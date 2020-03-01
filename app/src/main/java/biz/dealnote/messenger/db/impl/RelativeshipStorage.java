@@ -83,6 +83,11 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
     }
 
     @Override
+    public Completable storeRequests(int accountId, @NonNull List<UserEntity> users, int objectId, boolean clearBeforeStore) {
+        return completableStoreForType(accountId, users, objectId, RelationshipColumns.TYPE_REQUESTS, clearBeforeStore);
+    }
+
+    @Override
     public Single<List<UserEntity>> getFriends(int accountId, int objectId) {
         return getUsersForType(accountId, objectId, RelationshipColumns.TYPE_FRIEND);
     }
@@ -90,6 +95,11 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
     @Override
     public Single<List<UserEntity>> getFollowers(int accountId, int objectId) {
         return getUsersForType(accountId, objectId, RelationshipColumns.TYPE_FOLLOWER);
+    }
+
+    @Override
+    public Single<List<UserEntity>> getRequests(int accountId) {
+        return getUsersForType(accountId, accountId, RelationshipColumns.TYPE_REQUESTS);
     }
 
     @Override
@@ -198,7 +208,9 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
                 .setStatus(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS)))
                 .setSex(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_SEX)))
                 .setFriend(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_IS_FRIEND)) == 1)
-                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS)));
+                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS)))
+                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS)) == 1)
+                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_IS_USER_BLACK_LIST)) == 1);
     }
 
     private void appendInsertHeaders(Uri uri, List<ContentProviderOperation> operations, int objectId, List<UserEntity> dbos, int type) {

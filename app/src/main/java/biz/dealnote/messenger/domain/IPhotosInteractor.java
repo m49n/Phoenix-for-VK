@@ -15,6 +15,11 @@ import io.reactivex.Single;
  */
 public interface IPhotosInteractor {
     Single<List<Photo>> get(int accountId, int ownerId, int albumId, int count, int offset, boolean rev);
+
+    Single<List<Photo>> getUsersPhoto(int accountId, Integer ownerId, Integer extended, Integer offset, Integer count);
+
+    Single<List<Photo>> getAll(int accountId, Integer ownerId, Integer extended, Integer photo_sizes, Integer offset, Integer count);
+
     Single<List<Photo>> getAllCachedData(int accountId, int ownerId, int albumId);
 
     Single<PhotoAlbum> getAlbumById(int accountId, int ownerId, int albumId);

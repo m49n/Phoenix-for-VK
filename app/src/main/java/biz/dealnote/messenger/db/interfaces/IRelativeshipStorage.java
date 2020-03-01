@@ -16,9 +16,11 @@ public interface IRelativeshipStorage extends IStorage {
 
     Completable storeFriends(int accountId, @NonNull List<UserEntity> users, int objectId, boolean clearBeforeStore);
     Completable storeFollowers(int accountId, @NonNull List<UserEntity> users, int objectId, boolean clearBeforeStore);
+    Completable storeRequests(int accountId, @NonNull List<UserEntity> users, int objectId, boolean clearBeforeStore);
 
     Single<List<UserEntity>> getFriends(int accountId, int objectId);
     Single<List<UserEntity>> getFollowers(int accountId, int objectId);
+    Single<List<UserEntity>> getRequests(int accountId);
 
     Single<List<CommunityEntity>> getCommunities(int accountId, int ownerId);
 

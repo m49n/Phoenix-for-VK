@@ -18,8 +18,9 @@ import retrofit2.http.POST;
 public interface IUsersService {
 
     @FormUrlEncoded
-    @POST("execute.getUserWallInfo")
-    Single<BaseResponse<UserWallInfoResponse>> getUserWallInfo(@Field("user_id") int userId,
+    @POST("execute")
+    Single<BaseResponse<UserWallInfoResponse>> getUserWallInfo(@Field("code") String code,
+                                                               @Field("user_id") int userId,
                                                                @Field("fields") String fields,
                                                                @Field("name_case") String nameCase);
 
@@ -31,6 +32,14 @@ public interface IUsersService {
                                                         @Field("count") Integer count,
                                                         @Field("fields") String fields,
                                                         @Field("name_case") String nameCase);
+
+    @FormUrlEncoded
+    @POST("friends.getRequests")
+    Single<BaseResponse<Items<VKApiUser>>> getRequests(@Field("offset") Integer offset,
+                                                        @Field("count") Integer count,
+                                                        @Field("extended") Integer extended,
+                                                        @Field("out") Integer out,
+                                                        @Field("fields") String fields);
 
     //https://vk.com/dev/users.search
     @FormUrlEncoded

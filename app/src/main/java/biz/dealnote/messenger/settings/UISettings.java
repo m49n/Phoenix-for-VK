@@ -42,13 +42,21 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public int getMainTheme() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        String theme = preferences.getString("app_theme", "fire");
+        String theme = preferences.getString("app_theme", "ice");
         switch (theme) {
-            case "ice":
-                return R.style.App_DayNight_Ice;
             case "fire":
-            default:
                 return R.style.App_DayNight_Fire;
+            case "red":
+                return R.style.App_DayNight_Red;
+            case "violet":
+                return R.style.App_DayNight_Violet;
+            case "green":
+                return R.style.App_DayNight_Green;
+            case "gray":
+                return R.style.App_DayNight_Gray;
+            case "ice":
+            default:
+                return R.style.App_DayNight_Ice;
         }
     }
 

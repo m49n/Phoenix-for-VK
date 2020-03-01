@@ -11,22 +11,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Transformation;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.FavePage;
+import biz.dealnote.messenger.model.FavePageType;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Holder> {
 
     private List<FavePage> data;
     private Context context;
+    private Transformation transformation;
 
     public FavePagesAdapter(List<FavePage> data, Context context) {
         this.data = data;
         this.context = context;
+        this.transformation = CurrentTheme.createTransformationForAvatar(context);
     }
 
     @NonNull
@@ -40,7 +46,7 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
         final FavePage favePage = data.get(position);
         holder.description.setText(favePage.getDescription());
         holder.name.setText(favePage.getOwner().getFullName());
-        ViewUtils.displayAvatar(holder.avatar, null, favePage.getOwner().getMaxSquareAvatar(), Constants.PICASSO_TAG);
+        ViewUtils.displayAvatar(holder.avatar, transformation, favePage.getOwner().getMaxSquareAvatar(), Constants.PICASSO_TAG);
 
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) {
@@ -90,11 +96,17 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             final int position = recyclerView.getChildAdapterPosition(v);
             final FavePage favePage = data.get(position);
-            menu.setHeaderTitle(favePage.getUser().getFullName());
+            if(favePage.getType().equals(FavePageType.COMMUNITY))
+                menu.setHeaderTitle(favePage.getGroup().getName());
+            else
+                menu.setHeaderTitle(favePage.getUser().getFullName());
 
-            menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
+            menu.add(favePage.getType().equals(FavePageType.COMMUNITY) ? favePage.getGroup().getId() : 0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
                 if (clickListener != null) {
-//                    clickListener.onDelete(position, user);
+                    if(favePage.getType().equals(FavePageType.USER))
+                        clickListener.onDelete(position, favePage.getUser());
+                    else
+                        clickListener.onDelete(position, favePage.getGroup());
                 }
                 return true;
             });

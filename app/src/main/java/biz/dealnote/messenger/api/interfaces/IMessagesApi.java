@@ -50,7 +50,7 @@ public interface IMessagesApi {
     Single<Integer> createChat(Collection<Integer> userIds, String title);
 
     @CheckResult
-    Single<ConversationDeleteResult> deleteDialog(int peerId, Integer offset, Integer count);
+    Single<ConversationDeleteResult> deleteDialog(int peerId);
 
     @CheckResult
     Single<Boolean> restore(int messageId);

@@ -30,8 +30,8 @@ public class CurrentTheme {
                 return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_cookies);
             case "2":
                 return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_lines);
-            //case "3":
-            //    return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_circular);
+            case "3":
+                return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
             default: //"0
                 int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
                 return new ColorDrawable(color);

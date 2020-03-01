@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -245,12 +244,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             });
         }
 
-        findPreference("privacy_policy")
-                .setOnPreferenceClickListener(preference -> {
-                    LinkHelper.openLinkInBrowser(getContext(), Constants.PRIVACY_POLICY_LINK);
-                    return true;
-                });
-
         findPreference("show_logs")
                 .setOnPreferenceClickListener(preference -> {
                     PlaceFactory.getLogsPlace().tryOpenWith(requireActivity());
@@ -272,12 +265,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         findPreference("proxy")
                 .setOnPreferenceClickListener(preference -> {
                     startActivity(new Intent(requireActivity(), ProxyManagerActivity.class));
-                    return true;
-                });
-
-        findPreference("source_code")
-                .setOnPreferenceClickListener(preference -> {
-                    LinkHelper.openLinkInBrowser(getContext(), getString(R.string.source_code_link));
                     return true;
                 });
 

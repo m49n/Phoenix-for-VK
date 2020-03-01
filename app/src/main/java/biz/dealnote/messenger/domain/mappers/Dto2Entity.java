@@ -446,7 +446,9 @@ public class Dto2Entity {
                 .setSex(favePage.user.sex)
                 .setDomain(favePage.user.domain)
                 .setFriend(favePage.user.is_friend)
-                .setFriendStatus(favePage.user.friend_status);
+                .setFriendStatus(favePage.user.friend_status)
+                .setCanWritePrivateMessage(favePage.user.can_write_private_message)
+                .setBlacklisted_by_me(favePage.user.blacklisted_by_me);
     }
 
     public static UserEntity mapUser(VKApiUser user) {
@@ -465,7 +467,9 @@ public class Dto2Entity {
                 .setSex(user.sex)
                 .setDomain(user.domain)
                 .setFriend(user.is_friend)
-                .setFriendStatus(user.friend_status);
+                .setFriendStatus(user.friend_status)
+                .setCanWritePrivateMessage(user.can_write_private_message)
+                .setBlacklisted_by_me(user.blacklisted_by_me);
     }
 
     public static UserDetailsEntity mapUserDetails(VKApiUser user) {

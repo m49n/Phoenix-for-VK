@@ -22,6 +22,9 @@ public interface IUsersApi {
                                           String fields, String nameCase);
 
     @CheckResult
+    Single<Items<VKApiUser>> getRequests(Integer offset, Integer count, Integer extended, Integer out, String fields);
+
+    @CheckResult
     Single<Items<VKApiUser>> search(String query, Integer sort, Integer offset, Integer count,
                                     String fields, Integer city, Integer country, String hometown,
                                     Integer universityCountry, Integer university, Integer universityYear,

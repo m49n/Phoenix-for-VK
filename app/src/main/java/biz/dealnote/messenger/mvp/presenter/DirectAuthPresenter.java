@@ -41,6 +41,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     private String smsCode;
     private String captcha;
     private String appCode;
+    private String RedirectUrl;
 
     public DirectAuthPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -96,6 +97,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
 
             if ("2fa_sms".equalsIgnoreCase(type)) {
                 requireSmsCode = true;
+                RedirectUrl = ((NeedValidationException) t).getValidationURL();
             } else if("2fa_app".equalsIgnoreCase(type)){
                 requireAppCode = true;
             }
@@ -209,5 +211,10 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     public void fireAppCodeEdit(CharSequence s) {
         this.appCode = s.toString();
         resolveButtonLoginState();
+    }
+
+    public String GetRedirectUrl()
+    {
+        return RedirectUrl;
     }
 }

@@ -78,7 +78,7 @@ public abstract class AccountDependencyPresenter<V extends IMvpView & IAccountDe
 
     }
 
-    protected int getAccountId() {
+    public int getAccountId() {
         return mAccountId;
     }
 

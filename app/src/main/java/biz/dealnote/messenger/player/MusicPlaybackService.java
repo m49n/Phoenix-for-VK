@@ -22,8 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
-import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -38,34 +38,76 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.media.session.MediaButtonReceiver;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.BuildConfig;
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.HttpLogger;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
+import biz.dealnote.messenger.media.exo.ExoEventAdapter;
+import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.util.Logger;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
@@ -158,6 +200,9 @@ public class MusicPlaybackService extends Service {
     private MediaControllerCompat.TransportControls mTransportController;
 
     private int mPlayPos = -1;
+
+    private String CoverAudio;
+    private String CoverAlbom;
 
     private int mShuffleMode = SHUFFLE_NONE;
 
@@ -555,7 +600,7 @@ public class MusicPlaybackService extends Service {
      * Called to open a new file as the current track and prepare the next for
      * playback
      */
-    private void playCurrentTrack() {
+    private void playCurrentTrack(boolean UpdateMeta) {
         synchronized (this) {
             Logger.d(TAG, "playCurrentTrack, mPlayListLen: " + Utils.safeCountOf(mPlayList));
 
@@ -566,7 +611,7 @@ public class MusicPlaybackService extends Service {
             stop(Boolean.FALSE);
 
             Audio current = mPlayList.get(mPlayPos);
-            openFile(current);
+            openFile(current, UpdateMeta);
         }
     }
 
@@ -698,27 +743,76 @@ public class MusicPlaybackService extends Service {
         updateNotification(cover);
         mMediaMetadataCompat = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getArtistName())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, getAlbumName())
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, CoverAlbom == null ? getAlbumName() : CoverAlbom)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, getTrackName())
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, cover)
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration())
                 .build();
         mMediaSession.setMetadata(mMediaMetadataCompat);
     }
+    public void GetCoverURL(Audio audio) throws Exception {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
+                    }});
+        ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
+        Request request = new Request.Builder()
+                .url("https://axzodu785h.execute-api.us-east-1.amazonaws.com/dev?track=" + URLEncoder.encode(audio.getTitle(), "UTF-8") + "&artist=" + URLEncoder.encode(audio.getArtist(), "UTF-8")).build();
 
+        builder.build().newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call th, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call th, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject obj = new JSONObject(response.body().string());
+                        if(obj.has("image"))
+                            CoverAudio = obj.getString("image");
+                        if(obj.has("album"))
+                            CoverAlbom = obj.getString("album");
+
+                        Handler uiHandler = new Handler(MusicPlaybackService.this.getMainLooper());
+                        uiHandler.post(() -> {
+                            fetchCoverAndUpdateMetadata();
+                            notifyChange(META_CHANGED);
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    };
+                }
+            }
+        });
+    }
     /**
      * Opens a file and prepares it for playback
      *
      * @param audio The path of the file to open
      */
-    public void openFile(final Audio audio) {
+    public void openFile(final Audio audio, boolean UpdateMeta) {
         synchronized (this) {
             if (audio == null) {
                 stop(Boolean.TRUE);
                 return;
             }
-
+            if(UpdateMeta) {
+                CoverAudio = null;
+                CoverAlbom = null;
+            }
             mPlayer.setDataSource(audio.getOwnerId(), audio.getId(), audio.getUrl());
+            if(UpdateMeta) {
+                try {
+                    GetCoverURL(audio);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -774,7 +868,6 @@ public class MusicPlaybackService extends Service {
             if (getCurrentTrack() == null) {
                 return null;
             }
-
             return String.valueOf(getCurrentTrack().getAlbumId());
         }
     }
@@ -790,7 +883,7 @@ public class MusicPlaybackService extends Service {
                 return null;
             }
 
-            return getCurrentTrack().getBigCover();
+            return getAlbumCover();
         }
     }
 
@@ -800,7 +893,7 @@ public class MusicPlaybackService extends Service {
                 return null;
             }
 
-            return getCurrentTrack().getCover();
+            return CoverAudio;
         }
     }
 
@@ -903,7 +996,7 @@ public class MusicPlaybackService extends Service {
 
             mHistory.clear();
 
-            playCurrentTrack();
+            playCurrentTrack(true);
 
             notifyChange(QUEUE_CHANGED);
             if (oldAudio != getCurrentTrack()) {
@@ -998,7 +1091,7 @@ public class MusicPlaybackService extends Service {
             stop(false);
             mPlayPos = pos;
 
-            playCurrentTrack();
+            playCurrentTrack(true);
 
             notifyChange(META_CHANGED);
         }
@@ -1028,7 +1121,7 @@ public class MusicPlaybackService extends Service {
             }
 
             stop(false);
-            playCurrentTrack();
+            playCurrentTrack(true);
 
             notifyChange(META_CHANGED);
         }
@@ -1151,7 +1244,7 @@ public class MusicPlaybackService extends Service {
                     if (service.isPlaying()) {
                         service.gotoNext(true);
                     } else {
-                        service.playCurrentTrack();
+                        service.playCurrentTrack(false);
                     }
                     break;
                 case TRACK_WENT_TO_NEXT:
@@ -1205,20 +1298,17 @@ public class MusicPlaybackService extends Service {
         }
     }
 
-    private static final class MultiPlayer implements MediaPlayer.OnErrorListener,
-            MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener {
+    private static final class MultiPlayer{
 
         final WeakReference<MusicPlaybackService> mService;
 
-        MediaPlayer mCurrentMediaPlayer = new MediaPlayer();
+        SimpleExoPlayer mCurrentMediaPlayer;
 
         Handler mHandler;
 
         boolean mIsInitialized;
 
         boolean preparing;
-
-        int bufferPercent;
 
         final IAudioInteractor audioInteractor;
 
@@ -1230,7 +1320,8 @@ public class MusicPlaybackService extends Service {
         MultiPlayer(final MusicPlaybackService service) {
             mService = new WeakReference<>(service);
             audioInteractor = InteractorFactory.createAudioInteractor();
-            mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
+            mCurrentMediaPlayer = new SimpleExoPlayer.Builder(Injection.provideApplicationContext()).build();
+            //mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
         }
 
         /**
@@ -1240,32 +1331,64 @@ public class MusicPlaybackService extends Service {
          *                  ready to play, false otherwise
          */
         void setDataSource(final String remoteUrl) {
+            preparing = true;
             final String url = firstNonEmptyString(remoteUrl, "https://vk.com/mp3/audio_api_unavailable.mp3");
 
-            try {
-                mCurrentMediaPlayer.reset();
-                mCurrentMediaPlayer.setOnPreparedListener(this);
-                mCurrentMediaPlayer.setDataSource(url);
-                mCurrentMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mCurrentMediaPlayer.prepareAsync();
-                preparing = true;
+            Proxy proxy = null;
+            if (nonNull(Injection.provideProxySettings().getActiveProxy())) {
+                proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(Injection.provideProxySettings().getActiveProxy()));
+                if (Injection.provideProxySettings().getActiveProxy().isAuthEnabled()) {
+                    Authenticator authenticator = new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(Injection.provideProxySettings().getActiveProxy().getUser(), Injection.provideProxySettings().getActiveProxy().getPass().toCharArray());
+                        }
+                    };
 
-                mService.get().mIsSupposedToBePlaying = false;
-            } catch (final Exception e) {
-                e.printStackTrace();
+                    Authenticator.setDefault(authenticator);
+                } else {
+                    Authenticator.setDefault(null);
+                }
             }
 
-            mCurrentMediaPlayer.setOnCompletionListener(this);
-            mCurrentMediaPlayer.setOnErrorListener(this);
-            mCurrentMediaPlayer.setOnBufferingUpdateListener(this);
+            String userAgent = Constants.USER_AGENT(null);
+            CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(factory).setExtractorsFactory(extractorsFactory).createMediaSource(Uri.parse(url));
+            mCurrentMediaPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+
+            mCurrentMediaPlayer.addListener(new ExoEventAdapter() {
+                @Override
+                public void onPlayerStateChanged(boolean b, int i) {
+
+                    switch (i){
+                        case Player.STATE_READY:
+                            if(preparing) {
+                                preparing = false;
+                                mIsInitialized = true;
+                                mService.get().notifyChange(PREPARED);
+                                mService.get().play();
+                            }
+                            break;
+                        case Player.STATE_ENDED:
+                            mService.get().gotoNext(false);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onPlayerError(ExoPlaybackException error) {
+                    long playbackPos = mCurrentMediaPlayer.getCurrentPosition();
+                    mService.get().playCurrentTrack(false);
+                    mCurrentMediaPlayer.seekTo(playbackPos);
+                    mService.get().notifyChange(META_CHANGED);
+                }
+            });
+            mCurrentMediaPlayer.prepare(mediaSource);
 
             final Intent intent = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
             intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, getAudioSessionId());
             intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, mService.get().getPackageName());
             mService.get().sendBroadcast(intent);
-
-            resetBufferPercent();
-
             mService.get().notifyChange(PLAYSTATE_CHANGED);
         }
 
@@ -1278,31 +1401,6 @@ public class MusicPlaybackService extends Service {
                         .subscribe(this::setDataSource, ignored -> setDataSource(url)));
             } else {
                 setDataSource(url);
-            }
-        }
-
-        void resetBufferPercent() {
-            bufferPercent = 0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onCompletion(final MediaPlayer mp) {
-            mService.get().gotoNext(false);
-        }
-
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-            boolean current = mp == mCurrentMediaPlayer;
-
-            if (current) {
-                preparing = false;
-                mIsInitialized = true;
-                mService.get().notifyChange(PREPARED);
-
-                mService.get().play();
             }
         }
 
@@ -1324,14 +1422,13 @@ public class MusicPlaybackService extends Service {
         }
 
         public void start() {
-            mCurrentMediaPlayer.start();
+            ExoUtil.startPlayer(mCurrentMediaPlayer);
         }
 
         public void stop() {
-            mCurrentMediaPlayer.reset();
             mIsInitialized = false;
             preparing = false;
-            resetBufferPercent();
+            mCurrentMediaPlayer.stop(true);
         }
 
         public void release() {
@@ -1341,7 +1438,7 @@ public class MusicPlaybackService extends Service {
         }
 
         public void pause() {
-            mCurrentMediaPlayer.pause();
+            ExoUtil.pausePlayer(mCurrentMediaPlayer);
         }
 
         public long duration() {
@@ -1359,7 +1456,7 @@ public class MusicPlaybackService extends Service {
 
         void setVolume(final float vol) {
             try {
-                mCurrentMediaPlayer.setVolume(vol, vol);
+                mCurrentMediaPlayer.setVolume(vol);
             } catch (IllegalStateException ignored) {
                 // случается
             }
@@ -1369,32 +1466,8 @@ public class MusicPlaybackService extends Service {
             return mCurrentMediaPlayer.getAudioSessionId();
         }
 
-        @Override
-        public boolean onError(final MediaPlayer mp, final int what, final int extra) {
-            switch (what) {
-                case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                    mIsInitialized = false;
-                    mCurrentMediaPlayer.release();
-                    mCurrentMediaPlayer = new MediaPlayer();
-                    mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
-                    mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);
-                    return true;
-                default:
-                    break;
-            }
-
-            return false;
-        }
-
-        @Override
-        public void onBufferingUpdate(MediaPlayer mp, int percent) {
-            if (mCurrentMediaPlayer == mp) {
-                bufferPercent = percent;
-            }
-        }
-
         int getBufferPercent() {
-            return bufferPercent;
+            return mCurrentMediaPlayer.getBufferedPercentage();
         }
     }
 
@@ -1408,7 +1481,7 @@ public class MusicPlaybackService extends Service {
 
         @Override
         public void openFile(final Audio audio) {
-            mService.get().openFile(audio);
+            mService.get().openFile(audio, true);
         }
 
         @Override

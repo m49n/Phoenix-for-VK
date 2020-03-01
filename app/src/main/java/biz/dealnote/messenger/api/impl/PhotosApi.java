@@ -218,6 +218,20 @@ class PhotosApi extends AbsApi implements IPhotosApi {
     }
 
     @Override
+    public Single<Items<VKApiPhoto>> getUsersPhoto(Integer ownerId, Integer extended, Integer offset, Integer count) {
+        return provideService(IPhotosService.class, TokenType.USER)
+                .flatMap(service -> service.getUserPhotos(ownerId, extended, offset, count)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiPhoto>> getAll(Integer ownerId, Integer extended, Integer photo_sizes, Integer offset, Integer count) {
+        return provideService(IPhotosService.class, TokenType.USER)
+                .flatMap(service -> service.getAll(ownerId, extended, photo_sizes, offset, count)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
     public Single<VkApiPhotoMessageServer> getMessagesUploadServer() {
         return provideService(IPhotosService.class, TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service.getMessagesUploadServer()

@@ -317,7 +317,8 @@ public class Entity2Model {
                 .setSex(entity.getSex())
                 .setDomain(entity.getDomain())
                 .setFriend(entity.isFriend())
-                .setFriendStatus(entity.getFriendStatus());
+                .setFriendStatus(entity.getFriendStatus())
+                .setCanWritePrivateMessage(entity.getCanWritePrivateMessage());
     }
 
     public static FavePage map(FaveUserEntity entity) {

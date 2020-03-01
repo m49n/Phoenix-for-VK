@@ -73,18 +73,12 @@ public class ViewUtils {
             return null;
         }
 
-        boolean onlinePhoenix = Constants.PHOENIX_FULL_API_ID == app || Constants.PHOENIX_LITE_API_ID == app;
-
         if(app == 5961172){
             return R.drawable.ic_olivka;
         }
 
         if(app == 2685278){
             return R.drawable.ic_kate_mobile;
-        }
-
-        if (onlinePhoenix) {
-            return R.drawable.online_phoenix;
         }
 
         switch (platform) {

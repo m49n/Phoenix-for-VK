@@ -223,6 +223,19 @@ public interface IPhotosService {
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
+    @FormUrlEncoded    @POST("photos.getUserPhotos")
+    Single<BaseResponse<Items<VKApiPhoto>>> getUserPhotos(@Field("user_id") Integer ownerId,
+                                                @Field("extended") Integer extended,
+                                                @Field("offset") Integer offset,
+                                                @Field("count") Integer count);
+
+    @FormUrlEncoded    @POST("photos.getAll")
+    Single<BaseResponse<Items<VKApiPhoto>>> getAll(@Field("owner_id") Integer ownerId,
+                                                          @Field("extended") Integer extended,
+                                                          @Field("photo_sizes") Integer photo_sizes,
+                                                          @Field("offset") Integer offset,
+                                                          @Field("count") Integer count);
+
     @GET("photos.getMessagesUploadServer")
     Single<BaseResponse<VkApiPhotoMessageServer>> getMessagesUploadServer();
 

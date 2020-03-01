@@ -6,6 +6,7 @@ import biz.dealnote.messenger.api.interfaces.IAccountApi;
 import biz.dealnote.messenger.api.model.CountersDto;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.api.model.response.AccountsBannedResponce;
 import biz.dealnote.messenger.api.services.IAccountService;
 import io.reactivex.Single;
 
@@ -36,7 +37,7 @@ class AccountApi extends AbsApi implements IAccountApi {
     }
 
     @Override
-    public Single<Items<VKApiUser>> getBanned(Integer count, Integer offset, String fields) {
+    public Single<AccountsBannedResponce> getBanned(Integer count, Integer offset, String fields) {
         return provideService(IAccountService.class, TokenType.USER)
                 .flatMap(service -> service
                         .getBanned(count, offset, fields)

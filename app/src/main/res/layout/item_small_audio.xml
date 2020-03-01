@@ -20,11 +20,13 @@
         android:src="@drawable/play" />
 
     <LinearLayout
+        android:id="@+id/track_option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="12dp"
         android:layout_toEndOf="@+id/item_audio_play"
+        android:layout_toStartOf="@id/item_audio_time"
         android:orientation="vertical"
         android:paddingEnd="8dp">
 
@@ -46,6 +48,24 @@
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/item_audio_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        tools:text="Time" />
+
+    <ImageView
+        android:id="@+id/saved"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@id/item_audio_time"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/save"
+        android:tint="?colorSecondary" />
 
 
 </RelativeLayout>

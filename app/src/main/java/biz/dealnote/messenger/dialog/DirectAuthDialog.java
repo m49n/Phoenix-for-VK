@@ -2,29 +2,51 @@ package biz.dealnote.messenger.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.domain.IAccountsInteractor;
+import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.fragment.AccountsFragment;
 import biz.dealnote.messenger.fragment.base.BaseMvpDialogFragment;
 import biz.dealnote.messenger.listener.TextWatcherAdapter;
 import biz.dealnote.messenger.mvp.presenter.DirectAuthPresenter;
 import biz.dealnote.messenger.mvp.view.IDirectAuthView;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 /**
@@ -35,6 +57,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
     public static final String ACTION_LOGIN_COMPLETE = "ACTION_LOGIN_COMPLETE";
     public static final String ACTION_LOGIN_VIA_WEB = "ACTION_LOGIN_VIA_WEB";
+    public static final String ACTION_VALIDATE_VIA_WEB = "ACTION_VALIDATE_VIA_WEB";
 
     public static DirectAuthDialog newInstance() {
         Bundle args = new Bundle();
@@ -52,6 +75,8 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
     private EditText mPassword;
     private EditText mCaptcha;
     private EditText mSmsCode;
+
+    private TextView mValidate;
 
     private View mSmsCodeRoot;
 
@@ -96,6 +121,9 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
             }
         });
 
+        this.mValidate = view.findViewById(R.id.button_validate_web);
+        this.mValidate.setOnClickListener(view1 -> onValidate(getPresenter().GetRedirectUrl()));
+
         view.findViewById(R.id.button_send_code_via_sms).setOnClickListener(view1 -> getPresenter().fireButtonSendCodeViaSmsClick());
 
         this.mSmsCodeRoot = view.findViewById(R.id.field_sms_code_root);
@@ -109,7 +137,6 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
         this.mContentRoot = view.findViewById(R.id.content_root);
         this.mLoadingRoot = view.findViewById(R.id.loading_root);
-
         this.mCaptchaRoot = view.findViewById(R.id.captcha_root);
         this.mCaptcha = view.findViewById(R.id.field_captcha);
         this.mCaptcha.addTextChangedListener(new TextWatcherAdapter(){
@@ -118,7 +145,6 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
                 getPresenter().fireCaptchaEdit(s);
             }
         });
-
         this.mCaptchaImage = view.findViewById(R.id.captcha_img);
 
         builder.setView(view);
@@ -136,6 +162,10 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
     @Override
     public IPresenterFactory<DirectAuthPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DirectAuthPresenter(saveInstanceState);
+    }
+
+    public void onValidate(String url) {
+        returnResultAndDissmiss(new Intent(ACTION_VALIDATE_VIA_WEB).putExtra(Extra.URL, url), true);
     }
 
     @Override
@@ -231,21 +261,19 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
     @Override
     public void returnSuccessToParent(int userId, String accessToken) {
-        returnResultAndDissmiss(new Intent(ACTION_LOGIN_COMPLETE)
-                .putExtra(Extra.TOKEN, accessToken)
-                .putExtra(Extra.USER_ID, userId));
+        returnResultAndDissmiss(new Intent(ACTION_LOGIN_COMPLETE).putExtra(Extra.TOKEN, accessToken).putExtra(Extra.USER_ID, userId).putExtra(Extra.LOGIN, mLogin.getText().toString()).putExtra(Extra.PASSWORD, mPassword.getText().toString()), true);
     }
 
-    private void returnResultAndDissmiss(Intent data){
+    private void returnResultAndDissmiss(Intent data, boolean Dismiss){
         if(Objects.nonNull(getTargetFragment())){
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         }
-
-        dismiss();
+        if(Dismiss)
+            dismiss();
     }
 
     @Override
     public void returnLoginViaWebAction() {
-        returnResultAndDissmiss(new Intent(ACTION_LOGIN_VIA_WEB));
+        returnResultAndDissmiss(new Intent(ACTION_LOGIN_VIA_WEB), true);
     }
 }

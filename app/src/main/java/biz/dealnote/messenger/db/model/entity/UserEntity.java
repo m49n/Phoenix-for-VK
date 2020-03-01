@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.db.model.entity;
 
+import biz.dealnote.messenger.model.User;
+
 /**
  * Created by Ruslan Kolbasa on 08.09.2017.
  * phoenix
@@ -36,6 +38,8 @@ public class UserEntity {
 
     private boolean friend;
     private int friendStatus;
+    private boolean can_write_private_message;
+    private boolean blacklisted_by_me;
 
     public UserEntity(int id) {
         this.id = id;
@@ -173,6 +177,24 @@ public class UserEntity {
 
     public UserEntity setFriendStatus(int friendStatus) {
         this.friendStatus = friendStatus;
+        return this;
+    }
+
+    public boolean getCanWritePrivateMessage() {
+        return can_write_private_message;
+    }
+
+    public UserEntity setCanWritePrivateMessage(boolean can_write_private_message) {
+        this.can_write_private_message = can_write_private_message;
+        return this;
+    }
+
+    public boolean getBlacklisted_by_me() {
+        return blacklisted_by_me;
+    }
+
+    public UserEntity setBlacklisted_by_me(boolean blacklisted_by_me) {
+        this.blacklisted_by_me = blacklisted_by_me;
         return this;
     }
 

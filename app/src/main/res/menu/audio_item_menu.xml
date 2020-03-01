@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_item_audio"
+        android:title="@string/action_add" />
+
+    <item
+        android:id="@+id/save_item_audio"
+        android:title="@string/save" />
+    <item
+        android:id="@+id/bitrate_item_audio"
+        android:title="@string/get_bitrate"/>
+</menu>

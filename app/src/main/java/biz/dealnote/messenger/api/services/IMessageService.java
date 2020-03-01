@@ -141,17 +141,11 @@ public interface IMessageService {
      * Deletes all private messages in a conversation.
      *
      * @param peerId Destination ID.
-     * @param offset Offset needed to return a specific subset of messages.
-     * @param count  Number of messages to delete.
-     *               NOTE: If the number of messages exceeds the maximum, the method shall be called several times.
-     *               maximum value 10000
      * @return 1
      */
     @FormUrlEncoded
     @POST("messages.deleteConversation")
-    Single<BaseResponse<ConversationDeleteResult>> deleteDialog(@Field("peer_id") int peerId,
-                                                                @Field("offset") Integer offset,
-                                                                @Field("count") Integer count);
+    Single<BaseResponse<ConversationDeleteResult>> deleteDialog(@Field("peer_id") int peerId);
 
     /**
      * Restores a deleted message.

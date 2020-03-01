@@ -73,6 +73,7 @@ public class ErrorLocalizer {
                 case 21: return context.getString(R.string.api_error_21);
                 case 23: return context.getString(R.string.api_error_23);
                 case 24: return context.getString(R.string.api_error_24);
+                case 30: return context.getString(R.string.api_error_30);
                 case 100: return context.getString(R.string.api_error_100);
                 case 101: return context.getString(R.string.api_error_101);
                 case 103: return context.getString(R.string.api_error_103);

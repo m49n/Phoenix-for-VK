@@ -39,6 +39,7 @@
 
         <item name="chat_background_cookies">@drawable/cookies_dark</item>
         <item name="chat_background_lines">@drawable/lines_dark</item>
+        <item name="chat_background_runes">@drawable/runes_dark</item>
         <item name="buttonAddPhotoBackground">@drawable/background_rectangle_dash</item>
     </style>
 

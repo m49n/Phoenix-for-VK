@@ -3,6 +3,7 @@ First open-sourced VK client for Android inspired by Material Design.
 
 <b>Screenshots:</b>
 <img src="Screenshots.jpg"/>
+<img src="Screenshot_20200301-011809.png"/>
 
 <b>Available at Google Play:</b> https://play.google.com/store/apps/details?id=dev.ezorrio.phoenix <br>
 

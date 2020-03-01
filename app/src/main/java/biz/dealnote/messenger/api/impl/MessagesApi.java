@@ -107,10 +107,10 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     }
 
     @Override
-    public Single<ConversationDeleteResult> deleteDialog(int peerId, Integer offset, Integer count) {
+    public Single<ConversationDeleteResult> deleteDialog(int peerId) {
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service
-                        .deleteDialog(peerId, offset, count)
+                        .deleteDialog(peerId)
                         .map(extractResponseWithErrorHandling()));
     }
 

@@ -9,14 +9,19 @@ import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.task.LocalPhotoRequestHandler;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Ruslan Kolbasa on 28.07.2017.
@@ -83,7 +88,12 @@ public class PicassoInstance {
         }
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .cache(new Cache(cache, calculateDiskCacheSize(cache)));
+                .cache(new Cache(cache, calculateDiskCacheSize(cache))).addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
+                    }});
 
         ProxyConfig config = proxySettings.getActiveProxy();
 

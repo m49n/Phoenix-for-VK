@@ -78,7 +78,7 @@ class GroupsApi extends AbsApi implements IGroupsApi {
     @Override
     public Single<VKApiCommunity> getWallInfo(String groupId, String fields) {
         return provideService(IGroupsService.class, TokenType.USER)
-                .flatMap(service -> service.getGroupWallInfo(groupId, fields)
+                .flatMap(service -> service.getGroupWallInfo("var group_id = Args.group_id; var fields =Args.fields; var negative_group_id = -group_id; var group_info = API.groups.getById({\"group_id\":group_id, \"fields\":fields}); var all_wall_count = API.wall.get({\"owner_id\":negative_group_id, \"count\":1, \"filter\":\"all\"}).count; var owner_wall_count = API.wall.get({\"owner_id\":negative_group_id, \"count\":1, \"filter\":\"owner\"}).count; var suggests_wall_count = API.wall.get({\"owner_id\":negative_group_id, \"count\":1, \"filter\":\"suggests\"}).count; var postponed_wall_count = API.wall.get({\"owner_id\":negative_group_id, \"count\":1, \"filter\":\"postponed\"}).count; return {\"group_info\": group_info, \"all_wall_count\":all_wall_count, \"owner_wall_count\":owner_wall_count, \"suggests_wall_count\":suggests_wall_count, \"postponed_wall_count\":postponed_wall_count };", groupId, fields)
                         .map(extractResponseWithErrorHandling()))
                 .map(response -> {
                     if (safeCountOf(response.groups) != 1) {

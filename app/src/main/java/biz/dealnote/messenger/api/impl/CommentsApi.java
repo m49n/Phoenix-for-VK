@@ -21,7 +21,131 @@ class CommentsApi extends AbsApi implements ICommentsApi {
                                               Integer count, String sort, Integer startCommentId, String accessKey, String fields) {
         return provideService(ICommentsService.class)
                 .flatMap(service -> service
-                        .get(sourceType, ownerId, sourceId, offset, count, sort, startCommentId, accessKey, fields)
+                        .get("var owner_id = Args.owner_id;\n" +
+                                "var source_id = Args.source_id;\n" +
+                                "var start_comment_id = Args.start_comment_id;\n" +
+                                "var offset = Args.offset;\n" +
+                                "var count = Args.count;\n" +
+                                "var sort = Args.sort;\n" +
+                                "var access_key = Args.access_key;\n" +
+                                "var source_type = Args.source_type;\n" +
+                                "var fields = Args.fields;\n" +
+                                "\n" +
+                                "var positive_group_id;\n" +
+                                "if(owner_id < 0){\n" +
+                                "    positive_group_id = -owner_id;\n" +
+                                "} else {\n" +
+                                "    positive_group_id = owner_id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "var admin_level = 0;\n" +
+                                "if(owner_id < 0){\n" +
+                                "    admin_level = API.groups.getById({\"group_id\":positive_group_id,\n" +
+                                "        \"fields\":\"admin_level\"})[0].admin_level;\n" +
+                                "}\n" +
+                                "\n" +
+                                "var result;\n" +
+                                "if(source_type == \"post\"){\n" +
+                                "    result = API.wall.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"post_id\":source_id, \n" +
+                                "        \"need_likes\":\"1\", \n" +
+                                "        \"start_comment_id\":start_comment_id, \n" +
+                                "        \"offset\":offset, \n" +
+                                "        \"count\":count, \n" +
+                                "        \"sort\":sort, \n" +
+                                "        \"preview_length\":\"0\", \n" +
+                                "        \"extended\":\"1\",\n" +
+                                "        \"fields\":fields\n" +
+                                "    });\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"photo\"){\n" +
+                                "    result = API.photos.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"photo_id\":source_id, \n" +
+                                "        \"need_likes\":\"1\", \n" +
+                                "        \"start_comment_id\":start_comment_id, \n" +
+                                "        \"offset\":offset, \n" +
+                                "        \"count\":count, \n" +
+                                "        \"sort\":sort, \n" +
+                                "        \"extended\":\"1\",\n" +
+                                "        \"fields\":fields,\n" +
+                                "        \"access_key\":access_key});\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"video\"){\n" +
+                                "    result = API.video.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"video_id\":source_id, \n" +
+                                "        \"need_likes\":\"1\", \n" +
+                                "        \"start_comment_id\":start_comment_id, \n" +
+                                "        \"offset\":offset, \n" +
+                                "        \"count\":count, \n" +
+                                "        \"sort\":sort, \n" +
+                                "        \"extended\":\"1\",\n" +
+                                "        \"fields\":fields\n" +
+                                "    });\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"topic\"){\n" +
+                                "    result = API.board.getComments({\"group_id\":positive_group_id, \n" +
+                                "        \"topic_id\":source_id, \n" +
+                                "        \"need_likes\":\"1\", \n" +
+                                "        \"start_comment_id\":start_comment_id, \n" +
+                                "        \"offset\":offset, \n" +
+                                "        \"count\":count, \n" +
+                                "        \"sort\":sort, \n" +
+                                "        \"extended\":\"1\"});\n" +
+                                "}\n" +
+                                "\n" +
+                                "var first_id;\n" +
+                                "if(source_type == \"post\"){\n" +
+                                "   first_id = API.wall.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"asc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"photo\"){\n" +
+                                "   first_id = API.photos.getComments({\n" +
+                                "        \"owner_id\":owner_id, \n" +
+                                "        \"photo_id\":source_id, \n" +
+                                "        \"count\":\"1\", \n" +
+                                "        \"sort\":\"asc\", \n" +
+                                "        \"access_key\":access_key}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"video\"){\n" +
+                                "   first_id = API.video.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"video_id\":source_id, \"count\":\"1\", \"sort\":\"asc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"topic\"){\n" +
+                                "    first_id = API.board.getComments({\"group_id\":positive_group_id, \n" +
+                                "        \"topic_id\":source_id, \"count\":\"1\", \"sort\":\"asc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "var last_id;\n" +
+                                "if(source_type == \"post\"){\n" +
+                                "    last_id = API.wall.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"desc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"photo\"){\n" +
+                                "    last_id = API.photos.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"photo_id\":source_id, \"count\":\"1\", \"sort\":\"desc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"video\"){\n" +
+                                "    last_id = API.video.getComments({\"owner_id\":owner_id, \n" +
+                                "        \"video_id\":source_id, \"count\":\"1\", \"sort\":\"desc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "if(source_type == \"topic\"){\n" +
+                                "    last_id = API.board.getComments({\"group_id\":positive_group_id, \n" +
+                                "        \"topic_id\":source_id, \"count\":\"1\", \"sort\":\"desc\"}).items[0].id;\n" +
+                                "}\n" +
+                                "\n" +
+                                "return {\"main\": result, \n" +
+                                "    \"first_id\": first_id, \n" +
+                                "    \"last_id\": last_id, \n" +
+                                "    \"admin_level\": admin_level};", sourceType, ownerId, sourceId, offset, count, sort, startCommentId, accessKey, fields)
                         .map(handleExecuteErrors("execute.getComments"))
                         .map(extractResponseWithErrorHandling()));
     }

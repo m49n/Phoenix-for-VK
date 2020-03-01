@@ -47,9 +47,9 @@ public class AccountsInteractor implements IAccountsInteractor {
                 .account()
                 .getBanned(count, offset, UserColumns.API_FIELDS)
                 .map(items -> {
-                    List<VKApiUser> dtos = listEmptyIfNull(items.getItems());
+                    List<VKApiUser> dtos = listEmptyIfNull(items.profiles);
                     List<User> users = Dto2Model.transformUsers(dtos);
-                    return new BannedPart(items.count, users);
+                    return new BannedPart(items.profiles.size(), users);
                 });
     }
 

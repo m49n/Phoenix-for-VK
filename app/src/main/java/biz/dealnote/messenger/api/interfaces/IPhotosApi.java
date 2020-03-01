@@ -95,6 +95,12 @@ public interface IPhotosApi {
                                   Integer offset, Integer count);
 
     @CheckResult
+    Single<Items<VKApiPhoto>> getUsersPhoto(Integer ownerId, Integer extended, Integer offset, Integer count);
+
+    @CheckResult
+    Single<Items<VKApiPhoto>> getAll(Integer ownerId, Integer extended, Integer photo_sizes, Integer offset, Integer count);
+
+    @CheckResult
     Single<VkApiPhotoMessageServer> getMessagesUploadServer();
 
     @CheckResult

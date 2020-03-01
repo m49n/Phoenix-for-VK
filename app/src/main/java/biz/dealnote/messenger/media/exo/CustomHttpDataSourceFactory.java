@@ -30,7 +30,7 @@ import java.net.Proxy;
 public final class CustomHttpDataSourceFactory extends BaseFactory {
 
     private final String userAgent;
-    private final TransferListener<? super DataSource> listener;
+    private final TransferListener listener;
     private final int connectTimeoutMillis;
     private final int readTimeoutMillis;
     private final boolean allowCrossProtocolRedirects;
@@ -59,7 +59,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      * @param listener  An optional listener.
      * @see #CustomHttpDataSourceFactory(String, TransferListener, int, int, boolean, Proxy)
      */
-    public CustomHttpDataSourceFactory(String userAgent, TransferListener<? super DataSource> listener, Proxy proxy) {
+    public CustomHttpDataSourceFactory(String userAgent, TransferListener listener, Proxy proxy) {
         this(userAgent, listener, CustomHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS, CustomHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, false, proxy);
     }
 
@@ -73,7 +73,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      * @param allowCrossProtocolRedirects Whether cross-protocol redirects (i.e. redirects from HTTP
      *                                    to HTTPS and vice versa) are enabled.
      */
-    public CustomHttpDataSourceFactory(String userAgent, TransferListener<? super DataSource> listener,
+    public CustomHttpDataSourceFactory(String userAgent, TransferListener listener,
                                        int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects, Proxy proxy) {
         this.userAgent = userAgent;
         this.listener = listener;

@@ -444,8 +444,15 @@ public class DBHelper extends SQLiteOpenHelper {
         String create = "CREATE TABLE [" + FaveUsersColumns.TABLENAME + "] (" +
                 " [" + FaveUsersColumns._ID + "] BIGINT NOT NULL UNIQUE, " +
                 " [" + FaveUsersColumns.DESCRIPTION + "] TEXT, " +
-                " [" + FaveUsersColumns.UPDATED_TIME + "] TEXT, " +
+                " [" + FaveUsersColumns.UPDATED_TIME + "] INTEGER, " +
                 " [" + FaveUsersColumns.FAVE_TYPE + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_FIRST_NAME + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_LAST_NAME + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_PHOTO_50 + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_PHOTO_100 + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_PHOTO_200 + "] TEXT, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_ONLINE + "] BOOLEAN, " +
+                " [" + FaveUsersColumns.FOREIGN_USER_ONLINE_MOBILE + "] BOOLEAN, " +
                 " CONSTRAINT [] PRIMARY KEY([" + FaveUsersColumns._ID + "]) ON CONFLICT REPLACE);";
         db.execSQL(create);
     }
@@ -458,8 +465,14 @@ public class DBHelper extends SQLiteOpenHelper {
     private void createFaveGroupsTable(SQLiteDatabase db) {
         String create = "CREATE TABLE [" + FaveGroupsColumns.TABLENAME + "] (" +
                 " [" + FaveGroupsColumns._ID + "] BIGINT NOT NULL UNIQUE, " +
+                " [" + FaveGroupsColumns.NAME + "] TEXT, " +
+                " [" + FaveGroupsColumns.SCREEN_NAME + "] TEXT, " +
+                " [" + FaveGroupsColumns.IS_CLOSED + "] INTEGER, " +
+                " [" + FaveGroupsColumns.PHOTO_200 + "] TEXT, " +
+                " [" + FaveGroupsColumns.PHOTO_100 + "] TEXT, " +
+                " [" + FaveGroupsColumns.PHOTO_50 + "] TEXT, " +
                 " [" + FaveGroupsColumns.DESCRIPTION + "] TEXT, " +
-                " [" + FaveGroupsColumns.UPDATED_TIME + "] TEXT, " +
+                " [" + FaveGroupsColumns.UPDATED_TIME + "] INTEGER, " +
                 " [" + FaveGroupsColumns.FAVE_TYPE + "] TEXT, " +
                 " CONSTRAINT [] PRIMARY KEY([" + FaveGroupsColumns._ID + "]) ON CONFLICT REPLACE);";
         db.execSQL(create);
@@ -688,6 +701,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + UserColumns.DOMAIN + "] TEXT, " +
                 " [" + UserColumns.IS_FRIEND + "] BOOLEAN, " +
                 " [" + UserColumns.FRIEND_STATUS + "] INTEGER, " +
+                " [" + UserColumns.WRITE_MESSAGE_STATUS + "] BOOLEAN, " +
+                " [" + UserColumns.IS_USER_BLACK_LIST + "] BOOLEAN, " +
                 " CONSTRAINT [] PRIMARY KEY([" + UserColumns._ID + "]) ON CONFLICT REPLACE);";
         db.execSQL(sql);
     }

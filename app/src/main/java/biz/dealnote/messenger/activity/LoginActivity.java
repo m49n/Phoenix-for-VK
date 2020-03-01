@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.Auth;
@@ -39,6 +40,7 @@ public class LoginActivity extends Activity {
         WebView webview = findViewById(R.id.vkontakteview);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.clearCache(true);
+        webview.getSettings().setUserAgentString(Constants.USER_AGENT("vkandroid"));
 
         //Чтобы получать уведомления об окончании загрузки страницы
         webview.setWebViewClient(new VkontakteWebViewClient());
@@ -49,22 +51,32 @@ public class LoginActivity extends Activity {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
 
-        String clientId = getIntent().getStringExtra(EXTRA_CLIENT_ID);
-        String scope = getIntent().getStringExtra(EXTRA_SCOPE);
-        String groupIds = getIntent().getStringExtra(EXTRA_GROUP_IDS);
+        if(getIntent().getStringExtra(EXTRA_VALIDATE) == null) {
+            String clientId = getIntent().getStringExtra(EXTRA_CLIENT_ID);
+            String scope = getIntent().getStringExtra(EXTRA_SCOPE);
+            String groupIds = getIntent().getStringExtra(EXTRA_GROUP_IDS);
 
-        String url = Auth.getUrl(clientId, scope, groupIds);
-        webview.loadUrl(url);
+            String url = Auth.getUrl(clientId, scope, groupIds);
+            webview.loadUrl(url);
+        }
+        else
+            webview.loadUrl(getIntent().getStringExtra(EXTRA_VALIDATE));
     }
 
     private static final String EXTRA_CLIENT_ID = "client_id";
     private static final String EXTRA_SCOPE = "scope";
+    private static final String EXTRA_VALIDATE = "validate";
     private static final String EXTRA_GROUP_IDS = "group_ids";
 
     public static Intent createIntent(Context context, String clientId, String scope){
         return new Intent(context, LoginActivity.class)
                 .putExtra(EXTRA_CLIENT_ID, clientId)
                 .putExtra(EXTRA_SCOPE, scope);
+    }
+
+    public static Intent createIntent(Context context, String validate_url){
+        return new Intent(context, LoginActivity.class)
+                .putExtra(EXTRA_VALIDATE, validate_url);
     }
 
     public static Intent createIntent(Context context, String clientId, String scope, Collection<Integer> groupIds){

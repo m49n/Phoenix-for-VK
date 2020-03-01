@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.browser.customtabs.CustomTabsIntent;
+
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.fragment.fave.FaveTabsFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
@@ -39,6 +41,7 @@ import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.PhoenixToast;
 
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 import static biz.dealnote.messenger.util.Utils.singletonArrayList;
@@ -48,6 +51,11 @@ public class LinkHelper {
 
 
     public static void openUrl(Activity context, int accountId, String link) {
+        if(link == null || link.length() <= 0)
+        {
+            PhoenixToast.showToast(context, R.string.empty_clipboard_url);
+            return;
+        }
         if (!openVKlink(context, accountId, link)) {
             PlaceFactory.getExternalLinkPlace(accountId, link).tryOpenWith(context);
         }

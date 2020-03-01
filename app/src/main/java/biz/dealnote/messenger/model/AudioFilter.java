@@ -76,7 +76,7 @@ public class AudioFilter implements Entry, Parcelable {
     @Override
     public String getTitle(@NonNull Context context) {
         if (isFilterNone()) {
-            return context.getString(R.string.saved);
+            return context.getString(R.string.my_saved);
         }
         switch (genre) {
             case TOP_ALL:
@@ -113,8 +113,6 @@ public class AudioFilter implements Entry, Parcelable {
                 return context.getString(R.string.other);
             case VKApiAudio.Genre.POP:
                 return context.getString(R.string.pop);
-            case VKApiAudio.Genre.RAP_AND_HIPHOP:
-                return context.getString(R.string.rap);
             case VKApiAudio.Genre.REGGAE:
                 return context.getString(R.string.reggae);
             case VKApiAudio.Genre.ROCK:

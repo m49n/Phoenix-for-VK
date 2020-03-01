@@ -65,6 +65,48 @@ public class PhotosInteractor implements IPhotosInteractor {
     }
 
     @Override
+    public Single<List<Photo>> getUsersPhoto(int accountId, Integer ownerId, Integer extended, Integer offset, Integer count) {
+        return networker.vkDefault(accountId)
+                .photos()
+                .getUsersPhoto(ownerId, extended, offset, count)
+                .map(items -> Utils.listEmptyIfNull(items.getItems()))
+                .flatMap(dtos -> {
+                    List<Photo> photos = new ArrayList<>(dtos.size());
+                    List<PhotoEntity> dbos = new ArrayList<>(dtos.size());
+
+                    for(VKApiPhoto dto : dtos){
+                        photos.add(Dto2Model.transform(dto));
+                        dbos.add(Dto2Entity.mapPhoto(dto));
+                    }
+
+                    return cache.photos()
+                            .insertPhotosRx(accountId, ownerId, -9000, dbos, offset == 0)
+                            .andThen(Single.just(photos));
+                });
+    }
+
+    @Override
+    public Single<List<Photo>> getAll(int accountId, Integer ownerId, Integer extended, Integer photo_sizes, Integer offset, Integer count) {
+        return networker.vkDefault(accountId)
+                .photos()
+                .getAll(ownerId, extended, photo_sizes, offset, count)
+                .map(items -> Utils.listEmptyIfNull(items.getItems()))
+                .flatMap(dtos -> {
+                    List<Photo> photos = new ArrayList<>(dtos.size());
+                    List<PhotoEntity> dbos = new ArrayList<>(dtos.size());
+
+                    for(VKApiPhoto dto : dtos){
+                        photos.add(Dto2Model.transform(dto));
+                        dbos.add(Dto2Entity.mapPhoto(dto));
+                    }
+
+                    return cache.photos()
+                            .insertPhotosRx(accountId, ownerId, -9001, dbos, offset == 0)
+                            .andThen(Single.just(photos));
+                });
+    }
+
+    @Override
     public Single<List<Photo>> getAllCachedData(int accountId, int ownerId, int albumId) {
         PhotoCriteria criteria = new PhotoCriteria(accountId).setAlbumId(albumId).setOwnerId(ownerId);
 
@@ -109,13 +151,44 @@ public class PhotosInteractor implements IPhotosInteractor {
                 .flatMap(items -> {
                     List<VKApiPhotoAlbum> dtos = Utils.listEmptyIfNull(items.getItems());
 
-                    List<PhotoAlbumEntity> dbos = new ArrayList<>(dtos.size());
-                    List<PhotoAlbum> albums = new ArrayList<>(dbos.size());
+                    List<PhotoAlbumEntity> dbos = new ArrayList<>(dtos.size() + 2);
+                    List<PhotoAlbum> albums = new ArrayList<>(dbos.size() + 2);
+
+                    VKApiPhotoAlbum Allph = new VKApiPhotoAlbum();
+                    Allph.title = "Все фото";
+                    Allph.id = -9001;
+                    Allph.owner_id = ownerId;
+                    Allph.size = -1;
+
+                    VKApiPhotoAlbum usersPh = new VKApiPhotoAlbum();
+                    usersPh.title = "Фото с пользователем";
+                    usersPh.id = -9000;
+                    usersPh.owner_id = ownerId;
+                    usersPh.size = -1;
+
+                    dbos.add(Dto2Entity.buildPhotoAlbumDbo(Allph));
+                    albums.add(Dto2Model.transform(Allph));
+
+                    if(ownerId >= 0) {
+                        boolean HasUserPhotoAlb = false;
+                        for (VKApiPhotoAlbum dto : dtos) {
+                            if (dto.id == -9000) {
+                                HasUserPhotoAlb = true;
+                                break;
+                            }
+                        }
+                        if (!HasUserPhotoAlb) {
+                            dbos.add(Dto2Entity.buildPhotoAlbumDbo(usersPh));
+                            albums.add(Dto2Model.transform(usersPh));
+                        }
+                    }
 
                     for(VKApiPhotoAlbum dto : dtos){
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(dto));
                         albums.add(Dto2Model.transform(dto));
                     }
+
+
 
                     return cache.photoAlbums()
                             .store(accountId, ownerId, dbos, offset == 0)

@@ -2,7 +2,20 @@
 <resources>
 
     <string name="app_name">Phoenix (R)</string>
-
+    <string-array name="array_theme_names">
+        <item>Синее Пламя</item>
+        <item>Жёлтое Пламя</item>
+        <item>Красное Пламя</item>
+        <item>Фиолетовое Пламя</item>
+        <item>Зелёное Пламя</item>
+        <item>Серое Пламя</item>
+    </string-array>
+    <string-array name="array_chat_background_names">
+        <item>Статичный</item>
+        <item>Печеньки</item>
+        <item>Линии</item>
+        <item>Руны</item>
+    </string-array>
     <!-- Dialogs-->
     <string name="dialogs">Диалоги</string>
     <string name="dialog_day_today">Сегодня</string>
@@ -100,6 +113,7 @@
     <string name="counter_groups">группы</string>
     <string name="counter_friends">друзья</string>
     <string name="counter_followers">подписчики</string>
+    <string name="counter_requests">подписки</string>
     <string name="counter_photos">фото</string>
     <string name="counter_audios">аудио</string>
     <string name="counter_videos">видео</string>
@@ -220,6 +234,7 @@
     <string name="api_error_21">Данное действие разрешено только для Standalone и Open API приложений</string>
     <string name="api_error_23">Метод был выключен</string>
     <string name="api_error_24">Требуется подтверждение со стороны пользователя</string>
+    <string name="api_error_30">Закрытый профиль</string>
     <string name="api_error_100">Один из необходимых параметров был не передан или неверен</string>
     <string name="api_error_101">Неверный API ID приложения</string>
     <string name="api_error_103">Превышено ограничение на количество вступлений</string>
@@ -265,6 +280,12 @@
     <string name="message_was_deleted">Сообщение было удалено</string>
     <string name="edit">Редактировать</string>
     <string name="added">Добавлено</string>
+
+    <string name="saved_audio">Скачивание трека...</string>
+    <string name="exist_audio">Уже скачано</string>
+    <string name="error_audio">Ошибка аудио</string>
+
+    <string name="error_sending">Ошибка входа, повторите попытку позже</string>
 
     <string name="get_full_app_title">Получить полное приложение</string>
     <string name="get_full_app_summary">Если хотите получить больше возможностей, попробуйте Phoenix для ВК</string>
@@ -497,7 +518,7 @@
     <string name="remove_chat_user_commit">Вы действительно хотите исключить пользователя %1$s из беседы?</string>
     <string name="confirmation">Подтверждение</string>
     <string name="add_to_home_screen">Добавить на главный экран</string>
-    <string name="welcome_hint">Нажмите на птицу для авторизации :)</string>
+    <string name="welcome_hint">Нажмите на шлем викинга для авторизации :)</string>
     <string name="poll">Опрос</string>
     <string name="new_poll">Новый опрос</string>
     <string name="poll_question">Тема опроса</string>
@@ -525,6 +546,7 @@
     <string name="people">Люди</string>
     <string name="links">Ссылки</string>
     <string name="posts">Записи</string>
+    <string name="fave_groups">Сообщества</string>
     <string name="loading_owner_photo_album">Загрузка фотоальбома</string>
     <string name="no_photos_found">Фотографии не найдены</string>
     <string name="please_wait">Пожалуйста, подождите</string>
@@ -551,11 +573,12 @@
     <string name="no_photos">Нет изображений</string>
     <string name="invites_you_to_join_community">%1$s приглашает Вас вступить в сообщество</string>
     <string name="attachments_in_chat">Материалы беседы</string>
+    <string name="unknown_photos_count">неизвестно</string>
     <string name="photos_count">%1$d фото</string>
     <string name="videos_count">%1$d видео</string>
     <string name="communities">Сообщества</string>
     <string name="share_photo_title">Поделиться фотографией</string>
-    <string name="save_yourself">Сохранить себе</string>
+    <string name="save_yourself">Сохранить в альбом</string>
     <string name="photo_saved_yourself">Сохранено в альбом "Сохраненные фотографии"</string>
     <string name="documents">Документы</string>
     <string name="search_options">Опции поиска</string>
@@ -957,6 +980,7 @@
     <string name="api_error_800">Это видео уже добавлено</string>
     <string name="user_blacklist_title">Черный список</string>
     <string name="add_to_blacklist">В черный список</string>
+    <string name="is_to_blacklist">Заблокирован</string>
     <string name="button_activate">Aктивировать</string>
     <string name="proxy_address_helper_text">Адрес сервера</string>
     <string name="proxy_port_helper_text">Порт</string>
@@ -968,17 +992,21 @@
     <string name="proxy_authorization">Авторизация</string>
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
+    <string name="get_bitrate">Узнать Битрейт</string>
+    <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
     <string name="button_proxy">Прокси</string>
     <string name="login_password_hint">Пароль</string>
     <string name="login_phone_or_email_hint">Телефон или email</string>
-    <string name="login_title">Авторизация</string>
+    <string name="login_title">АВТОРИЗАЦИЯ ВК</string>
     <string name="button_login_via_web">Через Web</string>
+    <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
     <string name="drawer_edit_title">Боковое меню</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
+    <string name="button_validate_web">Не пришёл код</string>
     <string name="error_not_found_message">Объект не найден</string>
     <string name="audios_disabled_summary_message">16 декабря 2016 года администрация \"ВКонтакте\" отключила доступ к своему музыкальному API для сторонних приложений</string>
     <string name="audios_disabled_title">Доступ закрыт :(</string>
@@ -1050,9 +1078,11 @@
     <string name="wall_comment_push_title">Новый комментарий к записи</string>
     <string name="audios">Аудио</string>
     <string name="playlist">Плейлист</string>
+    <string name="equalizer">Эквалайзер</string>
     <string name="phoenix_player">Phoenix Плеер</string>
     <string name="choose_theme_title">Тема приложения</string>
     <string name="acoustic">Акустика</string>
+    <string name="my_saved">Моё аудио</string>
     <string name="alternative">Альтернатива</string>
     <string name="chanson">Шансон</string>
     <string name="classical">Классика</string>
@@ -1064,11 +1094,13 @@
     <string name="jazz">Джаз</string>
     <string name="metal">Метал</string>
     <string name="pop">Поп</string>
-    <string name="rap">Рэп</string>
     <string name="reggae">Рэгги</string>
     <string name="rock">Рок</string>
     <string name="trance">Транс</string>
     <string name="top">Топ</string>
     <string name="gift">Подарок</string>
     <string name="chat">Чат</string>
+    <string name="get_root">Получение Root доступа...</string>
+    <string name="open_clipboard_url">Открыть ссылку из буфера</string>
+    <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
 </resources>

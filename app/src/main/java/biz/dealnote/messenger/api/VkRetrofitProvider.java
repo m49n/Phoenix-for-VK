@@ -18,6 +18,7 @@ import biz.dealnote.messenger.api.adapters.ChatsInfoAdapter;
 import biz.dealnote.messenger.api.adapters.CommentDtoAdapter;
 import biz.dealnote.messenger.api.adapters.CommunityDtoAdapter;
 import biz.dealnote.messenger.api.adapters.CustomCommentsResponseAdapter;
+import biz.dealnote.messenger.api.adapters.DocsEntryDtoAdapter;
 import biz.dealnote.messenger.api.adapters.FeedbackDtoAdapter;
 import biz.dealnote.messenger.api.adapters.FeedbackUserArrayDtoAdapter;
 import biz.dealnote.messenger.api.adapters.GroupSettingsAdapter;
@@ -50,6 +51,7 @@ import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
+import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.api.model.VkApiPostSource;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 import biz.dealnote.messenger.api.model.database.SchoolClazzDto;
@@ -81,6 +83,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
 
     private static final Gson VKGSON = new GsonBuilder()
             .registerTypeAdapter(VkApiAttachments.Entry.class, new AttachmentsEntryDtoAdapter())
+            .registerTypeAdapter(VkApiDoc.Entry.class, new DocsEntryDtoAdapter())
             .registerTypeAdapter(VKApiPhoto.class, new PhotoDtoAdapter())
             .registerTypeAdapter(boolean.class, new BooleanAdapter())
             .registerTypeAdapter(VkApiPrivacy.class, new PrivacyDtoAdapter())

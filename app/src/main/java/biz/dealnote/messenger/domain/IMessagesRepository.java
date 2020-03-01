@@ -123,7 +123,7 @@ public interface IMessagesRepository {
 
     Single<List<AppChatUser>> addChatUsers(int accountId, int chatId, List<User> users);
 
-    Completable deleteDialog(int accountId, int peedId, int count, int offset);
+    Completable deleteDialog(int accountId, int peedId);
 
     Completable deleteMessages(int accountId, int peerId, @NonNull Collection<Integer> ids, boolean forAll);
 

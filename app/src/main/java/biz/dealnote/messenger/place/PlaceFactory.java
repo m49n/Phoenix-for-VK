@@ -175,9 +175,9 @@ public class PlaceFactory {
                 .withStringExtra(Extra.BODY, body);
     }
 
-    public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, Integer focusPhotoId){
+    public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, Integer focusPhotoId, Integer Index){
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY)
-                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, focusPhotoId));
+                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, focusPhotoId, Index));
     }
 
     public static Place getSimpleGalleryPlace(int accountId, ArrayList<Photo> photos, int position, boolean needRefresh){

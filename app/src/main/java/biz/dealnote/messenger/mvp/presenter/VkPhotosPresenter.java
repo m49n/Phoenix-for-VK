@@ -50,7 +50,7 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
 
     private static final String SAVE_ALBUM = "save-album";
     private static final String SAVE_OWNER = "save-owner";
-    private static final int COUNT = 50;
+    private static final int COUNT = 100;
 
     private final int ownerId;
     private final int albumId;
@@ -269,9 +269,23 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
 
     private void requestActualData(int offset) {
         setRequestNow(true);
-        appendDisposable(interactor.get(getAccountId(), ownerId, albumId, COUNT, offset, true)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
+        if(albumId != -9001 && albumId != -9000) {
+            appendDisposable(interactor.get(getAccountId(), ownerId, albumId, COUNT, offset, true)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
+        }
+        else if(albumId == -9000)
+        {
+            appendDisposable(interactor.getUsersPhoto(getAccountId(), ownerId, 1, offset, COUNT)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
+        }
+        else if(albumId == -9001)
+        {
+            appendDisposable(interactor.getAll(getAccountId(), ownerId, 1, 1, offset, COUNT)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
+        }
     }
 
     private void onActualDataGetError(Throwable t) {
@@ -416,7 +430,14 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
     }
 
     public void firePhotoClick(SelectablePhotoWrapper wrapper) {
-        getView().displayGallery(getAccountId(), albumId, ownerId, wrapper.getPhoto().getId());
+        int Index = 0;
+        for (int i = 0; i < photos.size(); i++) {
+            SelectablePhotoWrapper photo = photos.get(i);
+            if (photo.getPhoto().getId() == wrapper.getPhoto().getId()) {
+                Index = i;
+            }
+        }
+        getView().displayGallery(getAccountId(), albumId, ownerId, wrapper.getPhoto().getId(), Index);
     }
 
     public void fireSelectionCommitClick() {

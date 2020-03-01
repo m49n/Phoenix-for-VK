@@ -36,14 +36,23 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         final PhotoAlbum photoAlbum = data.get(position);
-
-        String thumb = photoAlbum.getSizes().getUrlForSize(PhotoSize.X, false);
-
-        PicassoInstance.with()
-                .load(thumb)
-                .tag(Constants.PICASSO_TAG)
-                .placeholder(R.drawable.background_gray)
-                .into(holder.imageView);
+        if(photoAlbum.getSizes() != null)
+        {
+            String thumb = photoAlbum.getSizes().getUrlForSize(PhotoSize.X, false);
+            PicassoInstance.with()
+                    .load(thumb)
+                    .tag(Constants.PICASSO_TAG)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.imageView);
+        }
+        else
+        {
+            PicassoInstance.with()
+                    .load(R.drawable.albom)
+                    .tag(Constants.PICASSO_TAG)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.imageView);
+        }
 
         holder.title.setText(photoAlbum.getTitle());
 
@@ -52,8 +61,10 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
                 clickListener.onVkPhotoAlbumClick(photoAlbum);
             }
         });
-
-        holder.counterText.setText(context.getString(R.string.photos_count, photoAlbum.getSize()));
+        if(photoAlbum.getSize() >= 0)
+            holder.counterText.setText(context.getString(R.string.photos_count, photoAlbum.getSize()));
+        else
+            holder.counterText.setText(R.string.unknown_photos_count);
         holder.imageView.setOnLongClickListener(v -> clickListener != null && clickListener.onVkPhotoAlbumLongClick(photoAlbum));
     }
 

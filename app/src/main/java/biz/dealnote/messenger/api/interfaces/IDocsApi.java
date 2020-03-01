@@ -29,7 +29,7 @@ public interface IDocsApi {
     Single<Items<VkApiDoc>> search(String query, Integer count, Integer offset);
 
     @CheckResult
-    Single<List<VkApiDoc>> save(String file, String title, String tags);
+    Single<VkApiDoc.Entry> save(String file, String title, String tags);
 
     @CheckResult
     Single<VkApiDocsUploadServer> getUploadServer(Integer groupId, String type);

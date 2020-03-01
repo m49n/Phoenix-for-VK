@@ -14,6 +14,7 @@ import biz.dealnote.messenger.mvp.view.IErrorView;
 import biz.dealnote.messenger.mvp.view.IToastView;
 import biz.dealnote.messenger.service.ErrorLocalizer;
 import biz.dealnote.messenger.util.InstancesCounter;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.AbsPresenter;

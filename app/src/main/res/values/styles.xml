@@ -38,6 +38,7 @@
 
         <item name="chat_background_cookies">@drawable/cookies_white</item>
         <item name="chat_background_lines">@drawable/lines_white</item>
+        <item name="chat_background_runes">@drawable/runes_white</item>
 
         <item name="buttonAddPhotoBackground">@drawable/background_rectangle_dash_inverse</item>
     </style>
@@ -56,6 +57,38 @@
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#FF9800</item>
+    </style>
+
+    <style name="App.DayNight.Red" parent="App.DayNight">
+        <item name="colorPrimary">#ff0056</item>
+        <item name="colorSecondary">#ff63a0</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#ff0056</item>
+    </style>
+
+    <style name="App.DayNight.Violet" parent="App.DayNight">
+        <item name="colorPrimary">#9800ff</item>
+        <item name="colorSecondary">#8500ff</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#9800ff</item>
+    </style>
+
+    <style name="App.DayNight.Green" parent="App.DayNight">
+        <item name="colorPrimary">#268000</item>
+        <item name="colorSecondary">#36b500</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#268000</item>
+    </style>
+
+    <style name="App.DayNight.Gray" parent="App.DayNight">
+        <item name="colorPrimary">#444444</item>
+        <item name="colorSecondary">#777777</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#444444</item>
     </style>
 
     <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">

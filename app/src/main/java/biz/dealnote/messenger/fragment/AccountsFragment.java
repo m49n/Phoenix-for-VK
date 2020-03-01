@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,8 +18,17 @@ import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +36,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -46,6 +67,7 @@ import biz.dealnote.messenger.model.Account;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.ShortcutUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -84,6 +106,9 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
 
         root.findViewById(R.id.fab).setOnClickListener(this);
+        root.findViewById(R.id.kate_acc).setOnClickListener(this);
+        root.findViewById(R.id.dav_acc).setOnClickListener(this);
+        root.findViewById(R.id.dav_acc).setVisibility(View.GONE);
         return root;
     }
 
@@ -163,19 +188,22 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 if (resultCode == Activity.RESULT_OK) {
                     int uid = data.getExtras().getInt(Extra.USER_ID);
                     String token = data.getStringExtra(Extra.TOKEN);
-                    processNewAccount(uid, token);
+                    processNewAccount(uid, token, "vkandroid", true);
                 }
-
                 break;
 
             case REQEUST_DIRECT_LOGIN:
                 if (resultCode == Activity.RESULT_OK) {
                     if (DirectAuthDialog.ACTION_LOGIN_VIA_WEB.equals(data.getAction())) {
                         startLoginViaWeb();
+                    }
+                    else if(DirectAuthDialog.ACTION_VALIDATE_VIA_WEB.equals(data.getAction())) {
+                        String url = data.getStringExtra(Extra.URL);
+                        startValidateViaWeb(url);
                     } else if (DirectAuthDialog.ACTION_LOGIN_COMPLETE.equals(data.getAction())) {
                         int uid = data.getExtras().getInt(Extra.USER_ID);
                         String token = data.getStringExtra(Extra.TOKEN);
-                        processNewAccount(uid, token);
+                        processNewAccount(uid, token, "vkandroid", true);
                     }
                 }
                 break;
@@ -208,7 +236,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         resolveEmptyText();
     }
 
-    private void processNewAccount(final int uid, final String token) {
+    private void processNewAccount(final int uid, final String token, final String type, boolean isCurrent) {
         //Accounts account = new Accounts(token, uid);
 
         // важно!! Если мы получили новый токен, то необходимо удалить запись
@@ -220,8 +248,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 .storeAccessToken(uid, token);
 
         Settings.get()
+                .accounts().storeTokenType(uid, type);
+
+        Settings.get()
                 .accounts()
-                .registerAccountId(uid, true);
+                .registerAccountId(uid, isCurrent);
 
         merge(new Account(uid, null));
 
@@ -238,6 +269,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 
+    private void startValidateViaWeb(String url) {
+        Intent intent = LoginActivity.createIntent(requireActivity(), url);
+        startActivityForResult(intent, REQUEST_LOGIN);
+    }
+
     private void startDirectLogin() {
         DirectAuthDialog.newInstance()
                 .targetTo(this, REQEUST_DIRECT_LOGIN)
@@ -250,6 +286,109 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             case R.id.fab:
                 startDirectLogin();
                 break;
+            case R.id.kate_acc:
+                onKate();
+                break;
+        }
+    }
+
+    private boolean canRunRootCommands()
+    {
+        boolean retval = false;
+        Process suProcess;
+        PhoenixToast.showToast(requireActivity(), R.string.get_root);
+        try
+        {
+            suProcess = Runtime.getRuntime().exec("su");
+
+            DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+            DataInputStream osRes = new DataInputStream(suProcess.getInputStream());
+
+            if (null != os && null != osRes)
+            {
+                os.writeBytes("id\n");
+                os.flush();
+
+                String currUid = osRes.readLine();
+                boolean exitSu = false;
+                if (null == currUid)
+                {
+                    retval = false;
+                    exitSu = false;
+                    PhoenixToast.showToastError(requireActivity(), "Can't get root access or denied by user");
+                }
+                else if (true == currUid.contains("uid=0"))
+                {
+                    retval = true;
+                    exitSu = true;
+                }
+                else
+                {
+                    retval = false;
+                    exitSu = true;
+                    PhoenixToast.showToastError(requireActivity(), "Root access rejected: \" + currUid");
+                }
+                if (exitSu)
+                {
+                    os.writeBytes("exit\n");
+                    os.flush();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            retval = false;
+            PhoenixToast.showToastError(requireActivity(), "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
+        }
+
+        return retval;
+    }
+
+    private void onKate()
+    {
+        if(!canRunRootCommands())
+            return;
+        String JSDT = new String();
+        try {
+            Process suProcess;
+            suProcess = Runtime.getRuntime().exec("su");
+            DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+            DataInputStream osRes = new DataInputStream(suProcess.getInputStream());
+            if (null != os && null != osRes) {
+                os.writeBytes("cat /data/data/com.perm.kate_new_6/shared_prefs/com.perm.kate_new_6_preferences.xml\n");
+                os.flush();
+                TimeUnit.SECONDS.sleep(1);
+                while(osRes.available()>0) {
+                    JSDT += osRes.readLine();
+                }
+                os.writeBytes("exit\n");
+                os.flush();
+                suProcess.waitFor();
+            }
+            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder();
+            Document doc = dBuilder.parse(new InputSource(new StringReader(JSDT)));
+            NodeList elements = doc.getElementsByTagName("map").item(0).getChildNodes();
+            for (int i = 0; i < elements.getLength(); i++) {
+                NamedNodeMap attributes = elements.item(i).getAttributes();
+                if(attributes == null || attributes.getNamedItem("name") == null)
+                    continue;
+                String name = attributes.getNamedItem("name").getNodeValue();
+                if(name.equals("accounts"))
+                {
+                    JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
+                    for(int s = 0; s < jsonRoot.length(); s++) {
+                        JSONObject mJsonObject = jsonRoot.getJSONObject(s);
+                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", false);
+                    }
+                    break;
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            PhoenixToast.showToastError(requireActivity(), "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
     }
 
@@ -257,6 +396,10 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         Settings.get()
                 .accounts()
                 .removeAccessToken(account.getId());
+
+        Settings.get()
+                .accounts()
+                .removeType(account.getId());
 
         Settings.get()
                 .accounts()

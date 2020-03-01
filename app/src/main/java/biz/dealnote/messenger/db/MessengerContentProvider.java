@@ -347,6 +347,8 @@ public class MessengerContentProvider extends ContentProvider {
         sUsersProjectionMap.put(UserColumns.DOMAIN, UserColumns.FULL_DOMAIN);
         sUsersProjectionMap.put(UserColumns.IS_FRIEND, UserColumns.FULL_IS_FRIEND);
         sUsersProjectionMap.put(UserColumns.FRIEND_STATUS, UserColumns.FULL_FRIEND_STATUS);
+        sUsersProjectionMap.put(UserColumns.WRITE_MESSAGE_STATUS, UserColumns.FULL_WRITE_MESSAGE_STATUS);
+        sUsersProjectionMap.put(UserColumns.IS_USER_BLACK_LIST, UserColumns.FULL_IS_USER_BLACK_LIST);
 
         sRelativeshipProjectionMap = new HashMap<>();
         sRelativeshipProjectionMap.put(RelationshipColumns._ID, RelationshipColumns.FULL_ID);
@@ -367,6 +369,8 @@ public class MessengerContentProvider extends ContentProvider {
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_SEX, UserColumns.FULL_SEX + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_SEX);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_IS_FRIEND, UserColumns.FULL_IS_FRIEND + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_IS_FRIEND);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS, UserColumns.FULL_FRIEND_STATUS + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS);
+        sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS, UserColumns.FULL_WRITE_MESSAGE_STATUS + " AS " + RelationshipColumns.FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS);
+        sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_IS_USER_BLACK_LIST, UserColumns.FULL_IS_USER_BLACK_LIST + " AS " + RelationshipColumns.FOREIGN_SUBJECT_IS_USER_BLACK_LIST);
 
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_NAME, GroupColumns.FULL_NAME + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_NAME);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_SCREEN_NAME, GroupColumns.FULL_SCREEN_NAME + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_SCREEN_NAME);
@@ -745,8 +749,10 @@ public class MessengerContentProvider extends ContentProvider {
         sFaveUsersProjectionMap.put(FaveUsersColumns.FOREIGN_USER_PHOTO_100, "users." + UserColumns.PHOTO_100 + " AS " + FaveUsersColumns.FOREIGN_USER_PHOTO_100);
         sFaveUsersProjectionMap.put(FaveUsersColumns.FOREIGN_USER_PHOTO_50, "users." + UserColumns.PHOTO_50 + " AS " + FaveUsersColumns.FOREIGN_USER_PHOTO_50);
         sFaveUsersProjectionMap.put(FaveUsersColumns.FOREIGN_USER_ONLINE, "users." + UserColumns.ONLINE + " AS " + FaveUsersColumns.FOREIGN_USER_ONLINE);
+        sFaveUsersProjectionMap.put(FaveUsersColumns.FOREIGN_USER_ONLINE_MOBILE, "users." + UserColumns.ONLINE_MOBILE + " AS " + FaveUsersColumns.FOREIGN_USER_ONLINE_MOBILE);
         sFaveUsersProjectionMap.put(FaveUsersColumns.UPDATED_TIME, FaveUsersColumns.UPDATED_TIME);
         sFaveUsersProjectionMap.put(FaveUsersColumns.DESCRIPTION, FaveUsersColumns.DESCRIPTION);
+        sFaveUsersProjectionMap.put(FaveUsersColumns.FAVE_TYPE, FaveUsersColumns.FAVE_TYPE);
 
         sFaveGroupsProjectionMap = new HashMap<>();
         sFaveGroupsProjectionMap.put(FaveGroupsColumns._ID, FaveGroupsColumns.FULL_ID);
@@ -758,6 +764,7 @@ public class MessengerContentProvider extends ContentProvider {
         sFaveGroupsProjectionMap.put(FaveGroupsColumns.PHOTO_50, "groups." + GroupColumns.PHOTO_50 + " AS " + FaveGroupsColumns.PHOTO_50);
         sFaveGroupsProjectionMap.put(FaveGroupsColumns.UPDATED_TIME, FaveGroupsColumns.UPDATED_TIME);
         sFaveGroupsProjectionMap.put(FaveGroupsColumns.DESCRIPTION, FaveGroupsColumns.DESCRIPTION);
+        sFaveGroupsProjectionMap.put(FaveGroupsColumns.FAVE_TYPE, FaveGroupsColumns.FAVE_TYPE);
 
         sFaveLinksProjectionMap = new HashMap<>();
         sFaveLinksProjectionMap.put(FaveLinksColumns._ID, FaveLinksColumns.FULL_ID);

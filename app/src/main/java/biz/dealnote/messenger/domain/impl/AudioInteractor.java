@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.domain.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,10 +8,10 @@ import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
-import biz.dealnote.messenger.plugins.IAudioPluginConnector;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import static biz.dealnote.messenger.util.Objects.isNull;
 
 /**
  * Created by admin on 07.10.2017.
@@ -19,11 +20,31 @@ import io.reactivex.Single;
 public class AudioInteractor implements IAudioInteractor {
 
     private final INetworker networker;
-    private final IAudioPluginConnector audioPluginConnector;
+    private final int AccountId;
 
-    public AudioInteractor(INetworker networker, IAudioPluginConnector pluginConnector) {
+    public AudioInteractor(INetworker networker, int AccountId) {
         this.networker = networker;
-        this.audioPluginConnector = pluginConnector;
+        this.AccountId = AccountId;
+    }
+
+    protected static String join(Collection<IdPair> audios, String delimiter) {
+        if (isNull(audios)) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean firstTime = true;
+        for (IdPair pair : audios) {
+            if (firstTime) {
+                firstTime = false;
+            } else {
+                sb.append(delimiter);
+            }
+
+            sb.append(pair.ownerId + "_" + pair.id);
+        }
+
+        return sb.toString();
     }
 
     @Override
@@ -72,32 +93,93 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> get(int ownerId, int offset) {
-        return audioPluginConnector.get(ownerId, offset);
+    public Single<List<Audio>> get(int accountId, int ownerId, int offset) {
+
+        return networker.vkDefault(accountId)
+                .audio()
+                .get(ownerId,offset).map(out-> {
+                    List<Audio> ret = new ArrayList<>();
+                    for(int i = 0; i < out.items.size(); i++)
+                        ret.add(new Audio()
+                            .setId(out.items.get(i).id)
+                            .setOwnerId(out.items.get(i).owner_id)
+                            .setAlbumId(Objects.nonNull(out.items.get(i).album_id) ? out.items.get(i).album_id : 0)
+                            .setArtist(out.items.get(i).artist)
+                            .setTitle(out.items.get(i).title)
+                            .setUrl(out.items.get(i).url)
+                            .setLyricsId(out.items.get(i).lyrics_id)
+                            .setGenre(out.items.get(i).genre)
+                            .setDuration(out.items.get(i).duration));
+                    return ret;
+                });
     }
 
     @Override
     public Single<List<Audio>> getById(List<IdPair> audios) {
-        return audioPluginConnector.getById(audios);
+        return networker.vkDefault(AccountId)
+                .audio()
+                .getById(join(audios, ",")).map(out-> {
+                    List<Audio> ret = new ArrayList<>();
+                    for(int i = 0; i < out.size(); i++)
+                        ret.add(new Audio()
+                                .setId(out.get(i).id)
+                                .setOwnerId(out.get(i).owner_id)
+                                .setAlbumId(Objects.nonNull(out.get(i).album_id) ? out.get(i).album_id : 0)
+                                .setArtist(out.get(i).artist)
+                                .setTitle(out.get(i).title)
+                                .setUrl(out.get(i).url)
+                                .setLyricsId(out.get(i).lyrics_id)
+                                .setGenre(out.get(i).genre)
+                                .setDuration(out.get(i).duration));
+                    return ret;
+                });
     }
 
     @Override
-    public Single<List<Audio>> getPopular(int foreign, int genre) {
-        return audioPluginConnector.getPopular(foreign, genre);
+    public Single<List<Audio>> getPopular(int accountId, int foreign, int genre) {
+
+        return networker.vkDefault(accountId)
+                .audio()
+                .getPopular(foreign,genre).map(out-> {
+                    List<Audio> ret = new ArrayList<>();
+                    for(int i = 0; i < out.size(); i++)
+                        ret.add(new Audio()
+                                .setId(out.get(i).id)
+                                .setOwnerId(out.get(i).owner_id)
+                                .setAlbumId(Objects.nonNull(out.get(i).album_id) ? out.get(i).album_id : 0)
+                                .setArtist(out.get(i).artist)
+                                .setTitle(out.get(i).title)
+                                .setUrl(out.get(i).url)
+                                .setLyricsId(out.get(i).lyrics_id)
+                                .setGenre(out.get(i).genre)
+                                .setDuration(out.get(i).duration));
+                    return ret;
+                });
     }
 
     @Override
-    public Single<List<Audio>> search(String query, boolean own, int offset) {
-        return audioPluginConnector.search(query, own, offset);
+    public Single<List<Audio>> search(int accountId, String query, boolean own, int offset) {
+        return networker.vkDefault(accountId)
+                .audio()
+                .Search(query, own == true ? 1:0, offset).map(out-> {
+                    List<Audio> ret = new ArrayList<>();
+                    for(int i = 0; i < out.items.size(); i++)
+                        ret.add(new Audio()
+                                .setId(out.items.get(i).id)
+                                .setOwnerId(out.items.get(i).owner_id)
+                                .setAlbumId(Objects.nonNull(out.items.get(i).album_id) ? out.items.get(i).album_id : 0)
+                                .setArtist(out.items.get(i).artist)
+                                .setTitle(out.items.get(i).title)
+                                .setUrl(out.items.get(i).url)
+                                .setLyricsId(out.items.get(i).lyrics_id)
+                                .setGenre(out.items.get(i).genre)
+                                .setDuration(out.items.get(i).duration));
+                    return ret;
+                });
     }
-
-//    @Override
-//    public Single<String> findAudioUrl(int audioId, int ownerId) {
-//        return audioPluginConnector.findAudioUrl(audioId, ownerId);
-//    }
 
     @Override
     public boolean isAudioPluginAvailable() {
-        return audioPluginConnector.isPluginAvailable();
+        return true;
     }
 }

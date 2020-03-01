@@ -25,6 +25,7 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoUtil;
@@ -69,7 +70,7 @@ public class ExoVideoPlayer implements IVideoPlayer {
             }
         }
 
-        String userAgent = Util.getUserAgent(context.getApplicationContext(), "phoenix-video-exo-player");
+        String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // Produces Extractor instances for parsing the media data.

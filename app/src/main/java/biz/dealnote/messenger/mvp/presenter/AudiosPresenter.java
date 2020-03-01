@@ -1,7 +1,12 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,7 +80,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private void requestNext() {
         setLoadingNow(true);
         final int offset = audios.size();
-        audioListDisposable.add(audioInteractor.get(ownerId, offset)
+        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onNextListReceived, this::onListGetError));
     }
@@ -84,23 +89,22 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         int engOnly = 0;
         List<AudioFilter> result = new ArrayList<>();
         result.add(new AudioFilter(engOnly, AudioFilter.MY_AUDIO, true));
-        result.add(new AudioFilter(engOnly, AudioFilter.TOP_ALL));
+        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ETHNIC));
+        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INSTRUMENTAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ACOUSTIC_AND_VOCAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ALTERNATIVE));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.CLASSICAL));
+        result.add(new AudioFilter(engOnly, AudioFilter.TOP_ALL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DANCE_AND_HOUSE));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DRUM_AND_BASS));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DUBSTEP));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.EASY_LISTENING));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ELECTROPOP_AND_DISCO));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ETHNIC));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INDIE_POP));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INSTRUMENTAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.JAZZ_AND_BLUES));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.METAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.OTHER));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.POP));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.RAP_AND_HIPHOP));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.REGGAE));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ROCK));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.TRANCE));
@@ -109,7 +113,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void requestList() {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.get(ownerId, 0)
+        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, 0)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onListReceived, this::onListGetError));
     }
@@ -138,7 +142,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void getListByGenre(boolean foreign, int genre) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.getPopular(foreign ? 1 : 0, genre)
+        audioListDisposable.add(audioInteractor.getPopular(getAccountId(), foreign ? 1 : 0, genre)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onListReceived, this::onListGetError));
     }

@@ -1091,10 +1091,10 @@ public class MessagesRepository implements IMessagesRepository {
     }
 
     @Override
-    public Completable deleteDialog(int accountId, int peedId, int count, int offset) {
+    public Completable deleteDialog(int accountId, int peedId) {
         return networker.vkDefault(accountId)
                 .messages()
-                .deleteDialog(peedId, offset, count)
+                .deleteDialog(peedId)
                 .flatMapCompletable(ignored -> storages.dialogs()
                         .removePeerWithId(accountId, peedId)
                         .andThen(storages.messages().insertPeerDbos(accountId, peedId, Collections.emptyList(), true)))
@@ -1337,11 +1337,11 @@ public class MessagesRepository implements IMessagesRepository {
                                     .flatMap(uploadDto -> docsApi
                                             .save(uploadDto.file, null, null)
                                             .map(dtos -> {
-                                                if (dtos.isEmpty()) {
+                                                if (dtos.type.isEmpty()) {
                                                     throw new NotFoundException("Unable to save voice message");
                                                 }
 
-                                                VkApiDoc dto = dtos.get(0);
+                                                VkApiDoc dto = dtos.doc;
                                                 IAttachmentToken token = AttachmentsTokenCreator.ofDocument(dto.id, dto.ownerId, dto.accessKey);
                                                 return Optional.wrap(token);
                                             }));

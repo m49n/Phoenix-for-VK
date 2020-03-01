@@ -20,10 +20,4 @@ public final class FaveGroupsColumns implements BaseColumns {
     private FaveGroupsColumns() {
     }
 
-    public static ContentValues buildCV(int id) {
-        ContentValues cv = new ContentValues();
-        cv.put(_ID, id);
-        return cv;
-    }
-
 }

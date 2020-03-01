@@ -13,4 +13,6 @@
 
     <item android:title="@string/copy_url"
         android:id="@+id/action_copy_url"/>
+    <item android:title="@string/open_clipboard_url"
+        android:id="@+id/action_open_url"/>
 </menu>

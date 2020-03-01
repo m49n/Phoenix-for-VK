@@ -45,7 +45,7 @@ class WallApi extends AbsApi implements IWallApi {
                                 integerFromBoolean(signed), publishDate, latitude, longitude, placeId,
                                 integerFromBoolean(markAsAds))
                         .map(extractResponseWithErrorHandling())
-                        .map(response -> response == 1));
+                        .map(response -> response.postId != 0));
     }
 
     @Override

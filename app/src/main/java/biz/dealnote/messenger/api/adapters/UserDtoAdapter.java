@@ -71,6 +71,8 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         VKApiUser dto = new VKApiUser();
 
         dto.id = optInt(root, "id");
+        if(dto.id == 0)
+            dto.id = optInt(root, "user_id");
         dto.first_name = optString(root, "first_name");
         dto.last_name = optString(root, "last_name");
         dto.online = optInt(root, ONLINE) == 1;

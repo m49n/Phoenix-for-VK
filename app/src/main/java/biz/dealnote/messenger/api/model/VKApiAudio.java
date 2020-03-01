@@ -1,5 +1,4 @@
 package biz.dealnote.messenger.api.model;
-
 /**
  * An audio object describes an audio file and contains the following fields.
  */
@@ -77,7 +76,6 @@ public class VKApiAudio implements VKApiAttachment {
 
         public final static int ROCK = 1;
         public final static int POP = 2;
-        public final static int RAP_AND_HIPHOP = 3;
         public final static int EASY_LISTENING = 4;
         public final static int DANCE_AND_HOUSE = 5;
         public final static int INSTRUMENTAL = 6;

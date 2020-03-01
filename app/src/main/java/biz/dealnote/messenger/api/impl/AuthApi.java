@@ -2,12 +2,16 @@ package biz.dealnote.messenger.api.impl;
 
 import com.google.gson.Gson;
 
+import java.util.Locale;
+
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.AuthException;
 import biz.dealnote.messenger.api.CaptchaNeedException;
 import biz.dealnote.messenger.api.IDirectLoginSeviceProvider;
 import biz.dealnote.messenger.api.NeedValidationException;
 import biz.dealnote.messenger.api.interfaces.IAuthApi;
 import biz.dealnote.messenger.api.model.LoginResponse;
+import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import okhttp3.ResponseBody;
@@ -39,7 +43,7 @@ public class AuthApi implements IAuthApi {
         final Integer finalForceSms = forceSmsInteger;
         return service.provideAuthService()
                 .flatMap(service -> service
-                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms)
+                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms, Locale.getDefault().getLanguage(), Utils.getDiviceId(Injection.provideApplicationContext()))
                         .compose(withHttpErrorHandling()));
     }
 
@@ -62,7 +66,7 @@ public class AuthApi implements IAuthApi {
                     }
 
                     if ("need_validation".equalsIgnoreCase(response.error)) {
-                        return Single.error(new NeedValidationException(response.validationType));
+                        return Single.error(new NeedValidationException(response.validationType, response.redirect_uri));
                     }
 
                     if(nonEmpty(response.error)){

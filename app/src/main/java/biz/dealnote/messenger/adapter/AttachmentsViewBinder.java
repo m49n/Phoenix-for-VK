@@ -1,7 +1,9 @@
 package biz.dealnote.messenger.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -9,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -22,6 +26,7 @@ import com.squareup.picasso.Transformation;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +35,8 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.domain.IAudioInteractor;
+import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.Attachments;
@@ -45,13 +52,20 @@ import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.model.WikiPage;
+import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.WaveFormView;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -76,6 +90,8 @@ public class AttachmentsViewBinder {
     private OnAttachmentsActionCallback mAttachmentsActionCallback;
     private EmojiconTextView.OnHashTagClickListener mOnHashTagClickListener;
     private Context mContext;
+    private CompositeDisposable audioListDisposable = new CompositeDisposable();
+    private IAudioInteractor mAudioInteractor;
 
     public AttachmentsViewBinder(Context context, @NonNull OnAttachmentsActionCallback attachmentsActionCallback) {
         this.mContext = context;
@@ -85,6 +101,7 @@ public class AttachmentsViewBinder {
         this.mAttachmentsActionCallback = attachmentsActionCallback;
         this.mActiveWaveFormColor = CurrentTheme.getColorPrimary(context);
         this.mNoactiveWaveFormColor = Utils.adjustAlpha(mActiveWaveFormColor, 0.5f);
+        this.mAudioInteractor = InteractorFactory.createAudioInteractor();
     }
 
     private static void safeSetVisibitity(@Nullable View view, int visibility) {
@@ -516,6 +533,14 @@ public class AttachmentsViewBinder {
         }
     }
 
+    private void delete(final int accoutnId, Audio audio) {
+        audioListDisposable.add(mAudioInteractor.delete(accoutnId, audio.getId(), audio.getOwnerId()).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {}, ignore -> {}));
+    }
+
+    private void add(int accountId, Audio audio) {
+        audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {}, ignore -> {}));
+    }
+
     /**
      * Отображение аудиозаписей
      *
@@ -545,6 +570,55 @@ public class AttachmentsViewBinder {
 
                 int finalG = g;
                 holder.ibPlay.setOnClickListener(v -> mAttachmentsActionCallback.onAudioPlay(finalG, audios));
+                holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
+                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.pause : R.drawable.play);
+                holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
+
+
+
+                holder.Track.setOnClickListener(view -> {
+                    PopupMenu popup = new PopupMenu(mContext, holder.Track);
+                    popup.inflate(R.menu.audio_item_menu);
+                    popup.setOnMenuItemClickListener(item1 -> {
+                        switch (item1.getItemId()) {
+                            case R.id.add_item_audio:
+                                boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
+                                if(myAudio)
+                                    delete(Settings.get().accounts().getCurrent(), audio);
+                                else
+                                    add(Settings.get().accounts().getCurrent(), audio);
+                                return true;
+                            case R.id.save_item_audio:
+                                if(!AppPerms.hasWriteStoragePermision(mContext)) {
+                                    AppPerms.requestWriteStoragePermission((Activity)mContext);
+                                }
+                                if(!AppPerms.hasReadStoragePermision(mContext)) {
+                                    AppPerms.requestReadExternalStoragePermission((Activity)mContext);
+                                }
+                                int ret = DownloadUtil.downloadTrack(mContext, audio);
+                                if(ret == 0)
+                                    PhoenixToast.showToast(mContext, R.string.saved_audio);
+                                else if(ret == 1)
+                                    PhoenixToast.showToastSuccess(mContext, R.string.exist_audio);
+                                else
+                                    PhoenixToast.showToast(mContext, R.string.error_audio);
+                                return true;
+                            case R.id.bitrate_item_audio:
+                                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                                retriever.setDataSource(audio.getUrl(), new HashMap<>());
+                                String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                                PhoenixToast.showToast(mContext, mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                                return true;
+                            default:
+                                return false;
+                        }
+                    });
+                    if(audio.getOwnerId() == Settings.get().accounts().getCurrent())
+                        popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.delete);
+                    else
+                        popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.action_add);
+                    popup.show();
+                });
 
                 root.setVisibility(View.VISIBLE);
                 root.setTag(audio);
@@ -621,11 +695,17 @@ public class AttachmentsViewBinder {
         TextView tvTitle;
         TextView tvSubtitle;
         ImageView ibPlay;
+        TextView time;
+        ImageView saved;
+        LinearLayout Track;
 
         AudioHolder(View root) {
             tvTitle = root.findViewById(R.id.dialog_message);
             tvSubtitle = root.findViewById(R.id.item_audio_subtitle);
             ibPlay = root.findViewById(R.id.item_audio_play);
+            time = root.findViewById(R.id.item_audio_time);
+            saved = root.findViewById(R.id.saved);
+            Track = root.findViewById(R.id.track_option);
         }
     }
 

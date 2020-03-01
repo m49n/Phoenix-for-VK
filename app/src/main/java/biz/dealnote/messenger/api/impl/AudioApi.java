@@ -1,12 +1,14 @@
 package biz.dealnote.messenger.api.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import biz.dealnote.messenger.api.IServiceProvider;
 import biz.dealnote.messenger.api.interfaces.IAudioApi;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.response.BaseResponse;
 import biz.dealnote.messenger.api.services.IAudioService;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
@@ -70,6 +72,41 @@ class AudioApi extends AbsApi implements IAudioApi {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
                         .get(ownerId, albumId, join(audioIds, ","), 0, offset, count)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiAudio>> get(Integer ownerId, Integer offset) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .get(ownerId, offset)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<List<VKApiAudio>> getPopular(Integer foreign,
+                                                Integer genre) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getPopular(foreign, genre)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiAudio>> Search(String query,
+                                            Integer own,
+                                            Integer offset) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .Search(query, own, offset)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<List<VKApiAudio>> getById(String audios) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getById(audios)
                         .map(extractResponseWithErrorHandling()));
     }
 }

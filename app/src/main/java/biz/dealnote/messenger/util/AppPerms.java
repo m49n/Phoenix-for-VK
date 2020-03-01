@@ -63,9 +63,9 @@ public class AppPerms {
             }
 
             if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(activity, R.string.permission_granted_text, Toast.LENGTH_LONG).show();
+                PhoenixToast.showToastSuccess(activity, R.string.permission_granted_text);
             } else {
-                Toast.makeText(activity, R.string.permission_is_not_granted_text, Toast.LENGTH_LONG).show();
+                PhoenixToast.showToastError(activity, R.string.permission_is_not_granted_text);
             }
         }
     }

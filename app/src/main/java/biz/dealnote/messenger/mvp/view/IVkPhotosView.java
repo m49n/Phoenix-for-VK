@@ -32,7 +32,7 @@ public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorV
 
     void notifyUploadProgressChanged(int id, int progress);
 
-    void displayGallery(int accountId, int albumId, int ownerId, Integer focusToId);
+    void displayGallery(int accountId, int albumId, int ownerId, Integer focusToId, Integer Index);
 
     void displayDefaultToolbarTitle();
 

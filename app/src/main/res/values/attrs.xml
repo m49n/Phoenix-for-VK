@@ -49,7 +49,7 @@
     <attr name="messages_background_color" format="color" />
     <attr name="chat_background_cookies" format="reference" />
     <attr name="chat_background_lines" format="reference" />
-    <attr name="chat_background_circular" format="reference" />
+    <attr name="chat_background_runes" format="reference" />
     <attr name="message_unread_color" format="color" />
     <attr name="buttonAddPhotoBackground" format="reference" />
     <attr name="dividerColor" format="color" />

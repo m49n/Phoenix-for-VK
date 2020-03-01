@@ -18,9 +18,10 @@
         android:padding="4dp">
 
         <LinearLayout
+            android:id="@+id/track_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/item_audio_time"
+            android:layout_toStartOf="@id/item_audio_time"
             android:orientation="vertical"
             android:paddingEnd="16dp">
 
@@ -53,13 +54,13 @@
             tools:text="Time" />
 
         <ImageView
-            android:id="@+id/hq"
+            android:id="@+id/saved"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_below="@id/item_audio_time"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/high_quality"
-            android:tint="?android:textColorSecondary" />
+            android:src="@drawable/save"
+            android:tint="?colorSecondary" />
 
     </RelativeLayout>
 

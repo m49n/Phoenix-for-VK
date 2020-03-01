@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.App;
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoEventAdapter;
@@ -113,7 +114,7 @@ public class ExoGifPlayer implements IGifPlayer {
             }
         }
 
-        String userAgent = Util.getUserAgent(App.getInstance(), "phoenix-gif-exo-player");
+        String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // Produces Extractor instances for parsing the media data.

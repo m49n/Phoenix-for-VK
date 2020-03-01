@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.media.audiofx.AudioEffect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,17 +27,16 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -54,9 +58,11 @@ import biz.dealnote.messenger.player.ui.ShuffleButton;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
+import biz.dealnote.messenger.util.DownloadUtil;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
-import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -67,7 +73,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
-
     // Message to refresh the time
     private static final int REFRESH_TIME = 1;
 
@@ -91,6 +96,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     // VK Additional action
     private CircleCounterButton ivAdd;
+    private RepeatingImageButton ivSave;
     private CircleCounterButton ivTranslate;
 
     private TextView tvTitle;
@@ -190,11 +196,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutRes;
-        if (Utils.isLandscape(requireActivity()) && !Utils.is600dp(requireActivity())) {
-            layoutRes = R.layout.fragment_player_land;
-        } else {
             layoutRes = R.layout.fragment_player_port_new;
-        }
 
         View root = inflater.inflate(layoutRes, container, false);
 
@@ -232,6 +234,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         ivAdd = root.findViewById(R.id.audio_add);
         ivAdd.setOnClickListener(v -> onAddButtonClick());
 
+        ivSave = root.findViewById(R.id.audio_save);
+        ivSave.setOnClickListener(v -> onSaveButtonClick());
+
         CircleCounterButton ivShare = root.findViewById(R.id.audio_share);
         ivShare.setOnClickListener(v -> shareAudio());
 
@@ -262,6 +267,27 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 .isAudioBroadcastActive();
     }
 
+    private void onSaveButtonClick() {
+        Audio audio = MusicUtils.getCurrentAudio();
+        if (audio == null) {
+            return;
+        }
+        if(!AppPerms.hasWriteStoragePermision(getContext())) {
+            AppPerms.requestWriteStoragePermission(requireActivity());
+        }
+        if(!AppPerms.hasReadStoragePermision(getContext())) {
+            AppPerms.requestReadExternalStoragePermission(requireActivity());
+        }
+
+        int ret = DownloadUtil.downloadTrack(getContext(), audio);
+        if(ret == 0)
+            PhoenixToast.showToast(requireActivity(), R.string.saved_audio);
+        else if(ret == 1)
+            PhoenixToast.showToastSuccess(requireActivity(), R.string.exist_audio);
+        else
+            PhoenixToast.showToast(requireActivity(), R.string.error_audio);
+    }
+
     private void onAddButtonClick() {
         Audio audio = MusicUtils.getCurrentAudio();
         if (audio == null) {
@@ -287,7 +313,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     @SuppressWarnings("unused")
     private void onAudioAdded(Audio result) {
-        safeToast(R.string.added);
+        PhoenixToast.showToast(requireActivity(), R.string.added);
         resolveAddButton();
     }
 
@@ -311,9 +337,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     private void onAudioDeletedOrRestored(int id, int ownerId, boolean deleted) {
         if (deleted) {
-            safeToast(R.string.deleted);
+            PhoenixToast.showToast(requireActivity(), R.string.deleted);
         } else {
-            safeToast(R.string.restored);
+            PhoenixToast.showToast(requireActivity(), R.string.restored);
         }
 
         Audio current = MusicUtils.getCurrentAudio();
@@ -323,12 +349,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
 
         resolveAddButton();
-    }
-
-    private void safeToast(int res) {
-        if (isAdded()) {
-            Toast.makeText(requireActivity(), res, Toast.LENGTH_LONG).show();
-        }
     }
 
     /**

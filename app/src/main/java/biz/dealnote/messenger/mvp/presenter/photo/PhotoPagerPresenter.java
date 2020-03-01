@@ -20,11 +20,13 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IPhotoPagerView;
+import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Completable;
@@ -279,9 +281,16 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         }
 
         Photo photo = getCurrent();
-        String file = dir.getAbsolutePath() + "/" + photo.getOwnerId() + "_" + photo.getId() + ".jpg";
-        String url = photo.getUrlForSize(PhotoSize.W, true);
 
+        OwnerInfo.getRx(getApplicationContext(), getAccountId(), photo.getOwnerId())
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(userInfo -> DownloadResult(userInfo.getOwner().getFullName() + "_", dir, photo), throwable -> DownloadResult("", dir, photo));
+    }
+
+    private void DownloadResult(String Prefix, File dir, Photo photo)
+    {
+        String file = dir.getAbsolutePath() + "/" + Prefix + photo.getOwnerId() + "_" + photo.getId() + ".jpg";
+        String url = photo.getUrlForSize(PhotoSize.W, true);
         new InternalDownloader(this, getApplicationContext(), url, file).doDownload();
     }
 
@@ -301,9 +310,9 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             if (Objects.isNull(presenter)) return;
 
             if (Objects.isNull(s)) {
-                presenter.safeShowLongToast(presenter.getView(), R.string.saved);
+                PhoenixToast.showToast(presenter.getApplicationContext(), R.string.saved);
             } else {
-                presenter.safeShowLongToast(presenter.getView(), R.string.error_with_message, s);
+                PhoenixToast.showToast(presenter.getApplicationContext(), String.format( presenter.getApplicationContext().getResources().getString(R.string.error_with_message), s));
             }
         }
     }

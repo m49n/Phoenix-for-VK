@@ -46,6 +46,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import biz.dealnote.messenger.Constants;
+
 /**
  * An {@link HttpDataSource} that uses Android's {@link HttpURLConnection}.
  * <p>
@@ -78,7 +80,7 @@ public class CustomHttpDataSource implements HttpDataSource {
     private final Predicate<String> contentTypePredicate;
     private final RequestProperties defaultRequestProperties;
     private final RequestProperties requestProperties;
-    private final TransferListener<? super CustomHttpDataSource> listener;
+    private TransferListener listener;
 
     private DataSpec dataSpec;
     private HttpURLConnection connection;
@@ -110,7 +112,7 @@ public class CustomHttpDataSource implements HttpDataSource {
      *                             {@link #open(DataSpec)}.
      * @param listener             An optional listener.
      */
-    public CustomHttpDataSource(String userAgent, Predicate<String> contentTypePredicate, TransferListener<? super CustomHttpDataSource> listener, Proxy proxy) {
+    public CustomHttpDataSource(String userAgent, Predicate<String> contentTypePredicate, TransferListener listener, Proxy proxy) {
         this(userAgent, contentTypePredicate, listener, DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DEFAULT_READ_TIMEOUT_MILLIS, proxy);
     }
@@ -127,7 +129,7 @@ public class CustomHttpDataSource implements HttpDataSource {
      *                             as an infinite timeout.
      */
     public CustomHttpDataSource(String userAgent, Predicate<String> contentTypePredicate,
-                                TransferListener<? super CustomHttpDataSource> listener, int connectTimeoutMillis,
+                                TransferListener listener, int connectTimeoutMillis,
                                 int readTimeoutMillis, Proxy proxy) {
         this(userAgent, contentTypePredicate, listener, connectTimeoutMillis, readTimeoutMillis, false,
                 null, proxy);
@@ -150,7 +152,7 @@ public class CustomHttpDataSource implements HttpDataSource {
      *                                    HTTP headers or {@code null} if not required.
      */
     public CustomHttpDataSource(String userAgent, Predicate<String> contentTypePredicate,
-                                TransferListener<? super CustomHttpDataSource> listener, int connectTimeoutMillis,
+                                TransferListener listener, int connectTimeoutMillis,
                                 int readTimeoutMillis, boolean allowCrossProtocolRedirects,
                                 RequestProperties defaultRequestProperties, Proxy proxy) {
         this.userAgent = Assertions.checkNotEmpty(userAgent);
@@ -190,6 +192,21 @@ public class CustomHttpDataSource implements HttpDataSource {
     @Override
     public void clearAllRequestProperties() {
         requestProperties.clear();
+    }
+    @Override
+    public int getResponseCode()
+    {
+        try {
+            return connection.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public void addTransferListener(TransferListener transferListener) {
+        listener = transferListener;
     }
 
     @Override
@@ -263,7 +280,7 @@ public class CustomHttpDataSource implements HttpDataSource {
 
         opened = true;
         if (listener != null) {
-            listener.onTransferStart(this, dataSpec);
+            listener.onTransferStart(this, dataSpec, true);
         }
 
         return bytesToRead;
@@ -296,7 +313,7 @@ public class CustomHttpDataSource implements HttpDataSource {
             if (opened) {
                 opened = false;
                 if (listener != null) {
-                    listener.onTransferEnd(this);
+                    listener.onTransferEnd(this, dataSpec, true);
                 }
             }
         }
@@ -348,7 +365,7 @@ public class CustomHttpDataSource implements HttpDataSource {
      */
     private HttpURLConnection makeConnection(DataSpec dataSpec) throws IOException {
         URL url = new URL(dataSpec.uri.toString());
-        byte[] postBody = dataSpec.postBody;
+        byte[] postBody = dataSpec.httpBody;
         long position = dataSpec.position;
         long length = dataSpec.length;
         boolean allowGzip = dataSpec.isFlagSet(DataSpec.FLAG_ALLOW_GZIP);
@@ -423,7 +440,7 @@ public class CustomHttpDataSource implements HttpDataSource {
             }
             connection.setRequestProperty("Range", rangeRequest);
         }
-        connection.setRequestProperty("User-Agent", userAgent);
+        connection.setRequestProperty("User-Agent", Constants.USER_AGENT(null));
         if (!allowGzip) {
             connection.setRequestProperty("Accept-Encoding", "identity");
         }
@@ -549,7 +566,7 @@ public class CustomHttpDataSource implements HttpDataSource {
             }
             bytesSkipped += read;
             if (listener != null) {
-                listener.onBytesTransferred(this, read);
+                listener.onBytesTransferred(this, dataSpec, true, read);
             }
         }
 
@@ -594,7 +611,7 @@ public class CustomHttpDataSource implements HttpDataSource {
 
         bytesRead += read;
         if (listener != null) {
-            listener.onBytesTransferred(this, read);
+            listener.onBytesTransferred(this, dataSpec, true, read);
         }
         return read;
     }

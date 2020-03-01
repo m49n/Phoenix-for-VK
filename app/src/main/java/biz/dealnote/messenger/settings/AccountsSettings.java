@@ -37,11 +37,13 @@ class AccountsSettings implements ISettings.IAccountsSettings {
 
     private SharedPreferences preferences;
     private Map<Integer, String> tokens;
+    private Map<Integer, String> types;
 
     @SuppressLint("UseSparseArrays")
     AccountsSettings(Context context) {
         this.app = context.getApplicationContext();
         this.tokens = Collections.synchronizedMap(new HashMap<>(1));
+        this.types = Collections.synchronizedMap(new HashMap<>(1));
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         Collection<Integer> aids = getRegistered();
@@ -51,11 +53,20 @@ class AccountsSettings implements ISettings.IAccountsSettings {
             if (nonEmpty(token)) {
                 tokens.put(aid, token);
             }
+            String type = preferences.getString(typeKeyFor(aid), null);
+            if (nonEmpty(type)) {
+                types.put(aid, type);
+            }
         }
+
     }
 
     private static String tokenKeyFor(int uid) {
         return "token" + uid;
+    }
+
+    private static String typeKeyFor(int uid) {
+        return "type" + uid;
     }
 
     private final PublishProcessor<ISettings.IAccountsSettings> changesPublisher = PublishProcessor.create();
@@ -192,6 +203,14 @@ class AccountsSettings implements ISettings.IAccountsSettings {
                 .putString(tokenKeyFor(accountId), accessToken)
                 .apply();
     }
+    @Override
+    public void storeTokenType(int accountId, String type)
+    {
+        types.put(accountId, type);
+        preferences.edit()
+                .putString(typeKeyFor(accountId), type)
+                .apply();
+    }
 
     @Override
     public String getAccessToken(int accountId) {
@@ -199,10 +218,23 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     }
 
     @Override
+    public String getType(int accountId) {
+        return types.get(accountId);
+    }
+
+    @Override
     public void removeAccessToken(int accountId) {
         tokens.remove(accountId);
         preferences.edit()
                 .remove(tokenKeyFor(accountId))
+                .apply();
+    }
+    @Override
+    public void removeType(int accountId)
+    {
+        types.remove(accountId);
+        preferences.edit()
+                .remove(typeKeyFor(accountId))
                 .apply();
     }
 }

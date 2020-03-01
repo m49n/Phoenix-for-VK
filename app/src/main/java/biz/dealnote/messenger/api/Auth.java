@@ -3,7 +3,9 @@ package biz.dealnote.messenger.api;
 import android.util.Log;
 
 import java.net.URLEncoder;
+import java.util.Locale;
 
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 import biz.dealnote.messenger.util.Utils;
 
@@ -17,19 +19,18 @@ public class Auth {
 
         url = url + "&display=mobile&scope="
                 + scope + "&redirect_uri=" + URLEncoder.encode(redirect_url) + "&response_type=token"
-                + "&v=" + URLEncoder.encode(ApiVersion.CURRENT);
+                + "&v=" + URLEncoder.encode(ApiVersion.CURRENT) + "&lang=" + URLEncoder.encode(Locale.getDefault().getLanguage()) + "&device_id=" + URLEncoder.encode(Utils.getDiviceId(Injection.provideApplicationContext()));
 
         if(Utils.nonEmpty(groupIds)){
             url = url + "&group_ids=" + groupIds;
         }
-
-        url = url + "&state=phoenixapi";
         return url;
     }
 
     public static String getScope() {
         //http://vk.com/dev/permission
-        return "friends,audio,groups,offline,wall,messages,notifications,notify,photos,video,docs,status";
+        //return "friends,audio,groups,offline,wall,messages,notifications,notify,photos,video,docs,status";
+        return "all";
     }
 
     public static String[] parseRedirectUrl(String url) throws Exception {

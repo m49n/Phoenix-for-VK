@@ -9,12 +9,6 @@ public final class FaveUsersColumns implements BaseColumns {
 
     public static final String TABLENAME = "fave_users";
 
-    public static ContentValues buildCV(int id){
-        ContentValues cv = new ContentValues();
-        cv.put(_ID, id);
-        return cv;
-    }
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
 
     public static final String FOREIGN_USER_FIRST_NAME = "user_first_name";

@@ -11,6 +11,7 @@ public class RelationshipColumns implements BaseColumns {
     public static final int TYPE_FOLLOWER = 2;
     public static final int TYPE_BLACK_LIST = 3;
     public static final int TYPE_MEMBER = 4;
+    public static final int TYPE_REQUESTS = 5;
 
     public static final String TABLENAME = "relationship";
 
@@ -45,6 +46,8 @@ public class RelationshipColumns implements BaseColumns {
     public static final String FOREIGN_SUBJECT_USER_SEX = "subject_user_sex";
     public static final String FOREIGN_SUBJECT_USER_IS_FRIEND = "subject_user_is_friend";
     public static final String FOREIGN_SUBJECT_USER_FRIEND_STATUS = "subject_user_friend_status";
+    public static final String FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS = "subject_write_message_status";
+    public static final String FOREIGN_SUBJECT_IS_USER_BLACK_LIST = "subject_is_user_in_black_list";
 
     public static final String FOREIGN_SUBJECT_GROUP_NAME = "subject_group_name";
     public static final String FOREIGN_SUBJECT_GROUP_SCREEN_NAME = "subject_group_screen_name";

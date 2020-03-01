@@ -20,9 +20,22 @@
 
     <string name="settings">Settings</string>
 
-    <string-array name="array_theme_names" translatable="false">
-        <item>Yellow Flames</item>
+    <string-array name="array_theme_names">
         <item>Blue Flames</item>
+        <item>Yellow Flames</item>
+        <item>Red Flames</item>
+        <item>Violet Flames</item>
+        <item>Green Flames</item>
+        <item>Gray Flames</item>
+    </string-array>
+
+    <string-array name="array_theme_values" translatable="false">
+        <item>ice</item>
+        <item>fire</item>
+        <item>red</item>
+        <item>violet</item>
+        <item>green</item>
+        <item>gray</item>
     </string-array>
 
     <string-array name="preview_preview_size" translatable="false">
@@ -57,11 +70,6 @@
         <item>•••••• </item>
     </string-array>
 
-    <string-array name="array_theme_values" translatable="false">
-        <item>fire</item>
-        <item>ice</item>
-    </string-array>
-
     <string-array name="night_mode_names">
         <item>Off</item>
         <item>On</item>
@@ -94,16 +102,18 @@
         <item>5</item>
     </string-array>
 
-    <string-array name="array_chat_background_names" translatable="false">
+    <string-array name="array_chat_background_names">
         <item>Static</item>
         <item>Cookies</item>
         <item>Lines</item>
+        <item>Runes</item>
     </string-array>
 
     <string-array name="array_chat_background_items" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string name="general_settings">General</string>
@@ -190,6 +200,7 @@
     <string name="counter_groups">groups</string>
     <string name="counter_friends">friends</string>
     <string name="counter_followers">followers</string>
+    <string name="counter_requests">requests</string>
     <string name="counter_photos">photos</string>
     <string name="counter_audios">audios</string>
     <string name="counter_videos">videos</string>
@@ -318,6 +329,7 @@
     <string name="api_error_21">Permission to perform this action is allowed only for Standalone and OpenAPI applications</string>
     <string name="api_error_23">This method was disabled</string>
     <string name="api_error_24">Confirmation required</string>
+    <string name="api_error_30">This Profile is Private</string>
     <string name="api_error_100">One of the parameters specified was missing or invalid</string>
     <string name="api_error_101">Invalid application API ID</string>
     <string name="api_error_103">Out of limits</string>
@@ -358,6 +370,11 @@
     <string name="message_was_deleted">Message was deleted</string>
     <string name="edit">Edit</string>
     <string name="added">Added</string>
+    <string name="saved_audio">Saved</string>
+    <string name="exist_audio">Exist</string>
+    <string name="error_audio">Error</string>
+
+    <string name="error_sending">Error</string>
 
     <string name="get_full_app_title">Get FULL app</string>
     <string name="get_full_app_summary">If you want more options, try Phoenix for VK</string>
@@ -626,6 +643,7 @@
     <string name="people">People</string>
     <string name="links">Links</string>
     <string name="posts">Posts</string>
+    <string name="fave_groups">Groups</string>
     <string name="loading_owner_photo_album">Loading photo album</string>
     <string name="please_wait">Please wait</string>
     <string name="no_photos_found">No photos found</string>
@@ -658,6 +676,7 @@
     <string name="directory_is_empty">Directory is empty</string>
     <string name="invites_you_to_join_community">%1$s invites you to join the community</string>
     <string name="attachments_in_chat">Attachments in chat</string>
+    <string name="unknown_photos_count">unknown count</string>
     <string name="photos_count">%1$d photos</string>
     <string name="videos_count">%1$d videos</string>
     <string name="documents_count">%1$d documents</string>
@@ -1076,6 +1095,7 @@
     <string name="api_error_800">This video is already added</string>
     <string name="user_blacklist_title">Blacklist</string>
     <string name="add_to_blacklist">Add to blacklist</string>
+    <string name="is_to_blacklist">Is Blocked</string>
     <string name="proxy_address_helper_text">Server address</string>
     <string name="proxy_port_helper_text">Port</string>
     <string name="proxy_manager_title">Proxy Manager</string>
@@ -1091,9 +1111,12 @@
     <string name="button_disable">Disable</string>
     <string name="button_activate">Activate</string>
     <string name="action_add">Add</string>
+    <string name="get_bitrate">Get Bitrate</string>
+    <string name="bitrate">Bitrate:</string>
     <string name="error_timeout_message">Timeout</string>
     <string name="button_login">Login</string>
     <string name="button_login_via_web">Login via web</string>
+    <string name="button_dev_mode">Dev</string>
     <string name="login_title">Login</string>
     <string name="login_phone_or_email_hint">Phone or email</string>
     <string name="login_password_hint">Password</string>
@@ -1103,6 +1126,7 @@
     <string name="drawer_edit_title">Navigation editor</string>
     <string name="login_app_code_hint">Confirmation code</string>
     <string name="button_login_send_code_via_sms">Send code via SMS</string>
+    <string name="button_validate_web">if code not sended</string>
     <string name="error_not_found_message">Object not found</string>
     <string name="my_communities_title">My communities</string>
     <string name="quick_search_title">Quick search</string>
@@ -1182,9 +1206,11 @@
     <string name="wall_comment_push_title">New wall comment</string>
     <string name="audios">Audios</string>
     <string name="playlist">Playlist</string>
+    <string name="equalizer">Equalizer</string>
     <string name="phoenix_player">Phoenix Player</string>
     <string name="choose_theme_title">Application theme</string>
     <string name="acoustic">Acoustic</string>
+    <string name="my_saved">My Audio</string>
     <string name="alternative">Alternative</string>
     <string name="chanson">Chanson</string>
     <string name="classical">Classical</string>
@@ -1199,7 +1225,6 @@
     <string name="jazz">Jazz</string>
     <string name="metal">Metal</string>
     <string name="pop">Pop</string>
-    <string name="rap">Rap</string>
     <string name="reggae">Reggae</string>
     <string name="rock">Rock</string>
     <string name="speech" translatable="false">Speech</string>
@@ -1207,5 +1232,8 @@
     <string name="top">Top</string>
     <string name="gift">Gift</string>
     <string name="chat">Chat</string>
+    <string name="get_root">Prepare Root</string>
+    <string name="open_clipboard_url">Open url from Clipboard</string>
+    <string name="empty_clipboard_url">Clipboard haven\'t Link</string>
 
 </resources>

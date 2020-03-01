@@ -53,7 +53,7 @@ class DocsApi extends AbsApi implements IDocsApi {
     }
 
     @Override
-    public Single<List<VkApiDoc>> save(String file, String title, String tags) {
+    public Single<VkApiDoc.Entry> save(String file, String title, String tags) {
         return provideService(IDocsService.class)
                 .flatMap(service -> service.save(file, title, tags)
                         .map(extractResponseWithErrorHandling()));

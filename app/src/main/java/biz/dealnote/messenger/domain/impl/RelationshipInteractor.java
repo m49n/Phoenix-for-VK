@@ -50,6 +50,13 @@ public class RelationshipInteractor implements IRelationshipInteractor {
     }
 
     @Override
+    public Single<List<User>> getCachedRequests(int accountId) {
+        return repositories.relativeship()
+                .getRequests(accountId)
+                .map(Entity2Model::buildUsersFromDbo);
+    }
+
+    @Override
     public Single<List<User>> getActualFriendsList(int accountId, int userId, int count, int offset) {
         String order = accountId == userId ? "hints" : null;
 
@@ -91,6 +98,23 @@ public class RelationshipInteractor implements IRelationshipInteractor {
 
                     return repositories.relativeship()
                             .storeFollowers(accountId, dbos, userId, offset == 0)
+                            .andThen(Single.just(users));
+                });
+    }
+
+    @Override
+    public Single<List<User>> getRequests(int accountId, Integer offset, Integer count)
+    {
+        return networker.vkDefault(accountId)
+                .users()
+                .getRequests(offset, count, 1, 1, UserColumns.API_FIELDS)
+                .map(items -> Utils.listEmptyIfNull(items.getItems()))
+                .flatMap(dtos -> {
+                    List<UserEntity> dbos = Dto2Entity.mapUsers(dtos);
+                    List<User> users = Dto2Model.transformUsers(dtos);
+
+                    return repositories.relativeship()
+                            .storeRequests(accountId, dbos, accountId, offset == 0)
                             .andThen(Single.just(users));
                 });
     }

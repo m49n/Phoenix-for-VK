@@ -62,6 +62,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     private static final int REQUEST_UPLOAD_AVATAR = 46;
 
     private UserHeaderHolder mHeaderHolder;
+    boolean NeedShowClBlk;
 
     @Override
     public void displayBaseUserInfo(User user) {
@@ -69,7 +70,8 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
         mHeaderHolder.tvName.setText(user.getFullName());
         mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user));
-
+        mHeaderHolder.fabMessage.setEnabled(user.getCanWritePrivateMessage());
+        NeedShowClBlk = user.getBlacklisted_by_me();
         String screenName = nonEmpty(user.getDomain()) ? "@" + user.getDomain() : null;
         mHeaderHolder.tvScreenName.setText(screenName);
 
@@ -314,11 +316,14 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             getPresenter().fireAddToBookmarks();
             return true;
         });
-
-        menu.add(R.string.add_to_blacklist).setOnMenuItemClickListener(item -> {
-            getPresenter().fireAddToBlacklistClick();
-            return true;
-        });
+        if(!NeedShowClBlk) {
+            menu.add(R.string.add_to_blacklist).setOnMenuItemClickListener(item -> {
+                getPresenter().fireAddToBlacklistClick();
+                return true;
+            });
+        }
+        else
+            menu.add(R.string.is_to_blacklist);
     }
 
     private class UserHeaderHolder {

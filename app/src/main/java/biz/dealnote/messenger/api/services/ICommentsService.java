@@ -14,8 +14,9 @@ import retrofit2.http.POST;
 public interface ICommentsService {
 
     @FormUrlEncoded
-    @POST("execute.getComments")
-    Single<BaseResponse<CustomCommentsResponse>> get(@Field("source_type") String sourceType,
+    @POST("execute")
+    Single<BaseResponse<CustomCommentsResponse>> get(@Field("code") String code,
+                                                     @Field("source_type") String sourceType,
                                                      @Field("owner_id") int ownerId,
                                                      @Field("source_id") int sourceId,
                                                      @Field("offset") Integer offset,

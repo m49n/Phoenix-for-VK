@@ -87,9 +87,15 @@ public interface ISettings {
 
         void storeAccessToken(int accountId, String accessToken);
 
+        void storeTokenType(int accountId, String type);
+
         String getAccessToken(int accountId);
 
+        String getType(int accountId);
+
         void removeAccessToken(int accountId);
+
+        void removeType(int accountId);
     }
 
     interface IMainSettings {

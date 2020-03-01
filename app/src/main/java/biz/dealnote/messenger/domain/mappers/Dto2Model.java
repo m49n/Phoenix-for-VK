@@ -240,7 +240,9 @@ public class Dto2Model {
                 .setSex(user.sex)
                 .setDomain(user.domain)
                 .setFriend(user.is_friend)
-                .setFriendStatus(user.friend_status);
+                .setFriendStatus(user.friend_status)
+                .setCanWritePrivateMessage(user.can_write_private_message)
+                .setBlacklisted_by_me(user.blacklisted_by_me);
     }
 
     @NonNull

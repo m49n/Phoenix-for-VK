@@ -25,6 +25,8 @@ public interface IAuthService {
                                       @Field("code") String smscode,
                                       @Field("captcha_sid") String captchaSid,
                                       @Field("captcha_key") String captchaKey,
-                                      @Field("force_sms") Integer forceSms);
+                                      @Field("force_sms") Integer forceSms,
+                                      @Field("lang") String lang,
+                                      @Field("device_id") String device_id);
 
 }

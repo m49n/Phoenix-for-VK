@@ -452,6 +452,7 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         for (Token token : tokens) {
             settings.registerAccountId(token.getOwnerId(), false);
             settings.storeAccessToken(token.getOwnerId(), token.getAccessToken());
+            settings.storeTokenType(token.getOwnerId(), settings.getType(super.getAccountId()));
         }
 
         if (tokens.size() == 1) {

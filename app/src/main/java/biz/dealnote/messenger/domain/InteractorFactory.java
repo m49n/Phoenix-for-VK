@@ -20,7 +20,6 @@ import biz.dealnote.messenger.domain.impl.RelationshipInteractor;
 import biz.dealnote.messenger.domain.impl.StickersInteractor;
 import biz.dealnote.messenger.domain.impl.UtilsInteractor;
 import biz.dealnote.messenger.domain.impl.VideosInteractor;
-import biz.dealnote.messenger.plugins.AudioPluginConnector;
 import biz.dealnote.messenger.settings.Settings;
 
 /**
@@ -107,7 +106,6 @@ public class InteractorFactory {
     }
 
     public static IAudioInteractor createAudioInteractor() {
-        return new AudioInteractor(Injection.provideNetworkInterfaces(),
-                new AudioPluginConnector(Injection.provideApplicationContext()));
+        return new AudioInteractor(Injection.provideNetworkInterfaces(), Injection.provideSettings().accounts().getCurrent());
     }
 }

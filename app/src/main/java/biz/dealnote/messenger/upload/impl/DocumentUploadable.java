@@ -84,15 +84,14 @@ public class DocumentUploadable implements IUploadable<Document> {
                                 .docs()
                                 .save(dto.file, filename, null)
                                 .flatMap(tmpList -> {
-                                    if(tmpList.isEmpty()){
+                                    if(tmpList.type.isEmpty()){
                                         return Single.error(new NotFoundException());
                                     }
-
-                                    Document document = Dto2Model.transform(tmpList.get(0));
+                                    Document document = Dto2Model.transform(tmpList.doc);
                                     UploadResult<Document> result = new UploadResult<>(server, document);
 
                                     if(upload.isAutoCommit()){
-                                        DocumentEntity entity = Dto2Entity.mapDoc(tmpList.get(0));
+                                        DocumentEntity entity = Dto2Entity.mapDoc(tmpList.doc);
                                         return commit(storage, upload, entity).andThen(Single.just(result));
                                     } else {
                                         return Single.just(result);

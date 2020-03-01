@@ -72,7 +72,7 @@ public interface IDocsService {
      */
     @FormUrlEncoded
     @POST("docs.save")
-    Single<BaseResponse<List<VkApiDoc>>> save(@Field("file") String file,
+    Single<BaseResponse<VkApiDoc.Entry>> save(@Field("file") String file,
                                               @Field("title") String title,
                                               @Field("tags") String tags);
 

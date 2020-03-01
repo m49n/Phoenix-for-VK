@@ -24,6 +24,8 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 
 import androidx.annotation.Nullable;
+
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoEventAdapter;
@@ -114,7 +116,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
             }
         }
 
-        String userAgent = Util.getUserAgent(app, "Phoenix-for-VK");
+        String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // Produces Extractor instances for parsing the media data.

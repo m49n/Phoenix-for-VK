@@ -32,7 +32,27 @@ class UsersApi extends AbsApi implements IUsersApi {
     public Single<VKApiUser> getUserWallInfo(int userId, String fields, String nameCase) {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service
-                        .getUserWallInfo(userId, fields, nameCase)
+                        .getUserWallInfo("var user_id = Args.user_id;\n" +
+                                "var fields =Args.fields;\n" +
+                                "var name_case = Args.name_case;\n" +
+                                "\n" +
+                                "var user_info = API.users.get({\"user_ids\":user_id,\n" +
+                                "    \"fields\":fields, \"name_case\":name_case});\n" +
+                                "\n" +
+                                "var all_wall_count =API.wall.get({\"owner_id\":user_id,\n" +
+                                "    \"count\":1, \"filter\":\"all\"}).count;\n" +
+                                "    \n" +
+                                "var owner_wall_count =API.wall.get({\"owner_id\":user_id,\n" +
+                                "    \"count\":1, \"filter\":\"owner\"}).count;\n" +
+                                "\n" +
+                                "var postponed_wall_count =API.wall.get({\"owner_id\":user_id,\n" +
+                                "    \"count\":1, \"filter\":\"postponed\"}).count;\n" +
+                                "\n" +
+                                "return {\"user_info\": user_info, \n" +
+                                "    \"all_wall_count\":all_wall_count,\n" +
+                                "    \"owner_wall_count\":owner_wall_count,\n" +
+                                "    \"postponed_wall_count\":postponed_wall_count\n" +
+                                "};", userId, fields, nameCase)
                         .map(extractResponseWithErrorHandling())
                         .map(response -> {
                             if (Utils.safeCountOf(response.users) != 1) {
@@ -69,6 +89,14 @@ class UsersApi extends AbsApi implements IUsersApi {
     public Single<Items<VKApiUser>> getFollowers(Integer userId, Integer offset, Integer count, String fields, String nameCase) {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service.getFollowers(userId, offset, count, fields, nameCase)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiUser>> getRequests(Integer offset, Integer count, Integer extended, Integer out, String fields)
+    {
+        return provideService(IUsersService.class, TokenType.USER)
+                .flatMap(service -> service.getRequests(offset, count, extended, out, fields)
                         .map(extractResponseWithErrorHandling()));
     }
 

@@ -31,6 +31,9 @@ public class LoginResponse {
     @SerializedName("validation_type")
     public String validationType; // 2fa_sms or 2fa_app
 
+    @SerializedName("redirect_uri")
+    public String redirect_uri;
+
     @SerializedName("phone_mask")
     public String phoneMask;
 }

@@ -121,6 +121,8 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
         cv.put(UserColumns.DOMAIN, dbo.getDomain());
         cv.put(UserColumns.IS_FRIEND, dbo.isFriend());
         cv.put(UserColumns.FRIEND_STATUS, dbo.getFriendStatus());
+        cv.put(UserColumns.WRITE_MESSAGE_STATUS, dbo.getCanWritePrivateMessage());
+        cv.put(UserColumns.IS_USER_BLACK_LIST, dbo.getBlacklisted_by_me());
         return cv;
     }
 
@@ -553,7 +555,9 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
                 .setSex(cursor.getInt(cursor.getColumnIndex(UserColumns.SEX)))
                 .setDomain(cursor.getString(cursor.getColumnIndex(UserColumns.DOMAIN)))
                 .setFriend(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_FRIEND)) == 1)
-                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(UserColumns.FRIEND_STATUS)));
+                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(UserColumns.FRIEND_STATUS)))
+                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(UserColumns.WRITE_MESSAGE_STATUS)) == 1)
+                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_USER_BLACK_LIST)) == 1);
     }
 
     private FriendListEntity mapFriendsList(Cursor cursor) {

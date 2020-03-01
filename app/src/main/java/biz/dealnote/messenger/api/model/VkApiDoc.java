@@ -10,6 +10,16 @@ import java.util.List;
  */
 public class VkApiDoc implements VKApiAttachment {
 
+    public static class Entry {
+        public final String type;
+        public final VkApiDoc doc;
+
+        public Entry(String type, VkApiDoc doc) {
+            this.type = type;
+            this.doc = doc;
+        }
+    }
+
     @SerializedName("id")
     public int id;
 

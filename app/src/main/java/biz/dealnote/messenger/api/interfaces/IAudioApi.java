@@ -1,11 +1,13 @@
 package biz.dealnote.messenger.api.interfaces;
 
 import java.util.Collection;
+import java.util.List;
 
 import androidx.annotation.CheckResult;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.response.BaseResponse;
 import io.reactivex.Single;
 
 /**
@@ -34,5 +36,19 @@ public interface IAudioApi {
     @CheckResult
     Single<Items<VKApiAudio>> get(Integer ownerId, Integer albumId, Collection<Integer> audioIds,
                                   Integer offset, Integer count);
+    @CheckResult
+    Single<Items<VKApiAudio>> get(Integer ownerI,
+                                  Integer offset);
+
+    @CheckResult
+    Single<List<VKApiAudio>> getPopular(Integer foreign,
+                                         Integer genre);
+    @CheckResult
+    Single<Items<VKApiAudio>> Search(String query,
+                                     Integer own,
+                                     Integer offset);
+
+    @CheckResult
+    Single<List<VKApiAudio>> getById(String audios);
 
 }

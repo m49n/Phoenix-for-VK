@@ -39,7 +39,8 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     public static final int TAB_ALL_FRIENDS = 0;
     public static final int TAB_ONLINE = 1;
     public static final int TAB_FOLLOWERS = 2;
-    public static final int TAB_MUTUAL = 3;
+    public static final int TAB_REQUESTS = 3;
+    public static final int TAB_MUTUAL = 4;
 
     public static Bundle buildArgs(int accountId, int userId, int tab, FriendsCounters counters) {
         Bundle args = new Bundle();
@@ -70,10 +71,11 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        titles = new CharSequence[4];
+        titles = new CharSequence[5];
         titles[TAB_ALL_FRIENDS] = getString(R.string.all_friends);
         titles[TAB_ONLINE] = getString(R.string.online);
         titles[TAB_FOLLOWERS] = getString(R.string.counter_followers);
+        titles[TAB_REQUESTS] = getString(R.string.counter_requests);
         titles[TAB_MUTUAL] = getString(R.string.mutual_friends);
     }
 
@@ -129,6 +131,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         setupTabCounterView(TAB_ALL_FRIENDS, counters.getAll());
         setupTabCounterView(TAB_ONLINE, counters.getOnline());
         setupTabCounterView(TAB_FOLLOWERS, counters.getFollowers());
+        setupTabCounterView(TAB_REQUESTS, 0);
         setupTabCounterView(TAB_MUTUAL, counters.getMutual());
 
         tabLayout.setupWithViewPager(viewPager);
@@ -170,7 +173,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         private final int userId;
         private final boolean showMutualTab;
 
-        private final List<String> mFragmentTitles = new ArrayList<>(4);
+        private final List<String> mFragmentTitles = new ArrayList<>(5);
 
         public Adapter(Context context, FragmentManager fm, int accountId, int userId, boolean showMutualTab) {
             super(fm);
@@ -181,6 +184,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
             mFragmentTitles.add(TAB_ALL_FRIENDS, context.getString(R.string.all_friends));
             mFragmentTitles.add(TAB_ONLINE, context.getString(R.string.online));
             mFragmentTitles.add(TAB_FOLLOWERS, context.getString(R.string.counter_followers));
+            mFragmentTitles.add(TAB_REQUESTS, context.getString(R.string.counter_requests));
 
             if (showMutualTab) {
                 mFragmentTitles.add(TAB_MUTUAL, context.getString(R.string.mutual_friends));
@@ -198,6 +202,8 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
                     return FollowersFragment.newInstance(accountId, userId);
                 case TAB_MUTUAL:
                     return MutualFriendsFragment.newInstance(accountId, userId);
+                case TAB_REQUESTS:
+                    return RequestsFragment.newInstance(accountId, userId);
             }
 
             throw new UnsupportedOperationException();
@@ -205,7 +211,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
 
         @Override
         public int getCount() {
-            return showMutualTab ? 4 : 3;
+            return showMutualTab ? 5 : 4;
         }
 
         @Override

@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.activity;
 
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -306,7 +307,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         } else {
             if (!isFragmentWithoutNavigation()) {
                 mToolbar.setNavigationIcon(R.drawable.phoenix_round);
-                mToolbar.setNavigationOnClickListener(v -> showCommunityInviteDialog());
+                mToolbar.setNavigationOnClickListener(v -> {
+                            final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                            LinkHelper.openUrl(this, mAccountId, temp);
+                        }
+                );
             } else {
                 mToolbar.setNavigationIcon(R.drawable.arrow_left);
                 mToolbar.setNavigationOnClickListener(v -> openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_FEED));

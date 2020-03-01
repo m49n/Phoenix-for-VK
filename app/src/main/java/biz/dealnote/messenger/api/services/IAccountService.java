@@ -3,6 +3,7 @@ package biz.dealnote.messenger.api.services;
 import biz.dealnote.messenger.api.model.CountersDto;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.api.model.response.AccountsBannedResponce;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
@@ -26,9 +27,9 @@ public interface IAccountService {
 
     @POST("account.getBanned")
     @FormUrlEncoded
-    Single<BaseResponse<Items<VKApiUser>>> getBanned(@Field("count") Integer count,
-                                                     @Field("offset") Integer offset,
-                                                     @Field("fields") String fields);
+    Single<BaseResponse<AccountsBannedResponce>> getBanned(@Field("count") Integer count,
+                                                                  @Field("offset") Integer offset,
+                                                                  @Field("fields") String fields);
 
     //https://vk.com/dev/account.getCounters
     /**

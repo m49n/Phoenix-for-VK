@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.api.services;
 
+import java.util.List;
+
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
@@ -73,5 +75,26 @@ public interface IAudioService {
                                                 @Field("need_user") Integer needUser,
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
+
+    @FormUrlEncoded
+    @POST("audio.get")
+    Single<BaseResponse<Items<VKApiAudio>>> get(@Field("owner_id") Integer ownerId,
+                                                @Field("offset") Integer offset);
+
+    @FormUrlEncoded
+    @POST("audio.getPopular")
+    Single<BaseResponse<List<VKApiAudio>>> getPopular(@Field("only_eng") Integer foreign,
+                                                @Field("genre_id") Integer genre);
+
+    @FormUrlEncoded
+    @POST("audio.search")
+    Single<BaseResponse<Items<VKApiAudio>>> Search(@Field("q") String query,
+                                                   @Field("search_own") Integer own,
+                                                   @Field("offset") Integer offset);
+
+    @FormUrlEncoded
+    @POST("audio.getById")
+    Single<BaseResponse<List<VKApiAudio>>> getById(@Field("audios") String audios);
+
 
 }

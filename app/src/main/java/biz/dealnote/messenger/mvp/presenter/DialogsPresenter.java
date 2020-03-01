@@ -202,7 +202,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     private void removeDialog(final int peeId) {
         final int accountId = dialogsOwnerId;
 
-        appendDisposable(messagesInteractor.deleteDialog(accountId, peeId, 0, 10000)
+        appendDisposable(messagesInteractor.deleteDialog(accountId, peeId)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(() -> onDialogRemovedSuccessfully(accountId, peeId), t -> showError(getView(), t)));
     }

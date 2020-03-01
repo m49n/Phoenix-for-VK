@@ -93,7 +93,7 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="fire"
+            android:defaultValue="ice"
             android:entries="@array/array_theme_names"
             android:entryValues="@array/array_theme_values"
             android:key="app_theme"
@@ -136,22 +136,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="other"
-        android:title="@string/other_settings"
-        app:iconSpaceReserved="false">
-        <Preference
-            android:key="talk_about"
-            android:title="@string/share_text"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="add_comment"
-            android:title="@string/rate_text"
-            app:iconSpaceReserved="false" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="dev"
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false">
@@ -178,20 +162,6 @@
     <PreferenceCategory
         android:title="@string/about_settings"
         app:iconSpaceReserved="false">
-        <Preference
-            android:key="privacy_policy"
-            android:title="@string/privacy_policy"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:key="join_app_group"
-            android:summary="@string/pref_join_app_group_summary"
-            android:title="@string/pref_join_app_group_title"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:key="source_code"
-            android:summary="@string/source_code_link"
-            android:title="@string/source_code_title"
-            app:iconSpaceReserved="false" />
         <Preference
             android:key="version"
             android:title="@string/app_name"

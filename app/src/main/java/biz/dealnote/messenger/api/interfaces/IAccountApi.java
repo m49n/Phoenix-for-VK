@@ -4,6 +4,7 @@ import androidx.annotation.CheckResult;
 import biz.dealnote.messenger.api.model.CountersDto;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.api.model.response.AccountsBannedResponce;
 import io.reactivex.Single;
 
 /**
@@ -18,7 +19,7 @@ public interface IAccountApi {
     @CheckResult
     Single<Integer> unbanUser(int userId);
 
-    Single<Items<VKApiUser>> getBanned(Integer count, Integer offset, String fields);
+    Single<AccountsBannedResponce> getBanned(Integer count, Integer offset, String fields);
 
     @CheckResult
     Single<Boolean> unregisterDevice(String deviceId);

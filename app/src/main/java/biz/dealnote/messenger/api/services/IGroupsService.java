@@ -59,8 +59,9 @@ public interface IGroupsService {
                                                        @Field("user_id") Integer userId);
 
     @FormUrlEncoded
-    @POST("execute.getCommunityWallInfo")
-    Single<BaseResponse<GroupWallInfoResponse>> getGroupWallInfo(@Field("group_id") String groupId,
+    @POST("execute")
+    Single<BaseResponse<GroupWallInfoResponse>> getGroupWallInfo(@Field("code") String code,
+                                                                 @Field("group_id") String groupId,
                                                                  @Field("fields") String fields);
 
     @FormUrlEncoded

@@ -275,8 +275,8 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     }
 
     @Override
-    public void displayGallery(int accountId, int albumId, int ownerId, Integer focusToId) {
-        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, focusToId).tryOpenWith(requireActivity());
+    public void displayGallery(int accountId, int albumId, int ownerId, Integer focusToId, Integer Index) {
+        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, focusToId, Index).tryOpenWith(requireActivity());
     }
 
     @Override

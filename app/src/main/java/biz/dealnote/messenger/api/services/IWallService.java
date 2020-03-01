@@ -6,6 +6,7 @@ import biz.dealnote.messenger.api.model.response.DefaultCommentsResponse;
 import biz.dealnote.messenger.api.model.response.PostCreateResponse;
 import biz.dealnote.messenger.api.model.response.PostsResponse;
 import biz.dealnote.messenger.api.model.response.RepostReponse;
+import biz.dealnote.messenger.api.model.response.WallEditReponce;
 import biz.dealnote.messenger.api.model.response.WallResponse;
 import biz.dealnote.messenger.api.model.response.WallSearchResponse;
 import io.reactivex.Single;
@@ -34,18 +35,18 @@ public interface IWallService {
     //https://vk.com/dev/wall.edit
     @FormUrlEncoded
     @POST("wall.edit")
-    Single<BaseResponse<Integer>> edit(@Field("owner_id") Integer ownerId,
-                                       @Field("post_id") Integer postId,
-                                       @Field("friends_only") Integer friendsOnly,
-                                       @Field("message") String message,
-                                       @Field("attachments") String attachments,
-                                       @Field("services") String services,
-                                       @Field("signed") Integer signed,
-                                       @Field("publish_date") Long publishDate,
-                                       @Field("lat") Double latitude,
-                                       @Field("long") Double longitude,
-                                       @Field("place_id") Integer placeId,
-                                       @Field("mark_as_ads") Integer markAsAds);
+    Single<BaseResponse<WallEditReponce>> edit(@Field("owner_id") Integer ownerId,
+                                               @Field("post_id") Integer postId,
+                                               @Field("friends_only") Integer friendsOnly,
+                                               @Field("message") String message,
+                                               @Field("attachments") String attachments,
+                                               @Field("services") String services,
+                                               @Field("signed") Integer signed,
+                                               @Field("publish_date") Long publishDate,
+                                               @Field("lat") Double latitude,
+                                               @Field("long") Double longitude,
+                                               @Field("place_id") Integer placeId,
+                                               @Field("mark_as_ads") Integer markAsAds);
 
     //https://vk.com/dev/wall.pin
     @FormUrlEncoded

@@ -3,6 +3,9 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static biz.dealnote.messenger.util.Utils.stringEmptyIfNull;
 
 /**
@@ -37,8 +40,6 @@ public class Audio extends AbsModel implements Parcelable {
 
     private String cover;
 
-    private boolean isHq;
-
     public Audio() {
 
     }
@@ -58,7 +59,6 @@ public class Audio extends AbsModel implements Parcelable {
         deleted = in.readByte() != 0;
         bigCover = in.readString();
         cover = in.readString();
-        isHq = in.readInt() == 1;
     }
 
     @Override
@@ -77,7 +77,6 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeByte((byte) (deleted ? 1 : 0));
         dest.writeString(bigCover);
         dest.writeString(cover);
-        dest.writeInt(isHq ? 1 : 0);
     }
 
     public static final Creator<Audio> CREATOR = new Creator<Audio>() {
@@ -141,8 +140,31 @@ public class Audio extends AbsModel implements Parcelable {
         return url;
     }
 
+    private String getMp3FromM3u8(String url) {
+        if (url == null || !url.contains("index.m3u8?"))
+            return url;
+        if (url.contains("/audios/")) {
+            final String regex = "^(.+?)/[^/]+?/audios/([^/]+)/.+$";
+            final String subst = "$1/audios/$2.mp3";
+
+            final Pattern pattern = Pattern.compile(regex);
+            final Matcher matcher = pattern.matcher(url);
+
+            return matcher.replaceFirst(subst);
+        }
+        else {
+            final String regex = "^(.+?)/(p[0-9]+)/[^/]+?/([^/]+)/.+$";
+            final String subst = "$1/$2/$3.mp3";
+
+            final Pattern pattern = Pattern.compile(regex);
+            final Matcher matcher = pattern.matcher(url);
+            String rt = matcher.replaceFirst(subst);
+            return rt;
+        }
+    }
+
     public Audio setUrl(String url) {
-        this.url = url;
+        this.url = getMp3FromM3u8(url);
         return this;
     }
 
@@ -206,15 +228,6 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setCover(String cover) {
         this.cover = cover;
-        return this;
-    }
-
-    public boolean isHq() {
-        return isHq;
-    }
-
-    public Audio setHq(boolean hq) {
-        isHq = hq;
         return this;
     }
 

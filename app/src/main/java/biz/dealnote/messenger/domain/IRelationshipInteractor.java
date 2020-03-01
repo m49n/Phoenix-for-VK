@@ -14,10 +14,13 @@ import io.reactivex.Single;
 public interface IRelationshipInteractor {
     Single<List<User>> getCachedFriends(int accountId, int objectId);
     Single<List<User>> getCachedFollowers(int accountId, int objectId);
+    Single<List<User>> getCachedRequests(int accountId);
     Single<List<User>> getActualFriendsList(int accountId, int objectId, int count, int offset);
     Single<List<User>> getOnlineFriends(int accountId, int objectId, int count, int offset);
     Single<List<User>> getFollowers(int accountId, int objectId, int count, int offset);
     Single<List<User>> getMutualFriends(int accountId, int objectId, int count, int offset);
+
+    Single<List<User>> getRequests(int accountId, Integer offset, Integer count);
 
     Single<Pair<List<User>, Integer>> seacrhFriends(int accountId, int userId, int count, int offset, String q);
 

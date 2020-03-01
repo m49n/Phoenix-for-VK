@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
@@ -112,11 +113,12 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         return args;
     }
 
-    public static Bundle buildArgsForAlbum(int aid, int albumId, int ownerId, Integer focusPhotoId) {
+    public static Bundle buildArgsForAlbum(int aid, int albumId, int ownerId, Integer focusPhotoId, Integer Index) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, aid);
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putInt(Extra.ALBUM_ID, albumId);
+        args.putInt(Extra.INDEX, Index);
         if (focusPhotoId != null) {
             args.putInt(EXTRA_FOCUS_PHOTO_ID, focusPhotoId);
         }
@@ -310,11 +312,12 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     return new SimplePhotoPresenter(photos, index, needUpdate, aid, saveInstanceState);
 
                 case Place.VK_PHOTO_ALBUM_GALLERY:
+                    int indexx = requireArguments().getInt(Extra.INDEX);
                     int ownerId = requireArguments().getInt(Extra.OWNER_ID);
                     int albumId = requireArguments().getInt(Extra.ALBUM_ID);
                     Integer focusTo = requireArguments().containsKey(EXTRA_FOCUS_PHOTO_ID)
                             ? requireArguments().getInt(EXTRA_FOCUS_PHOTO_ID) : null;
-                    return new PhotoAlbumPagerPresenter(aid, ownerId, albumId, focusTo, saveInstanceState);
+                    return new PhotoAlbumPagerPresenter(indexx, Injection.provideNetworkInterfaces(), aid, ownerId, albumId, focusTo, saveInstanceState);
 
                 case Place.FAVE_PHOTOS_GALLERY:
                     int findex = requireArguments().getInt(Extra.INDEX);
