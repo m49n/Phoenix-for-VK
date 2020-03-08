@@ -4,8 +4,6 @@ import biz.dealnote.messenger.api.IServiceProvider;
 import biz.dealnote.messenger.api.TokenType;
 import biz.dealnote.messenger.api.interfaces.IAccountApi;
 import biz.dealnote.messenger.api.model.CountersDto;
-import biz.dealnote.messenger.api.model.Items;
-import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.AccountsBannedResponce;
 import biz.dealnote.messenger.api.services.IAccountService;
 import io.reactivex.Single;

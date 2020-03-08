@@ -3,6 +3,8 @@ package biz.dealnote.messenger.util;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -11,7 +13,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import androidx.annotation.Nullable;
 import biz.dealnote.messenger.R;
 
 public class AppTextUtils {

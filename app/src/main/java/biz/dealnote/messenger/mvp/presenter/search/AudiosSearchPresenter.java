@@ -49,7 +49,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
     Single<Pair<List<Audio>, IntNextFrom>> doSearch(int accountId, AudioSearchCriteria criteria, IntNextFrom startFrom) {
         final IntNextFrom nextFrom = new IntNextFrom(startFrom.getOffset() + 50);
 
-        return audioInteractor.search(accountId, criteria.getQuery(), criteria.isOwn(), startFrom.getOffset())
+        return audioInteractor.search(accountId, criteria, startFrom.getOffset())
                 .map(audio -> Pair.Companion.create(audio, nextFrom));
     }
 
@@ -69,7 +69,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
 
     @Override
     AudioSearchCriteria instantiateEmptyCriteria() {
-        return new AudioSearchCriteria("", false);
+        return new AudioSearchCriteria("");
     }
 
 }

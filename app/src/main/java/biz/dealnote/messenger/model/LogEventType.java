@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
 import biz.dealnote.messenger.adapter.horizontal.Entry;
 
 /**

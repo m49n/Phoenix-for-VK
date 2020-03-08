@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.Calendar;
 import java.util.EventListener;
 import java.util.List;
 
-import androidx.recyclerview.widget.RecyclerView;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
 import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;

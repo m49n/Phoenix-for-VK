@@ -3,12 +3,13 @@ package biz.dealnote.messenger.adapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import java.lang.ref.WeakReference;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import java.lang.ref.WeakReference;
+
 import biz.dealnote.messenger.util.Objects;
 
 public abstract class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {

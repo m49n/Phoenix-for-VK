@@ -264,6 +264,16 @@ public final class MusicUtils {
         return false;
     }
 
+    public static boolean isPaused() {
+        if (mService != null) {
+            try {
+                return mService.isPaused();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return false;
+    }
+
     /**
      * @return The current shuffle mode.
      */
@@ -453,6 +463,10 @@ public final class MusicUtils {
 
     public static boolean isNowPlayingOrPreparing(Audio audio) {
         return audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying());
+    }
+
+    public static boolean isNowPaused(Audio audio) {
+        return audio.equals(getCurrentAudio()) && (isPaused());
     }
 
     private static final String TAG = MusicUtils.class.getSimpleName();

@@ -1,8 +1,9 @@
 package biz.dealnote.messenger.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.CommentIntent;

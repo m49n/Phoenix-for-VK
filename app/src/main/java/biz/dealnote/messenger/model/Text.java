@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ParcelUtils;
 

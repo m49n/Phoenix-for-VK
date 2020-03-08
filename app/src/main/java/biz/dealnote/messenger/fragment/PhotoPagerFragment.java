@@ -3,9 +3,11 @@ package biz.dealnote.messenger.fragment;
 import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +26,14 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -52,6 +57,7 @@ import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
@@ -233,7 +239,10 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
+        if(Constants.IS_HAS_ADD_YOU_SELF_ALBUM)
+            menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
+        else
+            menu.findItem(R.id.save_yourself).setVisible(false);
         menu.findItem(R.id.action_delete).setVisible(mCanDelete);
 
         int imageSize = getPhotoSizeFromPrefs();
@@ -385,7 +394,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 getString(R.string.repost_to_wall)
         };
 
-        new AlertDialog.Builder(requireActivity())
+        new MaterialAlertDialogBuilder(requireActivity())
                 .setItems(items, (dialogInterface, i) -> {
                     switch (i) {
                         case 0:
@@ -462,10 +471,29 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void showPhotoInfo(String time, String info) {
-        new AlertDialog.Builder(requireActivity())
-                .setTitle("Uploaded: " + time)
-                .setMessage(info)
+    public void showPhotoInfo(Photo photo) {
+        String res = "";
+        if(photo.getAlbumId() >= 0)
+            res += "<p><i><a href=\"" + "https://vk.com/album" + photo.getOwnerId() + "_" + photo.getAlbumId() + "\">" + requireContext().getString(R.string.open_photo_album) + "</a></i></p>";
+        if(photo.getOwnerId() >= 0)
+            res += "<p><i><a href=\"" + "https://vk.com/id" + photo.getOwnerId() + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
+        else
+            res += "<p><i><a href=\"" + "https://vk.com/club" + (photo.getOwnerId() * -1) + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
+        if(photo.getText().length() > 0)
+            res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" +  photo.getText());
+        if(photo.getTagsCount() > 0)
+            res += "<p><i><a href=\"" + "https://vk.com/photo" + photo.getOwnerId() + "_" + photo.getId() + "\">" + requireContext().getString(R.string.has_tags) + "</a></i></p>";
+
+        TextView textView = new TextView(requireActivity());
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(Html.fromHtml(res));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(requireContext().getString(R.string.uploaded) + " " + AppTextUtils.getDateFromUnixTime(photo.getDate()))
+                .setView(textView)
+                .setPositiveButton("OK", null)
+                .setCancelable(true)
                 .create()
                 .show();
     }

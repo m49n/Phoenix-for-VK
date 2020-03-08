@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.CallSuper;
+
 import biz.dealnote.messenger.model.Comment;
 
 /**

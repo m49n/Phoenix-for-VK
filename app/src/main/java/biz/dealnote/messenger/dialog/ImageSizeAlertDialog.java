@@ -2,9 +2,10 @@ package biz.dealnote.messenger.dialog;
 
 import android.app.Activity;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import androidx.appcompat.app.AlertDialog;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;

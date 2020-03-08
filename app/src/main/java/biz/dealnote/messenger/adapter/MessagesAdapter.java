@@ -212,6 +212,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
             holder.avatar.setBackgroundColor(Color.TRANSPARENT);
         }
+        if(holder.user != null)
+            holder.user.setText(message.getSender().getFullName());
 
         holder.avatar.setOnClickListener(v -> {
             if (nonNull(onMessageActionListener)) {
@@ -413,12 +415,14 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
     private abstract class BaseMessageHolder extends RecyclerView.ViewHolder {
 
+        EmojiconTextView user;
         TextView status;
         ImageView avatar;
         OnlineView important;
 
         BaseMessageHolder(View itemView) {
             super(itemView);
+            this.user = itemView.findViewById(R.id.item_message_user);
             this.status = itemView.findViewById(R.id.item_message_status_text);
             this.important = itemView.findViewById(R.id.item_message_important);
             this.avatar = itemView.findViewById(R.id.item_message_avatar);

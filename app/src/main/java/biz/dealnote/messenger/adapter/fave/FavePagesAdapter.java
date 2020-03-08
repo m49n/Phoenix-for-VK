@@ -96,17 +96,11 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             final int position = recyclerView.getChildAdapterPosition(v);
             final FavePage favePage = data.get(position);
-            if(favePage.getType().equals(FavePageType.COMMUNITY))
-                menu.setHeaderTitle(favePage.getGroup().getName());
-            else
-                menu.setHeaderTitle(favePage.getUser().getFullName());
+            menu.setHeaderTitle(favePage.getOwner().getFullName());
 
-            menu.add(favePage.getType().equals(FavePageType.COMMUNITY) ? favePage.getGroup().getId() : 0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
+            menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
                 if (clickListener != null) {
-                    if(favePage.getType().equals(FavePageType.USER))
-                        clickListener.onDelete(position, favePage.getUser());
-                    else
-                        clickListener.onDelete(position, favePage.getGroup());
+                    clickListener.onDelete(position, favePage.getOwner());
                 }
                 return true;
             });

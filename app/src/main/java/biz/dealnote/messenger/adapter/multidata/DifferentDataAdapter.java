@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.adapter.multidata;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.RecyclerView;
 import biz.dealnote.messenger.util.Utils;
 
 public abstract class DifferentDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -4,12 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import biz.dealnote.messenger.App;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
@@ -23,7 +24,6 @@ import biz.dealnote.messenger.mvp.view.IPhotoPagerView;
 import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppPerms;
-import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
@@ -198,9 +198,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     }
 
     public void fireInfoButtonClick() {
-        String info = getCurrent().getText();
-        String time = AppTextUtils.getDateFromUnixTime(getCurrent().getDate());
-        getView().showPhotoInfo(time, info);
+        getView().showPhotoInfo(getCurrent());
     }
 
     public void fireShareButtonClick() {
@@ -217,6 +215,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         resolveToolbarTitleSubtitleView();
         resolveLikeView();
         resolveCommentsView();
+        resolveOptionMenu();
     }
 
     public void fireLikeClick() {
@@ -310,9 +309,9 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             if (Objects.isNull(presenter)) return;
 
             if (Objects.isNull(s)) {
-                PhoenixToast.showToast(presenter.getApplicationContext(), R.string.saved);
+                PhoenixToast.showToastSuccess(presenter.getApplicationContext(), R.string.saved);
             } else {
-                PhoenixToast.showToast(presenter.getApplicationContext(), String.format( presenter.getApplicationContext().getResources().getString(R.string.error_with_message), s));
+                PhoenixToast.showToastError(presenter.getApplicationContext(), String.format( presenter.getApplicationContext().getResources().getString(R.string.error_with_message), s));
             }
         }
     }

@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -13,7 +15,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Map;
 
-import androidx.core.app.NotificationCompat;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.longpoll.AppNotificationChannels;

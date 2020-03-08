@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.api.adapters;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,7 +13,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import androidx.annotation.Nullable;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent;
 import biz.dealnote.messenger.api.model.longpoll.AddMessageUpdate;

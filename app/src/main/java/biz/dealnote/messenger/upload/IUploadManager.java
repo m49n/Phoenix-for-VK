@@ -1,8 +1,9 @@
 package biz.dealnote.messenger.upload;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Flowable;

@@ -38,29 +38,20 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.media.session.MediaButtonReceiver;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,7 +61,6 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -83,7 +73,6 @@ import biz.dealnote.messenger.BuildConfig;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
-import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.HttpLogger;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.api.ProxyUtil;
@@ -95,7 +84,6 @@ import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.util.Logger;
-import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
@@ -976,6 +964,10 @@ public class MusicPlaybackService extends Service {
         return mIsSupposedToBePlaying;
     }
 
+    public boolean isPaused() {
+        return mPlayer.isPaused();
+    }
+
     /**
      * Opens a list for playback
      *
@@ -1310,6 +1302,8 @@ public class MusicPlaybackService extends Service {
 
         boolean preparing;
 
+        boolean isPaused;
+
         final IAudioInteractor audioInteractor;
 
         final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -1417,11 +1411,16 @@ public class MusicPlaybackService extends Service {
             return mIsInitialized;
         }
 
+        boolean isPaused() {
+            return isPaused;
+        }
+
         boolean isPreparing() {
             return preparing;
         }
 
         public void start() {
+            isPaused = false;
             ExoUtil.startPlayer(mCurrentMediaPlayer);
         }
 
@@ -1438,6 +1437,7 @@ public class MusicPlaybackService extends Service {
         }
 
         public void pause() {
+            isPaused = true;
             ExoUtil.pausePlayer(mCurrentMediaPlayer);
         }
 
@@ -1532,6 +1532,11 @@ public class MusicPlaybackService extends Service {
         @Override
         public boolean isPlaying() {
             return mService.get().isPlaying();
+        }
+
+        @Override
+        public boolean isPaused() {
+            return mService.get().isPaused();
         }
 
         @Override

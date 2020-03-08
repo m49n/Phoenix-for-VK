@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -569,11 +568,22 @@ public class AttachmentsViewBinder {
                 holder.tvSubtitle.setText(audio.getTitle());
 
                 int finalG = g;
-                holder.ibPlay.setOnClickListener(v -> mAttachmentsActionCallback.onAudioPlay(finalG, audios));
+                holder.ibPlay.setOnClickListener(v -> {
+                    if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
+                        if(MusicUtils.isNowPlayingOrPreparing(audio))
+                            holder.ibPlay.setImageResource(R.drawable.play);
+                        else
+                            holder.ibPlay.setImageResource(R.drawable.pause);
+                        MusicUtils.playOrPause();
+                    }
+                    else
+                        mAttachmentsActionCallback.onAudioPlay(finalG, audios);
+                });
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
                 holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.pause : R.drawable.play);
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
-
+                holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);
+                holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
 
 
                 holder.Track.setOnClickListener(view -> {
@@ -697,6 +707,8 @@ public class AttachmentsViewBinder {
         ImageView ibPlay;
         TextView time;
         ImageView saved;
+        ImageView hq;
+        ImageView my;
         LinearLayout Track;
 
         AudioHolder(View root) {
@@ -705,7 +717,9 @@ public class AttachmentsViewBinder {
             ibPlay = root.findViewById(R.id.item_audio_play);
             time = root.findViewById(R.id.item_audio_time);
             saved = root.findViewById(R.id.saved);
+            hq = root.findViewById(R.id.hq);
             Track = root.findViewById(R.id.track_option);
+            my = root.findViewById(R.id.my);
         }
     }
 

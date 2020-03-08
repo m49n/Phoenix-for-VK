@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +32,7 @@ import biz.dealnote.messenger.model.menu.AdvancedItem;
 import biz.dealnote.messenger.mvp.presenter.UserDetailsPresenter;
 import biz.dealnote.messenger.mvp.view.IUserDetailsView;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -127,7 +127,7 @@ public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, I
             ClipData clip = ClipData.newPlainText("Details", details);
             clipboard.setPrimaryClip(clip);
 
-            Toast.makeText(requireContext(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+            PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
         }
     }
 

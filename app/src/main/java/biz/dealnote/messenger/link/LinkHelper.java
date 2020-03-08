@@ -7,10 +7,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
+import androidx.browser.customtabs.CustomTabsIntent;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.browser.customtabs.CustomTabsIntent;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;

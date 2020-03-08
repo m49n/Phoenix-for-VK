@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;

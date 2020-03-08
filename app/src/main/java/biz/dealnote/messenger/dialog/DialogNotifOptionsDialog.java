@@ -4,11 +4,12 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.settings.Settings;

@@ -17,8 +17,7 @@ import biz.dealnote.messenger.db.model.entity.CountryEntity;
 import biz.dealnote.messenger.db.model.entity.DialogEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
-import biz.dealnote.messenger.db.model.entity.FaveGroupEntity;
-import biz.dealnote.messenger.db.model.entity.FaveUserEntity;
+import biz.dealnote.messenger.db.model.entity.FavePageEntity;
 import biz.dealnote.messenger.db.model.entity.GiftEntity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
@@ -162,18 +161,9 @@ public class Entity2Model {
         return users;
     }
 
-    public static List<FavePage> buildFaveUsersFromDbo(List<FaveUserEntity> dbos) {
+    public static List<FavePage> buildFaveUsersFromDbo(List<FavePageEntity> dbos) {
         List<FavePage> users = new ArrayList<>(dbos.size());
-        for (FaveUserEntity dbo : dbos) {
-            users.add(map(dbo));
-        }
-
-        return users;
-    }
-
-    public static List<FavePage> buildFaveCommunitiesFromDbo(List<FaveGroupEntity> dbos) {
-        List<FavePage> users = new ArrayList<>(dbos.size());
-        for (FaveGroupEntity dbo : dbos) {
+        for (FavePageEntity dbo : dbos) {
             users.add(map(dbo));
         }
 
@@ -302,6 +292,9 @@ public class Entity2Model {
     }
 
     public static User map(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new User(entity.getId())
                 .setFirstName(entity.getFirstName())
                 .setLastName(entity.getLastName())
@@ -318,18 +311,21 @@ public class Entity2Model {
                 .setDomain(entity.getDomain())
                 .setFriend(entity.isFriend())
                 .setFriendStatus(entity.getFriendStatus())
-                .setCanWritePrivateMessage(entity.getCanWritePrivateMessage());
+                .setCanWritePrivateMessage(entity.getCanWritePrivateMessage())
+                .setBlacklisted_by_me(entity.getBlacklisted_by_me());
     }
 
-    public static FavePage map(FaveUserEntity entity) {
+    public static FavePage map(FavePageEntity entity) {
         return new FavePage(entity.getId())
                 .setDescription(entity.getDescription())
                 .setUpdatedDate(entity.getUpdateDate())
-                .setFaveType(entity.getFaveType())
-                .setUser(map((UserEntity) entity));
+                .setFaveType(entity.getFaveType());
     }
 
     public static Community map(CommunityEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new Community(entity.getId())
                 .setName(entity.getName())
                 .setScreenName(entity.getScreenName())
@@ -342,14 +338,6 @@ public class Entity2Model {
                 .setMember(entity.isMember())
                 .setMemberStatus(entity.getMemberStatus())
                 .setType(entity.getType());
-    }
-
-    public static FavePage map(FaveGroupEntity entity) {
-        return new FavePage(entity.getId())
-                .setDescription(entity.getDescription())
-                .setUpdatedDate(entity.getUpdateDate())
-                .setFaveType(entity.getFaveType())
-                .setGroup(map((CommunityEntity) entity));
     }
 
     public static PhotoAlbum map(PhotoAlbumEntity entity) {
@@ -535,7 +523,8 @@ public class Entity2Model {
                 .setOwnerId(dbo.getOwnerId())
                 .setLyricsId(dbo.getLyricsId())
                 .setTitle(dbo.getTitle())
-                .setGenre(dbo.getGenre());
+                .setGenre(dbo.getGenre())
+                .setHq(dbo.isHq());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {

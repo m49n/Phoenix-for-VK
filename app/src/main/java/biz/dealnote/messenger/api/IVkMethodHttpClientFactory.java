@@ -1,8 +1,9 @@
 package biz.dealnote.messenger.api;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 
-import androidx.annotation.Nullable;
 import biz.dealnote.messenger.model.ProxyConfig;
 import okhttp3.OkHttpClient;
 

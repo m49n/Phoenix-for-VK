@@ -1,8 +1,9 @@
 package biz.dealnote.messenger.mvp.view;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Message;
 

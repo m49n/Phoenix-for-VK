@@ -2,13 +2,14 @@ package biz.dealnote.messenger.mvp.presenter;
 
 import android.os.Bundle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.model.Career;

@@ -1,10 +1,11 @@
 package biz.dealnote.messenger.domain;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOfflineUpdate;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOnlineUpdate;
 import biz.dealnote.messenger.db.model.entity.OwnerEntities;

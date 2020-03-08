@@ -6,6 +6,7 @@ import android.text.Layout;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
+
 import biz.dealnote.messenger.R;
 
 /**

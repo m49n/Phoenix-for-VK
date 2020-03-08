@@ -3,11 +3,12 @@ package biz.dealnote.messenger.view.pager;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Callback;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.api.PicassoInstance;
 
 /**

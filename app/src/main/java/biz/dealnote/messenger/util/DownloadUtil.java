@@ -7,7 +7,6 @@ import android.os.Environment;
 
 import java.io.File;
 
-import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.Audio;
 
 /**

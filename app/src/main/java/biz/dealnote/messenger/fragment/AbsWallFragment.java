@@ -31,7 +31,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
-import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.adapter.WallAdapter;
@@ -187,8 +186,10 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 return true;
             case R.id.action_open_url:
                 final ClipboardManager clipBoard= (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
-                String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
+                if(clipBoard.getPrimaryClip().getItemCount() > 0) {
+                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                    LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
+                }
                 return true;
         }
 

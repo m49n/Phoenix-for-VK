@@ -5,10 +5,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.db.interfaces.ILocalMediaStorage;
 import biz.dealnote.messenger.model.LocalImageAlbum;
 import biz.dealnote.messenger.model.LocalPhoto;

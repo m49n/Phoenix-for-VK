@@ -2,7 +2,6 @@ package biz.dealnote.messenger.settings;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
 
 import biz.dealnote.messenger.BuildConfig;
 

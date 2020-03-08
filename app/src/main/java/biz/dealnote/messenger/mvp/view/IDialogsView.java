@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.mvp.view;
 
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
+import java.util.List;
+
 import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.User;

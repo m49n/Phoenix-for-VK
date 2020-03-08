@@ -11,6 +11,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.Dimension;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
@@ -22,6 +23,9 @@ public class OnlineView extends AppCompatImageView {
 
     @ColorInt
     private int mCircleColor;
+
+    @ColorInt
+    public int mCircleColorBackup;
 
     @ColorInt
     private int mStrokeColor;
@@ -93,6 +97,7 @@ public class OnlineView extends AppCompatImageView {
 
         try {
             mCircleColor = a.getColor(R.styleable.OnlineView_circle_color, Color.BLUE);
+            mCircleColorBackup = a.getColor(R.styleable.OnlineView_circle_color, Color.BLUE);
             mStrokeColor = a.getColor(R.styleable.OnlineView_stroke_color, Color.WHITE);
             mStrokeWidth = a.getDimension(R.styleable.OnlineView_stroke_width, pxOf(1));
             //mIconPadding = a.getDimension(R.styleable.OnlineView_icon_padding, 8);
@@ -123,6 +128,13 @@ public class OnlineView extends AppCompatImageView {
 
     public void setStrokeColor(int color){
         mStrokeColor = color;
+        invalidate();
+        //View strokeView = findViewById(R.id.stroke);
+        //strokeView.getBackground().setColorFilter(mStrokeColor, PorterDuff.Mode.MULTIPLY);
+    }
+
+    public void setCircleColor(int color){
+        mCircleColor = color;
         invalidate();
         //View strokeView = findViewById(R.id.stroke);
         //strokeView.getBackground().setColorFilter(mStrokeColor, PorterDuff.Mode.MULTIPLY);

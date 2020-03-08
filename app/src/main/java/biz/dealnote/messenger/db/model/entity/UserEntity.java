@@ -1,7 +1,5 @@
 package biz.dealnote.messenger.db.model.entity;
 
-import biz.dealnote.messenger.model.User;
-
 /**
  * Created by Ruslan Kolbasa on 08.09.2017.
  * phoenix

@@ -5,10 +5,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.model.longpoll.VkApiGroupLongpollUpdates;

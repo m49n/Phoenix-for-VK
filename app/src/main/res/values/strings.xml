@@ -1210,6 +1210,10 @@
     <string name="phoenix_player">Phoenix Player</string>
     <string name="choose_theme_title">Application theme</string>
     <string name="acoustic">Acoustic</string>
+    <string name="genre_type">Genre:</string>
+    <string name="by_artist">By Artist</string>
+    <string name="auto_compete">Autocomplete</string>
+    <string name="with_lyrics">With Lyrics</string>
     <string name="my_saved">My Audio</string>
     <string name="alternative">Alternative</string>
     <string name="chanson">Chanson</string>
@@ -1235,5 +1239,8 @@
     <string name="get_root">Prepare Root</string>
     <string name="open_clipboard_url">Open url from Clipboard</string>
     <string name="empty_clipboard_url">Clipboard haven\'t Link</string>
-
+    <string name="get_lyrics">LYRICS</string>
+    <string name="uploaded">Uploaded:</string>
+    <string name="has_tags">Has Tags</string>
+    <string name="pages">Pages</string>
 </resources>

@@ -6,10 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+
 import biz.dealnote.messenger.App;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;

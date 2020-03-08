@@ -1,8 +1,9 @@
 package biz.dealnote.messenger.mvp.view;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
@@ -22,7 +23,7 @@ public interface IPhotoPagerView extends IMvpView, IAccountDependencyView, IErro
     void setToolbarSubtitle(String subtitle);
     void sharePhoto(int accountId, @NonNull Photo photo);
     void postToMyWall(@NonNull Photo photo, int accountId);
-    void showPhotoInfo(String time, String info);
+    void showPhotoInfo(Photo photo);
     void requestWriteToExternalStoragePermission();
     void setButtonRestoreVisible(boolean visible);
     void setupOptionMenu(boolean canSaveYourself, boolean canDelete);

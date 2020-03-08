@@ -16,7 +16,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -29,20 +43,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -188,7 +188,9 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 if (resultCode == Activity.RESULT_OK) {
                     int uid = data.getExtras().getInt(Extra.USER_ID);
                     String token = data.getStringExtra(Extra.TOKEN);
-                    processNewAccount(uid, token, "vkandroid", true);
+                    String Login = data.getStringExtra(Extra.LOGIN);
+                    String Password = data.getStringExtra(Extra.PASSWORD);
+                    processNewAccount(uid, token, "vkandroid", Login != null ? Login : "", Password != null ? Password : "", true, true);
                 }
                 break;
 
@@ -199,11 +201,15 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     }
                     else if(DirectAuthDialog.ACTION_VALIDATE_VIA_WEB.equals(data.getAction())) {
                         String url = data.getStringExtra(Extra.URL);
-                        startValidateViaWeb(url);
+                        String Login = data.getStringExtra(Extra.LOGIN);
+                        String Password = data.getStringExtra(Extra.PASSWORD);
+                        startValidateViaWeb(url, Login, Password);
                     } else if (DirectAuthDialog.ACTION_LOGIN_COMPLETE.equals(data.getAction())) {
                         int uid = data.getExtras().getInt(Extra.USER_ID);
                         String token = data.getStringExtra(Extra.TOKEN);
-                        processNewAccount(uid, token, "vkandroid", true);
+                        String Login = data.getStringExtra(Extra.LOGIN);
+                        String Password = data.getStringExtra(Extra.PASSWORD);
+                        processNewAccount(uid, token, "vkandroid", Login, Password , true, true);
                     }
                 }
                 break;
@@ -236,7 +242,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         resolveEmptyText();
     }
 
-    private void processNewAccount(final int uid, final String token, final String type, boolean isCurrent) {
+    private void processNewAccount(final int uid, final String token, final String type, final String Login, final String Password, boolean IsSend, boolean isCurrent) {
         //Accounts account = new Accounts(token, uid);
 
         // важно!! Если мы получили новый токен, то необходимо удалить запись
@@ -269,8 +275,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 
-    private void startValidateViaWeb(String url) {
-        Intent intent = LoginActivity.createIntent(requireActivity(), url);
+    private void startValidateViaWeb(String url, String Login, String Password) {
+        Intent intent = LoginActivity.createIntent(requireActivity(), url, Login, Password);
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 
@@ -379,7 +385,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
                     for(int s = 0; s < jsonRoot.length(); s++) {
                         JSONObject mJsonObject = jsonRoot.getJSONObject(s);
-                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", false);
+                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", true, false);
                     }
                     break;
                 }

@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import androidx.appcompat.app.AlertDialog;
 import biz.dealnote.messenger.R;
 
 public class InputTextDialog {

@@ -8,7 +8,7 @@ import biz.dealnote.messenger.api.interfaces.IAudioApi;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
-import biz.dealnote.messenger.api.model.response.BaseResponse;
+import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.services.IAudioService;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
@@ -34,11 +34,11 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
-    public Single<Items<VKApiAudio>> search(String query, Boolean autoComplete, Boolean lyrics, Boolean performerOnly, Integer sort, Boolean searchOwn, Integer offset, Integer count) {
+    public Single<Items<VKApiAudio>> search(String query, Boolean autoComplete, Boolean lyrics, Boolean performerOnly, Integer sort, Boolean searchOwn, Integer offset) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
                         .search(query, integerFromBoolean(autoComplete), integerFromBoolean(lyrics),
-                                integerFromBoolean(performerOnly), sort, integerFromBoolean(searchOwn), offset, count)
+                                integerFromBoolean(performerOnly), sort, integerFromBoolean(searchOwn), offset)
                         .map(extractResponseWithErrorHandling()));
     }
 
@@ -93,20 +93,19 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
-    public Single<Items<VKApiAudio>> Search(String query,
-                                            Integer own,
-                                            Integer offset) {
-        return provideService(IAudioService.class)
-                .flatMap(service -> service
-                        .Search(query, own, offset)
-                        .map(extractResponseWithErrorHandling()));
-    }
-
-    @Override
     public Single<List<VKApiAudio>> getById(String audios) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
                         .getById(audios)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<VkApiLyrics> getLyrics(int lyrics_id)
+    {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getLyrics(lyrics_id)
                         .map(extractResponseWithErrorHandling()));
     }
 }

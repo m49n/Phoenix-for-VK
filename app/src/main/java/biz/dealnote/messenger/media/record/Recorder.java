@@ -3,10 +3,10 @@ package biz.dealnote.messenger.media.record;
 import android.media.MediaRecorder;
 import android.os.Build;
 
-import java.io.IOException;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+
+import java.io.IOException;
 
 /**
  * Created by ruslan.kolbasa on 05.10.2016.

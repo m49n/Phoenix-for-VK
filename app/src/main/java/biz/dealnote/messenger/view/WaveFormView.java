@@ -10,9 +10,10 @@ import android.util.AttributeSet;
 import android.util.Property;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+
 import java.lang.ref.WeakReference;
 
-import androidx.annotation.ColorInt;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Exestime;
 

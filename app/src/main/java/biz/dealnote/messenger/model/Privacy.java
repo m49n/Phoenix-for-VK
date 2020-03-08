@@ -4,11 +4,12 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.R;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;

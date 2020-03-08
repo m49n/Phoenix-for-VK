@@ -34,7 +34,7 @@
             android:id="@+id/dialog_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             tools:text="Title" />
 
@@ -42,11 +42,37 @@
             android:id="@+id/item_audio_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             tools:text="Title" />
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sub_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/item_audio_play"
+        android:layout_toStartOf="@id/item_audio_time"
+        android:orientation="vertical"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/my"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:src="@drawable/my"
+            android:tint="?colorSecondary" />
+
+        <ImageView
+            android:id="@+id/hq"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:src="@drawable/high_quality"
+            android:tint="?colorSecondary" />
     </LinearLayout>
 
     <TextView

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 
+import androidx.core.content.FileProvider;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -12,7 +14,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
-import androidx.core.content.FileProvider;
 import biz.dealnote.messenger.Constants;
 
 /**

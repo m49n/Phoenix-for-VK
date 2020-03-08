@@ -8,14 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Collections;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Collections;
+import java.util.List;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.ProxiesAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;

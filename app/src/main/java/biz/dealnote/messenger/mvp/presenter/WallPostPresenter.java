@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.db.model.PostUpdate;
 import biz.dealnote.messenger.domain.IOwnersRepository;

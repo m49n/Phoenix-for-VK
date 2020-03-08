@@ -15,6 +15,7 @@ interface IAudioPlayerService {
     void setRepeatMode(int repeatmode);
     void refresh();
     boolean isPlaying();
+    boolean isPaused();
     boolean isPreparing();
     boolean isInitialized();
     List<Audio> getQueue();

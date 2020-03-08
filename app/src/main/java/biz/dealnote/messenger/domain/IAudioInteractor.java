@@ -3,6 +3,7 @@ package biz.dealnote.messenger.domain;
 import java.util.Collection;
 import java.util.List;
 
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
 import io.reactivex.Completable;
@@ -24,9 +25,11 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> getById(List<IdPair> audios);
 
+    Single<String> getLyrics(int lyrics_id);
+
     Single<List<Audio>> getPopular(int accountId, int foreign, int genre);
 
-    Single<List<Audio>> search(int accountId, String query, boolean own, int offset);
+    Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
 
     boolean isAudioPluginAvailable();
 }

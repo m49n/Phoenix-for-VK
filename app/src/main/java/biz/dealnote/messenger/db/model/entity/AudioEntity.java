@@ -28,9 +28,20 @@ public class AudioEntity extends Entity {
 
     private boolean deleted;
 
+    private boolean is_hq;
+
     public AudioEntity(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
+    }
+
+    public boolean isHq() {
+        return is_hq;
+    }
+
+    public AudioEntity setHq(boolean hq) {
+        is_hq = hq;
+        return this;
     }
 
     public int getId() {

@@ -2,6 +2,7 @@ package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -84,8 +85,11 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     .into(mHeaderHolder.ivAvatar);
         }
 
-        Integer onlineIcon = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        mHeaderHolder.ivOnline.setVisibility(user.isOnline() ? View.VISIBLE : View.GONE);
+        Integer onlineIcon = ViewUtils.getOnlineIcon(true, user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
+        if(!user.isOnline())
+            mHeaderHolder.ivOnline.setCircleColor(Color.RED);
+        else
+            mHeaderHolder.ivOnline.setCircleColor(mHeaderHolder.ivOnline.mCircleColorBackup);
 
         if (onlineIcon != null) {
             mHeaderHolder.ivOnline.setIcon(onlineIcon);

@@ -5,6 +5,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.LoadMoreState;
 

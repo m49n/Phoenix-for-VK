@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.provider.BaseColumns;
 
 import androidx.annotation.NonNull;
+
 import biz.dealnote.messenger.api.model.VKApiCountry;
 
 public class CountriesColumns implements BaseColumns {

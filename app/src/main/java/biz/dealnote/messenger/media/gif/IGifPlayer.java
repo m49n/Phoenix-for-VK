@@ -3,6 +3,7 @@ package biz.dealnote.messenger.media.gif;
 import android.view.SurfaceHolder;
 
 import androidx.annotation.NonNull;
+
 import biz.dealnote.messenger.model.VideoSize;
 
 /**

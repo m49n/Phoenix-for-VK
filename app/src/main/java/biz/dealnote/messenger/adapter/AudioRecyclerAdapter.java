@@ -10,16 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
 import java.util.List;
 
-import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
@@ -66,13 +63,26 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         holder.title.setText(item.getTitle());
         holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
 
+        holder.hq.setVisibility(item.isHq() ? View.VISIBLE : View.INVISIBLE);
+
+        holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
+
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.INVISIBLE);
 
         holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.pause : R.drawable.play);
 
         holder.play.setOnClickListener(v -> {
-            if(mClickListener != null){
-                mClickListener.onClick(holder.getAdapterPosition(), item);
+            if (MusicUtils.isNowPlayingOrPreparing(item) || MusicUtils.isNowPaused(item)) {
+                if(MusicUtils.isNowPlayingOrPreparing(item))
+                    holder.play.setImageResource(R.drawable.play);
+                else
+                    holder.play.setImageResource(R.drawable.pause);
+                MusicUtils.playOrPause();
+            }
+            else {
+                if (mClickListener != null) {
+                    mClickListener.onClick(holder.getAdapterPosition(), item);
+                }
             }
         });
         holder.Track.setOnClickListener(view -> {
@@ -137,6 +147,8 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView play;
         TextView time;
         ImageView saved;
+        ImageView hq;
+        ImageView my;
         LinearLayout Track;
 
         AudioHolder(View itemView) {
@@ -146,7 +158,9 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             play = itemView.findViewById(R.id.item_audio_play);
             time = itemView.findViewById(R.id.item_audio_time);
             saved = itemView.findViewById(R.id.saved);
+            hq = itemView.findViewById(R.id.hq);
             Track = itemView.findViewById(R.id.track_option);
+            my = itemView.findViewById(R.id.my);
         }
     }
 

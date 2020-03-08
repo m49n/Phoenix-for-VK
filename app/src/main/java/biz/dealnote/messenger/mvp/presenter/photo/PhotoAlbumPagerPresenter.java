@@ -2,21 +2,18 @@ package biz.dealnote.messenger.mvp.presenter.photo;
 
 import android.os.Bundle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
-import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.domain.IPhotosInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
-import biz.dealnote.messenger.domain.mappers.Dto2Entity;
 import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.model.Photo;
-import biz.dealnote.messenger.mvp.view.IVkPhotosView;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;

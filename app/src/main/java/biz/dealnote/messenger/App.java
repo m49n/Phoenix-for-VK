@@ -1,7 +1,6 @@
 package biz.dealnote.messenger;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -11,6 +10,7 @@ import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.service.ErrorLocalizer;
 import biz.dealnote.messenger.service.KeepLongpollService;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.PhoenixToast;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -53,7 +53,7 @@ public class App extends Application {
         compositeDisposable.add(Repository.INSTANCE.getMessages()
                 .observeMessagesSendErrors()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(throwable -> Toast.makeText(App.this, ErrorLocalizer.localizeThrowable(App.this, throwable), Toast.LENGTH_LONG).show(), ignore()));
+                .subscribe(throwable -> PhoenixToast.showToastError(App.this, ErrorLocalizer.localizeThrowable(App.this, throwable)), ignore()));
     }
 
     @NonNull

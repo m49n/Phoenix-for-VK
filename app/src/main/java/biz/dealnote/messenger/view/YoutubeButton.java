@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+
 import biz.dealnote.messenger.R;
 
 /**

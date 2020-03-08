@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.view.emoji.section.Emojicon;
 

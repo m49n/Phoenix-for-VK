@@ -2,11 +2,11 @@ package biz.dealnote.messenger.model;
 
 import android.util.SparseArray;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Ruslan Kolbasa on 11.09.2017.

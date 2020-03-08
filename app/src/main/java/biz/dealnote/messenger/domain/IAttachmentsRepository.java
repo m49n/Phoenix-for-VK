@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.domain;
 
-import java.util.List;
-
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
+
+import java.util.List;
+
 import biz.dealnote.messenger.db.AttachToType;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.util.Pair;

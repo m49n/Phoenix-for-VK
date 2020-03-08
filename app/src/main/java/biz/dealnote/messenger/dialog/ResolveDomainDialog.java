@@ -4,9 +4,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.dialog.base.AccountDependencyDialogFragment;

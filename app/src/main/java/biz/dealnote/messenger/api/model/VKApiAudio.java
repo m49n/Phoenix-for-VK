@@ -47,12 +47,14 @@ public class VKApiAudio implements VKApiAttachment {
     /**
      * Genre ID. See the list of audio genres.
      */
-    public int genre;
+    public int genre_id;
 
     /**
      * An access key using for get information about hidden objects.
      */
     public String access_key;
+
+    public boolean is_hq;
 
     /**
      * Creates empty Audio instance.

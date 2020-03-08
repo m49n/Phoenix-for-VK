@@ -1,18 +1,15 @@
 package biz.dealnote.messenger.fragment;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.audiofx.AudioEffect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,16 +24,19 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -44,6 +44,7 @@ import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
@@ -91,6 +92,8 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     // Total time
     private TextView mTotalTime;
 
+    private TextView mGetLyrics;
+
     // Progress
     private SeekBar mProgress;
 
@@ -100,6 +103,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private CircleCounterButton ivTranslate;
 
     private TextView tvTitle;
+    private TextView tvGenre;
     private TextView tvSubtitle;
 
     private ImageView ivCover;
@@ -215,7 +219,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mTotalTime = root.findViewById(R.id.audio_player_total_time);
         mProgress = root.findViewById(android.R.id.progress);
         tvTitle = root.findViewById(R.id.audio_player_title);
+        tvGenre = root.findViewById(R.id.audio_player_genre);
         tvSubtitle = root.findViewById(R.id.audio_player_subtitle);
+        mGetLyrics = root.findViewById(R.id.audio_player_get_lyrics);
+        mGetLyrics.setOnClickListener(v -> onLyrics());
 
         //to animate running text
         tvTitle.setSelected(true);
@@ -305,6 +312,14 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
     }
 
+    private void onLyrics() {
+        Audio audio = MusicUtils.getCurrentAudio();
+        if (audio == null) {
+            return;
+        }
+        get_lyrics(audio);
+    }
+
     private void add(int accountId, Audio audio) {
         appendDisposable(mAudioInteractor.add(accountId, audio, null, null)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
@@ -333,6 +348,31 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         appendDisposable(mAudioInteractor.restore(accountId, id, ownerId)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(() -> onAudioDeletedOrRestored(id, ownerId, false), t -> {/*TODO*/}));
+    }
+
+    private void get_lyrics(Audio audio) {
+        appendDisposable(mAudioInteractor.getLyrics(audio.getLyricsId())
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onAudioLyricsRecived, t -> {/*TODO*/}));
+    }
+
+    private void onAudioLyricsRecived(String Text) {
+        String title = null;
+        if(MusicUtils.getCurrentAudio() != null)
+            title = MusicUtils.getCurrentAudio().getArtistAndTitle();
+
+        MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(requireActivity());
+        dlgAlert.setMessage(Text);
+        dlgAlert.setTitle(title != null ? title : requireContext().getString(R.string.get_lyrics));
+
+        ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("response", Text);
+        clipboard.setPrimaryClip(clip);
+
+        dlgAlert.setPositiveButton("OK", null);
+        dlgAlert.setCancelable(true);
+        PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
+        dlgAlert.create().show();
     }
 
     private void onAudioDeletedOrRestored(int id, int ownerId, boolean deleted) {
@@ -484,7 +524,81 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         String artist = MusicUtils.getArtistName();
         String trackName = MusicUtils.getTrackName();
         String coverUrl = MusicUtils.getAlbumCoverBig();
+        if (mGetLyrics != null) {
+            if (MusicUtils.getCurrentAudio() != null && MusicUtils.getCurrentAudio().getLyricsId() != 0) {
+                mGetLyrics.setText(R.string.get_lyrics);
+                mGetLyrics.setVisibility(View.VISIBLE);
+            }
+            else
+                mGetLyrics.setVisibility(View.INVISIBLE);
+        }
 
+        if (tvGenre != null && MusicUtils.getCurrentAudio() != null) {
+            String genre = null;
+            switch (MusicUtils.getCurrentAudio().getGenre()) {
+                case VKApiAudio.Genre.ACOUSTIC_AND_VOCAL:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.acoustic);
+                    break;
+                case VKApiAudio.Genre.ALTERNATIVE:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.alternative);
+                    break;
+                case VKApiAudio.Genre.CHANSON:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.chanson);
+                    break;
+                case VKApiAudio.Genre.CLASSICAL:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.classical);
+                    break;
+                case VKApiAudio.Genre.DANCE_AND_HOUSE:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.dance);
+                    break;
+                case VKApiAudio.Genre.DRUM_AND_BASS:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.drum_and_bass);
+                    break;
+                case VKApiAudio.Genre.DUBSTEP:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.dubstep);
+                    break;
+                case VKApiAudio.Genre.EASY_LISTENING:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.easy_listening);
+                    break;
+                case VKApiAudio.Genre.ELECTROPOP_AND_DISCO:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.disco);
+                    break;
+                case VKApiAudio.Genre.ETHNIC:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.ethnic);
+                    break;
+                case VKApiAudio.Genre.INDIE_POP:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.indie_pop);
+                    break;
+                case VKApiAudio.Genre.INSTRUMENTAL:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.instrumental);
+                    break;
+                case VKApiAudio.Genre.JAZZ_AND_BLUES:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.jazz);
+                    break;
+                case VKApiAudio.Genre.METAL:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.metal);
+                    break;
+                case VKApiAudio.Genre.OTHER:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.other);
+                    break;
+                case VKApiAudio.Genre.POP:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.pop);
+                    break;
+                case VKApiAudio.Genre.REGGAE:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.reggae);
+                    break;
+                case VKApiAudio.Genre.ROCK:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.rock);
+                    break;
+                case VKApiAudio.Genre.SPEECH:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.speech);
+                    break;
+                case VKApiAudio.Genre.TRANCE:
+                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.trance);
+                    break;
+            }
+            tvGenre.setText(genre == null ? null : genre.trim());
+        }
         if (tvTitle != null) {
             tvTitle.setText(artist == null ? null : artist.trim());
         }

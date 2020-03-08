@@ -3,6 +3,7 @@ package biz.dealnote.messenger.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.mvp.presenter.CommunityMembersPresenter;

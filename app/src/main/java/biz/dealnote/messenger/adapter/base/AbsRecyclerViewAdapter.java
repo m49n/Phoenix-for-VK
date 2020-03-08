@@ -3,6 +3,7 @@ package biz.dealnote.messenger.adapter.base;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import biz.dealnote.messenger.adapter.listener.OwnerClickListener;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;

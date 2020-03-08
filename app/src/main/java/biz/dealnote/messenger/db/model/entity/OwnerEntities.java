@@ -1,8 +1,8 @@
 package biz.dealnote.messenger.db.model.entity;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
+
+import java.util.List;
 
 /**
  * Created by Ruslan Kolbasa on 08.09.2017.

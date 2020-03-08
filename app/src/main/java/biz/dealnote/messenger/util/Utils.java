@@ -21,6 +21,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -33,9 +37,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.model.Identificable;
 import biz.dealnote.messenger.model.ISelectable;

@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.mvp.view;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.model.Audio;

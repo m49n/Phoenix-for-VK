@@ -11,7 +11,7 @@
         <item>Серое Пламя</item>
     </string-array>
     <string-array name="array_chat_background_names">
-        <item>Статичный</item>
+        <item>Отключено</item>
         <item>Печеньки</item>
         <item>Линии</item>
         <item>Руны</item>
@@ -518,7 +518,7 @@
     <string name="remove_chat_user_commit">Вы действительно хотите исключить пользователя %1$s из беседы?</string>
     <string name="confirmation">Подтверждение</string>
     <string name="add_to_home_screen">Добавить на главный экран</string>
-    <string name="welcome_hint">Нажмите на шлем викинга для авторизации :)</string>
+    <string name="welcome_hint">Нажмите на феникса для авторизации :)</string>
     <string name="poll">Опрос</string>
     <string name="new_poll">Новый опрос</string>
     <string name="poll_question">Тема опроса</string>
@@ -1081,7 +1081,11 @@
     <string name="equalizer">Эквалайзер</string>
     <string name="phoenix_player">Phoenix Плеер</string>
     <string name="choose_theme_title">Тема приложения</string>
+    <string name="genre_type">Жанр:</string>
     <string name="acoustic">Акустика</string>
+    <string name="by_artist">По исполнителю</string>
+    <string name="auto_compete">Автоисправление</string>
+    <string name="with_lyrics">Содержит текст песни</string>
     <string name="my_saved">Моё аудио</string>
     <string name="alternative">Альтернатива</string>
     <string name="chanson">Шансон</string>
@@ -1103,4 +1107,8 @@
     <string name="get_root">Получение Root доступа...</string>
     <string name="open_clipboard_url">Открыть ссылку из буфера</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
+    <string name="get_lyrics">ТЕКСТ ПЕСНИ</string>
+    <string name="uploaded">Загружено:</string>
+    <string name="has_tags">Содержит отметки</string>
+    <string name="pages">Страницы</string>
 </resources>

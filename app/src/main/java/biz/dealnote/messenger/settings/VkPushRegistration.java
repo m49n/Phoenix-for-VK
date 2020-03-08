@@ -1,8 +1,8 @@
 package biz.dealnote.messenger.settings;
 
-import com.google.gson.annotations.SerializedName;
-
 import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 public class VkPushRegistration {
 

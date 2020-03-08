@@ -306,11 +306,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             if (!isFragmentWithoutNavigation()) {
-                mToolbar.setNavigationIcon(R.drawable.phoenix_round);
+                mToolbar.setNavigationIcon(R.drawable.online_phoenix);
                 mToolbar.setNavigationOnClickListener(v -> {
                             final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                            String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                            LinkHelper.openUrl(this, mAccountId, temp);
+                            if(clipBoard.getPrimaryClip().getItemCount() > 0) {
+                                String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                                LinkHelper.openUrl(this, mAccountId, temp);
+                            }
                         }
                 );
             } else {

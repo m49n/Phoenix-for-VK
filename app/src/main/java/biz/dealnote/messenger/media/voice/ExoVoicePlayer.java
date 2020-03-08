@@ -3,6 +3,8 @@ package biz.dealnote.messenger.media.voice;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -17,13 +19,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.util.Util;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
-
-import androidx.annotation.Nullable;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.ProxyUtil;

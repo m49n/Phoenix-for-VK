@@ -4,6 +4,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
@@ -30,8 +31,7 @@ public interface IAudioService {
                                                    @Field("performer_only") Integer performerOnly,
                                                    @Field("sort") Integer sort,
                                                    @Field("search_own") Integer searchOwn,
-                                                   @Field("offset") Integer offset,
-                                                   @Field("count") Integer count);
+                                                   @Field("offset") Integer offset);
 
     //https://vk.com/dev/audio.restore
     @FormUrlEncoded
@@ -87,14 +87,12 @@ public interface IAudioService {
                                                 @Field("genre_id") Integer genre);
 
     @FormUrlEncoded
-    @POST("audio.search")
-    Single<BaseResponse<Items<VKApiAudio>>> Search(@Field("q") String query,
-                                                   @Field("search_own") Integer own,
-                                                   @Field("offset") Integer offset);
-
-    @FormUrlEncoded
     @POST("audio.getById")
     Single<BaseResponse<List<VKApiAudio>>> getById(@Field("audios") String audios);
+
+    @FormUrlEncoded
+    @POST("audio.getLyrics")
+    Single<BaseResponse<VkApiLyrics>> getLyrics(@Field("lyrics_id") int lyrics_id);
 
 
 }

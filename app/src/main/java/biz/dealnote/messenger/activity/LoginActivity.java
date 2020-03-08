@@ -31,6 +31,9 @@ public class LoginActivity extends Activity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
+    String TLogin;
+    String TPassword;
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,13 +62,18 @@ public class LoginActivity extends Activity {
             String url = Auth.getUrl(clientId, scope, groupIds);
             webview.loadUrl(url);
         }
-        else
+        else {
+            TLogin = getIntent().getStringExtra(EXTRA_LOGIN);
+            TPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
             webview.loadUrl(getIntent().getStringExtra(EXTRA_VALIDATE));
+        }
     }
 
     private static final String EXTRA_CLIENT_ID = "client_id";
     private static final String EXTRA_SCOPE = "scope";
     private static final String EXTRA_VALIDATE = "validate";
+    private static final String EXTRA_LOGIN = "login";
+    private static final String EXTRA_PASSWORD = "password";
     private static final String EXTRA_GROUP_IDS = "group_ids";
 
     public static Intent createIntent(Context context, String clientId, String scope){
@@ -74,9 +82,9 @@ public class LoginActivity extends Activity {
                 .putExtra(EXTRA_SCOPE, scope);
     }
 
-    public static Intent createIntent(Context context, String validate_url){
+    public static Intent createIntent(Context context, String validate_url, String Login, String Password){
         return new Intent(context, LoginActivity.class)
-                .putExtra(EXTRA_VALIDATE, validate_url);
+                .putExtra(EXTRA_VALIDATE, validate_url).putExtra(EXTRA_LOGIN, Login).putExtra(EXTRA_PASSWORD, Password);
     }
 
     public static Intent createIntent(Context context, String clientId, String scope, Collection<Integer> groupIds){
@@ -145,6 +153,8 @@ public class LoginActivity extends Activity {
 
                         intent.putExtra(Extra.TOKEN, accessToken);
                         intent.putExtra(Extra.USER_ID, Integer.parseInt(userId));
+                        intent.putExtra(Extra.LOGIN, TLogin);
+                        intent.putExtra(Extra.PASSWORD, TPassword);
                     }
 
                     setResult(RESULT_OK, intent);

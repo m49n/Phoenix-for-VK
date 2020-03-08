@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.model.menu;
 
 import androidx.annotation.DrawableRes;
+
 import biz.dealnote.messenger.model.Text;
 
 /**

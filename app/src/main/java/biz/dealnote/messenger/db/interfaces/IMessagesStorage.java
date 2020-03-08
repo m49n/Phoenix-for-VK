@@ -1,11 +1,12 @@
 package biz.dealnote.messenger.db.interfaces;
 
-import java.util.Collection;
-import java.util.List;
-
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.Collection;
+import java.util.List;
+
 import biz.dealnote.messenger.db.model.MessageEditEntity;
 import biz.dealnote.messenger.db.model.MessagePatch;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;

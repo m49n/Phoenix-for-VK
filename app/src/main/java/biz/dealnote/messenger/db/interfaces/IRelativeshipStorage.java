@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.db.interfaces;
 
+import androidx.annotation.NonNull;
+
 import java.util.Collection;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.db.model.entity.CommunityEntity;
 import biz.dealnote.messenger.db.model.entity.FriendListEntity;
 import biz.dealnote.messenger.db.model.entity.UserEntity;

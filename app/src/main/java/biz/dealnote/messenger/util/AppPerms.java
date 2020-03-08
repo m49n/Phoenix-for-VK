@@ -4,11 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
+
 import biz.dealnote.messenger.R;
 
 public class AppPerms {

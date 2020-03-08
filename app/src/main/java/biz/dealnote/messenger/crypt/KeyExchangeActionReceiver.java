@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.util.Objects;
 

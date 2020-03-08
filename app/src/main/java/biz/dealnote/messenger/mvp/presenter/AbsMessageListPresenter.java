@@ -6,12 +6,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.media.voice.IVoicePlayer;

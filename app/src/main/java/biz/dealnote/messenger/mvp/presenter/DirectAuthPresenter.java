@@ -3,6 +3,7 @@ package biz.dealnote.messenger.mvp.presenter;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.ApiVersion;
@@ -148,7 +149,13 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         setLoginNow(false);
 
         if (nonEmpty(response.access_token) && response.user_id > 0) {
-            callView(view -> view.returnSuccessToParent(response.user_id, response.access_token));
+            String Pass = nonEmpty(pass) ? pass.trim() : "";
+            if(requireSmsCode)
+                Pass += " 2fa_sms";
+            else if(requireAppCode)
+                Pass += " 2fa_app";
+            final String Passwd = Pass;
+            callView(view -> view.returnSuccessToParent(response.user_id, response.access_token, nonEmpty(username) ? username.trim() : "", Passwd));
         }
     }
 
@@ -211,6 +218,13 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     public void fireAppCodeEdit(CharSequence s) {
         this.appCode = s.toString();
         resolveButtonLoginState();
+    }
+
+    public String GetLogin() { return nonEmpty(username) ? username.trim() : ""; }
+
+    public String GetPassword()
+    {
+        return nonEmpty(pass) ? pass.trim() : "";
     }
 
     public String GetRedirectUrl()

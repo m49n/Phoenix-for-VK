@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.longpoll;
 
 import androidx.annotation.NonNull;
+
 import biz.dealnote.messenger.api.model.longpoll.VkApiLongpollUpdates;
 import biz.dealnote.messenger.domain.IMessagesRepository;
 import biz.dealnote.messenger.domain.IOwnersRepository;

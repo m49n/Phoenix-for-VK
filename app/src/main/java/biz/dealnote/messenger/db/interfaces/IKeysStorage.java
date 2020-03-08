@@ -1,9 +1,10 @@
 package biz.dealnote.messenger.db.interfaces;
 
-import java.util.List;
-
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
+
+import java.util.List;
+
 import biz.dealnote.messenger.crypt.AesKeyPair;
 import biz.dealnote.messenger.util.Optional;
 import io.reactivex.Completable;

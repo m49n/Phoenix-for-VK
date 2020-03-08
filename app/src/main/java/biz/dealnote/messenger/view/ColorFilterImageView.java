@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageView;
+
 import biz.dealnote.messenger.R;
 
 /**

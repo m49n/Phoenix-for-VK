@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.settings.Settings;
 

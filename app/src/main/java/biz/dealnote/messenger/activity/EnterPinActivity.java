@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.EnterPinFragment;
 import biz.dealnote.messenger.util.Utils;

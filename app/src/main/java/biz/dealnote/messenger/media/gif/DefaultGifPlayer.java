@@ -4,10 +4,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.view.SurfaceHolder;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.model.VideoSize;
 import biz.dealnote.messenger.util.Objects;
 

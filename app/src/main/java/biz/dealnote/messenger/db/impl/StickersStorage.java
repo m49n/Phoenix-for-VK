@@ -4,13 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import biz.dealnote.messenger.db.column.StikerSetColumns;
 import biz.dealnote.messenger.db.interfaces.IStickersStorage;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;

@@ -7,14 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Transformation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.RecyclerView;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.Manager;

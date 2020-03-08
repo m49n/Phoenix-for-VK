@@ -79,6 +79,15 @@
             android:layout_marginTop="4dp"
             android:max="1000" />
 
+        <TextView
+            android:id="@+id/audio_player_get_lyrics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/audio_player_current_time"
+            android:textColor="?attr/colorSecondary"
+            android:layout_marginStart="25dp"
+            tools:text="@string/get_lyrics" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -120,6 +129,19 @@
                 android:src="@drawable/save"
                 android:tint="?attr/colorPrimary" />
 
+            <TextView
+                android:id="@+id/audio_player_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textSize="12sp"
+                tools:text="Genre" />
 
             <TextView
                 android:id="@+id/audio_player_title"
@@ -132,7 +154,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                tools:text="Emin" />
+                tools:text="Warduna" />
 
             <TextView
                 android:id="@+id/audio_player_subtitle"
@@ -145,7 +167,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="Sunny" />
+                tools:text="Jara" />
 
         </LinearLayout>
 
