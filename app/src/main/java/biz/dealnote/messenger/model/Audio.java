@@ -144,7 +144,7 @@ public class Audio extends AbsModel implements Parcelable {
         return url;
     }
 
-    private String getMp3FromM3u8(String url) {
+    public static String getMp3FromM3u8(String url) {
         if (url == null || !url.contains("index.m3u8?"))
             return url;
         if (url.contains("/audios/")) {
@@ -168,7 +168,8 @@ public class Audio extends AbsModel implements Parcelable {
     }
 
     public Audio setUrl(String url) {
-        this.url = getMp3FromM3u8(url);
+        //this.url = getMp3FromM3u8(url);
+        this.url = url;
         return this;
     }
 

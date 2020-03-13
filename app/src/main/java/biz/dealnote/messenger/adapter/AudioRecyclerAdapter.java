@@ -114,7 +114,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         return true;
                     case R.id.bitrate_item_audio:
                         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                        retriever.setDataSource(item.getUrl(), new HashMap<>());
+                        retriever.setDataSource(Audio.getMp3FromM3u8(item.getUrl()), new HashMap<>());
                         String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
                         PhoenixToast.showToast(mContext, mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
                         return true;

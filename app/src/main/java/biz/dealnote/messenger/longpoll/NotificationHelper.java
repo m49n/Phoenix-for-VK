@@ -153,6 +153,40 @@ public class NotificationHelper {
         }
     }
 
+    public static void showSimpleNotification(Context context, String body, String Title, String Type) {
+        boolean hideBody = Settings.get()
+                .security()
+                .needHideMessagesBodyForNotif();
+
+        String text = hideBody ? context.getString(R.string.message_text_is_not_available) : body;
+
+        final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Objects.isNull(nManager)){
+            return;
+        }
+
+        if (Utils.hasOreo()){
+            nManager.createNotificationChannel(AppNotificationChannels.getChatMessageChannel(context));
+            nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
+        }
+
+        if(Type != null)
+            Title += ", Type: " + Type;
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,  AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID)
+                .setSmallIcon(R.drawable.phoenix_round)
+                .setContentText(text)
+                .setContentTitle(Title)
+                .setAutoCancel(true);
+
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Notification notification = builder.build();
+
+        nManager.notify("simple " + Settings.get().accounts().getCurrent(), NOTIFICATION_MESSAGE, notification);
+    }
+
     private static String createPeerTagFor(int aid, int peerId) {
         return aid + "_" + peerId;
     }

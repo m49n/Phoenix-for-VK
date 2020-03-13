@@ -15,4 +15,6 @@
         android:id="@+id/action_copy_url"/>
     <item android:title="@string/open_clipboard_url"
         android:id="@+id/action_open_url"/>
+    <item android:title="@string/set_offline"
+        android:id="@+id/action_set_offline"/>
 </menu>

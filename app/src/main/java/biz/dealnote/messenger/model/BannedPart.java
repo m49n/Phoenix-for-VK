@@ -7,18 +7,14 @@ import java.util.List;
  * phoenix
  */
 public class BannedPart {
-
-    private final int totalCount;
-
     private final List<User> users;
 
-    public BannedPart(int totalCount, List<User> users) {
-        this.totalCount = totalCount;
+    public BannedPart(List<User> users) {
         this.users = users;
     }
 
     public int getTotalCount() {
-        return totalCount;
+        return users.size();
     }
 
     public List<User> getUsers() {

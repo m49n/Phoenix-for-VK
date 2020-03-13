@@ -1,7 +1,7 @@
 package biz.dealnote.messenger.dialog;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +18,7 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
+import dmax.dialog.SpotsDialog;
 
 public class ResolveDomainDialog extends AccountDependencyDialogFragment {
 
@@ -56,11 +57,7 @@ public class ResolveDomainDialog extends AccountDependencyDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ProgressDialog progressDialog = new ProgressDialog(requireActivity());
-        progressDialog.setTitle(R.string.loading);
-        progressDialog.setMessage(getString(R.string.please_wait));
-        progressDialog.setCancelable(true);
-        progressDialog.setOnCancelListener(this);
+        AlertDialog progressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setMessage(getString(R.string.please_wait)).setCancelable(true).setCancelListener(this).build();
 
         request();
         return progressDialog;

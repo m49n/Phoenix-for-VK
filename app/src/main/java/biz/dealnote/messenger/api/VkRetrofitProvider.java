@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import biz.dealnote.messenger.api.adapters.AnswerVKOfficialDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsEntryDtoAdapter;
 import biz.dealnote.messenger.api.adapters.BooleanAdapter;
@@ -63,6 +64,7 @@ import biz.dealnote.messenger.api.model.response.CustomCommentsResponse;
 import biz.dealnote.messenger.api.model.response.LikesListResponse;
 import biz.dealnote.messenger.api.model.response.NewsfeedCommentsResponse;
 import biz.dealnote.messenger.api.model.response.SearchDialogsResponse;
+import biz.dealnote.messenger.model.AnswerVKOfficial;
 import biz.dealnote.messenger.settings.IProxySettings;
 import io.reactivex.Single;
 import okhttp3.OkHttpClient;
@@ -82,6 +84,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
     private static final String API_METHOD_URL = "https://api.vk.com/method/";
 
     private static final Gson VKGSON = new GsonBuilder()
+            .registerTypeAdapter(AnswerVKOfficial.class, new AnswerVKOfficialDtoAdapter())
             .registerTypeAdapter(VkApiAttachments.Entry.class, new AttachmentsEntryDtoAdapter())
             .registerTypeAdapter(VkApiDoc.Entry.class, new DocsEntryDtoAdapter())
             .registerTypeAdapter(VKApiPhoto.class, new PhotoDtoAdapter())

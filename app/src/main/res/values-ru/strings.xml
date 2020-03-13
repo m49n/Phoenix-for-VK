@@ -985,7 +985,7 @@
     <string name="proxy_address_helper_text">Адрес сервера</string>
     <string name="proxy_port_helper_text">Порт</string>
     <string name="proxy_manager_title">Менеджер прокси</string>
-    <string name="http_proxy">HTTP Прокси</string>
+    <string name="http_proxy">HTTP(S) Прокси</string>
     <string name="proxy_password_helper_text">Пароль</string>
     <string name="proxy_username_helper_text">Пользователь</string>
     <string name="button_save">Сохранить</string>
@@ -999,7 +999,7 @@
     <string name="button_proxy">Прокси</string>
     <string name="login_password_hint">Пароль</string>
     <string name="login_phone_or_email_hint">Телефон или email</string>
-    <string name="login_title">АВТОРИЗАЦИЯ ВК</string>
+    <string name="login_title">ВХОД | ВК</string>
     <string name="button_login_via_web">Через Web</string>
     <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
@@ -1071,7 +1071,6 @@
     <string name="button_for_all">Для всех</string>
     <string name="button_for_me">Для меня</string>
     <string name="message_edited_at">(ред. %1$s)</string>
-
     <string name="multiply_poll">Мультивыбор</string>
     <string name="photo_comment_push_title">Новый комментарий к фото</string>
     <string name="video_comment_push_title">Новый комментарий к видео</string>
@@ -1106,9 +1105,13 @@
     <string name="chat">Чат</string>
     <string name="get_root">Получение Root доступа...</string>
     <string name="open_clipboard_url">Открыть ссылку из буфера</string>
+    <string name="set_offline">Стать Offline</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
     <string name="get_lyrics">ТЕКСТ ПЕСНИ</string>
     <string name="uploaded">Загружено:</string>
     <string name="has_tags">Содержит отметки</string>
     <string name="pages">Страницы</string>
+    <string name="succ_offline">Вы стали Оффлайн</string>
+    <string name="err_offline">Ошибка, вы Онлайн!</string>
+    <string name="user_readed_yor_message">Прочитал ваше сообщение</string>
 </resources>

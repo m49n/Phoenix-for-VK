@@ -9,6 +9,7 @@ import biz.dealnote.messenger.api.interfaces.INotificationsApi;
 import biz.dealnote.messenger.api.model.feedback.VkApiBaseFeedback;
 import biz.dealnote.messenger.api.model.response.NotificationsResponse;
 import biz.dealnote.messenger.api.services.INotificationsService;
+import biz.dealnote.messenger.model.AnswerVKOfficial;
 import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -56,5 +57,12 @@ class NotificationsApi extends AbsApi implements INotificationsApi {
                             response.notifications = realList; //without unsupported items
                             return response;
                         }));
+    }
+    @Override
+    public Single<List<AnswerVKOfficial>> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime) {
+        return provideService(INotificationsService.class, TokenType.USER)
+                .flatMap(service -> service.getOfficial(count, startFrom, filters, startTime, endTime)
+                        .map(extractResponseWithErrorHandling())
+                        .map(response -> response.items));
     }
 }

@@ -16,8 +16,8 @@ android {
         applicationId "dev.ezorrio.phoenix"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10500
-        versionName '1.0.5'
+        versionCode 10512
+        versionName '1.0.5-mod-1.2'
 
         buildConfigField 'int', 'VK_API_APP_ID', getProps("vk_app_id")
         buildConfigField 'String', 'FCM_SENDER_ID', getProps("fcm_sender_id")
@@ -45,7 +45,6 @@ android {
             multiDexEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
 
         debug {
@@ -91,8 +90,8 @@ allprojects {
 }
 
 ext {
-    retrofitLibraryVersion = '2.6.2'
-    okhttpLibraryVersion = '4.3.1'
+    retrofitLibraryVersion = '2.7.2'
+    okhttpLibraryVersion = '4.4.0'
 }
 
 dependencies {
@@ -126,8 +125,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.3'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.3'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.airbnb.android:lottie:3.1.0'
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'

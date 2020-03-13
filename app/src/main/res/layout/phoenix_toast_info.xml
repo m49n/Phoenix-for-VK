@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#C80280EF"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/icon_toast"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:background="@mipmap/ic_launcher_round" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:layout_toStartOf="@+id/active"
+        android:layout_toEndOf="@+id/icon_toast"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="@dimen/font_size_title"
+            android:textStyle="bold"
+            tools:text="Message" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/active"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="8dp"
+        android:src="@drawable/online_phoenix" />
+
+</RelativeLayout>

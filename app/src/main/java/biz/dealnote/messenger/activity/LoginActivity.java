@@ -43,7 +43,7 @@ public class LoginActivity extends Activity {
         WebView webview = findViewById(R.id.vkontakteview);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.clearCache(true);
-        webview.getSettings().setUserAgentString(Constants.USER_AGENT("vkandroid"));
+        webview.getSettings().setUserAgentString(Constants.USER_AGENT("vkofficial"));
 
         //Чтобы получать уведомления об окончании загрузки страницы
         webview.setWebViewClient(new VkontakteWebViewClient());

@@ -31,6 +31,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.adapter.WallAdapter;
@@ -51,6 +52,8 @@ import biz.dealnote.messenger.mvp.view.IWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.LoadMoreFooterHelper;
@@ -186,14 +189,26 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 return true;
             case R.id.action_open_url:
                 final ClipboardManager clipBoard= (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
-                if(clipBoard.getPrimaryClip().getItemCount() > 0) {
+                if(clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
                     String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
                     LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
                 }
                 return true;
+            case R.id.action_set_offline:
+                getPresenter().appendDisposable(Injection.provideNetworkInterfaces().vkDefault(getPresenter().getAccountId()).account().setOffline()
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(this::OnSetOffline, t -> OnSetOffline(false)));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void OnSetOffline(boolean succ) {
+        if(succ)
+            PhoenixToast.showToastSuccess(getContext(), R.string.succ_offline);
+        else
+            PhoenixToast.showToastError(getContext(), R.string.err_offline);
     }
 
     @Override

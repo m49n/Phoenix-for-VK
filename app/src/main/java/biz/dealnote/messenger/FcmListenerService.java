@@ -7,14 +7,20 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
+import biz.dealnote.messenger.longpoll.NotificationHelper;
 import biz.dealnote.messenger.push.IPushRegistrationResolver;
 import biz.dealnote.messenger.push.PushType;
+import biz.dealnote.messenger.push.message.BirthdayFCMMessage;
 import biz.dealnote.messenger.push.message.CommentFCMMessage;
 import biz.dealnote.messenger.push.message.FCMMessage;
+import biz.dealnote.messenger.push.message.FriendAcceptedFCMMessage;
 import biz.dealnote.messenger.push.message.FriendFCMMessage;
+import biz.dealnote.messenger.push.message.GroupInviteFCMMessage;
 import biz.dealnote.messenger.push.message.LikeFCMMessage;
 import biz.dealnote.messenger.push.message.NewPostPushMessage;
+import biz.dealnote.messenger.push.message.ReplyFCMMessage;
 import biz.dealnote.messenger.push.message.WallPostFCMMessage;
+import biz.dealnote.messenger.push.message.WallPublishFCMMessage;
 import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
@@ -95,7 +101,7 @@ public class FcmListenerService extends FirebaseMessagingService {
                     new LikeFCMMessage(accountId, message).notifyIfNeed(context);
                     break;
 
-            /*case PushType.REPLY:
+            case PushType.REPLY:
                 ReplyFCMMessage.fromRemoteMessage(message).notify(context, accountId);
                 break;
             case PushType.WALL_PUBLISH:
@@ -111,9 +117,11 @@ public class FcmListenerService extends FirebaseMessagingService {
             case PushType.BIRTHDAY:
                 BirthdayFCMMessage.fromRemoteMessage(message).notify(context, accountId);
                 break;
-
-            */
+                case PushType.SHOW_MESSAGE:
+                    NotificationHelper.showSimpleNotification(context, message.getData().get("body"), message.getData().get("title"), null);
+                    break;
                 default:
+                    //NotificationHelper.showSimpleNotification(context, message.getData().get("body"), message.getData().get("title"), pushType);
                     PersistentLogger.logThrowable("Push issues", new Exception("Unespected Push event, collapse_key: " + pushType + ", dump: " + bundleDump));
                     break;
             }

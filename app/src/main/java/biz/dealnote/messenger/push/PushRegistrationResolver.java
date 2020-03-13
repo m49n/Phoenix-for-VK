@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.ApiException;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.service.ApiErrorCodes;
@@ -91,6 +90,9 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
                         return Completable.complete();
                     }
 
+                    if(!settings.accounts().getType(settings.accounts().getCurrent()).equals("vkofficial") || settings.accounts().getType(settings.accounts().getCurrent()).equals("hacked"))
+                        return Completable.never();
+
                     Set<VkPushRegistration> needUnregister = new HashSet<>(0);
 
                     Optional<Integer> optionalAccountId = hasAuth ? Optional.wrap(accountId) : Optional.empty();
@@ -145,14 +147,16 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
     }
 
     private Completable register(VkPushRegistration registration) {
-        if(!Constants.IS_HAS_PUSH)
-            return Completable.never();
         try {
             JSONArray fr_of_fr = new JSONArray();
             fr_of_fr.put("fr_of_fr");
 
             JSONObject json = new JSONObject();
             json.put("msg", "on"); // личные сообщения +
+            json.put("sdk_open", "on");
+            json.put("mention", "on");
+            json.put("event_soon", "on");
+            json.put("app_request", "on");
             json.put("chat", "on"); // групповые чаты +
             json.put("wall_post", "on"); // новая запись на стене пользователя +
             json.put("comment", "on"); // комментарии +
@@ -185,8 +189,6 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
     }
 
     private Completable unregister(VkPushRegistration registration) {
-        if(!Constants.IS_HAS_PUSH)
-            return Completable.never();
         return networker.vkManual(registration.getUserId(), registration.getVkToken())
                 .account()
                 .unregisterDevice(registration.getDeviceId())

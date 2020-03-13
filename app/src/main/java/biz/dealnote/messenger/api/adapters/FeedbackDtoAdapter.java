@@ -63,6 +63,8 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
     }
 
     private static VkApiBaseFeedback createInstance(String type) {
+        if(type == null)
+            return null;
         switch (type) {
             case "follow":
             case "friend_accepted":

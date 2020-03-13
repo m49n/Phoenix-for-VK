@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,12 +35,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -190,7 +184,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     String token = data.getStringExtra(Extra.TOKEN);
                     String Login = data.getStringExtra(Extra.LOGIN);
                     String Password = data.getStringExtra(Extra.PASSWORD);
-                    processNewAccount(uid, token, "vkandroid", Login != null ? Login : "", Password != null ? Password : "", true, true);
+                    processNewAccount(uid, token, "vkofficial", Login != null ? Login : "", Password != null ? Password : "", true, true);
                 }
                 break;
 
@@ -209,7 +203,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                         String token = data.getStringExtra(Extra.TOKEN);
                         String Login = data.getStringExtra(Extra.LOGIN);
                         String Password = data.getStringExtra(Extra.PASSWORD);
-                        processNewAccount(uid, token, "vkandroid", Login, Password , true, true);
+                        processNewAccount(uid, token, "vkofficial", Login, Password , true, true);
                     }
                 }
                 break;
@@ -294,6 +288,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.kate_acc:
                 onKate();
+                break;
+            case R.id.dav_acc:
                 break;
         }
     }

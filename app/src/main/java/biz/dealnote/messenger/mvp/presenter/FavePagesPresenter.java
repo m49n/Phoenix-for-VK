@@ -13,8 +13,10 @@ import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.EndlessData;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IFaveUsersView;
+import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -30,19 +32,50 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
 
     private final List<FavePage> pages;
 
+    private final List<FavePage> search_pages;
+
     private final IFaveInteractor faveInteractor;
 
     private boolean actualDataReceived;
 
     private boolean endOfContent;
 
+    private String q;
+
     public FavePagesPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.pages = new ArrayList<>();
+        this.search_pages = new ArrayList<>();
         this.faveInteractor = InteractorFactory.createFaveInteractor();
 
         loadAllCachedData();
         loadActualData(0);
+    }
+
+    private boolean isSeacrhNow() {
+        return nonEmpty(q);
+    }
+
+    public void fireSearchRequestChanged(String q) {
+        String query = q == null ? null : q.trim();
+
+        if (Objects.safeEquals(q, this.q)) {
+            return;
+        }
+        while(!fireScrollToEnd());
+        this.q = query;
+        search_pages.clear();
+        for(int i =0; i < pages.size(); i++) {
+            if (pages.get(i).getOwner().getFullName().toLowerCase().contains(q.toLowerCase()))
+                search_pages.add(pages.get(i));
+            if((q.toLowerCase().equals("group") || q.toLowerCase().equals("групп")) &&  pages.get(i).getOwner().getOwnerType() == OwnerType.COMMUNITY)
+                search_pages.add(pages.get(i));
+        }
+
+        if(isSeacrhNow())
+            callView(v-> v.displayData(search_pages));
+        else
+            callView(v-> v.displayData(pages));
     }
 
     @Override
@@ -140,10 +173,12 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         super.onDestroyed();
     }
 
-    public void fireScrollToEnd() {
-        if (!endOfContent && nonEmpty(pages) && actualDataReceived && !cacheLoadingNow && !actualDataLoading) {
+    public boolean fireScrollToEnd() {
+        if (!endOfContent && nonEmpty(pages) && actualDataReceived && !cacheLoadingNow && !actualDataLoading && !isSeacrhNow()) {
             loadActualData(this.pages.size());
+            return false;
         }
+        return true;
     }
 
     public void fireRefresh() {

@@ -15,5 +15,6 @@ public final class PushType {
     public static final String GROUP_INVITE = "group_invite";
     public static final String BIRTHDAY = "birthday";
     public static final String LIKE = "like";
+    public static final String SHOW_MESSAGE = "show_message";
     public static final String NEW_POST = "new_post";
 }

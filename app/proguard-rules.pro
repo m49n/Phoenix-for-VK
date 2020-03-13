@@ -73,6 +73,8 @@
 # Retrofit, OkHttp, Gson
 -dontwarn okhttp3.**
 -dontnote okhttp3.**
+-dontwarn org.conscrypt.*
+-dontwarn java.util.concurrent.*
 -dontwarn okio.**
 -dontwarn io.reactivex.**
 -dontwarn retrofit.**

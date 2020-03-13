@@ -49,7 +49,7 @@ public class AccountsInteractor implements IAccountsInteractor {
                 .map(items -> {
                     List<VKApiUser> dtos = listEmptyIfNull(items.profiles);
                     List<User> users = Dto2Model.transformUsers(dtos);
-                    return new BannedPart(items.profiles.size(), users);
+                    return new BannedPart(users);
                 });
     }
 

@@ -1099,7 +1099,7 @@
     <string name="proxy_address_helper_text">Server address</string>
     <string name="proxy_port_helper_text">Port</string>
     <string name="proxy_manager_title">Proxy Manager</string>
-    <string name="http_proxy">HTTP Proxy</string>
+    <string name="http_proxy">HTTP(S) Proxy</string>
     <string name="phoxy_address_hint" translatable="false">10.0.0.1</string>
     <string name="phoxy_port_hint" translatable="false">3128</string>
     <string name="phoxy_username_hint" translatable="false">Login</string>
@@ -1238,9 +1238,13 @@
     <string name="chat">Chat</string>
     <string name="get_root">Prepare Root</string>
     <string name="open_clipboard_url">Open url from Clipboard</string>
+    <string name="set_offline">Set Offline</string>
     <string name="empty_clipboard_url">Clipboard haven\'t Link</string>
     <string name="get_lyrics">LYRICS</string>
     <string name="uploaded">Uploaded:</string>
     <string name="has_tags">Has Tags</string>
     <string name="pages">Pages</string>
+    <string name="succ_offline">You is Offline</string>
+    <string name="err_offline">Error! You is Online</string>
+    <string name="user_readed_yor_message">Readed yor message</string>
 </resources>

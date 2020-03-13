@@ -45,10 +45,8 @@ import androidx.media.session.MediaButtonReceiver;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -1346,8 +1344,12 @@ public class MusicPlaybackService extends Service {
 
             String userAgent = Constants.USER_AGENT(null);
             CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
-            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(factory).setExtractorsFactory(extractorsFactory).createMediaSource(Uri.parse(url));
+            //MediaSource mediaSource;
+            //if (url.contains("index.m3u8"))
+                //mediaSource = new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+            //else
+                //mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+            MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(Audio.getMp3FromM3u8(url)));
             mCurrentMediaPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
 
             mCurrentMediaPlayer.addListener(new ExoEventAdapter() {

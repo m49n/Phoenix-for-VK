@@ -70,14 +70,6 @@ class AccountApi extends AbsApi implements IAccountApi {
     }
 
     @Override
-    public Single<Boolean> setOnline(Boolean voip) {
-        return provideService(IAccountService.class, TokenType.USER)
-                .flatMap(service -> service.setOnline(integerFromBoolean(voip))
-                        .map(extractResponseWithErrorHandling())
-                        .map(response -> response == 1));
-    }
-
-    @Override
     public Single<CountersDto> getCounters(String filter) {
         return provideService(IAccountService.class, TokenType.USER)
                 .flatMap(service -> service

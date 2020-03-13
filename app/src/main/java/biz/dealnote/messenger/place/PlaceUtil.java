@@ -1,8 +1,8 @@
 package biz.dealnote.messenger.place;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -25,6 +25,7 @@ import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.WallEditorAttrs;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
+import dmax.dialog.SpotsDialog;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -34,7 +35,7 @@ import io.reactivex.disposables.Disposable;
 public class PlaceUtil {
 
     public static void goToPostEditor(@NonNull Activity activity, final int accountId, final Post post) {
-        ProgressDialog dialog = createProgressDialog(activity);
+        AlertDialog dialog = createProgressDialog(activity);
         WeakReference<Dialog> dialogWeakReference = new WeakReference<>(dialog);
         WeakReference<Activity> reference = new WeakReference<>(activity);
 
@@ -84,7 +85,7 @@ public class PlaceUtil {
     public static void goToPostCreation(@NonNull Activity activity, int accountId, int ownerId,
                                         @EditingPostType int editingType, @Nullable List<AbsModel> input, @Nullable ArrayList<Uri> streams, @Nullable String body) {
 
-        ProgressDialog dialog = createProgressDialog(activity);
+        AlertDialog dialog = createProgressDialog(activity);
         WeakReference<Dialog> dialogWeakReference = new WeakReference<>(dialog);
         WeakReference<Activity> reference = new WeakReference<>(activity);
 
@@ -112,11 +113,8 @@ public class PlaceUtil {
         dialog.setOnCancelListener(d -> disposable.dispose());
     }
 
-    private static ProgressDialog createProgressDialog(Activity activity) {
-        ProgressDialog dialog = new ProgressDialog(activity);
-        dialog.setTitle(R.string.please_wait);
-        dialog.setMessage(activity.getString(R.string.message_obtaining_owner_information));
-        dialog.setCancelable(true);
+    private static AlertDialog createProgressDialog(Activity activity) {
+        AlertDialog dialog = new SpotsDialog.Builder().setContext(activity).setMessage(activity.getString(R.string.message_obtaining_owner_information)).setCancelable(true).build();
         dialog.show();
         return dialog;
     }

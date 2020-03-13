@@ -63,16 +63,6 @@ public interface IAccountService {
                                                  @Field("settings") String settings);
 
     /**
-     * Marks the current user as online for 15 minutes.
-     *
-     * @param voip 1 if videocalls are available for current device.
-     * @return In case of success returns 1.
-     */
-    @FormUrlEncoded
-    @POST("account.setOnline")
-    Single<BaseResponse<Integer>> setOnline(@Field("voip") Integer voip);
-
-    /**
      * Marks a current user as offline.
      *
      * @return In case of success returns 1.

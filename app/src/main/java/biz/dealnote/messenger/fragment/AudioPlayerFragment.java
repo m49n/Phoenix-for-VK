@@ -295,6 +295,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             PhoenixToast.showToast(requireActivity(), R.string.error_audio);
     }
 
+
     private void onAddButtonClick() {
         Audio audio = MusicUtils.getCurrentAudio();
         if (audio == null) {

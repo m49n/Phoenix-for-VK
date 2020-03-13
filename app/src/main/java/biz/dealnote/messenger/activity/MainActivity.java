@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -21,6 +23,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -42,6 +45,7 @@ import biz.dealnote.messenger.db.Stores;
 import biz.dealnote.messenger.dialog.ResolveDomainDialog;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
 import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
+import biz.dealnote.messenger.fragment.AnswerVKOfficialFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.AudiosFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
@@ -122,6 +126,7 @@ import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Pair;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.StatusbarUtil;
 import biz.dealnote.messenger.util.Utils;
@@ -302,24 +307,45 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         FragmentManager manager = getSupportFragmentManager();
         if (manager.getBackStackEntryCount() > 1) {
-            mToolbar.setNavigationIcon(R.drawable.arrow_left);
+            Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
+            tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+            mToolbar.setNavigationIcon(tr);
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             if (!isFragmentWithoutNavigation()) {
-                mToolbar.setNavigationIcon(R.drawable.online_phoenix);
+                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.online_phoenix);
+                tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+                mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {
-                            final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                            if(clipBoard.getPrimaryClip().getItemCount() > 0) {
-                                String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                                LinkHelper.openUrl(this, mAccountId, temp);
-                            }
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+                    builder.setPositiveButton(R.string.set_offline, (dialog, which) ->
+                            mCompositeDisposable.add(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
+                                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                                    .subscribe(this::OnSetOffline, t -> OnSetOffline(false))));
+                    builder.setNegativeButton(R.string.open_clipboard_url, (dialog, which) -> {
+                        final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
+                            String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                            LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
                         }
-                );
+                    });
+                    builder.setCancelable(true);
+                    builder.create().show();
+                });
             } else {
-                mToolbar.setNavigationIcon(R.drawable.arrow_left);
+                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
+                tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+                mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_FEED));
             }
         }
+    }
+
+    private void OnSetOffline(boolean succ) {
+        if(succ)
+            PhoenixToast.showToastSuccess(this, R.string.succ_offline);
+        else
+            PhoenixToast.showToastError(this, R.string.err_offline);
     }
 
     private void onCurrentAccountChange(int newAccountId) {
@@ -1182,27 +1208,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         return mDestroyed;
     }
 
-    private void showCommunityInviteDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.app_community_invite_title)
-                .setMessage(R.string.app_community_invite_message)
-                .setPositiveButton(R.string.group, (dialog, which) -> goToAppCommunity())
-                .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                .setNegativeButton(R.string.chat, (dialog, which) -> openTelegramChat())
-                .show();
-    }
-
-    private void goToAppCommunity() {
-        PlaceFactory.getOwnerWallPlace(mAccountId, -PreferencesFragment.APP_GROUP_ID, null)
-                .tryOpenWith(this);
-    }
-
-    private void openTelegramChat() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://tele.click/phoenix_vk"));
-        startActivity(intent);
-    }
-
     private void openPageAndCloseSheet(AbsMenuItem item) {
         if (getNavigationFragment().isSheetOpen()) {
             getNavigationFragment().closeSheet();
@@ -1238,6 +1243,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_DIALOGS);
                 return true;
             case R.id.menu_feedback:
+                if(Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked"))
+                {
+                    attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
+                    return true;
+                }
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEEDBACK);
                 return true;
             case R.id.menu_other:

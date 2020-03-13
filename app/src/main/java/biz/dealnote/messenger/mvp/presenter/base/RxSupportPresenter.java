@@ -96,7 +96,7 @@ public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresente
         super.onDestroyed();
     }
 
-    protected void appendDisposable(@NonNull Disposable disposable) {
+    public void appendDisposable(@NonNull Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 

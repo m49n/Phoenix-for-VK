@@ -1,6 +1,8 @@
 package biz.dealnote.messenger.domain.impl;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import java.util.concurrent.Executors;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.interfaces.IDocsApi;
 import biz.dealnote.messenger.api.interfaces.IMessagesApi;
 import biz.dealnote.messenger.api.interfaces.INetworker;
@@ -93,13 +96,17 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.WriteText;
 import biz.dealnote.messenger.model.criteria.DialogsCriteria;
 import biz.dealnote.messenger.model.criteria.MessagesCriteria;
+import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.ISettings;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.IUploadManager;
 import biz.dealnote.messenger.upload.Method;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.upload.UploadDestination;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Optional;
+import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Unixtime;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.VKOwnIds;
@@ -368,6 +375,13 @@ public class MessagesRepository implements IMessagesRepository {
 
         if (nonEmpty(outgoing)) {
             for (OutputMessagesSetReadUpdate update : outgoing) {
+
+                OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                        .subscribe(userInfo -> {
+                                    Handler handlerMain = new Handler(Looper.getMainLooper());
+                                    handlerMain.post(() -> PhoenixToast.showToastInfo(Injection.provideApplicationContext(),  userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                                }, throwable -> {});
                 patches.add(new PeerPatch(update.peer_id).withOutRead(update.local_id));
             }
         }

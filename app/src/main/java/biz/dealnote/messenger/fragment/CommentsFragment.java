@@ -1,7 +1,7 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -58,6 +58,7 @@ import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
 import biz.dealnote.messenger.view.emoji.StickersGridView;
 import biz.dealnote.mvp.core.IPresenterFactory;
+import dmax.dialog.SpotsDialog;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -402,14 +403,11 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         }
     }
 
-    private ProgressDialog mDeepLookingProgressDialog;
+    private AlertDialog mDeepLookingProgressDialog;
 
     @Override
     public void displayDeepLookingCommentProgress() {
-        mDeepLookingProgressDialog = new ProgressDialog(requireActivity());
-        mDeepLookingProgressDialog.setMessage(getString(R.string.please_wait));
-        mDeepLookingProgressDialog.setCancelable(true);
-        mDeepLookingProgressDialog.setOnCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser());
+        mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
         mDeepLookingProgressDialog.show();
     }
 

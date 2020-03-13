@@ -1,6 +1,6 @@
 package biz.dealnote.messenger.fragment.base;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -21,6 +21,7 @@ import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.compat.AbsMvpFragment;
 import biz.dealnote.mvp.core.AbsPresenter;
 import biz.dealnote.mvp.core.IMvpView;
+import dmax.dialog.SpotsDialog;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
@@ -106,16 +107,13 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), swipeRefreshLayout, needToolbarOffset);
     }
 
-    private ProgressDialog mLoadingProgressDialog;
+    private AlertDialog mLoadingProgressDialog;
 
     @Override
     public void displayProgressDialog(@StringRes int title, @StringRes int message, boolean cancelable) {
         dismissProgressDialog();
 
-        mLoadingProgressDialog = new ProgressDialog(requireActivity());
-        mLoadingProgressDialog.setTitle(title);
-        mLoadingProgressDialog.setMessage(getString(message));
-        mLoadingProgressDialog.setCancelable(cancelable);
+        mLoadingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setMessage(getString(title) + ": " + getString(message)).setCancelable(cancelable).build();
         mLoadingProgressDialog.show();
     }
 

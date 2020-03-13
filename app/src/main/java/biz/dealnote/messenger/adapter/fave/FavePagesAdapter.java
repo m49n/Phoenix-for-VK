@@ -18,7 +18,6 @@ import java.util.List;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.FavePage;
-import biz.dealnote.messenger.model.FavePageType;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.ViewUtils;

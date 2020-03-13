@@ -31,8 +31,5 @@ public interface IAccountApi {
     Single<Boolean> setOffline();
 
     @CheckResult
-    Single<Boolean> setOnline(Boolean voip);
-
-    @CheckResult
     Single<CountersDto> getCounters(String filter);
 }

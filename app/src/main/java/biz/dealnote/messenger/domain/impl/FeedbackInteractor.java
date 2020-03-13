@@ -24,6 +24,7 @@ import biz.dealnote.messenger.domain.mappers.Dto2Entity;
 import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.domain.mappers.Entity2Model;
 import biz.dealnote.messenger.domain.mappers.FeedbackEntity2Model;
+import biz.dealnote.messenger.model.AnswerVKOfficial;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.criteria.NotificationsCriteria;
 import biz.dealnote.messenger.model.feedback.Feedback;
@@ -56,6 +57,14 @@ public class FeedbackInteractor implements IFeedbackInteractor {
     public Single<List<Feedback>> getCachedFeedbacks(int accountId) {
         final NotificationsCriteria criteria = new NotificationsCriteria(accountId);
         return getCachedFeedbacksByCriteria(criteria);
+    }
+
+    @Override
+    public Single<List<AnswerVKOfficial>> getOfficial(int accountId, Integer count, Integer startFrom) {
+        return networker.vkDefault(accountId)
+                .notifications()
+                .getOfficial(count, startFrom, null, null, null)
+                .map(response -> response);
     }
 
     @Override

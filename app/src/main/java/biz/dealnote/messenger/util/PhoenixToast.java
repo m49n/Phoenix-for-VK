@@ -28,6 +28,21 @@ public class PhoenixToast {
     public static void showToast(@NonNull Context context, @StringRes int message) {
         showToast(context, context.getResources().getString(message));
     }
+    public static void showToastInfo(@NonNull Context context, String message) {
+        View view = View.inflate(context, R.layout.phoenix_toast_info, null);
+        TextView subtitle = view.findViewById(R.id.subtitle);
+
+        subtitle.setText(message);
+
+        Toast toast = new Toast(context);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(view);
+        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.show();
+    }
+    public static void showToastInfo(@NonNull Context context, @StringRes int message) {
+        showToastInfo(context, context.getResources().getString(message));
+    }
     public static void showToastSuccess(@NonNull Context context, String message) {
         View view = View.inflate(context, R.layout.phoenix_toast_succ, null);
         TextView subtitle = view.findViewById(R.id.subtitle);
