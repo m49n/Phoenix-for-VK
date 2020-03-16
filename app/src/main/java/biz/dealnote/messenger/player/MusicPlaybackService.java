@@ -81,6 +81,7 @@ import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -792,12 +793,19 @@ public class MusicPlaybackService extends Service {
                 CoverAlbom = null;
             }
             mPlayer.setDataSource(audio.getOwnerId(), audio.getId(), audio.getUrl());
-            if(UpdateMeta) {
+            if(UpdateMeta && Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("kate")) {
                 try {
                     GetCoverURL(audio);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+            else if(audio.getThumb_image_big() != null)
+            {
+                CoverAudio = audio.getThumb_image_big();
+                CoverAlbom = audio.getAlbum_title();
+                fetchCoverAndUpdateMetadata();
+                notifyChange(META_CHANGED);
             }
         }
     }
@@ -907,7 +915,7 @@ public class MusicPlaybackService extends Service {
 
     public Audio getCurrentTrack() {
         synchronized (this) {
-            if (mPlayPos >= 0) {
+            if (mPlayPos >= 0 && mPlayList.size() > mPlayPos) {
                 return mPlayList.get(mPlayPos);
             }
         }
@@ -1324,7 +1332,7 @@ public class MusicPlaybackService extends Service {
          */
         void setDataSource(final String remoteUrl) {
             preparing = true;
-            final String url = firstNonEmptyString(remoteUrl, "https://vk.com/mp3/audio_api_unavailable.mp3");
+            final String url = firstNonEmptyString(remoteUrl, "https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/audio_error.mp3");
 
             Proxy proxy = null;
             if (nonNull(Injection.provideProxySettings().getActiveProxy())) {

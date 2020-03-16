@@ -22,7 +22,6 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
-import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.Community;
 import biz.dealnote.messenger.model.GroupSettings;
@@ -65,12 +64,10 @@ public class CommunityControlFragment extends Fragment {
         pager.setOffscreenPageLimit(2);
 
         List<ITab> tabs = new ArrayList<>();
-        tabs.add(new Tab(getString(R.string.community_blacklist_tab_title), () -> CommunityBlacklistFragment.newInstance(mAccountId, mCommunity.getId())));
+        if(mCommunity.getAdminLevel() > 0)
+            tabs.add(new Tab(getString(R.string.community_blacklist_tab_title), () -> CommunityBlacklistFragment.newInstance(mAccountId, mCommunity.getId())));
         tabs.add(new Tab(getString(R.string.community_links_tab_title), () -> CommunityLinksFragment.newInstance(mAccountId, mCommunity.getId())));
-
-        if(mCommunity.getAdminLevel() >= VKApiCommunity.AdminLevel.ADMIN){
-            tabs.add(new Tab(getString(R.string.community_managers_tab_title), () -> CommunityManagersFragment.newInstance(mAccountId, mCommunity.getId())));
-        }
+        tabs.add(new Tab(mCommunity.getAdminLevel() == 0 ? getString(R.string.community_managers_contacts) : getString(R.string.community_managers_tab_title), () -> CommunityManagersFragment.newInstance(mAccountId, mCommunity)));
 
         pager.setAdapter(new Adapter(tabs, getChildFragmentManager()));
 

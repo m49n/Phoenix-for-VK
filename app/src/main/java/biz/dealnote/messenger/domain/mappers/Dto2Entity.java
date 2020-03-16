@@ -337,8 +337,7 @@ public class Dto2Entity {
         return new VideoAlbumEntity(dto.id, dto.owner_id)
                 .setUpdateTime(dto.updated_time)
                 .setCount(dto.count)
-                .setPhoto160(dto.photo_160)
-                .setPhoto320(dto.photo_320)
+                .setImage(dto.image)
                 .setTitle(dto.title)
                 .setPrivacy(nonNull(dto.privacy) ? mapPrivacy(dto.privacy) : null);
     }
@@ -470,7 +469,7 @@ public class Dto2Entity {
                     .setOnlineFriendsCount(counters.online_friends)
                     .setMutualFriendsCount(counters.mutual_friends)
                     .setFollowersCount(counters.followers)
-                    .setGroupsCount(counters.groups)
+                    .setGroupsCount(Math.max(counters.groups, counters.pages))
                     .setPhotosCount(counters.photos)
                     .setAudiosCount(counters.audios)
                     .setVideosCount(counters.videos)
@@ -774,7 +773,9 @@ public class Dto2Entity {
                 .setAlbumId(dto.album_id)
                 .setGenre(dto.genre_id)
                 .setAccessKey(dto.access_key)
-                .setHq(dto.is_hq);
+                .setHq(dto.is_hq)
+                .setThumb_image_big(dto.thumb_image_big)
+                .setThumb_image_little(dto.thumb_image_little);
     }
 
     public static PollEntity.Answer mapPollAnswer(VKApiPoll.Answer dto) {
@@ -995,9 +996,7 @@ public class Dto2Entity {
                 .setAddingDate(dto.adding_date)
                 .setViews(dto.views)
                 .setPlayer(dto.player)
-                .setPhoto130(dto.photo_130)
-                .setPhoto320(dto.photo_320)
-                .setPhoto800(dto.photo_800)
+                .setImage(dto.image)
                 .setAccessKey(dto.access_key)
                 .setCommentsCount(isNull(dto.comments) ? 0 : dto.comments.count)
                 .setCanComment(dto.can_comment)

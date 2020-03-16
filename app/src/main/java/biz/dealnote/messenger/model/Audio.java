@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.model;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -36,11 +37,15 @@ public class Audio extends AbsModel implements Parcelable {
 
     private boolean deleted;
 
-    private String bigCover;
-
-    private String cover;
-
     private boolean isHq;
+
+    private String thumb_image_little;
+
+    private String thumb_image_big;
+
+    private String album_title;
+
+    public Drawable CacheAudioIcon;
 
     public Audio() {
 
@@ -59,8 +64,9 @@ public class Audio extends AbsModel implements Parcelable {
         genre = in.readInt();
         accessKey = in.readString();
         deleted = in.readByte() != 0;
-        bigCover = in.readString();
-        cover = in.readString();
+        thumb_image_big = in.readString();
+        thumb_image_little = in.readString();
+        album_title = in.readString();
         isHq = in.readByte() != 0;
     }
 
@@ -78,8 +84,9 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeInt(genre);
         dest.writeString(accessKey);
         dest.writeByte((byte) (deleted ? 1 : 0));
-        dest.writeString(bigCover);
-        dest.writeString(cover);
+        dest.writeString(thumb_image_big);
+        dest.writeString(thumb_image_little);
+        dest.writeString(album_title);
         dest.writeByte((byte) (isHq ? 1 : 0));
     }
 
@@ -173,6 +180,33 @@ public class Audio extends AbsModel implements Parcelable {
         return this;
     }
 
+    public String getAlbum_title() {
+        return album_title;
+    }
+
+    public Audio setAlbum_title(String album_title) {
+        this.album_title = album_title;
+        return this;
+    }
+
+    public String getThumb_image_little() {
+        return thumb_image_little;
+    }
+
+    public Audio setThumb_image_little(String thumb_image_little) {
+        this.thumb_image_little = thumb_image_little;
+        return this;
+    }
+
+    public String getThumb_image_big() {
+        return thumb_image_big;
+    }
+
+    public Audio setThumb_image_big(String thumb_image_big) {
+        this.thumb_image_big = thumb_image_big;
+        return this;
+    }
+
     public int getLyricsId() {
         return lyricsId;
     }
@@ -224,24 +258,6 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setDeleted(boolean deleted) {
         this.deleted = deleted;
-        return this;
-    }
-
-    public String getBigCover() {
-        return bigCover;
-    }
-
-    public Audio setBigCover(String bigCover) {
-        this.bigCover = bigCover;
-        return this;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public Audio setCover(String cover) {
-        this.cover = cover;
         return this;
     }
 

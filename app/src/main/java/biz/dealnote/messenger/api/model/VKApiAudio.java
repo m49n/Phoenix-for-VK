@@ -1,4 +1,5 @@
 package biz.dealnote.messenger.api.model;
+
 /**
  * An audio object describes an audio file and contains the following fields.
  */
@@ -48,6 +49,12 @@ public class VKApiAudio implements VKApiAttachment {
      * Genre ID. See the list of audio genres.
      */
     public int genre_id;
+
+    public String thumb_image_little;
+
+    public String thumb_image_big;
+
+    public String album_title;
 
     /**
      * An access key using for get information about hidden objects.

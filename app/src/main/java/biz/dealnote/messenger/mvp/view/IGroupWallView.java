@@ -6,6 +6,7 @@ import androidx.annotation.StringRes;
 import java.util.List;
 
 import biz.dealnote.messenger.model.Community;
+import biz.dealnote.messenger.model.CommunityDetails;
 import biz.dealnote.messenger.model.GroupSettings;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.PostFilter;
@@ -16,7 +17,7 @@ import biz.dealnote.messenger.model.PostFilter;
  */
 public interface IGroupWallView extends IWallView {
 
-    void displayBaseCommunityData(Community community);
+    void displayBaseCommunityData(Community community, CommunityDetails details);
     void displayCommunityCover(boolean enabled, String resource);
 
     void setupPrimaryButton(@StringRes Integer title);

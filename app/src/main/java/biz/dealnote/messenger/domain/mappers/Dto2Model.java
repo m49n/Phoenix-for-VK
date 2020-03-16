@@ -603,7 +603,9 @@ public class Dto2Model {
                 .setGenre(dto.genre_id)
                 .setAccessKey(dto.access_key)
                 .setDeleted(false)
-                .setHq(dto.is_hq);
+                .setHq(dto.is_hq)
+                .setThumb_image_big(dto.thumb_image_big)
+                .setThumb_image_little(dto.thumb_image_little);
     }
 
     public static Link transform(@NonNull VKApiLink link) {
@@ -734,9 +736,7 @@ public class Dto2Model {
                 .setAddingDate(dto.adding_date)
                 .setViews(dto.views)
                 .setPlayer(dto.player)
-                .setPhoto130(dto.photo_130)
-                .setPhoto320(dto.photo_320)
-                .setPhoto800(dto.photo_800)
+                .setImage(dto.image)
                 .setAccessKey(dto.access_key)
                 .setCommentsCount(isNull(dto.comments) ? 0 : dto.comments.count)
                 .setCanComment(dto.can_comment)
@@ -807,6 +807,7 @@ public class Dto2Model {
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));
                     break;
                 case VKApiAttachment.TYPE_WIKI_PAGE:
+                case VKApiAttachment.TYPE_ARTICLE:
                     attachments.prepareWikiPages().add(transform((VKApiWikiPage) attachment));
                     break;
                 case VKApiAttachment.TYPE_POST:

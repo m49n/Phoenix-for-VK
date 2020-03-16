@@ -2,7 +2,10 @@ package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -20,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
@@ -30,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import biz.dealnote.messenger.Constants;
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
@@ -436,6 +442,25 @@ public class AttachmentsViewBinder {
                 ImageView ivPhoto = itemView.findViewById(R.id.item_document_image);
                 ImageView ivType = itemView.findViewById(R.id.item_document_type);
 
+                ViewGroup.LayoutParams params1 = ivPhoto.getLayoutParams();
+                ViewGroup.LayoutParams params2 = ivType.getLayoutParams();
+                if(doc.getType() == Types.LINK || doc.getType() == Types.WIKI_PAGE) {
+                    params1.width = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
+                    params1.height = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
+                    params2.width = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
+                    params2.height = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
+                }
+                else
+                {
+                    params1.width = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
+                    params1.height = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
+                    params2.width = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
+                    params2.height = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
+
+                }
+                ivPhoto.setLayoutParams(params1);
+                ivPhoto.setLayoutParams(params2);
+
                 String title = doc.getTitle(mContext);
                 String details = doc.getSecondaryText(mContext);
 
@@ -454,9 +479,7 @@ public class AttachmentsViewBinder {
                         if (imageUrl != null) {
                             ivType.setVisibility(View.GONE);
                             ivPhoto.setVisibility(View.VISIBLE);
-                            PicassoInstance.with()
-                                    .load(imageUrl)
-                                    .into(ivPhoto);
+                            ViewUtils.displayAvatar(ivPhoto, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
                         } else {
                             ivType.setVisibility(View.VISIBLE);
                             ivPhoto.setVisibility(View.GONE);
@@ -468,9 +491,7 @@ public class AttachmentsViewBinder {
                         if (imageUrl != null) {
                             ivType.setVisibility(View.GONE);
                             ivPhoto.setVisibility(View.VISIBLE);
-                            PicassoInstance.with()
-                                    .load(imageUrl)
-                                    .into(ivPhoto);
+                            ViewUtils.displayAvatar(ivPhoto, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
                         } else {
                             ivPhoto.setVisibility(View.GONE);
                             ivType.setVisibility(View.GONE);
@@ -479,7 +500,12 @@ public class AttachmentsViewBinder {
                     case Types.LINK:
                     case Types.WIKI_PAGE:
                         ivType.setVisibility(View.VISIBLE);
-                        ivPhoto.setVisibility(View.GONE);
+                        if (imageUrl != null) {
+                            ivPhoto.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhoto, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
+                        }
+                        else
+                            ivPhoto.setVisibility(View.GONE);
                         ivType.getBackground().setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
                         ivType.setImageResource(R.drawable.share);
                         break;
@@ -554,7 +580,7 @@ public class AttachmentsViewBinder {
 
         int i = audios.size() - container.getChildCount();
         for (int j = 0; j < i; j++) {
-            container.addView(LayoutInflater.from(mContext).inflate(R.layout.item_small_audio, container, false));
+            container.addView(LayoutInflater.from(mContext).inflate(R.layout.item_audio, container, false));
         }
 
         for (int g = 0; g < container.getChildCount(); g++) {
@@ -567,20 +593,52 @@ public class AttachmentsViewBinder {
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
 
+                if(audio.CacheAudioIcon != null) {
+                    holder.ibPlay.setBackground(audio.CacheAudioIcon);
+                }
+                else
+                    holder.ibPlay.setBackgroundResource(R.drawable.audio);
+
+                if(audio.getThumb_image_little() != null && audio.CacheAudioIcon == null)
+                {
+                    PicassoInstance.with()
+                            .load(audio.getThumb_image_little())
+                            .transform(CurrentTheme.createTransformationForAvatar(Injection.provideApplicationContext()))
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    audio.CacheAudioIcon = new BitmapDrawable(Injection.provideApplicationContext().getResources(), bitmap);
+                                    holder.ibPlay.setBackground(audio.CacheAudioIcon);
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                }
+                            });
+                }
+
                 int finalG = g;
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
                         if(MusicUtils.isNowPlayingOrPreparing(audio))
-                            holder.ibPlay.setImageResource(R.drawable.play);
+                            holder.ibPlay.setImageResource(R.drawable.play_button);
                         else
-                            holder.ibPlay.setImageResource(R.drawable.pause);
+                            holder.ibPlay.setImageResource(R.drawable.pause_button);
                         MusicUtils.playOrPause();
                     }
                     else
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                 });
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
-                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.pause : R.drawable.play);
+                if(MusicUtils.isNowPlayingOrPreparing(audio))
+                    holder.ibPlay.setImageResource(R.drawable.pause_button);
+                else
+                    holder.ibPlay.setImageResource(R.drawable.play_button);
+
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
                 holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);
                 holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
@@ -712,8 +770,8 @@ public class AttachmentsViewBinder {
         LinearLayout Track;
 
         AudioHolder(View root) {
-            tvTitle = root.findViewById(R.id.dialog_message);
-            tvSubtitle = root.findViewById(R.id.item_audio_subtitle);
+            tvTitle = root.findViewById(R.id.dialog_title);
+            tvSubtitle = root.findViewById(R.id.dialog_message);
             ibPlay = root.findViewById(R.id.item_audio_play);
             time = root.findViewById(R.id.item_audio_time);
             saved = root.findViewById(R.id.saved);

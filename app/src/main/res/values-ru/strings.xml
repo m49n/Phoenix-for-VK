@@ -65,6 +65,7 @@
     <string name="last_seen_sex_woman">была в сети: %1$s</string>
     <string name="last_seen_sex_unknown">был(-а) в сети: %1$s</string>
     <string name="online">Онлайн</string>
+    <string name="offline">Оффлайн</string>
     <string name="thank_you">На вашей стене создан пост с информацией о приложении. Спасибо большое за поддержку!</string>
 
 
@@ -893,6 +894,7 @@
     <string name="community_options_name_title">Название</string>
     <string name="community_control">Управление</string>
     <string name="community_managers_tab_title">Управление</string>
+    <string name="community_managers_contacts">Контакты</string>
     <string name="community_options_description_title">Описание сообщества</string>
     <string name="community_options_link_title">Адрес страницы</string>
     <string name="community_options_type_title">Тип группы</string>
@@ -1114,4 +1116,6 @@
     <string name="succ_offline">Вы стали Оффлайн</string>
     <string name="err_offline">Ошибка, вы Онлайн!</string>
     <string name="user_readed_yor_message">Прочитал ваше сообщение</string>
+    <string name="copy_track_info">Скопировать информацию трека</string>
+    <string name="search_by_artist">Поиск по исполнителю</string>
 </resources>

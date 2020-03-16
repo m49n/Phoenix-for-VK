@@ -20,6 +20,7 @@ public class VkApiAttachments {
     public static final String TYPE_APP = "app";
     public static final String TYPE_POLL = "poll";
     public static final String TYPE_WIKI_PAGE = "page";
+    public static final String TYPE_ARTICLE = "article";
     public static final String TYPE_ALBUM = "album";
     public static final String TYPE_STICKER = "sticker";
     public static final String TYPE_GIFT = "gift";

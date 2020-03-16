@@ -508,7 +508,7 @@ public class Post extends AbsModel implements Parcelable, Cloneable {
         }
 
         if(hasVideos()){
-            return getAttachments().getVideos().get(0).get320orSmallerPhoto();
+            return getAttachments().getVideos().get(0).getImage();
         }
 
         if(hasDocs()){

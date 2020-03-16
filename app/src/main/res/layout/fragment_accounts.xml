@@ -54,8 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/phoenix_round"
-        app:maxImageSize="60dp" />
+        android:src="@drawable/phoenix"
+        app:maxImageSize="46dp" />
 
 
     <TextView

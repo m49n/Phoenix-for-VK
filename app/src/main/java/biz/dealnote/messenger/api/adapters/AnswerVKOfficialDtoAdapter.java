@@ -22,6 +22,7 @@ public class AnswerVKOfficialDtoAdapter extends AbsAdapter implements JsonDeseri
         JsonObject root = json.getAsJsonObject();
 
         AnswerVKOfficial dto = new AnswerVKOfficial();
+        dto.iconType = optString(root, "icon_type");
         dto.header = optString(root, "header");
         if(dto.header != null) {
             dto.header = dto.header.replace("{date}", "").replaceAll("'''(((?!''').)*)'''", "<b>$1</b>").replaceAll("\\[vk(ontakte)?:\\/\\/[A-Za-z0-9\\/\\?=]+\\|([^\\]]+)\\]", "$2");;

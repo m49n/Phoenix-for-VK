@@ -68,7 +68,10 @@ public class AudioInteractor implements IAudioInteractor {
                             .setLyricsId(orig.getLyricsId())
                             .setGenre(orig.getGenre())
                             .setDuration(orig.getDuration())
-                            .setHq(orig.isHq());
+                            .setHq(orig.isHq())
+                            .setThumb_image_little(orig.getThumb_image_little())
+                            .setThumb_image_big(orig.getThumb_image_big())
+                            .setAlbum_title(orig.getAlbum_title());
                 });
     }
 
@@ -114,7 +117,10 @@ public class AudioInteractor implements IAudioInteractor {
                             .setLyricsId(out.items.get(i).lyrics_id)
                             .setGenre(out.items.get(i).genre_id)
                             .setDuration(out.items.get(i).duration)
-                            .setHq(out.items.get(i).is_hq));
+                            .setHq(out.items.get(i).is_hq)
+                            .setThumb_image_little(out.items.get(i).thumb_image_little)
+                            .setThumb_image_big(out.items.get(i).thumb_image_big)
+                            .setAlbum_title(out.items.get(i).album_title));
                     return ret;
                 });
     }
@@ -136,7 +142,10 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setLyricsId(out.get(i).lyrics_id)
                                 .setGenre(out.get(i).genre_id)
                                 .setDuration(out.get(i).duration)
-                                .setHq(out.get(i).is_hq));
+                                .setHq(out.get(i).is_hq)
+                                .setThumb_image_little(out.get(i).thumb_image_little)
+                                .setThumb_image_big(out.get(i).thumb_image_big)
+                                .setAlbum_title(out.get(i).album_title));
                     return ret;
                 });
     }
@@ -166,7 +175,10 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setLyricsId(out.get(i).lyrics_id)
                                 .setGenre(out.get(i).genre_id)
                                 .setDuration(out.get(i).duration)
-                                .setHq(out.get(i).is_hq));
+                                .setHq(out.get(i).is_hq)
+                                .setThumb_image_little(out.get(i).thumb_image_little)
+                                .setThumb_image_big(out.get(i).thumb_image_big)
+                                .setAlbum_title(out.get(i).album_title));
                     return ret;
                 });
     }
@@ -195,7 +207,10 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setLyricsId(out.items.get(i).lyrics_id)
                                 .setGenre(out.items.get(i).genre_id)
                                 .setDuration(out.items.get(i).duration)
-                                .setHq(out.items.get(i).is_hq));
+                                .setHq(out.items.get(i).is_hq)
+                                .setThumb_image_little(out.items.get(i).thumb_image_little)
+                                .setThumb_image_big(out.items.get(i).thumb_image_big)
+                                .setAlbum_title(out.items.get(i).album_title));
                     return ret;
                 });
     }

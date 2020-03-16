@@ -76,7 +76,7 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
     @OnGuiCreated
     private void resolveBaseCommunityViews() {
         if (isGuiReady()) {
-            getView().displayBaseCommunityData(this.community);
+            getView().displayBaseCommunityData(this.community, this.details);
         }
     }
 

@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             if (!isFragmentWithoutNavigation()) {
-                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.online_phoenix);
+                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.phoenix);
                 tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {
@@ -455,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         if (fragment instanceof ChatFragment) {
             Logger.d(TAG, "Chat fragment is present. Try to re-init");
             ChatFragment chatFragment = (ChatFragment) fragment;
-            chatFragment.reInit(accountId, messagesOwnerId, peer);
+            chatFragment.reInit(peer);
             onChatResume(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
         } else {
             Logger.d(TAG, "Create new chat fragment");

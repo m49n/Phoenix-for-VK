@@ -122,8 +122,8 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         } else if ("administrator".equalsIgnoreCase(role)) {
             return VKApiCommunity.AdminLevel.ADMIN;
         }
-
-        throw new IllegalArgumentException("Invalid role");
+        else
+            return 0;
     }
 
     private static String convertAdminLevelToRole(int adminLevel) {

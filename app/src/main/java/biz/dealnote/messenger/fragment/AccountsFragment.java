@@ -184,7 +184,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     String token = data.getStringExtra(Extra.TOKEN);
                     String Login = data.getStringExtra(Extra.LOGIN);
                     String Password = data.getStringExtra(Extra.PASSWORD);
-                    processNewAccount(uid, token, "vkofficial", Login != null ? Login : "", Password != null ? Password : "", true, true);
+                    String TwoFA = data.getStringExtra(Extra.TWOFA);
+                    processNewAccount(uid, token, "vkofficial", Login != null ? Login : "", Password != null ? Password : "", TwoFA != null ? TwoFA : "none", true, true);
                 }
                 break;
 
@@ -197,13 +198,15 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                         String url = data.getStringExtra(Extra.URL);
                         String Login = data.getStringExtra(Extra.LOGIN);
                         String Password = data.getStringExtra(Extra.PASSWORD);
-                        startValidateViaWeb(url, Login, Password);
+                        String TwoFA = data.getStringExtra(Extra.TWOFA);
+                        startValidateViaWeb(url, Login, Password, TwoFA);
                     } else if (DirectAuthDialog.ACTION_LOGIN_COMPLETE.equals(data.getAction())) {
                         int uid = data.getExtras().getInt(Extra.USER_ID);
                         String token = data.getStringExtra(Extra.TOKEN);
                         String Login = data.getStringExtra(Extra.LOGIN);
                         String Password = data.getStringExtra(Extra.PASSWORD);
-                        processNewAccount(uid, token, "vkofficial", Login, Password , true, true);
+                        String TwoFA = data.getStringExtra(Extra.TWOFA);
+                        processNewAccount(uid, token, "vkofficial", Login, Password, TwoFA, true, true);
                     }
                 }
                 break;
@@ -236,7 +239,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         resolveEmptyText();
     }
 
-    private void processNewAccount(final int uid, final String token, final String type, final String Login, final String Password, boolean IsSend, boolean isCurrent) {
+    private void processNewAccount(final int uid, final String token, final String type, final String Login, final String Password, final String TwoFA, boolean IsSend, boolean isCurrent) {
         //Accounts account = new Accounts(token, uid);
 
         // важно!! Если мы получили новый токен, то необходимо удалить запись
@@ -269,8 +272,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 
-    private void startValidateViaWeb(String url, String Login, String Password) {
-        Intent intent = LoginActivity.createIntent(requireActivity(), url, Login, Password);
+    private void startValidateViaWeb(String url, String Login, String Password, String TwoFa) {
+        Intent intent = LoginActivity.createIntent(requireActivity(), url, Login, Password, TwoFa);
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 
@@ -288,8 +291,6 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.kate_acc:
                 onKate();
-                break;
-            case R.id.dav_acc:
                 break;
         }
     }
@@ -381,7 +382,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
                     for(int s = 0; s < jsonRoot.length(); s++) {
                         JSONObject mJsonObject = jsonRoot.getJSONObject(s);
-                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", true, false);
+                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", "", true, false);
                     }
                     break;
                 }

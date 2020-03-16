@@ -358,6 +358,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 pinnedTitle?.text = sender.fullName
                 pinnedSubtitle?.text = body
                 buttonUnpin?.visibility = if (canChange) View.VISIBLE else View.GONE
+                pinnedView?.setOnClickListener {presenter?.requestFromNetInMessage(pinned.id);}
             }
         }
     }
@@ -466,7 +467,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                                               body: String?, attachments: ModelsBundle?) {
         val fragment = MessageAttachmentsFragment.newInstance(accountId, messageOwnerId, destination.id, attachments)
         fragment.setTargetFragment(this, REQUEST_EDIT_MESSAGE)
-        fragment.show(requireFragmentManager(), "message-attachments")
+        fragment.show(requireActivity().supportFragmentManager, "message-attachments")
     }
 
     override fun startImagesSelection(accountId: Int, ownerId: Int) {
@@ -890,8 +891,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         return presenter?.onBackPressed() == true
     }
 
-    fun reInit(newAccountId: Int, newMessagesOwnerId: Int, newPeer: Peer) {
-        presenter?.reInitWithNewPeer(newAccountId, newMessagesOwnerId, newPeer)
+    fun reInit(newPeer: Peer) {
+        presenter?.reInitWithNewPeer(newPeer)
     }
 
     private fun isActionModeVisible(): Boolean {

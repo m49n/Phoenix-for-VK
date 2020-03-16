@@ -103,8 +103,7 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
         cv.put(VideoAlbumsColumns.OWNER_ID, dbo.getOwnerId());
         cv.put(VideoAlbumsColumns.ALBUM_ID, dbo.getId());
         cv.put(VideoAlbumsColumns.TITLE, dbo.getTitle());
-        cv.put(VideoAlbumsColumns.PHOTO_160, dbo.getPhoto160());
-        cv.put(VideoAlbumsColumns.PHOTO_320, dbo.getPhoto320());
+        cv.put(VideoAlbumsColumns.IMAGE, dbo.getImage());
         cv.put(VideoAlbumsColumns.COUNT, dbo.getCount());
         cv.put(VideoAlbumsColumns.UPDATE_TIME, dbo.getUpdateTime());
         cv.put(VideoAlbumsColumns.PRIVACY, nonNull(dbo.getPrivacy()) ? GSON.toJson(dbo.getPrivacy()) : null);
@@ -126,8 +125,7 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
                 .setTitle(cursor.getString(cursor.getColumnIndex(VideoAlbumsColumns.TITLE)))
                 .setUpdateTime(cursor.getLong(cursor.getColumnIndex(VideoAlbumsColumns.UPDATE_TIME)))
                 .setCount(cursor.getInt(cursor.getColumnIndex(VideoAlbumsColumns.COUNT)))
-                .setPhoto160(cursor.getString(cursor.getColumnIndex(VideoAlbumsColumns.PHOTO_160)))
-                .setPhoto320(cursor.getString(cursor.getColumnIndex(VideoAlbumsColumns.PHOTO_320)))
+                .setImage(cursor.getString(cursor.getColumnIndex(VideoAlbumsColumns.IMAGE)))
                 .setPrivacy(privacyEntity);
     }
 }

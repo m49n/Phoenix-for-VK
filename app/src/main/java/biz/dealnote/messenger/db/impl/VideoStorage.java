@@ -32,6 +32,7 @@ import static biz.dealnote.messenger.db.column.VideoColumns.DESCRIPTION;
 import static biz.dealnote.messenger.db.column.VideoColumns.DURATION;
 import static biz.dealnote.messenger.db.column.VideoColumns.EXTERNAL;
 import static biz.dealnote.messenger.db.column.VideoColumns.HLS;
+import static biz.dealnote.messenger.db.column.VideoColumns.IMAGE;
 import static biz.dealnote.messenger.db.column.VideoColumns.LIKES;
 import static biz.dealnote.messenger.db.column.VideoColumns.LINK;
 import static biz.dealnote.messenger.db.column.VideoColumns.LIVE;
@@ -42,9 +43,6 @@ import static biz.dealnote.messenger.db.column.VideoColumns.MP4_480;
 import static biz.dealnote.messenger.db.column.VideoColumns.MP4_720;
 import static biz.dealnote.messenger.db.column.VideoColumns.ORIGINAL_OWNER_ID;
 import static biz.dealnote.messenger.db.column.VideoColumns.OWNER_ID;
-import static biz.dealnote.messenger.db.column.VideoColumns.PHOTO_130;
-import static biz.dealnote.messenger.db.column.VideoColumns.PHOTO_320;
-import static biz.dealnote.messenger.db.column.VideoColumns.PHOTO_800;
 import static biz.dealnote.messenger.db.column.VideoColumns.PLAYER;
 import static biz.dealnote.messenger.db.column.VideoColumns.PRIVACY_COMMENT;
 import static biz.dealnote.messenger.db.column.VideoColumns.PRIVACY_VIEW;
@@ -120,9 +118,7 @@ class VideoStorage extends AbsStorage implements IVideoStorage {
                 .setAddingDate(cursor.getLong(cursor.getColumnIndex(ADDING_DATE)))
                 .setViews(cursor.getInt(cursor.getColumnIndex(VIEWS)))
                 .setPlayer(cursor.getString(cursor.getColumnIndex(PLAYER)))
-                .setPhoto130(cursor.getString(cursor.getColumnIndex(PHOTO_130)))
-                .setPhoto320(cursor.getString(cursor.getColumnIndex(PHOTO_320)))
-                .setPhoto800(cursor.getString(cursor.getColumnIndex(PHOTO_800)))
+                .setImage(cursor.getString(cursor.getColumnIndex(IMAGE)))
                 .setAccessKey(cursor.getString(cursor.getColumnIndex(ACCESS_KEY)))
                 .setCommentsCount(cursor.getInt(cursor.getColumnIndex(COMMENTS)))
                 .setCanComment(cursor.getInt(cursor.getColumnIndex(CAN_COMENT)) == 1)
@@ -171,9 +167,7 @@ class VideoStorage extends AbsStorage implements IVideoStorage {
         cv.put(VideoColumns.ADDING_DATE, dbo.getAddingDate());
         cv.put(VideoColumns.VIEWS, dbo.getViews());
         cv.put(VideoColumns.PLAYER, dbo.getPlayer());
-        cv.put(VideoColumns.PHOTO_130, dbo.getPhoto130());
-        cv.put(VideoColumns.PHOTO_320, dbo.getPhoto320());
-        cv.put(VideoColumns.PHOTO_800, dbo.getPhoto800());
+        cv.put(VideoColumns.IMAGE, dbo.getImage());
         cv.put(VideoColumns.ACCESS_KEY, dbo.getAccessKey());
         cv.put(VideoColumns.COMMENTS, dbo.getCommentsCount());
         cv.put(VideoColumns.CAN_COMENT, dbo.isCanComment());

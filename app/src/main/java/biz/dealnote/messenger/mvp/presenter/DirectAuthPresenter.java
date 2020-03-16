@@ -148,14 +148,16 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     private void onLoginResponse(LoginResponse response) {
         setLoginNow(false);
 
+        String TwFa = "none";
         if (nonEmpty(response.access_token) && response.user_id > 0) {
             String Pass = nonEmpty(pass) ? pass.trim() : "";
             if(requireSmsCode)
-                Pass += " 2fa_sms";
+                TwFa = "2fa_sms";
             else if(requireAppCode)
-                Pass += " 2fa_app";
+                TwFa = "2fa_app";
             final String Passwd = Pass;
-            callView(view -> view.returnSuccessToParent(response.user_id, response.access_token, nonEmpty(username) ? username.trim() : "", Passwd));
+            final String TwFafin = TwFa;
+            callView(view -> view.returnSuccessToParent(response.user_id, response.access_token, nonEmpty(username) ? username.trim() : "", Passwd, TwFafin));
         }
     }
 

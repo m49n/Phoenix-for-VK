@@ -235,7 +235,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         bindBaseMessageHolder(holder, message);
 
         holder.body.setVisibility(TextUtils.isEmpty(message.getBody()) ? View.GONE : View.VISIBLE);
-
         String displayedBody = null;
 
         switch (message.getCryptStatus()) {
@@ -256,9 +255,11 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 break;
             case CryptStatus.NO_ENCRYPTION:
             case CryptStatus.DECRYPTED:
-                holder.bubble.setBubbleAlpha(255);
+                holder.bubble.setBubbleAlpha(210);
                 break;
         }
+        if(message.isOut())
+            holder.bubble.setBubbleAlpha(100);
 
         holder.body.setText(OwnerLinkSpanFactory.withSpans(displayedBody, true, false, ownerLinkAdapter));
         holder.encryptedView.setVisibility(message.getCryptStatus() == CryptStatus.NO_ENCRYPTION ? View.GONE : View.VISIBLE);

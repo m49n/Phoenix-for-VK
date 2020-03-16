@@ -46,7 +46,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.Holder> {
         holder.title.setText(video.getTitle());
         holder.videoLenght.setText(AppTextUtils.getDurationString(video.getDuration()));
 
-        String photoUrl = video.getMaxResolutionPhoto();
+        String photoUrl = video.getImage();
 
         if (Utils.nonEmpty(photoUrl)) {
             PicassoInstance.with()

@@ -50,7 +50,6 @@ android {
         debug {
             minifyEnabled false
             multiDexEnabled false
-            signingConfig signingConfigs.debug
         }
     }
 }

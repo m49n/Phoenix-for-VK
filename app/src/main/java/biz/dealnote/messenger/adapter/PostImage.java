@@ -8,8 +8,6 @@ import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.view.mozaik.PostImagePosition;
 
-import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
-
 public class PostImage {
 
     public static final int TYPE_IMAGE = 1;
@@ -66,7 +64,7 @@ public class PostImage {
                 return size == null ? null : size.getUrl();
             case PostImage.TYPE_VIDEO:
                 Video video = (Video) attachment;
-                return firstNonEmptyString(video.getPhoto800(), video.getPhoto320());
+                return video.getImage();
             case PostImage.TYPE_GIF:
                 Document document = (Document) attachment;
                 return document.getPreviewWithSize(PhotoSize.Q, false);

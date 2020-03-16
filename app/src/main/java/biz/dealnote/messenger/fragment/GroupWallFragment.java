@@ -21,6 +21,7 @@ import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -40,6 +41,7 @@ import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.PeopleSearchCriteria;
 import biz.dealnote.messenger.model.Community;
+import biz.dealnote.messenger.model.CommunityDetails;
 import biz.dealnote.messenger.model.GroupSettings;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
@@ -67,13 +69,18 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
     private GroupHeaderHolder mHeaderHolder;
 
     @Override
-    public void displayBaseCommunityData(Community community) {
+    public void displayBaseCommunityData(Community community, CommunityDetails details) {
         if(isNull(mHeaderHolder)) return;
 
         mHeaderHolder.tvName.setText(community.getFullName());
 
         String screenName = nonEmpty(community.getScreenName()) ? "@" + community.getScreenName() : null;
         mHeaderHolder.tvScreenName.setText(screenName);
+
+        if(!details.isCanMessage())
+            mHeaderHolder.fabMessage.setImageResource(R.drawable.close);
+        else
+            mHeaderHolder.fabMessage.setImageResource(R.drawable.email);
 
         String photoUrl = community.getMaxSquareAvatar();
         if (nonEmpty(photoUrl)) {
@@ -248,7 +255,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         setupCounter(mHeaderHolder.bMembers, members);
         setupCounter(mHeaderHolder.bDocuments, docs);
         setupCounter(mHeaderHolder.bPhotos, photos);
-//        setupCounter(mHeaderHolder.bAudios, audio);
+        setupCounter(mHeaderHolder.bAudios, audio);
         setupCounter(mHeaderHolder.bVideos, video);
     }
 
@@ -259,7 +266,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         OptionMenuView optionMenuView = new OptionMenuView();
         getPresenter().fireOptionMenuViewCreated(optionMenuView);
 
-        menu.findItem(R.id.action_community_control).setVisible(optionMenuView.controlVisible);
+        if(!optionMenuView.controlVisible)
+            menu.findItem(R.id.action_community_control).setTitle(R.string.mail_information);
+        else
+            menu.findItem(R.id.action_community_control).setTitle(R.string.community_control);
     }
 
     private static final class OptionMenuView implements IOptionMenuView {
@@ -298,7 +308,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         Button primaryActionButton;
         Button secondaryActionButton;
 
-        View fabMessage;
+        FloatingActionButton fabMessage;
         HorizontalOptionsAdapter<PostFilter> mFiltersAdapter;
 
         GroupHeaderHolder(@NonNull View root) {
@@ -311,6 +321,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
             bMembers = root.findViewById(R.id.header_group_bmembers);
             bDocuments = root.findViewById(R.id.header_group_bdocuments);
             bPhotos = root.findViewById(R.id.header_group_bphotos);
+            bAudios = root.findViewById(R.id.header_group_baudios);
             bVideos = root.findViewById(R.id.header_group_bvideos);
             primaryActionButton = root.findViewById(R.id.header_group_primary_button);
             secondaryActionButton = root.findViewById(R.id.header_group_secondary_button);
@@ -338,6 +349,8 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .setOnClickListener(v -> getPresenter().fireHeaderTopicsClick());
             root.findViewById(R.id.header_group_documents_container)
                     .setOnClickListener(v -> getPresenter().fireHeaderDocsClick());
+            root.findViewById(R.id.header_group_audios_container)
+                    .setOnClickListener(v -> getPresenter().fireHeaderAudiosClick());
         }
     }
 }

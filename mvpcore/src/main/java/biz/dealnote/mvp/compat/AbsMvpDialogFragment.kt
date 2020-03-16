@@ -2,6 +2,7 @@ package biz.dealnote.mvp.compat
 
 import android.os.Bundle
 import android.view.View
+import androidx.loader.app.LoaderManager
 
 import biz.dealnote.mvp.core.IMvpView
 import biz.dealnote.mvp.core.IPresenter
@@ -18,16 +19,15 @@ abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> : androidx.
     protected val presenter: P?
         get() = delegate.presenter
 
-    protected val isPresenterPrepared: Boolean
-        get() = delegate.isPresenterPrepared
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate.onCreate(requireActivity(), getViewHost(), this, loaderManager, savedInstanceState)
+        delegate.onCreate(requireActivity(), getViewHost(), this, LoaderManager.getInstance(this), savedInstanceState)
     }
 
     // Override in case of fragment not implementing IPresenter<View> interface
-    protected fun getViewHost(): V = this as V
+    @Suppress("UNCHECKED_CAST")
+    @SuppressWarnings("unchecked")
+    private fun getViewHost(): V = this as V
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,11 +63,4 @@ abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> : androidx.
         super.onDestroy()
     }
 
-    fun callPresenter(action: PresenterAction<P, V>) {
-        delegate.callPresenter(action)
-    }
-
-    fun postPrenseterReceive(action: PresenterAction<P, V>) {
-        delegate.postPrenseterReceive(action)
-    }
 }

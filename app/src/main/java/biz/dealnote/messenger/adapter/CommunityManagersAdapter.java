@@ -85,10 +85,15 @@ public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityMana
         Integer roleTextRes = roleTextResources.get(manager.getRole());
 
         if(Objects.isNull(roleTextRes)){
-            roleTextRes = R.string.role_unknown;
+            if(manager.getContactInfo() != null && manager.getContactInfo().getDescriprion() != null)
+                holder.role.setText(manager.getContactInfo().getDescriprion());
+            else {
+                roleTextRes = R.string.role_unknown;
+                holder.role.setText(roleTextRes);
+            }
         }
-
-        holder.role.setText(roleTextRes);
+        else
+            holder.role.setText(roleTextRes);
         holder.itemView.setOnClickListener(v -> {
             if(Objects.nonNull(actionListener)){
                 actionListener.onManagerClick(manager);

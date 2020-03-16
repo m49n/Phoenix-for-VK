@@ -209,7 +209,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         holder.tvTitle.setText(video.getTitle());
 
         PicassoInstance.with()
-                .load(video.getMaxResolutionPhoto())
+                .load(video.getImage())
                 .placeholder(R.drawable.background_gray)
                 .into(holder.photoImageView);
 

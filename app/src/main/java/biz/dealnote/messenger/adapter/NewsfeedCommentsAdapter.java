@@ -212,9 +212,9 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             holder.service.setVisibility(View.GONE);
         }
 
-        if (nonEmpty(video.getMaxResolutionPhoto())) {
+        if (nonEmpty(video.getImage())) {
             PicassoInstance.with()
-                    .load(video.getMaxResolutionPhoto())
+                    .load(video.getImage())
                     .into(holder.image);
         } else {
             PicassoInstance.with()

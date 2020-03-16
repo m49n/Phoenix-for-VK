@@ -92,19 +92,9 @@ public class VKApiVideo implements VKApiAttachment, Commentable, Likeable, Copya
     public String player;
 
     /**
-     * URL of the video cover image with the size of 130x98px.
+     * URL of the video cover image
      */
-    public String photo_130;
-
-    /**
-     * URL of the video cover image with the size of 320x240px.
-     */
-    public String photo_320;
-
-    /**
-     * URL of the video cover image with the size of 640x480px (if available).
-     */
-    public String photo_800;
+    public String image;
 
     /**
      * An access key using for get information about hidden objects.

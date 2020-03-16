@@ -149,6 +149,20 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
     }
 
     @Override
+    public Single<List<ContactInfo>> getContacts(int accountId, int groupId) {
+        return networker.vkDefault(accountId).groups()
+                .getById(Collections.singleton(groupId), null, null, "contacts")
+                .map(communities -> {
+                    List<VKApiCommunity.Contact> temps = listEmptyIfNull(communities.get(0).contacts);
+                    List<ContactInfo> managers = new ArrayList<>(temps.size());
+                    for (VKApiCommunity.Contact user : temps) {
+                        managers.add(transform(user));
+                    }
+                    return managers;
+                });
+    }
+
+    @Override
     public Single<List<Manager>> getManagers(int accountId, int groupId) {
         return networker.vkDefault(accountId)
                 .groups()
@@ -157,27 +171,22 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
                         .groups()
                         .getById(Collections.singleton(groupId), null, null, "contacts")
                         .map(communities -> {
-                            if(communities.isEmpty()){
+                            if (communities.isEmpty()) {
                                 throw new NotFoundException("Group with id " + groupId + " not found");
                             }
-
                             return listEmptyIfNull(communities.get(0).contacts);
                         })
                         .map(contacts -> {
                             List<VKApiUser> users = listEmptyIfNull(items.getItems());
-
                             List<Manager> managers = new ArrayList<>(users.size());
                             for (VKApiUser user : users) {
                                 VKApiCommunity.Contact contact = findById(contacts, user.id);
-
                                 Manager manager = new Manager(Dto2Model.transformUser(user), user.role);
                                 if (nonNull(contact)) {
                                     manager.setDisplayAsContact(true).setContactInfo(transform(contact));
                                 }
-
                                 managers.add(manager);
                             }
-
                             return managers;
                         }));
     }

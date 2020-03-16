@@ -12,6 +12,7 @@ import java.util.Map;
 import biz.dealnote.messenger.api.adapters.AnswerVKOfficialDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsEntryDtoAdapter;
+import biz.dealnote.messenger.api.adapters.AudioDtoAdapter;
 import biz.dealnote.messenger.api.adapters.BooleanAdapter;
 import biz.dealnote.messenger.api.adapters.ChatDtoAdapter;
 import biz.dealnote.messenger.api.adapters.ChatUserDtoAdapter;
@@ -37,9 +38,11 @@ import biz.dealnote.messenger.api.adapters.SchoolClazzDtoAdapter;
 import biz.dealnote.messenger.api.adapters.SearchDialogsResponseAdapter;
 import biz.dealnote.messenger.api.adapters.ToticDtoAdapter;
 import biz.dealnote.messenger.api.adapters.UserDtoAdapter;
+import biz.dealnote.messenger.api.adapters.VideoAlbumDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoDtoAdapter;
 import biz.dealnote.messenger.api.model.ChatUserDto;
 import biz.dealnote.messenger.api.model.GroupSettingsDto;
+import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
@@ -51,6 +54,7 @@ import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VKApiVideo;
+import biz.dealnote.messenger.api.model.VKApiVideoAlbum;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.api.model.VkApiPostSource;
@@ -91,7 +95,9 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(boolean.class, new BooleanAdapter())
             .registerTypeAdapter(VkApiPrivacy.class, new PrivacyDtoAdapter())
             .registerTypeAdapter(VKApiPhotoAlbum.class, new PhotoAlbumDtoAdapter())
+            .registerTypeAdapter(VKApiVideoAlbum.class, new VideoAlbumDtoAdapter())
             .registerTypeAdapter(VkApiAttachments.class, new AttachmentsDtoAdapter())
+            .registerTypeAdapter(VKApiAudio.class, new AudioDtoAdapter())
             .registerTypeAdapter(VKApiPost.class, new PostDtoAdapter())
             .registerTypeAdapter(VkApiPostSource.class, new PostSourceDtoAdapter())
             .registerTypeAdapter(VKApiUser.class, new UserDtoAdapter())

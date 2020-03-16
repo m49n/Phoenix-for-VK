@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DBHelper";
 
-    private static final int DATABASE_VERSION = 173;
+    private static final int DATABASE_VERSION = 174;
 
     private static volatile Map<Integer, DBHelper> dbHelperMap = new ConcurrentHashMap<>();
 
@@ -563,9 +563,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + VideoColumns.ADDING_DATE + "] INTEGER, " +
                 "  [" + VideoColumns.VIEWS + "] INTEGER, " +
                 "  [" + VideoColumns.PLAYER + "] TEXT, " +
-                "  [" + VideoColumns.PHOTO_130 + "] TEXT, " +
-                "  [" + VideoColumns.PHOTO_320 + "] TEXT, " +
-                "  [" + VideoColumns.PHOTO_800 + "] TEXT, " +
+                "  [" + VideoColumns.IMAGE + "] TEXT, " +
                 "  [" + VideoColumns.ACCESS_KEY + "] TEXT, " +
                 "  [" + VideoColumns.COMMENTS + "] INTEGER, " +
                 "  [" + VideoColumns.CAN_COMENT + "] INTEGER, " +
@@ -867,8 +865,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + VideoAlbumsColumns.OWNER_ID + "] INTEGER, " +
                 "  [" + VideoAlbumsColumns.TITLE + "] VARCHAR(2048), " +
                 "  [" + VideoAlbumsColumns.COUNT + "] INTEGER, " +
-                "  [" + VideoAlbumsColumns.PHOTO_160 + "] VARCHAR(2048), " +
-                "  [" + VideoAlbumsColumns.PHOTO_320 + "] VARCHAR(2048), " +
+                "  [" + VideoAlbumsColumns.IMAGE + "] VARCHAR(2048), " +
                 "  [" + VideoAlbumsColumns.UPDATE_TIME + "] BIGINT, " +
                 "  [" + VideoAlbumsColumns.PRIVACY + "] VARCHAR(2048), " +
                 "  CONSTRAINT [] UNIQUE ([" + VideoAlbumsColumns.ALBUM_ID + "], [" + VideoAlbumsColumns.OWNER_ID + "]) ON CONFLICT REPLACE);";

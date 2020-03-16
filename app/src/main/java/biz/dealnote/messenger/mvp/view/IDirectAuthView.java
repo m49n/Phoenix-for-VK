@@ -24,7 +24,7 @@ public interface IDirectAuthView extends IMvpView, IErrorView {
 
     void hideKeyboard();
 
-    void returnSuccessToParent(int userId, String accessToken, String Login, String Password);
+    void returnSuccessToParent(int userId, String accessToken, String Login, String Password, String twoFA);
 
     void returnLoginViaWebAction();
 }

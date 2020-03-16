@@ -498,9 +498,7 @@ public class MessengerContentProvider extends ContentProvider {
         sVideosProjectionMap.put(VideoColumns.ADDING_DATE, VideoColumns.FULL_ADDING_DATE);
         sVideosProjectionMap.put(VideoColumns.VIEWS, VideoColumns.FULL_VIEWS);
         sVideosProjectionMap.put(VideoColumns.PLAYER, VideoColumns.FULL_PLAYER);
-        sVideosProjectionMap.put(VideoColumns.PHOTO_130, VideoColumns.FULL_PHOTO_130);
-        sVideosProjectionMap.put(VideoColumns.PHOTO_320, VideoColumns.FULL_PHOTO_320);
-        sVideosProjectionMap.put(VideoColumns.PHOTO_800, VideoColumns.FULL_PHOTO_800);
+        sVideosProjectionMap.put(VideoColumns.IMAGE, VideoColumns.FULL_IMAGE);
         sVideosProjectionMap.put(VideoColumns.ACCESS_KEY, VideoColumns.FULL_ACCESS_KEY);
         sVideosProjectionMap.put(VideoColumns.COMMENTS, VideoColumns.FULL_COMMENTS);
         sVideosProjectionMap.put(VideoColumns.CAN_COMENT, VideoColumns.FULL_CAN_COMENT);
@@ -690,8 +688,7 @@ public class MessengerContentProvider extends ContentProvider {
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.ALBUM_ID, VideoAlbumsColumns.FULL_ALBUM_ID);
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.OWNER_ID, VideoAlbumsColumns.FULL_OWNER_ID);
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.TITLE, VideoAlbumsColumns.FULL_TITLE);
-        sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.PHOTO_160, VideoAlbumsColumns.FULL_PHOTO_160);
-        sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.PHOTO_320, VideoAlbumsColumns.FULL_PHOTO_320);
+        sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.IMAGE, VideoAlbumsColumns.FULL_IMAGE);
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.COUNT, VideoAlbumsColumns.FULL_COUNT);
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.UPDATE_TIME, VideoAlbumsColumns.FULL_UPDATE_TIME);
         sVideoAlbumsProjectionMap.put(VideoAlbumsColumns.PRIVACY, VideoAlbumsColumns.FULL_PRIVACY);

@@ -17,9 +17,6 @@ abstract class AbsMvpActivity<P : IPresenter<V>, V : IMvpView> : ComponentActivi
     protected val presenter: P?
         get() = delegate.presenter
 
-    // Override in case of fragment not implementing IPresenter<View> interface
-    protected fun getViewHost(): V = this as V
-
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         delegate.onViewCreated()

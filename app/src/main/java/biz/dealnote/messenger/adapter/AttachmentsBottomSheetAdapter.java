@@ -131,7 +131,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(video.getTitle());
 
-        bindImageView(holder, video.get320orSmallerPhoto());
+        bindImageView(holder, video.getImage());
     }
 
     private void bindDoc(EntryHolder holder, Document doc){

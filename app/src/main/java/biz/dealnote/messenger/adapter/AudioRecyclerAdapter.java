@@ -2,6 +2,9 @@ package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +16,20 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import java.util.HashMap;
 import java.util.List;
 
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.player.util.MusicUtils;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
@@ -59,6 +68,34 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     public void onBindViewHolder(final AudioHolder holder, int position) {
         final Audio item = mData.get(position);
 
+        if(item.CacheAudioIcon != null) {
+            holder.play.setBackground(item.CacheAudioIcon);
+        }
+        else
+            holder.play.setBackgroundResource(R.drawable.audio);
+
+        if(item.getThumb_image_little() != null && item.CacheAudioIcon == null)
+        {
+            PicassoInstance.with()
+                    .load(item.getThumb_image_little())
+                    .transform(CurrentTheme.createTransformationForAvatar(Injection.provideApplicationContext()))
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            item.CacheAudioIcon = new BitmapDrawable(Injection.provideApplicationContext().getResources(), bitmap);
+                            holder.play.setBackground(item.CacheAudioIcon);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+        }
+
         holder.artist.setText(item.getArtist());
         holder.title.setText(item.getTitle());
         holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
@@ -69,14 +106,14 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.INVISIBLE);
 
-        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.pause : R.drawable.play);
+        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.pause_button : R.drawable.play_button);
 
         holder.play.setOnClickListener(v -> {
             if (MusicUtils.isNowPlayingOrPreparing(item) || MusicUtils.isNowPaused(item)) {
                 if(MusicUtils.isNowPlayingOrPreparing(item))
-                    holder.play.setImageResource(R.drawable.play);
+                    holder.play.setImageResource(R.drawable.play_button);
                 else
-                    holder.play.setImageResource(R.drawable.pause);
+                    holder.play.setImageResource(R.drawable.pause_button);
                 MusicUtils.playOrPause();
             }
             else {

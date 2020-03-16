@@ -48,6 +48,8 @@ import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
+import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -191,6 +193,19 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
             case R.id.playlist:
                 PlaceFactory.getPlaylistPlace().tryOpenWith(requireActivity());
+                return true;
+            case R.id.copy_track_info:
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                String Artist = MusicUtils.getCurrentAudio().getArtist() != null ? MusicUtils.getCurrentAudio().getArtist() : "";
+                if(MusicUtils.getCurrentAudio().getAlbum_title() != null)
+                    Artist += " (" + MusicUtils.getCurrentAudio().getAlbum_title() + ")";
+                String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";;
+                ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
+                clipboard.setPrimaryClip(clip);
+                PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
+                return true;
+            case R.id.search_by_artist:
+                PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true)).tryOpenWith(requireActivity());
                 return true;
         }
 

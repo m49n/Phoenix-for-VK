@@ -27,7 +27,9 @@ abstract class AbsMvpFragment<P : IPresenter<V>, V : IMvpView> : androidx.fragme
     }
 
     // Override in case of fragment not implementing IPresenter<View> interface
-    protected fun getViewHost(): V = this as V
+    @Suppress("UNCHECKED_CAST")
+    @SuppressWarnings("unchecked")
+    private fun getViewHost(): V = this as V
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

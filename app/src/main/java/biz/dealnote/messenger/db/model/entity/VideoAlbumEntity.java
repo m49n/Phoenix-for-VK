@@ -12,9 +12,7 @@ public class VideoAlbumEntity extends Entity {
 
     private String title;
 
-    private String photo160;
-
-    private String photo320;
+    private String image;
 
     private int count;
 
@@ -44,21 +42,12 @@ public class VideoAlbumEntity extends Entity {
         return this;
     }
 
-    public String getPhoto160() {
-        return photo160;
+    public String getImage() {
+        return image;
     }
 
-    public VideoAlbumEntity setPhoto160(String photo160) {
-        this.photo160 = photo160;
-        return this;
-    }
-
-    public String getPhoto320() {
-        return photo320;
-    }
-
-    public VideoAlbumEntity setPhoto320(String photo320) {
-        this.photo320 = photo320;
+    public VideoAlbumEntity setImage(String image) {
+        this.image = image;
         return this;
     }
 

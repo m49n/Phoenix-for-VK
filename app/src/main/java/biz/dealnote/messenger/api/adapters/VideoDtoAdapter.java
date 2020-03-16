@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api.adapters;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -81,9 +82,33 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
             dto.live = optString(filesRoot, "live");
         }
 
-        dto.photo_130 = optString(root, "photo_130");
-        dto.photo_320 = optString(root, "photo_320");
-        dto.photo_800 = optString(root, "photo_800");
+        if(root.has("image")) {
+            JsonArray images = root.getAsJsonArray("image");
+            if(images.size() > 0) {
+                for(int i = 0; i < images.size(); i++) {
+                    if(images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+                        dto.image = images.get(i).getAsJsonObject().get("url").getAsString();
+                        break;
+                    }
+                }
+                if(dto.image == null)
+                    dto.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
+            }
+        }
+        if(dto.image == null && root.has("first_frame")) {
+            JsonArray images = root.getAsJsonArray("first_frame");
+            if(images.size() > 0) {
+                for(int i = 0; i < images.size(); i++) {
+                    if(images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+                        dto.image = images.get(i).getAsJsonObject().get("url").getAsString();
+                        break;
+                    }
+                }
+                if(dto.image == null)
+                    dto.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
+            }
+        }
+
         dto.platform = optString(root, "platform");
 
         dto.can_edit = optIntAsBoolean(root, "can_edit");

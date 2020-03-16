@@ -9,8 +9,8 @@ import biz.dealnote.messenger.db.column.UserColumns;
 
 public class Constants {
     public static final boolean IS_HAS_ADD_YOU_SELF_ALBUM = true;
-    public static final boolean IS_HAS_LOGIN_WEB = false;
 
+    public static final boolean IS_HAS_LOGIN_WEB = false;
     public static final String PRIVACY_POLICY_LINK = "https://github.com/PhoenixDevTeam/Phoenix-for-VK/wiki/Privacy-policy";
 
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".fileprovider";

@@ -19,9 +19,7 @@ public class VideoAlbum extends AbsModel implements Parcelable {
 
     private long updatedTime;
 
-    private String photo160;
-
-    private String photo320;
+    private String image;
 
     private SimplePrivacy privacy;
 
@@ -37,8 +35,7 @@ public class VideoAlbum extends AbsModel implements Parcelable {
         title = in.readString();
         count = in.readInt();
         updatedTime = in.readLong();
-        photo160 = in.readString();
-        photo320 = in.readString();
+        image = in.readString();
         privacy = in.readParcelable(SimplePrivacy.class.getClassLoader());
     }
 
@@ -50,8 +47,7 @@ public class VideoAlbum extends AbsModel implements Parcelable {
         dest.writeString(title);
         dest.writeInt(count);
         dest.writeLong(updatedTime);
-        dest.writeString(photo160);
-        dest.writeString(photo320);
+        dest.writeString(image);
         dest.writeParcelable(privacy, flags);
     }
 
@@ -111,21 +107,12 @@ public class VideoAlbum extends AbsModel implements Parcelable {
         return this;
     }
 
-    public String getPhoto160() {
-        return photo160;
+    public String getImage() {
+        return image;
     }
 
-    public VideoAlbum setPhoto160(String photo160) {
-        this.photo160 = photo160;
-        return this;
-    }
-
-    public String getPhoto320() {
-        return photo320;
-    }
-
-    public VideoAlbum setPhoto320(String photo320) {
-        this.photo320 = photo320;
+    public VideoAlbum setImage(String image) {
+        this.image = image;
         return this;
     }
 

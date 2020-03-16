@@ -99,8 +99,7 @@ public class Entity2Model {
                 .setTitle(dbo.getTitle())
                 .setCount(dbo.getCount())
                 .setPrivacy(nonNull(dbo.getPrivacy()) ? mapSimplePrivacy(dbo.getPrivacy()) : null)
-                .setPhoto160(dbo.getPhoto160())
-                .setPhoto320(dbo.getPhoto320())
+                .setImage(dbo.getImage())
                 .setUpdatedTime(dbo.getUpdateTime());
     }
 
@@ -763,9 +762,7 @@ public class Entity2Model {
                 .setAddingDate(entity.getAddingDate())
                 .setViews(entity.getViews())
                 .setPlayer(entity.getPlayer())
-                .setPhoto130(entity.getPhoto130())
-                .setPhoto320(entity.getPhoto320())
-                .setPhoto800(entity.getPhoto800())
+                .setImage(entity.getImage())
                 .setAccessKey(entity.getAccessKey())
                 .setCommentsCount(entity.getCommentsCount())
                 .setCanComment(entity.isCanComment())

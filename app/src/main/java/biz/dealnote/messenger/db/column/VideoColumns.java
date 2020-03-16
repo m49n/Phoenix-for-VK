@@ -18,9 +18,7 @@ public final class VideoColumns implements BaseColumns {
     public static final String ADDING_DATE = "adding_date";
     public static final String VIEWS = "views";
     public static final String PLAYER = "player";
-    public static final String PHOTO_130 = "photo_130";
-    public static final String PHOTO_320 = "photo_320";
-    public static final String PHOTO_800 = "photo_800";
+    public static final String IMAGE = "image";
     public static final String ACCESS_KEY = "access_key";
     public static final String COMMENTS = "comments";
     public static final String CAN_COMENT = "can_comment";
@@ -55,9 +53,7 @@ public final class VideoColumns implements BaseColumns {
     public static final String FULL_ADDING_DATE = TABLENAME + "." + ADDING_DATE;
     public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
     public static final String FULL_PLAYER = TABLENAME + "." + PLAYER;
-    public static final String FULL_PHOTO_130 = TABLENAME + "." + PHOTO_130;
-    public static final String FULL_PHOTO_320 = TABLENAME + "." + PHOTO_320;
-    public static final String FULL_PHOTO_800 = TABLENAME + "." + PHOTO_800;
+    public static final String FULL_IMAGE = TABLENAME + "." + IMAGE;
     public static final String FULL_ACCESS_KEY = TABLENAME + "." + ACCESS_KEY;
     public static final String FULL_COMMENTS = TABLENAME + "." + COMMENTS;
     public static final String FULL_CAN_COMENT = TABLENAME + "." + CAN_COMENT;

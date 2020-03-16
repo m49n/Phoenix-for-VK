@@ -26,11 +26,7 @@ public class VideoEntity extends Entity {
 
     private String player;
 
-    private String photo130;
-
-    private String photo320;
-
-    private String photo800;
+    private String image;
 
     private String accessKey;
 
@@ -177,30 +173,12 @@ public class VideoEntity extends Entity {
         return this;
     }
 
-    public String getPhoto130() {
-        return photo130;
+    public String getImage() {
+        return image;
     }
 
-    public VideoEntity setPhoto130(String photo130) {
-        this.photo130 = photo130;
-        return this;
-    }
-
-    public String getPhoto320() {
-        return photo320;
-    }
-
-    public VideoEntity setPhoto320(String photo320) {
-        this.photo320 = photo320;
-        return this;
-    }
-
-    public String getPhoto800() {
-        return photo800;
-    }
-
-    public VideoEntity setPhoto800(String photo800) {
-        this.photo800 = photo800;
+    public VideoEntity setImage(String image) {
+        this.image = image;
         return this;
     }
 

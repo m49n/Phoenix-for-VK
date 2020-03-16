@@ -91,13 +91,14 @@
 
     <ImageView
         android:id="@+id/item_audio_play"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:background="@drawable/circle_back_white"
-        android:backgroundTint="?colorPrimary"
+        android:background="@drawable/audio"
+        android:backgroundTint="#D3FFFFFF"
+        android:backgroundTintMode="multiply"
         android:padding="8dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/play" />
+        android:src="@drawable/play_button" />
 
 </RelativeLayout>

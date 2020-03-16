@@ -4,6 +4,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.fragment.search.nextfrom.IntNextFrom;
 import biz.dealnote.messenger.model.Banned;
+import biz.dealnote.messenger.model.ContactInfo;
 import biz.dealnote.messenger.model.GroupSettings;
 import biz.dealnote.messenger.model.Manager;
 import biz.dealnote.messenger.model.User;
@@ -28,4 +29,5 @@ public interface IGroupSettingsInteractor {
     Single<Pair<List<Banned>, IntNextFrom>> getBanned(int accountId, int groupId, IntNextFrom startFrom, int count);
 
     Single<List<Manager>> getManagers(int accountId, int groupId);
+    Single<List<ContactInfo>> getContacts(int accountId, int groupId);
 }

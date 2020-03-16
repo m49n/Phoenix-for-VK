@@ -3,8 +3,6 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import biz.dealnote.messenger.util.Utils;
-
 /**
  * Created by admin on 21.11.2016.
  * phoenix
@@ -31,11 +29,7 @@ public class Video extends AbsModel implements Parcelable {
 
     private String player;
 
-    private String photo130;
-
-    private String photo320;
-
-    private String photo800;
+    private String image;
 
     private String accessKey;
 
@@ -91,9 +85,7 @@ public class Video extends AbsModel implements Parcelable {
         addingDate = in.readLong();
         views = in.readInt();
         player = in.readString();
-        photo130 = in.readString();
-        photo320 = in.readString();
-        photo800 = in.readString();
+        image = in.readString();
         accessKey = in.readString();
         commentsCount = in.readInt();
         canComment = in.readByte() != 0;
@@ -148,9 +140,7 @@ public class Video extends AbsModel implements Parcelable {
         dest.writeLong(addingDate);
         dest.writeInt(views);
         dest.writeString(player);
-        dest.writeString(photo130);
-        dest.writeString(photo320);
-        dest.writeString(photo800);
+        dest.writeString(image);
         dest.writeString(accessKey);
         dest.writeInt(commentsCount);
         dest.writeByte((byte) (canComment ? 1 : 0));
@@ -299,30 +289,12 @@ public class Video extends AbsModel implements Parcelable {
         return this;
     }
 
-    public String getPhoto130() {
-        return photo130;
+    public String getImage() {
+        return image;
     }
 
-    public Video setPhoto130(String photo130) {
-        this.photo130 = photo130;
-        return this;
-    }
-
-    public String getPhoto320() {
-        return photo320;
-    }
-
-    public Video setPhoto320(String photo320) {
-        this.photo320 = photo320;
-        return this;
-    }
-
-    public String getPhoto800() {
-        return photo800;
-    }
-
-    public Video setPhoto800(String photo800) {
-        this.photo800 = photo800;
+    public Video setImage(String image) {
+        this.image = image;
         return this;
     }
 
@@ -481,13 +453,5 @@ public class Video extends AbsModel implements Parcelable {
 
     public int getDuration() {
         return duration;
-    }
-
-    public String get320orSmallerPhoto() {
-        return Utils.firstNonEmptyString(photo320, photo130);
-    }
-
-    public String getMaxResolutionPhoto() {
-        return Utils.firstNonEmptyString(photo800, photo320, photo130);
     }
 }

@@ -145,6 +145,7 @@
     <string name="last_seen_sex_woman">last activity: %1$s</string>
     <string name="last_seen_sex_unknown">last activity: %1$s</string>
     <string name="online">Online</string>
+    <string name="offline">Offline</string>
     <string name="thank_you">Info about this app was shared to your wall. Thank you very much! </string>
 
     <!-- Notification settings-->
@@ -1009,6 +1010,7 @@
     <string name="community_options_name_title">Name</string>
     <string name="community_control">Community control</string>
     <string name="community_managers_tab_title">Managers</string>
+    <string name="community_managers_contacts">Contacts</string>
     <string name="community_options_description_title">Community description</string>
     <string name="community_options_link_title">Community link</string>
     <string name="community_options_type_title">Community type</string>
@@ -1247,4 +1249,6 @@
     <string name="succ_offline">You is Offline</string>
     <string name="err_offline">Error! You is Online</string>
     <string name="user_readed_yor_message">Readed yor message</string>
+    <string name="copy_track_info">Copy Track Info</string>
+    <string name="search_by_artist">Search by Artist</string>
 </resources>

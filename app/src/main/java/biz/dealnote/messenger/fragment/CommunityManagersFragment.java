@@ -26,6 +26,7 @@ import biz.dealnote.messenger.adapter.CommunityManagersAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.PeopleSearchCriteria;
+import biz.dealnote.messenger.model.Community;
 import biz.dealnote.messenger.model.Manager;
 import biz.dealnote.messenger.model.SelectProfileCriteria;
 import biz.dealnote.messenger.model.User;
@@ -46,10 +47,10 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
 
     private static final int REQUEST_SELECT_PROFILES = 19;
 
-    public static CommunityManagersFragment newInstance(int accountId, int groupId) {
+    public static CommunityManagersFragment newInstance(int accountId, Community groupId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
-        args.putInt(Extra.GROUP_ID, groupId);
+        args.putParcelable(Extra.GROUP_ID, groupId);
         CommunityManagersFragment fragment = new CommunityManagersFragment();
         fragment.setArguments(args);
         return fragment;
@@ -83,7 +84,6 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
         });
 
         recyclerView.setAdapter(mAdapter);
-
         root.findViewById(R.id.button_add).setOnClickListener(v -> getPresenter().fireButtonAddClick());
         return root;
     }
@@ -101,7 +101,7 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
     public IPresenterFactory<CommunityManagersPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityManagersPresenter(
                 requireArguments().getInt(Extra.ACCOUNT_ID),
-                requireArguments().getInt(Extra.GROUP_ID),
+                requireArguments().getParcelable(Extra.GROUP_ID),
                 saveInstanceState
         );
     }

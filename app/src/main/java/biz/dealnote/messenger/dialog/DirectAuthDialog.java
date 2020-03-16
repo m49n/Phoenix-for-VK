@@ -147,9 +147,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
     }
 
     public void onValidate(String url, String Login, String Password) {
-        if(Password != null)
-            Password += " 2fa";
-        returnResultAndDissmiss(new Intent(ACTION_VALIDATE_VIA_WEB).putExtra(Extra.URL, url).putExtra(Extra.LOGIN, Login).putExtra(Extra.PASSWORD, Password), true);
+        returnResultAndDissmiss(new Intent(ACTION_VALIDATE_VIA_WEB).putExtra(Extra.URL, url).putExtra(Extra.LOGIN, Login).putExtra(Extra.PASSWORD, Password).putExtra(Extra.TWOFA, "web_validation"), true);
     }
 
     @Override
@@ -244,8 +242,8 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
     }
 
     @Override
-    public void returnSuccessToParent(int userId, String accessToken, String Login, String Password) {
-        returnResultAndDissmiss(new Intent(ACTION_LOGIN_COMPLETE).putExtra(Extra.TOKEN, accessToken).putExtra(Extra.USER_ID, userId).putExtra(Extra.LOGIN, Login).putExtra(Extra.PASSWORD, Password), true);
+    public void returnSuccessToParent(int userId, String accessToken, String Login, String Password, String twoFA) {
+        returnResultAndDissmiss(new Intent(ACTION_LOGIN_COMPLETE).putExtra(Extra.TOKEN, accessToken).putExtra(Extra.USER_ID, userId).putExtra(Extra.LOGIN, Login).putExtra(Extra.PASSWORD, Password).putExtra(Extra.TWOFA, twoFA), true);
     }
 
     private void returnResultAndDissmiss(Intent data, boolean Dismiss){

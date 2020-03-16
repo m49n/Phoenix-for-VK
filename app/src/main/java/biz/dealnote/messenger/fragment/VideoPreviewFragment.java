@@ -240,7 +240,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             mSubtitleText.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        String imageUrl = video.getMaxResolutionPhoto();
+        String imageUrl = video.getImage();
 
         if (nonEmpty(imageUrl) && nonNull(mPreviewImage)) {
             PicassoInstance.with()

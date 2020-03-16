@@ -103,7 +103,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
             }
         } else if(item instanceof Video){
             Video video = (Video) item;
-            String imgUrl = video.get320orSmallerPhoto();
+            String imgUrl = video.getImage();
             title = video.getTitle();
             holder.mSubtitle.setText(R.string.show_video);
 

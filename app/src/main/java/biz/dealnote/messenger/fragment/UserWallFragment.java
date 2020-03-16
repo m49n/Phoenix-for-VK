@@ -71,7 +71,12 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
         mHeaderHolder.tvName.setText(user.getFullName());
         mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user));
-        mHeaderHolder.fabMessage.setEnabled(user.getCanWritePrivateMessage());
+
+        if(!user.getCanWritePrivateMessage())
+            mHeaderHolder.fabMessage.setImageResource(R.drawable.close);
+        else
+            mHeaderHolder.fabMessage.setImageResource(R.drawable.email);
+
         NeedShowClBlk = user.getBlacklisted_by_me();
         String screenName = nonEmpty(user.getDomain()) ? "@" + user.getDomain() : null;
         mHeaderHolder.tvScreenName.setText(screenName);

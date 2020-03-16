@@ -14,6 +14,7 @@ public class Extra {
     public static final String TOKEN = "token";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
+    public static final String TWOFA = "twofa";
     public static final String TIMEOUT = "timeout";
     public static final String ACCOUNT = "account";
     public static final String ACCOUNT_ID = "account_id";

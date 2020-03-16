@@ -111,12 +111,12 @@ public class FeedbackViewBinder {
     }
 
     private void setupAttachmentViewWithVideo(Video video, ImageView imageView) {
-        if (video == null || TextUtils.isEmpty(video.getMaxResolutionPhoto())) {
+        if (video == null || TextUtils.isEmpty(video.getImage())) {
             imageView.setVisibility(View.GONE);
         } else {
             imageView.setVisibility(View.VISIBLE);
             PicassoInstance.with()
-                    .load(video.getMaxResolutionPhoto())
+                    .load(video.getImage())
                     .tag(Constants.PICASSO_TAG)
                     .into(imageView);
         }

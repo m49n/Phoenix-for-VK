@@ -232,9 +232,9 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             if (update.accountId == accountId && isChatWithUser(update.userId)) {
                 update.online?.run {
                     subtitle = if (isOnline) {
-                        getString(R.string.online)
+                        getString(R.string.online) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen));
                     } else {
-                        getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen))
+                        getString(R.string.offline) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen))
                     }
 
                     resolveToolbarSubtitle()
@@ -516,6 +516,15 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, true)
                 .fromIOToMain()
                 .subscribe({ messages -> onNetDataReceived(messages, startMessageId) }, { this.onMessagesGetError(it) })
+    }
+
+    fun requestFromNetInMessage(startMessageId: Int?) {
+        setNetLoadingNow(true)
+
+        val peerId = this.peerId
+        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, true)
+                .fromIOToMain()
+                .subscribe({ messages -> onNetDataReceived(messages, null) }, { this.onMessagesGetError(it) })
     }
 
     private fun onMessagesGetError(t: Throwable) {
@@ -1423,7 +1432,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
-    fun reInitWithNewPeer(newAccountId: Int, newMessagesOwnerId: Int, newPeer: Peer) {
+    fun reInitWithNewPeer(newPeer: Peer) {
         saveDraftMessageBody()
 
         this.peer = newPeer

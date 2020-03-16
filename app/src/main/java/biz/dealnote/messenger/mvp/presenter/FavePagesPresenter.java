@@ -68,7 +68,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         for(int i =0; i < pages.size(); i++) {
             if (pages.get(i).getOwner().getFullName().toLowerCase().contains(q.toLowerCase()))
                 search_pages.add(pages.get(i));
-            if((q.toLowerCase().equals("group") || q.toLowerCase().equals("групп")) &&  pages.get(i).getOwner().getOwnerType() == OwnerType.COMMUNITY)
+            if((q.toLowerCase().contains("group") || q.toLowerCase().contains("групп")) &&  pages.get(i).getOwner().getOwnerType() == OwnerType.COMMUNITY)
                 search_pages.add(pages.get(i));
         }
 

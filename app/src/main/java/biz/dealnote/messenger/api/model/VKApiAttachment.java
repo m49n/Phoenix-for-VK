@@ -12,6 +12,7 @@ public interface VKApiAttachment {
     String TYPE_POST = "wall";
     String TYPE_POSTED_PHOTO = "posted_photo";
     String TYPE_LINK = "link";
+    String TYPE_ARTICLE = "article";
     String TYPE_NOTE = "note";
     String TYPE_APP = "app";
     String TYPE_POLL = "poll";

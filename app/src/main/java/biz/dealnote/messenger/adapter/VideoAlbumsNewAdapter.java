@@ -14,7 +14,6 @@ import java.util.List;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.VideoAlbum;
-import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
@@ -42,7 +41,7 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
 
         holder.tvCount.setText(context.getString(R.string.videos_albums_videos_counter, item.getCount()));
         holder.tvTitle.setText(item.getTitle());
-        String photoUrl = Utils.firstNonEmptyString(item.getPhoto320(), item.getPhoto160());
+        String photoUrl = item.getImage();
 
         holder.ivPhoto.setVisibility(isEmpty(photoUrl) ? View.INVISIBLE : View.VISIBLE);
 

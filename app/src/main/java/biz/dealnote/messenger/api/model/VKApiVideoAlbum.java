@@ -49,9 +49,7 @@ public class VKApiVideoAlbum {
      */
     public long updated_time;
 
-    public String photo_160;
-
-    public String photo_320;
+    public String image;
 
     public VkApiPrivacy privacy;
 }

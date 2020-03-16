@@ -10,9 +10,15 @@ import java.util.List;
 
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.model.VKApiCommunity;
+import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.db.column.UserColumns;
 import biz.dealnote.messenger.domain.IGroupSettingsInteractor;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.domain.impl.GroupSettingsInteractor;
+import biz.dealnote.messenger.domain.mappers.Dto2Model;
+import biz.dealnote.messenger.model.Community;
+import biz.dealnote.messenger.model.ContactInfo;
 import biz.dealnote.messenger.model.Manager;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
@@ -21,19 +27,22 @@ import biz.dealnote.messenger.util.Analytics;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
+import static biz.dealnote.messenger.util.Objects.nonNull;
+import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
+
 /**
  * Created by admin on 13.06.2017.
  * phoenix
  */
 public class CommunityManagersPresenter extends AccountDependencyPresenter<ICommunityManagersView> {
 
-    private final int groupId;
+    private final Community groupId;
 
     private final List<Manager> data;
 
     private final IGroupSettingsInteractor interactor;
 
-    public CommunityManagersPresenter(int accountId, int groupId, @Nullable Bundle savedInstanceState) {
+    public CommunityManagersPresenter(int accountId, Community groupId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.interactor = new GroupSettingsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores().owners(), Repository.INSTANCE.getOwners());
         this.groupId = groupId;
@@ -42,7 +51,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
         appendDisposable(Injection.provideStores()
                 .owners()
                 .observeManagementChanges()
-                .filter(pair -> pair.getFirst() == groupId)
+                .filter(pair -> pair.getFirst() == groupId.getId())
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(pair -> onManagerActionReceived(pair.getSecond()), Analytics::logUnexpectedError));
 
@@ -69,11 +78,52 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
         }
     }
 
+    private ContactInfo findByIdU(List<ContactInfo> contacts, int user_id) {
+        for (ContactInfo element : contacts) {
+            if (element.getUserId() == user_id) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    private void onContactsReceived(List<ContactInfo> contacts) {
+        final int accountId = super.getAccountId();
+        List<Integer> Ids = new ArrayList<>(contacts.size());
+        for(ContactInfo it : contacts)
+            Ids.add(it.getUserId());
+        appendDisposable(Injection.provideNetworkInterfaces().vkDefault(accountId).users().get(Ids, null, UserColumns.API_FIELDS, null)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(t -> {
+                    List<VKApiUser> users = listEmptyIfNull(t);
+                    List<Manager> managers = new ArrayList<>(users.size());
+                    for (VKApiUser user : users) {
+                        ContactInfo contact = findByIdU(contacts, user.id);
+                        Manager manager = new Manager(Dto2Model.transformUser(user), user.role);
+                        if (nonNull(contact)) {
+                            manager.setDisplayAsContact(true).setContactInfo(contact);
+                        }
+                        managers.add(manager);
+                        onDataReceived(managers);
+                    }
+                }, this::onRequestError));
+    }
+    private void requestContacts() {
+        final int accountId = super.getAccountId();
+        appendDisposable(interactor.getContacts(accountId, groupId.getId())
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onContactsReceived, this::onRequestError));
+    }
+
     private void requestData() {
         final int accountId = super.getAccountId();
 
         setLoadingNow(true);
-        appendDisposable(interactor.getManagers(accountId, groupId)
+        if(groupId.getAdminLevel() < VKApiCommunity.AdminLevel.ADMIN) {
+            requestContacts();
+            return;
+        }
+        appendDisposable(interactor.getManagers(accountId, groupId.getId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onDataReceived, this::onRequestError));
     }
@@ -122,14 +172,14 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
     }
 
     public void fireManagerClick(Manager manager) {
-        getView().goToManagerEditing(getAccountId(), groupId, manager);
+        getView().goToManagerEditing(getAccountId(), groupId.getId(), manager);
     }
 
     public void fireRemoveClick(Manager manager) {
         final int accountId = super.getAccountId();
         final User user = manager.getUser();
 
-        appendDisposable(interactor.editManager(accountId, groupId, user, null, false, null, null, null)
+        appendDisposable(interactor.editManager(accountId, groupId.getId(), user, null, false, null, null, null)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(this::onRemoveComplete, throwable -> onRemoveError(Utils.getCauseIfRuntime(throwable))));
     }
@@ -144,10 +194,10 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
     }
 
     public void fireButtonAddClick() {
-        getView().startSelectProfilesActivity(getAccountId(), groupId);
+        getView().startSelectProfilesActivity(getAccountId(), groupId.getId());
     }
 
     public void fireProfilesSelected(ArrayList<User> users) {
-        getView().startAddingUsersToManagers(getAccountId(), groupId, users);
+        getView().startAddingUsersToManagers(getAccountId(), groupId.getId(), users);
     }
 }

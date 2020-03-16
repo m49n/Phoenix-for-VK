@@ -30,9 +30,42 @@ public class AudioEntity extends Entity {
 
     private boolean is_hq;
 
+    private String thumb_image_little;
+
+    private String thumb_image_big;
+
+    private String album_title;
+
     public AudioEntity(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
+    }
+
+    public String getAlbum_title() {
+        return album_title;
+    }
+
+    public AudioEntity setAlbum_title(String album_title) {
+        this.album_title = album_title;
+        return this;
+    }
+
+    public String getThumb_image_little() {
+        return thumb_image_little;
+    }
+
+    public AudioEntity setThumb_image_little(String thumb_image_little) {
+        this.thumb_image_little = thumb_image_little;
+        return this;
+    }
+
+    public String getThumb_image_big() {
+        return thumb_image_big;
+    }
+
+    public AudioEntity setThumb_image_big(String thumb_image_big) {
+        this.thumb_image_big = thumb_image_big;
+        return this;
     }
 
     public boolean isHq() {
@@ -40,7 +73,7 @@ public class AudioEntity extends Entity {
     }
 
     public AudioEntity setHq(boolean hq) {
-        is_hq = hq;
+        this.is_hq = hq;
         return this;
     }
 

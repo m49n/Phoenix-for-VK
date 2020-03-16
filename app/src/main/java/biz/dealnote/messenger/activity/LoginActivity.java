@@ -33,6 +33,7 @@ public class LoginActivity extends Activity {
 
     String TLogin;
     String TPassword;
+    String TwoFA;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -65,6 +66,7 @@ public class LoginActivity extends Activity {
         else {
             TLogin = getIntent().getStringExtra(EXTRA_LOGIN);
             TPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
+            TwoFA = getIntent().getStringExtra(EXTRA_TWO_FA);
             webview.loadUrl(getIntent().getStringExtra(EXTRA_VALIDATE));
         }
     }
@@ -74,6 +76,7 @@ public class LoginActivity extends Activity {
     private static final String EXTRA_VALIDATE = "validate";
     private static final String EXTRA_LOGIN = "login";
     private static final String EXTRA_PASSWORD = "password";
+    private static final String EXTRA_TWO_FA = "twofa";
     private static final String EXTRA_GROUP_IDS = "group_ids";
 
     public static Intent createIntent(Context context, String clientId, String scope){
@@ -82,9 +85,9 @@ public class LoginActivity extends Activity {
                 .putExtra(EXTRA_SCOPE, scope);
     }
 
-    public static Intent createIntent(Context context, String validate_url, String Login, String Password){
+    public static Intent createIntent(Context context, String validate_url, String Login, String Password, String TwoFa){
         return new Intent(context, LoginActivity.class)
-                .putExtra(EXTRA_VALIDATE, validate_url).putExtra(EXTRA_LOGIN, Login).putExtra(EXTRA_PASSWORD, Password);
+                .putExtra(EXTRA_VALIDATE, validate_url).putExtra(EXTRA_LOGIN, Login).putExtra(EXTRA_PASSWORD, Password).putExtra(EXTRA_TWO_FA, TwoFa);
     }
 
     public static Intent createIntent(Context context, String clientId, String scope, Collection<Integer> groupIds){
@@ -155,6 +158,7 @@ public class LoginActivity extends Activity {
                         intent.putExtra(Extra.USER_ID, Integer.parseInt(userId));
                         intent.putExtra(Extra.LOGIN, TLogin);
                         intent.putExtra(Extra.PASSWORD, TPassword);
+                        intent.putExtra(Extra.TWOFA, TwoFA);
                     }
 
                     setResult(RESULT_OK, intent);

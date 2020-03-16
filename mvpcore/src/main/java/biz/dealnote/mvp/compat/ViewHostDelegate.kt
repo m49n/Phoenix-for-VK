@@ -54,6 +54,8 @@ class ViewHostDelegate<P : IPresenter<V>, V : IMvpView> {
             }
         })
 
+        @Suppress("UNCHECKED_CAST")
+        @SuppressWarnings("unchecked")
         presenter = (loader as SimplePresenterLoader<P, V>).get()
         presenter?.run {
             attachViewHost(view)

@@ -561,23 +561,23 @@ public class UserInfoResolveUtil {
         return getUserActivityLine(context, user.getLastSeen(), user.isOnline(), user.getSex());
     }
 
-    public static String getUserActivityLine(Context context, long lastSeen, boolean online, int sex){
-        if(!online && lastSeen == 0){
+    public static String getUserActivityLine(Context context, long lastSeen, boolean online, int sex) {
+        if (!online && lastSeen == 0) {
             return null;
         }
 
-        String activityText;
-        if(online){
-            activityText = context.getString(R.string.online);
+        String activityText = "";
+        if (online)
+            activityText = context.getString(R.string.online) + ", ";
+        else
+            activityText = context.getString(R.string.offline) + ", ";
+        String activityTime = AppTextUtils.getDateFromUnixTime(lastSeen);
+        if (sex == VKApiUser.SEX_MAN) {
+            activityText += context.getString(R.string.last_seen_sex_man, activityTime);
+        } else if (sex == VKApiUser.SEX_WOMAN) {
+            activityText += context.getString(R.string.last_seen_sex_woman, activityTime);
         } else {
-            String activityTime = AppTextUtils.getDateFromUnixTime(lastSeen);
-            if(sex == VKApiUser.SEX_MAN){
-                activityText = context.getString(R.string.last_seen_sex_man, activityTime);
-            } else if(sex == VKApiUser.SEX_WOMAN){
-                activityText = context.getString(R.string.last_seen_sex_woman, activityTime);
-            } else {
-                activityText = context.getString(R.string.last_seen_sex_unknown, activityTime);
-            }
+            activityText += context.getString(R.string.last_seen_sex_unknown, activityTime);
         }
         return activityText;
     }
