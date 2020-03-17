@@ -11,6 +11,7 @@ import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 import biz.dealnote.messenger.api.model.response.DefaultCommentsResponse;
 import biz.dealnote.messenger.api.model.response.UploadOwnerPhotoResponse;
@@ -110,5 +111,8 @@ public interface IPhotosApi {
     @CheckResult
     Single<Items<VKApiPhotoAlbum>> getAlbums(Integer ownerId, Collection<Integer> albumIds, Integer offset,
                                              Integer count, Boolean needSystem, Boolean needCovers);
+
+    @CheckResult
+    Single<List<VKApiPhotoTags>> getTags(Integer ownerId, Integer photo_id, String access_key);
 
 }

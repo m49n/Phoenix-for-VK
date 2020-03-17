@@ -32,6 +32,7 @@ import biz.dealnote.messenger.mvp.view.IRequestExecuteView;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Pair;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
@@ -77,6 +78,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                     String[] parts = line.split("=");
                     String name = parts[0].toLowerCase();
                     String value = parts[1];
+                    value = value.replaceAll("\"", "");
 
                     params.put(name, value);
                 }
@@ -97,6 +99,14 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
         return AppPerms.hasWriteStoragePermision(getApplicationContext());
     }
 
+    private final static char[]	ILLEGAL_FILENAME_CHARS	= {'/', '\\', ':', '*', '?', '"', '<', '>', '|', ',', '=', ';', '\n', '\t', '\r' };
+    static private String makeLegalFilenameNTV(String filename) {
+        for(int i = 0; i < ILLEGAL_FILENAME_CHARS.length; i++) {
+            filename = filename.replace(ILLEGAL_FILENAME_CHARS[i], '_');
+        }
+        return filename;
+    }
+
     private void saveToFile() {
         if (!hasWritePermission()) {
             getView().requestWriteExternalStoragePermission();
@@ -106,7 +116,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
         FileOutputStream out = null;
 
         try {
-            final String filename = this.method + ".txt";
+            final String filename = makeLegalFilenameNTV(this.method) + ".json";
 
             final File file = new File(Environment.getExternalStorageDirectory(), filename);
             file.delete();
@@ -195,9 +205,9 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                         List<String> trimmed = new ArrayList<>();
 
                         for (String line : lines) {
-                            if (trimmed.size() > 50) {
+                            if (trimmed.size() > 200) {
                                 trimmed.add("\n");
-                                trimmed.add("... and more " + (lines.length - 50) + " lines");
+                                trimmed.add("... and more " + (lines.length - 200) + " lines");
                                 break;
                             }
 
@@ -240,6 +250,6 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
         ClipData clip = ClipData.newPlainText("response", fullResponseBody);
         clipboard.setPrimaryClip(clip);
 
-        safeShowToast(getView(), R.string.copied_to_clipboard, false);
+        PhoenixToast.showToastSuccess(getApplicationContext(), R.string.copied_to_clipboard);
     }
 }

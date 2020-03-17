@@ -88,6 +88,47 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/additional_settings"
+        app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_update"
+            android:summary="@string/auto_update"
+            android:title="@string/auto_update"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="info_reading"
+            android:summary="@string/info_reading"
+            android:title="@string/info_reading"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="player_instead_feed"
+            android:summary="@string/player_instead_feed"
+            android:title="@string/player_instead_feed"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_stop_audio"
+            android:summary="@string/use_stop_audio"
+            android:title="@string/use_stop_audio"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enable_save_photo_to_album"
+            android:summary="@string/enable_save_photo_to_album"
+            android:title="@string/enable_save_photo_to_album"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="group_appearance"
         android:title="@string/appearance_settings"
         app:iconSpaceReserved="false">

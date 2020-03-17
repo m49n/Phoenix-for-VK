@@ -37,7 +37,7 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
         extends PlaceSupportMvpFragment<P, V> implements IBaseSearchView<T> {
 
     private static final int REQUEST_FILTER_EDIT = 19;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView.Adapter mAdapter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 

@@ -14,6 +14,7 @@ import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 import biz.dealnote.messenger.api.model.response.DefaultCommentsResponse;
 import biz.dealnote.messenger.api.model.response.UploadOwnerPhotoResponse;
@@ -256,6 +257,13 @@ class PhotosApi extends AbsApi implements IPhotosApi {
                 .flatMap(service -> service.getAlbums(ownerId, ids, offset, count, integerFromBoolean(needSystem), integerFromBoolean(needCovers), 1)
                         .map(extractResponseWithErrorHandling()));
 
+    }
+
+    @Override
+    public Single<List<VKApiPhotoTags>> getTags(Integer ownerId, Integer photo_id, String access_key)
+    {
+        return provideService(IPhotosService.class, TokenType.USER)
+                .flatMap(service -> service.getTags(ownerId, photo_id, access_key).map(extractResponseWithErrorHandling()));
     }
 
     private static String findAccessKey(Collection<AccessIdPair> data, int id, int ownerId) {

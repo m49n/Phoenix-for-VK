@@ -407,7 +407,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     @Override
     public void displayDeepLookingCommentProgress() {
-        mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
+        mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setTheme(R.style.SpotsDialog).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
         mDeepLookingProgressDialog.show();
     }
 

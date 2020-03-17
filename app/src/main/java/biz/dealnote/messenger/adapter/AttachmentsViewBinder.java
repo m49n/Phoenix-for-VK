@@ -2,10 +2,7 @@ package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -23,8 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
@@ -35,7 +30,6 @@ import java.util.List;
 import java.util.Set;
 
 import biz.dealnote.messenger.Constants;
-import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
@@ -593,6 +587,7 @@ public class AttachmentsViewBinder {
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
 
+                /*
                 if(audio.CacheAudioIcon != null) {
                     holder.ibPlay.setBackground(audio.CacheAudioIcon);
                 }
@@ -620,24 +615,34 @@ public class AttachmentsViewBinder {
                                 }
                             });
                 }
+                */
 
                 int finalG = g;
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
                         if(MusicUtils.isNowPlayingOrPreparing(audio))
-                            holder.ibPlay.setImageResource(R.drawable.play_button);
+                            holder.ibPlay.setImageResource(R.drawable.play);
+                        else {
+                            if(!Settings.get().other().isUse_stop_audio())
+                                holder.ibPlay.setImageResource(R.drawable.pause);
+                            else
+                                holder.ibPlay.setImageResource(R.drawable.stop);
+                        }
+                        if(!Settings.get().other().isUse_stop_audio())
+                            MusicUtils.playOrPause();
                         else
-                            holder.ibPlay.setImageResource(R.drawable.pause_button);
-                        MusicUtils.playOrPause();
+                            MusicUtils.stop();
                     }
-                    else
+                    else {
+                        if(!Settings.get().other().isUse_stop_audio())
+                            holder.ibPlay.setImageResource(R.drawable.pause);
+                        else
+                            holder.ibPlay.setImageResource(R.drawable.stop);
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
+                    }
                 });
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
-                if(MusicUtils.isNowPlayingOrPreparing(audio))
-                    holder.ibPlay.setImageResource(R.drawable.pause_button);
-                else
-                    holder.ibPlay.setImageResource(R.drawable.play_button);
+                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : R.drawable.play);
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
                 holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);

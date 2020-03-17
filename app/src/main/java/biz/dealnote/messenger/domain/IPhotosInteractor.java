@@ -3,6 +3,7 @@ package biz.dealnote.messenger.domain;
 import java.util.Collection;
 import java.util.List;
 
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.model.AccessIdPair;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoAlbum;
@@ -37,4 +38,6 @@ public interface IPhotosInteractor {
     Completable restorePhoto(int accountId, int ownerId, int photoId);
 
     Single<List<Photo>> getPhotosByIds(int accountId, Collection<AccessIdPair> ids);
+
+    Single<List<VKApiPhotoTags>> getTags(int accountId, Integer ownerId, Integer photo_id, String access_key);
 }

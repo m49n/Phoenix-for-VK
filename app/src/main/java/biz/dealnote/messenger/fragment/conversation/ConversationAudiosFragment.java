@@ -49,4 +49,9 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
                 saveInstanceState
         );
     }
+    @Override
+    public void onDestroy() {
+        ((AudioRecyclerAdapter)this.mAdapter).onDestroy();
+        super.onDestroy();
+    }
 }

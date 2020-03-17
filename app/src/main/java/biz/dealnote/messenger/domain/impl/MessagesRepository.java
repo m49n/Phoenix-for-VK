@@ -376,12 +376,15 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(outgoing)) {
             for (OutputMessagesSetReadUpdate update : outgoing) {
 
-                OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(userInfo -> {
-                                    Handler handlerMain = new Handler(Looper.getMainLooper());
-                                    handlerMain.post(() -> PhoenixToast.showToastInfo(Injection.provideApplicationContext(),  userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
-                                }, throwable -> {});
+                if(Settings.get().other().isInfo_reading()) {
+                    OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
+                            .compose(RxUtils.applySingleIOToMainSchedulers())
+                            .subscribe(userInfo -> {
+                                Handler handlerMain = new Handler(Looper.getMainLooper());
+                                handlerMain.post(() -> PhoenixToast.showToastInfo(Injection.provideApplicationContext(), userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                            }, throwable -> {
+                            });
+                }
                 patches.add(new PeerPatch(update.peer_id).withOutRead(update.local_id));
             }
         }

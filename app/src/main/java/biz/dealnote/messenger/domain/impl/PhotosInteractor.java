@@ -8,6 +8,7 @@ import java.util.List;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.db.column.PhotosColumns;
 import biz.dealnote.messenger.db.interfaces.IStorages;
 import biz.dealnote.messenger.db.model.PhotoPatch;
@@ -141,6 +142,14 @@ public class PhotosInteractor implements IPhotosInteractor {
         return cache.photoAlbums()
                 .findAlbumsByCriteria(criteria)
                 .map(entities -> mapAll(entities, Entity2Model::map));
+    }
+
+    @Override
+    public Single<List<VKApiPhotoTags>> getTags(int accountId, Integer ownerId, Integer photo_id, String access_key)
+    {
+        return networker.vkDefault(accountId)
+                .photos().getTags(ownerId, photo_id, access_key)
+                .map(items-> items);
     }
 
     @Override

@@ -16,6 +16,7 @@ import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.view.search.IAudioSearchView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
@@ -55,7 +56,8 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
 
     public void playAudio(Context context, int position) {
         MusicPlaybackService.startForPlayList(context, (ArrayList<Audio>) data, position, false);
-        PlaceFactory.getPlayerPlace(getAccountId()).tryOpenWith(context);
+        if(!Settings.get().other().isPlayer_instead_feed())
+            PlaceFactory.getPlayerPlace(getAccountId()).tryOpenWith(context);
     }
 
     @Override

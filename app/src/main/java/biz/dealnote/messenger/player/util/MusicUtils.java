@@ -202,6 +202,15 @@ public final class MusicUtils {
         }
     }
 
+    public static void stop() {
+        try {
+            if (mService != null) {
+                mService.stop();
+            }
+        } catch (final Exception ignored) {
+        }
+    }
+
     /**
      * Cycles through the repeat options.
      */
@@ -377,23 +386,6 @@ public final class MusicUtils {
         return Collections.emptyList();
     }
 
-
-    /**
-     * @param context The {@link Context} to use
-     * @param audio   The source of the file
-     */
-    public static void playFile(final Context context, final Audio audio) {
-        if (audio == null || mService == null) {
-            return;
-        }
-
-        try {
-            mService.stop();
-            mService.openFile(audio);
-            mService.play();
-        } catch (final RemoteException ignored) {
-        }
-    }
 
     /**
      * Called when one of the lists should refresh or requery.

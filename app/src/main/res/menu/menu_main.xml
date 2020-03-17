@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_feed"
-        android:icon="@drawable/rss"
-        android:title="@string/feed" />
+        android:id="@+id/menu_mutable"
+        android:icon="@drawable/audio_player"
+        android:title="@string/audio_channel" />
 
     <item
         android:id="@+id/menu_search"

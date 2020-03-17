@@ -5,6 +5,7 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import biz.dealnote.messenger.api.model.response.DefaultCommentsResponse;
 import biz.dealnote.messenger.api.model.response.UploadOwnerPhotoResponse;
@@ -252,5 +253,10 @@ public interface IPhotosService {
                                                            @Field("need_system") Integer needSystem,
                                                            @Field("need_covers") Integer needCovers,
                                                            @Field("photo_sizes") Integer photoSizes);
+
+    @FormUrlEncoded    @POST("photos.getTags")
+    Single<BaseResponse<List<VKApiPhotoTags>>> getTags(@Field("owner_id") Integer ownerId,
+                                                        @Field("photo_id") Integer photo_id,
+                                                        @Field("access_key") String access_key);
 
 }

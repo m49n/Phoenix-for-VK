@@ -114,7 +114,7 @@ public class PlaceUtil {
     }
 
     private static AlertDialog createProgressDialog(Activity activity) {
-        AlertDialog dialog = new SpotsDialog.Builder().setContext(activity).setMessage(activity.getString(R.string.message_obtaining_owner_information)).setCancelable(true).build();
+        AlertDialog dialog = new SpotsDialog.Builder().setContext(activity).setTheme(R.style.SpotsDialog).setMessage(activity.getString(R.string.message_obtaining_owner_information)).setCancelable(true).build();
         dialog.show();
         return dialog;
     }

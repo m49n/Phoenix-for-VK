@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Phoenix (R)</string>
+    <string name="app_name">Phoenix (R) Мод</string>
     <string-array name="array_theme_names">
         <item>Синее Пламя</item>
         <item>Жёлтое Пламя</item>
@@ -152,7 +152,7 @@
 
     <string name="high_notif_priority_title">Высокий приоритет уведомлений</string>
     <string name="high_notif_priority_summary">Уведомления из приложения будут располагаться выше по отношению к другим уведомлениям. Для Android версии 5.0 и выше данная опция также включает всплывающие уведомления</string>
-    <string name="night_mode_title">Ночной режим</string>
+    <string name="night_mode_title">Amoled режим</string>
 
     <string name="photos">Фотографии</string>
     <string name="from_vk_albums">Из альбомов ВК</string>
@@ -1118,4 +1118,9 @@
     <string name="user_readed_yor_message">Прочитал ваше сообщение</string>
     <string name="copy_track_info">Скопировать информацию трека</string>
     <string name="search_by_artist">Поиск по исполнителю</string>
+    <string name="auto_update">Получать обновления</string>
+    <string name="info_reading">Уведомлять о прочтении вашего сообщения</string>
+    <string name="player_instead_feed">Показывать плеер вместо новостей</string>
+    <string name="use_stop_audio">Стоп вместо паузы аудио</string>
+    <string name="enable_save_photo_to_album">Включить сохранеие фото в альбом"</string>
 </resources>

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.crypt.AesKeyPair;
 import biz.dealnote.messenger.crypt.ver.Version;
 import biz.dealnote.messenger.db.column.AttachmentsColumns;
@@ -53,8 +54,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DBHelper";
 
-    private static final int DATABASE_VERSION = 174;
-
     private static volatile Map<Integer, DBHelper> dbHelperMap = new ConcurrentHashMap<>();
 
     @NonNull
@@ -74,7 +73,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private DBHelper(Context context, int aid) {
-        super(context, getDatabaseFileName(aid), null, DATABASE_VERSION);
+        super(context, getDatabaseFileName(aid), null, Constants.DATABASE_VERSION);
     }
 
     private static String getDatabaseFileName(int aid) {
@@ -91,7 +90,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int old, int i2) {
-        if (old < DATABASE_VERSION) {
+        if (old < Constants.DATABASE_VERSION) {
             dropAllTables(db);
             onCreate(db);
         }

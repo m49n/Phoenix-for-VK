@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
-import biz.dealnote.messenger.api.ApiVersion;
 import biz.dealnote.messenger.api.Auth;
 import biz.dealnote.messenger.api.CaptchaNeedException;
 import biz.dealnote.messenger.api.NeedValidationException;
@@ -74,7 +73,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         setLoginNow(true);
         appendDisposable(networker.vkDirectAuth()
                 .directLogin("password", Constants.API_ID, Constants.SECRET,
-                        trimmedUsername, trimmedPass, ApiVersion.CURRENT, true,
+                        trimmedUsername, trimmedPass, Constants.API_VERSION, true,
                         Auth.getScope(), code, captchaSid, captchaCode, forceSms)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onLoginResponse, t -> onLoginError(getCauseIfRuntime(t))));

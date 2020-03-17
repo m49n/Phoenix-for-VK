@@ -66,6 +66,16 @@ public interface ISettings {
         boolean isCommentsDesc();
 
         boolean toggleCommentsDirection();
+
+        boolean isAuto_update();
+
+        boolean isInfo_reading();
+
+        boolean isPlayer_instead_feed();
+
+        boolean isUse_stop_audio();
+
+        boolean isEnable_save_photo_to_album();
     }
 
     interface IAccountsSettings {

@@ -189,7 +189,8 @@ public class MusicPlaybackService extends Service {
     private int mPlayPos = -1;
 
     private String CoverAudio;
-    private String CoverAlbom;
+    private Bitmap CoverBitmap;
+    private String AlbumTitle;
 
     private int mShuffleMode = SHUFFLE_NONE;
 
@@ -384,7 +385,7 @@ public class MusicPlaybackService extends Service {
 
             if (intent.hasExtra(NOW_IN_FOREGROUND)) {
                 mAnyActivityInForeground = intent.getBooleanExtra(NOW_IN_FOREGROUND, false);
-                updateNotification(null);
+                updateNotification();
             }
 
             if (SHUTDOWN.equals(action)) {
@@ -536,9 +537,9 @@ public class MusicPlaybackService extends Service {
     /**
      * Updates the notification, considering the current play and activity state
      */
-    private void updateNotification(Bitmap cover) {
+    private void updateNotification() {
         mNotificationHelper.buildNotification(getApplicationContext(), getArtistName(),
-                getTrackName(), isPlaying(), cover, mMediaSession.getSessionToken());
+                getTrackName(), isPlaying(), CoverBitmap, mMediaSession.getSessionToken());
     }
 
     private void scheduleDelayedShutdown() {
@@ -702,8 +703,11 @@ public class MusicPlaybackService extends Service {
     }
 
     private void fetchCoverAndUpdateMetadata() {
+        if(CoverBitmap != null) {
+            updateMetadata();
+        }
         if (getAlbumCover() == null || getAlbumCover().isEmpty()) {
-            updateMetadata(null);
+            updateMetadata();
             return;
         }
 
@@ -712,12 +716,13 @@ public class MusicPlaybackService extends Service {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        updateMetadata(bitmap);
+                        CoverBitmap = bitmap;
+                        updateMetadata();
                     }
 
                     @Override
                     public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                        updateMetadata(null);
+                        updateMetadata();
                     }
 
                     @Override
@@ -726,13 +731,13 @@ public class MusicPlaybackService extends Service {
                 });
     }
 
-    private void updateMetadata(Bitmap cover) {
-        updateNotification(cover);
+    private void updateMetadata() {
+        updateNotification();
         mMediaMetadataCompat = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getArtistName())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, CoverAlbom == null ? getAlbumName() : CoverAlbom)
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, AlbumTitle == null ? getAlbumName() : AlbumTitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, getTrackName())
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, cover)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, CoverBitmap)
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration())
                 .build();
         mMediaSession.setMetadata(mMediaMetadataCompat);
@@ -762,7 +767,7 @@ public class MusicPlaybackService extends Service {
                         if(obj.has("image"))
                             CoverAudio = obj.getString("image");
                         if(obj.has("album"))
-                            CoverAlbom = obj.getString("album");
+                            AlbumTitle = obj.getString("album");
 
                         Handler uiHandler = new Handler(MusicPlaybackService.this.getMainLooper());
                         uiHandler.post(() -> {
@@ -790,7 +795,8 @@ public class MusicPlaybackService extends Service {
             }
             if(UpdateMeta) {
                 CoverAudio = null;
-                CoverAlbom = null;
+                AlbumTitle = null;
+                CoverBitmap = null;
             }
             mPlayer.setDataSource(audio.getOwnerId(), audio.getId(), audio.getUrl());
             if(UpdateMeta && Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("kate")) {
@@ -803,7 +809,7 @@ public class MusicPlaybackService extends Service {
             else if(audio.getThumb_image_big() != null)
             {
                 CoverAudio = audio.getThumb_image_big();
-                CoverAlbom = audio.getAlbum_title();
+                AlbumTitle = audio.getAlbum_title();
                 fetchCoverAndUpdateMetadata();
                 notifyChange(META_CHANGED);
             }
@@ -1248,7 +1254,7 @@ public class MusicPlaybackService extends Service {
                 case TRACK_WENT_TO_NEXT:
                     //service.mPlayPos = service.mNextPlayPos;
                     service.notifyChange(META_CHANGED);
-                    service.updateNotification(null);
+                    service.updateNotification();
                     break;
                 case TRACK_ENDED:
                     if (service.mRepeatMode == REPEAT_CURRENT) {
@@ -1374,7 +1380,10 @@ public class MusicPlaybackService extends Service {
                             }
                             break;
                         case Player.STATE_ENDED:
-                            mService.get().gotoNext(false);
+                            if(preparing == false && mIsInitialized == true) {
+                                mIsInitialized = false;
+                                mService.get().gotoNext(true);
+                            }
                             break;
                     }
                 }
@@ -1502,6 +1511,7 @@ public class MusicPlaybackService extends Service {
         @Override
         public void stop() {
             mService.get().stop();
+            mService.get().stopSelf();
         }
 
         @Override

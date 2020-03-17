@@ -20,17 +20,17 @@ public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
 
     @Override
     public OkHttpClient createDefaultVkHttpClient(int accountId, Gson gson, ProxyConfig config) {
-        return createDefaultVkApiOkHttpClient(new DefaultVkApiInterceptor(accountId, ApiVersion.CURRENT, gson), config);
+        return createDefaultVkApiOkHttpClient(new DefaultVkApiInterceptor(accountId, Constants.API_VERSION, gson), config);
     }
 
     @Override
     public OkHttpClient createCustomVkHttpClient(int accountId, String token, Gson gson, ProxyConfig config) {
-        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(token, ApiVersion.CURRENT, gson), config);
+        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(token, Constants.API_VERSION, gson), config);
     }
 
     @Override
     public OkHttpClient createServiceVkHttpClient(Gson gson, ProxyConfig config) {
-        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(Constants.SERVICE_TOKEN, ApiVersion.CURRENT, gson), config);
+        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(Constants.SERVICE_TOKEN, Constants.API_VERSION, gson), config);
     }
 
     private OkHttpClient createDefaultVkApiOkHttpClient(AbsVkApiInterceptor interceptor, ProxyConfig config) {

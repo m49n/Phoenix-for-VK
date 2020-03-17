@@ -15,6 +15,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface NightMode {
     int DISABLE = AppCompatDelegate.MODE_NIGHT_NO;
     int ENABLE = AppCompatDelegate.MODE_NIGHT_YES;
-    int AUTO = AppCompatDelegate.MODE_NIGHT_AUTO_TIME;
+    int AUTO = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
     int FOLLOW_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 }

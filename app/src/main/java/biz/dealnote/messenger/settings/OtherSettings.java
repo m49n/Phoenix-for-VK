@@ -109,4 +109,26 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isForceExoplayer() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_exoplayer", false);
     }
+
+    @Override
+    public boolean isAuto_update() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("auto_update", true);
+    }
+
+    @Override
+    public boolean isInfo_reading() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("info_reading", true);
+    }
+    @Override
+    public boolean isPlayer_instead_feed() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("player_instead_feed", false);
+    }
+    @Override
+    public boolean isUse_stop_audio() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
+    }
+    @Override
+    public boolean isEnable_save_photo_to_album() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_save_photo_to_album", false);
+    }
 }

@@ -45,6 +45,7 @@
     <attr name="dialogs_unread_color" format="color" />
     <attr name="icon_color_active" format="color" />
 
+    <attr name="navi_menu_color" format="color" />
     <attr name="navi_menu_selector" format="reference" />
     <attr name="messages_background_color" format="color" />
     <attr name="chat_background_cookies" format="reference" />

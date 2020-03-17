@@ -3,11 +3,11 @@ package biz.dealnote.messenger.fragment;
 import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseIntArray;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
@@ -33,13 +34,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
+import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.domain.ILikesInteractor;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.model.Commented;
@@ -59,6 +60,7 @@ import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.AssertUtils;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
 import biz.dealnote.messenger.view.pager.AbsImageDisplayHolder;
@@ -239,7 +241,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(Constants.IS_HAS_ADD_YOU_SELF_ALBUM)
+        if(Settings.get().other().isEnable_save_photo_to_album())
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
         else
             menu.findItem(R.id.save_yourself).setVisible(false);
@@ -470,8 +472,14 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void showPhotoInfo(Photo photo) {
+        AlertDialog dlg = new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(requireContext().getString(R.string.uploaded) + " " + AppTextUtils.getDateFromUnixTime(photo.getDate()))
+                .setPositiveButton("OK", null)
+                .setCancelable(true)
+                .create();
         String res = "";
         if(photo.getAlbumId() >= 0)
             res += "<p><i><a href=\"" + "https://vk.com/album" + photo.getOwnerId() + "_" + photo.getAlbumId() + "\">" + requireContext().getString(R.string.open_photo_album) + "</a></i></p>";
@@ -481,21 +489,43 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             res += "<p><i><a href=\"" + "https://vk.com/club" + (photo.getOwnerId() * -1) + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
         if(photo.getText().length() > 0)
             res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" +  photo.getText());
-        if(photo.getTagsCount() > 0)
-            res += "<p><i><a href=\"" + "https://vk.com/photo" + photo.getOwnerId() + "_" + photo.getId() + "\">" + requireContext().getString(R.string.has_tags) + "</a></i></p>";
+        if(photo.getTagsCount() > 0) {
+            String finalRes = res;
+            Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(userInfo -> {
+                        String tmp = finalRes;
+                        tmp += ("<p><b>" + requireContext().getString(R.string.has_tags) + ":</b></p>" +  photo.getText());
+                        for(VKApiPhotoTags i : userInfo)
+                        {
+                            if(i.user_id != 0)
+                                tmp += ("<i><a href=\"https://vk.com/id" + i.user_id + "\">" + (i.tagged_name != null ? i.tagged_name : "") + "</a></i>" + " ");
+                            else
+                                tmp += ((i.tagged_name != null ? i.tagged_name : "") + " ");
+                        }
+                        dlg.setMessage(Html.fromHtml(tmp));
+                        dlg.show();
+                        try {
+                            TextView tv = dlg.findViewById(android.R.id.message);
+                            if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
+                        } catch (Exception e) {}
+                    }, throwable -> {
+                        dlg.setMessage(Html.fromHtml(finalRes));
+                        dlg.show();
+                        try {
+                            TextView tv = dlg.findViewById(android.R.id.message);
+                            if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
+                        } catch (Exception e) {}
+                    });
+            return;
+        }
 
-        TextView textView = new TextView(requireActivity());
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(Html.fromHtml(res));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(requireContext().getString(R.string.uploaded) + " " + AppTextUtils.getDateFromUnixTime(photo.getDate()))
-                .setView(textView)
-                .setPositiveButton("OK", null)
-                .setCancelable(true)
-                .create()
-                .show();
+        dlg.setMessage(Html.fromHtml(res));
+        dlg.show();
+        try {
+            TextView tv = dlg.findViewById(android.R.id.message);
+            if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
+        } catch (Exception e) {}
     }
 
     @Override

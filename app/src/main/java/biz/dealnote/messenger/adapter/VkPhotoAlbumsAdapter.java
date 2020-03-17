@@ -47,13 +47,7 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
                     .into(holder.imageView);
         }
         else
-        {
-            PicassoInstance.with()
-                    .load(R.drawable.albom)
-                    .tag(Constants.PICASSO_TAG)
-                    .placeholder(R.drawable.background_gray)
-                    .into(holder.imageView);
-        }
+            holder.imageView.setImageResource(R.drawable.album);
 
         holder.title.setText(photoAlbum.getTitle());
 

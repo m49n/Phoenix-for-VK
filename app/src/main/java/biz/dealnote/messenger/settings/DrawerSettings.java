@@ -10,6 +10,7 @@ import io.reactivex.subjects.PublishSubject;
 
 import static biz.dealnote.messenger.model.SwitchableCategory.BOOKMARKS;
 import static biz.dealnote.messenger.model.SwitchableCategory.DOCS;
+import static biz.dealnote.messenger.model.SwitchableCategory.FEED;
 import static biz.dealnote.messenger.model.SwitchableCategory.FEEDBACK;
 import static biz.dealnote.messenger.model.SwitchableCategory.FRIENDS;
 import static biz.dealnote.messenger.model.SwitchableCategory.GROUPS;
@@ -66,7 +67,7 @@ class DrawerSettings implements ISettings.IDrawerSettings {
     @Override
     public int[] getCategoriesOrder() {
         @SwitchableCategory
-        int[] all = {FRIENDS, FEEDBACK, NEWSFEED_COMMENTS, GROUPS, PHOTOS, VIDEOS, MUSIC, DOCS, BOOKMARKS};
+        int[] all = {FEED, FRIENDS, FEEDBACK, NEWSFEED_COMMENTS, GROUPS, PHOTOS, VIDEOS, MUSIC, DOCS, BOOKMARKS};
         String line = PreferenceManager.getDefaultSharedPreferences(app).getString("drawer_categories_order", null);
 
         String[] parts = isEmpty(line) ? new String[0] : line.split("-");

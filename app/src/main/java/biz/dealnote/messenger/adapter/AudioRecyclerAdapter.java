@@ -1,10 +1,10 @@
 package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +16,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import java.util.HashMap;
 import java.util.List;
 
-import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
-import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
@@ -38,17 +33,34 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static biz.dealnote.messenger.util.Objects.isNull;
+
 public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdapter.AudioHolder>{
 
     private Context mContext;
     private List<Audio> mData;
     private IAudioInteractor mAudioInteractor;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
+    private PlaybackStatus mPlaybackStatus;
 
     public AudioRecyclerAdapter(Context context, List<Audio> data) {
         this.mAudioInteractor = InteractorFactory.createAudioInteractor();
         this.mContext = context;
         this.mData = data;
+
+        this.mPlaybackStatus = new PlaybackStatus();
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.META_CHANGED);
+        filter.addAction(MusicPlaybackService.PREPARED);
+        filter.addAction(MusicPlaybackService.REFRESH);
+        this.mContext.registerReceiver(mPlaybackStatus, filter);
+    }
+
+    public void onDestroy() {
+        mContext.unregisterReceiver(mPlaybackStatus);
     }
 
     private void delete(final int accoutnId, Audio audio) {
@@ -68,12 +80,12 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     public void onBindViewHolder(final AudioHolder holder, int position) {
         final Audio item = mData.get(position);
 
+        /*
         if(item.CacheAudioIcon != null) {
             holder.play.setBackground(item.CacheAudioIcon);
         }
         else
             holder.play.setBackgroundResource(R.drawable.audio);
-
         if(item.getThumb_image_little() != null && item.CacheAudioIcon == null)
         {
             PicassoInstance.with()
@@ -95,6 +107,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         }
                     });
         }
+         */
 
         holder.artist.setText(item.getArtist());
         holder.title.setText(item.getTitle());
@@ -106,18 +119,29 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.INVISIBLE);
 
-        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.pause_button : R.drawable.play_button);
+        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : R.drawable.play);
 
         holder.play.setOnClickListener(v -> {
             if (MusicUtils.isNowPlayingOrPreparing(item) || MusicUtils.isNowPaused(item)) {
                 if(MusicUtils.isNowPlayingOrPreparing(item))
-                    holder.play.setImageResource(R.drawable.play_button);
+                    holder.play.setImageResource(R.drawable.play);
+                else {
+                    if(!Settings.get().other().isUse_stop_audio())
+                        holder.play.setImageResource(R.drawable.pause);
+                    else
+                        holder.play.setImageResource(R.drawable.stop);
+                }
+                if(!Settings.get().other().isUse_stop_audio())
+                    MusicUtils.playOrPause();
                 else
-                    holder.play.setImageResource(R.drawable.pause_button);
-                MusicUtils.playOrPause();
+                    MusicUtils.stop();
             }
             else {
                 if (mClickListener != null) {
+                    if(!Settings.get().other().isUse_stop_audio())
+                        holder.play.setImageResource(R.drawable.pause);
+                    else
+                        holder.play.setImageResource(R.drawable.stop);
                     mClickListener.onClick(holder.getAdapterPosition(), item);
                 }
             }
@@ -209,5 +233,19 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
     public interface ClickListener {
         void onClick(int position, Audio audio);
+    }
+
+    private final class PlaybackStatus extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            if (isNull(action)) return;
+
+            switch (action) {
+                case MusicPlaybackService.PLAYSTATE_CHANGED:
+                    AudioRecyclerAdapter.this.notifyDataSetChanged();
+                    break;
+            }
+        }
     }
 }

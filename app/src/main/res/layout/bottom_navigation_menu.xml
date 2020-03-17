@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:itemIconTint="@color/selector_bottom_navigation"
+        android:background="?navi_menu_color"
         android:layout_marginTop="2dp"
         android:elevation="2dp"
         app:labelVisibilityMode="unlabeled"

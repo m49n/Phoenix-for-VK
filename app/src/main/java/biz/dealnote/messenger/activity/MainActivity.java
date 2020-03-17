@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.activity;
 
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,18 +11,23 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
@@ -34,13 +40,21 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.HttpLogger;
+import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.db.Stores;
 import biz.dealnote.messenger.dialog.ResolveDomainDialog;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
@@ -131,6 +145,12 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.StatusbarUtil;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -226,6 +246,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         setStatusbarColored(true, Settings.get().ui().isDarkModeEnabled(this));
 
         mBottomNavigation = findViewById(R.id.bottom_navigation_menu);
+        if(Settings.get().other().isPlayer_instead_feed()) {
+            mBottomNavigation.getMenu().getItem(0).setIcon(R.drawable.audio_player);
+            mBottomNavigation.getMenu().getItem(0).setTitle(R.string.audio_channel);
+        }
+        else {
+            mBottomNavigation.getMenu().getItem(0).setIcon(R.drawable.rss);
+            mBottomNavigation.getMenu().getItem(0).setTitle(R.string.feed);
+        }
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
 
         mBottomNavigationContainer = findViewById(R.id.bottom_navigation_menu_container);
@@ -244,12 +272,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 Place place = Settings.get().ui().getDefaultPage(mAccountId);
                 place.tryOpenWith(this);
             }
-
             checkFCMRegistration();
 
             if (!isAuthValid()) {
                 startAccountsActivity();
             } else {
+                CheckUpdate();
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);
                 if (needPin) {
@@ -259,6 +287,74 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
+    private void CheckUpdate()
+    {
+        if(!Constants.NEED_CHECK_UPDATE || !Settings.get().other().isAuto_update())
+            return;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
+                    }});
+        ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
+        Request request = new Request.Builder()
+                .url("https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/current_version.json").build();
+
+        builder.build().newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call th, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call th, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        int ApkV = Constants.VERSION_APK;
+                        String Chngs = "";
+                        JSONObject obj = new JSONObject(response.body().string());
+                        if(obj.has("apk_version"))
+                            ApkV = obj.getInt("apk_version");
+                        if(obj.has("changes"))
+                            Chngs = obj.getString("changes");
+
+                        final String Chenges_log = Chngs;
+                        final int APK_VERS = ApkV;
+
+                        if(APK_VERS <= Constants.VERSION_APK)
+                            return;
+
+                        Handler uiHandler = new Handler(MainActivity.this.getMainLooper());
+                        uiHandler.post(() -> {
+                            String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/blob/5.x/VKPhoenix.apk\">Скачать с github.com</a></i>";
+                            res += ("<p>Изменения: " + Chenges_log + "</p>");
+                            res += ("<p>Донат на энергетик: 5599005042882048 (номер карты скопирован в буфер обмена)</p>");
+
+                            ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("response", "5599005042882048");
+                            clipboard.setPrimaryClip(clip);
+
+                            AlertDialog dlg = new MaterialAlertDialogBuilder(MainActivity.this)
+                                    .setTitle("Обновление мода")
+                                    .setMessage(Html.fromHtml(res))
+                                    .setPositiveButton("OK", null)
+                                    .setCancelable(true)
+                                    .create();
+                            dlg.show();
+                            try {
+                                TextView tv = dlg.findViewById(android.R.id.message);
+                                if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            } catch (Exception e) {}
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    };
+                }
+            }
+        });
+    }
 
     @Override
     protected void onPause() {
@@ -1024,6 +1120,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.NOTIFICATIONS:
+                if(Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked"))
+                {
+                    attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
+                    break;
+                }
                 attachToFront(FeedbackFragment.newInstance(args));
                 break;
 
@@ -1233,8 +1334,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_feed:
-                openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEED);
+            case R.id.menu_mutable:
+                if(Settings.get().other().isPlayer_instead_feed()) {
+                    if (MusicUtils.getCurrentAudio() != null)
+                        PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(this);
+                }
+                else
+                    openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEED);
                 return true;
             case R.id.menu_search:
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_SEARCH);
@@ -1243,11 +1349,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_DIALOGS);
                 return true;
             case R.id.menu_feedback:
-                if(Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked"))
-                {
-                    attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
-                    return true;
-                }
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEEDBACK);
                 return true;
             case R.id.menu_other:

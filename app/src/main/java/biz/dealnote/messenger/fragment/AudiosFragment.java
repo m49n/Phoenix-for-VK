@@ -177,6 +177,12 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
+    public void onDestroy() {
+        mAudioRecyclerAdapter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
     public void onOptionClick(AudioFilter source) {
         getPresenter().fireFilterItemClick(source);
     }

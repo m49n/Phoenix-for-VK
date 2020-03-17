@@ -60,4 +60,10 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
                 saveInstanceState
         );
     }
+
+    @Override
+    public void onDestroy() {
+        ((AudioRecyclerAdapter)this.mAdapter).onDestroy();
+        super.onDestroy();
+    }
 }

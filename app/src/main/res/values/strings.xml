@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Phoenix (R)</string>
+    <string name="app_name">Phoenix (R) Mod</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Conversations</string>
@@ -1251,4 +1251,9 @@
     <string name="user_readed_yor_message">Readed yor message</string>
     <string name="copy_track_info">Copy Track Info</string>
     <string name="search_by_artist">Search by Artist</string>
+    <string name="auto_update">Receive Updates</string>
+    <string name="info_reading">Info about your message is reading</string>
+    <string name="player_instead_feed">Player instead feed in navigation</string>
+    <string name="use_stop_audio">Don\'t use pause</string>
+    <string name="enable_save_photo_to_album">Enable save photo to album"</string>
 </resources>
