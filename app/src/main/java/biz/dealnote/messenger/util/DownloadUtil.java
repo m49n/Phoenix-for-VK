@@ -7,7 +7,9 @@ import android.os.Environment;
 
 import java.io.File;
 
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.Video;
 
 /**
  * Created by maartenvangiel on 28/09/16.
@@ -38,7 +40,7 @@ public class DownloadUtil {
         }
         return 0;
     }
-    private final static char[]	ILLEGAL_FILENAME_CHARS	= {'/', '\\', ':', '*', '?', '"', '<', '>', '|', ',', '=', ';', '\n', '\t', '\r' };
+    private final static char[]	ILLEGAL_FILENAME_CHARS	= {'/', '\\', ':', '*', '?', '"', '<', '>', '|', ',', '=', ';', '\n', '\t', '\r', '#' };
     static private String makeLegalFilenameNTV(String filename) {
         for(int i = 0; i < ILLEGAL_FILENAME_CHARS.length; i++) {
             filename = filename.replace(ILLEGAL_FILENAME_CHARS[i], '_');
@@ -63,4 +65,28 @@ public class DownloadUtil {
             return false;
     }
 
+    public static void downloadVideo(Context context, Video video, String URL, String Res){
+        if(URL == null || URL.length() <= 0)
+            return;
+        String videoName = makeLegalFilename(video.getTitle() == null ? "" : video.getTitle() + " - " + video.getOwnerId() + "_" + video.getId() + "_" + Res + "P", "mp4");
+        if (new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/Phoenix/" + videoName).exists() == true) {
+            PhoenixToast.showToastError(context, R.string.exist_audio);
+            return;
+        }
+        try {
+            DownloadManager.Request downloadRequest = new DownloadManager.Request(Uri.parse(URL));
+            downloadRequest.allowScanningByMediaScanner();
+            downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+            downloadRequest.setDescription(videoName);
+            downloadRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, "/Phoenix/" + videoName);
+
+            DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            downloadManager.enqueue(downloadRequest);
+        }
+        catch(Exception e) {
+            PhoenixToast.showToast(context, "Video Error: " + e.getMessage());
+            return;
+        }
+    }
 }

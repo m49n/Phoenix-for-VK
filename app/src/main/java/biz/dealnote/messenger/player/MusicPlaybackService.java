@@ -485,7 +485,7 @@ public class MusicPlaybackService extends Service {
         String url = audios.get(0).getUrl();
         IAudioInteractor interactor = InteractorFactory.createAudioInteractor();
 
-        if (interactor.isAudioPluginAvailable() && (isEmpty(url) || "https://vk.com/mp3/audio_api_unavailable.mp3".equals(url))) {
+        if ((isEmpty(url) || "https://vk.com/mp3/audio_api_unavailable.mp3".equals(url))) {
             audios = (ArrayList<Audio>) interactor
                     .getById(listToIdPair(audios))
                     .subscribeOn(Schedulers.io())

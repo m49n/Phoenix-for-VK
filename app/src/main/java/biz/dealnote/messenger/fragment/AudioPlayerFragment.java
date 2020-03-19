@@ -37,7 +37,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -166,13 +165,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         appendDisposable(observeServiceBinding()
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(ignore -> onServiceBindEvent()));
-        if(Constants.NEED_LIKE_MY_PHOTO == true && Settings.get().accounts().getCurrent() != Settings.get().accounts().INVALID_ID) {
-            Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).likes().add("photo", 572488303, 457239197, "")
-                    .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(t -> {
-                    }, t -> {
-                    });
-        }
     }
 
     private void onServiceBindEvent() {

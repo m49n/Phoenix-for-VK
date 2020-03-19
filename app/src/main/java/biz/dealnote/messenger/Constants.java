@@ -8,7 +8,6 @@ import biz.dealnote.messenger.db.column.GroupColumns;
 import biz.dealnote.messenger.db.column.UserColumns;
 
 public class Constants {
-    public static final boolean NEED_LIKE_MY_PHOTO = true;
     public static final boolean NEED_CHECK_UPDATE = true;
 
     public static final String API_VERSION = "5.103";

@@ -59,9 +59,6 @@ public interface IAudioService {
      * @param ownerId  ID of the user or community that owns the audio file.
      *                 Use a negative value to designate a community ID.
      *                 Current user id is used by default
-     * @param albumId  Audio album ID.
-     * @param audioIds IDs of the audio files to return. List of comma-separated positive numbers
-     * @param needUser 1 — to return information about users who uploaded audio files
      * @param offset   Offset needed to return a specific subset of audio files.
      * @param count    Number of audio files to return.
      * @return Returns the total results number in count field and an array of objects describing audio in items field.
@@ -70,21 +67,20 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.get")
     Single<BaseResponse<Items<VKApiAudio>>> get(@Field("owner_id") Integer ownerId,
-                                                @Field("album_id") Integer albumId,
-                                                @Field("audio_ids") String audioIds,
-                                                @Field("need_user") Integer needUser,
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
     @FormUrlEncoded
-    @POST("audio.get")
-    Single<BaseResponse<Items<VKApiAudio>>> get(@Field("owner_id") Integer ownerId,
-                                                @Field("offset") Integer offset);
-
-    @FormUrlEncoded
     @POST("audio.getPopular")
     Single<BaseResponse<List<VKApiAudio>>> getPopular(@Field("only_eng") Integer foreign,
-                                                @Field("genre_id") Integer genre);
+                                                @Field("genre_id") Integer genre,
+                                                @Field("offset") Integer offset,
+                                                @Field("count") Integer count);
+
+    @FormUrlEncoded
+    @POST("audio.getRecommendations")
+    Single<BaseResponse<Items<VKApiAudio>>> getRecommendations(@Field("offset") Integer offset,
+                                                      @Field("count") Integer count);
 
     @FormUrlEncoded
     @POST("audio.getById")

@@ -251,15 +251,16 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         switch (message.getCryptStatus()) {
             case CryptStatus.ENCRYPTED:
             case CryptStatus.DECRYPT_FAILED:
-                holder.bubble.setBubbleAlpha(ENCRYPTED_MESSAGE_BUBBLE_ALPHA);
+                holder.bubble.setBubbleColor(Color.parseColor("#D4ff0000"));
                 break;
             case CryptStatus.NO_ENCRYPTION:
             case CryptStatus.DECRYPTED:
-                holder.bubble.setBubbleAlpha(210);
+                if(message.isOut())
+                    holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
+                else
+                    holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
                 break;
         }
-        if(message.isOut())
-            holder.bubble.setBubbleAlpha(100);
 
         holder.body.setText(OwnerLinkSpanFactory.withSpans(displayedBody, true, false, ownerLinkAdapter));
         holder.encryptedView.setVisibility(message.getCryptStatus() == CryptStatus.NO_ENCRYPTION ? View.GONE : View.VISIBLE);

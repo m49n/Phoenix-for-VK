@@ -206,7 +206,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
     private void OnSetOffline(boolean succ) {
         if(succ)
-            PhoenixToast.showToastSuccess(getContext(), R.string.succ_offline);
+            PhoenixToast.showToast(getContext(), R.string.succ_offline);
         else
             PhoenixToast.showToastError(getContext(), R.string.err_offline);
     }

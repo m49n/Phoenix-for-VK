@@ -158,11 +158,11 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> getPopular(int accountId, int foreign, int genre) {
+    public Single<List<Audio>> getPopular(int accountId, int foreign, int genre, int offset) {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .getPopular(foreign,genre).map(out-> {
+                .getPopular(foreign,genre, offset).map(out-> {
                     List<Audio> ret = new ArrayList<>();
                     for(int i = 0; i < out.size(); i++)
                         ret.add(new Audio()
@@ -179,6 +179,32 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setThumb_image_little(out.get(i).thumb_image_little)
                                 .setThumb_image_big(out.get(i).thumb_image_big)
                                 .setAlbum_title(out.get(i).album_title));
+                    return ret;
+                });
+    }
+
+    @Override
+    public Single<List<Audio>> getRecommendations(int accountId, Integer offset)
+    {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getRecommendations(offset).map(out-> {
+                    List<Audio> ret = new ArrayList<>();
+                    for(int i = 0; i < out.items.size(); i++)
+                        ret.add(new Audio()
+                                .setId(out.items.get(i).id)
+                                .setOwnerId(out.items.get(i).owner_id)
+                                .setAlbumId(Objects.nonNull(out.items.get(i).album_id) ? out.items.get(i).album_id : 0)
+                                .setArtist(out.items.get(i).artist)
+                                .setTitle(out.items.get(i).title)
+                                .setUrl(out.items.get(i).url)
+                                .setLyricsId(out.items.get(i).lyrics_id)
+                                .setGenre(out.items.get(i).genre_id)
+                                .setDuration(out.items.get(i).duration)
+                                .setHq(out.items.get(i).is_hq)
+                                .setThumb_image_little(out.items.get(i).thumb_image_little)
+                                .setThumb_image_big(out.items.get(i).thumb_image_big)
+                                .setAlbum_title(out.items.get(i).album_title));
                     return ret;
                 });
     }
@@ -213,10 +239,5 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setAlbum_title(out.items.get(i).album_title));
                     return ret;
                 });
-    }
-
-    @Override
-    public boolean isAudioPluginAvailable() {
-        return true;
     }
 }

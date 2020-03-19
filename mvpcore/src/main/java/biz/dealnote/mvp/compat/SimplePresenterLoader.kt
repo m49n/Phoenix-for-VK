@@ -1,8 +1,6 @@
 package biz.dealnote.mvp.compat
 
 import android.content.Context
-import androidx.loader.content.Loader
-
 import biz.dealnote.mvp.core.IMvpView
 import biz.dealnote.mvp.core.IPresenter
 import biz.dealnote.mvp.core.IPresenterFactory

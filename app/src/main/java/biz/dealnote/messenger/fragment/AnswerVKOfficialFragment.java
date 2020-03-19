@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,13 +20,18 @@ import java.util.List;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.activity.ActivityFeatures;
+import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.adapter.AnswerVKOfficialAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
+import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.AnswerVKOfficial;
 import biz.dealnote.messenger.mvp.presenter.AnswerVKOfficialPresenter;
 import biz.dealnote.messenger.mvp.view.IAnswerVKOfficialView;
+import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -78,6 +84,29 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
         if (nonNull(mEmpty) && nonNull(mAdapter)) {
             mEmpty.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Settings.get().ui().notifyPlaceResumed(Place.NOTIFICATIONS);
+
+        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.drawer_feedback);
+            actionBar.setSubtitle(null);
+        }
+
+        if (requireActivity() instanceof OnSectionResumeCallback) {
+            ((OnSectionResumeCallback) requireActivity()).onSectionResume(AdditionalNavigationFragment.SECTION_ITEM_FEEDBACK);
+        }
+
+        new ActivityFeatures.Builder()
+                .begin()
+                .setHideNavigationMenu(false)
+                .setBarsColored(requireActivity(), true)
+                .build()
+                .apply(requireActivity());
     }
 
     @Override

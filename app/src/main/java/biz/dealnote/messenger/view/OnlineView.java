@@ -25,9 +25,6 @@ public class OnlineView extends AppCompatImageView {
     private int mCircleColor;
 
     @ColorInt
-    public int mCircleColorBackup;
-
-    @ColorInt
     private int mStrokeColor;
 
     //@DrawableRes
@@ -97,7 +94,6 @@ public class OnlineView extends AppCompatImageView {
 
         try {
             mCircleColor = a.getColor(R.styleable.OnlineView_circle_color, Color.BLUE);
-            mCircleColorBackup = a.getColor(R.styleable.OnlineView_circle_color, Color.BLUE);
             mStrokeColor = a.getColor(R.styleable.OnlineView_stroke_color, Color.WHITE);
             mStrokeWidth = a.getDimension(R.styleable.OnlineView_stroke_width, pxOf(1));
             //mIconPadding = a.getDimension(R.styleable.OnlineView_icon_padding, 8);

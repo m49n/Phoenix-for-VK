@@ -103,8 +103,8 @@ public class BubbleLinearLayout extends LinearLayout {
         super.onDraw(canvas);
     }
 
-    public void setBubbleAlpha(int alpha) {
-        this.bubbleColor = Color.argb(alpha, Color.red(this.bubbleColor), Color.green(this.bubbleColor), Color.blue(this.bubbleColor));
+    public void setBubbleColor(int ARGBColor) {
+        this.bubbleColor = Color.argb(Color.alpha(ARGBColor), Color.red(ARGBColor), Color.green(ARGBColor), Color.blue(ARGBColor));
         setUp();
     }
 }

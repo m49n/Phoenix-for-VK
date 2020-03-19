@@ -33,17 +33,16 @@ public interface IAudioApi {
 
     @CheckResult
     Single<Integer> add(int audioId, int ownerId, Integer groupId, Integer album_id);
-
-    @CheckResult
-    Single<Items<VKApiAudio>> get(Integer ownerId, Integer albumId, Collection<Integer> audioIds,
-                                  Integer offset, Integer count);
     @CheckResult
     Single<Items<VKApiAudio>> get(Integer ownerI,
                                   Integer offset);
 
     @CheckResult
     Single<List<VKApiAudio>> getPopular(Integer foreign,
-                                         Integer genre);
+                                         Integer genre, Integer offset);
+
+    @CheckResult
+    Single<Items<VKApiAudio>> getRecommendations(Integer offset);
 
     @CheckResult
     Single<List<VKApiAudio>> getById(String audios);

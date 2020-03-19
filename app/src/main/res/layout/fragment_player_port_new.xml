@@ -154,6 +154,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="?attr/colorSecondary"
                 tools:text="Warduna" />
 
             <TextView

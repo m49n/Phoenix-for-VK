@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#C80280EF"
+    android:background="#9E0073FF"
     android:padding="8dp">
 
     <ImageView

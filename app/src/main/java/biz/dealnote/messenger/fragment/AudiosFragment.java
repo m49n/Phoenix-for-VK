@@ -30,7 +30,6 @@ import biz.dealnote.messenger.model.AudioFilter;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
-import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -67,8 +66,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
 
-        root.findViewById(R.id.button_details).setOnClickListener(v -> openPost());
-
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -88,10 +85,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         mAudioRecyclerAdapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
         recyclerView.setAdapter(mAudioRecyclerAdapter);
         return root;
-    }
-
-    private void openPost() {
-        PlaceFactory.getPostPreviewPlace(requireArguments().getInt(Extra.ACCOUNT_ID), 7927, -72124992).tryOpenWith(requireActivity());
     }
 
     @Override
@@ -178,7 +171,11 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
 
     @Override
     public void onDestroy() {
-        mAudioRecyclerAdapter.onDestroy();
+        synchronized(mAudioRecyclerAdapter)
+        {
+            if (nonNull(mAudioRecyclerAdapter))
+                mAudioRecyclerAdapter.onDestroy();
+        }
         super.onDestroy();
     }
 

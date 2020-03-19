@@ -27,9 +27,9 @@ public interface IAudioInteractor {
 
     Single<String> getLyrics(int lyrics_id);
 
-    Single<List<Audio>> getPopular(int accountId, int foreign, int genre);
+    Single<List<Audio>> getPopular(int accountId, int foreign, int genre, int offset);
+
+    Single<List<Audio>> getRecommendations(int accountId, Integer offset);
 
     Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
-
-    boolean isAudioPluginAvailable();
 }

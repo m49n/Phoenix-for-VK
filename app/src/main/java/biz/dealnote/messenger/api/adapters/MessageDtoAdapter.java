@@ -48,6 +48,11 @@ public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
             }
         }
 
+        if(root.has("reply_message")){
+            dto.fwd_messages = new ArrayList<>(1);
+            dto.fwd_messages.add(deserialize(root.get("reply_message"), VKApiMessage.class, context));
+        }
+
         dto.deleted = optIntAsBoolean(root, "deleted");
         dto.important = optBoolean(root, "important");
         dto.random_id = optString(root, "random_id");

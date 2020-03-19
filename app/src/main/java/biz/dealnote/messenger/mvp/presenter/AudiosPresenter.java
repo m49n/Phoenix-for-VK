@@ -32,7 +32,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private final IAudioInteractor audioInteractor;
     private final ArrayList<Audio> audios;
     private final int ownerId;
-    private final boolean audioAvailable;
     private boolean actualReceived;
     private List<AudioFilter> filters;
     private AudioFilter currentFilter;
@@ -40,14 +39,11 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     public AudiosPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.audioInteractor = InteractorFactory.createAudioInteractor();
-        this.audioAvailable = audioInteractor.isAudioPluginAvailable();
         this.audios = new ArrayList<>();
         this.ownerId = ownerId;
         this.filters = createFilterList();
 
-        if (audioAvailable) {
-            requestList();
-        }
+        requestList(0);
     }
 
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
@@ -76,21 +72,27 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private void requestNext() {
         setLoadingNow(true);
         final int offset = audios.size();
-        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, offset)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onNextListReceived, this::onListGetError));
+        if (currentFilter == null || currentFilter.isFilterNone()) {
+            requestList(offset);
+        } else if(!currentFilter.isRecommendatiom()){
+            getListByGenre(offset, currentFilter.isEnglishOnly() == 1, currentFilter.getGenre());
+        }
+        else if(currentFilter.isRecommendatiom()) {
+            getRecommendations(offset);
+        }
     }
 
     private static List<AudioFilter> createFilterList() {
         int engOnly = 0;
         List<AudioFilter> result = new ArrayList<>();
         result.add(new AudioFilter(engOnly, AudioFilter.MY_AUDIO, true));
+        result.add(new AudioFilter(engOnly, AudioFilter.MY_RECOMENDATIONS));
+        result.add(new AudioFilter(engOnly, AudioFilter.TOP_ALL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ETHNIC));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INSTRUMENTAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ACOUSTIC_AND_VOCAL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ALTERNATIVE));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.CLASSICAL));
-        result.add(new AudioFilter(engOnly, AudioFilter.TOP_ALL));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DANCE_AND_HOUSE));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DRUM_AND_BASS));
         result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DUBSTEP));
@@ -107,15 +109,15 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         return result;
     }
 
-    public void requestList() {
+    public void requestList(int offset) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, 0)
+        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onListReceived, this::onListGetError));
+                .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
     }
 
     private void onNextListReceived(List<Audio> next) {
-        next.removeAll(audios);
+        //next.removeAll(audios);
         audios.addAll(next);
         endOfContent = next.isEmpty();
         setLoadingNow(false);
@@ -137,11 +139,18 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             PlaceFactory.getPlayerPlace(getAccountId()).tryOpenWith(context);
     }
 
-    public void getListByGenre(boolean foreign, int genre) {
+    public void getListByGenre(int offset, boolean foreign, int genre) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.getPopular(getAccountId(), foreign ? 1 : 0, genre)
+        audioListDisposable.add(audioInteractor.getPopular(getAccountId(), foreign ? 1 : 0, genre, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onListReceived, this::onListGetError));
+                .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
+    }
+
+    public void getRecommendations(int offset) {
+        setLoadingNow(true);
+        audioListDisposable.add(audioInteractor.getRecommendations(getAccountId(), offset)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
     }
 
     @Override
@@ -156,13 +165,14 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     public void fireRefresh() {
-        if (audioAvailable) {
-            audioListDisposable.clear();
-            if (currentFilter == null || currentFilter.isFilterNone()) {
-                requestList();
-            } else {
-                getListByGenre(currentFilter.isEnglishOnly() == 1, currentFilter.getGenre());
-            }
+        audioListDisposable.clear();
+        if (currentFilter == null || currentFilter.isFilterNone()) {
+            requestList(0);
+        } else if(!currentFilter.isRecommendatiom()){
+            getListByGenre(0, currentFilter.isEnglishOnly() == 1, currentFilter.getGenre());
+        }
+        else if(currentFilter.isRecommendatiom()) {
+            getRecommendations(0);
         }
     }
 
@@ -178,7 +188,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         view.showFilters(getAccountId() == ownerId);
         view.fillFilters(filters);
         view.displayList(audios);
-        view.setBlockedScreen(!audioAvailable);
     }
 
     public void fireFilterItemClick(AudioFilter source) {

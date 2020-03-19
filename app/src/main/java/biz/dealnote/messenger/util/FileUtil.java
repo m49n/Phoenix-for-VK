@@ -43,7 +43,7 @@ public class FileUtil {
         boolean noExist = false;
         while (!noExist) {
             int randomInt = random.nextInt(1000000);
-            String fileName = "JPEG_" + timeStamp + "_" + randomInt + ".jpg";
+            String fileName = "Captured_" + timeStamp + "_" + randomInt + ".jpg";
             File file = new File(directory, fileName);
 
             if (!file.exists()) {

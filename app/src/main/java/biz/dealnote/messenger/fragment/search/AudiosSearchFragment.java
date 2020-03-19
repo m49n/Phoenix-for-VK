@@ -15,7 +15,6 @@ import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.search.AudiosSearchPresenter;
 import biz.dealnote.messenger.mvp.view.search.IAudioSearchView;
-import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 
@@ -46,10 +45,6 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
     @Override
     RecyclerView.LayoutManager createLayoutManager() {
         return new LinearLayoutManager(requireActivity());
-    }
-
-    private void openPost() {
-        PlaceFactory.getPostPreviewPlace(requireArguments().getInt(Extra.ACCOUNT_ID), 7927, -72124992).tryOpenWith(requireActivity());
     }
 
     @Override

@@ -51,6 +51,7 @@ import biz.dealnote.messenger.mvp.view.IVideoPreviewView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.AppPrefs;
+import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.YoutubeDeveloperKey;
 import biz.dealnote.messenger.view.CircleCounterButton;
@@ -336,6 +337,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
 
         static final int PLAY_ANOTHER_SOFT = -5;
         static final int PLAY_BROWSER = -6;
+        static final int DOWNLOAD = -7;
     }
 
     private List<Item> createDirectVkPlayItems(Video video, Section section) {
@@ -428,6 +430,10 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .setIcon(R.drawable.ic_external)
                 .setSection(SECTION_OTHER));
 
+        items.add(new Item(Menu.DOWNLOAD, new Text(R.string.download))
+                .setIcon(R.drawable.save)
+                .setSection(SECTION_OTHER));
+
         MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
 
         new MaterialAlertDialogBuilder(requireActivity())
@@ -485,6 +491,10 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             case Menu.PLAY_BROWSER:
                 playWithExternalSoftware(video.getPlayer());
                 break;
+
+            case Menu.DOWNLOAD:
+                showDownloadPlayerMenu(video);
+                break;
         }
     }
 
@@ -514,6 +524,36 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                             break;
                         case Menu.LIVE:
                             playDirectVkLinkInExternalPlayer(video.getLive());
+                            break;
+                    }
+                })
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
+    }
+
+    private void showDownloadPlayerMenu(Video video) {
+        Section section = new Section(new Text(R.string.download));
+        List<Item> items = createDirectVkPlayItems(video, section);
+        MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
+
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setAdapter(adapter, (dialog, which) -> {
+                    Item item = items.get(which);
+                    switch (item.getKey()) {
+                        case Menu.P_240:
+                            DownloadUtil.downloadVideo(requireContext(), video, video.getMp4link240(), "240");
+                            break;
+                        case Menu.P_360:
+                            DownloadUtil.downloadVideo(requireContext(), video, video.getMp4link360(), "360");
+                            break;
+                        case Menu.P_480:
+                            DownloadUtil.downloadVideo(requireContext(), video, video.getMp4link480(), "480");
+                            break;
+                        case Menu.P_720:
+                            DownloadUtil.downloadVideo(requireContext(), video, video.getMp4link720(), "720");
+                            break;
+                        case Menu.P_1080:
+                            DownloadUtil.downloadVideo(requireContext(), video, video.getMp4link1080(), "1080");
                             break;
                     }
                 })

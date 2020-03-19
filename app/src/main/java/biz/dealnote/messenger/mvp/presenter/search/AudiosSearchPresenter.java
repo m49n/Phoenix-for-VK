@@ -28,12 +28,10 @@ import io.reactivex.Single;
 public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, AudioSearchCriteria, Audio, IntNextFrom> {
 
     private final IAudioInteractor audioInteractor;
-    private final boolean audioAvailable;
 
     public AudiosSearchPresenter(int accountId, @Nullable AudioSearchCriteria criteria, @Nullable Bundle savedInstanceState) {
         super(accountId, criteria, savedInstanceState);
         this.audioInteractor = InteractorFactory.createAudioInteractor();
-        this.audioAvailable = audioInteractor.isAudioPluginAvailable();
     }
 
     @Override
@@ -62,7 +60,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
 
     @Override
     boolean canSearch(AudioSearchCriteria criteria) {
-        return audioAvailable;
+        return true;
     }
 
     private void onListGetError(Throwable t) {

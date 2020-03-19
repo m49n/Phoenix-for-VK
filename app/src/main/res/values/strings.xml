@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Phoenix (R) Mod</string>
+    <string name="app_name">Phoenix Mod</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Conversations</string>
@@ -103,14 +103,12 @@
     </string-array>
 
     <string-array name="array_chat_background_names">
-        <item>Static</item>
         <item>Cookies</item>
         <item>Lines</item>
         <item>Runes</item>
     </string-array>
 
     <string-array name="array_chat_background_items" translatable="false">
-        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -1256,4 +1254,6 @@
     <string name="player_instead_feed">Player instead feed in navigation</string>
     <string name="use_stop_audio">Don\'t use pause</string>
     <string name="enable_save_photo_to_album">Enable save photo to album"</string>
+    <string name="download">Download"</string>
+    <string name="recommendation">Recommendation"</string>
 </resources>

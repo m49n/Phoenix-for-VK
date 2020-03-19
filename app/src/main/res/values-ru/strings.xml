@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Phoenix (R) Мод</string>
+    <string name="app_name">Phoenix Мод</string>
     <string-array name="array_theme_names">
         <item>Синее Пламя</item>
         <item>Жёлтое Пламя</item>
@@ -11,7 +11,6 @@
         <item>Серое Пламя</item>
     </string-array>
     <string-array name="array_chat_background_names">
-        <item>Отключено</item>
         <item>Печеньки</item>
         <item>Линии</item>
         <item>Руны</item>
@@ -1123,4 +1122,6 @@
     <string name="player_instead_feed">Показывать плеер вместо новостей</string>
     <string name="use_stop_audio">Стоп вместо паузы аудио</string>
     <string name="enable_save_photo_to_album">Включить сохранеие фото в альбом"</string>
+    <string name="download">Скачать"</string>
+    <string name="recommendation">Рекомендации"</string>
 </resources>

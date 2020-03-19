@@ -11,6 +11,7 @@ import biz.dealnote.messenger.adapter.horizontal.Entry;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 
 public class AudioFilter implements Entry, Parcelable {
+    public static final int MY_RECOMENDATIONS = -2;
     public static final int MY_AUDIO = -1;
     public static final int TOP_ALL = 0;
     public static final Creator<AudioFilter> CREATOR = new Creator<AudioFilter>() {
@@ -61,6 +62,10 @@ public class AudioFilter implements Entry, Parcelable {
         return genre == TOP_ALL;
     }
 
+    public boolean isRecommendatiom() {
+        return genre == MY_RECOMENDATIONS;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -79,6 +84,8 @@ public class AudioFilter implements Entry, Parcelable {
             return context.getString(R.string.my_saved);
         }
         switch (genre) {
+            case MY_RECOMENDATIONS:
+                return context.getString(R.string.recommendation);
             case TOP_ALL:
                 return context.getString(R.string.top);
             case VKApiAudio.Genre.ACOUSTIC_AND_VOCAL:

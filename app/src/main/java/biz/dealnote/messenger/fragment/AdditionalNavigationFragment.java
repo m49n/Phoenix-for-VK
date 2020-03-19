@@ -425,6 +425,10 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         }
     }
 
+    public List<AbsMenuItem> getDrawerItems() {
+        return mDrawerItems;
+    }
+
     @Override
     public void onDrawerItemClick(AbsMenuItem item) {
         selectItem(item, false);
