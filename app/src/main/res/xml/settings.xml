@@ -126,6 +126,13 @@
             android:title="@string/enable_save_photo_to_album"
             app:iconSpaceReserved="false" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_recent_dialogs"
+            android:summary="@string/show_recent_dialogs"
+            android:title="@string/show_recent_dialogs"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

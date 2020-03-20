@@ -127,7 +127,7 @@ public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, I
             ClipData clip = ClipData.newPlainText("Details", details);
             clipboard.setPrimaryClip(clip);
 
-            PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.copied_to_clipboard);
         }
     }
 

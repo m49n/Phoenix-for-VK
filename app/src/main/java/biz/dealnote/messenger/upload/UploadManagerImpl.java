@@ -291,7 +291,7 @@ public class UploadManagerImpl implements IUploadManager {
                 final String message = firstNonEmptyString(cause.getMessage(), cause.toString());
                 compositeDisposable.add(Completable.complete()
                         .observeOn(Injection.provideMainThreadScheduler())
-                        .subscribe(() -> PhoenixToast.showToastError(context, message)));
+                        .subscribe(() -> PhoenixToast.CreatePhoenixToast(context).showToastError(message)));
 
             }
 

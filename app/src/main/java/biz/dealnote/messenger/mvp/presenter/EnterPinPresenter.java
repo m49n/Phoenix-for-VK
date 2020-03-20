@@ -1,17 +1,15 @@
 package biz.dealnote.messenger.mvp.presenter;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
@@ -23,13 +21,10 @@ import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IEnterPinView;
 import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.util.Action;
-import biz.dealnote.messenger.util.FingerprintTools;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
-import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
 /**
@@ -45,9 +40,11 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
     private int[] mValues;
     private final IOwnersRepository ownersRepository;
     private final ISettings.ISecuritySettings securitySettings;
+    private Fragment myContext;
 
-    public EnterPinPresenter(@Nullable Bundle savedState) {
+    public EnterPinPresenter(Fragment Context, @Nullable Bundle savedState) {
         super(savedState);
+        myContext = Context;
         securitySettings = Settings.get().security();
         ownersRepository = Repository.INSTANCE.getOwners();
 
@@ -60,12 +57,6 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
         if (Objects.isNull(mOwner)) {
             loadOwnerInfo();
-        }
-
-        if(canUseFingerprint()){
-            fingerprintCallback = new WeakFingerprintCallback(this);
-        } else {
-            fingerprintCallback = null;
         }
     }
 
@@ -90,88 +81,18 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
     public void onFingerprintClicked() {
         if(!securitySettings.isEntranceByFingerprintAllowed()){
-            safeShowError(getView(), R.string.error_login_by_fingerprint_not_allowed);
+            getView().getPhoenixToast().showToastError(R.string.error_login_by_fingerprint_not_allowed);
             return;
         }
-
-        FingerprintTools.SensorState sensorState = FingerprintTools.checkSensorState(getApplicationContext());
-        switch (sensorState){
-            case NOT_BLOCKED:
-            case NO_FINGERPRINTS:
-                safeShowError(getView(), R.string.error_fingerprint_not_blocked);
-                break;
-            case NOT_SUPPORTED:
-                safeShowError(getView(), R.string.error_fingerprint_not_supported);
-                break;
-            case READY:
-                safeShowToast(getView(), R.string.message_fingerprint_touch_sensor, false);
-                break;
-        }
+        if(canAuthenticateWithBiometrics())
+            showBiometricPrompt();
+        else
+            getView().getPhoenixToast().showToastError(R.string.biometric_not_support);
     }
 
     @Override
     public void onGuiResumed() {
         super.onGuiResumed();
-
-        if(canUseFingerprint()){
-            observeFingerprintActions();
-        }
-    }
-
-    private CancellationSignal fingerprintCancellationSignal;
-
-    private void observeFingerprintActions(){
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
-            return;
-        }
-
-        FingerprintManager manager = (FingerprintManager) getApplicationContext().getSystemService(Context.FINGERPRINT_SERVICE);
-
-        this.fingerprintCancellationSignal = new CancellationSignal();
-
-        final FingerprintManager.AuthenticationCallback callback = (FingerprintManager.AuthenticationCallback) fingerprintCallback;
-        manager.authenticate(null, fingerprintCancellationSignal, 0, callback, null);
-    }
-
-    private final Object fingerprintCallback;
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private static final class WeakFingerprintCallback extends FingerprintManager.AuthenticationCallback {
-
-        final WeakReference<EnterPinPresenter> reference;
-
-        WeakFingerprintCallback(EnterPinPresenter instance) {
-            this.reference = new WeakReference<>(instance);
-        }
-
-        void callPresenter(final Action<EnterPinPresenter> action){
-            final EnterPinPresenter presenter = reference.get();
-            if(nonNull(presenter)){
-                action.call(presenter);
-            }
-        }
-
-        @Override
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-            if(errMsgId != FingerprintManager.FINGERPRINT_ERROR_CANCELED){
-                callPresenter(targer -> safeShowError(targer.getView(), errString.toString()));
-            }
-        }
-
-        @Override
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-            callPresenter(targer -> safeShowError(targer.getView(), helpString.toString()));
-        }
-
-        @Override
-        public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-            callPresenter(EnterPinPresenter::onFingerprintRecognizeSuccess);
-        }
-
-        @Override
-        public void onAuthenticationFailed() {
-            callPresenter(targer -> targer.safeShowError(targer.getView(), R.string.error_fingerprint_failed));
-        }
     }
 
     private void onFingerprintRecognizeSuccess(){
@@ -180,22 +101,9 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         }
     }
 
-    private boolean canUseFingerprint(){
-        if(!securitySettings.isEntranceByFingerprintAllowed()){
-            return false;
-        }
-
-        FingerprintTools.SensorState sensorState = FingerprintTools.checkSensorState(getApplicationContext());
-        return sensorState == FingerprintTools.SensorState.READY;
-    }
-
     @Override
     public void onGuiPaused() {
         super.onGuiPaused();
-        if(nonNull(fingerprintCancellationSignal)){
-            fingerprintCancellationSignal.cancel();
-            fingerprintCancellationSignal = null;
-        }
     }
 
     @OnGuiCreated
@@ -328,5 +236,45 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
     public void saveState(@NonNull Bundle outState) {
         super.saveState(outState);
         outState.putIntArray(SAVE_VALUE, mValues);
+    }
+
+    private void showBiometricPrompt() {
+
+        BiometricPrompt.AuthenticationCallback authenticationCallback = getAuthenticationCallback();
+        BiometricPrompt mBiometricPrompt = new BiometricPrompt(myContext, ContextCompat.getMainExecutor(getApplicationContext()), authenticationCallback);
+
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getApplicationContext().getString(R.string.biometric))
+                .setNegativeButtonText(getApplicationContext().getString(R.string.cancel))
+                .build();
+            mBiometricPrompt.authenticate(promptInfo);
+    }
+
+    private boolean canAuthenticateWithBiometrics() {
+        BiometricManager biometricManager = BiometricManager.from(getApplicationContext());
+        if (biometricManager != null) {
+            return biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
+        }
+        return false;
+    }
+
+    private BiometricPrompt.AuthenticationCallback getAuthenticationCallback() {
+        return new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                onFingerprintRecognizeSuccess();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        };
     }
 }

@@ -35,7 +35,7 @@ public class DownloadUtil {
             downloadManager.enqueue(downloadRequest);
         }
         catch(Exception e) {
-            PhoenixToast.showToast(context, "Audio Error: " + e.getMessage());
+            PhoenixToast.CreatePhoenixToast(context).showToastError("Audio Error: " + e.getMessage());
             return 2;
         }
         return 0;
@@ -70,7 +70,7 @@ public class DownloadUtil {
             return;
         String videoName = makeLegalFilename(video.getTitle() == null ? "" : video.getTitle() + " - " + video.getOwnerId() + "_" + video.getId() + "_" + Res + "P", "mp4");
         if (new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/Phoenix/" + videoName).exists() == true) {
-            PhoenixToast.showToastError(context, R.string.exist_audio);
+            PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.exist_audio);
             return;
         }
         try {
@@ -83,9 +83,10 @@ public class DownloadUtil {
 
             DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             downloadManager.enqueue(downloadRequest);
+            PhoenixToast.CreatePhoenixToast(context).showToast(R.string.downloading);
         }
         catch(Exception e) {
-            PhoenixToast.showToast(context, "Video Error: " + e.getMessage());
+            PhoenixToast.CreatePhoenixToast(context).showToastError("Video Error: " + e.getMessage());
             return;
         }
     }

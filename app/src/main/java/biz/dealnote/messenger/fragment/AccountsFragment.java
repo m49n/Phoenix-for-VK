@@ -299,7 +299,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     {
         boolean retval = false;
         Process suProcess;
-        PhoenixToast.showToast(requireActivity(), R.string.get_root);
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.get_root);
         try
         {
             suProcess = Runtime.getRuntime().exec("su");
@@ -318,7 +318,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 {
                     retval = false;
                     exitSu = false;
-                    PhoenixToast.showToastError(requireActivity(), "Can't get root access or denied by user");
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Can't get root access or denied by user");
                 }
                 else if (true == currUid.contains("uid=0"))
                 {
@@ -329,7 +329,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 {
                     retval = false;
                     exitSu = true;
-                    PhoenixToast.showToastError(requireActivity(), "Root access rejected: \" + currUid");
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected: \" + currUid");
                 }
                 if (exitSu)
                 {
@@ -341,7 +341,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         catch (Exception e)
         {
             retval = false;
-            PhoenixToast.showToastError(requireActivity(), "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
 
         return retval;
@@ -391,7 +391,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         }
         catch (Exception e)
         {
-            PhoenixToast.showToastError(requireActivity(), "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
     }
 

@@ -257,7 +257,7 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
 
         items.add(SECTION_ITEM_ACCOUNTS);
 
-        if (nonEmpty(mRecentChats)) {
+        if (nonEmpty(mRecentChats) &&  Settings.get().other().isEnable_show_recent_dialogs()) {
             items.addAll(mRecentChats);
         }
         return items;

@@ -53,7 +53,7 @@ public class App extends Application {
         compositeDisposable.add(Repository.INSTANCE.getMessages()
                 .observeMessagesSendErrors()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(throwable -> PhoenixToast.showToastError(App.this, ErrorLocalizer.localizeThrowable(App.this, throwable)), ignore()));
+                .subscribe(throwable -> PhoenixToast.CreatePhoenixToast(App.this).showToastError(ErrorLocalizer.localizeThrowable(App.this, throwable)), ignore()));
     }
 
     @NonNull

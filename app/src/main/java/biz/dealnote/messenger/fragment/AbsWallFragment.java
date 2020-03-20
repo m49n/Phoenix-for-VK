@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -206,9 +205,9 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
     private void OnSetOffline(boolean succ) {
         if(succ)
-            PhoenixToast.showToast(getContext(), R.string.succ_offline);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.succ_offline);
         else
-            PhoenixToast.showToastError(getContext(), R.string.err_offline);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.err_offline);
     }
 
     @Override
@@ -223,7 +222,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         ClipData clip = ClipData.newPlainText(label, body);
         clipboard.setPrimaryClip(clip);
 
-        Toast.makeText(requireActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
+        getPhoenixToast().showToastSuccess(R.string.copied);
     }
 
     @Override

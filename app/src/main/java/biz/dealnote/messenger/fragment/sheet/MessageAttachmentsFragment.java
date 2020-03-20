@@ -37,6 +37,7 @@ import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
 import biz.dealnote.messenger.mvp.presenter.MessageAttachmentsPresenter;
 import biz.dealnote.messenger.mvp.view.IMessageAttachmentsView;
 import biz.dealnote.messenger.upload.Upload;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -255,5 +256,14 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         if(isAdded()){
             showError(getString(titleTes, params));
         }
+    }
+
+    @Override
+    public PhoenixToast getPhoenixToast()
+    {
+        if(isAdded()) {
+            return PhoenixToast.CreatePhoenixToast(requireActivity());
+        }
+        return PhoenixToast.CreatePhoenixToast(null);
     }
 }

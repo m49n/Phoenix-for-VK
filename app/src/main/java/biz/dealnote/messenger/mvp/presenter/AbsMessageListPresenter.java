@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -178,8 +179,7 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
                 .getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("messages", result);
         clipboard.setPrimaryClip(clip);
-
-        safeShowLongToast(getView(), R.string.copied_to_clipboard);
+        getView().getPhoenixToast().setDuration(Toast.LENGTH_LONG).showToastSuccess(R.string.copied_to_clipboard);
     }
 
     public final void fireForwardClick(){

@@ -19,3 +19,5 @@ Requirements:
   1) Create cert to build for release
 
   2) Build APK :)
+Telegram: https://t.me/phoenixvk_mod
+Donate: 5599005042882048

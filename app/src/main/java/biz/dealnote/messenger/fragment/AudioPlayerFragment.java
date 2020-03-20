@@ -202,7 +202,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";;
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
-                PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.copied_to_clipboard);
                 return true;
             case R.id.search_by_artist:
                 PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true)).tryOpenWith(requireActivity());
@@ -303,11 +303,11 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         int ret = DownloadUtil.downloadTrack(getContext(), audio);
         if(ret == 0)
-            PhoenixToast.showToast(requireActivity(), R.string.saved_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved_audio);
         else if(ret == 1)
-            PhoenixToast.showToastSuccess(requireActivity(), R.string.exist_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.exist_audio);
         else
-            PhoenixToast.showToast(requireActivity(), R.string.error_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.error_audio);
     }
 
 
@@ -344,7 +344,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     @SuppressWarnings("unused")
     private void onAudioAdded(Audio result) {
-        PhoenixToast.showToast(requireActivity(), R.string.added);
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.added);
         resolveAddButton();
     }
 
@@ -387,15 +387,15 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         dlgAlert.setPositiveButton("OK", null);
         dlgAlert.setCancelable(true);
-        PhoenixToast.showToastSuccess(requireContext(), R.string.copied_to_clipboard);
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.copied_to_clipboard);
         dlgAlert.create().show();
     }
 
     private void onAudioDeletedOrRestored(int id, int ownerId, boolean deleted) {
         if (deleted) {
-            PhoenixToast.showToast(requireActivity(), R.string.deleted);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.deleted);
         } else {
-            PhoenixToast.showToast(requireActivity(), R.string.restored);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.restored);
         }
 
         Audio current = MusicUtils.getCurrentAudio();

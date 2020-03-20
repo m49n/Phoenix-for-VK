@@ -430,9 +430,16 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .setIcon(R.drawable.ic_external)
                 .setSection(SECTION_OTHER));
 
-        items.add(new Item(Menu.DOWNLOAD, new Text(R.string.download))
-                .setIcon(R.drawable.save)
-                .setSection(SECTION_OTHER));
+        if(nonEmpty(firstNonEmptyString(video.getMp4link240(),
+                video.getMp4link360(),
+                video.getMp4link480(),
+                video.getMp4link720(),
+                video.getMp4link1080())))
+        {
+            items.add(new Item(Menu.DOWNLOAD, new Text(R.string.download))
+                    .setIcon(R.drawable.save)
+                    .setSection(SECTION_OTHER));
+        }
 
         MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
 

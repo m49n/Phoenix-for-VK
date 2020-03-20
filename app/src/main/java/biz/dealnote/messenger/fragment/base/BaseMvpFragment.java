@@ -17,6 +17,7 @@ import biz.dealnote.messenger.mvp.view.IProgressView;
 import biz.dealnote.messenger.mvp.view.IToastView;
 import biz.dealnote.messenger.mvp.view.IToolbarView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.compat.AbsMvpFragment;
@@ -51,6 +52,14 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
         if(isAdded()){
             Utils.showRedTopToast(requireActivity(), text);
         }
+    }
+
+    @Override
+    public PhoenixToast getPhoenixToast() {
+        if(isAdded()){
+            return PhoenixToast.CreatePhoenixToast(requireActivity());
+        }
+        return PhoenixToast.CreatePhoenixToast(null);
     }
 
     @Override

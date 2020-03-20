@@ -131,4 +131,9 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isEnable_save_photo_to_album() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_save_photo_to_album", false);
     }
+
+    @Override
+    public boolean isEnable_show_recent_dialogs() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_recent_dialogs", true);
+    }
 }

@@ -53,7 +53,7 @@ public class LinkHelper {
     public static void openUrl(Activity context, int accountId, String link) {
         if(link == null || link.length() <= 0)
         {
-            PhoenixToast.showToast(context, R.string.empty_clipboard_url);
+            PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.empty_clipboard_url);
             return;
         }
         if (!openVKlink(context, accountId, link)) {

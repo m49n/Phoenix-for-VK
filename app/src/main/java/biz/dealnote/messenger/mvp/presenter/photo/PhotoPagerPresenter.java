@@ -26,7 +26,6 @@ import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
-import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Completable;
@@ -293,7 +292,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         new InternalDownloader(this, getApplicationContext(), url, file).doDownload();
     }
 
-    private static final class InternalDownloader extends DownloadImageTask {
+    private final class InternalDownloader extends DownloadImageTask {
 
         final WeakReference<PhotoPagerPresenter> ref;
 
@@ -309,9 +308,9 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             if (Objects.isNull(presenter)) return;
 
             if (Objects.isNull(s)) {
-                PhoenixToast.showToastSuccess(presenter.getApplicationContext(), R.string.saved);
+                getView().getPhoenixToast().showToastSuccess(R.string.saved);
             } else {
-                PhoenixToast.showToastError(presenter.getApplicationContext(), String.format( presenter.getApplicationContext().getResources().getString(R.string.error_with_message), s));
+                getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
             }
         }
     }

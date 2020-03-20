@@ -6,71 +6,102 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import biz.dealnote.messenger.R;
 
 public class PhoenixToast {
 
-    public static void showToast(@NonNull Context context, String message) {
-        View view = View.inflate(context, R.layout.phoenix_toast, null);
+    private Context M_context;
+    private int duration;
+    public PhoenixToast setDuration(int duration)
+    {
+        this.duration = duration;
+        return this;
+    }
+    private PhoenixToast(Context context)
+    {
+        this.duration = Toast.LENGTH_SHORT;
+        this.M_context = context;
+    }
+    public static PhoenixToast CreatePhoenixToast(Context context)
+    {
+        return new PhoenixToast(context);
+    }
+    public void showToast(String message) {
+        if(M_context == null)
+            return;
+        View view = View.inflate(M_context, R.layout.phoenix_toast, null);
         TextView subtitle = view.findViewById(R.id.subtitle);
 
         subtitle.setText(message);
 
-        Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        Toast toast = new Toast(M_context);
+        toast.setDuration(duration);
         toast.setView(view);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.show();
     }
-    public static void showToast(@NonNull Context context, @StringRes int message) {
-        showToast(context, context.getResources().getString(message));
+    public void showToast(@StringRes int message, Object... params) {
+        if(M_context == null)
+            return;
+        showToast(M_context.getResources().getString(message, params));
     }
-    public static void showToastInfo(@NonNull Context context, String message) {
-        View view = View.inflate(context, R.layout.phoenix_toast_info, null);
+    public void showToastInfo(String message) {
+        if(M_context == null)
+            return;
+        View view = View.inflate(M_context, R.layout.phoenix_toast_info, null);
         TextView subtitle = view.findViewById(R.id.subtitle);
 
         subtitle.setText(message);
 
-        Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        Toast toast = new Toast(M_context);
+        toast.setDuration(duration);
         toast.setView(view);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.show();
     }
-    public static void showToastInfo(@NonNull Context context, @StringRes int message) {
-        showToastInfo(context, context.getResources().getString(message));
+    public void showToastInfo(@StringRes int message, Object... params) {
+        if(M_context == null)
+            return;
+        showToastInfo(M_context.getResources().getString(message, params));
     }
-    public static void showToastSuccess(@NonNull Context context, String message) {
-        View view = View.inflate(context, R.layout.phoenix_toast_succ, null);
+    public void showToastSuccess(String message) {
+        if(M_context == null)
+            return;
+        View view = View.inflate(M_context, R.layout.phoenix_toast_succ, null);
         TextView subtitle = view.findViewById(R.id.subtitle);
 
         subtitle.setText(message);
 
-        Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        Toast toast = new Toast(M_context);
+        toast.setDuration(duration);
         toast.setView(view);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.show();
     }
-    public static void showToastSuccess(@NonNull Context context, @StringRes int message) {
-        showToastSuccess(context, context.getResources().getString(message));
+    public void showToastSuccess(@StringRes int message, Object... params) {
+        if(M_context == null)
+            return;
+        showToastSuccess(M_context.getResources().getString(message, params));
     }
-    public static void showToastError(@NonNull Context context, String message) {
-        View view = View.inflate(context, R.layout.toast_error, null);
+    public void showToastError(String message) {
+        if(M_context == null)
+            return;
+        View view = View.inflate(M_context, R.layout.toast_error, null);
         TextView subtitle = view.findViewById(R.id.text);
 
         subtitle.setText(message);
 
-        Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        Toast toast = new Toast(M_context);
+        toast.setDuration(duration);
         toast.setView(view);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.show();
     }
-    public static void showToastError(@NonNull Context context, @StringRes int message) {
-        showToastError(context, context.getResources().getString(message));
+    public void showToastError(@StringRes int message, Object... params) {
+        if(M_context == null)
+            return;
+        showToastError(M_context.getResources().getString(message, params));
     }
 }

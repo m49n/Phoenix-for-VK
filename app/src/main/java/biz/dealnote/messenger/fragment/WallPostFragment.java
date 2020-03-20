@@ -212,7 +212,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         ClipData clip = ClipData.newPlainText(getString(R.string.link), link);
         clipboard.setPrimaryClip(clip);
 
-        Toast.makeText(requireActivity(), R.string.copied_url, Toast.LENGTH_SHORT).show();
+        getPhoenixToast().showToastSuccess(R.string.copied_url);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         ClipData clipData = ClipData.newPlainText(getString(R.string.post_text), text);
         manager.setPrimaryClip(clipData);
 
-        Toast.makeText(requireActivity(), R.string.copied_text, Toast.LENGTH_SHORT).show();
+        getPhoenixToast().showToastSuccess(R.string.copied_text);
     }
 
     private boolean mTextSelectionAllowed;

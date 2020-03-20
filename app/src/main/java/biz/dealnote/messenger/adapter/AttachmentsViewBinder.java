@@ -2,6 +2,7 @@ package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
@@ -67,6 +68,7 @@ import biz.dealnote.messenger.view.emoji.EmojiconTextView;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
+import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.dpToPx;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
@@ -500,8 +502,8 @@ public class AttachmentsViewBinder {
                         }
                         else
                             ivPhoto.setVisibility(View.GONE);
-                        ivType.getBackground().setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
-                        ivType.setImageResource(R.drawable.share);
+                        ivType.getBackground().setColorFilter(Color.parseColor("#00FFFFFF"), PorterDuff.Mode.MULTIPLY);
+                        ivType.setImageResource(R.drawable.share_colored);
                         break;
                     case Types.POLL:
                         ivType.setVisibility(View.VISIBLE);
@@ -616,12 +618,11 @@ public class AttachmentsViewBinder {
                             });
                 }
                 */
-
                 int finalG = g;
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
                         if(MusicUtils.isNowPlayingOrPreparing(audio))
-                            holder.ibPlay.setImageResource(R.drawable.play);
+                            holder.ibPlay.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
                         else {
                             if(!Settings.get().other().isUse_stop_audio())
                                 holder.ibPlay.setImageResource(R.drawable.pause);
@@ -640,9 +641,15 @@ public class AttachmentsViewBinder {
                             holder.ibPlay.setImageResource(R.drawable.stop);
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                     }
+                    for (int tt = 0; tt < container.getChildCount(); tt++) {
+                        if(tt == finalG)
+                            continue;
+                        ViewGroup roottemp = (ViewGroup) container.getChildAt(tt);
+                        ((ImageView)roottemp.findViewById(R.id.item_audio_play)).setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
+                    }
                 });
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
-                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : R.drawable.play);
+                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
                 holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);
@@ -670,17 +677,17 @@ public class AttachmentsViewBinder {
                                 }
                                 int ret = DownloadUtil.downloadTrack(mContext, audio);
                                 if(ret == 0)
-                                    PhoenixToast.showToast(mContext, R.string.saved_audio);
+                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
                                 else if(ret == 1)
-                                    PhoenixToast.showToastSuccess(mContext, R.string.exist_audio);
+                                    PhoenixToast.CreatePhoenixToast(mContext).showToastSuccess(R.string.exist_audio);
                                 else
-                                    PhoenixToast.showToast(mContext, R.string.error_audio);
+                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
                                 return true;
                             case R.id.bitrate_item_audio:
                                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                                 retriever.setDataSource(Audio.getMp3FromM3u8(audio.getUrl()), new HashMap<>());
                                 String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-                                PhoenixToast.showToast(mContext, mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
                                 return true;
                             default:
                                 return false;

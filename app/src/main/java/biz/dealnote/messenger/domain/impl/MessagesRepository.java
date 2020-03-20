@@ -381,7 +381,7 @@ public class MessagesRepository implements IMessagesRepository {
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
                                 Handler handlerMain = new Handler(Looper.getMainLooper());
-                                handlerMain.post(() -> PhoenixToast.showToastInfo(Injection.provideApplicationContext(), userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
                             }, throwable -> {
                             });
                 }

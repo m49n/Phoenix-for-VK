@@ -7,6 +7,7 @@ import androidx.annotation.StringRes;
 import biz.dealnote.messenger.mvp.view.IErrorView;
 import biz.dealnote.messenger.mvp.view.IToastView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.compat.AbsMvpDialogFragment;
 import biz.dealnote.mvp.core.AbsPresenter;
@@ -48,5 +49,13 @@ public abstract class BaseMvpDialogFragment<P extends AbsPresenter<V>, V extends
     @Override
     public void displayAccountSupported() {
         // TODO: 18.12.2017
+    }
+    @Override
+    public PhoenixToast getPhoenixToast()
+    {
+        if(isAdded()) {
+            return PhoenixToast.CreatePhoenixToast(requireActivity());
+        }
+        return PhoenixToast.CreatePhoenixToast(null);
     }
 }

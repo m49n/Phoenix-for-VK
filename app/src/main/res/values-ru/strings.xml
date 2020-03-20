@@ -1119,9 +1119,13 @@
     <string name="search_by_artist">Поиск по исполнителю</string>
     <string name="auto_update">Получать обновления</string>
     <string name="info_reading">Уведомлять о прочтении вашего сообщения</string>
-    <string name="player_instead_feed">Показывать плеер вместо новостей</string>
+    <string name="player_instead_feed">Показывать плеер вместо новостей (перезапуск)</string>
     <string name="use_stop_audio">Стоп вместо паузы аудио</string>
-    <string name="enable_save_photo_to_album">Включить сохранеие фото в альбом"</string>
+    <string name="enable_save_photo_to_album">Включить сохранение фото в альбом"</string>
     <string name="download">Скачать"</string>
+    <string name="downloading">Скачивание"</string>
     <string name="recommendation">Рекомендации"</string>
+    <string name="biometric">Приложите палец к сканеру"</string>
+    <string name="biometric_not_support">Данная фича не поддерживается"</string>
+    <string name="show_recent_dialogs">Показывть последние диалоги (перезапуск)"</string>
 </resources>

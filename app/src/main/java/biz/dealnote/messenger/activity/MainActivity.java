@@ -442,9 +442,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     private void OnSetOffline(boolean succ) {
         if(succ)
-            PhoenixToast.showToast(this, R.string.succ_offline);
+            PhoenixToast.CreatePhoenixToast(this).showToast(R.string.succ_offline);
         else
-            PhoenixToast.showToastError(this, R.string.err_offline);
+            PhoenixToast.CreatePhoenixToast(this).showToastError(R.string.err_offline);
     }
 
     private void onCurrentAccountChange(int newAccountId) {
@@ -543,11 +543,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     }
 
     private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer) {
-        RecentChat recentChat = new RecentChat(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
-
-        getNavigationFragment().appendRecentChat(recentChat);
-        getNavigationFragment().refreshNavigationItems();
-        getNavigationFragment().selectPage(recentChat);
+        if(Settings.get().other().isEnable_show_recent_dialogs()) {
+            RecentChat recentChat = new RecentChat(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
+            getNavigationFragment().appendRecentChat(recentChat);
+            getNavigationFragment().refreshNavigationItems();
+            getNavigationFragment().selectPage(recentChat);
+        }
 
         Fragment fragment = getFrontFragment();
 
@@ -868,11 +869,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void onChatResume(int accountId, int peerId, String title, String imgUrl) {
-        RecentChat recentChat = new RecentChat(accountId, peerId, title, imgUrl);
-        getNavigationFragment().appendRecentChat(recentChat);
-        getNavigationFragment().refreshNavigationItems();
-        getNavigationFragment().selectPage(recentChat);
-        mCurrentFrontSection = recentChat;
+        if(Settings.get().other().isEnable_show_recent_dialogs()) {
+            RecentChat recentChat = new RecentChat(accountId, peerId, title, imgUrl);
+            getNavigationFragment().appendRecentChat(recentChat);
+            getNavigationFragment().refreshNavigationItems();
+            getNavigationFragment().selectPage(recentChat);
+            mCurrentFrontSection = recentChat;
+        }
     }
 
     @Override

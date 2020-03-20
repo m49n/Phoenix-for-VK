@@ -1251,9 +1251,13 @@
     <string name="search_by_artist">Search by Artist</string>
     <string name="auto_update">Receive Updates</string>
     <string name="info_reading">Info about your message is reading</string>
-    <string name="player_instead_feed">Player instead feed in navigation</string>
+    <string name="player_instead_feed">Player instead feed in navigation (restart required)</string>
     <string name="use_stop_audio">Don\'t use pause</string>
     <string name="enable_save_photo_to_album">Enable save photo to album"</string>
     <string name="download">Download"</string>
+    <string name="downloading">Скачивание"</string>
     <string name="recommendation">Recommendation"</string>
+    <string name="biometric">Please Touch Sensor"</string>
+    <string name="biometric_not_support">This future doesn\'t support"</string>
+    <string name="show_recent_dialogs">Show recent dialogs (restart required)"</string>
 </resources>

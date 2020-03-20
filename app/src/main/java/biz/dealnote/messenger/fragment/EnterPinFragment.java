@@ -62,7 +62,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public IPresenterFactory<EnterPinPresenter> getPresenterFactory(@Nullable final Bundle saveInstanceState) {
-        return () -> new EnterPinPresenter(saveInstanceState);
+        return () -> new EnterPinPresenter(this, saveInstanceState);
     }
 
     @Override

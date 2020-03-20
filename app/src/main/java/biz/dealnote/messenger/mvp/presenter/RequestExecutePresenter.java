@@ -32,7 +32,6 @@ import biz.dealnote.messenger.mvp.view.IRequestExecuteView;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Pair;
-import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
@@ -250,6 +249,6 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
         ClipData clip = ClipData.newPlainText("response", fullResponseBody);
         clipboard.setPrimaryClip(clip);
 
-        PhoenixToast.showToastSuccess(getApplicationContext(), R.string.copied_to_clipboard);
+        getView().getPhoenixToast().showToastSuccess(R.string.copied_to_clipboard);
     }
 }

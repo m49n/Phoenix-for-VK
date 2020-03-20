@@ -34,6 +34,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
+import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 
 public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdapter.AudioHolder>{
 
@@ -119,12 +120,12 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.INVISIBLE);
 
-        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : R.drawable.play);
+        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.play));
 
         holder.play.setOnClickListener(v -> {
             if (MusicUtils.isNowPlayingOrPreparing(item) || MusicUtils.isNowPaused(item)) {
                 if(MusicUtils.isNowPlayingOrPreparing(item))
-                    holder.play.setImageResource(R.drawable.play);
+                    holder.play.setImageResource(isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.play);
                 else {
                     if(!Settings.get().other().isUse_stop_audio())
                         holder.play.setImageResource(R.drawable.pause);
@@ -167,17 +168,17 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         }
                         int ret = DownloadUtil.downloadTrack(mContext, item);
                         if(ret == 0)
-                            PhoenixToast.showToast(mContext, R.string.saved_audio);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
                         else if(ret == 1)
-                            PhoenixToast.showToastSuccess(mContext, R.string.exist_audio);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToastSuccess(R.string.exist_audio);
                         else
-                            PhoenixToast.showToast(mContext, R.string.error_audio);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
                         return true;
                     case R.id.bitrate_item_audio:
                         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                         retriever.setDataSource(Audio.getMp3FromM3u8(item.getUrl()), new HashMap<>());
                         String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-                        PhoenixToast.showToast(mContext, mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                        PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
                         return true;
                     default:
                         return false;

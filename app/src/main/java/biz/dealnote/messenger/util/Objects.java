@@ -20,6 +20,14 @@ public class Objects {
         return o == null;
     }
 
+    public static boolean isNullOrEmptyString(@Nullable String o){
+        if(o == null)
+            return true;
+        if(o.length() <= 0)
+            return true;
+        return false;
+    }
+
     /**
      * Perform a safe equals between 2 objects.
      * <p>
