@@ -89,8 +89,6 @@ public class VKApiAudio implements VKApiAttachment {
         public final static int DANCE_AND_HOUSE = 5;
         public final static int INSTRUMENTAL = 6;
         public final static int METAL = 7;
-        public final static int DUBSTEP = 8;
-        public final static int JAZZ_AND_BLUES = 9;
         public final static int DRUM_AND_BASS = 10;
         public final static int TRANCE = 11;
         public final static int CHANSON = 12;

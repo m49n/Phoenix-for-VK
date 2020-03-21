@@ -1081,12 +1081,12 @@
     <string name="equalizer">Эквалайзер</string>
     <string name="phoenix_player">Phoenix Плеер</string>
     <string name="choose_theme_title">Тема приложения</string>
-    <string name="genre_type">Жанр:</string>
+    <string name="album">Альбом:</string>
     <string name="acoustic">Акустика</string>
     <string name="by_artist">По исполнителю</string>
     <string name="auto_compete">Автоисправление</string>
     <string name="with_lyrics">Содержит текст песни</string>
-    <string name="my_saved">Моё аудио</string>
+    <string name="my_saved">На странице</string>
     <string name="alternative">Альтернатива</string>
     <string name="chanson">Шансон</string>
     <string name="classical">Классика</string>
@@ -1101,7 +1101,7 @@
     <string name="reggae">Рэгги</string>
     <string name="rock">Рок</string>
     <string name="trance">Транс</string>
-    <string name="top">Топ</string>
+    <string name="top">Популярные</string>
     <string name="gift">Подарок</string>
     <string name="chat">Чат</string>
     <string name="get_root">Получение Root доступа...</string>
@@ -1128,4 +1128,5 @@
     <string name="biometric">Приложите палец к сканеру"</string>
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
     <string name="show_recent_dialogs">Показывть последние диалоги (перезапуск)"</string>
+    <string name="show_audio_top">Показывть популярные аудио"</string>
 </resources>

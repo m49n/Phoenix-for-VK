@@ -207,7 +207,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 args.putInt(Extra.KEY, databaseOption.key);
                 args.putInt(Extra.ACCOUNT_ID, mAccountId);
                 selectCountryDialog.setArguments(args);
-                selectCountryDialog.show(requireFragmentManager(), "countries");
+                selectCountryDialog.show(getParentFragmentManager(), "countries");
                 break;
 
             case DatabaseOption.TYPE_CITY:
@@ -334,7 +334,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectCityDialog selectCityDialog = SelectCityDialog.newInstance(mAccountId, countryId, args);
         selectCityDialog.setTargetFragment(this, REQUEST_CODE_CITY);
-        selectCityDialog.show(requireFragmentManager(), "cities");
+        selectCityDialog.show(getParentFragmentManager(), "cities");
     }
 
     private void showUniversitiesDialog(DatabaseOption databaseOption, int countryId) {
@@ -343,7 +343,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectUniversityDialog dialog = SelectUniversityDialog.newInstance(mAccountId, countryId, args);
         dialog.setTargetFragment(this, REQUEST_CODE_UNIVERSITY);
-        dialog.show(requireFragmentManager(), "universities");
+        dialog.show(getParentFragmentManager(), "universities");
     }
 
     private void showSchoolsDialog(DatabaseOption databaseOption, int cityId) {
@@ -352,7 +352,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectSchoolsDialog dialog = SelectSchoolsDialog.newInstance(mAccountId, cityId, args);
         dialog.setTargetFragment(this, REQUEST_CODE_SCHOOL);
-        dialog.show(requireFragmentManager(), "schools");
+        dialog.show(getParentFragmentManager(), "schools");
     }
 
     private void showFacultiesDialog(DatabaseOption databaseOption, int universityId) {
@@ -361,7 +361,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectFacultyDialog dialog = SelectFacultyDialog.newInstance(mAccountId, universityId, args);
         dialog.setTargetFragment(this, REQUEST_CODE_FACULTY);
-        dialog.show(requireFragmentManager(), "faculties");
+        dialog.show(getParentFragmentManager(), "faculties");
     }
 
     private void showChairsDialog(DatabaseOption databaseOption, int facultyId) {
@@ -370,7 +370,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectChairsDialog dialog = SelectChairsDialog.newInstance(mAccountId, facultyId, args);
         dialog.setTargetFragment(this, REQUEST_CODE_CHAIR);
-        dialog.show(requireFragmentManager(), "chairs");
+        dialog.show(getParentFragmentManager(), "chairs");
     }
 
     private void showSchoolClassesDialog(DatabaseOption databaseOption, int countryId) {
@@ -379,7 +379,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
 
         SelectSchoolClassesDialog dialog = SelectSchoolClassesDialog.newInstance(mAccountId, countryId, args);
         dialog.setTargetFragment(this, REQUEST_CODE_SCHOOL_CLASS);
-        dialog.show(requireFragmentManager(), "school-classes");
+        dialog.show(getParentFragmentManager(), "school-classes");
     }
 
     private BaseOption findDependencyByKey(int key) {

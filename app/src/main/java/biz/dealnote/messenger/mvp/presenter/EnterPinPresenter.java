@@ -58,6 +58,10 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         if (Objects.isNull(mOwner)) {
             loadOwnerInfo();
         }
+
+        if(securitySettings.isEntranceByFingerprintAllowed() && canAuthenticateWithBiometrics()){
+            showBiometricPrompt();
+        }
     }
 
     private void loadOwnerInfo() {

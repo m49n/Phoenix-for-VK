@@ -57,4 +57,14 @@ class NewsfeedApi extends AbsApi implements INewsfeedApi {
                                 maxPhotoCount, sourceIds, startFrom, count, fields)
                         .map(extractResponseWithErrorHandling()));
     }
+
+    @Override
+    public Single<NewsfeedResponse> getRecommended(Long startTime, Long endTime,
+                                                   Integer maxPhotoCount, String startFrom, Integer count, String fields) {
+        return provideService(INewsfeedService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .getRecommended(startTime, endTime,
+                                maxPhotoCount, startFrom, count, fields)
+                        .map(extractResponseWithErrorHandling()));
+    }
 }

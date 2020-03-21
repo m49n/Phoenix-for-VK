@@ -133,6 +133,13 @@
             android:title="@string/show_recent_dialogs"
             app:iconSpaceReserved="false" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_audio_top"
+            android:summary="@string/show_audio_top"
+            android:title="@string/show_audio_top"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

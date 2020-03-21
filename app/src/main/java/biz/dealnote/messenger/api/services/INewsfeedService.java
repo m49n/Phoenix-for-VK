@@ -112,4 +112,12 @@ public interface INewsfeedService {
                                                @Field("count") Integer count,
                                                @Field("fields") String fields);
 
+    @FormUrlEncoded    @POST("newsfeed.getRecommended")
+    Single<BaseResponse<NewsfeedResponse>> getRecommended(@Field("start_time") Long startTime,
+                                               @Field("end_time") Long endTime,
+                                               @Field("max_photos") Integer maxPhotoCount,
+                                               @Field("start_from") String startFrom,
+                                               @Field("count") Integer count,
+                                               @Field("fields") String fields);
+
 }

@@ -2,6 +2,7 @@ package biz.dealnote.messenger.api;
 
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
@@ -15,12 +16,12 @@ public class Auth {
     private static final String TAG = "Phoenix.Auth";
     public static String redirect_url = "https://oauth.vk.com/blank.html";
 
-    public static String getUrl(String api_id, String scope, String groupIds) {
+    public static String getUrl(String api_id, String scope, String groupIds) throws UnsupportedEncodingException {
         String url = "https://oauth.vk.com/authorize?client_id=" + api_id;
 
         url = url + "&display=mobile&scope="
-                + scope + "&redirect_uri=" + URLEncoder.encode(redirect_url) + "&response_type=token"
-                + "&v=" + URLEncoder.encode(Constants.API_VERSION) + "&lang=" + URLEncoder.encode(Locale.getDefault().getLanguage()) + "&device_id=" + URLEncoder.encode(Utils.getDiviceId(Injection.provideApplicationContext()));
+                + scope + "&redirect_uri=" + URLEncoder.encode(redirect_url, "utf-8") + "&response_type=token"
+                + "&v=" + URLEncoder.encode(Constants.API_VERSION, "utf-8") + "&lang=" + URLEncoder.encode(Locale.getDefault().getLanguage(), "utf-8") + "&device_id=" + URLEncoder.encode(Utils.getDiviceId(Injection.provideApplicationContext()), "utf-8");
 
         if(Utils.nonEmpty(groupIds)){
             url = url + "&group_ids=" + groupIds;

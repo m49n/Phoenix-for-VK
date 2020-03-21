@@ -280,7 +280,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     private void startDirectLogin() {
         DirectAuthDialog.newInstance()
                 .targetTo(this, REQEUST_DIRECT_LOGIN)
-                .show(requireFragmentManager(), "direct-login");
+                .show(getParentFragmentManager(), "direct-login");
     }
 
     @Override

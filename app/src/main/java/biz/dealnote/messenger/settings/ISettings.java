@@ -78,6 +78,8 @@ public interface ISettings {
         boolean isEnable_save_photo_to_album();
 
         boolean isEnable_show_recent_dialogs();
+
+        boolean isEnable_show_audio_top();
     }
 
     interface IAccountsSettings {

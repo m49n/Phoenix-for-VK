@@ -44,7 +44,6 @@ import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.api.PicassoInstance;
-import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
@@ -105,7 +104,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private CircleCounterButton ivTranslate;
 
     private TextView tvTitle;
-    private TextView tvGenre;
+    private TextView tvAlbum;
     private TextView tvSubtitle;
 
     private ImageView ivCover;
@@ -234,7 +233,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mTotalTime = root.findViewById(R.id.audio_player_total_time);
         mProgress = root.findViewById(android.R.id.progress);
         tvTitle = root.findViewById(R.id.audio_player_title);
-        tvGenre = root.findViewById(R.id.audio_player_genre);
+        tvAlbum = root.findViewById(R.id.audio_player_album);
         tvSubtitle = root.findViewById(R.id.audio_player_subtitle);
         mGetLyrics = root.findViewById(R.id.audio_player_get_lyrics);
         mGetLyrics.setOnClickListener(v -> onLyrics());
@@ -549,71 +548,11 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 mGetLyrics.setVisibility(View.INVISIBLE);
         }
 
-        if (tvGenre != null && MusicUtils.getCurrentAudio() != null) {
-            String genre = null;
-            switch (MusicUtils.getCurrentAudio().getGenre()) {
-                case VKApiAudio.Genre.ACOUSTIC_AND_VOCAL:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.acoustic);
-                    break;
-                case VKApiAudio.Genre.ALTERNATIVE:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.alternative);
-                    break;
-                case VKApiAudio.Genre.CHANSON:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.chanson);
-                    break;
-                case VKApiAudio.Genre.CLASSICAL:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.classical);
-                    break;
-                case VKApiAudio.Genre.DANCE_AND_HOUSE:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.dance);
-                    break;
-                case VKApiAudio.Genre.DRUM_AND_BASS:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.drum_and_bass);
-                    break;
-                case VKApiAudio.Genre.DUBSTEP:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.dubstep);
-                    break;
-                case VKApiAudio.Genre.EASY_LISTENING:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.easy_listening);
-                    break;
-                case VKApiAudio.Genre.ELECTROPOP_AND_DISCO:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.disco);
-                    break;
-                case VKApiAudio.Genre.ETHNIC:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.ethnic);
-                    break;
-                case VKApiAudio.Genre.INDIE_POP:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.indie_pop);
-                    break;
-                case VKApiAudio.Genre.INSTRUMENTAL:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.instrumental);
-                    break;
-                case VKApiAudio.Genre.JAZZ_AND_BLUES:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.jazz);
-                    break;
-                case VKApiAudio.Genre.METAL:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.metal);
-                    break;
-                case VKApiAudio.Genre.OTHER:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.other);
-                    break;
-                case VKApiAudio.Genre.POP:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.pop);
-                    break;
-                case VKApiAudio.Genre.REGGAE:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.reggae);
-                    break;
-                case VKApiAudio.Genre.ROCK:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.rock);
-                    break;
-                case VKApiAudio.Genre.SPEECH:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.speech);
-                    break;
-                case VKApiAudio.Genre.TRANCE:
-                    genre = requireContext().getString(R.string.genre_type) + " " + requireContext().getString(R.string.trance);
-                    break;
-            }
-            tvGenre.setText(genre == null ? null : genre.trim());
+        if (tvAlbum != null && MusicUtils.getCurrentAudio() != null) {
+            String album = requireContext().getString(R.string.album);
+            if(MusicUtils.getCurrentAudio().getAlbum_title() != null)
+                album += (" " + MusicUtils.getCurrentAudio().getAlbum_title());
+            tvAlbum.setText(album);
         }
         if (tvTitle != null) {
             tvTitle.setText(artist == null ? null : artist.trim());

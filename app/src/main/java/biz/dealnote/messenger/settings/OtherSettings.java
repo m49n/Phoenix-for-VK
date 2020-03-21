@@ -136,4 +136,9 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isEnable_show_recent_dialogs() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_recent_dialogs", true);
     }
+
+    @Override
+    public boolean isEnable_show_audio_top() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", true);
+    }
 }

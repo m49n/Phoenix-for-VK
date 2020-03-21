@@ -228,7 +228,7 @@ public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPres
         }
 
         ProgressDialogFragment.newInstance(dialogTitle, title, request, this, requestCode, false)
-                .show(getFragmentManager(), "progress");
+                .show(getParentFragmentManager(), "progress");
     }*/
 
     @Override

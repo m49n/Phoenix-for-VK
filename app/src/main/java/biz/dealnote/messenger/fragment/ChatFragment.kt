@@ -467,7 +467,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                                               body: String?, attachments: ModelsBundle?) {
         val fragment = MessageAttachmentsFragment.newInstance(accountId, messageOwnerId, destination.id, attachments)
         fragment.setTargetFragment(this, REQUEST_EDIT_MESSAGE)
-        fragment.show(requireActivity().supportFragmentManager, "message-attachments")
+        fragment.show(parentFragmentManager, "message-attachments")
     }
 
     override fun startImagesSelection(accountId: Int, ownerId: Int) {

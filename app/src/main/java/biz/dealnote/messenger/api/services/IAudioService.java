@@ -4,6 +4,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import io.reactivex.Single;
@@ -66,7 +67,8 @@ public interface IAudioService {
     //https://vk.com/dev/audio.get
     @FormUrlEncoded
     @POST("audio.get")
-    Single<BaseResponse<Items<VKApiAudio>>> get(@Field("owner_id") Integer ownerId,
+    Single<BaseResponse<Items<VKApiAudio>>> get(@Field("album_id") Integer album_id,
+                                                @Field("owner_id") Integer ownerId,
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
@@ -79,8 +81,9 @@ public interface IAudioService {
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
-    Single<BaseResponse<Items<VKApiAudio>>> getRecommendations(@Field("offset") Integer offset,
-                                                      @Field("count") Integer count);
+    Single<BaseResponse<Items<VKApiAudio>>> getRecommendations(@Field("user_id") Integer user_id,
+                                                               @Field("offset") Integer offset,
+                                                               @Field("count") Integer count);
 
     @FormUrlEncoded
     @POST("audio.getById")
@@ -89,6 +92,10 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.getLyrics")
     Single<BaseResponse<VkApiLyrics>> getLyrics(@Field("lyrics_id") int lyrics_id);
+
+    @FormUrlEncoded
+    @POST("audio.getPlaylists")
+    Single<BaseResponse<Items<VKApiAudioPlaylist>>> getPlaylists(@Field("owner_id") int owner_id);
 
 
 }

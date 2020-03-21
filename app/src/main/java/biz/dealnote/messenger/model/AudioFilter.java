@@ -25,29 +25,39 @@ public class AudioFilter implements Entry, Parcelable {
             return new AudioFilter[size];
         }
     };
-    private int engOnly;
+    private boolean isAlbum;
     private int genre;
     private boolean active;
+    private String title;
 
     public AudioFilter(Parcel in) {
-        engOnly = in.readInt();
+        isAlbum = in.readInt() == 1;
         genre = in.readInt();
         active = in.readInt() == 1;
+        title = in.readString();
     }
 
-    public AudioFilter(int engOnly, int genre) {
-        this.engOnly = engOnly;
+    public AudioFilter(boolean isAlbum, int genre, String title) {
+        this.isAlbum = isAlbum;
         this.genre = genre;
+        this.title = title;
     }
 
-    public AudioFilter(int engOnly, int genre, boolean active) {
-        this.engOnly = engOnly;
+    public AudioFilter(boolean isAlbum, int genre) {
+        this.isAlbum = isAlbum;
+        this.genre = genre;
+        this.title = null;
+    }
+
+    public AudioFilter(boolean isAlbum, int genre, boolean active) {
+        this.isAlbum = isAlbum;
         this.genre = genre;
         this.active = active;
+        this.title = null;
     }
 
-    public int isEnglishOnly() {
-        return engOnly;
+    public boolean isAlbum() {
+        return isAlbum;
     }
 
     public int getGenre() {
@@ -55,15 +65,11 @@ public class AudioFilter implements Entry, Parcelable {
     }
 
     public boolean isFilterNone() {
-        return genre == MY_AUDIO;
+        return genre == MY_AUDIO && !isAlbum;
     }
 
-    public boolean isTopAll() {
-        return genre == TOP_ALL;
-    }
-
-    public boolean isRecommendatiom() {
-        return genre == MY_RECOMENDATIONS;
+    public boolean isRecommendation() {
+        return genre == MY_RECOMENDATIONS && !isAlbum;
     }
 
     @Override
@@ -73,13 +79,16 @@ public class AudioFilter implements Entry, Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(engOnly);
+        parcel.writeInt(isAlbum ? 1 : 0);
         parcel.writeInt(genre);
         parcel.writeInt(active ? 1 : 0);
+        parcel.writeString(title);
     }
 
     @Override
     public String getTitle(@NonNull Context context) {
+        if(isAlbum())
+            return title;
         if (isFilterNone()) {
             return context.getString(R.string.my_saved);
         }
@@ -100,8 +109,6 @@ public class AudioFilter implements Entry, Parcelable {
                 return context.getString(R.string.dance);
             case VKApiAudio.Genre.DRUM_AND_BASS:
                 return context.getString(R.string.drum_and_bass);
-            case VKApiAudio.Genre.DUBSTEP:
-                return context.getString(R.string.dubstep);
             case VKApiAudio.Genre.EASY_LISTENING:
                 return context.getString(R.string.easy_listening);
             case VKApiAudio.Genre.ELECTROPOP_AND_DISCO:
@@ -112,8 +119,6 @@ public class AudioFilter implements Entry, Parcelable {
                 return context.getString(R.string.indie_pop);
             case VKApiAudio.Genre.INSTRUMENTAL:
                 return context.getString(R.string.instrumental);
-            case VKApiAudio.Genre.JAZZ_AND_BLUES:
-                return context.getString(R.string.jazz);
             case VKApiAudio.Genre.METAL:
                 return context.getString(R.string.metal);
             case VKApiAudio.Genre.OTHER:

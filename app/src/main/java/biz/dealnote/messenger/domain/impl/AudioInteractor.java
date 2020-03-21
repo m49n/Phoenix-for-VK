@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import biz.dealnote.messenger.api.interfaces.INetworker;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.fragment.search.options.SpinnerOption;
@@ -100,11 +101,11 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> get(int accountId, int ownerId, int offset) {
+    public Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset) {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .get(ownerId,offset).map(out-> {
+                .get(album_id, ownerId, offset).map(out-> {
                     List<Audio> ret = new ArrayList<>();
                     for(int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
@@ -184,11 +185,11 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> getRecommendations(int accountId, Integer offset)
+    public Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId, Integer offset)
     {
         return networker.vkDefault(accountId)
                 .audio()
-                .getRecommendations(offset).map(out-> {
+                .getRecommendations(audioOwnerId, offset).map(out-> {
                     List<Audio> ret = new ArrayList<>();
                     for(int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
@@ -207,6 +208,14 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setAlbum_title(out.items.get(i).album_title));
                     return ret;
                 });
+    }
+
+    @Override
+    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id)
+    {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getPlaylists(owner_id).map(out-> out.items);
     }
 
     @Override

@@ -33,4 +33,8 @@ public interface INewsfeedApi {
     Single<NewsfeedResponse> get(String filters, Boolean returnBanned, Long startTime, Long endTime,
                                  Integer maxPhotoCount, String sourceIds, String startFrom, Integer count, String fields);
 
+    @CheckResult
+    Single<NewsfeedResponse> getRecommended(Long startTime, Long endTime,
+                                 Integer maxPhotoCount, String startFrom, Integer count, String fields);
+
 }

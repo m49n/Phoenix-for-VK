@@ -388,7 +388,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void showNotificationSettings(int accountId, int peerId) {
         DialogNotifOptionsDialog dialog = DialogNotifOptionsDialog.newInstance(accountId, peerId);
-        dialog.show(requireFragmentManager(), "dialog-notif-options");
+        dialog.show(getParentFragmentManager(), "dialog-notif-options");
     }
 
     @Override

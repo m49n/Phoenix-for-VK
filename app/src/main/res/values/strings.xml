@@ -1210,11 +1210,11 @@
     <string name="phoenix_player">Phoenix Player</string>
     <string name="choose_theme_title">Application theme</string>
     <string name="acoustic">Acoustic</string>
-    <string name="genre_type">Genre:</string>
+    <string name="album">Album:</string>
     <string name="by_artist">By Artist</string>
     <string name="auto_compete">Autocomplete</string>
     <string name="with_lyrics">With Lyrics</string>
-    <string name="my_saved">My Audio</string>
+    <string name="my_saved">On Page</string>
     <string name="alternative">Alternative</string>
     <string name="chanson">Chanson</string>
     <string name="classical">Classical</string>
@@ -1260,4 +1260,5 @@
     <string name="biometric">Please Touch Sensor"</string>
     <string name="biometric_not_support">This future doesn\'t support"</string>
     <string name="show_recent_dialogs">Show recent dialogs (restart required)"</string>
+    <string name="show_audio_top">Show Top Audio"</string>
 </resources>

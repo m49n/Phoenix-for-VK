@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
@@ -42,8 +43,8 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         this.audios = new ArrayList<>();
         this.ownerId = ownerId;
         this.filters = createFilterList();
-
-        requestList(0);
+        requestPlayLists();
+        requestList(0, null);
     }
 
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
@@ -73,47 +74,62 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         setLoadingNow(true);
         final int offset = audios.size();
         if (currentFilter == null || currentFilter.isFilterNone()) {
-            requestList(offset);
-        } else if(!currentFilter.isRecommendatiom()){
-            getListByGenre(offset, currentFilter.isEnglishOnly() == 1, currentFilter.getGenre());
+            requestList(offset, null);
+        } else if(!currentFilter.isRecommendation() && !currentFilter.isAlbum()){
+            getListByGenre(offset, false, currentFilter.getGenre());
         }
-        else if(currentFilter.isRecommendatiom()) {
+        else if(currentFilter.isRecommendation()) {
             getRecommendations(offset);
         }
+        else if(currentFilter.isAlbum())
+            requestList(offset, currentFilter.getGenre());
     }
 
-    private static List<AudioFilter> createFilterList() {
-        int engOnly = 0;
+    private List<AudioFilter> createFilterList() {
         List<AudioFilter> result = new ArrayList<>();
-        result.add(new AudioFilter(engOnly, AudioFilter.MY_AUDIO, true));
-        result.add(new AudioFilter(engOnly, AudioFilter.MY_RECOMENDATIONS));
-        result.add(new AudioFilter(engOnly, AudioFilter.TOP_ALL));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ETHNIC));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INSTRUMENTAL));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ACOUSTIC_AND_VOCAL));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ALTERNATIVE));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.CLASSICAL));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DANCE_AND_HOUSE));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DRUM_AND_BASS));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.DUBSTEP));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.EASY_LISTENING));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ELECTROPOP_AND_DISCO));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.INDIE_POP));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.JAZZ_AND_BLUES));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.METAL));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.OTHER));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.POP));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.REGGAE));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.ROCK));
-        result.add(new AudioFilter(engOnly, VKApiAudio.Genre.TRANCE));
+        result.add(new AudioFilter(false, AudioFilter.MY_AUDIO, true));
+        if(ownerId >= 0)
+            result.add(new AudioFilter(false, AudioFilter.MY_RECOMENDATIONS));
+        if(getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
+            result.add(new AudioFilter(false, AudioFilter.TOP_ALL));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.ETHNIC));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.INSTRUMENTAL));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.ACOUSTIC_AND_VOCAL));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.ALTERNATIVE));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.CLASSICAL));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.DANCE_AND_HOUSE));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.DRUM_AND_BASS));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.EASY_LISTENING));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.ELECTROPOP_AND_DISCO));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.INDIE_POP));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.METAL));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.OTHER));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.POP));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.REGGAE));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.ROCK));
+            result.add(new AudioFilter(false, VKApiAudio.Genre.TRANCE));
+        }
         return result;
     }
 
-    public void requestList(int offset) {
+    public void requestList(int offset, Integer album_id) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.get(getAccountId(), ownerId, offset)
+        audioListDisposable.add(audioInteractor.get(getAccountId(), album_id, ownerId, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
+    }
+
+    public void requestPlayLists() {
+        audioListDisposable.add(audioInteractor.getPlaylists(getAccountId(), ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onPlayListReceived, t -> {}));
+    }
+
+    private void onPlayListReceived(List<VKApiAudioPlaylist> playlists)
+    {
+        for(VKApiAudioPlaylist i : playlists)
+            filters.add(new AudioFilter(true, i.id, i.title));
+        callView(IAudiosView::notifyFilterListChanged);
     }
 
     private void onNextListReceived(List<Audio> next) {
@@ -148,7 +164,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void getRecommendations(int offset) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.getRecommendations(getAccountId(), offset)
+        audioListDisposable.add(audioInteractor.getRecommendations(getAccountId(), ownerId, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
     }
@@ -167,13 +183,15 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     public void fireRefresh() {
         audioListDisposable.clear();
         if (currentFilter == null || currentFilter.isFilterNone()) {
-            requestList(0);
-        } else if(!currentFilter.isRecommendatiom()){
-            getListByGenre(0, currentFilter.isEnglishOnly() == 1, currentFilter.getGenre());
+            requestList(0, null);
+        } else if(!currentFilter.isRecommendation() && !currentFilter.isAlbum()){
+            getListByGenre(0, false, currentFilter.getGenre());
         }
-        else if(currentFilter.isRecommendatiom()) {
+        else if(currentFilter.isRecommendation()) {
             getRecommendations(0);
         }
+        else if(currentFilter.isAlbum())
+            requestList(0, currentFilter.getGenre());
     }
 
     public void fireScrollToEnd() {
@@ -185,7 +203,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     @Override
     public void onGuiCreated(@NonNull IAudiosView view) {
         super.onGuiCreated(view);
-        view.showFilters(getAccountId() == ownerId);
+        view.showFilters(true);
         view.fillFilters(filters);
         view.displayList(audios);
     }
@@ -193,7 +211,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     public void fireFilterItemClick(AudioFilter source) {
         currentFilter = source;
         for (AudioFilter filter : filters) {
-            filter.setActive(filter.getGenre() == source.getGenre());
+            filter.setActive(filter.getGenre() == source.getGenre() && filter.isAlbum() == source.isAlbum());
         }
         callView(IAudiosView::notifyFilterListChanged);
         fireRefresh();

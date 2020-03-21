@@ -142,7 +142,7 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
     public void displayFilter(int accountId, ArrayList<BaseOption> options) {
         FilterEditFragment fragment = FilterEditFragment.newInstance(accountId, options);
         fragment.setTargetFragment(this, REQUEST_FILTER_EDIT);
-        fragment.show(getFragmentManager(), "filter-edit");
+        fragment.show(getParentFragmentManager(), "filter-edit");
     }
 
     @Override

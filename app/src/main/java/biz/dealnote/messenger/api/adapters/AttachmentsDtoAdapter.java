@@ -86,6 +86,13 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VkApiAudioMessage.class);
         } else if (VKApiAttachment.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
+        } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
+            if(o.getAsJsonObject().has("photo"))
+                return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);
+            else if(o.getAsJsonObject().has("video"))
+                return context.deserialize(o.getAsJsonObject().get("video"), VKApiVideo.class);
+            else if(o.getAsJsonObject().has("link"))
+                return context.deserialize(o.getAsJsonObject().get("link"), VKApiLink.class);
         }
 
         return null;

@@ -8,6 +8,7 @@ import biz.dealnote.messenger.api.interfaces.IAudioApi;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.services.IAudioService;
 import biz.dealnote.messenger.util.Objects;
@@ -68,10 +69,10 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
-    public Single<Items<VKApiAudio>> get(Integer ownerId, Integer offset) {
+    public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .get(ownerId, offset, 50)
+                        .get(album_id, ownerId, offset, 50)
                         .map(extractResponseWithErrorHandling()));
     }
 
@@ -84,11 +85,20 @@ class AudioApi extends AbsApi implements IAudioApi {
                         .map(extractResponseWithErrorHandling()));
     }
     @Override
-    public Single<Items<VKApiAudio>> getRecommendations(Integer offset)
+    public Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId, Integer offset)
     {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .getRecommendations(offset, 50)
+                        .getRecommendations(audioOwnerId, offset, 50)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id)
+    {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getPlaylists(owner_id)
                         .map(extractResponseWithErrorHandling()));
     }
 

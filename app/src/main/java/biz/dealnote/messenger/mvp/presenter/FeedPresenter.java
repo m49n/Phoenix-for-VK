@@ -328,11 +328,13 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
     }
 
     private static List<FeedSource> createDefaultFeedSources() {
-        List<FeedSource> data = new ArrayList<>(4);
+        List<FeedSource> data = new ArrayList<>(6);
         data.add(new FeedSource(null, R.string.news_feed));
         data.add(new FeedSource("friends", R.string.friends));
         data.add(new FeedSource("groups", R.string.groups));
+        data.add(new FeedSource("pages", R.string.pages));
         data.add(new FeedSource("following", R.string.subscriptions));
+        data.add(new FeedSource("recommendation", R.string.recommendation));
         return data;
     }
 

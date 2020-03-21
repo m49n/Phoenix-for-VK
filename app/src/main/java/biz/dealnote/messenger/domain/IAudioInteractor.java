@@ -3,6 +3,7 @@ package biz.dealnote.messenger.domain;
 import java.util.Collection;
 import java.util.List;
 
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.IdPair;
@@ -21,7 +22,7 @@ public interface IAudioInteractor {
 
     Completable sendBroadcast(int accountId, int audioOwnerId, int audioId, @Nullable Collection<Integer> targetIds);
 
-    Single<List<Audio>> get(int accountId, int ownerId, int offset);
+    Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset);
 
     Single<List<Audio>> getById(List<IdPair> audios);
 
@@ -29,7 +30,9 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> getPopular(int accountId, int foreign, int genre, int offset);
 
-    Single<List<Audio>> getRecommendations(int accountId, Integer offset);
+    Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId, Integer offset);
 
     Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
+
+    Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id);
 }

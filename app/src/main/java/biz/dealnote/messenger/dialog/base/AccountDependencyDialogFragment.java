@@ -154,7 +154,7 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
 
     protected void onAccountContextInvalidState() {
         if (isAdded() && isResumed()) {
-            getFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         }
     }
 
@@ -164,7 +164,7 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     public void onResume() {
         super.onResume();
         if (isInvalidAccountContext()) {
-            getFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         }
     }
 

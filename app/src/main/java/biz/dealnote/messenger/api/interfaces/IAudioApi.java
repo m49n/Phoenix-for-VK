@@ -8,6 +8,7 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
 import io.reactivex.Single;
 
@@ -34,7 +35,7 @@ public interface IAudioApi {
     @CheckResult
     Single<Integer> add(int audioId, int ownerId, Integer groupId, Integer album_id);
     @CheckResult
-    Single<Items<VKApiAudio>> get(Integer ownerI,
+    Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerI,
                                   Integer offset);
 
     @CheckResult
@@ -42,12 +43,15 @@ public interface IAudioApi {
                                          Integer genre, Integer offset);
 
     @CheckResult
-    Single<Items<VKApiAudio>> getRecommendations(Integer offset);
+    Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId, Integer offset);
 
     @CheckResult
     Single<List<VKApiAudio>> getById(String audios);
 
     @CheckResult
     Single<VkApiLyrics> getLyrics(int lyrics_id);
+
+    @CheckResult
+    Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id);
 
 }

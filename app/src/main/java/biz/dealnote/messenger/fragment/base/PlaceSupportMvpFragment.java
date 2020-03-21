@@ -192,7 +192,7 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
 
     @Override
     public void repostPost(int accountId, @NonNull Post post) {
-        FragmentManager fm = requireFragmentManager();
+        FragmentManager fm = getParentFragmentManager();
 
         PostShareDialog.newInstance(accountId, post)
                 .targetTo(this, REQUEST_POST_SHARE)

@@ -6,11 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -23,6 +24,7 @@ import biz.dealnote.messenger.api.Auth;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 import biz.dealnote.messenger.model.Token;
 import biz.dealnote.messenger.util.Logger;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
@@ -49,19 +51,21 @@ public class LoginActivity extends Activity {
         //Чтобы получать уведомления об окончании загрузки страницы
         webview.setWebViewClient(new VkontakteWebViewClient());
 
-        //otherwise CookieManager will fall with java.lang.IllegalStateException: CookieSyncManager::createInstance() needs to be called before CookieSyncManager::getInstance()
-        CookieSyncManager.createInstance(this);
-
         CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeAllCookie();
+        cookieManager.removeAllCookies(aBoolean -> Log.d(TAG, "Cookie removed: " + aBoolean));
 
         if(getIntent().getStringExtra(EXTRA_VALIDATE) == null) {
             String clientId = getIntent().getStringExtra(EXTRA_CLIENT_ID);
             String scope = getIntent().getStringExtra(EXTRA_SCOPE);
             String groupIds = getIntent().getStringExtra(EXTRA_GROUP_IDS);
 
-            String url = Auth.getUrl(clientId, scope, groupIds);
-            webview.loadUrl(url);
+            try {
+                String url = Auth.getUrl(clientId, scope, groupIds);
+                webview.loadUrl(url);
+            }
+            catch (UnsupportedEncodingException e) {
+                PhoenixToast.CreatePhoenixToast(this).showToastError(e.getLocalizedMessage());
+            }
         }
         else {
             TLogin = getIntent().getStringExtra(EXTRA_LOGIN);

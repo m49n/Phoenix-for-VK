@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -24,7 +25,7 @@ public abstract class AbsPresenterBottomSheetFragment<P extends IPresenter<V>, V
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        delegate.onCreate(requireActivity(), getPresenterViewHost(), this, getLoaderManager(), savedInstanceState);
+        delegate.onCreate(requireActivity(), getPresenterViewHost(), this, LoaderManager.getInstance(this), savedInstanceState);
     }
 
     @Override

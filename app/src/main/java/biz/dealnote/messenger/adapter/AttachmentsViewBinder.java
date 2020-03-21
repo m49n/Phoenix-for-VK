@@ -438,25 +438,6 @@ public class AttachmentsViewBinder {
                 ImageView ivPhoto = itemView.findViewById(R.id.item_document_image);
                 ImageView ivType = itemView.findViewById(R.id.item_document_type);
 
-                ViewGroup.LayoutParams params1 = ivPhoto.getLayoutParams();
-                ViewGroup.LayoutParams params2 = ivType.getLayoutParams();
-                if(doc.getType() == Types.LINK || doc.getType() == Types.WIKI_PAGE) {
-                    params1.width = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
-                    params1.height = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
-                    params2.width = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
-                    params2.height = mContext.getResources().getDimensionPixelSize(R.dimen.article_size);
-                }
-                else
-                {
-                    params1.width = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
-                    params1.height = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
-                    params2.width = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
-                    params2.height = mContext.getResources().getDimensionPixelSize(R.dimen.audio_play_button_size);
-
-                }
-                ivPhoto.setLayoutParams(params1);
-                ivPhoto.setLayoutParams(params2);
-
                 String title = doc.getTitle(mContext);
                 String details = doc.getSecondaryText(mContext);
 
@@ -475,7 +456,7 @@ public class AttachmentsViewBinder {
                         if (imageUrl != null) {
                             ivType.setVisibility(View.GONE);
                             ivPhoto.setVisibility(View.VISIBLE);
-                            ViewUtils.displayAvatar(ivPhoto, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
+                            ViewUtils.displayAvatar(ivPhoto, null, imageUrl, Constants.PICASSO_TAG);
                         } else {
                             ivType.setVisibility(View.VISIBLE);
                             ivPhoto.setVisibility(View.GONE);
@@ -498,7 +479,7 @@ public class AttachmentsViewBinder {
                         ivType.setVisibility(View.VISIBLE);
                         if (imageUrl != null) {
                             ivPhoto.setVisibility(View.VISIBLE);
-                            ViewUtils.displayAvatar(ivPhoto, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
+                            ViewUtils.displayAvatar(ivPhoto, null, imageUrl, Constants.PICASSO_TAG);
                         }
                         else
                             ivPhoto.setVisibility(View.GONE);

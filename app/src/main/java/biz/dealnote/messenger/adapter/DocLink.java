@@ -58,7 +58,7 @@ public class DocLink {
         switch (type) {
             case Types.DOC:
                 Document doc = (Document) attachment;
-                return doc.getPreviewWithSize(PhotoSize.M, false);
+                return doc.getPreviewWithSize(PhotoSize.Y, true);
 
             case Types.POST:
                 return ((Post) attachment).getAuthorPhoto();
@@ -68,7 +68,7 @@ public class DocLink {
 
                 if(Objects.nonNull(link.getPhoto()) && Objects.nonNull(link.getPhoto().getSizes())){
                     PhotoSizes sizes = link.getPhoto().getSizes();
-                    return sizes.getUrlForSize(PhotoSize.M, false);
+                    return sizes.getUrlForSize(PhotoSize.Y, true);
                 }
 
                 return null;

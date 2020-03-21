@@ -173,7 +173,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void showLinksDialog(int accountId, @NonNull Feedback notification) {
-        FeedbackLinkDialog.newInstance(accountId, notification).show(requireFragmentManager(), "feedback_links");
+        FeedbackLinkDialog.newInstance(accountId, notification).show(getParentFragmentManager(), "feedback_links");
     }
 
     @Override
