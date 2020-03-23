@@ -70,6 +70,15 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="count" />
 
+            <TextView
+                android:id="@+id/item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                tools:text="time" />
+
         </LinearLayout>
 
 

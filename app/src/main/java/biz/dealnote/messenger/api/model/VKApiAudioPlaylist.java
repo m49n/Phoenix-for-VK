@@ -29,6 +29,7 @@ public class VKApiAudioPlaylist {
     public int id;
     public int owner_id;
     public int count;
+    public int update_time;
     public String title;
     public String description;
     public String thumb_image;

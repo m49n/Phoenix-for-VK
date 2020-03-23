@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import biz.dealnote.messenger.App;
 import biz.dealnote.messenger.Constants;
@@ -107,6 +108,11 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     @NonNull
     protected ArrayList<Photo> getData() {
         return mPhotos;
+    }
+
+    @NonNull
+    protected void setData(List<Photo> Photos) {
+        mPhotos = (ArrayList<Photo>) Photos;
     }
 
     @Override

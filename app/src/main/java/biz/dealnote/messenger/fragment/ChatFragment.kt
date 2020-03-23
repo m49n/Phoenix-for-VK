@@ -251,6 +251,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun notifyDataChanged() {
+        recyclerView?.scrollToPosition(0);
         adapter?.notifyDataSetChanged()
     }
 

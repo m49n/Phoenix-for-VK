@@ -50,7 +50,7 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
         } else {
             this.mFocusPhotoId = focusPhotoId;
         }
-        loadData(ownerId, albumId, focusPhotoId);
+        loadData(ownerId, albumId);
     }
 
     @Override
@@ -111,24 +111,24 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
                 });
     }
 
-    private void loadData(int ownerId, int albumId, Integer focusPhotoId)
+    private void loadData(int ownerId, int albumId)
     {
         changeLoadingNowState(true);
 
         if(albumId != -9001 && albumId != -9000) {
-            appendDisposable(get(getAccountId(), ownerId, albumId, COUNT_PER_LOAD, indexx, true)
+            appendDisposable(get(getAccountId(), ownerId, albumId, COUNT_PER_LOAD, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), true)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
         }
         else if(albumId == -9000)
         {
-            appendDisposable(getUsersPhoto(getAccountId(), ownerId, 1, indexx, COUNT_PER_LOAD)
+            appendDisposable(getUsersPhoto(getAccountId(), ownerId, 1, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
         }
         else if(albumId == -9001)
         {
-            appendDisposable(getAll(getAccountId(), ownerId, 1, 1, indexx, COUNT_PER_LOAD)
+            appendDisposable(getAll(getAccountId(), ownerId, 1, 1, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
         }
@@ -166,9 +166,10 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
     @Override
     protected void afterPageChangedFromUi(int oldPage, int newPage) {
         super.afterPageChangedFromUi(oldPage, newPage);
+        if(oldPage == newPage)
+            return;
 
         if (newPage == count() - 1) {
-            final int accountId = super.getAccountId();
 
             if(mAlbumId != -9001 && mAlbumId != -9000) {
                 appendDisposable(get(getAccountId(), mOwnerId, mAlbumId, COUNT_PER_LOAD, count(), true)

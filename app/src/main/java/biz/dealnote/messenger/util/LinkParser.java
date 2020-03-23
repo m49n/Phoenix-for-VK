@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LinkParser {
-    public static final Pattern MENTIONS_PATTERN = Pattern.compile("\\[((?:id|club)[0-9]+)\\|([^\\]]+)\\]");
+    public static final Pattern MENTIONS_PATTERN = Pattern.compile("\\[((?:id|club|event|public)[0-9]+)\\|([^\\]]+)\\]");
     public static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\+\\d{8,15}");
     public static Pattern REPLY_URL_PATTERN;
     public static Pattern URL_PATTERN;

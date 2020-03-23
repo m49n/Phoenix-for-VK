@@ -1,23 +1,37 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.domain.IVideosInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.search.nextfrom.IntNextFrom;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IVideosListView;
+import biz.dealnote.messenger.upload.IUploadManager;
+import biz.dealnote.messenger.upload.Upload;
+import biz.dealnote.messenger.upload.UploadDestination;
+import biz.dealnote.messenger.upload.UploadIntent;
+import biz.dealnote.messenger.upload.UploadResult;
 import biz.dealnote.messenger.util.Analytics;
+import biz.dealnote.messenger.util.AppPerms;
+import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.RxUtils;
+import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static biz.dealnote.messenger.Injection.provideMainThreadScheduler;
+import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 /**
@@ -44,10 +58,27 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
     private boolean hasActualNetData;
 
+    private final IUploadManager uploadManager;
+    private UploadDestination destination;
+    private List<Upload> uploadsData;
+
+    public Integer getOwnerId()
+    {
+        return ownerId;
+    }
+
+    public Integer getAlbumId()
+    {
+        return albumId;
+    }
+
     public VideosListPresenter(int accountId, int ownerId, int albumId, String action,
                                @Nullable String albumTitle, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.interactor = InteractorFactory.createVideosInteractor();
+        this.uploadManager = Injection.provideUploadManager();
+        this.destination = UploadDestination.forVideo(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action) ? 0 : 1);
+        this.uploadsData = new ArrayList<>(0);
 
         this.ownerId = ownerId;
         this.albumId = albumId;
@@ -58,8 +89,104 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
         this.data = new ArrayList<>();
 
+        appendDisposable(uploadManager.get(getAccountId(), destination)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onUploadsDataReceived));
+
+        appendDisposable(uploadManager.observeAdding()
+                .observeOn(provideMainThreadScheduler())
+                .subscribe(this::onUploadsAdded));
+
+        appendDisposable(uploadManager.observeDeleting(true)
+                .observeOn(provideMainThreadScheduler())
+                .subscribe(this::onUploadDeleted));
+
+        appendDisposable(uploadManager.observeResults()
+                .filter(pair -> destination.compareTo(pair.getFirst().getDestination()))
+                .observeOn(provideMainThreadScheduler())
+                .subscribe(this::onUploadResults));
+
+        appendDisposable(uploadManager.obseveStatus()
+                .observeOn(provideMainThreadScheduler())
+                .subscribe(this::onUploadStatusUpdate));
+
+        appendDisposable(uploadManager.observeProgress()
+                .observeOn(provideMainThreadScheduler())
+                .subscribe(this::onProgressUpdates));
+
+
         loadAllFromCache();
         request(false);
+    }
+
+    private void onUploadsDataReceived(List<Upload> data) {
+        uploadsData.clear();
+        uploadsData.addAll(data);
+
+        callView(IVideosListView::notifyDataSetChanged);
+        resolveUploadDataVisiblity();
+    }
+
+    private void onUploadResults(Pair<Upload, UploadResult<?>> pair) {
+        Video obj = (Video) pair.getSecond().getResult();
+        if(obj.getId() == 0)
+            getView().getPhoenixToast().showToastError(R.string.error);
+        else {
+            getView().getPhoenixToast().showToastSuccess(R.string.uploaded);
+            if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
+                getView().onUploaded(obj);
+            }
+            else
+                fireRefresh();
+        }
+
+    }
+
+    private void onProgressUpdates(List<IUploadManager.IProgressUpdate> updates) {
+        for(IUploadManager.IProgressUpdate update : updates){
+            int index = findIndexById(uploadsData, update.getId());
+            if (index != -1) {
+                callView(view -> view.notifyUploadProgressChanged(index, update.getProgress(), true));
+            }
+        }
+    }
+
+    private void onUploadStatusUpdate(Upload upload) {
+        int index = findIndexById(uploadsData, upload.getId());
+        if (index != -1) {
+            callView(view -> view.notifyUploadItemChanged(index));
+        }
+    }
+
+    private void onUploadsAdded(List<Upload> added) {
+        for (Upload u : added) {
+            if (destination.compareTo(u.getDestination())) {
+                int index = uploadsData.size();
+                uploadsData.add(u);
+                callView(view -> view.notifyUploadItemsAdded(index, 1));
+            }
+        }
+
+        resolveUploadDataVisiblity();
+    }
+
+    private void onUploadDeleted(int[] ids) {
+        for (int id : ids) {
+            int index = findIndexById(uploadsData, id);
+            if (index != -1) {
+                uploadsData.remove(index);
+                callView(view -> view.notifyUploadItemRemoved(index));
+            }
+        }
+
+        resolveUploadDataVisiblity();
+    }
+
+    @OnGuiCreated
+    private void resolveUploadDataVisiblity() {
+        if (isGuiReady()) {
+            getView().setUploadDataVisible(!uploadsData.isEmpty());
+        }
     }
 
     private boolean requestNow;
@@ -79,6 +206,25 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
     private void setRequestNow(boolean requestNow) {
         this.requestNow = requestNow;
         resolveRefreshingView();
+    }
+
+    public void doUpload()
+    {
+        if (AppPerms.hasReadStoragePermision(getApplicationContext())) {
+            getView().startSelectUploadFileActivity(getAccountId());
+        } else {
+            getView().requestReadExternalStoragePermission();
+        }
+    }
+
+    public void fireRemoveClick(Upload upload) {
+        uploadManager.cancel(upload.getId());
+    }
+
+    public void fireReadPermissionResolved() {
+        if (AppPerms.hasReadStoragePermision(getApplicationContext())) {
+            getView().startSelectUploadFileActivity(getAccountId());
+        }
     }
 
     private CompositeDisposable netDisposable = new CompositeDisposable();
@@ -133,7 +279,16 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
     public void onGuiCreated(@NonNull IVideosListView view) {
         super.onGuiCreated(view);
         view.displayData(data);
+        view.displayUploads(uploadsData);
         view.setToolbarSubtitle(albumTitle);
+    }
+
+    public void fireFileForUploadSelected(String file) {
+        UploadIntent intent = new UploadIntent(getAccountId(), destination)
+                .setAutoCommit(true)
+                .setFileUri(Uri.parse(file));
+
+        uploadManager.enqueue(Collections.singletonList(intent));
     }
 
     private CompositeDisposable cacheDisposable = new CompositeDisposable();

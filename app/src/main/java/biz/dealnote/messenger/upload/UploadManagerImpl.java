@@ -34,6 +34,7 @@ import biz.dealnote.messenger.upload.impl.OwnerPhotoUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2AlbumUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2MessageUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2WallUploadable;
+import biz.dealnote.messenger.upload.impl.VideoUploadable;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.PhoenixToast;
@@ -122,6 +123,9 @@ public class UploadManagerImpl implements IUploadManager {
                 if (dest.getOwnerId() < 0) {
                     builder.append(Extra.GROUP_ID).append(Math.abs(dest.getOwnerId()));
                 }
+                break;
+            case Method.VIDEO:
+                builder.append(Extra.OWNER_ID).append(dest.getOwnerId());
                 break;
             case Method.PHOTO_TO_MESSAGE:
                 //do nothink
@@ -404,6 +408,8 @@ public class UploadManagerImpl implements IUploadManager {
         final UploadDestination destination = upload.getDestination();
 
         switch (destination.getMethod()) {
+            case Method.VIDEO:
+                return new VideoUploadable(context, networker, storages.docs());
             case Method.PHOTO_TO_MESSAGE:
                 return new Photo2MessageUploadable(context, networker, attachmentsRepository, storages.messages());
             case Method.PHOTO_TO_ALBUM:

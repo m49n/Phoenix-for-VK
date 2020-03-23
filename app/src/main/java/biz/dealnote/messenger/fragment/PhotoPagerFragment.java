@@ -82,15 +82,13 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
     private static final String EXTRA_FOCUS_PHOTO_ID = "focus_photo_id";
 
-    private static final String TAG = PhotoPagerFragment.class.getSimpleName();
-
     private static final String EXTRA_PHOTOS = "photos";
     private static final String EXTRA_NEED_UPDATE = "need_update";
     private static final int REQUEST_PERMISSION_WRITE_STORAGE = 9020;
 
     private static final SparseIntArray SIZES = new SparseIntArray();
 
-    private static final int DEFAULT_PHOTO_SIZE = PhotoSize.Z;
+    private static final int DEFAULT_PHOTO_SIZE = PhotoSize.W;
 
     static {
         SIZES.put(1, PhotoSize.X);

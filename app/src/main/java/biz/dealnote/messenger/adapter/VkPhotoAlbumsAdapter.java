@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
 
     private Context context;
     private List<PhotoAlbum> data;
+    private Drawable Pic;
 
     public VkPhotoAlbumsAdapter(Context context, List<PhotoAlbum> data) {
         this.data = data;
         this.context = context;
+        this.Pic = context.getDrawable(R.drawable.album);
     }
 
     @NonNull
@@ -37,17 +40,18 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         final PhotoAlbum photoAlbum = data.get(position);
-        if(photoAlbum.getSizes() != null)
+
+        if(photoAlbum.getSizes() != null && !photoAlbum.getSizes().isEmpty())
         {
-            String thumb = photoAlbum.getSizes().getUrlForSize(PhotoSize.X, false);
+            String thumb = photoAlbum.getSizes().getUrlForSize(PhotoSize.Y, false);
             PicassoInstance.with()
                     .load(thumb)
                     .tag(Constants.PICASSO_TAG)
-                    .placeholder(R.drawable.background_gray)
+                    .placeholder(R.drawable.album)
                     .into(holder.imageView);
         }
         else
-            holder.imageView.setImageResource(R.drawable.album);
+            holder.imageView.setImageDrawable(Pic);
 
         holder.title.setText(photoAlbum.getTitle());
 

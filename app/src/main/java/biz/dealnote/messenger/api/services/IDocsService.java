@@ -6,6 +6,7 @@ import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import biz.dealnote.messenger.api.model.server.VkApiDocsUploadServer;
+import biz.dealnote.messenger.api.model.server.VkApiVideosUploadServer;
 import io.reactivex.Single;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -87,6 +88,11 @@ public interface IDocsService {
     @POST("docs.getUploadServer")
     Single<BaseResponse<VkApiDocsUploadServer>> getUploadServer(@Field("group_id") Integer groupId,
                                                                 @Field("type") String type);
+
+    @FormUrlEncoded
+    @POST("video.save")
+    Single<BaseResponse<VkApiVideosUploadServer>> getVideoServer(@Field("is_private") Integer is_private,
+                                                                 @Field("name") String name);
 
     /**
      * Returns detailed information about user or community documents.

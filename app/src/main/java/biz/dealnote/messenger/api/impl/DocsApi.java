@@ -9,6 +9,7 @@ import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.api.model.server.VkApiDocsUploadServer;
+import biz.dealnote.messenger.api.model.server.VkApiVideosUploadServer;
 import biz.dealnote.messenger.api.services.IDocsService;
 import io.reactivex.Single;
 
@@ -63,6 +64,14 @@ class DocsApi extends AbsApi implements IDocsApi {
     public Single<VkApiDocsUploadServer> getUploadServer(Integer groupId, String type) {
         return provideService(IDocsService.class)
                 .flatMap(service -> service.getUploadServer(groupId, type)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<VkApiVideosUploadServer> getVideoServer(Integer isPrivate, String name)
+    {
+        return provideService(IDocsService.class)
+                .flatMap(service -> service.getVideoServer(isPrivate, name)
                         .map(extractResponseWithErrorHandling()));
     }
 

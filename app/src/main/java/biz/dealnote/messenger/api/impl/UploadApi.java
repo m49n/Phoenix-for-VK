@@ -12,6 +12,7 @@ import biz.dealnote.messenger.api.model.upload.UploadOwnerPhotoDto;
 import biz.dealnote.messenger.api.model.upload.UploadPhotoToAlbumDto;
 import biz.dealnote.messenger.api.model.upload.UploadPhotoToMessageDto;
 import biz.dealnote.messenger.api.model.upload.UploadPhotoToWallDto;
+import biz.dealnote.messenger.api.model.upload.UploadVideoDto;
 import biz.dealnote.messenger.api.services.IUploadService;
 import biz.dealnote.messenger.api.util.ProgressRequestBody;
 import biz.dealnote.messenger.util.Objects;
@@ -48,6 +49,14 @@ public class UploadApi implements IUploadApi {
         ProgressRequestBody body = new ProgressRequestBody(is, wrapPercentageListener(listener), MediaType.parse("*/*"));
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", filename, body);
         return service().uploadDocumentRx(server, part);
+    }
+
+    @Override
+    public Single<UploadVideoDto> uploadVideoRx(String server, String filename, @NonNull InputStream video, PercentagePublisher listener)
+    {
+        ProgressRequestBody body = new ProgressRequestBody(video, wrapPercentageListener(listener), MediaType.parse("*/*"));
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", filename, body);
+        return service().uploadVideoRx(server, part);
     }
 
     @Override

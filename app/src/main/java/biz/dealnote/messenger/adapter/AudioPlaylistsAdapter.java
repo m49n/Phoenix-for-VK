@@ -20,6 +20,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
@@ -50,6 +51,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
         holder.name.setText(playlist.title);
         holder.description.setText(playlist.description);
+        holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
         holder.playlist_container.setOnClickListener(v -> {
             if (clickListener != null) {
                 clickListener.onAlbumClick(holder.getAdapterPosition(), playlist);
@@ -87,6 +89,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         TextView name;
         TextView description;
         TextView count;
+        TextView update;
         View playlist_container;
 
         public Holder(View itemView) {
@@ -97,6 +100,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
             count = itemView.findViewById(R.id.item_count);
             playlist_container = itemView.findViewById(R.id.playlist_container);
             description = itemView.findViewById(R.id.item_description);
+            update = itemView.findViewById(R.id.item_time);
         }
 
         @Override

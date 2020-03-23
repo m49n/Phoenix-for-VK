@@ -9,6 +9,7 @@ import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.api.model.server.VkApiDocsUploadServer;
+import biz.dealnote.messenger.api.model.server.VkApiVideosUploadServer;
 import io.reactivex.Single;
 
 /**
@@ -34,6 +35,9 @@ public interface IDocsApi {
 
     @CheckResult
     Single<VkApiDocsUploadServer> getUploadServer(Integer groupId, String type);
+
+    @CheckResult
+    Single<VkApiVideosUploadServer> getVideoServer(Integer isPrivate, String name);
 
     @CheckResult
     Single<Items<VkApiDoc>> get(Integer ownerId, Integer count, Integer offset, Integer type);

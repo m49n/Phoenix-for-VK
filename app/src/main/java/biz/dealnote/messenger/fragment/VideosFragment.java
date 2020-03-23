@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,30 +27,39 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
+import biz.dealnote.messenger.activity.DualTabPhotoActivity;
+import biz.dealnote.messenger.adapter.DocsUploadAdapter;
 import biz.dealnote.messenger.adapter.VideosAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Video;
+import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
+import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.mvp.presenter.VideosListPresenter;
 import biz.dealnote.messenger.mvp.view.IVideosListView;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
+import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 /**
  * Created by admin on 21.11.2016.
  * phoenix
  */
 public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideosListView>
-        implements IVideosListView, VideosAdapter.VideoOnClickListener {
+        implements IVideosListView, DocsUploadAdapter.ActionListener,  VideosAdapter.VideoOnClickListener {
 
     public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
     public static final String EXTRA_ALBUM_TITLE = "album_title";
+    private static final int PERM_REQUEST_READ_STORAGE = 17;
+    private static final int REQUEST_CODE_FILE = 115;
 
     public static Bundle buildArgs(int accoutnId, int ownerId, int albumId, String action, @Nullable String albumTitle) {
         Bundle args = new Bundle();
@@ -92,6 +105,8 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
     private VideosAdapter mAdapter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private DocsUploadAdapter mUploadAdapter;
+    private View mUploadRoot;
     private TextView mEmpty;
 
     @Override
@@ -134,6 +149,78 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
     }
 
     @Override
+    public void requestReadExternalStoragePermission() {
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_READ_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERM_REQUEST_READ_STORAGE) {
+            getPresenter().fireReadPermissionResolved();
+        }
+    }
+
+    @Override
+    public void startSelectUploadFileActivity(int accountId) {
+        Sources sources = new Sources()
+                .with(new FileManagerSelectableSource())
+                .with(new LocalPhotosSelectableSource());
+
+        Intent intent = DualTabPhotoActivity.createIntent(requireActivity(), 10, sources);
+        startActivityForResult(intent, REQUEST_CODE_FILE);
+    }
+
+    @Override
+    public void setUploadDataVisible(boolean visible) {
+        if (nonNull(mUploadRoot)) {
+            mUploadRoot.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    @Override
+    public void displayUploads(List<Upload> data) {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.setData(data);
+        }
+    }
+
+    @Override
+    public void notifyUploadDataChanged() {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void notifyUploadItemsAdded(int position, int count) {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.notifyItemRangeInserted(position, count);
+        }
+    }
+
+    @Override
+    public void notifyUploadItemChanged(int position) {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void notifyUploadItemRemoved(int position) {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.notifyItemRemoved(position);
+        }
+    }
+
+    @Override
+    public void notifyUploadProgressChanged(int position, int progress, boolean smoothly) {
+        if (nonNull(mUploadAdapter)) {
+            mUploadAdapter.changeUploadProgress(position, progress, smoothly);
+        }
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_videos, container, false);
 
@@ -148,12 +235,28 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
             toolbar.setVisibility(View.GONE);
         }
 
+        FloatingActionButton Add = root.findViewById(R.id.add_button);
+
+        if(Add != null) {
+            if (getPresenter().getAccountId() != getPresenter().getOwnerId())
+                Add.setVisibility(View.INVISIBLE);
+            else {
+                Add.setVisibility(View.VISIBLE);
+                Add.setOnClickListener(v -> {
+                    getPresenter().doUpload();
+                });
+            }
+        }
+
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
 
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout, true);
 
         mEmpty = root.findViewById(R.id.empty);
+
+        RecyclerView uploadRecyclerView = root.findViewById(R.id.uploads_recycler_view);
+        uploadRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         int columns = requireActivity().getResources().getInteger(R.integer.videos_column_count);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL);
@@ -168,10 +271,27 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
         mAdapter = new VideosAdapter(requireActivity(), Collections.emptyList());
         mAdapter.setVideoOnClickListener(this);
+        mUploadAdapter = new DocsUploadAdapter(requireActivity(), Collections.emptyList(), this);
+        uploadRecyclerView.setAdapter(mUploadAdapter);
+        mUploadRoot = root.findViewById(R.id.uploads_root);
         recyclerView.setAdapter(mAdapter);
+
 
         resolveEmptyTextVisibility();
         return root;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_FILE && resultCode == Activity.RESULT_OK) {
+            String file = data.getStringExtra(FileManagerFragment.returnFileParameter);
+
+            if (nonEmpty(file)) {
+                getPresenter().fireFileForUploadSelected(file);
+            }
+        }
     }
 
     @Override
@@ -227,5 +347,18 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
     @Override
     public void showVideoPreview(int accountId, Video video) {
         PlaceFactory.getVideoPreviewPlace(accountId, video).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onRemoveClick(Upload upload) {
+        getPresenter().fireRemoveClick(upload);
+    }
+
+    @Override
+    public void onUploaded(Video upload) {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra(Extra.ATTACHMENTS, Utils.singletonArrayList(upload));
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
     }
 }
