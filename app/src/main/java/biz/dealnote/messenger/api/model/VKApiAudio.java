@@ -1,5 +1,11 @@
 package biz.dealnote.messenger.api.model;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
+import biz.dealnote.messenger.R;
+
 /**
  * An audio object describes an audio file and contains the following fields.
  */
@@ -101,5 +107,48 @@ public class VKApiAudio implements VKApiAttachment {
         public final static int SPEECH = 19;
         public final static int ALTERNATIVE = 21;
         public final static int ELECTROPOP_AND_DISCO = 22;
+
+        public static String getTitleByGenre(@NonNull Context context, int genre) {
+            switch (genre) {
+                case VKApiAudio.Genre.ACOUSTIC_AND_VOCAL:
+                    return "#" + context.getString(R.string.acoustic);
+                case VKApiAudio.Genre.ALTERNATIVE:
+                    return "#" + context.getString(R.string.alternative);
+                case VKApiAudio.Genre.CHANSON:
+                    return "#" + context.getString(R.string.chanson);
+                case VKApiAudio.Genre.CLASSICAL:
+                    return "#" + context.getString(R.string.classical);
+                case VKApiAudio.Genre.DANCE_AND_HOUSE:
+                    return "#" + context.getString(R.string.dance);
+                case VKApiAudio.Genre.DRUM_AND_BASS:
+                    return "#" + context.getString(R.string.drum_and_bass);
+                case VKApiAudio.Genre.EASY_LISTENING:
+                    return "#" + context.getString(R.string.easy_listening);
+                case VKApiAudio.Genre.ELECTROPOP_AND_DISCO:
+                    return "#" + context.getString(R.string.disco);
+                case VKApiAudio.Genre.ETHNIC:
+                    return "#" + context.getString(R.string.ethnic);
+                case VKApiAudio.Genre.INDIE_POP:
+                    return "#" + context.getString(R.string.indie_pop);
+                case VKApiAudio.Genre.INSTRUMENTAL:
+                    return "#" + context.getString(R.string.instrumental);
+                case VKApiAudio.Genre.METAL:
+                    return "#" + context.getString(R.string.metal);
+                case VKApiAudio.Genre.OTHER:
+                    return "#" + context.getString(R.string.other);
+                case VKApiAudio.Genre.POP:
+                    return "#" + context.getString(R.string.pop);
+                case VKApiAudio.Genre.REGGAE:
+                    return "#" + context.getString(R.string.reggae);
+                case VKApiAudio.Genre.ROCK:
+                    return "#" + context.getString(R.string.rock);
+                case VKApiAudio.Genre.SPEECH:
+                    return "#" + context.getString(R.string.speech);
+                case VKApiAudio.Genre.TRANCE:
+                    return "#" + context.getString(R.string.trance);
+
+            }
+            return null;
+        }
     }
 }

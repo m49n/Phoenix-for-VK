@@ -95,7 +95,19 @@ public interface IAudioService {
 
     @FormUrlEncoded
     @POST("audio.getPlaylists")
-    Single<BaseResponse<Items<VKApiAudioPlaylist>>> getPlaylists(@Field("owner_id") int owner_id);
+    Single<BaseResponse<Items<VKApiAudioPlaylist>>> getPlaylists(@Field("owner_id") int owner_id,
+                                                                 @Field("offset") int offset,
+                                                                 @Field("count") int count);
+
+    @FormUrlEncoded
+    @POST("audio.deletePlaylist")
+    Single<BaseResponse<Integer>> deletePlaylist(@Field("playlist_id") int playlist_id,
+                                                 @Field("owner_id") int ownerId);
+
+    @FormUrlEncoded
+    @POST("audio.followPlaylist")
+    Single<BaseResponse<VKApiAudioPlaylist>> followPlaylist(@Field("playlist_id") int playlist_id,
+                                                 @Field("owner_id") int ownerId);
 
 
 }

@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private static String getDatabaseFileName(int aid) {
-        return "vksm" + aid + ".sqlite";
+        return "cache_" + aid + ".sqlite";
     }
 
     @Override

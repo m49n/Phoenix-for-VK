@@ -1,5 +1,9 @@
 package biz.dealnote.messenger.fragment.conversation;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -14,10 +18,15 @@ import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentAudioPresenter;
 import biz.dealnote.messenger.mvp.view.IChatAttachmentAudiosView;
+import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.mvp.core.IPresenterFactory;
+
+import static biz.dealnote.messenger.util.Objects.isNull;
 
 public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio, ChatAttachmentAudioPresenter, IChatAttachmentAudiosView>
         implements AudioRecyclerAdapter.ClickListener, IChatAttachmentAudiosView {
+
+    private PlaybackStatus mPlaybackStatus;
 
     @Override
     protected RecyclerView.LayoutManager createLayoutManager() {
@@ -49,9 +58,41 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
                 saveInstanceState
         );
     }
+
     @Override
-    public void onDestroy() {
-        ((AudioRecyclerAdapter)this.mAdapter).onDestroy();
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        this.mPlaybackStatus = new PlaybackStatus();
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.META_CHANGED);
+        filter.addAction(MusicPlaybackService.PREPARED);
+        filter.addAction(MusicPlaybackService.REFRESH);
+        requireActivity().registerReceiver(mPlaybackStatus, filter);
+    }
+
+    @Override
+    public void onPause() {
+        try {
+            requireActivity().unregisterReceiver(mPlaybackStatus);
+        } catch (final Throwable ignored) {
+        }
+        super.onPause();
+    }
+
+    private final class PlaybackStatus extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            if (isNull(action)) return;
+
+            switch (action) {
+                case MusicPlaybackService.PLAYSTATE_CHANGED:
+                    getAdapter().notifyDataSetChanged();
+                    break;
+            }
+        }
     }
 }

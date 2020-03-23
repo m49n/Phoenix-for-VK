@@ -33,6 +33,7 @@
     <string name="general_settings">Общие</string>
     <string name="other_settings">Другие</string>
     <string name="about_settings">О приложении</string>
+    <string name="cache_cleaner">Очистить кэш для данного аккаунта</string>
     <string name="share_text">Поделиться приложением с друзьями</string>
     <string name="rate_text">Оценить приложение в Google Play</string>
     <!-- Quick Reply-->
@@ -344,6 +345,8 @@
 
     <string name="feedback_empty_text">Здесь Вы будете видеть упоминания, новые комментарии и отметки «Мне нравится»</string>
 
+    <string name="playlist_empty_text">Здесь Вы будете видеть аудио плейлисты</string>
+
     <string name="end_of_list">Конец списка</string>
 
     <string name="open_profile">Открыть профиль</string>
@@ -647,6 +650,7 @@
     <string name="school_country">Страна, в которой закончили школу</string>
     <string name="religious_affiliation">Религиозная принадлежность</string>
     <string name="audios_count">%1$d аудиозаписей</string>
+    <string name="audios_pattern_count">аудиозаписей</string>
     <string name="documents_count">%1$d документов</string>
     <string name="cancel_invitation">Отклонить приглашение</string>
     <string name="invitation_has_been_declined">Приглашение было отклонено</string>
@@ -1078,6 +1082,7 @@
     <string name="wall_comment_push_title">Новый комментарий к записи</string>
     <string name="audios">Аудио</string>
     <string name="playlist">Плейлист</string>
+    <string name="playlists">Плейлисты</string>
     <string name="equalizer">Эквалайзер</string>
     <string name="phoenix_player">Phoenix Плеер</string>
     <string name="choose_theme_title">Тема приложения</string>

@@ -11,4 +11,8 @@
     <item
         android:id="@+id/bitrate_item_audio"
         android:title="@string/get_bitrate"/>
+
+    <item
+        android:id="@+id/search_by_artist"
+        android:title="@string/search_by_artist"/>
 </menu>

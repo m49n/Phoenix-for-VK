@@ -211,11 +211,29 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id)
+    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset)
     {
         return networker.vkDefault(accountId)
                 .audio()
-                .getPlaylists(owner_id).map(out-> out.items);
+                .getPlaylists(owner_id, offset).map(out-> out.items);
+    }
+
+    @Override
+    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId)
+    {
+        return networker.vkDefault(accountId)
+                .audio()
+                .followPlaylist(playlist_id, ownerId)
+                .map(resultId -> resultId);
+    }
+
+    @Override
+    public Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId)
+    {
+        return networker.vkDefault(accountId)
+                .audio()
+                .deletePlaylist(playlist_id, ownerId)
+                .map(resultId -> resultId);
     }
 
     @Override

@@ -69,6 +69,23 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
+    public Single<Integer> deletePlaylist(int playlist_id, int ownerId) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .deletePlaylist(playlist_id, ownerId)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId)
+    {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .followPlaylist(playlist_id, ownerId)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
     public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
@@ -94,11 +111,11 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
-    public Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id)
+    public Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id, int offset)
     {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .getPlaylists(owner_id)
+                        .getPlaylists(owner_id, offset, 50)
                         .map(extractResponseWithErrorHandling()));
     }
 

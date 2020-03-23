@@ -1,6 +1,5 @@
 package biz.dealnote.messenger.model;
 
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -44,8 +43,6 @@ public class Audio extends AbsModel implements Parcelable {
     private String thumb_image_big;
 
     private String album_title;
-
-    public Drawable CacheAudioIcon;
 
     public Audio() {
 

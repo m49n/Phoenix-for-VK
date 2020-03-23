@@ -212,6 +212,11 @@
             android:key="request_executor"
             android:title="@string/request_executor_title"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="cache_cleaner"
+            android:title="@string/cache_cleaner"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

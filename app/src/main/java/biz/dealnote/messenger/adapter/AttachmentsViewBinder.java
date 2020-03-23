@@ -29,6 +29,7 @@ import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
@@ -37,6 +38,8 @@ import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.Attachments;
@@ -52,6 +55,7 @@ import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.model.WikiPage;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
@@ -570,36 +574,16 @@ public class AttachmentsViewBinder {
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
 
-                /*
-                if(audio.CacheAudioIcon != null) {
-                    holder.ibPlay.setBackground(audio.CacheAudioIcon);
-                }
-                else
-                    holder.ibPlay.setBackgroundResource(R.drawable.audio);
-
-                if(audio.getThumb_image_little() != null && audio.CacheAudioIcon == null)
-                {
-                    PicassoInstance.with()
-                            .load(audio.getThumb_image_little())
-                            .transform(CurrentTheme.createTransformationForAvatar(Injection.provideApplicationContext()))
-                            .into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    audio.CacheAudioIcon = new BitmapDrawable(Injection.provideApplicationContext().getResources(), bitmap);
-                                    holder.ibPlay.setBackground(audio.CacheAudioIcon);
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                }
-                            });
-                }
-                */
+                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
                 int finalG = g;
+                AtomicBoolean PlayState = new AtomicBoolean(MusicUtils.isNowPlayingOrPreparing(audio));
+                holder.ibPlay.getViewTreeObserver().addOnDrawListener(() -> {
+                    boolean PlayStateCurrent = MusicUtils.isNowPlayingOrPreparing(audio);
+                    if(PlayStateCurrent != PlayState.get()) {
+                        PlayState.set(PlayStateCurrent);
+                        holder.ibPlay.setImageResource(PlayStateCurrent ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
+                    }
+                });
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
                         if(MusicUtils.isNowPlayingOrPreparing(audio))
@@ -622,15 +606,8 @@ public class AttachmentsViewBinder {
                             holder.ibPlay.setImageResource(R.drawable.stop);
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                     }
-                    for (int tt = 0; tt < container.getChildCount(); tt++) {
-                        if(tt == finalG)
-                            continue;
-                        ViewGroup roottemp = (ViewGroup) container.getChildAt(tt);
-                        ((ImageView)roottemp.findViewById(R.id.item_audio_play)).setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
-                    }
                 });
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
-                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
                 holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);
@@ -642,6 +619,9 @@ public class AttachmentsViewBinder {
                     popup.inflate(R.menu.audio_item_menu);
                     popup.setOnMenuItemClickListener(item1 -> {
                         switch (item1.getItemId()) {
+                            case R.id.search_by_artist:
+                                PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true)).tryOpenWith(mContext);
+                                return true;
                             case R.id.add_item_audio:
                                 boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
                                 if(myAudio)

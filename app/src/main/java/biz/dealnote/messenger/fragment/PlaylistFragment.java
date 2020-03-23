@@ -1,5 +1,9 @@
 package biz.dealnote.messenger.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +29,8 @@ import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.settings.Settings;
 
+import static biz.dealnote.messenger.util.Objects.isNull;
+
 /**
  * Created by golde on 27.09.2016.
  */
@@ -35,6 +41,7 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     private View root;
     private AudioRecyclerAdapter mAdapter;
     private ArrayList<Audio> mData;
+    private PlaybackStatus mPlaybackStatus;
 
     public static Bundle buildArgs(ArrayList<Audio> playlist) {
         Bundle bundle = new Bundle();
@@ -106,10 +113,42 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
                 .setBarsColored(requireActivity(), true)
                 .build()
                 .apply(requireActivity());
+        this.mPlaybackStatus = new PlaybackStatus();
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.META_CHANGED);
+        filter.addAction(MusicPlaybackService.PREPARED);
+        filter.addAction(MusicPlaybackService.REFRESH);
+        requireActivity().registerReceiver(mPlaybackStatus, filter);
     }
 
     @Override
     public boolean onBackPressed() {
         return true;
+    }
+
+    @Override
+    public void onPause() {
+        try {
+            requireActivity().unregisterReceiver(mPlaybackStatus);
+        } catch (final Throwable ignored) {
+        }
+        super.onPause();
+    }
+
+    private final class PlaybackStatus extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            if (isNull(action)) return;
+
+            switch (action) {
+                case MusicPlaybackService.PLAYSTATE_CHANGED:
+                    mAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
     }
 }

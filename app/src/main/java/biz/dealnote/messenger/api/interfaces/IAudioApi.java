@@ -43,6 +43,12 @@ public interface IAudioApi {
                                          Integer genre, Integer offset);
 
     @CheckResult
+    Single<Integer> deletePlaylist(int playlist_id, int ownerId);
+
+    @CheckResult
+    Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId);
+
+    @CheckResult
     Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId, Integer offset);
 
     @CheckResult
@@ -52,6 +58,6 @@ public interface IAudioApi {
     Single<VkApiLyrics> getLyrics(int lyrics_id);
 
     @CheckResult
-    Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id);
+    Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id, int offset);
 
 }

@@ -1,10 +1,7 @@
 package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +19,10 @@ import java.util.List;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
-import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
@@ -33,7 +32,6 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 
 public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdapter.AudioHolder>{
@@ -42,26 +40,11 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     private List<Audio> mData;
     private IAudioInteractor mAudioInteractor;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
-    private PlaybackStatus mPlaybackStatus;
 
     public AudioRecyclerAdapter(Context context, List<Audio> data) {
         this.mAudioInteractor = InteractorFactory.createAudioInteractor();
         this.mContext = context;
         this.mData = data;
-
-        this.mPlaybackStatus = new PlaybackStatus();
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
-        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
-        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
-        filter.addAction(MusicPlaybackService.META_CHANGED);
-        filter.addAction(MusicPlaybackService.PREPARED);
-        filter.addAction(MusicPlaybackService.REFRESH);
-        this.mContext.registerReceiver(mPlaybackStatus, filter);
-    }
-
-    public void onDestroy() {
-        mContext.unregisterReceiver(mPlaybackStatus);
     }
 
     private void delete(final int accoutnId, Audio audio) {
@@ -80,35 +63,6 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     @Override
     public void onBindViewHolder(final AudioHolder holder, int position) {
         final Audio item = mData.get(position);
-
-        /*
-        if(item.CacheAudioIcon != null) {
-            holder.play.setBackground(item.CacheAudioIcon);
-        }
-        else
-            holder.play.setBackgroundResource(R.drawable.audio);
-        if(item.getThumb_image_little() != null && item.CacheAudioIcon == null)
-        {
-            PicassoInstance.with()
-                    .load(item.getThumb_image_little())
-                    .transform(CurrentTheme.createTransformationForAvatar(Injection.provideApplicationContext()))
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            item.CacheAudioIcon = new BitmapDrawable(Injection.provideApplicationContext().getResources(), bitmap);
-                            holder.play.setBackground(item.CacheAudioIcon);
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    });
-        }
-         */
 
         holder.artist.setText(item.getArtist());
         holder.title.setText(item.getTitle());
@@ -152,6 +106,9 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             popup.inflate(R.menu.audio_item_menu);
             popup.setOnMenuItemClickListener(item1 -> {
                 switch (item1.getItemId()) {
+                    case R.id.search_by_artist:
+                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true)).tryOpenWith(mContext);
+                        return true;
                     case R.id.add_item_audio:
                         boolean myAudio = item.getOwnerId() == Settings.get().accounts().getCurrent();
                         if(myAudio)
@@ -234,19 +191,5 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
     public interface ClickListener {
         void onClick(int position, Audio audio);
-    }
-
-    private final class PlaybackStatus extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            final String action = intent.getAction();
-            if (isNull(action)) return;
-
-            switch (action) {
-                case MusicPlaybackService.PLAYSTATE_CHANGED:
-                    AudioRecyclerAdapter.this.notifyDataSetChanged();
-                    break;
-            }
-        }
     }
 }

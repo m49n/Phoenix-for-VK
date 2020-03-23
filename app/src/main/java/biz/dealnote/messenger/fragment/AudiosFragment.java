@@ -1,5 +1,9 @@
 package biz.dealnote.messenger.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,48 +26,64 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
-import biz.dealnote.messenger.adapter.horizontal.HorizontalOptionsAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.Audio;
-import biz.dealnote.messenger.model.AudioFilter;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
+import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
 /**
  * Audio is not supported :-(
  */
 public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView>
-        implements IAudiosView, HorizontalOptionsAdapter.Listener<AudioFilter> {
+        implements IAudiosView{
 
-    public static AudiosFragment newInstance(int accountId, int ownerId) {
+    public static AudiosFragment newInstance(int accountId, int ownerId, int option_menu_id, boolean isAlbum) {
         Bundle args = new Bundle();
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putInt(Extra.ID, option_menu_id);
+        args.putInt(Extra.ALBUM, isAlbum ? 1 : 0);
         AudiosFragment fragment = new AudiosFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    private View mBlockedRoot;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AudioRecyclerAdapter mAudioRecyclerAdapter;
-    private HorizontalOptionsAdapter<AudioFilter> mAudioFilterAdapter;
+    private PlaybackStatus mPlaybackStatus;
+    private boolean inTabsContainer;
 
-    private RecyclerView mFilterRecycler;
+    public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        inTabsContainer = requireArguments().getBoolean(EXTRA_IN_TABS_CONTAINER);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_music, container, false);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
-        mBlockedRoot = root.findViewById(R.id.blocked_root);
+
+        Toolbar toolbar = root.findViewById(R.id.toolbar);
+
+        if (!inTabsContainer) {
+            toolbar.setVisibility(View.VISIBLE);
+            ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        } else {
+            toolbar.setVisibility(View.GONE);
+        }
+
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
 
@@ -75,12 +96,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             }
         });
 
-        mFilterRecycler = root.findViewById(R.id.recycler_filter);
-        mFilterRecycler.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false));
-        mAudioFilterAdapter = new HorizontalOptionsAdapter<>(Collections.emptyList());
-        mAudioFilterAdapter.setListener(this);
-        mFilterRecycler.setAdapter(mAudioFilterAdapter);
-
         mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList());
         mAudioRecyclerAdapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
         recyclerView.setAdapter(mAudioRecyclerAdapter);
@@ -90,24 +105,34 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     @Override
     public void onResume() {
         super.onResume();
-        Settings.get().ui().notifyPlaceResumed(Place.AUDIOS);
+        if (!inTabsContainer) {
+            Settings.get().ui().notifyPlaceResumed(Place.AUDIOS);
+            ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
+            if (actionBar != null) {
+                actionBar.setTitle(R.string.music);
+                actionBar.setSubtitle(null);
+            }
 
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.music);
-            actionBar.setSubtitle(null);
+            if (requireActivity() instanceof OnSectionResumeCallback) {
+                ((OnSectionResumeCallback) requireActivity()).onSectionResume(AdditionalNavigationFragment.SECTION_ITEM_AUDIOS);
+            }
+
+            new ActivityFeatures.Builder()
+                    .begin()
+                    .setHideNavigationMenu(false)
+                    .setBarsColored(requireActivity(), true)
+                    .build()
+                    .apply(requireActivity());
         }
-
-        if (requireActivity() instanceof OnSectionResumeCallback) {
-            ((OnSectionResumeCallback) requireActivity()).onSectionResume(AdditionalNavigationFragment.SECTION_ITEM_AUDIOS);
-        }
-
-        new ActivityFeatures.Builder()
-                .begin()
-                .setHideNavigationMenu(false)
-                .setBarsColored(requireActivity(), true)
-                .build()
-                .apply(requireActivity());
+        this.mPlaybackStatus = new PlaybackStatus();
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
+        filter.addAction(MusicPlaybackService.META_CHANGED);
+        filter.addAction(MusicPlaybackService.PREPARED);
+        filter.addAction(MusicPlaybackService.REFRESH);
+        requireActivity().registerReceiver(mPlaybackStatus, filter);
     }
 
     @Override
@@ -115,15 +140,10 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         return () -> new AudiosPresenter(
                 requireArguments().getInt(Extra.ACCOUNT_ID),
                 requireArguments().getInt(Extra.OWNER_ID),
+                requireArguments().getInt(Extra.ID),
+                requireArguments().getInt(Extra.ALBUM) == 1,
                 saveInstanceState
         );
-    }
-
-    @Override
-    public void fillFilters(List<AudioFilter> sources) {
-        if (nonNull(mAudioFilterAdapter)) {
-            mAudioFilterAdapter.setItems(sources);
-        }
     }
 
     @Override
@@ -148,39 +168,25 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
-    public void setBlockedScreen(boolean visible) {
-        if (nonNull(mBlockedRoot)) {
-            mBlockedRoot.setVisibility(visible ? View.VISIBLE : View.GONE);
+    public void onPause() {
+        try {
+            requireActivity().unregisterReceiver(mPlaybackStatus);
+        } catch (final Throwable ignored) {
         }
-
-        if (nonNull(mSwipeRefreshLayout)) {
-            mSwipeRefreshLayout.setVisibility(visible ? View.GONE : View.VISIBLE);
-        }
+        super.onPause();
     }
 
-    @Override
-    public void showFilters(boolean canFilter) {
-        mFilterRecycler.setVisibility(canFilter ? View.VISIBLE : View.GONE);
-    }
+    private final class PlaybackStatus extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            if (isNull(action)) return;
 
-    public void notifyFilterListChanged() {
-        if (nonNull(mAudioFilterAdapter)) {
-            mAudioFilterAdapter.notifyDataSetChanged();
+            switch (action) {
+                case MusicPlaybackService.PLAYSTATE_CHANGED:
+                    notifyListChanged();
+                    break;
+            }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        synchronized(mAudioRecyclerAdapter)
-        {
-            if (nonNull(mAudioRecyclerAdapter))
-                mAudioRecyclerAdapter.onDestroy();
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    public void onOptionClick(AudioFilter source) {
-        getPresenter().fireFilterItemClick(source);
     }
 }

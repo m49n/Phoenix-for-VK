@@ -117,6 +117,7 @@
     <string name="general_settings">General</string>
     <string name="other_settings">Other</string>
     <string name="about_settings">About</string>
+    <string name="cache_cleaner">Purge Cache for this account</string>
     <string name="share_text">Share app with friends</string>
     <string name="rate_text">Rate this app in Google Play</string>
     <string name="go_to_dialog">To conversation</string>
@@ -430,6 +431,8 @@
 
     <string name="feedback_empty_text">Here you will see mentions, comments and likes</string>
 
+    <string name="playlist_empty_text">Here you will see audio playlists</string>
+
     <string name="end_of_list">End of list</string>
 
     <string name="open_profile">Open profile</string>
@@ -680,6 +683,7 @@
     <string name="videos_count">%1$d videos</string>
     <string name="documents_count">%1$d documents</string>
     <string name="audios_count">%1$d audios</string>
+    <string name="audios_pattern_count">audios</string>
     <string name="save_yourself">Save yourself</string>
     <string name="photo_saved_yourself">Saved to album \"Saved photos\"</string>
     <string name="share_photo_title">Share photo</string>
@@ -1206,6 +1210,7 @@
     <string name="wall_comment_push_title">New wall comment</string>
     <string name="audios">Audios</string>
     <string name="playlist">Playlist</string>
+    <string name="playlists">Playlists</string>
     <string name="equalizer">Equalizer</string>
     <string name="phoenix_player">Phoenix Player</string>
     <string name="choose_theme_title">Application theme</string>

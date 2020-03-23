@@ -55,6 +55,7 @@ import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.api.model.LinkAttachmentToken;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.db.DBHelper;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.LocalPhoto;
@@ -70,6 +71,7 @@ import biz.dealnote.messenger.settings.NightMode;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.MaskTransformation;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.Utils;
 
@@ -253,6 +255,13 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         findPreference("request_executor")
                 .setOnPreferenceClickListener(preference -> {
                     PlaceFactory.getRequestExecutorPlace(getAccountId()).tryOpenWith(requireActivity());
+                    return true;
+                });
+
+        findPreference("cache_cleaner")
+                .setOnPreferenceClickListener(preference -> {
+                    DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.success);
                     return true;
                 });
 

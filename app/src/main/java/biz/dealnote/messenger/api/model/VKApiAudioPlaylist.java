@@ -28,5 +28,8 @@ package biz.dealnote.messenger.api.model;
 public class VKApiAudioPlaylist {
     public int id;
     public int owner_id;
+    public int count;
     public String title;
+    public String description;
+    public String thumb_image;
 }

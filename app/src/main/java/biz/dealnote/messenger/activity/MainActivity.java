@@ -62,6 +62,7 @@ import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
 import biz.dealnote.messenger.fragment.AnswerVKOfficialFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.AudiosFragment;
+import biz.dealnote.messenger.fragment.AudiosTabsFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
 import biz.dealnote.messenger.fragment.ChatFragment;
 import biz.dealnote.messenger.fragment.ChatUsersFragment;
@@ -1077,7 +1078,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.AUDIOS:
-                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID)));
+                attachToFront(AudiosTabsFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID)));
+                break;
+
+            case Place.AUDIOS_IN_ALBUM:
+                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getInt(Extra.ID), true));
                 break;
 
             case Place.VIDEO_ALBUM:

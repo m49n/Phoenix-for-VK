@@ -34,5 +34,9 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
 
-    Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id);
+    Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset);
+
+    Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId);
+
+    Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId);
 }
