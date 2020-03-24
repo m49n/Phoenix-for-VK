@@ -13,6 +13,8 @@ import java.util.List;
 import biz.dealnote.messenger.db.interfaces.ILocalMediaStorage;
 import biz.dealnote.messenger.model.LocalImageAlbum;
 import biz.dealnote.messenger.model.LocalPhoto;
+import biz.dealnote.messenger.model.LocalVideo;
+import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
@@ -29,19 +31,19 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
 
     private static final String[] PROJECTION = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
-   /* private static final String[] VIDEO_PROJECTION = {
+   private static final String[] VIDEO_PROJECTION = {
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DATA,
             MediaStore.Video.Media.DURATION,
             MediaStore.Video.Media.SIZE,
             MediaStore.Video.Media.TITLE
-    };*/
+    };
 
-    /*@Override
+    @Override
     public Single<List<LocalVideo>> getVideos() {
         return Single.create(e -> {
             Cursor cursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    VIDEO_PROJECTION, null, null, MediaStore.Video.Media.DATE_ADDED);
+                    VIDEO_PROJECTION, null, null, MediaStore.Video.Media.DATE_MODIFIED + " DESC");
 
             ArrayList<LocalVideo> data = new ArrayList<>(safeCountOf(cursor));
             if (Objects.nonNull(cursor)) {
@@ -53,9 +55,9 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
 
             e.onSuccess(data);
         });
-    }*/
+    }
 
-    /*@Override
+    @Override
     public Bitmap getVideoThumbnail(long videoId) {
         return MediaStore.Video.Thumbnails.getThumbnail(getContext().getContentResolver(),
                 videoId, MediaStore.Video.Thumbnails.MINI_KIND, null);
@@ -64,10 +66,10 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
     private static LocalVideo mapVideo(Cursor cursor) {
         String data = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
         return new LocalVideo(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media._ID)), Uri.parse(data))
-                .setDuration(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.DURATION)))
+                .setDuration(cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media.DURATION)))
                 .setSize(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)))
                 .setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE)));
-    }*/
+    }
 
     @Override
     public Single<List<LocalPhoto>> getPhotos(long albumId) {
@@ -75,7 +77,7 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
             Cursor cursor = getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     PROJECTION, MediaStore.Images.Media.BUCKET_ID + " = ?",
                     new String[]{String.valueOf(albumId)},
-                    MediaStore.Images.ImageColumns.DATE_ADDED + " DESC");
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
             ArrayList<LocalPhoto> result = new ArrayList<>(safeCountOf(cursor));
             if (cursor != null) {
@@ -109,7 +111,7 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
             String selection = "1=1) GROUP BY (" + MediaStore.Images.ImageColumns.BUCKET_ID;
 
             Cursor cursor = getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection, selection, null, MediaStore.Images.ImageColumns.DATE_ADDED + " desc");
+                    projection, selection, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
             List<LocalImageAlbum> albums = new ArrayList<>(safeCountOf(cursor));
 

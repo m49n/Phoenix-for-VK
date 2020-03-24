@@ -59,7 +59,9 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
         this.data.add(SEACRH_CACHE, new UsersPart(R.string.results_in_the_cache, new ArrayList<>(), false));
         this.data.add(SEARCH_WEB, new UsersPart(R.string.results_in_a_network, new ArrayList<>(), false));
 
-        loadAllCachedData();
+        if(accountId == userId) {
+            loadAllCachedData();
+        }
         requestActualData(0);
     }
 
@@ -68,10 +70,14 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
     private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     private void requestActualData(int offset) {
+        final int accountId = super.getAccountId();
+        if(accountId != userId) {
+            this.cacheLoadingNow = false;
+            resolveRefreshingView();
+            return;
+        }
         this.actualDataLoadingNow = true;
         resolveRefreshingView();
-
-        final int accountId = super.getAccountId();
 
         actualDataDisposable.add(relationshipInteractor.getRequests(accountId, offset, 200)
                 .compose(RxUtils.applySingleIOToMainSchedulers())

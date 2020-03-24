@@ -121,11 +121,11 @@ public class FcmListenerService extends FirebaseMessagingService {
                     NotificationHelper.showSimpleNotification(context, message.getData().get("body"), message.getData().get("title"), null);
                     break;
                 default:
-                    //NotificationHelper.showSimpleNotification(context, message.getData().get("body"), message.getData().get("title"), pushType);
-                    PersistentLogger.logThrowable("Push issues", new Exception("Unespected Push event, collapse_key: " + pushType + ", dump: " + bundleDump));
+                    //PersistentLogger.logThrowable("Push issues", new Exception("Unespected Push event, collapse_key: " + pushType + ", dump: " + bundleDump));
                     break;
             }
         } catch (Exception e){
+            PersistentLogger.logThrowable("Push issues", e);
             e.printStackTrace();
         }
     }

@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -167,7 +167,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         }
     }
 
-    private static class Adapter extends FragmentPagerAdapter {
+    private static class Adapter extends FragmentStatePagerAdapter {
 
         private final int accountId;
         private final int userId;
@@ -176,7 +176,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         private final List<String> mFragmentTitles = new ArrayList<>(5);
 
         public Adapter(Context context, FragmentManager fm, int accountId, int userId, boolean showMutualTab) {
-            super(fm);
+            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             this.accountId = accountId;
             this.userId = userId;
             this.showMutualTab = showMutualTab;

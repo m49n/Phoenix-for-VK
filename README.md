@@ -1,4 +1,4 @@
-# Phoenix (R) for VK
+# Phoenix Freya for VK
 First open-sourced VK client for Android inspired by Material Design With Music.
 
 <b>Screenshots:</b>

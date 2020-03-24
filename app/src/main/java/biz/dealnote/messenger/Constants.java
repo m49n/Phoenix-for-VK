@@ -13,6 +13,7 @@ public class Constants {
     public static final String API_VERSION = "5.103";
     public static final int DATABASE_VERSION = 174;
     public static final int VERSION_APK = BuildConfig.VERSION_CODE;
+    public static final String APK_ID = BuildConfig.APPLICATION_ID;
 
     public static final boolean IS_HAS_LOGIN_WEB = false;
     public static final String PRIVACY_POLICY_LINK = "https://github.com/PhoenixDevTeam/Phoenix-for-VK/wiki/Privacy-policy";
@@ -20,7 +21,7 @@ public class Constants {
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".fileprovider";
 
     public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/58.1 lite-463 (Android %s; SDK %d; %s; %s; ru)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL);
-    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/5.56-4825 (Android %s; SDK %d; %s; %s; ru)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL);
+    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/5.56.1-4838 (Android %s; SDK %d; %s; %s; ru)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL);
 
     public static final String USER_AGENT(String type)
     {

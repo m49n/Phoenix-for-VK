@@ -25,6 +25,7 @@ import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.selection.AbsSelectableSource;
 import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalVideosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.model.selection.Types;
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
@@ -95,7 +96,7 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
         super.onResume();
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
         if (nonNull(actionBar)) {
-            actionBar.setTitle(R.string.photos);
+            actionBar.setTitle(R.string.multiply_poll);
             actionBar.setSubtitle(null);
         }
     }
@@ -132,6 +133,14 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
                 return fragment;
             }
 
+            if (source instanceof LocalVideosSelectableSource) {
+                Bundle args = new Bundle();
+                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
+                LocalVideosFragment fragment = LocalVideosFragment.newInstance();
+                fragment.setArguments(args);
+                return fragment;
+            }
+
             if (source instanceof VkPhotosSelectableSource) {
                 final VkPhotosSelectableSource vksource = (VkPhotosSelectableSource) source;
                 VKPhotoAlbumsFragment fragment = VKPhotoAlbumsFragment.newInstance(vksource.getAccountId(), vksource.getOwnerId(), null, null);
@@ -160,6 +169,9 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             switch (tabtype) {
                 case Types.LOCAL_PHOTOS:
                     return getString(R.string.local_photos_tab_title);
+
+                case Types.VIDEOS:
+                    return getString(R.string.videos);
 
                 case Types.VK_PHOTOS:
                     return getString(R.string.vk_photos_tab_title);

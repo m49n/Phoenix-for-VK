@@ -129,7 +129,7 @@ public class CommunityControlFragment extends Fragment {
         private final List<ITab> tabs;
 
         Adapter(List<ITab> tabs, FragmentManager fm) {
-            super(fm);
+            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             this.tabs = tabs;
         }
 

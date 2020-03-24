@@ -1,7 +1,10 @@
 package biz.dealnote.messenger.fragment;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -338,6 +341,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         static final int PLAY_ANOTHER_SOFT = -5;
         static final int PLAY_BROWSER = -6;
         static final int DOWNLOAD = -7;
+        static final int COPY_LINK = -9;
     }
 
     private List<Item> createDirectVkPlayItems(Video video, Section section) {
@@ -430,6 +434,13 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .setIcon(R.drawable.ic_external)
                 .setSection(SECTION_OTHER));
 
+        if(nonEmpty(external))
+        {
+            items.add(new Item(Menu.COPY_LINK, new Text(R.string.copy_url))
+                    .setIcon(R.drawable.content_copy)
+                    .setSection(SECTION_OTHER));
+        }
+
         if(nonEmpty(firstNonEmptyString(video.getMp4link240(),
                 video.getMp4link360(),
                 video.getMp4link480(),
@@ -501,6 +512,11 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
 
             case Menu.DOWNLOAD:
                 showDownloadPlayerMenu(video);
+                break;
+            case Menu.COPY_LINK:
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("response", video.getExternalLink());
+                clipboard.setPrimaryClip(clip);
                 break;
         }
     }

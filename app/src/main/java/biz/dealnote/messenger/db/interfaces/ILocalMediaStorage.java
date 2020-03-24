@@ -6,6 +6,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.model.LocalImageAlbum;
 import biz.dealnote.messenger.model.LocalPhoto;
+import biz.dealnote.messenger.model.LocalVideo;
 import io.reactivex.Single;
 
 /**
@@ -20,7 +21,7 @@ public interface ILocalMediaStorage extends IStorage {
 
     Bitmap getImageThumbnail(long imageId);
 
-    //Single<List<LocalVideo>> getVideos();
+    Single<List<LocalVideo>> getVideos();
 
-    //Bitmap getVideoThumbnail(long videoId);
+    Bitmap getVideoThumbnail(long videoId);
 }

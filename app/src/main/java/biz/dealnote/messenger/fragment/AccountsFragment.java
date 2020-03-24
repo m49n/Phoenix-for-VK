@@ -170,6 +170,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     resolveEmptyText();
+                    if(isAdded() && Utils.safeIsEmpty(mData))
+                        startDirectLogin();
                 }));
     }
 

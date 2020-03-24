@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import biz.dealnote.messenger.App;
@@ -273,6 +275,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         doSaveOnDrive();
     }
 
+    @SuppressLint("CheckResult")
     private void doSaveOnDrive() {
         String dcim = Environment.getExternalStorageDirectory().getAbsolutePath();
         File dir = new File(dcim + "/" + Constants.PHOTOS_PATH);
@@ -295,6 +298,15 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     {
         String file = dir.getAbsolutePath() + "/" + Prefix + photo.getOwnerId() + "_" + photo.getId() + ".jpg";
         String url = photo.getUrlForSize(PhotoSize.W, true);
+        do {
+            File Temp = new File(file);
+            if (Temp.exists()) {
+                Temp.setLastModified(Calendar.getInstance().getTime().getTime());
+                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastError(R.string.exist_audio);
+                return;
+            }
+        }
+        while(false);
         new InternalDownloader(this, getApplicationContext(), url, file).doDownload();
     }
 
@@ -314,9 +326,9 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             if (Objects.isNull(presenter)) return;
 
             if (Objects.isNull(s)) {
-                getView().getPhoenixToast().showToastSuccess(R.string.saved);
+                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastSuccess(R.string.saved);
             } else {
-                getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
+                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastError(R.string.error_with_message, s);
             }
         }
     }

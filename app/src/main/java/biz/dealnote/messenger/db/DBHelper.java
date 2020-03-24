@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private static String getDatabaseFileName(int aid) {
-        return "cache_" + aid + ".sqlite";
+        return "freya_" + aid + ".sqlite";
     }
 
     @Override

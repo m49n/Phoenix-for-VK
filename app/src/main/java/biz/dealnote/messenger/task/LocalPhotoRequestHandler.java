@@ -26,9 +26,21 @@ public class LocalPhotoRequestHandler extends RequestHandler {
     public RequestHandler.Result load(Request data, int arg1) {
         long imageId = Long.parseLong(data.uri.getLastPathSegment());
 
-        Bitmap bm = Stores.getInstance()
-                .localPhotos()
-                .getImageThumbnail(imageId);
+        boolean isVideo = data.uri.getPath().contains("videos");
+
+        Bitmap bm;
+        if(!isVideo)
+        {
+            bm = Stores.getInstance()
+                    .localPhotos()
+                    .getImageThumbnail(imageId);
+        }
+        else
+        {
+            bm = Stores.getInstance()
+                    .localPhotos()
+                    .getVideoThumbnail(imageId);
+        }
 
         return new RequestHandler.Result(bm, Picasso.LoadedFrom.DISK);
     }

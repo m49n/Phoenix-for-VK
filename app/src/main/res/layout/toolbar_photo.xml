@@ -7,5 +7,5 @@
     android:clipToPadding="true"
     app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
     app:subtitleTextColor="?colorSecondary"
-    app:theme="@style/Theme.Toolbar.Photo" />
+    android:theme="@style/Theme.Toolbar.Photo" />
 

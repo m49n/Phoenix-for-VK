@@ -17,7 +17,7 @@ public abstract class MyFragmentStatePagerAdapter extends FragmentStatePagerAdap
     private SparseArray<WeakReference<Fragment>> fragments;
 
     public MyFragmentStatePagerAdapter(FragmentManager fm) {
-        super(fm);
+        super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         fragments = new SparseArray<>(3);
     }
 

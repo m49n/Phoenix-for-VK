@@ -34,9 +34,10 @@ import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.model.LocalVideo;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
-import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalVideosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.mvp.presenter.VideosListPresenter;
 import biz.dealnote.messenger.mvp.view.IVideosListView;
@@ -164,10 +165,10 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
     @Override
     public void startSelectUploadFileActivity(int accountId) {
         Sources sources = new Sources()
-                .with(new FileManagerSelectableSource())
-                .with(new LocalPhotosSelectableSource());
+                .with(new LocalVideosSelectableSource())
+                .with(new FileManagerSelectableSource());
 
-        Intent intent = DualTabPhotoActivity.createIntent(requireActivity(), 10, sources);
+        Intent intent = DualTabPhotoActivity.createIntent(requireActivity(), 1, sources);
         startActivityForResult(intent, REQUEST_CODE_FILE);
     }
 
@@ -287,9 +288,13 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
         if (requestCode == REQUEST_CODE_FILE && resultCode == Activity.RESULT_OK) {
             String file = data.getStringExtra(FileManagerFragment.returnFileParameter);
+            LocalVideo vid = data.getParcelableExtra(Extra.VIDEO);
 
             if (nonEmpty(file)) {
                 getPresenter().fireFileForUploadSelected(file);
+            }
+            else if(nonNull(vid)) {
+                getPresenter().fireFileForUploadSelected(vid.getData().getPath());
             }
         }
     }

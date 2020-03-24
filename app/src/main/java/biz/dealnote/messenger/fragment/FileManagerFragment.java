@@ -185,6 +185,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         fileList.clear();
 
         if (path.exists() && path.canRead()) {
+
             String[] fList = path.list(filter);
             directoryShownIsEmpty = false;
 

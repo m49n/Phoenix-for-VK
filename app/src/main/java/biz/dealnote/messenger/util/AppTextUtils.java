@@ -110,6 +110,10 @@ public class AppTextUtils {
         }
     }
 
+    public static String getDurationStringMS(int ms) {
+        return getDurationString((int)(ms / 1000));
+    }
+
     private static String twoDigitString(int number) {
         if (number == 0) {
             return TWO_ZERO;

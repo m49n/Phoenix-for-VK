@@ -315,18 +315,21 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             @Override public void onResponse(Call th, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     try {
-                        int ApkV = Constants.VERSION_APK;
+                        int APK_VERS = Constants.VERSION_APK;
                         String Chngs = "";
                         JSONObject obj = new JSONObject(response.body().string());
                         if(obj.has("apk_version"))
-                            ApkV = obj.getInt("apk_version");
+                            APK_VERS = obj.getInt("apk_version");
                         if(obj.has("changes"))
                             Chngs = obj.getString("changes");
 
-                        final String Chenges_log = Chngs;
-                        final int APK_VERS = ApkV;
+                        String apk_id = "null";
+                        if(obj.has("app_id"))
+                            apk_id = obj.getString("app_id");
 
-                        if(APK_VERS <= Constants.VERSION_APK)
+                        final String Chenges_log = Chngs;
+
+                        if(APK_VERS <= Constants.VERSION_APK && Constants.APK_ID.equals(apk_id))
                             return;
 
                         Handler uiHandler = new Handler(MainActivity.this.getMainLooper());
@@ -340,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                             clipboard.setPrimaryClip(clip);
 
                             AlertDialog dlg = new MaterialAlertDialogBuilder(MainActivity.this)
-                                    .setTitle("Обновление мода")
+                                    .setTitle("Обновление клиента")
                                     .setMessage(Html.fromHtml(res))
                                     .setPositiveButton("OK", null)
                                     .setCancelable(true)

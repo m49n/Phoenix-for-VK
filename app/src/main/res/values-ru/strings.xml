@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Phoenix Мод</string>
+    <string name="app_name">Феникс Мод</string>
     <string-array name="array_theme_names">
-        <item>Синее Пламя</item>
-        <item>Жёлтое Пламя</item>
-        <item>Красное Пламя</item>
-        <item>Фиолетовое Пламя</item>
-        <item>Зелёное Пламя</item>
-        <item>Серое Пламя</item>
+        <item>Синие Огни</item>
+        <item>Жёлтые Огни</item>
+        <item>Красные Огни</item>
+        <item>Фиолетовые Огни</item>
+        <item>Зелёные Огни</item>
+        <item>Серые Огни</item>
     </string-array>
     <string-array name="array_chat_background_names">
         <item>Печеньки</item>
