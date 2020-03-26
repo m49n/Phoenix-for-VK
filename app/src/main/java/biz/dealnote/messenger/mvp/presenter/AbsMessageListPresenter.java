@@ -179,7 +179,7 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
                 .getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("messages", result);
         clipboard.setPrimaryClip(clip);
-        getView().getPhoenixToast().setDuration(Toast.LENGTH_LONG).showToastSuccess(R.string.copied_to_clipboard);
+        getView().getPhoenixToast().setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
     }
 
     public final void fireForwardClick(){

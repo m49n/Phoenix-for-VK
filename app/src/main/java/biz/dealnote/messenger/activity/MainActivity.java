@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     }
 
     private void bindToAudioPlayService() {
-        if (!isActivityDestroyed()) {
+        if (!isActivityDestroyed() && mAudioPlayServiceToken == null) {
             mAudioPlayServiceToken = MusicUtils.bindToServiceWithoutStart(this, this);
         }
     }

@@ -6,11 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import biz.dealnote.messenger.domain.IFeedbackInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
-import biz.dealnote.messenger.model.AnswerVKOfficial;
+import biz.dealnote.messenger.model.AnswerVKOfficialList;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IAnswerVKOfficialView;
 import biz.dealnote.messenger.util.RxUtils;
@@ -25,7 +24,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswerVKOfficialView> {
 
-    private final List<AnswerVKOfficial> pages;
+    private final AnswerVKOfficialList pages;
 
     private final IFeedbackInteractor fInteractor;
 
@@ -35,7 +34,9 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
 
     public AnswerVKOfficialPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
-        this.pages = new ArrayList<>();
+        this.pages = new AnswerVKOfficialList();
+        this.pages.fields = new ArrayList<>();
+        this.pages.items = new ArrayList<>();
         this.fInteractor = InteractorFactory.createFeedbackInteractor();
 
         loadActualData(0);
@@ -70,20 +71,24 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
         resolveRefreshingView();
     }
 
-    private void onActualDataReceived(int offset, List<AnswerVKOfficial> data) {
+    private void onActualDataReceived(int offset, AnswerVKOfficialList data) {
 
         this.actualDataLoading = false;
-        this.endOfContent = (data.size() < 100);
+        this.endOfContent = (data.items.size() < 100);
         this.actualDataReceived = true;
 
         if (offset == 0) {
-            this.pages.clear();
-            this.pages.addAll(data);
+            this.pages.items.clear();
+            this.pages.fields.clear();
+            this.pages.items.addAll(data.items);
+            this.pages.fields.addAll(data.fields);
             callView(IAnswerVKOfficialView::notifyDataSetChanged);
         } else {
-            int startSize = this.pages.size();
-            this.pages.addAll(data);
-            callView(view -> view.notifyDataAdded(startSize, data.size()));
+            int startSize = this.pages.items.size();
+
+            this.pages.items.addAll(data.items);
+            this.pages.fields.addAll(data.fields);
+            callView(view -> view.notifyDataAdded(startSize, data.items.size()));
         }
 
         resolveRefreshingView();
@@ -108,8 +113,8 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
     }
 
     public boolean fireScrollToEnd() {
-        if (!endOfContent && nonEmpty(pages) && actualDataReceived && !actualDataLoading) {
-            loadActualData(this.pages.size());
+        if (!endOfContent && nonEmpty(pages.items) && actualDataReceived && !actualDataLoading) {
+            loadActualData(this.pages.items.size());
             return false;
         }
         return true;

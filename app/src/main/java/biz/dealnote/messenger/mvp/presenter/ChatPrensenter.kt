@@ -1182,7 +1182,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun canDeleteForAll(message: Message): Boolean {
-        return message.isOut && Unixtime.now() - message.date < 24 * 60 * 60
+        return message.isOut && Unixtime.now() - message.date < 24 * 60 * 60 && peerId != accountId
     }
 
     private fun cancelWaitingForUploadMessage(messageId: Int) {

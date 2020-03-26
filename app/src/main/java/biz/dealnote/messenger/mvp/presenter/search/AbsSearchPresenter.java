@@ -39,6 +39,17 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
     private C resultsForCriteria;
     private boolean endOfContent;
 
+    void LocalSeached(List<T> data, C criteria) {
+        setLoadingNow(false);
+        this.nextFrom = getInitialNextFrom();
+        this.resultsForCriteria = criteria;
+        this.endOfContent = true;
+        this.data.clear();
+        this.data.addAll(data);
+        callView(IBaseSearchView::notifyDataSetChanged);
+        resolveEmptyText();
+    }
+
     private WeakActionHandler<AbsSearchPresenter> actionHandler = new WeakActionHandler<>(this);
 
     AbsSearchPresenter(int accountId, @Nullable C criteria, @Nullable Bundle savedInstanceState) {
@@ -97,7 +108,7 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
                         this::onSeacrhError));
     }
 
-    private void onSeacrhError(Throwable throwable) {
+    void onSeacrhError(Throwable throwable) {
         throwable.printStackTrace();
     }
 

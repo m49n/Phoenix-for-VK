@@ -53,7 +53,7 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
+        View view = inflater.inflate(R.layout.fragment_video_gallery, container, false);
         view.findViewById(R.id.toolbar).setVisibility(View.GONE);
 
         mSwipeRefreshLayout = view.findViewById(R.id.refresh);
@@ -69,7 +69,7 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
 
         mEmptyTextView = view.findViewById(R.id.empty);
 
-        fabAttach = view.findViewById(R.id.fr_photo_gallery_attach);
+        fabAttach = view.findViewById(R.id.fr_video_gallery_attach);
         fabAttach.setOnClickListener(v -> getPresenter().fireFabClick());
 
         return view;

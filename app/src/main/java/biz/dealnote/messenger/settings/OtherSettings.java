@@ -111,6 +111,16 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isForce_cache() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_cache", false);
+    }
+
+    @Override
+    public boolean isForce_hls() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_hls", false);
+    }
+
+    @Override
     public boolean isAuto_update() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("auto_update", true);
     }

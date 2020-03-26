@@ -63,6 +63,7 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
+import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.view.CircleCounterButton;
@@ -201,7 +202,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";;
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.copied_to_clipboard);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
                 return true;
             case R.id.search_by_artist:
                 PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true)).tryOpenWith(requireActivity());
@@ -304,7 +305,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         if(ret == 0)
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved_audio);
         else if(ret == 1)
-            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.exist_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio);
         else
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.error_audio);
     }
@@ -386,7 +387,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         dlgAlert.setPositiveButton("OK", null);
         dlgAlert.setCancelable(true);
-        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.copied_to_clipboard);
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
         dlgAlert.create().show();
     }
 
@@ -532,6 +533,19 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
     }
 
+    private boolean ShowSecret1(String query)
+    {
+        return query.contains("landser") || query.contains("卐") || query.contains("русский корпус") || query.contains("русский стяг") || query.contains("чурк")
+                || query.contains("адольф") || query.contains("adolf") || query.contains("рейх") || query.contains("зиг") || query.contains("хайль")
+                || query.contains("hitler") || query.contains("sieg heil")  || query.contains("коловрат") || query.contains("вандал") || query.contains("arische");
+    }
+
+    private boolean ShowSecret2(String query)
+    {
+        return query.contains("pahom") || query.contains("epifan") || query.contains("bratishka") || query.contains("пахом")
+                || query.contains("братишка") || query.contains("поехавший") || query.contains("зелёный слоник");
+    }
+
     /**
      * Sets the track name, album name, and album art.
      */
@@ -574,6 +588,30 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         resolveAddButton();
 
         Audio current = MusicUtils.getCurrentAudio();
+
+        if(current != null) {
+            String SC = current.getArtist().toLowerCase();
+            String SC1 = current.getTitle().toLowerCase();
+            if(ShowSecret1(SC) || ShowSecret1(SC1)) {
+                if (isAdded())
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToastSecret(false);
+            }
+            else if(ShowSecret2(SC) || ShowSecret2(SC1)) {
+                if (isAdded())
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToastSecret(true);
+            }
+
+            if (DownloadUtil.TrackIsDownloaded(current)) {
+                ivSave.setImageResource(R.drawable.succ);
+            }
+            else if(Objects.isNullOrEmptyString(current.getUrl())){
+                ivSave.setImageResource(R.drawable.audio_died);
+            }
+            else
+                ivSave.setImageResource(R.drawable.save);
+        }
+        else
+            ivSave.setImageResource(R.drawable.save);
 
         //handle VK actions
         if (current != null && isAudioStreaming()) {

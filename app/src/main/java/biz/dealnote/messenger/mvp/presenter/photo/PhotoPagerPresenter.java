@@ -302,7 +302,8 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             File Temp = new File(file);
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().getTime().getTime());
-                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastError(R.string.exist_audio);
+                if(isGuiReady())
+                    getView().getPhoenixToast().showToastError(R.string.exist_audio);
                 return;
             }
         }
@@ -325,10 +326,12 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
             if (Objects.isNull(presenter)) return;
 
-            if (Objects.isNull(s)) {
-                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastSuccess(R.string.saved);
-            } else {
-                java.util.Objects.requireNonNull(getView()).getPhoenixToast().showToastError(R.string.error_with_message, s);
+            if(isGuiReady()) {
+                if (Objects.isNull(s)) {
+                    getView().getPhoenixToast().showToast(R.string.saved);
+                } else {
+                    getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
+                }
             }
         }
     }

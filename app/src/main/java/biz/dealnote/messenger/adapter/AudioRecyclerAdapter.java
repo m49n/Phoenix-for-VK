@@ -127,7 +127,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         if(ret == 0)
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
                         else if(ret == 1)
-                            PhoenixToast.CreatePhoenixToast(mContext).showToastSuccess(R.string.exist_audio);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
                         else
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
                         return true;

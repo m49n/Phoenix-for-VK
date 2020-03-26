@@ -180,6 +180,15 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+            /*
+            case VK_APP_AUTH_CODE:
+                if (resultCode == Activity.RESULT_OK && data != null && data.hasExtra("access_token") && data.hasExtra("user_id")) {
+                    String Token = data.getStringExtra("access_token");
+                    int id = Integer.parseInt(data.getStringExtra("user_id"));
+                    processNewAccount(id, Token, "vkofficial", "", "", "vk_app", true, true);
+                }
+                break;
+             */
             case REQUEST_LOGIN:
                 if (resultCode == Activity.RESULT_OK) {
                     int uid = data.getExtras().getInt(Extra.USER_ID);
@@ -349,6 +358,42 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         return retval;
     }
 
+    /*
+    private static final String VK_APP_AUTH_ACTION = "com.vkontakte.android.action.SDK_AUTH";
+    private static final String VK_APP_PACKAGE_ID = "com.vkontakte.android";
+    private static final int VK_APP_AUTH_CODE = 282;
+
+    private void OfficialVK
+    {
+        if (VKUtils.isAppInstalled(requireActivity(), VK_APP_PACKAGE_ID) && VKUtils.isIntentAvailable(requireActivity(), VK_APP_AUTH_ACTION)) {
+            List<VKAuthParams.VKScope> Scopes = new ArrayList<>();
+            Scopes.add(VKAuthParams.VKScope.NOTIFY);
+            Scopes.add(VKAuthParams.VKScope.FRIENDS);
+            Scopes.add(VKAuthParams.VKScope.PHOTOS);
+            Scopes.add(VKAuthParams.VKScope.AUDIO);
+            Scopes.add(VKAuthParams.VKScope.VIDEO);
+            Scopes.add(VKAuthParams.VKScope.STORIES);
+            Scopes.add(VKAuthParams.VKScope.PAGES);
+            Scopes.add(VKAuthParams.VKScope.STATUS);
+            Scopes.add(VKAuthParams.VKScope.NOTES);
+            Scopes.add(VKAuthParams.VKScope.MESSAGES);
+            Scopes.add(VKAuthParams.VKScope.WALL);
+            Scopes.add(VKAuthParams.VKScope.OFFLINE);
+            Scopes.add(VKAuthParams.VKScope.DOCS);
+            Scopes.add(VKAuthParams.VKScope.GROUPS);
+            Scopes.add(VKAuthParams.VKScope.NOTIFICATIONS);
+            Scopes.add(VKAuthParams.VKScope.STATS);
+            Scopes.add(VKAuthParams.VKScope.EMAIL);
+            Scopes.add(VKAuthParams.VKScope.MARKET);
+            Scopes.add(VKAuthParams.VKScope.PHONE);
+            Scopes.add(VKAuthParams.VKScope.OFFLINE);
+
+            Intent intent = new Intent(VK_APP_AUTH_ACTION, null).setPackage(VK_APP_PACKAGE_ID).putExtras(new VKAuthParams(BuildConfig.VK_API_APP_ID, VKAuthParams.DEFAULT_REDIRECT_URL, Scopes).toExtraBundle());
+            requireActivity().startActivityForResult(intent, VK_APP_AUTH_CODE);
+        }
+    }
+     */
+
     private void onKate()
     {
         if(!canRunRootCommands())
@@ -384,7 +429,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
                     for(int s = 0; s < jsonRoot.length(); s++) {
                         JSONObject mJsonObject = jsonRoot.getJSONObject(s);
-                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", "", true, false);
+                        processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", "kate_app", true, false);
                     }
                     break;
                 }

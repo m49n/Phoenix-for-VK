@@ -132,7 +132,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         if(obj.getId() == 0)
             getView().getPhoenixToast().showToastError(R.string.error);
         else {
-            getView().getPhoenixToast().showToastSuccess(R.string.uploaded);
+            getView().getPhoenixToast().showToast(R.string.uploaded);
             if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
                 getView().onUploaded(obj);
             }

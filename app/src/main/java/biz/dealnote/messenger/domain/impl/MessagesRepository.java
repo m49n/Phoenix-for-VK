@@ -369,6 +369,7 @@ public class MessagesRepository implements IMessagesRepository {
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public Completable handleReadUpdates(int accountId, @Nullable List<OutputMessagesSetReadUpdate> outgoing, @Nullable List<InputMessagesSetReadUpdate> incoming) {
         List<PeerPatch> patches = new ArrayList<>();

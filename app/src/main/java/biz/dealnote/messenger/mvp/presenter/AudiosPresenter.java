@@ -2,11 +2,14 @@ package biz.dealnote.messenger.mvp.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.domain.IAudioInteractor;
@@ -130,9 +133,58 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         super.onDestroyed();
     }
 
+    public ArrayList<Audio> listFiles() {
+
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString());
+        if(dir.listFiles() == null || dir.listFiles().length <= 0)
+            return new ArrayList<>();
+        ArrayList<File> files = new ArrayList<>();
+        int id = 0;
+        for (File file : dir.listFiles()) {
+            if (!file.isDirectory() && file.getName().contains(".mp3")) {
+                files.add(file);
+            }
+        }
+        if(files.size() <= 0)
+            return new ArrayList<>();
+        Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+
+        ArrayList<Audio> audios = new ArrayList<>(files.size());
+        for (File file : files) {
+
+            Audio rt = new Audio().setId(++id).setUrl("file://" + file.getPath());
+            String TrackName = file.getName().replace(".mp3", "");
+            String Artist = "";
+            String[] arr = TrackName.split(" - ");
+            if (arr.length > 1) {
+                Artist = arr[0];
+                TrackName = TrackName.replace(Artist + " - ", "");
+            }
+            rt.setArtist(Artist);
+            rt.setTitle(TrackName);
+
+            audios.add(rt);
+        }
+        return audios;
+    }
+
     private void onListGetError(Throwable t) {
         setLoadingNow(false);
-        showError(getView(), Utils.getCauseIfRuntime(t));
+
+        if(ownerId != getAccountId())
+        {
+            showError(getView(), Utils.getCauseIfRuntime(t));
+            return;
+        }
+        if (isGuiResumed()) {
+            getView().ProvideReadCachedAudio();
+            audios.clear();
+            audios.addAll(listFiles());
+            endOfContent = true;
+            actualReceived = true;
+            setLoadingNow(false);
+            callView(IAudiosView::notifyListChanged);
+        }
     }
 
     public void fireRefresh() {

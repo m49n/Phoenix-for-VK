@@ -35,6 +35,8 @@ import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -164,6 +166,17 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     public void displayRefreshing(boolean refresing) {
         if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refresing);
+        }
+    }
+    @Override
+    public void ProvideReadCachedAudio()
+    {
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
+        if(!AppPerms.hasWriteStoragePermision(getContext())) {
+            AppPerms.requestWriteStoragePermission(requireActivity());
+        }
+        if(!AppPerms.hasReadStoragePermision(getContext())) {
+            AppPerms.requestReadExternalStoragePermission(requireActivity());
         }
     }
 

@@ -159,6 +159,13 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_FILTER_EDIT)
+            onSeachOptionsChanged();
+    }
+
     abstract void setAdapterData(RecyclerView.Adapter adapter, List<T> data);
 
     abstract RecyclerView.Adapter createAdapter(List<T> data);

@@ -1,52 +1,38 @@
 package biz.dealnote.messenger.util;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.TextPaint;
-import android.text.style.CharacterStyle;
-import android.util.TypedValue;
+import android.text.style.ClickableSpan;
+import android.view.View;
 
-import biz.dealnote.messenger.Injection;
-import biz.dealnote.messenger.R;
-public class LinkSpan extends CharacterStyle {
-    private static final int DEFAULT_COLOR = getAttributeColor(Injection.provideApplicationContext(), R.attr.colorPrimary);
-    private int color;
+import androidx.annotation.NonNull;
+
+import biz.dealnote.messenger.link.LinkHelper;
+import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
+
+public class LinkSpan extends ClickableSpan {
+
+    private boolean is_underline;
+    private Context context;
     private String link;
 
-    public static int getAttributeColor(
-            Context context,
-            int attributeId) {
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(attributeId, typedValue, true);
-        int colorRes = typedValue.resourceId;
-        int color = -1;
-        try {
-            color = context.getResources().getColor(colorRes);
-        } catch (Resources.NotFoundException e) {
-        }
-        return color;
-    }
-
-    public LinkSpan(String str, String str2) {
-        if(str2 != null)
-            str += (" " + str2);
+    public LinkSpan(Context context, String str, boolean is_underline) {
+        this.is_underline = is_underline;
+        this.context = context;
         this.link = str;
-        this.color = DEFAULT_COLOR;
     }
 
-    public int getColor() {
-        return this.color;
+    @Override
+    public void onClick(@NonNull View widget) {
+        LinkHelper.openUrl((Activity) context, Settings.get().accounts().getCurrent(), link);
     }
 
-    public String getLink() {
-        return this.link;
-    }
-
-    public void setColor(int i) {
-        this.color = i;
-    }
-
+    @Override
     public void updateDrawState(TextPaint textPaint) {
-        textPaint.setColor(this.color);
+        super.updateDrawState(textPaint);
+        textPaint.setColor(CurrentTheme.getColorPrimary(context));
+        textPaint.setUnderlineText(is_underline);
     }
 }

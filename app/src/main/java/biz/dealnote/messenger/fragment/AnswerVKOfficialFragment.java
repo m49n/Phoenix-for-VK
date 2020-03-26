@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.Collections;
-import java.util.List;
-
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -27,17 +24,18 @@ import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
-import biz.dealnote.messenger.model.AnswerVKOfficial;
+import biz.dealnote.messenger.model.AnswerVKOfficialList;
 import biz.dealnote.messenger.mvp.presenter.AnswerVKOfficialPresenter;
 import biz.dealnote.messenger.mvp.view.IAnswerVKOfficialView;
 import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPresenter, IAnswerVKOfficialView> implements IAnswerVKOfficialView {
+public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPresenter, IAnswerVKOfficialView> implements IAnswerVKOfficialView, AnswerVKOfficialAdapter.ClickListener {
 
     public static AnswerVKOfficialFragment newInstance(int accountId) {
         Bundle args = new Bundle();
@@ -72,7 +70,8 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
-        mAdapter = new AnswerVKOfficialAdapter(Collections.emptyList(), requireActivity());
+        mAdapter = new AnswerVKOfficialAdapter(null, requireActivity());
+        mAdapter.setClickListener(this);
 
         recyclerView.setAdapter(mAdapter);
 
@@ -110,7 +109,7 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
     }
 
     @Override
-    public void displayData(List<AnswerVKOfficial> users) {
+    public void displayData(AnswerVKOfficialList users) {
         if (nonNull(mAdapter)) {
             mAdapter.setData(users);
             resolveEmptyText();
@@ -138,6 +137,11 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
         if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
+    }
+
+    @Override
+    public void openOwnerWall(int owner_id) {
+        PlaceFactory.getOwnerWallPlace(Settings.get().accounts().getCurrent(), owner_id, null).tryOpenWith(requireActivity());
     }
 
     @Override

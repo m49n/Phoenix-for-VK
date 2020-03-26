@@ -1,12 +1,14 @@
 package biz.dealnote.messenger.fragment.search;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ import biz.dealnote.messenger.fragment.search.options.SimpleBooleanOption;
 import biz.dealnote.messenger.fragment.search.options.SimpleNumberOption;
 import biz.dealnote.messenger.fragment.search.options.SimpleTextOption;
 import biz.dealnote.messenger.fragment.search.options.SpinnerOption;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.InputTextDialog;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
@@ -76,6 +79,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
@@ -85,12 +89,11 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         Toolbar toolbar = root.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_options);
 
-        MenuItem saveItem = toolbar.getMenu().add(R.string.save);
-        saveItem.setIcon(R.drawable.check);
-        saveItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        saveItem.setOnMenuItemClickListener(menuItem -> {
+        Drawable dr = getResources().getDrawable(R.drawable.check);
+        dr.setColorFilter(CurrentTheme.getColorPrimary(requireActivity()), PorterDuff.Mode.MULTIPLY);
+        toolbar.setNavigationIcon(dr);
+        toolbar.setNavigationOnClickListener(menuItem -> {
             onSaveClick();
-            return true;
         });
 
         mEmptyText = root.findViewById(R.id.empty_text);

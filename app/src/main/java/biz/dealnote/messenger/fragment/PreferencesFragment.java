@@ -261,7 +261,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         findPreference("cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
                     DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastSuccess(R.string.success);
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
                     return true;
                 });
 

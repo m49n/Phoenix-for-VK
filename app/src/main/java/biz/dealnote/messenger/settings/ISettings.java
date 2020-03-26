@@ -61,6 +61,10 @@ public interface ISettings {
 
         boolean isForceExoplayer();
 
+        boolean isForce_hls();
+
+        boolean isForce_cache();
+
         boolean isKeepLongpoll();
 
         boolean isCommentsDesc();

@@ -249,6 +249,6 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
         ClipData clip = ClipData.newPlainText("response", fullResponseBody);
         clipboard.setPrimaryClip(clip);
 
-        getView().getPhoenixToast().showToastSuccess(R.string.copied_to_clipboard);
+        getView().getPhoenixToast().showToast(R.string.copied_to_clipboard);
     }
 }

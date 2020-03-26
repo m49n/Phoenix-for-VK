@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.Auth;
 import biz.dealnote.messenger.api.CaptchaNeedException;
 import biz.dealnote.messenger.api.NeedValidationException;
@@ -113,6 +114,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         if (Objects.nonNull(requieredCaptcha)) {
             callView(IDirectAuthView::moveFocusToCaptcha);
         } else if (requireSmsCode) {
+            getView().getPhoenixToast().showToast(R.string.sms_fail);
             callView(IDirectAuthView::moveFocusToSmsCode);
         } else if(requireAppCode){
             callView(IDirectAuthView::moveFocusToAppCode);

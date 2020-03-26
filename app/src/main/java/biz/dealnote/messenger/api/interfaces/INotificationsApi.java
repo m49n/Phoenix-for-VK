@@ -2,10 +2,8 @@ package biz.dealnote.messenger.api.interfaces;
 
 import androidx.annotation.CheckResult;
 
-import java.util.List;
-
 import biz.dealnote.messenger.api.model.response.NotificationsResponse;
-import biz.dealnote.messenger.model.AnswerVKOfficial;
+import biz.dealnote.messenger.model.AnswerVKOfficialList;
 import io.reactivex.Single;
 
 /**
@@ -22,6 +20,6 @@ public interface INotificationsApi {
                                                     Long startTime, Long endTime);
 
     @CheckResult
-    Single<List<AnswerVKOfficial>> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime);
+    Single<AnswerVKOfficialList> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime);
 
 }

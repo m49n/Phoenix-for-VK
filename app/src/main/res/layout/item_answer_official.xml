@@ -25,10 +25,17 @@
 
             <ImageView
                 android:id="@+id/item_friend_avatar"
-                android:layout_width="@dimen/avatar_size_small"
-                android:layout_height="@dimen/avatar_size_small"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:id="@+id/item_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignStart="@+id/item_friend_avatar"
+                android:layout_alignBottom="@+id/item_friend_avatar"
+                android:padding="3dp" />
 
         </RelativeLayout>
 

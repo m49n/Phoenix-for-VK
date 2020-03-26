@@ -14,12 +14,15 @@ import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.search.AudiosSearchPresenter;
 import biz.dealnote.messenger.mvp.view.search.IAudioSearchView;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.util.AppPerms;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -86,6 +89,18 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
         } catch (final Throwable ignored) {
         }
         super.onPause();
+    }
+
+    @Override
+    public void ProvideReadCachedAudio()
+    {
+        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
+        if(!AppPerms.hasWriteStoragePermision(getContext())) {
+            AppPerms.requestWriteStoragePermission(requireActivity());
+        }
+        if(!AppPerms.hasReadStoragePermision(getContext())) {
+            AppPerms.requestReadExternalStoragePermission(requireActivity());
+        }
     }
 
     private final class PlaybackStatus extends BroadcastReceiver {

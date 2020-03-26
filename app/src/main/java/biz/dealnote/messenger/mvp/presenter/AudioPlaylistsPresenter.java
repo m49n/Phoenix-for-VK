@@ -127,7 +127,7 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         final int accountId = super.getAccountId();
         actualDataDisposable.add(fInteractor.deletePlaylist(accountId, album.id, album.owner_id)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().getPhoenixToast().showToastSuccess(R.string.success), throwable -> {
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
                     getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
     }
 
@@ -136,7 +136,7 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         final int accountId = super.getAccountId();
         actualDataDisposable.add(fInteractor.followPlaylist(accountId, album.id, album.owner_id)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().getPhoenixToast().showToastSuccess(R.string.success), throwable -> {
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
                     getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
     }
 

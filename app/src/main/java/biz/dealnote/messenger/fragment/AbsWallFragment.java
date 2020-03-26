@@ -222,7 +222,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         ClipData clip = ClipData.newPlainText(label, body);
         clipboard.setPrimaryClip(clip);
 
-        getPhoenixToast().showToastSuccess(R.string.copied);
+        getPhoenixToast().showToast(R.string.copied);
     }
 
     @Override

@@ -16,8 +16,8 @@ android {
         applicationId "dev.freya.phoenix"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 20000
-        versionName '2.0.0'
+        versionCode 21000
+        versionName '2.1.0'
 
         buildConfigField 'int', 'VK_API_APP_ID', getProps("vk_app_id")
         buildConfigField 'String', 'FCM_SENDER_ID', getProps("fcm_sender_id")
@@ -129,6 +129,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
     implementation 'androidx.biometric:biometric:1.0.1'
+    implementation project(path: ':animated_toast')
 }
 
 apply plugin: 'com.google.gms.google-services'

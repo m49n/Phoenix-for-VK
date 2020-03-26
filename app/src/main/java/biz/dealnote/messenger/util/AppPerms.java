@@ -63,7 +63,7 @@ public class AppPerms {
             }
 
             if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                PhoenixToast.CreatePhoenixToast(activity).showToastSuccess(R.string.permission_granted_text);
+                PhoenixToast.CreatePhoenixToast(activity).showToast(R.string.permission_granted_text);
             } else {
                 PhoenixToast.CreatePhoenixToast(activity).showToastError(R.string.permission_is_not_granted_text);
             }
