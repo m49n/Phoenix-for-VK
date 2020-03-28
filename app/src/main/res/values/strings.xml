@@ -11,6 +11,15 @@
         <item>Серые Огни</item>
     </string-array>
 
+    <string-array name="array_theme_values" translatable="false">
+        <item>ice</item>
+        <item>fire</item>
+        <item>red</item>
+        <item>violet</item>
+        <item>green</item>
+        <item>gray</item>
+    </string-array>
+
     <string-array name="array_chat_background_names">
         <item>Печеньки</item>
         <item>Линии</item>
@@ -21,15 +30,6 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
-
-    <string-array name="array_theme_values" translatable="false">
-        <item>ice</item>
-        <item>fire</item>
-        <item>red</item>
-        <item>violet</item>
-        <item>green</item>
-        <item>gray</item>
     </string-array>
 
     <string-array name="preview_preview_size" translatable="false">
@@ -412,6 +412,8 @@
 
     <string name="end_of_list">Конец списка</string>
 
+    <string name="open_full_player">Открыть плеер</string>
+
     <string name="open_profile">Открыть профиль</string>
 
     <string name="play_240" translatable="false">240p</string>
@@ -642,6 +644,8 @@
     <string name="deleted">Удалено</string>
     <string name="remove_confirm">Подтвердите удаление</string>
     <string name="doc_remove_confirm_message">Вы действительно хотите удалить этот документ ? Это действие нельзя отменить.</string>
+    <string name="kate_import">Импорт из Kate Mobile</string>
+    <string name="development">DEV</string>
 
     <!-- Do not translate. Duration format for duration < 1 hour -->
     <string name="durationformatshort" translatable="false"><xliff:g id="format">%2$d:%3$02d</xliff:g></string>
@@ -1073,6 +1077,7 @@
     <string name="community_creator_desc">Невозможно изменить уровень полномочий создателя</string>
     <string name="community_creator">Создатель</string>
     <string name="saved_to_param_file_name">Сохранено в %1$s</string>
+    <string name="accounts_restored">Аккаунты восстановлены из резервной копии</string>
     <string name="error_video_playback_is_not_possible">Воспроизведение видео невозможно</string>
     <string name="request_executor_title">Тестирование запросов</string>
     <string name="request_body_title">Тело запроса</string>
@@ -1251,7 +1256,6 @@
     <string name="search_by_artist">Поиск по исполнителю</string>
     <string name="auto_update">Получать обновления</string>
     <string name="info_reading">Уведомлять о прочтении вашего сообщения</string>
-    <string name="player_instead_feed">Показывать плеер вместо новостей (перезапуск)</string>
     <string name="use_stop_audio">Стоп вместо паузы аудио</string>
     <string name="enable_save_photo_to_album">Включить сохранение фото в альбом"</string>
     <string name="download">Скачать"</string>

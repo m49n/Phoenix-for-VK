@@ -111,10 +111,14 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         return true;
                     case R.id.add_item_audio:
                         boolean myAudio = item.getOwnerId() == Settings.get().accounts().getCurrent();
-                        if(myAudio)
+                        if(myAudio) {
                             delete(Settings.get().accounts().getCurrent(), item);
-                        else
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
+                        }
+                        else {
                             add(Settings.get().accounts().getCurrent(), item);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
+                        }
                         return true;
                     case R.id.save_item_audio:
                         if(!AppPerms.hasWriteStoragePermision(mContext)) {

@@ -624,10 +624,14 @@ public class AttachmentsViewBinder {
                                 return true;
                             case R.id.add_item_audio:
                                 boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
-                                if(myAudio)
+                                if(myAudio) {
                                     delete(Settings.get().accounts().getCurrent(), audio);
-                                else
+                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
+                                }
+                                else {
                                     add(Settings.get().accounts().getCurrent(), audio);
+                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
+                                }
                                 return true;
                             case R.id.save_item_audio:
                                 if(!AppPerms.hasWriteStoragePermision(mContext)) {

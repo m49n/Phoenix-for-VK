@@ -130,10 +130,6 @@ class OtherSettings implements ISettings.IOtherSettings {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("info_reading", true);
     }
     @Override
-    public boolean isPlayer_instead_feed() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("player_instead_feed", false);
-    }
-    @Override
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }

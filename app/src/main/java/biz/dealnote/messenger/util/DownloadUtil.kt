@@ -52,24 +52,28 @@ object DownloadUtil {
         return filename_temp
     }
 
-    private fun makeLegalFilename(filename: String, extension: String): String {
+    @JvmStatic
+    fun makeLegalFilename(filename: String, extension: String?): String {
         //return filename.replaceAll("[^a-zA-Z0-9а-яА-Я' &\\.\\-]", "_").trim() + "." + extension;
         var result = makeLegalFilenameNTV(filename).trim { it <= ' ' }
         if (result.length > 90) result = result.substring(0, 90)
-        return result.trim { it <= ' ' } + "." + extension
+        var str = result.trim { it <= ' ' }
+        if(extension == null)
+            return str;
+        return "$str.$extension"
     }
 
     @JvmStatic
     fun TrackIsDownloaded(audio: Audio): Boolean {
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
-        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).exists()
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.path + "/" + audioName).exists()
     }
 
     @JvmStatic
     fun GetLocalTrackLink(audio: Audio): String {
         if(audio.url.contains("file://"))
             return audio.url;
-        val audioName = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
+        val audioName = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.path + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         return audioName
     }
 
@@ -78,7 +82,7 @@ object DownloadUtil {
         if (URL == null || URL.isEmpty()) return
         val videoName = makeLegalFilename(if (video.title == null) "" else video.title + " - " + video.ownerId + "_" + video.id + "_" + Res + "P", "mp4")
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString() + "/Phoenix/" + videoName)
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.path + "/Phoenix/" + videoName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.exist_audio)

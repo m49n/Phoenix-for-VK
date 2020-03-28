@@ -1,19 +1,26 @@
 package biz.dealnote.messenger.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import biz.dealnote.messenger.R
-import ir.sinasoheili.animated_toast.AnimatedToast
 
-class PhoenixToast private constructor(context: Context) {
+class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
     private val M_context: Context?
     private var duration: Int
+    private var image: Bitmap?
     fun setDuration(duration: Int): PhoenixToast {
         this.duration = duration
+        return this
+    }
+
+    fun setBitmap(Timage: Bitmap?): PhoenixToast  {
+        image = Timage
         return this
     }
 
@@ -21,7 +28,10 @@ class PhoenixToast private constructor(context: Context) {
         if (M_context == null) return
         val t = AnimatedToast(M_context)
         t.duration = duration
-        t.set_image(R.mipmap.ic_launcher_round)
+        if(image == null)
+            t.set_image(R.mipmap.ic_launcher_round)
+        else
+            t.set_image(image)
         t.setText(message!!)
         t.setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, 0)
         t.show()
@@ -36,6 +46,9 @@ class PhoenixToast private constructor(context: Context) {
         if (M_context == null) return
         val view = View.inflate(M_context, R.layout.phoenix_toast_info, null)
         val subtitle = view.findViewById<TextView>(R.id.subtitle)
+        val imagev = view.findViewById<ImageView>(R.id.icon_toast)
+        if(image != null)
+            imagev.setImageBitmap(image)
         subtitle.text = message
         val toast = Toast(M_context)
         toast.duration = duration
@@ -53,6 +66,9 @@ class PhoenixToast private constructor(context: Context) {
         if (M_context == null) return
         val view = View.inflate(M_context, R.layout.toast_error, null)
         val subtitle = view.findViewById<TextView>(R.id.text)
+        val imagev = view.findViewById<ImageView>(R.id.icon_toast_error)
+        if(image != null)
+            imagev.setImageBitmap(image)
         subtitle.text = message
         val toast = Toast(M_context)
         toast.duration = duration
@@ -85,12 +101,13 @@ class PhoenixToast private constructor(context: Context) {
     companion object {
         @JvmStatic
         fun CreatePhoenixToast(context: Context): PhoenixToast {
-            return PhoenixToast(context)
+            return PhoenixToast(context, null)
         }
     }
 
     init {
         duration = Toast.LENGTH_SHORT
         M_context = context
+        image = Timage
     }
 }

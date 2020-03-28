@@ -564,6 +564,7 @@ class MusicPlaybackService : Service() {
                 stop(java.lang.Boolean.TRUE)
                 return
             }
+
             if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio))
                 audio.setUrl(DownloadUtil.GetLocalTrackLink(audio))
             if (UpdateMeta) {
@@ -1057,7 +1058,7 @@ class MusicPlaybackService : Service() {
                             }
                             Player.STATE_ENDED -> if (!isPreparing && isInitialized) {
                                 isInitialized = false
-                                mService.get()!!.gotoNext(true)
+                                mService.get()!!.gotoNext(false)
                             }
                         }
                     }

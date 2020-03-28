@@ -107,13 +107,6 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="player_instead_feed"
-            android:summary="@string/player_instead_feed"
-            android:title="@string/player_instead_feed"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="use_stop_audio"
             android:summary="@string/use_stop_audio"
             android:title="@string/use_stop_audio"

@@ -75,8 +75,6 @@ public interface ISettings {
 
         boolean isInfo_reading();
 
-        boolean isPlayer_instead_feed();
-
         boolean isUse_stop_audio();
 
         boolean isEnable_save_photo_to_album();

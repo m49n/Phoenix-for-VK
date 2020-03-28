@@ -61,7 +61,6 @@ import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
-import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
@@ -153,9 +152,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        AssertUtils.requireNonNull(getArguments());
-
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         mAudioInteractor = InteractorFactory.createAudioInteractor();
 
         mTimeHandler = new TimeHandler(this);
@@ -536,7 +533,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private boolean ShowSecret1(String query)
     {
         return query.contains("landser") || query.contains("卐") || query.contains("русский корпус") || query.contains("русский стяг") || query.contains("чурк")
-                || query.contains("адольф") || query.contains("adolf") || query.contains("рейх") || query.contains("зиг") || query.contains("хайль")
+                || query.contains("адольф") || query.contains("adolf") || query.contains("рейх") || query.contains("зиг") || query.contains("хайль") || query.contains("скинхед")
                 || query.contains("hitler") || query.contains("sieg heil")  || query.contains("коловрат") || query.contains("вандал") || query.contains("arische");
     }
 
@@ -563,9 +560,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
 
         if (tvAlbum != null && MusicUtils.getCurrentAudio() != null) {
-            String album = requireContext().getString(R.string.album);
+            String album = "";
             if(MusicUtils.getCurrentAudio().getAlbum_title() != null)
-                album += (" " + MusicUtils.getCurrentAudio().getAlbum_title());
+                album += (requireContext().getString(R.string.album) + " " + MusicUtils.getCurrentAudio().getAlbum_title());
             tvAlbum.setText(album);
         }
         if (tvTitle != null) {

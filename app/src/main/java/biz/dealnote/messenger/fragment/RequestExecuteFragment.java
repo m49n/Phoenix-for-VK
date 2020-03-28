@@ -68,6 +68,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         root.findViewById(R.id.button_copy).setOnClickListener(v -> getPresenter().fireCopyClick());
         root.findViewById(R.id.button_save).setOnClickListener(v -> getPresenter().fireSaveClick());
         root.findViewById(R.id.button_execute).setOnClickListener(v -> getPresenter().fireExecuteClick());
+        root.findViewById(R.id.button_account).setOnClickListener(v -> getPresenter().fireAccountClick());
         return root;
     }
 

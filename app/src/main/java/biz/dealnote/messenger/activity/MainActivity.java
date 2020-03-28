@@ -84,6 +84,7 @@ import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
 import biz.dealnote.messenger.fragment.LogsFragement;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
+import biz.dealnote.messenger.fragment.MiniPlayerFragment;
 import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private ViewGroup mSheetContainer;
     private BottomNavigationView mBottomNavigation;
     private ViewGroup mBottomNavigationContainer;
+    private ViewGroup mMiniPlayer;
     private MusicUtils.ServiceToken mAudioPlayServiceToken;
     //OnSwipeTouchListener SwipeTouchListener;
 
@@ -250,17 +252,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         setStatusbarColored(true, Settings.get().ui().isDarkModeEnabled(this));
 
         mBottomNavigation = findViewById(R.id.bottom_navigation_menu);
-        if(Settings.get().other().isPlayer_instead_feed()) {
-            mBottomNavigation.getMenu().getItem(0).setIcon(R.drawable.audio_player);
-            mBottomNavigation.getMenu().getItem(0).setTitle(R.string.audio_channel);
-        }
-        else {
-            mBottomNavigation.getMenu().getItem(0).setIcon(R.drawable.rss);
-            mBottomNavigation.getMenu().getItem(0).setTitle(R.string.feed);
-        }
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
 
         mBottomNavigationContainer = findViewById(R.id.bottom_navigation_menu_container);
+        mMiniPlayer = findViewById(R.id.miniplayer);
 
         getSupportFragmentManager().addOnBackStackChangedListener(mOnBackStackChangedListener);
         resolveToolbarNavigationIcon();
@@ -601,6 +596,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private AdditionalNavigationFragment getNavigationFragment() {
         FragmentManager fm = getSupportFragmentManager();
         return (AdditionalNavigationFragment) fm.findFragmentById(R.id.additional_navigation_menu);
+    }
+
+    private MiniPlayerFragment getMiniPlayerFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        return (MiniPlayerFragment) fm.findFragmentById(R.id.miniplayer);
     }
 
     private void openNavigationPage(@NonNull AbsMenuItem item) {
@@ -949,9 +949,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();
             mBottomNavigationContainer.setVisibility(View.GONE);
+            getMiniPlayerFragment().ShowHide(false, true);
         } else {
             mBottomNavigationContainer.setVisibility(View.VISIBLE);
+            mMiniPlayer.setVisibility(View.VISIBLE);
             getNavigationFragment().unblockSheet();
+            getMiniPlayerFragment().ShowHide(true, true);
         }
     }
 
@@ -1356,13 +1359,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_mutable:
-                if(Settings.get().other().isPlayer_instead_feed()) {
-                    if (MusicUtils.getCurrentAudio() != null)
-                        PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(this);
-                }
-                else
-                    openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEED);
+            case R.id.menu_feed:
+                openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_FEED);
                 return true;
             case R.id.menu_search:
                 openPageAndCloseSheet(AdditionalNavigationFragment.SECTION_ITEM_SEARCH);

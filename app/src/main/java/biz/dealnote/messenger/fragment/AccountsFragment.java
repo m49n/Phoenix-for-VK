@@ -31,12 +31,14 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -398,26 +400,32 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     {
         if(!canRunRootCommands())
             return;
-        String JSDT = new String();
+        StringBuilder JSDT = new StringBuilder();
         try {
             Process suProcess;
             suProcess = Runtime.getRuntime().exec("su");
             DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
             DataInputStream osRes = new DataInputStream(suProcess.getInputStream());
-            if (null != os && null != osRes) {
-                os.writeBytes("cat /data/data/com.perm.kate_new_6/shared_prefs/com.perm.kate_new_6_preferences.xml\n");
-                os.flush();
-                TimeUnit.SECONDS.sleep(1);
-                while(osRes.available()>0) {
-                    JSDT += osRes.readLine();
+            BufferedReader d = new BufferedReader(new InputStreamReader(osRes));
+            os.writeBytes("cat /data/data/com.perm.kate_new_6/shared_prefs/com.perm.kate_new_6_preferences.xml\n");
+            os.flush();
+            while (!d.ready());
+
+            String Temp;
+            while (d.ready()){
+                Temp = d.readLine();
+                if(Temp != null) {
+                    JSDT.append(d.readLine());
                 }
-                os.writeBytes("exit\n");
-                os.flush();
-                suProcess.waitFor();
+                else
+                    break;
             }
+            os.writeBytes("exit\n");
+            os.flush();
+            suProcess.waitFor();
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder();
-            Document doc = dBuilder.parse(new InputSource(new StringReader(JSDT)));
+            Document doc = dBuilder.parse(new InputSource(new StringReader(JSDT.toString())));
             NodeList elements = doc.getElementsByTagName("map").item(0).getChildNodes();
             for (int i = 0; i < elements.getLength(); i++) {
                 NamedNodeMap attributes = elements.item(i).getAttributes();
@@ -427,8 +435,13 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 if(name.equals("accounts"))
                 {
                     JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
+                    List<Integer> accounts = Settings.get().accounts().getRegistered();
                     for(int s = 0; s < jsonRoot.length(); s++) {
                         JSONObject mJsonObject = jsonRoot.getJSONObject(s);
+                        if(accounts != null && accounts.size() > 0) {
+                            if(accounts.contains(mJsonObject.getInt("mid")))
+                                continue;
+                        }
                         processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", "kate_app", true, false);
                     }
                     break;
@@ -436,8 +449,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
 
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
     }

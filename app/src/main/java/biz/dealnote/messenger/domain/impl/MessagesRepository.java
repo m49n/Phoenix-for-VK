@@ -369,7 +369,6 @@ public class MessagesRepository implements IMessagesRepository {
         });
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public Completable handleReadUpdates(int accountId, @Nullable List<OutputMessagesSetReadUpdate> outgoing, @Nullable List<InputMessagesSetReadUpdate> incoming) {
         List<PeerPatch> patches = new ArrayList<>();
@@ -377,14 +376,14 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(outgoing)) {
             for (OutputMessagesSetReadUpdate update : outgoing) {
 
-                if(Settings.get().other().isInfo_reading()) {
-                    OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
+                if(Settings.get().other().isInfo_reading() && update.peer_id < 2000000000) {
+                    compositeDisposable.add(OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
                                 Handler handlerMain = new Handler(Looper.getMainLooper());
-                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).setBitmap(userInfo.getAvatar()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
                             }, throwable -> {
-                            });
+                            }));
                 }
                 patches.add(new PeerPatch(update.peer_id).withOutRead(update.local_id));
             }

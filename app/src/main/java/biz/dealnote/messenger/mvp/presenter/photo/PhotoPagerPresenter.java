@@ -1,6 +1,5 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,6 +27,7 @@ import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
+import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -275,7 +275,6 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         doSaveOnDrive();
     }
 
-    @SuppressLint("CheckResult")
     private void doSaveOnDrive() {
         String dcim = Environment.getExternalStorageDirectory().getAbsolutePath();
         File dir = new File(dcim + "/" + Constants.PHOTOS_PATH);
@@ -289,9 +288,9 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
         Photo photo = getCurrent();
 
-        OwnerInfo.getRx(getApplicationContext(), getAccountId(), photo.getOwnerId())
+        appendDisposable(OwnerInfo.getRx(getApplicationContext(), getAccountId(), photo.getOwnerId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(userInfo -> DownloadResult(userInfo.getOwner().getFullName() + "_", dir, photo), throwable -> DownloadResult("", dir, photo));
+                .subscribe(userInfo -> DownloadResult(DownloadUtil.makeLegalFilename(userInfo.getOwner().getFullName(), null) + "_", dir, photo), throwable -> DownloadResult("", dir, photo)));
     }
 
     private void DownloadResult(String Prefix, File dir, Photo photo)

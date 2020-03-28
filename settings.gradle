@@ -1,2 +1,2 @@
 include ':app', ':mvpcore'
-include ':app', ':animated_toast'
+include ':app', ':spots'

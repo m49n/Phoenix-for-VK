@@ -39,7 +39,7 @@
 
         <item name="message_bubble_color">#D4FFFFFF</item>
         <item name="navi_menu_color">@android:color/white</item>
-        <item name="toast_background">#E1455A64</item>
+        <item name="toast_background">#EEFFFFFF</item>
 
         <item name="chat_background_cookies">@drawable/cookies_white</item>
         <item name="chat_background_lines">@drawable/lines_white</item>

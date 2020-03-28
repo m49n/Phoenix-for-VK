@@ -3,7 +3,6 @@ package biz.dealnote.messenger.fragment;
 import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -470,7 +469,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         }
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public void showPhotoInfo(Photo photo) {
         AlertDialog dlg = new MaterialAlertDialogBuilder(requireActivity())
@@ -489,6 +487,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" +  photo.getText());
         if(photo.getTagsCount() > 0) {
             String finalRes = res;
+            getPresenter().appendDisposable(
             Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(userInfo -> {
@@ -514,7 +513,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                             TextView tv = dlg.findViewById(android.R.id.message);
                             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
                         } catch (Exception e) {}
-                    });
+                    }));
             return;
         }
 

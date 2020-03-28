@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -57,31 +56,26 @@
         android:src="@drawable/phoenix"
         app:maxImageSize="46dp" />
 
-
-    <TextView
+    <ImageButton
         android:id="@+id/kate_acc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:padding="32dp"
-        android:text="KATE MOBILE"
-        android:textAllCaps="false"
-        android:textColor="?attr/colorSecondary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        tools:ignore="RtlHardcoded" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="14dp"
+        android:alpha="0.7"
+        android:background="@drawable/kate"
+        android:contentDescription="@string/kate_import"
+        android:padding="32dp" />
 
-    <TextView
+    <ImageButton
         android:id="@+id/dav_acc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:padding="32dp"
-        android:text="DEV"
-        android:textAllCaps="false"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        tools:ignore="RtlHardcoded" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="14dp"
+        android:alpha="0.7"
+        android:background="@drawable/dev"
+        android:contentDescription="@string/development"
+        android:padding="32dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -34,7 +34,6 @@ import biz.dealnote.messenger.mvp.view.IAttachmentsPlacesView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
-import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IMvpView;
@@ -152,8 +151,6 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void playAudioList(int accountId, int position, @NonNull ArrayList<Audio> apiAudio) {
         MusicPlaybackService.startForPlayList(requireActivity(), apiAudio, position, false);
-        if(!Settings.get().other().isPlayer_instead_feed())
-            PlaceFactory.getPlayerPlace(accountId).tryOpenWith(requireActivity());
     }
 
     @Override
