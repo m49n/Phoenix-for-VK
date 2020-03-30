@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/copy"
+            android:contentDescription="@string/copy_data"
             android:padding="8dp"
             android:src="@drawable/content_copy"
             android:tint="?colorOnSurface" />

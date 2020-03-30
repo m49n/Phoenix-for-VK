@@ -23,8 +23,6 @@ import java.lang.ref.WeakReference;
 
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.domain.IAudioInteractor;
-import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -41,12 +39,9 @@ import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
     private int mAccountId;
 
-    private IAudioInteractor mAudioInteractor;
     private static final int REFRESH_TIME = 1;
     private PlaybackStatus mPlaybackStatus;
     private ImageButton mPlay;
-    private ImageButton mPClosePlay;
-    private ImageButton mOpenPlayer;
     private TextView Title;
     private SeekBar mProgress;
     private boolean mFromTouch = false;
@@ -63,8 +58,6 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAudioInteractor = InteractorFactory.createAudioInteractor();
 
         mTimeHandler = new TimeHandler(this);
 
@@ -99,14 +92,13 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         View root = inflater.inflate(R.layout.mini_player, container, false);
         mPlay = root.findViewById(R.id.btn_play_pause);
         lnt = root.findViewById(R.id.miniplayer_layout);
-        lnt.setVisibility(View.INVISIBLE);
-        mPClosePlay = root.findViewById(R.id.close_player);
+        ImageButton mPClosePlay = root.findViewById(R.id.close_player);
         mPClosePlay.setOnClickListener(v -> {
             CurrentTrack = MusicUtils.getCurrentAudio();
             lnt.setVisibility(View.INVISIBLE);
             }
         );
-        mOpenPlayer = root.findViewById(R.id.open_player);
+        ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
         mOpenPlayer.setOnClickListener(v -> PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(requireActivity()));
         mPlay.setOnClickListener(v -> {
             MusicUtils.playOrPause();

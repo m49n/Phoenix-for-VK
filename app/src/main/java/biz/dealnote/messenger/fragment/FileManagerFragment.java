@@ -135,8 +135,8 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (directoryScrollPositions == null) {
             directoryScrollPositions = new DirectoryScrollPositions();
         }

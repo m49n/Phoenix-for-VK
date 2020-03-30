@@ -109,8 +109,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
         if (mData == null) {

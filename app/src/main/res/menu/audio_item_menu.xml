@@ -9,6 +9,12 @@
         android:id="@+id/save_item_audio"
         android:title="@string/save" />
     <item
+        android:id="@+id/get_album_cover"
+        android:title="@string/get_album_cover" />
+    <item
+        android:id="@+id/copy_url"
+        android:title="@string/copy_original_url" />
+    <item
         android:id="@+id/bitrate_item_audio"
         android:title="@string/get_bitrate"/>
 

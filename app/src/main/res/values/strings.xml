@@ -9,6 +9,11 @@
         <item>Фиолетовые Огни</item>
         <item>Зелёные Огни</item>
         <item>Серые Огни</item>
+        <item>Сине-Красные Огни</item>
+        <item>Сине-Жёлтые Огни</item>
+        <item>Сине-Фиолетовые Огни</item>
+        <item>Жёлто-Фиолетовые Огни</item>
+        <item>Фиолетово-Жёлтые Огни</item>
     </string-array>
 
     <string-array name="array_theme_values" translatable="false">
@@ -18,6 +23,11 @@
         <item>violet</item>
         <item>green</item>
         <item>gray</item>
+        <item>blue_red</item>
+        <item>blue_yellow</item>
+        <item>blue_violet</item>
+        <item>yellow_violet</item>
+        <item>violet_yellow</item>
     </string-array>
 
     <string-array name="array_chat_background_names">
@@ -345,8 +355,8 @@
     <string name="edit">Редактировать</string>
     <string name="added">Добавлено</string>
 
-    <string name="saved_audio">Скачивание трека...</string>
-    <string name="exist_audio">Уже скачано (изменение даты...)</string>
+    <string name="saved_audio">Скачивание трека…</string>
+    <string name="exist_audio">Уже скачано (изменение даты…)</string>
     <string name="error_audio">Ошибка аудио</string>
 
     <string name="error_sending">Ошибка входа, повторите попытку позже</string>
@@ -535,6 +545,7 @@
     <string name="dislike">Мне не нравится</string>
     <string name="copied_url">Ссылка скопирована</string>
     <string name="copy_url">Копировать ссылку</string>
+    <string name="copy_original_url">Прямая ссылка</string>
     <string name="goto_user">Открыть владельца</string>
 
     <!-- Friend status -->
@@ -805,7 +816,7 @@
     <string name="who_is_not_allowed_to_view_this_album">Кому просмотр этого альбома запрещен?</string>
     <string name="who_is_allowed_to_comment_photos">Кто может комментировать фотографии?</string>
     <string name="who_is_not_allowed_to_comment_this_album">Кому комментирование этого альбома запрещено?</string>
-    <string name="copy">Копировать</string>
+    <string name="copy_data">Копировать</string>
     <string name="forward">Переслать</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
@@ -1110,6 +1121,7 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
+    <string name="get_album_cover">Сохранить обложку</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
@@ -1194,6 +1206,7 @@
     <string name="press_to_stop_service">Нажмите, чтобы остановить!</string>
     <string name="keep_longpoll_notification_title">Уведомления Phoenix</string>
     <string name="settings_keep_longpoll_title">Удерживать Longpoll</string>
+    <string name="settings_no_push">Не принимать Push FCM сообщения</string>
     <string name="settings_keep_longpoll_summary">Поддерживать связь со службой уведомлений. ВНИМАНИЕ! Это может привести к увеличению потребления батареи!</string>
     <string name="close">Закрыть</string>
     <string name="attach">Прикрепить</string>
@@ -1241,7 +1254,7 @@
     <string name="top">Популярные</string>
     <string name="gift">Подарок</string>
     <string name="chat">Чат</string>
-    <string name="get_root">Получение Root доступа...</string>
+    <string name="get_root">Получение Root доступа…</string>
     <string name="open_clipboard_url">Открыть ссылку из буфера</string>
     <string name="set_offline">Стать Offline</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
@@ -1263,6 +1276,6 @@
     <string name="recommendation">Рекомендации"</string>
     <string name="biometric">Приложите палец к сканеру"</string>
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
-    <string name="show_recent_dialogs">Показывть последние диалоги (перезапуск)"</string>
+    <string name="show_recent_dialogs">Показывть последние чаты (перезапуск)"</string>
     <string name="show_audio_top">Показывть популярные аудио"</string>
 </resources>

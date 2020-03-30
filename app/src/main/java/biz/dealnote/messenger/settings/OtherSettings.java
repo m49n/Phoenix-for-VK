@@ -106,6 +106,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isSettings_no_push() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("settings_no_push", false);
+    }
+
+    @Override
     public boolean isForceExoplayer() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_exoplayer", false);
     }
@@ -117,7 +122,7 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public boolean isForce_hls() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_hls", false);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_hls", true);
     }
 
     @Override

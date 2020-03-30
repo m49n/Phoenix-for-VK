@@ -176,8 +176,8 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private void resolveCommentsView() {
         if (isGuiReady() && hasPhotos()) {
             Photo photo = getCurrent();
-            boolean visible = photo.isCanComment() || photo.getCommentsCount() > 0;
-            getView().setupCommentsButton(visible, photo.getCommentsCount());
+            //boolean visible = photo.isCanComment() || photo.getCommentsCount() > 0;
+            getView().setupCommentsButton(true, photo.getCommentsCount());
         }
     }
 

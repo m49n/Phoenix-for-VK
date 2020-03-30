@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.api.model;
 
+import java.util.List;
+
 /**
  * Comment object describes a comment.
  */
@@ -56,6 +58,10 @@ public class VKApiComment {
      * Information about attachments in the comments (photos, links, etc.;)
      */
     public VkApiAttachments attachments;
+
+    public List<VKApiComment> threads;
+
+    public boolean in_thread;
 
     /**
      * Creates empty Comment instance.

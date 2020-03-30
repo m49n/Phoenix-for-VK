@@ -60,6 +60,16 @@
         <item name="my_messages_bubble_color">#D42C3C53</item>
     </style>
 
+    <style name="App.DayNight.BlueRed" parent="App.DayNight">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorSecondary">#FF0000</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_inactive">#AA5C5858</item>
+        <item name="my_messages_bubble_color">#D42C3C53</item>
+    </style>
+
     <style name="QuickReply" parent="Theme.MaterialComponents.Dialog">
         <item name="android:background">#1F2226</item>
         <item name="windowActionBar">false</item>

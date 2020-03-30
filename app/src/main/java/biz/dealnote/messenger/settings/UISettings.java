@@ -54,6 +54,16 @@ class UISettings implements ISettings.IUISettings {
                 return R.style.App_DayNight_Green;
             case "gray":
                 return R.style.App_DayNight_Gray;
+            case "blue_red":
+                return R.style.App_DayNight_BlueRed;
+            case "blue_yellow":
+                return R.style.App_DayNight_BlueYellow;
+            case "blue_violet":
+                return R.style.App_DayNight_BlueViolet;
+            case "yellow_violet":
+                return R.style.App_DayNight_YellowViolet;
+            case "violet_yellow":
+                return R.style.App_DayNight_VioletYellow;
             case "ice":
             default:
                 return R.style.App_DayNight_Ice;

@@ -67,6 +67,8 @@ public interface ISettings {
 
         boolean isKeepLongpoll();
 
+        boolean isSettings_no_push();
+
         boolean isCommentsDesc();
 
         boolean toggleCommentsDirection();

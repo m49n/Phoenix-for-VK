@@ -88,8 +88,8 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
     private Runnable runSearchRunnable = () -> request(0);
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
         if(mData == null){

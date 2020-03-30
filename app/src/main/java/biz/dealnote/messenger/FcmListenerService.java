@@ -50,7 +50,7 @@ public class FcmListenerService extends FirebaseMessagingService {
         String pushType = message.getData().get("type");
 
         Logger.d(TAG, "onMessage, from: " + message.getFrom() + ", pushType: " + pushType + ", data: " + message.getData());
-        if (isEmpty(pushType)) {
+        if (isEmpty(pushType) || Settings.get().other().isSettings_no_push()) {
             return;
         }
 

@@ -24,6 +24,8 @@ public class PhotoEntity extends Entity {
 
     private int likesCount;
 
+    private int repostsCount;
+
     private boolean canComment;
 
     private int commentsCount;
@@ -129,6 +131,15 @@ public class PhotoEntity extends Entity {
 
     public PhotoEntity setLikesCount(int likesCount) {
         this.likesCount = likesCount;
+        return this;
+    }
+
+    public int getRepostsCount() {
+        return repostsCount;
+    }
+
+    public PhotoEntity setRepostsCount(int repostsCount) {
+        this.repostsCount = repostsCount;
         return this;
     }
 

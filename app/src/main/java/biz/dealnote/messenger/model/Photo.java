@@ -34,6 +34,8 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
 
     private int likesCount;
 
+    private int repostsCount;
+
     private int commentsCount;
 
     private int tagsCount;
@@ -66,6 +68,7 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         accessKey = in.readString();
         deleted = in.readByte() != 0;
         postId = in.readInt();
+        repostsCount = in.readInt();
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
@@ -179,6 +182,15 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         return this;
     }
 
+    public int getRepostsCount() {
+        return repostsCount;
+    }
+
+    public Photo setRepostsCount(int repostsCount) {
+        this.repostsCount = repostsCount;
+        return this;
+    }
+
     public int getCommentsCount() {
         return commentsCount;
     }
@@ -252,6 +264,7 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         parcel.writeString(accessKey);
         parcel.writeByte((byte) (deleted ? 1 : 0));
         parcel.writeInt(postId);
+        parcel.writeInt(repostsCount);
     }
 
     public String generateWebLink(){

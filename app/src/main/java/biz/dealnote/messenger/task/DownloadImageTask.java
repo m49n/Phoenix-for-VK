@@ -32,6 +32,8 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
         wl.acquire();
 
         try {
+            if(photourl == null || photourl.isEmpty())
+                throw new Exception("Null image link");
             URL url = new URL(photourl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(60000);

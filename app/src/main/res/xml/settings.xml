@@ -194,10 +194,16 @@
         <CheckBoxPreference
             android:key="force_hls"
             android:title="@string/force_hls"
+            android:defaultValue="true"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="force_cache"
             android:title="@string/force_cache"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:key="settings_no_push"
+            android:summary="@string/settings_no_push"
+            android:title="@string/settings_no_push"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="keep_longpoll"

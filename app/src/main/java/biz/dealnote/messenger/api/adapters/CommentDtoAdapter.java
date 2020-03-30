@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
@@ -22,6 +23,8 @@ public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         JsonObject root = json.getAsJsonObject();
         VKApiComment dto = new VKApiComment();
 
+        dto.in_thread = false;
+
         dto.id = optInt(root, "id");
         dto.from_id = optInt(root, "from_id");
 
@@ -36,6 +39,15 @@ public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
 
         if(root.has("attachments")){
             dto.attachments = context.deserialize(root.get("attachments"), VkApiAttachments.class);
+        }
+
+        if(root.has("thread") && root.get("thread").getAsJsonObject().has("items") && root.get("thread").getAsJsonObject().getAsJsonArray("items").size() > 0){
+            dto.threads = new ArrayList<>();
+            for(JsonElement i : root.get("thread").getAsJsonObject().getAsJsonArray("items")) {
+                VKApiComment temp = context.deserialize(i.getAsJsonObject(), VKApiComment.class);
+                temp.in_thread = true;
+                dto.threads.add(temp);
+            }
         }
 
         if(root.has("likes")){

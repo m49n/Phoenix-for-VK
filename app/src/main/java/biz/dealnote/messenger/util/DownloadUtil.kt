@@ -7,17 +7,41 @@ import android.os.Environment
 import biz.dealnote.messenger.R
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.Video
+import biz.dealnote.messenger.task.DownloadImageTask
+import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
 import java.io.File
 import java.util.*
 
 /**
  * Created by maartenvangiel on 28/09/16.
  */
-object DownloadUtil {
+object DownloadUtil
+{
+    /*
+    fun downloadTrackWithFFMPG(context: Context, audio: Audio): Int
+    {
+        if (audio.url == null || audio.url.isEmpty()) return 2
+        val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
+        do {
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName)
+            if (Temp.exists()) {
+                Temp.setLastModified(Calendar.getInstance().time.time)
+                return 1
+            }
+        } while (false)
+
+
+        FFmpeg.execute(arrayOf("-i", audio.url, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName))
+        FFmpeg.execute(arrayOf("-i", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName, "-i", audio.thumb_image_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/covered_" + audioName, "-map", "0:0", "-map", "1:0", "-c", "copy", "-id3v2_version", "3"))
+        return 0
+    }
+     */
     @JvmStatic
     fun downloadTrack(context: Context, audio: Audio): Int {
         if(audio.url.contains("file://"))
             return 2
+        //if(Settings.get().other().isForce_hls)
+            //return downloadTrackWithFFMPG(context, audio)
         val HURl = Audio.getMp3FromM3u8(audio.url)
         if (HURl == null || HURl.isEmpty()) return 2
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
@@ -37,7 +61,7 @@ object DownloadUtil {
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             downloadManager.enqueue(downloadRequest)
         } catch (e: Exception) {
-            PhoenixToast.CreatePhoenixToast(context).showToastError("Audio Error: " + e.message)
+            CreatePhoenixToast(context).showToastError("Audio Error: " + e.message)
             return 2
         }
         return 0
@@ -85,7 +109,7 @@ object DownloadUtil {
             val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.path + "/Phoenix/" + videoName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
-                PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.exist_audio)
+                CreatePhoenixToast(context).showToastError(R.string.exist_audio)
                 return
             }
         } while (false)
@@ -97,10 +121,38 @@ object DownloadUtil {
             downloadRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, "/Phoenix/$videoName")
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             downloadManager.enqueue(downloadRequest)
-            PhoenixToast.CreatePhoenixToast(context).showToast(R.string.downloading)
+            CreatePhoenixToast(context).showToast(R.string.downloading)
         } catch (e: Exception) {
-            PhoenixToast.CreatePhoenixToast(context).showToastError("Video Error: " + e.message)
+            CreatePhoenixToast(context).showToastError("Video Error: " + e.message)
             return
         }
     }
+
+    @JvmStatic
+    fun downloadTrackCover(context: Context, audio: Audio) {
+        if (audio.url.contains("file://"))
+            return
+        val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "jpg")
+        if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).exists())
+            return
+        SomeInternalDownloader(context, audio.thumb_image_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
+    }
+
+    private class SomeInternalDownloader internal constructor(private val context: Context, url: String?, file: String?) : DownloadImageTask(context, url, file) {
+        private var mfile:String? = file
+        override fun onPostExecute(s: String?) {
+            if (Objects.isNull(s)) {
+
+                var Fl = File(mfile?.replace(".jpg", ".mp3"))
+                if(Fl.exists()) {
+                    File(mfile).setLastModified(Fl.lastModified());
+                }
+                CreatePhoenixToast(context).showToast(R.string.saved)
+            } else {
+                CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
+            }
+        }
+
+    }
+
 }

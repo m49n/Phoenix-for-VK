@@ -65,8 +65,8 @@ public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment i
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
         if(mData == null){

@@ -80,8 +80,8 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new AudioRecyclerAdapter(requireActivity(), mData);
         mAdapter.setClickListener(this);

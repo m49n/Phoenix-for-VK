@@ -13,7 +13,7 @@
         android:id="@+id/copy"
         android:icon="@drawable/content_copy"
         android:showAsAction="always"
-        android:title="@string/copy"
+        android:title="@string/copy_data"
         app:iconTint="?colorOnSurface"
         tools:ignore="AppCompatResource" />
     <item

@@ -131,8 +131,8 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         if (Objects.isNull(document) && !mLoadingNow) {
             requestVideoInfo();

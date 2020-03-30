@@ -23,7 +23,7 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:paddingBottom="90dp"
+            android:paddingBottom="72dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -58,8 +58,8 @@
 
     <ImageButton
         android:id="@+id/kate_acc"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="bottom|start"
         android:layout_marginBottom="14dp"
         android:alpha="0.7"
@@ -69,8 +69,8 @@
 
     <ImageButton
         android:id="@+id/dav_acc"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="14dp"
         android:alpha="0.7"

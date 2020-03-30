@@ -55,7 +55,8 @@ class CommentsApi extends AbsApi implements ICommentsApi {
                                 "        \"sort\":sort, \n" +
                                 "        \"preview_length\":\"0\", \n" +
                                 "        \"extended\":\"1\",\n" +
-                                "        \"fields\":fields\n" +
+                                "        \"fields\":fields,\n" +
+                                "        \"thread_items_count\":\"10\"\n" +
                                 "    });\n" +
                                 "}\n" +
                                 "\n" +
@@ -99,7 +100,7 @@ class CommentsApi extends AbsApi implements ICommentsApi {
                                 "var first_id;\n" +
                                 "if(source_type == \"post\"){\n" +
                                 "   first_id = API.wall.getComments({\"owner_id\":owner_id, \n" +
-                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"asc\"}).items[0].id;\n" +
+                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"asc\", \"thread_items_count\":\"10\"}).items[0].id;\n" +
                                 "}\n" +
                                 "\n" +
                                 "if(source_type == \"photo\"){\n" +
@@ -124,7 +125,7 @@ class CommentsApi extends AbsApi implements ICommentsApi {
                                 "var last_id;\n" +
                                 "if(source_type == \"post\"){\n" +
                                 "    last_id = API.wall.getComments({\"owner_id\":owner_id, \n" +
-                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"desc\"}).items[0].id;\n" +
+                                "        \"post_id\":source_id, \"count\":\"1\", \"sort\":\"desc\", \"thread_items_count\":\"10\"}).items[0].id;\n" +
                                 "}\n" +
                                 "\n" +
                                 "if(source_type == \"photo\"){\n" +

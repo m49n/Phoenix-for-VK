@@ -1,6 +1,8 @@
 package biz.dealnote.messenger.adapter;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -622,6 +624,15 @@ public class AttachmentsViewBinder {
                             case R.id.search_by_artist:
                                 PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true)).tryOpenWith(mContext);
                                 return true;
+                            case R.id.copy_url:
+                                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("response", audio.getUrl());
+                                clipboard.setPrimaryClip(clip);
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
+                                return true;
+                            case R.id.get_album_cover:
+                                DownloadUtil.downloadTrackCover(mContext, audio);
+                                return true;
                             case R.id.add_item_audio:
                                 boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
                                 if(myAudio) {
@@ -634,11 +645,13 @@ public class AttachmentsViewBinder {
                                 }
                                 return true;
                             case R.id.save_item_audio:
-                                if(!AppPerms.hasWriteStoragePermision(mContext)) {
-                                    AppPerms.requestWriteStoragePermission((Activity)mContext);
-                                }
                                 if(!AppPerms.hasReadStoragePermision(mContext)) {
                                     AppPerms.requestReadExternalStoragePermission((Activity)mContext);
+                                    return true;
+                                }
+                                if(!AppPerms.hasWriteStoragePermision(mContext)) {
+                                    AppPerms.requestWriteStoragePermission((Activity)mContext);
+                                    return true;
                                 }
                                 int ret = DownloadUtil.downloadTrack(mContext, audio);
                                 if(ret == 0)
