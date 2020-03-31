@@ -25,6 +25,7 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.mvp.presenter.CommunityLinksPresenter;
 import biz.dealnote.messenger.mvp.view.ICommunityLinksView;
+import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -55,6 +56,7 @@ public class CommunityLinksFragment extends BaseMvpFragment<CommunityLinksPresen
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

@@ -2,7 +2,6 @@ package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import biz.dealnote.messenger.model.Community;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -138,7 +138,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             subtitle = itemView.findViewById(R.id.item_people_subtitle);
             avatar = itemView.findViewById(R.id.item_people_avatar);
             online = itemView.findViewById(R.id.item_people_online);
-            online.setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(online, CurrentTheme.getColorPrimary(mContext));
         }
     }
 

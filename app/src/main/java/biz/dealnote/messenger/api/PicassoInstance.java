@@ -2,7 +2,6 @@ package biz.dealnote.messenger.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.StatFs;
 
 import com.squareup.picasso.OkHttp3Downloader;
@@ -134,8 +133,8 @@ public class PicassoInstance {
 
         try {
             StatFs statFs = new StatFs(dir.getAbsolutePath());
-            long blockCount = Build.VERSION.SDK_INT < 18 ? (long) statFs.getBlockCount() : statFs.getBlockCountLong();
-            long blockSize = Build.VERSION.SDK_INT < 18 ? (long) statFs.getBlockSize() : statFs.getBlockSizeLong();
+            long blockCount = statFs.getBlockCountLong();
+            long blockSize = statFs.getBlockSizeLong();
             long available = blockCount * blockSize;
             size = available / 50L;
         } catch (IllegalArgumentException ignored) {

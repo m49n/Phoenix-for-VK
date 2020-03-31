@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +18,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.LocalVideo;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.view.AspectRatioImageView;
 
 public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.ViewHolder> {
 
@@ -37,7 +37,7 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.video_item, parent, false));
+                .inflate(R.layout.item_local_video, parent, false));
         holders.add(holder);
         return holder;
     }
@@ -108,7 +108,7 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView photoImageView;
+        AspectRatioImageView photoImageView;
         View selectedRoot;
         TextView tvIndex;
         TextView tvTitle;
@@ -116,11 +116,11 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.photoImageView = itemView.findViewById(R.id.imageView);
+            this.photoImageView = itemView.findViewById(R.id.item_video_album_image);
             this.selectedRoot = itemView.findViewById(R.id.selected);
             this.tvIndex = itemView.findViewById(R.id.item_video_index);
-            this.tvTitle = itemView.findViewById(R.id.video_title);
-            this.tvDuration = itemView.findViewById(R.id.video_duration);
+            this.tvTitle = itemView.findViewById(R.id.item_video_album_title);
+            this.tvDuration = itemView.findViewById(R.id.item_video_album_count);
         }
 
         private void attachPhoto(LocalVideo video) {

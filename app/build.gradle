@@ -10,14 +10,14 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "dev.freya.phoenix"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 22100
-        versionName '2.2.1'
+        targetSdkVersion 29
+        versionCode 24000
+        versionName '2.4.0'
 
         buildConfigField 'int', 'VK_API_APP_ID', getProps("vk_app_id")
         buildConfigField 'String', 'FCM_SENDER_ID', getProps("fcm_sender_id")
@@ -129,6 +129,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation project(path: ':spots')
     implementation 'androidx.biometric:biometric:1.0.1'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

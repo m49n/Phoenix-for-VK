@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class CommunityControlFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_community_control, container, false);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
-        ViewPager pager = root.findViewById(R.id.view_pager);
+        ViewPager2 pager = root.findViewById(R.id.view_pager);
         pager.setOffscreenPageLimit(2);
 
         List<ITab> tabs = new ArrayList<>();
@@ -69,10 +69,12 @@ public class CommunityControlFragment extends Fragment {
         tabs.add(new Tab(getString(R.string.community_links_tab_title), () -> CommunityLinksFragment.newInstance(mAccountId, mCommunity.getId())));
         tabs.add(new Tab(mCommunity.getAdminLevel() == 0 ? getString(R.string.community_managers_contacts) : getString(R.string.community_managers_tab_title), () -> CommunityManagersFragment.newInstance(mAccountId, mCommunity)));
 
-        pager.setAdapter(new Adapter(tabs, getChildFragmentManager()));
+        Adapter tab_set = new Adapter(tabs, requireActivity());
+        pager.setAdapter(tab_set);
 
-        TabLayout tabLayout = root.findViewById(R.id.tablayout);
-        tabLayout.setupWithViewPager(pager);
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+            tab.setText(tab_set.tabs.get(position).getTabTitle());
+        }).attach();
         return root;
     }
 
@@ -124,40 +126,22 @@ public class CommunityControlFragment extends Fragment {
         Fragment create();
     }
 
-    private static class Adapter extends FragmentStatePagerAdapter {
-
+    private static class Adapter extends FragmentStateAdapter {
         private final List<ITab> tabs;
 
-        Adapter(List<ITab> tabs, FragmentManager fm) {
-            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        public Adapter(List<ITab> tabs, @NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
             this.tabs = tabs;
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             return tabs.get(position).getFragmentCreator().create();
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            /*switch (position){
-                //case Tabs.OPTIONS:
-                //    return app.getString(R.string.community_settings_tab_title);
-                case Tabs.MANAGERS:
-                    return app.getString(R.string.community_managers_tab_title);
-                case Tabs.LINKS:
-                    return app.getString(R.string.community_links_tab_title);
-                case Tabs.BLACKLIST:
-                    return app.getString(R.string.community_blacklist_tab_title);
-                //case Tabs.MEMBERS:
-                //    return app.getString(R.string.community_members_tab_title);
-            }*/
-
-            return tabs.get(position).getTabTitle();
-        }
-
-        @Override
-        public int getCount() {
+        public int getItemCount() {
             return tabs.size();
         }
     }

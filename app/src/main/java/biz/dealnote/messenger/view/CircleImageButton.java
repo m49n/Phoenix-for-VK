@@ -3,12 +3,12 @@ package biz.dealnote.messenger.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.util.Utils;
 
 /**
  * Created by golde on 11.04.2017.
@@ -34,8 +34,8 @@ public class CircleImageButton extends AppCompatImageView {
             int bgColor = a.getColor(R.styleable.CircleImageButton_backgroundColor, Color.RED);
             int iconColor = a.getColor(R.styleable.CircleImageButton_iconColor, Color.WHITE);
 
-            getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-            setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(getBackground(), bgColor);
+            Utils.setColorFilter(this, iconColor);
         } finally {
             a.recycle();
         }

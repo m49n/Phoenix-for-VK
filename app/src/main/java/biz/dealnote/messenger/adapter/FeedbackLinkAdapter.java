@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,6 +28,7 @@ import biz.dealnote.messenger.model.Topic;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapter.ViewHolder> {
@@ -150,7 +150,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
             mSubtitle = root.findViewById(R.id.item_feedback_link_text2);
             ivImage = root.findViewById(R.id.item_feedback_link_image);
             ivForward = root.findViewById(R.id.item_feedback_link_forward);
-            ivForward.setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(ivForward, CurrentTheme.getColorPrimary(mContext));
 
             root.setOnClickListener(v -> {
                 Object item = mData.get(getAdapterPosition());

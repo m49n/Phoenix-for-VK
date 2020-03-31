@@ -289,6 +289,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         SelectProfilesActivity.startFriendsSelection(this, REQUEST_CODE_SELECT_USERS_FOR_CHAT);
     }
 
+    /*
     @Override
     public void onDestroyView() {
         if (nonNull(mAdapter)) {
@@ -302,6 +303,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
 
         super.onDestroyView();
     }
+
+     */
 
     @Override
     public void onResume() {

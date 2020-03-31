@@ -297,6 +297,58 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/header_group_contacts_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="?colorSecondary"
+                        app:srcCompat="@drawable/account_circle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_light"
+                        android:gravity="center"
+                        android:text="@string/community_managers_contacts"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/header_group_links_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="?colorSecondary"
+                        app:srcCompat="@drawable/share" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_light"
+                        android:gravity="center"
+                        android:text="@string/links"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </HorizontalScrollView>

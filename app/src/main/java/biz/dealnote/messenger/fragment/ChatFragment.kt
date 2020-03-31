@@ -283,12 +283,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     private fun createStartConfig(): ChatConfig {
         val config = ChatConfig()
 
-        config.isCloseOnSend = activity is SendAttachmentsActivity
+        config.isCloseOnSend = requireActivity() is SendAttachmentsActivity
 
         val inputStreams = ActivityUtils.checkLocalStreams(requireActivity())
         config.uploadFiles = if (inputStreams.nullOrEmpty()) null else inputStreams
 
-        val models = activity!!.intent.getParcelableExtra<ModelsBundle>(MainActivity.EXTRA_INPUT_ATTACHMENTS)
+        val models = requireActivity().intent.getParcelableExtra<ModelsBundle>(MainActivity.EXTRA_INPUT_ATTACHMENTS)
 
         models?.run {
             config.appendAll(this)
@@ -424,7 +424,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         if (requestCode == REQUEST_EDIT_MESSAGE) {
             if (data != null && data.hasExtra(Extra.BUNDLE)) {
                 val bundle = data.getParcelableExtra<ModelsBundle>(Extra.BUNDLE)
-                presenter?.fireEditMessageResult(bundle)
+                if(bundle != null)
+                    presenter?.fireEditMessageResult(bundle)
             }
 
             if (resultCode == Activity.RESULT_OK) {

@@ -65,6 +65,7 @@ import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -212,7 +213,11 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutRes;
+        if (Utils.isLandscape(requireActivity()) && !Utils.is600dp(requireActivity())) {
+            layoutRes = R.layout.fragment_player_land;
+        } else {
             layoutRes = R.layout.fragment_player_port_new;
+        }
 
         View root = inflater.inflate(layoutRes, container, false);
 

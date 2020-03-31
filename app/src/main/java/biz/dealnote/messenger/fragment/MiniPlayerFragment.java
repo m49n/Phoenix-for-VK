@@ -109,6 +109,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             }
         });
         Title = root.findViewById(R.id.mini_artist);
+        Title.setSelected(true);
         mProgress = root.findViewById(R.id.SeekBar01);
         mProgress.setOnSeekBarChangeListener(this);
         appendDisposable(observeServiceBinding()

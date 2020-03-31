@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.view.steppers.base;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends
         int tintColor = isActive ? activeColor : inactiveColor;
 
         holder.counterRoot.setEnabled(isCurrent);
-        holder.counterRoot.getBackground().setColorFilter(tintColor, PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(holder.counterRoot.getBackground(), tintColor);
         holder.contentRoot.setVisibility(isCurrent ? View.VISIBLE : View.GONE);
 
         holder.line.setVisibility(isLast ? View.INVISIBLE : View.VISIBLE);

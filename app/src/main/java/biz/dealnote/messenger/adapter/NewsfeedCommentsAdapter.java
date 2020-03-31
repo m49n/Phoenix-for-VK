@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,7 @@ import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VideoWithOwner;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.AspectRatioImageView;
 import biz.dealnote.messenger.view.VideoServiceIcons;
@@ -258,7 +258,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
 
         holder.commentLikeRoot.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         holder.commentLikeCounter.setText(String.valueOf(comment.getLikesCount()));
-        holder.commentLikeIcon.setColorFilter(comment.isUserLikes() ? iconColorActive : colorTextSecondary, PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(holder.commentLikeIcon, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
 
         super.addOwnerAvatarClickHandling(holder.commentAvatar, comment.getFromId());
     }

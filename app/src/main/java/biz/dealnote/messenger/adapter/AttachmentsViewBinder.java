@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -129,6 +128,7 @@ public class AttachmentsViewBinder {
     public void displayAttachments(Attachments attachments, AttachmentsHolder containers, boolean postsAsLinks) {
         if (attachments == null) {
             safeSetVisibitity(containers.getVgAudios(), View.GONE);
+            safeSetVisibitity(containers.getVgVideos(), View.GONE);
             safeSetVisibitity(containers.getVgDocs(), View.GONE);
             safeSetVisibitity(containers.getVgPhotos(), View.GONE);
             safeSetVisibitity(containers.getVgPosts(), View.GONE);
@@ -145,6 +145,7 @@ public class AttachmentsViewBinder {
             }
 
             photosViewHelper.displayPhotos(attachments.getPostImages(), containers.getVgPhotos());
+            photosViewHelper.displayVideos(attachments.getPostImagesVideos(), containers.getVgVideos());
         }
     }
 
@@ -407,6 +408,7 @@ public class AttachmentsViewBinder {
 
                 AttachmentsHolder attachmentContainers = new AttachmentsHolder();
                 attachmentContainers.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
+                        setVgVideos(itemView.findViewById(R.id.video_attachments)).
                         setVgDocs(itemView.findViewById(R.id.docs_attachments)).
                         setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
                         setVgPosts(itemView.findViewById(R.id.posts_attachments)).
@@ -466,7 +468,7 @@ public class AttachmentsViewBinder {
                         } else {
                             ivType.setVisibility(View.VISIBLE);
                             ivPhoto.setVisibility(View.GONE);
-                            ivType.getBackground().setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
+                            Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary((mContext)));
                             ivType.setImageResource(R.drawable.file);
                         }
                         break;
@@ -489,13 +491,13 @@ public class AttachmentsViewBinder {
                         }
                         else
                             ivPhoto.setVisibility(View.GONE);
-                        ivType.getBackground().setColorFilter(Color.parseColor("#00FFFFFF"), PorterDuff.Mode.MULTIPLY);
+                        Utils.setColorFilter(ivType.getBackground(), Color.parseColor("#00FFFFFF"));
                         ivType.setImageResource(R.drawable.share_colored);
                         break;
                     case Types.POLL:
                         ivType.setVisibility(View.VISIBLE);
                         ivPhoto.setVisibility(View.GONE);
-                        ivType.getBackground().setColorFilter(CurrentTheme.getColorPrimary(mContext), PorterDuff.Mode.MULTIPLY);
+                        Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                         ivType.setImageResource(R.drawable.chart_bar);
                         break;
                     default:
@@ -785,7 +787,7 @@ public class AttachmentsViewBinder {
             mWaveFormView.setTag(generateHolderId());
 
             mButtonPlay = itemView.findViewById(R.id.item_voice_button_play);
-            mButtonPlay.getBackground().setColorFilter(mActiveWaveFormColor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(mButtonPlay.getBackground(), mActiveWaveFormColor);
 
             mDurationText = itemView.findViewById(R.id.item_voice_duration);
         }

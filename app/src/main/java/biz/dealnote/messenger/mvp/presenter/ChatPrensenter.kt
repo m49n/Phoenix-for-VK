@@ -1669,6 +1669,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
+    @Suppress("DEPRECATION")
     fun fireEditPhotoMaked(size: Int) {
         val uri = currentPhotoCameraUri
         currentPhotoCameraUri = null

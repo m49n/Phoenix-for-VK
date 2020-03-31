@@ -2,9 +2,9 @@ package biz.dealnote.messenger.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.upload.Upload;

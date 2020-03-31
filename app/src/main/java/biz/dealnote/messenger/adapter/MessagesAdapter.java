@@ -442,6 +442,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
             mAttachmentsHolder = new AttachmentsHolder();
             mAttachmentsHolder.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
+                    setVgVideos(itemView.findViewById(R.id.video_attachments)).
                     setVgDocs(itemView.findViewById(R.id.docs_attachments)).
                     setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
                     setVgPosts(itemView.findViewById(R.id.posts_attachments)).
@@ -486,6 +487,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
             attachmentsHolder = new AttachmentsHolder();
             attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
+                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
                     .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
                     .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
                     .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))

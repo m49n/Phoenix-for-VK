@@ -40,6 +40,7 @@ import biz.dealnote.messenger.mvp.presenter.UserBannedPresenter;
 import biz.dealnote.messenger.mvp.view.IUserBannedView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -74,6 +75,7 @@ public class UserBannedFragment extends BaseMvpFragment<UserBannedPresenter, IUs
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         mRecyclerView = root.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

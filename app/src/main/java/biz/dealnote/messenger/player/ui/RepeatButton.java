@@ -38,13 +38,13 @@ public class RepeatButton extends AppCompatImageButton implements OnClickListene
     public void updateRepeatState() {
         switch (MusicUtils.getRepeatMode()) {
             case MusicPlaybackService.REPEAT_ALL:
-                setImageDrawable(getResources().getDrawable(R.drawable.repeat));
+                setImageDrawable(getResources().getDrawable(R.drawable.repeat, getContext().getTheme()));
                 break;
             case MusicPlaybackService.REPEAT_CURRENT:
-                setImageDrawable(getResources().getDrawable(R.drawable.repeat_once));
+                setImageDrawable(getResources().getDrawable(R.drawable.repeat_once, getContext().getTheme()));
                 break;
             case MusicPlaybackService.REPEAT_NONE:
-                setImageDrawable(getResources().getDrawable(R.drawable.repeat_off));
+                setImageDrawable(getResources().getDrawable(R.drawable.repeat_off, getContext().getTheme()));
                 break;
             default:
                 break;

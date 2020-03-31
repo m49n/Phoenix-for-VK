@@ -999,63 +999,63 @@ public class MessengerContentProvider extends ContentProvider {
 
         switch (matchUri) {
             case URI_USERS:
-                rowId = db.insert(UserColumns.TABLENAME, null, values);
+                rowId = db.replace(UserColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(USER_CONTENT_URI, rowId);
                 break;
             case URI_MESSAGES:
-                rowId = db.insert(MessageColumns.TABLENAME, null, values);
+                rowId = db.replace(MessageColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(MESSAGE_CONTENT_URI, rowId);
                 break;
             case URI_ATTACHMENTS:
-                rowId = db.insert(AttachmentsColumns.TABLENAME, null, values);
+                rowId = db.replace(AttachmentsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(ATTACHMENTS_CONTENT_URI, rowId);
                 break;
             case URI_PHOTOS:
-                rowId = db.insert(PhotosColumns.TABLENAME, null, values);
+                rowId = db.replace(PhotosColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(PHOTOS_CONTENT_URI, rowId);
                 break;
             case URI_DIALOGS:
-                rowId = db.insert(DialogsColumns.TABLENAME, null, values);
+                rowId = db.replace(DialogsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(DIALOGS_CONTENT_URI, rowId);
                 break;
             case URI_PEERS:
-                rowId = db.insert(PeersColumns.TABLENAME, null, values);
+                rowId = db.replace(PeersColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(PEERS_CONTENT_URI, rowId);
                 break;
             case URI_DOCS:
-                rowId = db.insert(DocColumns.TABLENAME, null, values);
+                rowId = db.replace(DocColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(DOCS_CONTENT_URI, rowId);
                 break;
             case URI_VIDEOS:
-                rowId = db.insert(VideoColumns.TABLENAME, null, values);
+                rowId = db.replace(VideoColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(VIDEOS_CONTENT_URI, rowId);
                 break;
             case URI_POSTS:
-                rowId = db.insert(PostsColumns.TABLENAME, null, values);
+                rowId = db.replace(PostsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(POSTS_CONTENT_URI, rowId);
                 break;
             case URI_POST_ATTACHMENTS:
-                rowId = db.insert(PostAttachmentsColumns.TABLENAME, null, values);
+                rowId = db.replace(PostAttachmentsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(POSTS_ATTACHMENTS_CONTENT_URI, rowId);
                 break;
             case URI_GROUPS:
-                rowId = db.insert(GroupColumns.TABLENAME, null, values);
+                rowId = db.replace(GroupColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(GROUPS_CONTENT_URI, rowId);
                 break;
             case URI_RELATIVESHIP:
-                rowId = db.insert(RelationshipColumns.TABLENAME, null, values);
+                rowId = db.replace(RelationshipColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(RELATIVESHIP_CONTENT_URI, rowId);
                 break;
             case URI_COMMENTS:
-                rowId = db.insert(CommentsColumns.TABLENAME, null, values);
+                rowId = db.replace(CommentsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(COMMENTS_CONTENT_URI, rowId);
                 break;
             case URI_COMMENTS_ATTACHMENTS:
-                rowId = db.insert(CommentsAttachmentsColumns.TABLENAME, null, values);
+                rowId = db.replace(CommentsAttachmentsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(COMMENTS_ATTACHMENTS_CONTENT_URI, rowId);
                 break;
             case URI_PHOTO_ALBUMS:
-                rowId = db.insert(PhotoAlbumsColumns.TABLENAME, null, values);
+                rowId = db.replace(PhotoAlbumsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(PHOTO_ALBUMS_CONTENT_URI, rowId);
                 break;
             //case URI_POLL:
@@ -1063,64 +1063,64 @@ public class MessengerContentProvider extends ContentProvider {
             //    resultUri = ContentUris.withAppendedId(POLL_CONTENT_URI, rowId);
             //    break;
             case URI_NEWS:
-                rowId = db.insert(NewsColumns.TABLENAME, null, values);
+                rowId = db.replace(NewsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(NEWS_CONTENT_URI, rowId);
                 break;
             case URI_GROUPS_DET:
-                rowId = db.insert(GroupsDetColumns.TABLENAME, null, values);
+                rowId = db.replace(GroupsDetColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(GROUPS_DET_CONTENT_URI, rowId);
                 break;
             case URI_VIDEO_ALBUMS:
-                rowId = db.insert(VideoAlbumsColumns.TABLENAME, null, values);
+                rowId = db.replace(VideoAlbumsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(VIDEO_ALBUMS_CONTENT_URI, rowId);
                 break;
             case URI_TOPICS:
-                rowId = db.insert(TopicsColumns.TABLENAME, null, values);
+                rowId = db.replace(TopicsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(TOPICS_CONTENT_URI, rowId);
                 break;
             case URI_NOTIFICATIONS:
-                rowId = db.insert(NotificationColumns.TABLENAME, null, values);
+                rowId = db.replace(NotificationColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(NOTIFICATIONS_CONTENT_URI, rowId);
                 break;
             case URI_USER_DET:
-                rowId = db.insert(UsersDetColumns.TABLENAME, null, values);
+                rowId = db.replace(UsersDetColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(USER_DET_CONTENT_URI, rowId);
                 break;
             case URI_FAVE_PHOTOS:
-                rowId = db.insert(FavePhotosColumns.TABLENAME, null, values);
+                rowId = db.replace(FavePhotosColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FAVE_PHOTOS_CONTENT_URI, rowId);
                 break;
             case URI_FAVE_VIDEOS:
-                rowId = db.insert(FaveVideosColumns.TABLENAME, null, values);
+                rowId = db.replace(FaveVideosColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FAVE_VIDEOS_CONTENT_URI, rowId);
                 break;
             case URI_FAVE_PAGES:
-                rowId = db.insert(FavePageColumns.TABLENAME, null, values);
+                rowId = db.replace(FavePageColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FAVE_PAGES_CONTENT_URI, rowId);
                 break;
             case URI_FAVE_LINKS:
-                rowId = db.insert(FaveLinksColumns.TABLENAME, null, values);
+                rowId = db.replace(FaveLinksColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FAVE_LINKS_CONTENT_URI, rowId);
                 break;
             case URI_FAVE_POSTS:
-                rowId = db.insert(FavePostsColumns.TABLENAME, null, values);
+                rowId = db.replace(FavePostsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FAVE_POSTS_CONTENT_URI, rowId);
                 break;
 
             case URI_COUNTRIES:
-                rowId = db.insert(CountriesColumns.TABLENAME, null, values);
+                rowId = db.replace(CountriesColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(COUNTRIES_CONTENT_URI, rowId);
                 break;
             case URI_FEED_LISTS:
-                rowId = db.insert(FeedListsColumns.TABLENAME, null, values);
+                rowId = db.replace(FeedListsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FEED_LISTS_CONTENT_URI, rowId);
                 break;
             case URI_FRIEND_LISTS:
-                rowId = db.insert(FriendListsColumns.TABLENAME, null, values);
+                rowId = db.replace(FriendListsColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(FRIEND_LISTS_CONTENT_URI, rowId);
                 break;
             case URI_KEYS:
-                rowId = db.insert(KeyColumns.TABLENAME, null, values);
+                rowId = db.replace(KeyColumns.TABLENAME, null, values);
                 resultUri = ContentUris.withAppendedId(KEYS_CONTENT_URI, rowId);
                 break;
             default:

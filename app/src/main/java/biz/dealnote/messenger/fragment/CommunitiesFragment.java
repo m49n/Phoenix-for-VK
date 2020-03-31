@@ -38,6 +38,7 @@ import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
+import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.MySearchView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -73,6 +74,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

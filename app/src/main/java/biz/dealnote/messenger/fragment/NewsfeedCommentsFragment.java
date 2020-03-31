@@ -31,6 +31,7 @@ import biz.dealnote.messenger.mvp.view.INewsfeedCommentsView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
+import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -62,6 +63,7 @@ public class NewsfeedCommentsFragment extends PlaceSupportMvpFragment<NewsfeedCo
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 

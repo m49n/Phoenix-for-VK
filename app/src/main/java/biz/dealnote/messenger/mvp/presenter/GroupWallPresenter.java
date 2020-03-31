@@ -234,6 +234,14 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         getView().openDocuments(getAccountId(), ownerId, community);
     }
 
+    public void fireShowComunityInfoClick() {
+        getView().goToShowComunityInfo(getAccountId(), community);
+    }
+
+    public void fireShowComunityLinksInfoClick() {
+        getView().goToShowComunityLinksInfo(getAccountId(), community);
+    }
+
     public void fireHeaderStatusClick() {
 
     }

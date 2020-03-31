@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -28,6 +27,7 @@ import biz.dealnote.messenger.model.AnswerVKOfficialList;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.LinkParser;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOfficialAdapter.Holder> {
@@ -68,7 +68,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             Drawable tr = AppCompatResources.getDrawable(context, IconRes);
             if(IconRes == R.drawable.phoenix) {
                 assert tr != null;
-                tr.setColorFilter(CurrentTheme.getColorPrimary(context), PorterDuff.Mode.MULTIPLY);
+                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(context));
             }
             if(isSmall) {
                 holder.small.setVisibility(View.VISIBLE);

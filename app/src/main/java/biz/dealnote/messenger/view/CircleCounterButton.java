@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -16,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class CircleCounterButton extends LinearLayout {
@@ -95,11 +95,11 @@ public class CircleCounterButton extends LinearLayout {
 
     private void resolveActiveViews(){
         if (mActive) {
-            icon.setColorFilter(mActiveIconColor, PorterDuff.Mode.MULTIPLY);
-            icon.getBackground().setColorFilter(mActiveBackgroundColor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(icon, mActiveIconColor);
+            Utils.setColorFilter(icon.getBackground(), mActiveBackgroundColor);
         } else {
-            icon.setColorFilter(mNoactiveIconColor, PorterDuff.Mode.MULTIPLY);
-            icon.getBackground().setColorFilter(mNoactiveBackgroundColor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(icon, mNoactiveIconColor);
+            Utils.setColorFilter(icon.getBackground(), mNoactiveBackgroundColor);
         }
     }
 

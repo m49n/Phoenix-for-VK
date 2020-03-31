@@ -3,7 +3,6 @@ package biz.dealnote.messenger.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +13,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.util.Utils;
 
 /**
  * Created by admin on 03.06.2017.
@@ -44,7 +44,7 @@ public class YoutubeButton extends LinearLayout {
             int textcolor = a.getColor(R.styleable.YoutubeButton_youtube_button_text_color, Color.GRAY);
 
             ImageView icon = findViewById(R.id.youtube_button_icon);
-            icon.setColorFilter(iconcolor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(icon, iconcolor);
             icon.setImageResource(iconres);
 
             TextView textView = findViewById(R.id.youtube_button_text);

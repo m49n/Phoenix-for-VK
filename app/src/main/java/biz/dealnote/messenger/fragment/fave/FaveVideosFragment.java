@@ -70,6 +70,7 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         mAdapter = new VideosAdapter(requireActivity(), Collections.emptyList());
         mAdapter.setVideoOnClickListener(this);

@@ -1,6 +1,5 @@
 package biz.dealnote.messenger.adapter;
 
-import android.graphics.PorterDuff;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import java.util.List;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.FileItem;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.Utils;
 
 public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.Holder> {
 
@@ -60,8 +60,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
             fileName = itemView.findViewById(R.id.item_file_name);
             fileDetails = itemView.findViewById(R.id.item_file_details);
             icon = itemView.findViewById(R.id.item_file_icon);
-
-            icon.getBackground().setColorFilter(CurrentTheme.getColorPrimary(itemView.getContext()), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(icon.getBackground(), CurrentTheme.getColorPrimary(itemView.getContext()));
         }
     }
 

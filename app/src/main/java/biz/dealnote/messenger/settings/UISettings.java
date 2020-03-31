@@ -3,7 +3,8 @@ package biz.dealnote.messenger.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.PreferencesFragment;

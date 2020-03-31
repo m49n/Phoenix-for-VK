@@ -1,7 +1,7 @@
 package biz.dealnote.messenger.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +23,11 @@ import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Utils;
+import biz.dealnote.messenger.view.AspectRatioImageView;
 import biz.dealnote.messenger.view.mozaik.MozaikLayout;
 
+import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class PhotosViewHelper {
@@ -56,6 +59,76 @@ public class PhotosViewHelper {
         }
     }
 
+    private static class VideoHolder {
+
+        final AspectRatioImageView vgPhoto;
+        final ImageView ivPlay;
+        final TextView tvTitle;
+        final TextView tvDelay;
+
+        VideoHolder(View itemView) {
+            vgPhoto = itemView.findViewById(R.id.item_video_album_image);
+            ivPlay = itemView.findViewById(R.id.item_video_play);
+            tvTitle = itemView.findViewById(R.id.item_video_album_title);
+            tvDelay = itemView.findViewById(R.id.item_video_album_count);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void displayVideos(final List<PostImage> videos, final ViewGroup container) {
+        container.setVisibility(videos.size() == 0 ? View.GONE : View.VISIBLE);
+        if (videos.size() == 0) {
+            return;
+        }
+        int i = videos.size() - container.getChildCount();
+
+        for (int j = 0; j < i; j++) {
+            View root = LayoutInflater.from(context).inflate(R.layout.item_video_attachment, container, false);
+            VideoHolder holder = new VideoHolder(root);
+            root.setTag(holder);
+            Utils.setColorFilter(holder.ivPlay.getBackground(), mIconColorActive);
+            container.addView(root);
+        }
+
+        for (int g = 0; g < container.getChildCount(); g++) {
+            View tmpV = container.getChildAt(g);
+            VideoHolder holder = (VideoHolder) tmpV.getTag();
+
+            if (g < videos.size()) {
+                final PostImage image = videos.get(g);
+
+                holder.vgPhoto.setOnClickListener(v -> {
+                    if (image.getType() == PostImage.TYPE_VIDEO) {
+                        Video video = (Video) image.getAttachment();
+                        attachmentsActionCallback.onVideoPlay(video);
+                    }
+                });
+
+                final String url = image.getPreviewUrl(mPhotoPreviewSize);
+
+                if (image.getType() == PostImage.TYPE_VIDEO) {
+                    Video video = (Video) image.getAttachment();
+                    holder.tvDelay.setText(AppTextUtils.getDurationString(video.getDuration()));
+                    holder.tvTitle.setText(firstNonEmptyString(video.getTitle(), " "));
+                }
+
+                if (nonEmpty(url)) {
+                    PicassoInstance.with()
+                            .load(url)
+                            .placeholder(R.drawable.background_gray)
+                            .tag(Constants.PICASSO_TAG)
+                            .into(holder.vgPhoto);
+
+                    tmpV.setVisibility(View.VISIBLE);
+                } else {
+                    tmpV.setVisibility(View.GONE);
+                }
+            } else {
+                tmpV.setVisibility(View.GONE);
+            }
+        }
+    }
+
     public void displayPhotos(final List<PostImage> photos, final ViewGroup container) {
         container.setVisibility(photos.size() == 0 ? View.GONE : View.VISIBLE);
 
@@ -69,7 +142,7 @@ public class PhotosViewHelper {
             View root = LayoutInflater.from(context).inflate(R.layout.item_video, container, false);
             Holder holder = new Holder(root);
             root.setTag(holder);
-            holder.ivPlay.getBackground().setColorFilter(mIconColorActive, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(holder.ivPlay.getBackground(), mIconColorActive);
             container.addView(root);
         }
 

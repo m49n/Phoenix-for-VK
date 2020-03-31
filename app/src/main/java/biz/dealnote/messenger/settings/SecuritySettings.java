@@ -2,11 +2,11 @@ package biz.dealnote.messenger.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;

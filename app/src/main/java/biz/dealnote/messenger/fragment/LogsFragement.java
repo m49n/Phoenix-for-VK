@@ -30,6 +30,7 @@ import biz.dealnote.messenger.model.LogEventWrapper;
 import biz.dealnote.messenger.mvp.presenter.LogsPresenter;
 import biz.dealnote.messenger.mvp.view.ILogsView;
 import biz.dealnote.messenger.util.Utils;
+import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -64,6 +65,7 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         RecyclerView recyclerView = root.findViewById(R.id.events_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

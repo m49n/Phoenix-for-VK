@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -18,6 +17,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.Utils;
 
 public class PollAnswersAdapter extends RecyclerBindableAdapter<Poll.Answer, PollAnswersAdapter.ViewHolder> {
 
@@ -41,7 +41,7 @@ public class PollAnswersAdapter extends RecyclerBindableAdapter<Poll.Answer, Pol
 
         holder.tvCount.setText(String.valueOf(answer.getVoteCount()));
         holder.pbRate.setProgress((int) answer.getRate());
-        holder.pbRate.getProgressDrawable().setColorFilter(CurrentTheme.getColorPrimary(context), PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(holder.pbRate.getProgressDrawable(), CurrentTheme.getColorPrimary(context));
 
         boolean isMyAnswer = checkedIds.contains(answer.getId());
 

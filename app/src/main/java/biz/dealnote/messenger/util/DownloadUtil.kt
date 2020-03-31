@@ -36,6 +36,7 @@ object DownloadUtil
         return 0
     }
      */
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun downloadTrack(context: Context, audio: Audio): Int {
         if(audio.url.contains("file://"))
@@ -67,9 +68,15 @@ object DownloadUtil
         return 0
     }
 
-    private val ILLEGAL_FILENAME_CHARS = charArrayOf('/', '\\', ':', '*', '?', '"', '<', '>', '|', ',', '=', ';', '\n', '\t', '\r', '#')
+    private val ILLEGAL_FILENAME_CHARS = charArrayOf('#', '%', '&', '{', '}', '\\', '<', '>', '*', '?', '/', '$', '\'', '\"', ':', '@', '`', '|', '=')
     private fun makeLegalFilenameNTV(filename: String): String {
-        var filename_temp = filename
+        var filename_temp = filename.trim { it <= ' ' }
+
+        var s = '\u0000'
+        while (s < ' ') {
+            filename_temp = filename_temp.replace(s, '_')
+            s++
+        }
         for (i in ILLEGAL_FILENAME_CHARS.indices) {
             filename_temp = filename_temp.replace(ILLEGAL_FILENAME_CHARS[i], '_')
         }
@@ -78,21 +85,21 @@ object DownloadUtil
 
     @JvmStatic
     fun makeLegalFilename(filename: String, extension: String?): String {
-        //return filename.replaceAll("[^a-zA-Z0-9а-яА-Я' &\\.\\-]", "_").trim() + "." + extension;
-        var result = makeLegalFilenameNTV(filename).trim { it <= ' ' }
-        if (result.length > 90) result = result.substring(0, 90)
-        var str = result.trim { it <= ' ' }
+        var result = makeLegalFilenameNTV(filename)
+        if (result.length > 90) result = result.substring(0, 90).trim { it <= ' ' }
         if(extension == null)
-            return str;
-        return "$str.$extension"
+            return result;
+        return "$result.$extension"
     }
 
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun TrackIsDownloaded(audio: Audio): Boolean {
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.path + "/" + audioName).exists()
     }
 
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun GetLocalTrackLink(audio: Audio): String {
         if(audio.url.contains("file://"))
@@ -101,6 +108,7 @@ object DownloadUtil
         return audioName
     }
 
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun downloadVideo(context: Context, video: Video, URL: String?, Res: String) {
         if (URL == null || URL.isEmpty()) return
@@ -128,6 +136,7 @@ object DownloadUtil
         }
     }
 
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun downloadTrackCover(context: Context, audio: Audio) {
         if (audio.url.contains("file://"))
@@ -142,10 +151,9 @@ object DownloadUtil
         private var mfile:String? = file
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
-
-                var Fl = File(mfile?.replace(".jpg", ".mp3"))
+                val Fl = File(mfile!!.replace(".jpg", ".mp3"))
                 if(Fl.exists()) {
-                    File(mfile).setLastModified(Fl.lastModified());
+                    File(mfile!!).setLastModified(Fl.lastModified());
                 }
                 CreatePhoenixToast(context).showToast(R.string.saved)
             } else {

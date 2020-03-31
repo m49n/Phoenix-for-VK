@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +20,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
@@ -101,9 +101,7 @@ public class DocsAdapter extends RecyclerBindableAdapter<Document, DocsAdapter.D
             ivImage = root.findViewById(R.id.item_document_big_image);
             tvTitle = root.findViewById(R.id.item_document_big_title);
             tvSize = root.findViewById(R.id.item_document_big_size);
-
-            tvExt.getBackground().setColorFilter(CurrentTheme.getColorPrimary(root.getContext()),
-                    PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(tvExt.getBackground(), CurrentTheme.getColorPrimary(root.getContext()));
         }
     }
 }

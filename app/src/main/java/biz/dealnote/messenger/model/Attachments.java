@@ -322,17 +322,21 @@ public class Attachments implements Parcelable, Cloneable {
         return 0;
     }
 
+    public ArrayList<PostImage> getPostImagesVideos() {
+        ArrayList<PostImage> result = new ArrayList<>(safeCountOf(videos));
+        if (nonNull(videos)) {
+            for (Video video : videos) {
+                result.add(new PostImage(video, PostImage.TYPE_VIDEO));
+            }
+        }
+        return result;
+    }
+
     public ArrayList<PostImage> getPostImages() {
         ArrayList<PostImage> result = new ArrayList<>(safeCountOfMultiple(photos, videos));
         if (nonNull(photos)) {
             for (Photo photo : photos) {
                 result.add(new PostImage(photo, PostImage.TYPE_IMAGE));
-            }
-        }
-
-        if (nonNull(videos)) {
-            for (Video video : videos) {
-                result.add(new PostImage(video, PostImage.TYPE_VIDEO));
             }
         }
 

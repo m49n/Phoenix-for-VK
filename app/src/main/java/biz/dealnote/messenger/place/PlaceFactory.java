@@ -148,6 +148,18 @@ public class PlaceFactory {
                 .withParcelableExtra(Extra.OWNER, community);
     }
 
+    public static Place getShowComunityInfoPlace(int accountId, Community community){
+        return new Place(Place.COMMUNITY_INFO)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withParcelableExtra(Extra.OWNER, community);
+    }
+
+    public static Place getShowComunityLinksInfoPlace(int accountId, Community community){
+        return new Place(Place.COMMUNITY_INFO_LINKS)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withParcelableExtra(Extra.OWNER, community);
+    }
+
     public static Place getNewsfeedCommentsPlace(int accountId){
         return new Place(Place.NEWSFEED_COMMENTS)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId);

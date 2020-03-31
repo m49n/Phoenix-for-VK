@@ -3,9 +3,9 @@ package biz.dealnote.messenger.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Collection;

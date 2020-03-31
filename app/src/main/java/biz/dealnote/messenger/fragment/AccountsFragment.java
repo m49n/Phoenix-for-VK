@@ -320,35 +320,30 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
             DataInputStream osRes = new DataInputStream(suProcess.getInputStream());
 
-            if (null != os && null != osRes)
-            {
-                os.writeBytes("id\n");
-                os.flush();
+            os.writeBytes("id\n");
+            os.flush();
 
-                String currUid = osRes.readLine();
-                boolean exitSu = false;
-                if (null == currUid)
-                {
-                    retval = false;
-                    exitSu = false;
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Can't get root access or denied by user");
-                }
-                else if (true == currUid.contains("uid=0"))
-                {
-                    retval = true;
-                    exitSu = true;
-                }
-                else
-                {
-                    retval = false;
-                    exitSu = true;
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected: \" + currUid");
-                }
-                if (exitSu)
-                {
-                    os.writeBytes("exit\n");
-                    os.flush();
-                }
+            BufferedReader d = new BufferedReader(new InputStreamReader(osRes));
+            while (!d.ready())
+                Thread.sleep(10);
+            String currUid = d.readLine();
+            boolean exitSu = false;
+            if (null == currUid)
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Can't get root access or denied by user");
+            else if (currUid.contains("uid=0"))
+            {
+                retval = true;
+                exitSu = true;
+            }
+            else
+            {
+                exitSu = true;
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected: \" + currUid");
+            }
+            if (exitSu)
+            {
+                os.writeBytes("exit\n");
+                os.flush();
             }
         }
         catch (Exception e)
@@ -409,7 +404,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             BufferedReader d = new BufferedReader(new InputStreamReader(osRes));
             os.writeBytes("cat /data/data/com.perm.kate_new_6/shared_prefs/com.perm.kate_new_6_preferences.xml\n");
             os.flush();
-            while (!d.ready());
+            while (!d.ready())
+                Thread.sleep(10);
 
             String Temp;
             while (d.ready()){

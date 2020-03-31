@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -89,8 +88,8 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         Toolbar toolbar = root.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_options);
 
-        Drawable dr = getResources().getDrawable(R.drawable.check);
-        dr.setColorFilter(CurrentTheme.getColorPrimary(requireActivity()), PorterDuff.Mode.MULTIPLY);
+        Drawable dr = getResources().getDrawable(R.drawable.check, requireActivity().getTheme());
+        Utils.setColorFilter(dr, CurrentTheme.getColorPrimary(requireActivity()));
         toolbar.setNavigationIcon(dr);
         toolbar.setNavigationOnClickListener(menuItem -> {
             onSaveClick();

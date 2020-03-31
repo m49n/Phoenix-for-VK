@@ -2,7 +2,6 @@ package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import biz.dealnote.messenger.fragment.UserInfoResolveUtil;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UsersPart;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAdapter.Holder> {
@@ -50,7 +50,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
         final ItemInfo itemInfo = get(position);
         final User user = itemInfo.user;
 
-        holder.headerCount.getBackground().setColorFilter(CurrentTheme.getColorPrimary(context), PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(holder.headerCount.getBackground(), CurrentTheme.getColorPrimary(context));
         boolean headerVisible = group && itemInfo.first;
         holder.header.setVisibility(headerVisible ? View.VISIBLE : View.GONE);
 
@@ -172,7 +172,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
             this.avatar = itemView.findViewById(R.id.item_friend_avatar);
             this.avatarRoot = itemView.findViewById(R.id.item_friend_avatar_container);
             this.online = itemView.findViewById(R.id.item_friend_online);
-            this.online.setColorFilter(CurrentTheme.getColorPrimary(context), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(this.online, CurrentTheme.getColorPrimary(context));
         }
     }
 }

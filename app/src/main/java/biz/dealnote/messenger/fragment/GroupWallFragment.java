@@ -237,6 +237,16 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
     }
 
     @Override
+    public void goToShowComunityInfo(int accountId, Community community) {
+        PlaceFactory.getShowComunityInfoPlace(accountId, community).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void goToShowComunityLinksInfo(int accountId, Community community) {
+        PlaceFactory.getShowComunityLinksInfoPlace(accountId, community).tryOpenWith(requireActivity());
+    }
+
+    @Override
     public void startLoginCommunityActivity(int groupId) {
         Intent intent = LoginActivity.createIntent(requireActivity(), String.valueOf(Constants.API_ID), "messages,photos,docs,manage", Collections.singletonList(groupId));
         startActivityForResult(intent, REQUEST_LOGIN_COMMUNITY);
@@ -265,11 +275,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
         OptionMenuView optionMenuView = new OptionMenuView();
         getPresenter().fireOptionMenuViewCreated(optionMenuView);
-
-        if(!optionMenuView.controlVisible)
-            menu.findItem(R.id.action_community_control).setTitle(R.string.mail_information);
-        else
-            menu.findItem(R.id.action_community_control).setTitle(R.string.community_control);
+        menu.findItem(R.id.action_community_control).setVisible(optionMenuView.controlVisible);
     }
 
     private static final class OptionMenuView implements IOptionMenuView {
@@ -351,6 +357,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .setOnClickListener(v -> getPresenter().fireHeaderDocsClick());
             root.findViewById(R.id.header_group_audios_container)
                     .setOnClickListener(v -> getPresenter().fireHeaderAudiosClick());
+            root.findViewById(R.id.header_group_contacts_container)
+                    .setOnClickListener(v -> getPresenter().fireShowComunityInfoClick());
+            root.findViewById(R.id.header_group_links_container)
+                    .setOnClickListener(v -> getPresenter().fireShowComunityLinksInfoClick());
         }
     }
 }

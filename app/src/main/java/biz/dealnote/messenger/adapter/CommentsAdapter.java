@@ -3,7 +3,6 @@ package biz.dealnote.messenger.adapter;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -31,6 +30,7 @@ import biz.dealnote.messenger.link.internal.TopicLink;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.WeakViewAnimatorAdapter;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
@@ -116,7 +116,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
         holder.ivLike.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
-        holder.ivLike.setColorFilter(comment.isUserLikes() ? iconColorActive : colorTextSecondary, PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(holder.ivLike, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
         holder.tvLikeCounter.setText(String.valueOf(comment.getLikesCount()));
         holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         holder.tvLikeCounter.setTextColor(comment.isUserLikes() ? iconColorActive : colorTextSecondary);
@@ -237,7 +237,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);
             selectionView = root.findViewById(R.id.item_comment_selection);
             selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(context));
-            ivLike.setColorFilter(CurrentTheme.getSecondaryTextColorCode(context), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(context));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
 
             itemView.setOnCreateContextMenuListener(this);

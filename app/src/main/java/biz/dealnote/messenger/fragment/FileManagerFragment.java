@@ -187,6 +187,8 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         if (path.exists() && path.canRead()) {
 
             String[] fList = path.list(filter);
+            if(fList == null)
+                return;
             directoryShownIsEmpty = false;
 
             for (int i = 0; i < fList.length; i++) {
@@ -407,7 +409,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
 
     public static long getFreeSpace(String path) {
         StatFs stat = new StatFs(path);
-        long availSize = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+        long availSize = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
         return availSize;
     }
 

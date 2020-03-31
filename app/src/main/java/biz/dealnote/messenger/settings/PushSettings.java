@@ -1,7 +1,8 @@
 package biz.dealnote.messenger.settings;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 

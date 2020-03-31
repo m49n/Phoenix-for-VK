@@ -3,7 +3,6 @@ package biz.dealnote.messenger.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.util.Utils;
 
 /**
  * Created by admin on 14.06.2017.
@@ -56,7 +56,7 @@ public class MySpinnerView extends RelativeLayout {
             this.mTextColor = a.getColor(R.styleable.MySpinnerView_spinner_text_color, Color.BLACK);
 
             int iconColor = a.getColor(R.styleable.MySpinnerView_spinner_icon_color, Color.BLUE);
-            icon.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(icon, iconColor);
         } finally {
             a.recycle();
         }

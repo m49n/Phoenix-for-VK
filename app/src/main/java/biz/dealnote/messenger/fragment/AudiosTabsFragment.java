@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,12 +70,14 @@ public class AudiosTabsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        ViewPager viewPager = view.findViewById(R.id.fragment_audios_pager);
+        ViewPager2 viewPager = view.findViewById(R.id.fragment_audios_pager);
         viewPager.setOffscreenPageLimit(1);
-        setupViewPager(viewPager);
+        Adapter adapter = new Adapter(requireActivity());
+        setupViewPager(viewPager, adapter);
 
-        TabLayout tabLayout = view.findViewById(R.id.fragment_audios_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        new TabLayoutMediator(view.findViewById(R.id.fragment_audios_tabs), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+            tab.setText(adapter.mFragmentTitles.get(position));
+        }).attach();
     }
 
     public int getAccountId() {
@@ -89,12 +91,11 @@ public class AudiosTabsFragment extends BaseFragment {
         return fragment;
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getChildFragmentManager());
+    private void setupViewPager(ViewPager2 viewPager, Adapter adapter) {
         adapter.addFragment(CreateAudiosFragment(MY_AUDIO), getString(R.string.my_saved));
+        adapter.addFragment(AudioPlaylistsFragment.newInstance(getAccountId(), ownerId), getString(R.string.playlists));
         if(ownerId >= 0)
             adapter.addFragment(CreateAudiosFragment(MY_RECOMENDATIONS), getString(R.string.recommendation));
-        adapter.addFragment(AudioPlaylistsFragment.newInstance(getAccountId(), ownerId), getString(R.string.playlists));
         if(getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
             adapter.addFragment(CreateAudiosFragment(TOP_ALL), getString(R.string.top));
             adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ETHNIC), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ETHNIC));
@@ -140,13 +141,12 @@ public class AudiosTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
-    static class Adapter extends FragmentStatePagerAdapter {
-
+    private static class Adapter extends FragmentStateAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
 
-        public Adapter(FragmentManager fm) {
-            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        public Adapter(@NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
         }
 
         void addFragment(Fragment fragment, String title) {
@@ -154,19 +154,15 @@ public class AudiosTabsFragment extends BaseFragment {
             mFragmentTitles.add(title);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             return mFragments.get(position);
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
         }
     }
 }

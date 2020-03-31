@@ -2,7 +2,6 @@ package biz.dealnote.messenger.fragment;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -110,7 +109,7 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         ((AppCompatActivity) requireActivity()).setSupportActionBar(rootView.findViewById(R.id.toolbar));
         preview = rootView.findViewById(R.id.fragment_document_preview);
         ivDocIcon = rootView.findViewById(R.id.no_preview_icon);
-        ivDocIcon.getBackground().setColorFilter(CurrentTheme.getColorPrimary(requireActivity()), PorterDuff.Mode.MULTIPLY);
+        Utils.setColorFilter(ivDocIcon.getBackground(), CurrentTheme.getColorPrimary(requireActivity()));
 
         tvTitle = rootView.findViewById(R.id.fragment_document_title);
         tvSubtitle = rootView.findViewById(R.id.fragment_document_subtitle);

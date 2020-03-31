@@ -322,11 +322,12 @@ class MusicPlaybackService : Service() {
             cycleShuffle()
         }
         if (CMDPLAYLIST == action) {
-            val apiAudios: ArrayList<Audio> = intent.getParcelableArrayListExtra(Extra.AUDIOS)
+            val apiAudios: ArrayList<Audio>? = intent.getParcelableArrayListExtra(Extra.AUDIOS)
             val position = intent.getIntExtra(Extra.POSITION, 0)
             val forceShuffle = intent.getIntExtra(Extra.SHUFFLE_MODE, SHUFFLE_NONE)
             shuffleMode = forceShuffle
-            open(apiAudios, position)
+            if(apiAudios != null)
+                open(apiAudios, position)
         }
     }
 
@@ -922,7 +923,7 @@ class MusicPlaybackService : Service() {
             } else
                 null
 
-    private class MusicPlayerHandler internal constructor(service: MusicPlaybackService, looper: Looper?) : Handler(looper) {
+    private class MusicPlayerHandler internal constructor(service: MusicPlaybackService, looper: Looper) : Handler(looper) {
         private val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
         private var mCurrentVolume = 1.0f
         override fun handleMessage(msg: Message) {

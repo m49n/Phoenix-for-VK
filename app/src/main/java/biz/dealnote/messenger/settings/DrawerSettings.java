@@ -2,7 +2,8 @@ package biz.dealnote.messenger.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import biz.dealnote.messenger.model.SwitchableCategory;
 import io.reactivex.Observable;

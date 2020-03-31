@@ -1206,7 +1206,7 @@
     <string name="press_to_stop_service">Нажмите, чтобы остановить!</string>
     <string name="keep_longpoll_notification_title">Уведомления Phoenix</string>
     <string name="settings_keep_longpoll_title">Удерживать Longpoll</string>
-    <string name="settings_no_push">Не принимать Push FCM сообщения</string>
+    <string name="settings_no_push">Не принимать Push FCM уведомления</string>
     <string name="settings_keep_longpoll_summary">Поддерживать связь со службой уведомлений. ВНИМАНИЕ! Это может привести к увеличению потребления батареи!</string>
     <string name="close">Закрыть</string>
     <string name="attach">Прикрепить</string>

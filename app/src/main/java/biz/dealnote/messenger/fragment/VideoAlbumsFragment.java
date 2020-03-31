@@ -63,6 +63,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         FloatingActionButton Add = root.findViewById(R.id.add_button);
 

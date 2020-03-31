@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,6 +69,8 @@ import biz.dealnote.messenger.fragment.CommentsFragment;
 import biz.dealnote.messenger.fragment.CommunitiesFragment;
 import biz.dealnote.messenger.fragment.CommunityBanEditFragment;
 import biz.dealnote.messenger.fragment.CommunityControlFragment;
+import biz.dealnote.messenger.fragment.CommunityInfoContactsFragment;
+import biz.dealnote.messenger.fragment.CommunityInfoLinksFragment;
 import biz.dealnote.messenger.fragment.CommunityManagerEditFragment;
 import biz.dealnote.messenger.fragment.CreatePhotoAlbumFragment;
 import biz.dealnote.messenger.fragment.CreatePollFragment;
@@ -406,13 +407,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         FragmentManager manager = getSupportFragmentManager();
         if (manager.getBackStackEntryCount() > 1) {
             Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
-            tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+            Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
             mToolbar.setNavigationIcon(tr);
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             if (!isFragmentWithoutNavigation()) {
                 Drawable tr = AppCompatResources.getDrawable(this, R.drawable.phoenix);
-                tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
@@ -432,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 });
             } else {
                 Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
-                tr.setColorFilter(CurrentTheme.getColorPrimary(this), PorterDuff.Mode.MULTIPLY);
+                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_FEED));
             }
@@ -1230,6 +1231,22 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                         args.getParcelable(Extra.SETTINGS)
                 );
                 attachToFront(communityControlFragment);
+                break;
+
+            case Place.COMMUNITY_INFO:
+                CommunityInfoContactsFragment communityInfoFragment = CommunityInfoContactsFragment.newInstance(
+                        args.getInt(Extra.ACCOUNT_ID),
+                        args.getParcelable(Extra.OWNER)
+                );
+                attachToFront(communityInfoFragment);
+                break;
+
+            case Place.COMMUNITY_INFO_LINKS:
+                CommunityInfoLinksFragment communityLinksFragment = CommunityInfoLinksFragment.newInstance(
+                        args.getInt(Extra.ACCOUNT_ID),
+                        args.getParcelable(Extra.OWNER)
+                );
+                attachToFront(communityLinksFragment);
                 break;
 
             case Place.COMMUNITY_BAN_EDIT:

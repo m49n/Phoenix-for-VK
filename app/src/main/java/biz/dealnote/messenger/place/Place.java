@@ -78,6 +78,8 @@ public class Place implements Parcelable {
     public static final int DRAWER_EDIT = 66;
     public static final int USER_DETAILS = 67;
     public static final int AUDIOS_IN_ALBUM = 68;
+    public static final int COMMUNITY_INFO = 69;
+    public static final int COMMUNITY_INFO_LINKS = 70;
 
     public int type;
     private Bundle args;

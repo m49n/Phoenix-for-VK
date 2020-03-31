@@ -189,8 +189,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
      * Convert a JSON string to pretty print version
      */
     private static String toPrettyFormat(String jsonString) {
-        JsonParser parser = new JsonParser();
-        JsonObject json = parser.parse(jsonString).getAsJsonObject();
+        JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(json);
     }
@@ -207,7 +206,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                     String trimmedJson = null;
 
                     if (nonEmpty(fullJson)) {
-                        String lines[] = fullJson.split("\\r?\\n");
+                        String[] lines = fullJson.split("\\r?\\n");
 
                         List<String> trimmed = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +11,11 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -18,6 +23,7 @@ import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -781,20 +787,9 @@ public class Utils {
         }
     }
 
+    @SuppressLint("HardwareIds")
     public static String getDiviceId(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
-    public static String getAppVersionCode(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return String.valueOf(packageInfo.versionCode);
-        } catch (PackageManager.NameNotFoundException e) {
-            return "";
-        }
     }
 
     /**
@@ -885,5 +880,23 @@ public class Utils {
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, link);
         activity.startActivity(Intent.createChooser(sharingIntent, activity.getResources().getString(R.string.share_using)));
+    }
+
+    public static void setColorFilter(Drawable dr, int Color)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
+        } else {
+            dr.setColorFilter(Color, PorterDuff.Mode.MULTIPLY);
+        }
+    }
+
+    public static void setColorFilter(ImageView dr, int Color)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
+        } else {
+            dr.setColorFilter(Color, PorterDuff.Mode.MULTIPLY);
+        }
     }
 }
