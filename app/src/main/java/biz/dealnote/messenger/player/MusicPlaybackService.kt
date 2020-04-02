@@ -77,6 +77,8 @@ class MusicPlaybackService : Service() {
     /**
      * Used to track what type of audio focus loss caused the playback to pause
      */
+    private var OnceCloseMiniPlayer = false
+    private var SuperCloseMiniPlayer = false
     private var mPausedByTransientLossOfFocus = false
     private var mAnyActivityInForeground = false
     private var mMediaSession: MediaSessionCompat? = null
@@ -572,6 +574,7 @@ class MusicPlaybackService : Service() {
                 CoverAudio = null
                 AlbumTitle = null
                 CoverBitmap = null
+                OnceCloseMiniPlayer = false
             }
             mPlayer!!.setDataSource(audio.ownerId, audio.id, audio.url)
             if (UpdateMeta && Settings.get().accounts().getType(Settings.get().accounts().current) == "kate") {
@@ -1199,6 +1202,10 @@ class MusicPlaybackService : Service() {
             mService.get()!!.repeatMode = repeatmode
         }
 
+        override fun closeMiniPlayer() {
+            mService.get()!!.OnceCloseMiniPlayer = true;
+        }
+
         override fun refresh() {
             mService.get()!!.refresh()
         }
@@ -1229,6 +1236,14 @@ class MusicPlaybackService : Service() {
 
         override fun position(): Long {
             return mService.get()!!.position()
+        }
+
+        override fun getMiniplayerVisibility(): Boolean {
+            if(mService.get()!!.SuperCloseMiniPlayer || mService.get()!!.OnceCloseMiniPlayer)
+                return false
+            if(mService.get()!!.isPaused ||mService.get()!!.isPlaying )
+                return true
+            return false
         }
 
         override fun seek(position: Long): Long {
@@ -1267,6 +1282,11 @@ class MusicPlaybackService : Service() {
             return mService.get()!!.shuffleMode
         }
 
+        override fun setMiniPlayerVisibility(visiable: Boolean) {
+            mService.get()!!.SuperCloseMiniPlayer = !visiable
+            mService.get()!!.notifyChange(MINIPLAYER_SUPER_VIS_CHANGED)
+        }
+
         override fun getRepeatMode(): Int {
             return mService.get()!!.repeatMode
         }
@@ -1284,6 +1304,7 @@ class MusicPlaybackService : Service() {
     companion object {
         private const val TAG = "MusicPlaybackService"
         private val D = BuildConfig.DEBUG
+        const val MINIPLAYER_SUPER_VIS_CHANGED = "biz.dealnote.phoenix.player.mini_visible"
         const val PLAYSTATE_CHANGED = "biz.dealnote.phoenix.player.playstatechanged"
         const val POSITION_CHANGED = "biz.dealnote.phoenix.player.positionchanged"
         const val META_CHANGED = "biz.dealnote.phoenix.player.metachanged"

@@ -28,8 +28,6 @@ public class AudioEntity extends Entity {
 
     private boolean deleted;
 
-    private boolean is_hq;
-
     private String thumb_image_little;
 
     private String thumb_image_big;
@@ -65,15 +63,6 @@ public class AudioEntity extends Entity {
 
     public AudioEntity setThumb_image_big(String thumb_image_big) {
         this.thumb_image_big = thumb_image_big;
-        return this;
-    }
-
-    public boolean isHq() {
-        return is_hq;
-    }
-
-    public AudioEntity setHq(boolean hq) {
-        this.is_hq = hq;
         return this;
     }
 

@@ -614,7 +614,7 @@ public class AttachmentsViewBinder {
                 holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
-                holder.hq.setVisibility(audio.isHq() ? View.VISIBLE : View.INVISIBLE);
+                holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
                 holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
 
 
@@ -757,7 +757,7 @@ public class AttachmentsViewBinder {
         ImageView ibPlay;
         TextView time;
         ImageView saved;
-        ImageView hq;
+        ImageView lyric;
         ImageView my;
         LinearLayout Track;
 
@@ -767,7 +767,7 @@ public class AttachmentsViewBinder {
             ibPlay = root.findViewById(R.id.item_audio_play);
             time = root.findViewById(R.id.item_audio_time);
             saved = root.findViewById(R.id.saved);
-            hq = root.findViewById(R.id.hq);
+            lyric = root.findViewById(R.id.lyric);
             Track = root.findViewById(R.id.track_option);
             my = root.findViewById(R.id.my);
         }
@@ -787,7 +787,6 @@ public class AttachmentsViewBinder {
             mWaveFormView.setTag(generateHolderId());
 
             mButtonPlay = itemView.findViewById(R.id.item_voice_button_play);
-            Utils.setColorFilter(mButtonPlay.getBackground(), mActiveWaveFormColor);
 
             mDurationText = itemView.findViewById(R.id.item_voice_duration);
         }

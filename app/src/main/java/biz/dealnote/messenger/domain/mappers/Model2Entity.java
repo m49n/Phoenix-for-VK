@@ -306,8 +306,7 @@ public class Model2Entity {
                 .setAlbumId(audio.getAlbumId())
                 .setGenre(audio.getGenre())
                 .setAccessKey(audio.getAccessKey())
-                .setDeleted(audio.isDeleted())
-                .setHq(audio.isHq());
+                .setDeleted(audio.isDeleted());
     }
 
     public static PhotoEntity buildPhotoEntity(Photo photo) {

@@ -69,7 +69,7 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.NightMode;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.util.MaskTransformation;
+import biz.dealnote.messenger.util.ElipseTransformation;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RoundTransformation;
@@ -138,11 +138,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
 
         final ListPreference nightPreference = findPreference(KEY_NIGHT_SWITCH);
-        final ListPreference themePreference = findPreference(KEY_APP_THEME);
-        themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            requireActivity().recreate();
-            return true;
-        });
 
         nightPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             switch (Integer.parseInt(newValue.toString())) {
@@ -233,6 +228,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         if (avatarStyle != null) {
             avatarStyle.setOnPreferenceClickListener(preference -> {
                 showAvatarStyleDialog();
+                return true;
+            });
+        }
+
+        Preference appTheme = findPreference(KEY_APP_THEME);
+        if (appTheme != null) {
+            appTheme.setOnPreferenceClickListener(preference -> {
+                PlaceFactory.getSettingsThemePlace().tryOpenWith(requireActivity());
                 return true;
             });
         }
@@ -455,7 +458,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         PicassoInstance.with()
                 .load(R.drawable.cat)
-                .transform(new MaskTransformation(requireActivity(), R.drawable.avatar_mask))
+                .transform(new ElipseTransformation())
                 .into(ivOval);
 
         new MaterialAlertDialogBuilder(requireActivity())

@@ -36,8 +36,6 @@ public class Audio extends AbsModel implements Parcelable {
 
     private boolean deleted;
 
-    private boolean isHq;
-
     private String thumb_image_little;
 
     private String thumb_image_big;
@@ -64,7 +62,6 @@ public class Audio extends AbsModel implements Parcelable {
         thumb_image_big = in.readString();
         thumb_image_little = in.readString();
         album_title = in.readString();
-        isHq = in.readByte() != 0;
     }
 
     @Override
@@ -84,7 +81,6 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeString(thumb_image_big);
         dest.writeString(thumb_image_little);
         dest.writeString(album_title);
-        dest.writeByte((byte) (isHq ? 1 : 0));
     }
 
     public static final Creator<Audio> CREATOR = new Creator<Audio>() {
@@ -219,15 +215,6 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setAlbumId(int albumId) {
         this.albumId = albumId;
-        return this;
-    }
-
-    public boolean isHq() {
-        return isHq;
-    }
-
-    public Audio setHq(boolean hq) {
-        isHq = hq;
         return this;
     }
 

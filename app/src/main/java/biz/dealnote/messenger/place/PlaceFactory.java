@@ -206,6 +206,10 @@ public class PlaceFactory {
         return new Place(Place.CREATE_POLL).setArguments(CreatePollFragment.buildArgs(accountId, ownerId));
     }
 
+    public static Place getSettingsThemePlace(){
+        return new Place(Place.SETTINGS_THEME);
+    }
+
     public static Place getPollPlace(int accountId, @NonNull Poll poll){
         return new Place(Place.POLL).setArguments(PollFragment.buildArgs(accountId, poll));
     }

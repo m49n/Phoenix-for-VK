@@ -24,7 +24,7 @@
             android:id="@+id/item_voice_button_play"
             android:layout_width="@dimen/audio_play_button_size"
             android:layout_height="@dimen/audio_play_button_size"
-            android:background="@drawable/circle_back_white"
+            android:background="@drawable/audio_button"
             android:padding="6dp"
             android:scaleType="centerCrop"
             android:src="@drawable/play" />

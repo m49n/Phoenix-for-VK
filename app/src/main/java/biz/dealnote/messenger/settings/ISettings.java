@@ -249,6 +249,10 @@ public interface ISettings {
         @StyleRes
         int getMainTheme();
 
+        String getMainThemeKey();
+
+        void setMainTheme(String key);
+
         @AvatarStyle
         int getAvatarStyle();
 

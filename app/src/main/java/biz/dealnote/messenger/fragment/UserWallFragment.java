@@ -44,7 +44,6 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
-import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -86,7 +85,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         if (nonEmpty(photoUrl)) {
             PicassoInstance.with()
                     .load(photoUrl)
-                    .transform(new RoundTransformation())
+                    .transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
 
@@ -200,7 +199,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     @Override
     public IPresenterFactory<UserWallPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            AssertUtils.requireNonNull(getArguments());
+            requireArguments();
 
             int accoutnId = getArguments().getInt(Extra.ACCOUNT_ID);
             int ownerId = getArguments().getInt(Extra.OWNER_ID);

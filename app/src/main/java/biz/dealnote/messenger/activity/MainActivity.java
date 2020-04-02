@@ -94,6 +94,7 @@ import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
 import biz.dealnote.messenger.fragment.SecurityPreferencesFragment;
+import biz.dealnote.messenger.fragment.ThemeFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.UserBannedFragment;
 import biz.dealnote.messenger.fragment.UserDetailsFragment;
@@ -946,16 +947,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void hideMenu(boolean hide) {
+        MusicUtils.setMiniPlayerVisibility(!hide);
         if (hide) {
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();
             mBottomNavigationContainer.setVisibility(View.GONE);
-            getMiniPlayerFragment().ShowHide(false, true);
         } else {
             mBottomNavigationContainer.setVisibility(View.VISIBLE);
-            mMiniPlayer.setVisibility(View.VISIBLE);
             getNavigationFragment().unblockSheet();
-            getMiniPlayerFragment().ShowHide(true, true);
         }
     }
 
@@ -1247,6 +1246,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                         args.getParcelable(Extra.OWNER)
                 );
                 attachToFront(communityLinksFragment);
+                break;
+
+            case Place.SETTINGS_THEME:
+                ThemeFragment themes = ThemeFragment.newInstance();
+                attachToFront(themes);
                 break;
 
             case Place.COMMUNITY_BAN_EDIT:

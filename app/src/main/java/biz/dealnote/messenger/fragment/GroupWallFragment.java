@@ -51,8 +51,8 @@ import biz.dealnote.messenger.mvp.presenter.DocsListPresenter;
 import biz.dealnote.messenger.mvp.presenter.GroupWallPresenter;
 import biz.dealnote.messenger.mvp.view.IGroupWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AssertUtils;
-import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -85,7 +85,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         String photoUrl = community.getMaxSquareAvatar();
         if (nonEmpty(photoUrl)) {
             PicassoInstance.with()
-                    .load(photoUrl).transform(new RoundTransformation())
+                    .load(photoUrl).transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
     }

@@ -2,33 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">Феникс Мод</string>
-    <string-array name="array_theme_names">
-        <item>Синие Огни</item>
-        <item>Жёлтые Огни</item>
-        <item>Красные Огни</item>
-        <item>Фиолетовые Огни</item>
-        <item>Зелёные Огни</item>
-        <item>Серые Огни</item>
-        <item>Сине-Красные Огни</item>
-        <item>Сине-Жёлтые Огни</item>
-        <item>Сине-Фиолетовые Огни</item>
-        <item>Жёлто-Фиолетовые Огни</item>
-        <item>Фиолетово-Жёлтые Огни</item>
-    </string-array>
-
-    <string-array name="array_theme_values" translatable="false">
-        <item>ice</item>
-        <item>fire</item>
-        <item>red</item>
-        <item>violet</item>
-        <item>green</item>
-        <item>gray</item>
-        <item>blue_red</item>
-        <item>blue_yellow</item>
-        <item>blue_violet</item>
-        <item>yellow_violet</item>
-        <item>violet_yellow</item>
-    </string-array>
 
     <string-array name="array_chat_background_names">
         <item>Печеньки</item>
@@ -1134,6 +1107,7 @@
     <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
     <string name="drawer_edit_title">Боковое меню</string>
+    <string name="theme_edit_title">Выбор темы</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
     <string name="button_validate_web">Не пришёл код</string>

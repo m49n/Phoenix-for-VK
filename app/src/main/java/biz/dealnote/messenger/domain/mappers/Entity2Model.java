@@ -522,8 +522,7 @@ public class Entity2Model {
                 .setOwnerId(dbo.getOwnerId())
                 .setLyricsId(dbo.getLyricsId())
                 .setTitle(dbo.getTitle())
-                .setGenre(dbo.getGenre())
-                .setHq(dbo.isHq());
+                .setGenre(dbo.getGenre());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {

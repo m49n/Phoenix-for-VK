@@ -30,23 +30,24 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.album_id = root.has("album_id") ? root.get("album_id").getAsInt() : 0;
         dto.genre_id = root.has("genre_id") ? root.get("genre_id").getAsInt() : 0;
         dto.access_key = root.has("access_key") ? root.get("access_key").getAsString() : null;
-        dto.is_hq = root.has("is_hq") && root.get("is_hq").getAsBoolean();
 
-        if(root.has("album") && root.get("album").getAsJsonObject().has("thumb"))
+        if(root.has("album"))
         {
             JsonObject thmb = root.getAsJsonObject("album");
             if(root.has("title"))
-                dto.album_title = thmb.get("title").getAsString();;
-            thmb = thmb.getAsJsonObject("thumb");
-            if(thmb.has("photo_68"))
-                dto.thumb_image_little = thmb.get("photo_68").getAsString();
-            else if(thmb.has("photo_34"))
-                dto.thumb_image_little = thmb.get("photo_34").getAsString();
+                dto.album_title = thmb.get("title").getAsString();
+            if(thmb.has("thumb")) {
+                thmb = thmb.getAsJsonObject("thumb");
+                if (thmb.has("photo_68"))
+                    dto.thumb_image_little = thmb.get("photo_68").getAsString();
+                else if (thmb.has("photo_34"))
+                    dto.thumb_image_little = thmb.get("photo_34").getAsString();
 
-            if(thmb.has("photo_600"))
-                dto.thumb_image_big = thmb.get("photo_600").getAsString();
-            else if(thmb.has("photo_300"))
-                dto.thumb_image_big = thmb.get("photo_300").getAsString();
+                if (thmb.has("photo_600"))
+                    dto.thumb_image_big = thmb.get("photo_600").getAsString();
+                else if (thmb.has("photo_300"))
+                    dto.thumb_image_big = thmb.get("photo_300").getAsString();
+            }
         }
 
         return dto;

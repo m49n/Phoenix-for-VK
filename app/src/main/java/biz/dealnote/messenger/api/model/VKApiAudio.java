@@ -67,8 +67,6 @@ public class VKApiAudio implements VKApiAttachment {
      */
     public String access_key;
 
-    public boolean is_hq;
-
     /**
      * Creates empty Audio instance.
      */

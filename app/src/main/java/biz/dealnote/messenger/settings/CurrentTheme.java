@@ -15,7 +15,7 @@ import androidx.preference.PreferenceManager;
 import com.squareup.picasso.Transformation;
 
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.util.MaskTransformation;
+import biz.dealnote.messenger.util.ElipseTransformation;
 import biz.dealnote.messenger.util.RoundTransformation;
 
 public class CurrentTheme {
@@ -45,7 +45,7 @@ public class CurrentTheme {
 
         switch (style) {
             case AvatarStyle.OVAL:
-                return new MaskTransformation(context, R.drawable.avatar_mask);
+                return new ElipseTransformation();
             case AvatarStyle.CIRCLE:
                 return new RoundTransformation();
             default:

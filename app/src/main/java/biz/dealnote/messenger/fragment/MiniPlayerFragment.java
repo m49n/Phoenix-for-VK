@@ -24,7 +24,6 @@ import java.lang.ref.WeakReference;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
-import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
@@ -48,12 +47,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     private long mPosOverride = -1;
     private LinearLayout lnt;
 
-    private boolean HideBySuper = false;
-
     private TimeHandler mTimeHandler;
     private boolean mIsPaused = false;
     private long mLastSeekEventTime;
-    private Audio CurrentTrack = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +69,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PREPARED);
         filter.addAction(MusicPlaybackService.REFRESH);
+        filter.addAction(MusicPlaybackService.MINIPLAYER_SUPER_VIS_CHANGED);
         requireActivity().registerReceiver(mPlaybackStatus, filter);
         final long next = refreshCurrentTime();
         queueNextRefresh(next);
@@ -92,10 +89,11 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         View root = inflater.inflate(R.layout.mini_player, container, false);
         mPlay = root.findViewById(R.id.btn_play_pause);
         lnt = root.findViewById(R.id.miniplayer_layout);
+        lnt.setVisibility(MusicUtils.getMiniPlayerVisibility() ? View.VISIBLE : View.GONE);
         ImageButton mPClosePlay = root.findViewById(R.id.close_player);
         mPClosePlay.setOnClickListener(v -> {
-            CurrentTrack = MusicUtils.getCurrentAudio();
-            lnt.setVisibility(View.INVISIBLE);
+            MusicUtils.closeMiniPlayer();
+            lnt.setVisibility(View.GONE);
             }
         );
         ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
@@ -136,32 +134,10 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         updateNowPlayingInfo();
     }
 
-    public void ShowHide(boolean Show, boolean Super)
-    {
-        if(HideBySuper && Show && !Super)
-            return;
-        if(!Show && Super)
-            HideBySuper = true;
-        if(Show && MusicUtils.getCurrentAudio() == null)
-            lnt.setVisibility(View.INVISIBLE);
-        else if(Show) {
-            lnt.setVisibility(View.VISIBLE);
-            HideBySuper = false;
-            if(CurrentTrack == MusicUtils.getCurrentAudio() && CurrentTrack != null) {
-                lnt.setVisibility(View.INVISIBLE);
-                return;
-            }
-            else
-                CurrentTrack = null;
-        }
-        else
-            lnt.setVisibility(View.INVISIBLE);
-    }
-
     @SuppressLint("SetTextI18n")
     private void updateNowPlayingInfo()
     {
-        ShowHide(true, false);
+        lnt.setVisibility(MusicUtils.getMiniPlayerVisibility() ? View.VISIBLE : View.GONE);
         String artist = MusicUtils.getArtistName();
         String trackName = MusicUtils.getTrackName();
         Title.setText(firstNonEmptyString(artist, " ") + " - " + firstNonEmptyString(trackName, " "));
@@ -327,6 +303,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             if (isNull(fragment) || isNull(action)) return;
 
             switch (action) {
+                case MusicPlaybackService.MINIPLAYER_SUPER_VIS_CHANGED:
+                    fragment.updateNowPlayingInfo();
+                    break;
                 case MusicPlaybackService.META_CHANGED:
                 case MusicPlaybackService.PREPARED:
                     // Current info

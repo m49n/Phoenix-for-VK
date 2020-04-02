@@ -70,7 +70,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         holder.title.setText(item.getTitle());
         holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
 
-        holder.hq.setVisibility(item.isHq() ? View.VISIBLE : View.INVISIBLE);
+        holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
 
         holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
 
@@ -183,7 +183,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView play;
         TextView time;
         ImageView saved;
-        ImageView hq;
+        ImageView lyric;
         ImageView my;
         LinearLayout Track;
 
@@ -194,7 +194,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             play = itemView.findViewById(R.id.item_audio_play);
             time = itemView.findViewById(R.id.item_audio_time);
             saved = itemView.findViewById(R.id.saved);
-            hq = itemView.findViewById(R.id.hq);
+            lyric = itemView.findViewById(R.id.lyric);
             Track = itemView.findViewById(R.id.track_option);
             my = itemView.findViewById(R.id.my);
         }

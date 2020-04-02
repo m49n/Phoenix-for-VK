@@ -140,10 +140,8 @@
         android:title="@string/appearance_settings"
         app:iconSpaceReserved="false">
 
-        <ListPreference
+        <Preference
             android:defaultValue="ice"
-            android:entries="@array/array_theme_names"
-            android:entryValues="@array/array_theme_values"
             android:key="app_theme"
             android:title="@string/choose_theme_title"
             app:iconSpaceReserved="false" />

@@ -41,6 +41,19 @@ class UISettings implements ISettings.IUISettings {
     }
 
     @Override
+    public void setMainTheme(String key)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        preferences.edit().putString("app_theme", key).apply();
+    }
+
+    @Override
+    public String getMainThemeKey() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+       return preferences.getString("app_theme", "ice");
+    }
+
+    @Override
     public int getMainTheme() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
         String theme = preferences.getString("app_theme", "ice");
@@ -51,8 +64,12 @@ class UISettings implements ISettings.IUISettings {
                 return R.style.App_DayNight_Red;
             case "violet":
                 return R.style.App_DayNight_Violet;
-            case "green":
-                return R.style.App_DayNight_Green;
+            case "violet_green":
+                return R.style.App_DayNight_VioletGreen;
+            case "green_violet":
+                return R.style.App_DayNight_GreenViolet;
+            case "green_violet_sec":
+                return R.style.App_DayNight_GreenVioletSec;
             case "gray":
                 return R.style.App_DayNight_Gray;
             case "blue_red":
@@ -65,6 +82,10 @@ class UISettings implements ISettings.IUISettings {
                 return R.style.App_DayNight_YellowViolet;
             case "violet_yellow":
                 return R.style.App_DayNight_VioletYellow;
+            case "violet_red":
+                return R.style.App_DayNight_VioletRed;
+            case "yellow_red":
+                return R.style.App_DayNight_YellowRed;
             case "ice":
             default:
                 return R.style.App_DayNight_Ice;

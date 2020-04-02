@@ -213,6 +213,34 @@ public final class MusicUtils {
         }
     }
 
+    public static void closeMiniPlayer() {
+        try {
+            if (mService != null) {
+                mService.closeMiniPlayer();
+            }
+        } catch (final Exception ignored) {
+        }
+    }
+
+    public static void setMiniPlayerVisibility(boolean visiable) {
+        try {
+            if (mService != null) {
+                mService.setMiniPlayerVisibility(visiable);
+            }
+        } catch (final Exception ignored) {
+        }
+    }
+
+    public static boolean getMiniPlayerVisibility() {
+        try {
+            if (mService != null) {
+                return mService.getMiniplayerVisibility();
+            }
+        } catch (final Exception ignored) {
+        }
+        return false;
+    }
+
     /**
      * Cycles through the repeat options.
      */

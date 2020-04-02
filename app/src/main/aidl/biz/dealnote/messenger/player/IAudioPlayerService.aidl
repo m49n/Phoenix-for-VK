@@ -11,6 +11,9 @@ interface IAudioPlayerService {
     void play();
     void prev();
     void next();
+    void setMiniPlayerVisibility(boolean visiable);
+    void closeMiniPlayer();
+    boolean getMiniplayerVisibility();
     void setShuffleMode(int shufflemode);
     void setRepeatMode(int repeatmode);
     void refresh();
