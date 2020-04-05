@@ -34,6 +34,7 @@ import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener
 import biz.dealnote.messenger.listener.OnSectionResumeCallback
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener
 import biz.dealnote.messenger.model.*
+import biz.dealnote.messenger.model.selection.FileManagerSelectableSource
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource
 import biz.dealnote.messenger.model.selection.Sources
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource
@@ -45,6 +46,7 @@ import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.upload.UploadDestination
 import biz.dealnote.messenger.util.AppPerms
 import biz.dealnote.messenger.util.InputTextDialog
+import biz.dealnote.messenger.util.Utils.nonEmpty
 import biz.dealnote.messenger.util.ViewUtils
 import biz.dealnote.messenger.view.InputViewController
 import biz.dealnote.messenger.view.LoadMoreFooterHelper
@@ -418,6 +420,18 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
+    private fun onEditLocalFileSelected(file: String) {
+        val defaultSize = Settings.get().main().uploadImageSize
+        when (defaultSize) {
+            null -> {
+                ImageSizeAlertDialog.Builder(activity)
+                        .setOnSelectedCallback { size -> presenter?.fireFileForUploadSelected(file, size) }
+                        .show()
+            }
+            else -> presenter?.fireFileForUploadSelected(file, defaultSize)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -439,7 +453,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             val localPhotos: List<LocalPhoto> = data?.getParcelableArrayListExtra(Extra.PHOTOS)
                     ?: Collections.emptyList()
 
-            if (vkphotos.isNotEmpty()) {
+            val file = data?.getStringExtra(FileManagerFragment.returnFileParameter)
+
+            if(file != null && nonEmpty(file)){
+                onEditLocalFileSelected(file)
+            }
+            else if (vkphotos.isNotEmpty()) {
                 presenter?.fireEditAttachmentsSelected(vkphotos)
             } else if (localPhotos.isNotEmpty()) {
                 onEditLocalPhotosSelected(localPhotos)
@@ -476,6 +495,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         val sources = Sources()
                 .with(LocalPhotosSelectableSource())
                 .with(VkPhotosSelectableSource(accountId, ownerId))
+                .with(FileManagerSelectableSource())
 
         val intent = DualTabPhotoActivity.createIntent(activity, 10, sources)
         startActivityForResult(intent, REQUEST_ADD_VKPHOTO)

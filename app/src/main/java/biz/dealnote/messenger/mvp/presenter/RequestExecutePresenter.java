@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -57,11 +58,13 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
 
     private String body;
     private String method;
+    private Context context;
     private final INetworker networker;
 
-    public RequestExecutePresenter(int accountId, @Nullable Bundle savedInstanceState) {
+    public RequestExecutePresenter(int accountId, Context ctx, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.networker = Apis.get();
+        this.context = ctx;
     }
 
     private void executeRequest() {
@@ -323,8 +326,8 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
     }
 
     public void fireAccountClick() {
-        if (!hasWritePermission()) {
-            getView().requestWriteExternalStoragePermission();
+        if(!AppPerms.hasReadWriteStoragePermision(context)) {
+            AppPerms.requestReadWriteStoragePermission((Activity)context);
             return;
         }
 

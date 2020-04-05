@@ -12,7 +12,9 @@
         android:background="?android:colorBackground"
         app:elevation="0dp">
 
-        <include layout="@layout/toolbar_no_card" />
+        <include
+            android:id="@+id/toolbar_container"
+            layout="@layout/toolbar" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

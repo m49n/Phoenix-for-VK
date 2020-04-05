@@ -78,6 +78,16 @@ public final class UploadUtils {
         return intents;
     }
 
+    public static List<UploadIntent> createIntents(int accountId, UploadDestination destination, String file, int size,
+                                                   boolean autoCommit){
+        List<UploadIntent> intents = new ArrayList<>();
+        intents.add(new UploadIntent(accountId, destination)
+                    .setSize(size)
+                    .setAutoCommit(autoCommit)
+                    .setFileUri(Uri.parse(file)));
+        return intents;
+    }
+
     private static Bitmap scaleDown(Bitmap realImage, float maxImageSize, boolean filter) {
         if (realImage.getHeight() < maxImageSize && realImage.getWidth() < maxImageSize) {
             return realImage;

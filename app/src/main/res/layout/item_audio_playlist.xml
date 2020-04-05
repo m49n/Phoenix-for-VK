@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="5"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textColor="?colorSecondary"
                 tools:text="Description" />
 
             <TextView

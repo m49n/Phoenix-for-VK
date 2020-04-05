@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.PhoenixToast;
@@ -76,8 +79,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_music, container, false);
-
-
         Toolbar toolbar = root.findViewById(R.id.toolbar);
 
         if (!inTabsContainer) {
@@ -97,6 +98,15 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             @Override
             public void onScrollToLastElement() {
                 getPresenter().fireScrollToEnd();
+            }
+        });
+        FloatingActionButton Goto = root.findViewById(R.id.goto_button);
+        Goto.setOnClickListener(v -> {
+            Audio curr = MusicUtils.getCurrentAudio();
+            if (curr != null) {
+                int index = getPresenter().getAudioPos(curr);
+                if (index >= 0)
+                    recyclerView.scrollToPosition(index);
             }
         });
 
@@ -174,11 +184,8 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     public void ProvideReadCachedAudio()
     {
         PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
-        if(!AppPerms.hasWriteStoragePermision(getContext())) {
-            AppPerms.requestWriteStoragePermission(requireActivity());
-        }
-        if(!AppPerms.hasReadStoragePermision(getContext())) {
-            AppPerms.requestReadExternalStoragePermission(requireActivity());
+        if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
+            AppPerms.requestReadWriteStoragePermission(requireActivity());
         }
     }
 

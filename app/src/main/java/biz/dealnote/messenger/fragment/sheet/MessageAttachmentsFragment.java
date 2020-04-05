@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.fragment.sheet;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -25,12 +26,14 @@ import biz.dealnote.messenger.activity.AttachmentsActivity;
 import biz.dealnote.messenger.activity.DualTabPhotoActivity;
 import biz.dealnote.messenger.activity.VideoSelectActivity;
 import biz.dealnote.messenger.adapter.AttachmentsBottomSheetAdapter;
+import biz.dealnote.messenger.fragment.FileManagerFragment;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.ModelsBundle;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Types;
+import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
@@ -70,6 +73,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     private RecyclerView mRecyclerView;
     private View mEmptyView;
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
@@ -103,7 +107,8 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         if(requestCode == REQUEST_ADD_VKPHOTO && resultCode == Activity.RESULT_OK){
             ArrayList<Photo> vkphotos = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             ArrayList<LocalPhoto> localPhotos = data.getParcelableArrayListExtra(Extra.PHOTOS);
-            getPresenter().firePhotosSelected(vkphotos, localPhotos);
+            String file = data.getStringExtra(FileManagerFragment.returnFileParameter);
+            getPresenter().firePhotosSelected(vkphotos, localPhotos, file);
         }
 
         if(requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK){
@@ -146,7 +151,8 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     public void addPhoto(int accountId, int ownerId) {
         Sources sources = new Sources()
                 .with(new LocalPhotosSelectableSource())
-                .with(new VkPhotosSelectableSource(accountId, ownerId));
+                .with(new VkPhotosSelectableSource(accountId, ownerId))
+                .with(new FileManagerSelectableSource());
 
         Intent intent = DualTabPhotoActivity.createIntent(requireActivity(), 10, sources);
         startActivityForResult(intent, REQUEST_ADD_VKPHOTO);
@@ -166,6 +172,17 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
                 .setTitle(R.string.select_image_size_title)
                 .setItems(R.array.array_image_sizes_names, (dialogInterface, j)
                         -> getPresenter().fireUploadPhotoSizeSelected(photos, values[j]))
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
+    }
+
+    @Override
+    public void displaySelectUploadFileSizeDialog(String file) {
+        int[] values = {Upload.IMAGE_SIZE_800, Upload.IMAGE_SIZE_1200, Upload.IMAGE_SIZE_FULL};
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.select_image_size_title)
+                .setItems(R.array.array_image_sizes_names, (dialogInterface, j)
+                        -> getPresenter().fireUploadFileSizeSelected(file, values[j]))
                 .setNegativeButton(R.string.button_cancel, null)
                 .show();
     }

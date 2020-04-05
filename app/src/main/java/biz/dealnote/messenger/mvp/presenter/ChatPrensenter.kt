@@ -1595,6 +1595,16 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         view?.startImagesSelection(accountId, messagesOwnerId)
     }
 
+    fun fireFileForUploadSelected(file: String?, imageSize: Int) {
+        edited?.run {
+            val destination = UploadDestination.forMessage(message.id)
+            val intent = UploadIntent(accountId, destination)
+                    .setAutoCommit(false)
+                    .setFileUri(Uri.parse(file)).setSize(imageSize)
+            uploadManager.enqueue(listOf(intent))
+        }
+    }
+
     fun fireEditLocalPhotosSelected(localPhotos: List<LocalPhoto>, imageSize: Int) {
         edited?.run {
             if (localPhotos.isNotEmpty()) {

@@ -37,6 +37,7 @@ import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.MessageStatus;
 import biz.dealnote.messenger.model.Sticker;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.BubbleLinearLayout;
@@ -256,7 +257,10 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             case CryptStatus.NO_ENCRYPTION:
             case CryptStatus.DECRYPTED:
                 if(message.isOut())
-                    holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
+                    if(Settings.get().main().isMy_message_no_color())
+                        holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
+                    else
+                        holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
                 else
                     holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
                 break;

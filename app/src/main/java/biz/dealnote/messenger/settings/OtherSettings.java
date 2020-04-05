@@ -145,6 +145,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isNo_hide_mini_player() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("no_hide_mini_player", false);
+    }
+
+    @Override
     public boolean isEnable_show_recent_dialogs() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_recent_dialogs", true);
     }

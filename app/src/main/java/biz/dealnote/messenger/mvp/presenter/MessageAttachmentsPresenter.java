@@ -262,11 +262,25 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         getView().addPhoto(accountId, messageOwnerId);
     }
 
-    public void firePhotosSelected(ArrayList<Photo> photos, ArrayList<LocalPhoto> localPhotos) {
-        if (nonEmpty(photos)) {
+    public void firePhotosSelected(ArrayList<Photo> photos, ArrayList<LocalPhoto> localPhotos, String file) {
+        if(nonEmpty(file))
+            doUploadFile(file);
+        else if (nonEmpty(photos)) {
             fireAttachmentsSelected(photos);
         } else if (nonEmpty(localPhotos)) {
             doUploadPhotos(localPhotos);
+        }
+    }
+
+    private void doUploadFile(String file) {
+        Integer size = Settings.get()
+                .main()
+                .getUploadImageSize();
+
+        if (isNull(size)) {
+            getView().displaySelectUploadFileSizeDialog(file);
+        } else {
+            doUploadFile(file, size);
         }
     }
 
@@ -280,6 +294,11 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         } else {
             doUploadPhotos(photos, size);
         }
+    }
+
+    private void doUploadFile(String file, int size) {
+        List<UploadIntent> intents = UploadUtils.createIntents(messageOwnerId, destination, file, size, true);
+        uploadManager.enqueue(intents);
     }
 
     private void doUploadPhotos(List<LocalPhoto> photos, int size) {
@@ -312,6 +331,10 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
 
     public void fireUploadPhotoSizeSelected(List<LocalPhoto> photos, int imageSize) {
         doUploadPhotos(photos, imageSize);
+    }
+
+    public void fireUploadFileSizeSelected(String file, int imageSize) {
+        doUploadFile(file, imageSize);
     }
 
     public void fireCameraPermissionResolved() {

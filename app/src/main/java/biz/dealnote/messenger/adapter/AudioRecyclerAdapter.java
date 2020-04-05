@@ -9,11 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,31 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {}, ignore -> {}));
     }
 
+    private void get_lyrics(Audio audio) {
+        audioListDisposable.add(mAudioInteractor.getLyrics(audio.getLyricsId())
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onAudioLyricsRecived, t -> {/*TODO*/}));
+    }
+
+    private void onAudioLyricsRecived(String Text) {
+        String title = null;
+        if(MusicUtils.getCurrentAudio() != null)
+            title = MusicUtils.getCurrentAudio().getArtistAndTitle();
+
+        MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
+        dlgAlert.setMessage(Text);
+        dlgAlert.setTitle(title != null ? title : mContext.getString(R.string.get_lyrics));
+
+        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("response", Text);
+        clipboard.setPrimaryClip(clip);
+
+        dlgAlert.setPositiveButton("OK", null);
+        dlgAlert.setCancelable(true);
+        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied_to_clipboard);
+        dlgAlert.create().show();
+    }
+
     @Override
     public AudioHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new AudioHolder(LayoutInflater.from(mContext).inflate(R.layout.item_audio, parent, false));
@@ -68,7 +94,13 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
         holder.artist.setText(item.getArtist());
         holder.title.setText(item.getTitle());
-        holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
+        holder.title.setSelected(true);
+        if(item.getDuration() <= 0)
+            holder.time.setVisibility(View.GONE);
+        else {
+            holder.time.setVisibility(View.VISIBLE);
+            holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
+        }
 
         holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
 
@@ -106,6 +138,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         holder.Track.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(mContext, holder.Track);
             popup.inflate(R.menu.audio_item_menu);
+            popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
             popup.setOnMenuItemClickListener(item1 -> {
                 switch (item1.getItemId()) {
                     case R.id.search_by_artist:
@@ -113,6 +146,9 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         return true;
                     case R.id.get_album_cover:
                         DownloadUtil.downloadTrackCover(mContext, item);
+                        return true;
+                    case R.id.get_lyrics_menu:
+                        get_lyrics(item);
                         return true;
                     case R.id.copy_url:
                         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -132,12 +168,8 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         }
                         return true;
                     case R.id.save_item_audio:
-                        if(!AppPerms.hasReadStoragePermision(mContext)) {
-                            AppPerms.requestReadExternalStoragePermission((Activity)mContext);
-                            return true;
-                        }
-                        if(!AppPerms.hasWriteStoragePermision(mContext)) {
-                            AppPerms.requestWriteStoragePermission((Activity)mContext);
+                        if(!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                            AppPerms.requestReadWriteStoragePermission((Activity)mContext);
                             return true;
                         }
                         int ret = DownloadUtil.downloadTrack(mContext, item);
@@ -185,7 +217,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView saved;
         ImageView lyric;
         ImageView my;
-        LinearLayout Track;
+        ViewGroup Track;
 
         AudioHolder(View itemView) {
             super(itemView);

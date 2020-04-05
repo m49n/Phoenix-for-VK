@@ -20,7 +20,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -37,6 +39,8 @@ import io.reactivex.subjects.PublishSubject;
 public final class MusicUtils {
 
     public static IAudioPlayerService mService = null;
+
+    public static HashMap<Integer, ArrayList<Audio>> Audios = new HashMap<>();
 
     private static int sForegroundActivities = 0;
 

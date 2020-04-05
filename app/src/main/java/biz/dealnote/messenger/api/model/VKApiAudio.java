@@ -60,6 +60,8 @@ public class VKApiAudio implements VKApiAttachment {
 
     public String thumb_image_big;
 
+    public String thumb_image_very_big;
+
     public String album_title;
 
     /**

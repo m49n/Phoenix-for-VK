@@ -95,11 +95,8 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
     public void ProvideReadCachedAudio()
     {
         PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
-        if(!AppPerms.hasWriteStoragePermision(getContext())) {
-            AppPerms.requestWriteStoragePermission(requireActivity());
-        }
-        if(!AppPerms.hasReadStoragePermision(getContext())) {
-            AppPerms.requestReadExternalStoragePermission(requireActivity());
+        if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
+            AppPerms.requestReadWriteStoragePermission(requireActivity());
         }
     }
 

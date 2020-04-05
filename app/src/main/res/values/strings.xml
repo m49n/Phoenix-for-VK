@@ -18,23 +18,17 @@
     <string-array name="preview_preview_size" translatable="false">
         <item>S: 75px</item>
         <item>M: 130px</item>
-        <!--<item>O: 130px (3:2)</item>
-        <item>P: 200px (3:2)</item>
-        <item>Q: 320px (3:2)</item>
-        <item>R: 510px (3:2)</item>-->
         <item>X: 604px</item>
         <item>Y: 807px</item>
+        <item>Z: 1280px</item>
     </string-array>
 
     <string-array name="preview_preview_size_values" translatable="false">
         <item>1</item>
         <item>2</item>
-        <!--<item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>-->
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
 
     <string-array name="player_progress_state" translatable="false">
@@ -340,7 +334,7 @@
     <string name="default_category_summary">Выберите страницу, которая будет показана при запуске приложения</string>
     <string name="default_category_title">Стартовая страница</string>
 
-    <string name="drawer_feedback">Ответы</string>
+    <string name="drawer_feedback">Уведомления</string>
 
     <string name="mentioned_in_post">упомянул Вас в записи</string>
 
@@ -610,8 +604,8 @@
     <string name="loading_owner_photo_album">Загрузка фотоальбома</string>
     <string name="no_photos_found">Фотографии не найдены</string>
     <string name="please_wait">Пожалуйста, подождите</string>
-    <string name="permission_granted_text">Разрешение успешно получено. Повторите действие еще раз.</string>
-    <string name="permission_is_not_granted_text">Разрешение не получено. Действие не может быть выполнено.</string>
+    <string name="permission_granted_text">Разрешение %1$s успешно получено. Повторите действие еще раз.</string>
+    <string name="permission_is_not_granted_text">Разрешение %1$s не получено. Действие не может быть выполнено.</string>
     <string name="add_to_bookmarks">Добавить в закладки</string>
     <string name="loading">Загрузка</string>
     <string name="all_friends">Все друзья</string>
@@ -1233,6 +1227,7 @@
     <string name="set_offline">Стать Offline</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
     <string name="get_lyrics">ТЕКСТ ПЕСНИ</string>
+    <string name="get_lyrics_menu">Текст песни</string>
     <string name="uploaded">Загружено:</string>
     <string name="has_tags">Содержит отметки</string>
     <string name="pages">Страницы</string>
@@ -1250,6 +1245,8 @@
     <string name="recommendation">Рекомендации"</string>
     <string name="biometric">Приложите палец к сканеру"</string>
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
-    <string name="show_recent_dialogs">Показывть последние чаты (перезапуск)"</string>
-    <string name="show_audio_top">Показывть популярные аудио"</string>
+    <string name="show_recent_dialogs">Последние чаты (перезапуск)"</string>
+    <string name="show_audio_top">Популярные аудио"</string>
+    <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
+    <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
 </resources>

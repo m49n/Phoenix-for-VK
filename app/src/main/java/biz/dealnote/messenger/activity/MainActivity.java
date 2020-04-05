@@ -947,7 +947,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void hideMenu(boolean hide) {
-        MusicUtils.setMiniPlayerVisibility(!hide);
+        if(!Settings.get().other().isNo_hide_mini_player())
+            MusicUtils.setMiniPlayerVisibility(!hide);
         if (hide) {
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();

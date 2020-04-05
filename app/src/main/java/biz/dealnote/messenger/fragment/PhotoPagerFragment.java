@@ -42,6 +42,7 @@ import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.domain.ILikesInteractor;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
+import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.Photo;
@@ -77,7 +78,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  * phoenix
  */
 public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
-        implements IPhotoPagerView, GoBackCallback {
+        implements IPhotoPagerView, GoBackCallback, BackPressCallback {
 
     private static final String EXTRA_FOCUS_PHOTO_ID = "focus_photo_id";
 
@@ -569,6 +570,18 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         return Settings.get()
                 .main()
                 .getPrefDisplayImageSize(DEFAULT_PHOTO_SIZE);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        ObjectAnimator objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", -600);
+        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(getView(), View.ALPHA, 1, 0);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(objectAnimatorPosition, objectAnimatorAlpha);
+        animatorSet.setDuration(200);
+        animatorSet.addListener(mGoBackAnimationAdapter);
+        animatorSet.start();
+        return false;
     }
 
     private class Holder extends AbsImageDisplayHolder implements Callback {

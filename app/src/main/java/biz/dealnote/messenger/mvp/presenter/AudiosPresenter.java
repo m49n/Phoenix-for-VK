@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
@@ -18,6 +19,7 @@ import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
@@ -42,7 +44,14 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         this.ownerId = ownerId;
         this.option_menu_id = option_menu_id;
         this.isAlbum = isAlbum;
-        fireRefresh();
+        if(!isAlbum && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
+            audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
+            actualReceived = true;
+            setLoadingNow(false);
+            callView(IAudiosView::notifyListChanged);
+        }
+        else
+            fireRefresh();
     }
 
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
@@ -94,6 +103,9 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         endOfContent = next.isEmpty() || next.size() < 50;
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
+        if (!isAlbum && option_menu_id == -1) {
+            MusicUtils.Audios.put(ownerId, audios);
+        }
     }
 
     private void onListReceived(List<Audio> data) {
@@ -103,6 +115,10 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         actualReceived = true;
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
+
+        if (!isAlbum && option_menu_id == -1) {
+            MusicUtils.Audios.put(ownerId, audios);
+        }
     }
 
     public void playAudio(Context context, int position) {
@@ -129,7 +145,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         super.onDestroyed();
     }
 
-    public ArrayList<Audio> listFiles() {
+    private ArrayList<Audio> listFiles() {
 
         File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString());
         if(dir.listFiles() == null || dir.listFiles().length <= 0)
@@ -148,9 +164,9 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         ArrayList<Audio> audios = new ArrayList<>(files.size());
         for (File file : files) {
 
-            Audio rt = new Audio().setId(++id).setUrl("file://" + file.getPath());
-            if(new File(file.getPath().replace(".mp3", ".jpg")).exists())
-                rt.setThumb_image_big("file://" + file.getPath().replace(".mp3", ".jpg"));
+            Audio rt = new Audio().setId(++id).setUrl("file://" + file.getAbsolutePath());
+            if(new File(file.getAbsolutePath().replace(".mp3", ".jpg")).exists())
+                rt.setThumb_image_big("file://" + file.getAbsolutePath().replace(".mp3", ".jpg"));
             String TrackName = file.getName().replace(".mp3", "");
             String Artist = "";
             String[] arr = TrackName.split(" - ");
@@ -183,6 +199,20 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             setLoadingNow(false);
             callView(IAudiosView::notifyListChanged);
         }
+    }
+
+    public int getAudioPos(Audio audio)
+    {
+        if(audios != null && !audios.isEmpty()) {
+            int pos = 0;
+            for(Audio i : audios)
+            {
+                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId())
+                    return pos;
+                pos++;
+            }
+        }
+        return -1;
     }
 
     public void fireRefresh() {

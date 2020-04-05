@@ -32,6 +32,8 @@ public class AudioEntity extends Entity {
 
     private String thumb_image_big;
 
+    private String thumb_image_very_big;
+
     private String album_title;
 
     public AudioEntity(int id, int ownerId) {
@@ -63,6 +65,15 @@ public class AudioEntity extends Entity {
 
     public AudioEntity setThumb_image_big(String thumb_image_big) {
         this.thumb_image_big = thumb_image_big;
+        return this;
+    }
+
+    public String getThumb_image_very_big() {
+        return thumb_image_very_big;
+    }
+
+    public AudioEntity setThumb_image_very_big(String thumb_image_very_big) {
+        this.thumb_image_very_big = thumb_image_very_big;
         return this;
     }
 

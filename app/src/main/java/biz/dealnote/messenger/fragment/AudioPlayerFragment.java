@@ -296,12 +296,8 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         if (audio == null) {
             return;
         }
-        if(!AppPerms.hasReadStoragePermision(getContext())) {
-            AppPerms.requestReadExternalStoragePermission(requireActivity());
-            return;
-        }
-        if(!AppPerms.hasWriteStoragePermision(getContext())) {
-            AppPerms.requestWriteStoragePermission(requireActivity());
+        if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
+            AppPerms.requestReadWriteStoragePermission(requireActivity());
             return;
         }
 

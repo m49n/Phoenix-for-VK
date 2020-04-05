@@ -113,6 +113,11 @@ public class CurrentTheme {
         return getColorFromAttrs(R.attr.dialogs_unread_color, context, "#20b0b0b0");
     }
 
+    public static int getMy_messages_bubble_color(Context context)
+    {
+        return getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#20b0b0b0");
+    }
+
     public static int getColorFromAttrs(int resId, Context context, String defaultColor) {
         TypedValue a = new TypedValue();
         context.getTheme().resolveAttribute(resId, a, true);

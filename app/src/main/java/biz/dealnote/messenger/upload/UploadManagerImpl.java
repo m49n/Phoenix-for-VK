@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -37,7 +38,6 @@ import biz.dealnote.messenger.upload.impl.Photo2WallUploadable;
 import biz.dealnote.messenger.upload.impl.VideoUploadable;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.Pair;
-import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -295,10 +295,9 @@ public class UploadManagerImpl implements IUploadManager {
                 final String message = firstNonEmptyString(cause.getMessage(), cause.toString());
                 compositeDisposable.add(Completable.complete()
                         .observeOn(Injection.provideMainThreadScheduler())
-                        .subscribe(() -> PhoenixToast.CreatePhoenixToast(context).showToastError(message)));
+                        .subscribe(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show()));
 
             }
-
             String errorMessage = firstNonEmptyString(t.getMessage(), t.toString());
             upload.setStatus(Upload.STATUS_ERROR).setErrorText(errorMessage);
             statusProcessor.onNext(upload);

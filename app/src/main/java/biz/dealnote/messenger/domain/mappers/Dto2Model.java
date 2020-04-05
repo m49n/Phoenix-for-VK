@@ -604,7 +604,8 @@ public class Dto2Model {
                 .setAccessKey(dto.access_key)
                 .setDeleted(false)
                 .setThumb_image_big(dto.thumb_image_big)
-                .setThumb_image_little(dto.thumb_image_little);
+                .setThumb_image_little(dto.thumb_image_little)
+                .setThumb_image_very_big(dto.thumb_image_very_big);
     }
 
     public static Link transform(@NonNull VKApiLink link) {

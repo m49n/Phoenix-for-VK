@@ -285,17 +285,40 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                 return;
             }
         }
+        else
+            dir.setLastModified(Calendar.getInstance().getTime().getTime());
 
         Photo photo = getCurrent();
 
         appendDisposable(OwnerInfo.getRx(getApplicationContext(), getAccountId(), photo.getOwnerId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(userInfo -> DownloadResult(DownloadUtil.makeLegalFilename(userInfo.getOwner().getFullName(), null) + "_", dir, photo), throwable -> DownloadResult("", dir, photo)));
+                .subscribe(userInfo -> DownloadResult(DownloadUtil.makeLegalFilename(userInfo.getOwner().getFullName(), null), dir, photo), throwable -> DownloadResult(null, dir, photo)));
+    }
+
+    private String transform_owner(int owner_id)
+    {
+        if(owner_id < 0)
+            return "club" + Math.abs(owner_id);
+        else
+            return "id" + owner_id;
     }
 
     private void DownloadResult(String Prefix, File dir, Photo photo)
     {
-        String file = dir.getAbsolutePath() + "/" + Prefix + photo.getOwnerId() + "_" + photo.getId() + ".jpg";
+        if(Prefix != null) {
+            File dir_final = new File(dir.getAbsolutePath() + "/" + Prefix);
+            if (!dir_final.isDirectory()) {
+                boolean created = dir_final.mkdirs();
+                if (!created) {
+                    safeShowError(getView(), "Can't create directory " + dir_final);
+                    return;
+                }
+            }
+            else
+                dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
+            dir = dir_final;
+        }
+        String file = dir.getAbsolutePath() + "/" + (Prefix != null ? (Prefix + "_") : "") + transform_owner(photo.getOwnerId()) + "_" + photo.getId() + ".jpg";
         String url = photo.getUrlForSize(PhotoSize.W, true);
         do {
             File Temp = new File(file);

@@ -99,6 +99,19 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
         });
     }
 
+    private boolean hasAlbumById(int albumId, List<LocalImageAlbum> albums)
+    {
+        for(LocalImageAlbum i : albums)
+        {
+            if(i.getId() == albumId)
+            {
+                i.setPhotoCount(i.getPhotoCount() + 1);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public Single<List<LocalImageAlbum>> getImageAlbums() {
         return Single.create(e -> {
@@ -106,12 +119,10 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
             final String albumId = MediaStore.Images.ImageColumns.BUCKET_ID;
             final String data = MediaStore.Images.ImageColumns.DATA;
             final String coverId = MediaStore.Images.ImageColumns._ID;
-            String[] projection = new String[]{album, albumId, data, coverId, "COUNT(" + coverId + ")"};
-
-            String selection = "1=1) GROUP BY (" + MediaStore.Images.ImageColumns.BUCKET_ID;
+            String[] projection = new String[]{album, albumId, data, coverId};
 
             Cursor cursor = getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection, selection, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+                    projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
             List<LocalImageAlbum> albums = new ArrayList<>(safeCountOf(cursor));
 
@@ -119,12 +130,14 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
                 while (cursor.moveToNext()) {
                     if (e.isDisposed()) break;
 
-                    albums.add(new LocalImageAlbum()
-                            .setId(cursor.getInt(1))
-                            .setName(cursor.getString(0))
-                            .setCoverPath(cursor.getString(2))
-                            .setCoverId(cursor.getLong(3))
-                            .setPhotoCount(cursor.getInt(4)));
+                    if(!hasAlbumById(cursor.getInt(1), albums)) {
+                        albums.add(new LocalImageAlbum()
+                                .setId(cursor.getInt(1))
+                                .setName(cursor.getString(0))
+                                .setCoverPath(cursor.getString(2))
+                                .setCoverId(cursor.getLong(3))
+                                .setPhotoCount(1));
+                    }
                 }
 
                 cursor.close();

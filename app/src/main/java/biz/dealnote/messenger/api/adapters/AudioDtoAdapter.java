@@ -43,10 +43,19 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
                 else if (thmb.has("photo_34"))
                     dto.thumb_image_little = thmb.get("photo_34").getAsString();
 
-                if (thmb.has("photo_600"))
+                if (thmb.has("photo_1200")) {
+                    dto.thumb_image_very_big = thmb.get("photo_1200").getAsString();
+                }
+                if (thmb.has("photo_600")) {
                     dto.thumb_image_big = thmb.get("photo_600").getAsString();
-                else if (thmb.has("photo_300"))
+                    if(dto.thumb_image_very_big == null)
+                        dto.thumb_image_very_big = thmb.get("photo_600").getAsString();
+                }
+                else if (thmb.has("photo_300")) {
                     dto.thumb_image_big = thmb.get("photo_300").getAsString();
+                    if(dto.thumb_image_very_big == null)
+                        dto.thumb_image_very_big = thmb.get("photo_300").getAsString();
+                }
             }
         }
 

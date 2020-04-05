@@ -95,7 +95,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFF0000</item>
         <item name="icon_color_inactive">#AA151515</item>
-        <item name="my_messages_bubble_color">#D4E39696</item>
+        <item name="my_messages_bubble_color">#B4E46161</item>
     </style>
 
     <style name="App.DayNight.VioletRed" parent="App.DayNight">
@@ -105,7 +105,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFF0000</item>
         <item name="icon_color_inactive">#AA151515</item>
-        <item name="my_messages_bubble_color">#D4E39696</item>
+        <item name="my_messages_bubble_color">#B4E46161</item>
     </style>
 
     <style name="App.DayNight.YellowRed" parent="App.DayNight">
@@ -115,7 +115,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFF0000</item>
         <item name="icon_color_inactive">#AA151515</item>
-        <item name="my_messages_bubble_color">#D4E39696</item>
+        <item name="my_messages_bubble_color">#B4E46161</item>
     </style>
 
     <style name="App.DayNight.GreenVioletSec" parent="App.DayNight">
@@ -125,7 +125,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFF0000</item>
         <item name="icon_color_inactive">#AA151515</item>
-        <item name="my_messages_bubble_color">#D4E39696</item>
+        <item name="my_messages_bubble_color">#B4E46161</item>
     </style>
 
     <style name="App.DayNight.Violet" parent="App.DayNight">
@@ -135,7 +135,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA9800ff</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D4C896E3</item>
+        <item name="my_messages_bubble_color">#889142DF</item>
     </style>
 
     <style name="App.DayNight.BlueViolet" parent="App.DayNight">
@@ -145,7 +145,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA9800ff</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D4C896E3</item>
+        <item name="my_messages_bubble_color">#889142DF</item>
     </style>
 
     <style name="App.DayNight.YellowViolet" parent="App.DayNight">
@@ -155,7 +155,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA9800ff</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D4C896E3</item>
+        <item name="my_messages_bubble_color">#889142DF</item>
     </style>
 
     <style name="App.DayNight.VioletYellow" parent="App.DayNight">
@@ -175,7 +175,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA9800ff</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D4C896E3</item>
+        <item name="my_messages_bubble_color">#889142DF</item>
     </style>
 
     <style name="App.DayNight.GreenViolet" parent="App.DayNight">
@@ -185,7 +185,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA9800ff</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D4C896E3</item>
+        <item name="my_messages_bubble_color">#889142DF</item>
     </style>
 
     <style name="App.DayNight.Gray" parent="App.DayNight">

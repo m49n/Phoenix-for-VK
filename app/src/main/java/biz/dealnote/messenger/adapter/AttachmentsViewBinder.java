@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
@@ -551,6 +551,31 @@ public class AttachmentsViewBinder {
         audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {}, ignore -> {}));
     }
 
+    private void get_lyrics(Audio audio) {
+        audioListDisposable.add(mAudioInteractor.getLyrics(audio.getLyricsId())
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onAudioLyricsRecived, t -> {/*TODO*/}));
+    }
+
+    private void onAudioLyricsRecived(String Text) {
+        String title = null;
+        if(MusicUtils.getCurrentAudio() != null)
+            title = MusicUtils.getCurrentAudio().getArtistAndTitle();
+
+        MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
+        dlgAlert.setMessage(Text);
+        dlgAlert.setTitle(title != null ? title : mContext.getString(R.string.get_lyrics));
+
+        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("response", Text);
+        clipboard.setPrimaryClip(clip);
+
+        dlgAlert.setPositiveButton("OK", null);
+        dlgAlert.setCancelable(true);
+        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied_to_clipboard);
+        dlgAlert.create().show();
+    }
+
     /**
      * Отображение аудиозаписей
      *
@@ -577,6 +602,7 @@ public class AttachmentsViewBinder {
 
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
+                holder.tvSubtitle.setSelected(true);
 
                 holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
                 int finalG = g;
@@ -611,7 +637,12 @@ public class AttachmentsViewBinder {
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                     }
                 });
-                holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
+                if(audio.getDuration() <= 0)
+                    holder.time.setVisibility(View.GONE);
+                else {
+                    holder.time.setVisibility(View.VISIBLE);
+                    holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
+                }
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
                 holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
@@ -621,6 +652,7 @@ public class AttachmentsViewBinder {
                 holder.Track.setOnClickListener(view -> {
                     PopupMenu popup = new PopupMenu(mContext, holder.Track);
                     popup.inflate(R.menu.audio_item_menu);
+                    popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(audio.getLyricsId() != 0);
                     popup.setOnMenuItemClickListener(item1 -> {
                         switch (item1.getItemId()) {
                             case R.id.search_by_artist:
@@ -631,6 +663,9 @@ public class AttachmentsViewBinder {
                                 ClipData clip = ClipData.newPlainText("response", audio.getUrl());
                                 clipboard.setPrimaryClip(clip);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
+                                return true;
+                            case R.id.get_lyrics_menu:
+                                get_lyrics(audio);
                                 return true;
                             case R.id.get_album_cover:
                                 DownloadUtil.downloadTrackCover(mContext, audio);
@@ -647,12 +682,8 @@ public class AttachmentsViewBinder {
                                 }
                                 return true;
                             case R.id.save_item_audio:
-                                if(!AppPerms.hasReadStoragePermision(mContext)) {
-                                    AppPerms.requestReadExternalStoragePermission((Activity)mContext);
-                                    return true;
-                                }
-                                if(!AppPerms.hasWriteStoragePermision(mContext)) {
-                                    AppPerms.requestWriteStoragePermission((Activity)mContext);
+                                if(!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                                    AppPerms.requestReadWriteStoragePermission((Activity)mContext);
                                     return true;
                                 }
                                 int ret = DownloadUtil.downloadTrack(mContext, audio);
@@ -759,7 +790,7 @@ public class AttachmentsViewBinder {
         ImageView saved;
         ImageView lyric;
         ImageView my;
-        LinearLayout Track;
+        ViewGroup Track;
 
         AudioHolder(View root) {
             tvTitle = root.findViewById(R.id.dialog_title);

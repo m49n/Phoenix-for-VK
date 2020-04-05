@@ -96,7 +96,7 @@ object DownloadUtil
     @JvmStatic
     fun TrackIsDownloaded(audio: Audio): Boolean {
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
-        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.path + "/" + audioName).exists()
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.absolutePath + "/" + audioName).exists()
     }
 
     @Suppress("DEPRECATION")
@@ -104,7 +104,7 @@ object DownloadUtil
     fun GetLocalTrackLink(audio: Audio): String {
         if(audio.url.contains("file://"))
             return audio.url;
-        val audioName = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.path + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
+        val audioName = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.absolutePath + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         return audioName
     }
 
@@ -114,7 +114,7 @@ object DownloadUtil
         if (URL == null || URL.isEmpty()) return
         val videoName = makeLegalFilename(if (video.title == null) "" else video.title + " - " + video.ownerId + "_" + video.id + "_" + Res + "P", "mp4")
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.path + "/Phoenix/" + videoName)
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.absolutePath + "/Phoenix/" + videoName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 CreatePhoenixToast(context).showToastError(R.string.exist_audio)
@@ -144,7 +144,7 @@ object DownloadUtil
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "jpg")
         if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).exists())
             return
-        SomeInternalDownloader(context, audio.thumb_image_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
+        SomeInternalDownloader(context, audio.thumb_image_very_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
     }
 
     private class SomeInternalDownloader internal constructor(private val context: Context, url: String?, file: String?) : DownloadImageTask(context, url, file) {

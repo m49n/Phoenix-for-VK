@@ -25,7 +25,7 @@ public class Constants {
     public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/58.1 lite-463 (Android %s; SDK %d; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL, DEVICE_COUNTRY_CODE);
     public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.0-4929 (Android %s; SDK %d; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL, DEVICE_COUNTRY_CODE);
 
-    public static final String USER_AGENT(String type)
+    public static String USER_AGENT(String type)
     {
         if(type != null) {
             if (type.equals("kate"))

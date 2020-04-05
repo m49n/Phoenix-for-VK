@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         return new Holder(LayoutInflater.from(context).inflate(R.layout.item_audio_playlist, parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int position) {
         final VKApiAudioPlaylist playlist = data.get(position);
@@ -50,7 +52,12 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
             ViewUtils.displayAvatar(holder.thumb, transformation, playlist.thumb_image, Constants.PICASSO_TAG);
         holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
         holder.name.setText(playlist.title);
-        holder.description.setText(playlist.description);
+        if(isNullOrEmptyString(playlist.description))
+            holder.description.setVisibility(View.GONE);
+        else {
+            holder.description.setVisibility(View.VISIBLE);
+            holder.description.setText(playlist.description);
+        }
         holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
         holder.playlist_container.setOnClickListener(v -> {
             if (clickListener != null) {

@@ -40,6 +40,11 @@ class MainSettings implements ISettings.IMainSettings {
         return getDefaultPreferences().getBoolean(KEY_DOUBLE_PRESS_TO_EXIT, true);
     }
 
+    @Override
+    public boolean isMy_message_no_color() {
+        return getDefaultPreferences().getBoolean("my_message_no_color", false);
+    }
+
     @Nullable
     @Override
     public Integer getUploadImageSize() {

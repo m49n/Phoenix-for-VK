@@ -11,6 +11,11 @@
     <item
         android:id="@+id/get_album_cover"
         android:title="@string/get_album_cover" />
+
+    <item
+        android:id="@+id/get_lyrics_menu"
+        android:title="@string/get_lyrics_menu" />
+
     <item
         android:id="@+id/copy_url"
         android:title="@string/copy_original_url" />

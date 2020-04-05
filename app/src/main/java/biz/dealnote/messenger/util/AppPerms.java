@@ -22,6 +22,13 @@ public class AppPerms {
         return hasWritePermission == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static boolean hasReadWriteStoragePermision(Context context) {
+        if (!Utils.hasMarshmallow()) return true;
+        int hasWritePermission = PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int hasReadPermission = PermissionChecker.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return hasWritePermission == PackageManager.PERMISSION_GRANTED && hasReadPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
     public static boolean hasReadStoragePermision(Context context) {
         if (!Utils.hasMarshmallow()) return true;
         int hasWritePermission = PermissionChecker.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -37,6 +44,13 @@ public class AppPerms {
     public static void requestWriteStoragePermission(Activity activity) {
         if (Utils.hasMarshmallow()) {
             activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION_WRITE_STORAGE);
+        }
+    }
+
+    public static void requestReadWriteStoragePermission(Activity activity) {
+        if (Utils.hasMarshmallow()) {
+            activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSION_WRITE_STORAGE);
         }
     }
@@ -63,9 +77,9 @@ public class AppPerms {
             }
 
             if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                PhoenixToast.CreatePhoenixToast(activity).showToast(R.string.permission_granted_text);
+                PhoenixToast.CreatePhoenixToast(activity).showToast(R.string.permission_granted_text, permissions[i]);
             } else {
-                PhoenixToast.CreatePhoenixToast(activity).showToastError(R.string.permission_is_not_granted_text);
+                PhoenixToast.CreatePhoenixToast(activity).showToastError(R.string.permission_is_not_granted_text, permissions[i]);
             }
         }
     }
