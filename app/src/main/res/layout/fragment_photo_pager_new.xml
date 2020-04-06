@@ -29,20 +29,6 @@
         android:orientation="horizontal">
 
         <biz.dealnote.messenger.view.CircleCounterButton
-            android:id="@+id/like_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="25"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:active_background_color="?attr/icon_color_active"
-            app:active_icon_color="#fff"
-            app:always_counter="true"
-            app:button_icon="@drawable/heart"
-            app:noactive_background_color="#45dcdcdc"
-            app:noactive_icon_color="#fff"
-            app:text_color="#fff" />
-
-        <biz.dealnote.messenger.view.CircleCounterButton
             android:id="@+id/share_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -66,6 +52,20 @@
             app:noactive_background_color="#45dcdcdc"
             app:noactive_icon_color="#fff"
             app:text_color="#fff"/>
+
+        <biz.dealnote.messenger.view.CircleCounterButton
+            android:id="@+id/like_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:active_background_color="?attr/icon_color_active"
+            app:active_icon_color="#fff"
+            app:always_counter="true"
+            app:button_icon="@drawable/heart"
+            app:noactive_background_color="#45dcdcdc"
+            app:noactive_icon_color="#fff"
+            app:text_color="#fff" />
 
     </LinearLayout>
 

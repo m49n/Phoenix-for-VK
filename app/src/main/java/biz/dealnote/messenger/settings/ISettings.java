@@ -61,6 +61,8 @@ public interface ISettings {
 
         boolean isForceExoplayer();
 
+        boolean isShow_audio_cover();
+
         boolean isForce_hls();
 
         boolean isForce_cache();

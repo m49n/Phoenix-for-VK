@@ -88,6 +88,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
+    private var HronoType = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -253,7 +254,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun notifyDataChanged() {
-        recyclerView?.scrollToPosition(0);
         adapter?.notifyDataSetChanged()
     }
 
@@ -852,6 +852,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_refresh -> {
+                presenter?.fireRefreshClick()
+                return true
+            }
+            R.id.change_hrono_history -> {
+                presenter?.invert_Hrono()
                 presenter?.fireRefreshClick()
                 return true
             }

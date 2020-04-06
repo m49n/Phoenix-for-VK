@@ -11,6 +11,7 @@ import biz.dealnote.messenger.service.ErrorLocalizer;
 import biz.dealnote.messenger.service.KeepLongpollService;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.PhoenixToast;
+import ealvatag.tag.TagOptionSingleton;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,6 +29,7 @@ public class App extends Application {
     public void onCreate() {
         sInstanse = this;
         AppCompatDelegate.setDefaultNightMode(Settings.get().ui().getNightMode());
+        TagOptionSingleton.getInstance().setAndroid(true);
 
         super.onCreate();
 

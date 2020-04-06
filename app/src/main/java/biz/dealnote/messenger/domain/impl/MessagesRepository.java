@@ -715,10 +715,10 @@ public class MessagesRepository implements IMessagesRepository {
 
     @Override
     public Single<List<Message>> getPeerMessages(int accountId, int peerId, int count, Integer offset,
-                                                 Integer startMessageId, boolean cacheData) {
+                                                 Integer startMessageId, boolean cacheData, boolean rev) {
         return networker.vkDefault(accountId)
                 .messages()
-                .getHistory(offset, count, peerId, startMessageId, false, cacheData)
+                .getHistory(offset, count, peerId, startMessageId, rev, cacheData)
                 .flatMap(response -> {
                     final List<VKApiMessage> dtos = listEmptyIfNull(response.messages);
 

@@ -11,7 +11,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
-        android:backgroundTint="?attr/colorPrimary"
+        android:background="@drawable/audio_button_material"
         android:contentDescription="@string/play"
         android:scaleType="centerInside"
         android:src="@drawable/play" />
@@ -59,6 +59,7 @@
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
+        android:backgroundTint="?colorPrimary"
         android:contentDescription="@string/close"
         android:scaleType="centerInside"
         android:src="@drawable/close" />

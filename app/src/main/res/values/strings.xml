@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Феникс Мод</string>
+    <string name="app_name">Phoenix V</string>
 
     <string-array name="array_chat_background_names">
         <item>Печеньки</item>
@@ -636,6 +636,7 @@
     <string name="no_videos">Нет видео</string>
     <string name="invites_you_to_join_community">%1$s приглашает Вас вступить в сообщество</string>
     <string name="attachments_in_chat">Материалы беседы</string>
+    <string name="change_hrono_history">Показать начало</string>
     <string name="unknown_photos_count">неизвестно</string>
     <string name="photos_count">%1$d фото</string>
     <string name="videos_count">%1$d видео</string>
@@ -1088,7 +1089,7 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
-    <string name="get_album_cover">Сохранить обложку</string>
+    <string name="get_album_cover">Внедрить обложку</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
@@ -1249,4 +1250,5 @@
     <string name="show_audio_top">Популярные аудио"</string>
     <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
+    <string name="show_audio_cover">Обложки аудио (Перезапуск)</string>
 </resources>

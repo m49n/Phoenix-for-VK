@@ -79,6 +79,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private var conversation: Conversation? = null
 
+    private var HronoType = false
+
     private var isLoadingFromDbNow = false
     private var isLoadingFromNetNow = false
 
@@ -219,6 +221,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                 .subscribe { onUserWriteInDialog(it) })
 
         updateSubtitle()
+    }
+
+    fun invert_Hrono() {
+        HronoType = !HronoType
     }
 
     private fun onUserWriteInDialog(writeText: WriteText) {
@@ -441,6 +447,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
         isLoadingFromDbNow = false
         endOfContent = messages.isEmpty()
+        if(HronoType && startMessageId == null)
+        {
+            endOfContent = true
+            HronoType = false
+        }
 
         setNetLoadingNow(false)
         onAllDataLoaded(messages, startMessageId != null)
@@ -513,7 +524,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         setNetLoadingNow(true)
 
         val peerId = this.peerId
-        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, true)
+        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, true, HronoType)
                 .fromIOToMain()
                 .subscribe({ messages -> onNetDataReceived(messages, startMessageId) }, { this.onMessagesGetError(it) })
     }
@@ -522,7 +533,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         setNetLoadingNow(true)
 
         val peerId = this.peerId
-        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, true)
+        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, true, HronoType)
                 .fromIOToMain()
                 .subscribe({ messages -> onNetDataReceived(messages, null) }, { this.onMessagesGetError(it) })
     }

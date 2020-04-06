@@ -16,8 +16,8 @@ android {
         applicationId "dev.freya.phoenix"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 26000
-        versionName '2.6.0'
+        versionCode 27000
+        versionName '2.7.0'
 
         buildConfigField 'int', 'VK_API_APP_ID', getProps("vk_app_id")
         buildConfigField 'String', 'FCM_SENDER_ID', getProps("fcm_sender_id")
@@ -108,7 +108,6 @@ dependencies {
     implementation "androidx.preference:preference:1.1.0"
     implementation "androidx.exifinterface:exifinterface:1.2.0"
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -128,8 +127,11 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation project(path: ':spots')
+    implementation project(path: ':photoview')
     implementation 'androidx.biometric:biometric:1.0.1'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    implementation 'com.ealva:ealvatag:0.4.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

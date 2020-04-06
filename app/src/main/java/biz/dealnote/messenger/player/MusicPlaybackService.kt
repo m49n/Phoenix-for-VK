@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
@@ -26,6 +27,7 @@ import biz.dealnote.messenger.BuildConfig
 import biz.dealnote.messenger.Constants
 import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.Injection
+import biz.dealnote.messenger.R
 import biz.dealnote.messenger.api.HttpLogger
 import biz.dealnote.messenger.api.PicassoInstance
 import biz.dealnote.messenger.api.ProxyUtil
@@ -86,6 +88,7 @@ class MusicPlaybackService : Service() {
     private var mPlayPos = -1
     private var CoverAudio: String? = null
     private var CoverBitmap: Bitmap? = null
+    private var NullCoverBitmap: Bitmap = BitmapFactory.decodeResource(Injection.provideApplicationContext().getResources(), R.drawable.generic_audio_nowplaying);
     private var AlbumTitle: String? = null
     private var mShuffleMode = SHUFFLE_NONE
     private var mRepeatMode = REPEAT_NONE
@@ -338,7 +341,7 @@ class MusicPlaybackService : Service() {
      */
     private fun updateNotification() {
         mNotificationHelper!!.buildNotification(applicationContext, artistName,
-                trackName, isPlaying, CoverBitmap, mMediaSession!!.sessionToken)
+                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, NullCoverBitmap), mMediaSession!!.sessionToken)
     }
 
     private fun scheduleDelayedShutdown() {
@@ -511,7 +514,7 @@ class MusicPlaybackService : Service() {
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artistName)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, if (AlbumTitle == null) albumName else AlbumTitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, trackName)
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, CoverBitmap)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, Utils.firstNonNull(CoverBitmap, NullCoverBitmap))
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration())
                 .build()
         mMediaSession!!.setMetadata(mMediaMetadataCompat)

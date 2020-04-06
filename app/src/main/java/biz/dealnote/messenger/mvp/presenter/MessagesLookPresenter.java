@@ -65,7 +65,7 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
 
         final int accountId = super.getAccountId();
 
-        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, -COUNT / 2, mFocusMessageId, false)
+        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, -COUNT / 2, mFocusMessageId, false, false)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onDataReceived, this::onDataGetError));
     }
@@ -135,7 +135,7 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
 
         int targetMessageId = firstMessageId + 1; //чтобы не зацепить уже загруженное сообщение
 
-        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, -COUNT, targetMessageId, false)
+        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, -COUNT, targetMessageId, false, false)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onDataReceived, this::onDataGetError));
     }
@@ -172,7 +172,7 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
         final int targetLastMessageId = lastMessageId - 1; //чтобы не зацепить уже загруженное сообщение
         final int accountId = super.getAccountId();
 
-        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, 0, targetLastMessageId, false)
+        appendDisposable(messagesInteractor.getPeerMessages(accountId, mPeerId, COUNT, 0, targetLastMessageId, false, false)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onDataReceived, this::onDataGetError));
     }

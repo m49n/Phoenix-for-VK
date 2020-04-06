@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -22,6 +25,8 @@ import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
@@ -65,6 +70,7 @@ import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -554,13 +560,11 @@ public class AttachmentsViewBinder {
     private void get_lyrics(Audio audio) {
         audioListDisposable.add(mAudioInteractor.getLyrics(audio.getLyricsId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onAudioLyricsRecived, t -> {/*TODO*/}));
+                .subscribe(t -> onAudioLyricsRecived(t, audio), t -> {/*TODO*/}));
     }
 
-    private void onAudioLyricsRecived(String Text) {
-        String title = null;
-        if(MusicUtils.getCurrentAudio() != null)
-            title = MusicUtils.getCurrentAudio().getArtistAndTitle();
+    private void onAudioLyricsRecived(String Text, Audio audio) {
+        String title = audio.getArtistAndTitle();
 
         MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
         dlgAlert.setMessage(Text);
@@ -614,6 +618,36 @@ public class AttachmentsViewBinder {
                         holder.ibPlay.setImageResource(PlayStateCurrent ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.play);
                     }
                 });
+
+                if(Settings.get().other().isShow_audio_cover())
+                {
+                    if(!isNullOrEmptyString(audio.getThumb_image_little()))
+                    {
+                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button, mContext.getTheme()));
+                        PicassoInstance.with()
+                                .load(audio.getThumb_image_little())
+                                .transform(new RoundTransformation())
+                                .tag(Constants.PICASSO_TAG)
+                                .into(new Target() {
+                                    @Override
+                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                        holder.ibPlay.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
+                                    }
+
+                                    @Override
+                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    }
+
+                                    @Override
+                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                    }
+                                });
+                    }
+                    else
+                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button, mContext.getTheme()));
+                }
+
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparing(audio) || MusicUtils.isNowPaused(audio)) {
                         if(MusicUtils.isNowPlayingOrPreparing(audio))
@@ -644,9 +678,9 @@ public class AttachmentsViewBinder {
                     holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
                 }
 
-                holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.INVISIBLE);
-                holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
-                holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
+                holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.GONE);
+                holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
+                holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
 
                 holder.Track.setOnClickListener(view -> {

@@ -35,7 +35,7 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
 
     @Override
     public RecyclerView.Adapter createAdapter() {
-        AudioRecyclerAdapter audioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList());
+        AudioRecyclerAdapter audioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), false);
         audioRecyclerAdapter.setClickListener(this);
         return audioRecyclerAdapter;
     }

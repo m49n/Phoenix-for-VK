@@ -9,8 +9,14 @@ import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.Video
 import biz.dealnote.messenger.task.DownloadImageTask
 import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
+import ealvatag.audio.AudioFileIO
+import ealvatag.tag.FieldKey
+import ealvatag.tag.NullTag
+import ealvatag.tag.Tag
+import ealvatag.tag.images.ArtworkFactory
 import java.io.File
 import java.util.*
+
 
 /**
  * Created by maartenvangiel on 28/09/16.
@@ -151,9 +157,22 @@ object DownloadUtil
         private var mfile:String? = file
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
-                val Fl = File(mfile!!.replace(".jpg", ".mp3"))
-                if(Fl.exists()) {
-                    File(mfile!!).setLastModified(Fl.lastModified());
+                val Flaudio = File(mfile!!.replace(".jpg", ".mp3"))
+                val lst = Flaudio.lastModified()
+                if(Flaudio.exists()) {
+                    val audioFile = AudioFileIO.read(Flaudio)
+                    var tag: Tag = audioFile.tag.or(NullTag.INSTANCE)
+                    if (tag == NullTag.INSTANCE) { tag = audioFile.setNewDefaultTag(); }
+
+                    val Cover = File(mfile!!);
+                    val newartwork = ArtworkFactory.createArtworkFromFile(Cover);
+                    if(!tag.hasField(FieldKey.COVER_ART))
+                        tag.addArtwork(newartwork)
+                    else
+                        tag.setArtwork(newartwork)
+                    audioFile.save();
+                    Flaudio.setLastModified(lst)
+                    Cover.delete()
                 }
                 CreatePhoenixToast(context).showToast(R.string.saved)
             } else {

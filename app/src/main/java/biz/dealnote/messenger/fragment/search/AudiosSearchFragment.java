@@ -49,7 +49,7 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
 
     @Override
     RecyclerView.Adapter createAdapter(List<Audio> data) {
-        AudioRecyclerAdapter adapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList());
+        AudioRecyclerAdapter adapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), false);
         adapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
         return adapter;
     }

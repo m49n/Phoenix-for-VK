@@ -95,7 +95,7 @@ public interface IMessagesRepository {
      * @param cacheData если true - сохранить полученные данные в кэш
      * @return полученные сообщения
      */
-    Single<List<Message>> getPeerMessages(int accountId, int peerId, int count, Integer offset, Integer startMessageId, boolean cacheData);
+    Single<List<Message>> getPeerMessages(int accountId, int peerId, int count, Integer offset, Integer startMessageId, boolean cacheData, boolean rev);
 
     Single<List<Dialog>> getDialogs(int accountId, int count, Integer startMessageId);
 

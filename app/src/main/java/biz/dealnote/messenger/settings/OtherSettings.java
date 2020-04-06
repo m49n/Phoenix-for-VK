@@ -117,6 +117,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isShow_audio_cover() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_cover", true);
+    }
+
+    @Override
     public boolean isForce_cache() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_cache", false);
     }

@@ -141,7 +141,6 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         String artist = MusicUtils.getArtistName();
         String trackName = MusicUtils.getTrackName();
         Title.setText(firstNonEmptyString(artist, " ") + " - " + firstNonEmptyString(trackName, " "));
-
     }
 
     private void resolveControlViews() {

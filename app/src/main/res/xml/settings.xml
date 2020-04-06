@@ -203,6 +203,11 @@
             android:title="@string/settings_force_exoplayer_title"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_audio_cover"
+            android:title="@string/show_audio_cover"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
             android:key="force_hls"
             android:title="@string/force_hls"
             android:defaultValue="true"

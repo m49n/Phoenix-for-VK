@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +18,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
@@ -32,6 +39,7 @@ import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -42,12 +50,14 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     private Context mContext;
     private List<Audio> mData;
     private IAudioInteractor mAudioInteractor;
+    private boolean not_show_my;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
 
-    public AudioRecyclerAdapter(Context context, List<Audio> data) {
+    public AudioRecyclerAdapter(Context context, List<Audio> data, boolean not_show_my) {
         this.mAudioInteractor = InteractorFactory.createAudioInteractor();
         this.mContext = context;
         this.mData = data;
+        this.not_show_my = not_show_my;
     }
 
     private void delete(final int accoutnId, Audio audio) {
@@ -61,13 +71,11 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     private void get_lyrics(Audio audio) {
         audioListDisposable.add(mAudioInteractor.getLyrics(audio.getLyricsId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onAudioLyricsRecived, t -> {/*TODO*/}));
+                .subscribe(t -> onAudioLyricsRecived(t, audio), t -> {/*TODO*/}));
     }
 
-    private void onAudioLyricsRecived(String Text) {
-        String title = null;
-        if(MusicUtils.getCurrentAudio() != null)
-            title = MusicUtils.getCurrentAudio().getArtistAndTitle();
+    private void onAudioLyricsRecived(String Text, Audio audio) {
+        String title = audio.getArtistAndTitle();
 
         MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
         dlgAlert.setMessage(Text);
@@ -102,13 +110,45 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
         }
 
-        holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.INVISIBLE);
+        holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
 
-        holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.INVISIBLE);
+        if(not_show_my)
+            holder.my.setVisibility(View.GONE);
+        else
+            holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
-        holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.INVISIBLE);
+        holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.GONE);
 
         holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? (!Settings.get().other().isUse_stop_audio() ? R.drawable.pause : R.drawable.stop) : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.play));
+
+        if(Settings.get().other().isShow_audio_cover())
+        {
+            if(!isNullOrEmptyString(item.getThumb_image_little()))
+            {
+                holder.play.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button, mContext.getTheme()));
+                PicassoInstance.with()
+                        .load(item.getThumb_image_little())
+                        .transform(new RoundTransformation())
+                        .tag(Constants.PICASSO_TAG)
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                holder.play.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+            }
+            else
+                holder.play.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button, mContext.getTheme()));
+        }
 
         holder.play.setOnClickListener(v -> {
             if (MusicUtils.isNowPlayingOrPreparing(item) || MusicUtils.isNowPaused(item)) {

@@ -54,6 +54,13 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             fireRefresh();
     }
 
+    public boolean isMyAudio()
+    {
+        if (!isAlbum && option_menu_id == -1 && ownerId == getAccountId())
+            return true;
+        return false;
+    }
+
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
 
     private boolean loadingNow;
