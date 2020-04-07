@@ -84,7 +84,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
             String optAlbumTitle = requireArguments().getString(EXTRA_ALBUM_TITLE);
             String action = requireArguments().getString(Extra.ACTION);
-            return new VideosListPresenter(accountId, ownerId, albumId, action, optAlbumTitle, saveInstanceState);
+            return new VideosListPresenter(accountId, ownerId, albumId, action, optAlbumTitle, requireActivity(), saveInstanceState);
         };
     }
 

@@ -88,7 +88,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
-    private var HronoType = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -361,7 +360,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 pinnedTitle?.text = sender.fullName
                 pinnedSubtitle?.text = body
                 buttonUnpin?.visibility = if (canChange) View.VISIBLE else View.GONE
-                pinnedView?.setOnClickListener {presenter?.requestFromNetInMessage(pinned.id);}
+                pinnedView?.setOnClickListener {recyclerView?.scrollToPosition(0); presenter?.requestFromNetInMessage(pinned.id);}
             }
         }
     }
@@ -664,7 +663,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean) {
+                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean) {
         optionMenuSettings.put(LEAVE_CHAT_VISIBLE, canLeaveChat)
         optionMenuSettings.put(CHANGE_CHAT_TITLE_VISIBLE, canChangeTitle)
         optionMenuSettings.put(CHAT_MEMBERS_VISIBLE, canShowMembers)
@@ -672,6 +671,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         optionMenuSettings.put(ENCRYPTION_ENABLED, encryprionEnabled)
         optionMenuSettings.put(ENCRYPTION_PLUS_ENABLED, encryptionPlusEnabled)
         optionMenuSettings.put(KEY_EXCHANGE_VISIBLE, keyExchangeVisible)
+        optionMenuSettings.put(HRONO_VISIBLE, HronoVisible)
 
         try {
             requireActivity().invalidateOptionsMenu()
@@ -821,6 +821,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         menu.findItem(R.id.action_change_chat_title).isVisible = optionMenuSettings.get(CHANGE_CHAT_TITLE_VISIBLE, false)
         menu.findItem(R.id.action_chat_members).isVisible = optionMenuSettings.get(CHAT_MEMBERS_VISIBLE, false)
         menu.findItem(R.id.action_key_exchange).isVisible = optionMenuSettings.get(KEY_EXCHANGE_VISIBLE, false)
+        menu.findItem(R.id.change_hrono_history).isVisible = optionMenuSettings.get(HRONO_VISIBLE, false)
 
         val encryptionStatusItem = menu.findItem(R.id.crypt_state)
         val encryptionStatusVisible = optionMenuSettings.get(ENCRYPTION_STATUS_VISIBLE, false)
@@ -852,10 +853,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_refresh -> {
+                recyclerView?.scrollToPosition(0);
+                presenter?.reset_Hrono()
                 presenter?.fireRefreshClick()
                 return true
             }
             R.id.change_hrono_history -> {
+                recyclerView?.scrollToPosition(0);
                 presenter?.invert_Hrono()
                 presenter?.fireRefreshClick()
                 return true
@@ -989,5 +993,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         private const val ENCRYPTION_ENABLED = 5
         private const val ENCRYPTION_PLUS_ENABLED = 6
         private const val KEY_EXCHANGE_VISIBLE = 7
+        private const val HRONO_VISIBLE = 8
     }
 }

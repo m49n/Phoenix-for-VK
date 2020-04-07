@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -284,8 +286,10 @@ public class SearchTabsFragment extends Fragment implements MySearchView.OnQuery
     private void resolveLeftButton() {
         int count = requireActivity().getSupportFragmentManager().getBackStackEntryCount();
         if (mSearchView != null) {
-            mSearchView.setLeftIcon(count == 1 && requireActivity() instanceof AppStyleable ?
+            Drawable tr = AppCompatResources.getDrawable(requireActivity(), count == 1 && requireActivity() instanceof AppStyleable ?
                     R.drawable.phoenix_round : R.drawable.arrow_left);
+            Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
+            mSearchView.setLeftIcon(tr);
         }
     }
 

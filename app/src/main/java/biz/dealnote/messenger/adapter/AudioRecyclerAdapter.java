@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.adapter;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -34,6 +36,7 @@ import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.util.MusicUtils;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
@@ -41,6 +44,7 @@ import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
+import biz.dealnote.messenger.view.WeakViewAnimatorAdapter;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
@@ -99,6 +103,12 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     @Override
     public void onBindViewHolder(final AudioHolder holder, int position) {
         final Audio item = mData.get(position);
+
+        holder.cancelSelectionAnimation();
+        if (item.isAnimationNow()) {
+            holder.startSelectionAnimation();
+            item.setAnimationNow(false);
+        }
 
         holder.artist.setText(item.getArtist());
         holder.title.setText(item.getTitle());
@@ -176,13 +186,15 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             }
         });
         holder.Track.setOnClickListener(view -> {
+            holder.cancelSelectionAnimation();
+            holder.startSomeAnimation();
             PopupMenu popup = new PopupMenu(mContext, holder.Track);
             popup.inflate(R.menu.audio_item_menu);
             popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
             popup.setOnMenuItemClickListener(item1 -> {
                 switch (item1.getItemId()) {
                     case R.id.search_by_artist:
-                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true)).tryOpenWith(mContext);
+                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
                         return true;
                     case R.id.get_album_cover:
                         DownloadUtil.downloadTrackCover(mContext, item);
@@ -258,6 +270,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView lyric;
         ImageView my;
         ViewGroup Track;
+        View selectionView;
 
         AudioHolder(View itemView) {
             super(itemView);
@@ -269,6 +282,55 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             lyric = itemView.findViewById(R.id.lyric);
             Track = itemView.findViewById(R.id.track_option);
             my = itemView.findViewById(R.id.my);
+            selectionView = itemView.findViewById(R.id.item_audio_selection);
+            animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
+                @Override
+                public void onAnimationEnd(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationStart(View view) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onAnimationCancel(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+
+        Animator.AnimatorListener animationAdapter;
+        ObjectAnimator animator;
+
+        void startSelectionAnimation(){
+            selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(mContext));
+            selectionView.setAlpha(0.5f);
+
+            animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
+            animator.setDuration(1500);
+            animator.addListener(animationAdapter);
+            animator.start();
+        }
+
+        void startSomeAnimation(){
+            selectionView.setBackgroundColor(CurrentTheme.getColorSecondary(mContext));
+            selectionView.setAlpha(0.5f);
+
+            animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
+            animator.setDuration(500);
+            animator.addListener(animationAdapter);
+            animator.start();
+        }
+
+        void cancelSelectionAnimation(){
+            if(animator != null){
+                animator.cancel();
+                animator = null;
+            }
+
+            selectionView.setVisibility(View.INVISIBLE);
         }
     }
 

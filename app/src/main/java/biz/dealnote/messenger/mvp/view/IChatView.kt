@@ -34,7 +34,7 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun notifyItemRemoved(position: Int)
 
     fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                         encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean)
+                         encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean)
 
     fun goToSearchMessage(accountId: Int, peer: Peer)
     fun showImageSizeSelectDialog(streams: List<Uri>)

@@ -23,7 +23,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.media.session.MediaButtonReceiver
-import biz.dealnote.messenger.BuildConfig
 import biz.dealnote.messenger.Constants
 import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.Injection
@@ -1306,7 +1305,7 @@ class MusicPlaybackService : Service() {
 
     companion object {
         private const val TAG = "MusicPlaybackService"
-        private val D = BuildConfig.DEBUG
+        private val D = Constants.IS_DEBUG
         const val MINIPLAYER_SUPER_VIS_CHANGED = "biz.dealnote.phoenix.player.mini_visible"
         const val PLAYSTATE_CHANGED = "biz.dealnote.phoenix.player.playstatechanged"
         const val POSITION_CHANGED = "biz.dealnote.phoenix.player.positionchanged"

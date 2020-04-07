@@ -690,7 +690,7 @@ public class AttachmentsViewBinder {
                     popup.setOnMenuItemClickListener(item1 -> {
                         switch (item1.getItemId()) {
                             case R.id.search_by_artist:
-                                PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true)).tryOpenWith(mContext);
+                                PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
                                 return true;
                             case R.id.copy_url:
                                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);

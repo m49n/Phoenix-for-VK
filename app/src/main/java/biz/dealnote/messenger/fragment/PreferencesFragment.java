@@ -452,12 +452,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         resolveAvatarStyleViews(current, ivCircleSelected, ivOvalSelected);
 
         PicassoInstance.with()
-                .load(R.drawable.cat)
+                .load(R.drawable.ava_settings)
                 .transform(new RoundTransformation())
                 .into(ivCircle);
 
         PicassoInstance.with()
-                .load(R.drawable.cat)
+                .load(R.drawable.ava_settings)
                 .transform(new ElipseTransformation())
                 .into(ivOval);
 

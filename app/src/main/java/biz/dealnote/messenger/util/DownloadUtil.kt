@@ -1,20 +1,25 @@
 package biz.dealnote.messenger.util
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import biz.dealnote.messenger.R
+import biz.dealnote.messenger.domain.IAudioInteractor
+import biz.dealnote.messenger.domain.InteractorFactory
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.Video
 import biz.dealnote.messenger.task.DownloadImageTask
 import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
+import ealvatag.audio.AudioFile
 import ealvatag.audio.AudioFileIO
 import ealvatag.tag.FieldKey
 import ealvatag.tag.NullTag
 import ealvatag.tag.Tag
 import ealvatag.tag.images.ArtworkFactory
 import java.io.File
+import java.io.IOException
 import java.util.*
 
 
@@ -150,31 +155,53 @@ object DownloadUtil
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "jpg")
         if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).exists())
             return
-        SomeInternalDownloader(context, audio.thumb_image_very_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
+        SomeInternalDownloader(context, audio, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
     }
 
-    private class SomeInternalDownloader internal constructor(private val context: Context, url: String?, file: String?) : DownloadImageTask(context, url, file) {
+    private class SomeInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file) {
         private var mfile:String? = file
+        private val current_audio = audio
+        private fun FlushAudio(Cover: File, audioFile: AudioFile, Flaudio: File, lst:Long)
+        {
+            audioFile.save();
+            Flaudio.setLastModified(lst)
+            Cover.delete()
+            CreatePhoenixToast(context).showToast(R.string.tag_modified)
+        }
+        @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
                 val Flaudio = File(mfile!!.replace(".jpg", ".mp3"))
                 val lst = Flaudio.lastModified()
                 if(Flaudio.exists()) {
-                    val audioFile = AudioFileIO.read(Flaudio)
-                    var tag: Tag = audioFile.tag.or(NullTag.INSTANCE)
-                    if (tag == NullTag.INSTANCE) { tag = audioFile.setNewDefaultTag(); }
+                    try {
+                        val audioFile = AudioFileIO.read(Flaudio)
+                        var tag: Tag = audioFile.tag.or(NullTag.INSTANCE)
+                        if (tag == NullTag.INSTANCE) {
+                            tag = audioFile.setNewDefaultTag(); }
 
-                    val Cover = File(mfile!!);
-                    val newartwork = ArtworkFactory.createArtworkFromFile(Cover);
-                    if(!tag.hasField(FieldKey.COVER_ART))
-                        tag.addArtwork(newartwork)
-                    else
+                        val Cover = File(mfile!!);
+                        val newartwork = ArtworkFactory.createArtworkFromFile(Cover);
                         tag.setArtwork(newartwork)
-                    audioFile.save();
-                    Flaudio.setLastModified(lst)
-                    Cover.delete()
+                        if (!Objects.isNullOrEmptyString(current_audio.artist))
+                            tag.setField(FieldKey.ARTIST, current_audio.artist)
+                        if (!Objects.isNullOrEmptyString(current_audio.title))
+                            tag.setField(FieldKey.TITLE, current_audio.title)
+                        if (!Objects.isNullOrEmptyString(current_audio.album_title))
+                            tag.setField(FieldKey.ALBUM, current_audio.album_title)
+                        if(current_audio.lyricsId != 0) {
+                            val mAudioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor();
+                            mAudioInteractor.getLyrics(current_audio.getLyricsId())
+                                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                                    .subscribe({ t -> run { tag.setField(FieldKey.COMMENT, t); FlushAudio(Cover, audioFile, Flaudio, lst); } }, { FlushAudio(Cover, audioFile, Flaudio, lst) })
+                        }
+                        else
+                            FlushAudio(Cover, audioFile, Flaudio, lst)
+                    }
+                    catch (e: IOException) {
+                        CreatePhoenixToast(context).showToastError(R.string.error_with_message, e.message)
+                    }
                 }
-                CreatePhoenixToast(context).showToast(R.string.saved)
             } else {
                 CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
             }

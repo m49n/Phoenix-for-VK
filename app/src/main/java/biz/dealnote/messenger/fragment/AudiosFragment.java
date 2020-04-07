@@ -106,8 +106,12 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             if (curr != null) {
                 int index = getPresenter().getAudioPos(curr);
                 if (index >= 0)
-                    recyclerView.scrollToPosition(index);
+                    recyclerView.smoothScrollToPosition(index);
+                else
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found);
             }
+            else
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
         });
 
         mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio());

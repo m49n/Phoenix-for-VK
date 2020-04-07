@@ -2,6 +2,9 @@ package biz.dealnote.messenger.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,8 +27,11 @@ import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
+import biz.dealnote.messenger.fragment.search.SearchContentType;
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.Settings;
 
 public class AudiosTabsFragment extends BaseFragment {
@@ -57,6 +63,7 @@ public class AudiosTabsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         ownerId = requireArguments().getInt(Extra.OWNER_ID);
     }
@@ -164,5 +171,23 @@ public class AudiosTabsFragment extends BaseFragment {
         public int getItemCount() {
             return mFragments.size();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                AudioSearchCriteria criteria = new AudioSearchCriteria("", false, true);
+                PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.AUDIOS, criteria).tryOpenWith(requireActivity());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_audio_main, menu);
     }
 }

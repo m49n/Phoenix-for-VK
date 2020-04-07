@@ -3,6 +3,7 @@ package biz.dealnote.messenger.fragment.search;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.fragment.search.criteria.DialogsSearchCriteria;
 import biz.dealnote.messenger.fragment.search.criteria.DocumentSearchCriteria;
@@ -32,6 +33,10 @@ public class SearchFragmentFactory {
             case SearchContentType.VIDEOS:
                 return VideoSearchFragment.newInstance(accountId,
                         criteria instanceof VideoSearchCriteria ? (VideoSearchCriteria) criteria : null);
+
+            case SearchContentType.AUDIOS:
+                return AudiosSearchFragment.newInstance(accountId,
+                        criteria instanceof AudioSearchCriteria ? (AudioSearchCriteria) criteria : null);
 
             case SearchContentType.DOCUMENTS:
                 return DocsSearchFragment.newInstance(accountId,

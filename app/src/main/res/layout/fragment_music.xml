@@ -41,7 +41,7 @@
                 android:layout_marginStart="@dimen/fab_margin"
                 android:layout_marginTop="@dimen/fab_margin"
                 android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginBottom="@dimen/fab_margin"
+                android:layout_marginBottom="46dp"
                 android:src="@drawable/rune_mannaz_small"
                 app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
                 tools:ignore="RelativeOverlap" />

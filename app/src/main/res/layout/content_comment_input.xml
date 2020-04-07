@@ -94,7 +94,7 @@
                         android:background="@android:color/transparent"
                         android:hint="@string/text_hint"
                         android:imeOptions="actionDone"
-                        android:inputType="textCapSentences|textMultiLine|textLongMessage"
+                        android:inputType="textLongMessage|textAutoCorrect|textMultiLine|textCapSentences|textAutoComplete"
                         android:maxLines="8"
                         android:minHeight="40dp"
                         android:saveEnabled="false"

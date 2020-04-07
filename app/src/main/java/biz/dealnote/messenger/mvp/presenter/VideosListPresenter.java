@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +47,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
     private final int ownerId;
     private final int albumId;
+    private Context context;
 
     private final String action;
 
@@ -73,12 +77,13 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
     }
 
     public VideosListPresenter(int accountId, int ownerId, int albumId, String action,
-                               @Nullable String albumTitle, @Nullable Bundle savedInstanceState) {
+                               @Nullable String albumTitle, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.interactor = InteractorFactory.createVideosInteractor();
         this.uploadManager = Injection.provideUploadManager();
         this.destination = UploadDestination.forVideo(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action) ? 0 : 1);
         this.uploadsData = new ArrayList<>(0);
+        this.context = context;
 
         this.ownerId = ownerId;
         this.albumId = albumId;
@@ -117,6 +122,14 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
         loadAllFromCache();
         request(false);
+        if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)){
+            new MaterialAlertDialogBuilder(context)
+                    .setTitle(R.string.confirmation)
+                    .setMessage(R.string.do_upload_video)
+                    .setPositiveButton(R.string.button_yes, (dialog, which) -> doUpload())
+                    .setNegativeButton(R.string.button_no, null)
+                    .show();
+        }
     }
 
     private void onUploadsDataReceived(List<Upload> data) {

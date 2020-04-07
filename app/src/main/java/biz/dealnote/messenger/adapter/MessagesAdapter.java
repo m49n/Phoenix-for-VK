@@ -60,8 +60,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private static final int TYPE_GIFT_MY = 7;
     private static final int TYPE_GIFT_FRIEND = 8;
 
-    private static final int ENCRYPTED_MESSAGE_BUBBLE_ALPHA = 150;
-
     private Context context;
     private AttachmentsViewBinder attachmentsViewBinder;
     private Transformation avatarTransformation;
@@ -205,6 +203,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         bindReadState(holder.itemView, message.getStatus() == MessageStatus.SENT && read);
 
         if (message.isSelected()) {
+            holder.itemView.setBackgroundColor(CurrentTheme.getColorSecondary(context));
+            holder.itemView.getBackground().setAlpha(80);
             holder.avatar.setBackground(selectedDrawable);
             holder.avatar.setImageResource(R.drawable.ic_message_check_vector);
         } else {

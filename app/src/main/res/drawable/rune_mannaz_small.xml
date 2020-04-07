@@ -7,18 +7,18 @@
 
     <path
         android:strokeColor="#fff"
-        android:strokeWidth="4"
+        android:strokeWidth="7"
         android:pathData="M4,60V0" />
     <path
         android:strokeColor="#fff"
-        android:strokeWidth="4"
+        android:strokeWidth="7"
         android:pathData="M40,60V0" />
     <path
         android:strokeColor="#fff"
-        android:strokeWidth="4"
+        android:strokeWidth="7"
         android:pathData="M2,2h4l34,22" />
     <path
         android:strokeColor="#fff"
-        android:strokeWidth="4"
+        android:strokeWidth="7"
         android:pathData="M42,2h-4L4,24" />
 </vector>

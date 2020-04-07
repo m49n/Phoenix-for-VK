@@ -50,4 +50,5 @@ public class Constants {
     public static final int PIN_DIGITS_COUNT = 4;
 
     public static final String PICASSO_TAG = "picasso_tag";
+    public static final boolean IS_DEBUG = BuildConfig.DEBUG;
 }

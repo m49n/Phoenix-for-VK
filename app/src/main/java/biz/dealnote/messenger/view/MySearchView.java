@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -229,5 +230,8 @@ public class MySearchView extends LinearLayout {
 
     public void setLeftIcon(int drawable) {
         mButtonBack.setImageResource(drawable);
+    }
+    public void setLeftIcon(Drawable drawable) {
+        mButtonBack.setImageDrawable(drawable);
     }
 }

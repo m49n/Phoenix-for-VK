@@ -212,10 +212,12 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     {
         if(audios != null && !audios.isEmpty()) {
             int pos = 0;
-            for(Audio i : audios)
+            for(final Audio i : audios)
             {
-                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId())
+                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
+                    i.setAnimationNow(true);
                     return pos;
+                }
                 pos++;
             }
         }

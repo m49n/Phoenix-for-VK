@@ -224,7 +224,13 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     fun invert_Hrono() {
-        HronoType = !HronoType
+        HronoType = true
+        resolveOptionMenu()
+    }
+
+    fun reset_Hrono() {
+        HronoType = false
+        resolveOptionMenu()
     }
 
     private fun onUserWriteInDialog(writeText: WriteText) {
@@ -450,7 +456,6 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         if(HronoType && startMessageId == null)
         {
             endOfContent = true
-            HronoType = false
         }
 
         setNetLoadingNow(false)
@@ -524,7 +529,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         setNetLoadingNow(true)
 
         val peerId = this.peerId
-        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, true, HronoType)
+        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, !HronoType, HronoType)
                 .fromIOToMain()
                 .subscribe({ messages -> onNetDataReceived(messages, startMessageId) }, { this.onMessagesGetError(it) })
     }
@@ -533,7 +538,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         setNetLoadingNow(true)
 
         val peerId = this.peerId
-        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, true, HronoType)
+        netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, false, HronoType)
                 .fromIOToMain()
                 .subscribe({ messages -> onNetDataReceived(messages, null) }, { this.onMessagesGetError(it) })
     }
@@ -1348,7 +1353,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                     .getEncryptionLocationPolicy(messagesOwnerId, peerId) == KeyLocationPolicy.RAM
         }
 
-        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport)
+        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport, !HronoType)
     }
 
     fun fireEncriptionStatusClick() {

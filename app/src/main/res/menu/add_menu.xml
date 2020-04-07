@@ -5,5 +5,5 @@
         android:icon="@drawable/check"
         android:title="@string/add_option"
         app:iconTint="?colorOnSurface"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

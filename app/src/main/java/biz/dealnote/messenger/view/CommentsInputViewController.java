@@ -2,7 +2,6 @@ package biz.dealnote.messenger.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -112,7 +111,7 @@ public class CommentsInputViewController {
         this.sendOnEnter = sendOnEnter;
         if (sendOnEnter) {
             mInputField.setImeOptions(EditorInfo.IME_ACTION_SEND);
-            mInputField.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            mInputField.setSingleLine();
         }
     }
 

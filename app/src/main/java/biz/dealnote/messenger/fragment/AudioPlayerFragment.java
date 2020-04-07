@@ -203,7 +203,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
                 return true;
             case R.id.search_by_artist:
-                PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true)).tryOpenWith(requireActivity());
+                PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true, false)).tryOpenWith(requireActivity());
                 return true;
         }
 
@@ -244,6 +244,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         //to animate running text
         tvTitle.setSelected(true);
         tvSubtitle.setSelected(true);
+        tvAlbum.setSelected(true);
 
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
         if (actionBar != null) {

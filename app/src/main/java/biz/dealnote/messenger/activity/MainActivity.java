@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             if (!isFragmentWithoutNavigation()) {
-                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.phoenix);
+                Drawable tr = AppCompatResources.getDrawable(this, R.drawable.phoenix_round);
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {

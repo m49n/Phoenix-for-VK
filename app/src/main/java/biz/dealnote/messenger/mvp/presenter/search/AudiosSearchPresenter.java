@@ -109,7 +109,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
 
     @Override
     AudioSearchCriteria instantiateEmptyCriteria() {
-        return new AudioSearchCriteria("", false);
+        return new AudioSearchCriteria("", false, false);
     }
 
 }

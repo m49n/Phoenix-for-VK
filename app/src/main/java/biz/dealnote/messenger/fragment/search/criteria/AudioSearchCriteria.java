@@ -26,7 +26,7 @@ public class AudioSearchCriteria extends BaseSearchCriteria {
         }
     };
 
-    public AudioSearchCriteria(String query, boolean by_artist) {
+    public AudioSearchCriteria(String query, boolean by_artist, boolean in_main_page) {
         super(query);
         SpinnerOption sort = new SpinnerOption(KEY_SORT, R.string.sorting, true);
         sort.available = new ArrayList<>(3);
@@ -38,7 +38,9 @@ public class AudioSearchCriteria extends BaseSearchCriteria {
         SimpleBooleanOption byArtist = new SimpleBooleanOption(KEY_SEARCH_BY_ARTIST, R.string.by_artist, true);
         byArtist.checked = by_artist;
 
-        appendOption(new SimpleBooleanOption(KEY_SEARCH_ADDED, R.string.my_saved, true));
+        SimpleBooleanOption byMain = new SimpleBooleanOption(KEY_SEARCH_ADDED, R.string.my_saved, true);
+        byMain.checked = in_main_page;
+        appendOption(byMain);
         appendOption(byArtist);
         appendOption(new SimpleBooleanOption(KEY_SEARCH_AUTOCOMPLETE, R.string.auto_compete, true));
         appendOption(new SimpleBooleanOption(KEY_SEARCH_WITH_LYRICS, R.string.with_lyrics, true));

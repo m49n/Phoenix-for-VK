@@ -242,6 +242,7 @@
     <string name="remove_vote">Удалить голос</string>
 
     <string name="saved">Сохранено</string>
+    <string name="tag_modified">MP3 теги обновлены!</string>
     <string name="save_to_drive">Сохранить на накопитель</string>
 
     <string name="reply">Ответить</string>
@@ -786,6 +787,7 @@
     <string name="who_is_not_allowed_to_comment_this_album">Кому комментирование этого альбома запрещено?</string>
     <string name="copy_data">Копировать</string>
     <string name="forward">Переслать</string>
+    <string name="answer">Ответить</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
     <string name="updated_profile_photo_at">обновил фотографию на странице: %1$s</string>
@@ -1089,7 +1091,7 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
-    <string name="get_album_cover">Внедрить обложку</string>
+    <string name="get_album_cover">Внедрить обложку и теги</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
@@ -1250,5 +1252,8 @@
     <string name="show_audio_top">Популярные аудио"</string>
     <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
-    <string name="show_audio_cover">Обложки аудио (Перезапуск)</string>
+    <string name="show_audio_cover">Обложки аудио</string>
+    <string name="do_upload_video">Загрузить видео из локального хранилища?</string>
+    <string name="null_audio">Нет проигрываемых аудио</string>
+    <string name="audio_not_found">Аудио не найдено в списке</string>
 </resources>
