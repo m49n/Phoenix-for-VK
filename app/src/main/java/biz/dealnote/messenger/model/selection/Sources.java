@@ -32,6 +32,9 @@ public class Sources implements Parcelable {
                 case Types.LOCAL_PHOTOS:
                     this.sources.add(in.readParcelable(LocalPhotosSelectableSource.class.getClassLoader()));
                     break;
+                case Types.LOCAL_GALLERY:
+                    this.sources.add(in.readParcelable(LocalGallerySelectableSource.class.getClassLoader()));
+                    break;
                 case Types.VIDEOS:
                     this.sources.add(in.readParcelable(LocalVideosSelectableSource.class.getClassLoader()));
                     break;

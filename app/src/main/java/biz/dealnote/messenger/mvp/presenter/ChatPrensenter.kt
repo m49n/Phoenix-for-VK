@@ -454,9 +454,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         isLoadingFromDbNow = false
         endOfContent = messages.isEmpty()
         if(HronoType && startMessageId == null)
-        {
             endOfContent = true
-        }
 
         setNetLoadingNow(false)
         onAllDataLoaded(messages, startMessageId != null)
@@ -507,7 +505,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun canLoadMore(): Boolean {
-        return data.isNotEmpty() && !isLoadingFromDbNow && !isLoadingFromNetNow
+        return data.isNotEmpty() && !isLoadingFromDbNow && !isLoadingFromNetNow && !HronoType
     }
 
     @OnGuiCreated

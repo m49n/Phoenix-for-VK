@@ -3,13 +3,13 @@ First open-sourced VK client for Android inspired by Material Design With Music.
 
 <b>Screenshots:</b>
 <img src="Screenshots.jpg"/>
-<img src="Screenshot_20200313-141906.jpg"/>
+<img src="Screenshot_20200408-221250.jpg"/>
 
 <b>Available at Google Play:</b> https://play.google.com/store/apps/details?id=dev.ezorrio.phoenix <br>
 
 <b>Build guide:</b>
 Requirements:
-  1) Android Studio 4 Beta 3 or higher
+  1) Android Studio 4 Beta 4 or higher
   2) Android SDK r28
   
 <b>Setting up enviroment:</b>

@@ -216,6 +216,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             {
                 if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
                     i.setAnimationNow(true);
+                    callView(IAudiosView::notifyListChanged);
                     return pos;
                 }
                 pos++;

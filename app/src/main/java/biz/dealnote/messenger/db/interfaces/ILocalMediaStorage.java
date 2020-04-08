@@ -17,6 +17,8 @@ public interface ILocalMediaStorage extends IStorage {
 
     Single<List<LocalPhoto>> getPhotos(long albumId);
 
+    Single<List<LocalPhoto>> getPhotos();
+
     Single<List<LocalImageAlbum>> getImageAlbums();
 
     Bitmap getImageThumbnail(long imageId);

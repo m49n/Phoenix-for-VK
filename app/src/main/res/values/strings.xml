@@ -931,6 +931,7 @@
 
     <string name="vk_photos_tab_title">Фото ВК</string>
     <string name="local_photos_tab_title">Локальные фото</string>
+    <string name="local_gallery_tab_title">Галерея</string>
     <string name="send_short">Отпр.</string>
     <string name="message_attachment_empty_text">Вложений пока нет</string>
     <string name="button_add_photo">Добавить фото</string>

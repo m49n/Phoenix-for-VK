@@ -24,6 +24,7 @@ import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.selection.AbsSelectableSource;
 import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalGallerySelectableSource;
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
 import biz.dealnote.messenger.model.selection.LocalVideosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
@@ -133,6 +134,14 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
                 return fragment;
             }
 
+            if (source instanceof LocalGallerySelectableSource) {
+                Bundle args = new Bundle();
+                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
+                LocalPhotosFragment fragment = LocalPhotosFragment.newInstance(10, null);
+                fragment.setArguments(args);
+                return fragment;
+            }
+
             if (source instanceof LocalVideosSelectableSource) {
                 Bundle args = new Bundle();
                 args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
@@ -169,6 +178,9 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             switch (tabtype) {
                 case Types.LOCAL_PHOTOS:
                     return getString(R.string.local_photos_tab_title);
+
+                    case Types.LOCAL_GALLERY:
+                        return getString(R.string.local_gallery_tab_title);
 
                 case Types.VIDEOS:
                     return getString(R.string.videos);

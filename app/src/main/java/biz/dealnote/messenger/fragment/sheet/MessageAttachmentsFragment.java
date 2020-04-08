@@ -34,6 +34,7 @@ import biz.dealnote.messenger.model.ModelsBundle;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalGallerySelectableSource;
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
@@ -151,6 +152,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     public void addPhoto(int accountId, int ownerId) {
         Sources sources = new Sources()
                 .with(new LocalPhotosSelectableSource())
+                .with(new LocalGallerySelectableSource())
                 .with(new VkPhotosSelectableSource(accountId, ownerId))
                 .with(new FileManagerSelectableSource());
 

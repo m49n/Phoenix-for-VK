@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ import biz.dealnote.messenger.model.LocalImageAlbum;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.mvp.presenter.LocalPhotosPresenter;
 import biz.dealnote.messenger.mvp.view.ILocalPhotosView;
-import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -41,7 +41,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
         implements ILocalPhotosView, LocalPhotosAdapter.ClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String EXTRA_MAX_SELECTION_COUNT = "max_selection_count";
-
+    private static final int REQYEST_PERMISSION_READ_EXTERNAL_STORAGE = 89;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LocalPhotosAdapter mAdapter;
@@ -142,6 +142,19 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
     }
 
     @Override
+    public void requestReadExternalStoragePermission() {
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQYEST_PERMISSION_READ_EXTERNAL_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQYEST_PERMISSION_READ_EXTERNAL_STORAGE){
+            getPresenter().fireReadExternalStoregePermissionResolved();
+        }
+    }
+
+    @Override
     public void showError(String text) {
         if (isAdded()) Toast.makeText(requireActivity(), text, Toast.LENGTH_LONG).show();
     }
@@ -156,7 +169,6 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
         return () -> {
             int maxSelectionItemCount1 = requireArguments().getInt(EXTRA_MAX_SELECTION_COUNT, 10);
             LocalImageAlbum album = requireArguments().getParcelable(Extra.ALBUM);
-            AssertUtils.requireNonNull(album);
             return new LocalPhotosPresenter(album, maxSelectionItemCount1, saveInstanceState);
         };
     }

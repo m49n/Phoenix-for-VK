@@ -19,4 +19,5 @@ public interface ILocalPhotosView extends IMvpView, IErrorView {
     void returnResultToParent(ArrayList<LocalPhoto> photos);
     void updateSelectionAndIndexes();
     void setFabVisible(boolean visible, boolean anim);
+    void requestReadExternalStoragePermission();
 }

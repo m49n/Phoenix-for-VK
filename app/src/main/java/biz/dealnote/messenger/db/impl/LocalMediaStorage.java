@@ -99,6 +99,33 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
         });
     }
 
+    @Override
+    public Single<List<LocalPhoto>> getPhotos() {
+        return Single.create(e -> {
+            Cursor cursor = getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    PROJECTION, null, null,
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+
+            ArrayList<LocalPhoto> result = new ArrayList<>(safeCountOf(cursor));
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) break;
+
+                    long imageId = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                    String data = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                    result.add(new LocalPhoto()
+                            .setImageId(imageId)
+                            .setFullImageUri(Uri.parse(data)));
+                }
+
+                cursor.close();
+            }
+
+            e.onSuccess(result);
+        });
+    }
+
     private boolean hasAlbumById(int albumId, List<LocalImageAlbum> albums)
     {
         for(LocalImageAlbum i : albums)

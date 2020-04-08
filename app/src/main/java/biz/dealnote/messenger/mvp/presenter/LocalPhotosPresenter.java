@@ -15,6 +15,7 @@ import biz.dealnote.messenger.model.LocalImageAlbum;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter;
 import biz.dealnote.messenger.mvp.view.ILocalPhotosView;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
@@ -29,15 +30,27 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
     private LocalImageAlbum mLocalImageAlbum;
     private int mSelectionCountMax;
 
+    private boolean permissionRequestedOnce;
+
     private List<LocalPhoto> mLocalPhotos;
 
-    public LocalPhotosPresenter(@NonNull LocalImageAlbum album, int maxSelectionCount,
+    public LocalPhotosPresenter(LocalImageAlbum album, int maxSelectionCount,
                                 @Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
         mLocalImageAlbum = album;
         mSelectionCountMax = maxSelectionCount;
 
         mLocalPhotos = Collections.emptyList();
+        /*
+        if(mLocalImageAlbum == null && !AppPerms.hasReadStoragePermision(getApplicationContext())){
+            if(!permissionRequestedOnce){
+                permissionRequestedOnce = true;
+                getView().requestReadExternalStoragePermission();
+            }
+        } else {
+            loadData();
+        }
+         */
         loadData();
     }
 
@@ -45,11 +58,21 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
         if (mLoadingNow) return;
 
         changeLoadingState(true);
-        appendDisposable(Stores.getInstance()
-                .localPhotos()
-                .getPhotos(mLocalImageAlbum.getId())
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onDataLoaded, this::onLoadError));
+        if(mLocalImageAlbum != null) {
+            appendDisposable(Stores.getInstance()
+                    .localPhotos()
+                    .getPhotos(mLocalImageAlbum.getId())
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(this::onDataLoaded, this::onLoadError));
+        }
+        else
+        {
+            appendDisposable(Stores.getInstance()
+                    .localPhotos()
+                    .getPhotos()
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(this::onDataLoaded, this::onLoadError));
+        }
     }
 
     private void onLoadError(Throwable throwable){
@@ -158,5 +181,10 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
     public void fireRefresh() {
         loadData();
+    }
+    public void fireReadExternalStoregePermissionResolved() {
+        if(AppPerms.hasReadStoragePermision(getApplicationContext())){
+            loadData();
+        }
     }
 }

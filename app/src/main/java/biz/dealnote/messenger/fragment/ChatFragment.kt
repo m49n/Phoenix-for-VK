@@ -34,10 +34,8 @@ import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener
 import biz.dealnote.messenger.listener.OnSectionResumeCallback
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener
 import biz.dealnote.messenger.model.*
-import biz.dealnote.messenger.model.selection.FileManagerSelectableSource
-import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource
-import biz.dealnote.messenger.model.selection.Sources
-import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource
+import biz.dealnote.messenger.model.Types
+import biz.dealnote.messenger.model.selection.*
 import biz.dealnote.messenger.mvp.presenter.ChatPrensenter
 import biz.dealnote.messenger.mvp.view.IChatView
 import biz.dealnote.messenger.place.PlaceFactory
@@ -493,6 +491,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun startImagesSelection(accountId: Int, ownerId: Int) {
         val sources = Sources()
                 .with(LocalPhotosSelectableSource())
+                .with(LocalGallerySelectableSource())
                 .with(VkPhotosSelectableSource(accountId, ownerId))
                 .with(FileManagerSelectableSource())
 
