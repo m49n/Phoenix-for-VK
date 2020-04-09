@@ -76,7 +76,6 @@ public class CustomHttpDataSource implements HttpDataSource {
     private final boolean allowCrossProtocolRedirects;
     private final int connectTimeoutMillis;
     private final int readTimeoutMillis;
-    private final String userAgent;
     private final Predicate<String> contentTypePredicate;
     private final RequestProperties defaultRequestProperties;
     private final RequestProperties requestProperties;
@@ -155,7 +154,7 @@ public class CustomHttpDataSource implements HttpDataSource {
                                 TransferListener listener, int connectTimeoutMillis,
                                 int readTimeoutMillis, boolean allowCrossProtocolRedirects,
                                 RequestProperties defaultRequestProperties, Proxy proxy) {
-        this.userAgent = Assertions.checkNotEmpty(userAgent);
+        String userAgent1 = Assertions.checkNotEmpty(userAgent);
         this.contentTypePredicate = contentTypePredicate;
         this.listener = listener;
         this.requestProperties = new RequestProperties();
@@ -222,7 +221,9 @@ public class CustomHttpDataSource implements HttpDataSource {
         }
 
         int responseCode;
+        String msg;
         try {
+            msg = connection.getResponseMessage();
             responseCode = connection.getResponseCode();
         } catch (IOException e) {
             closeConnectionQuietly();
@@ -235,7 +236,7 @@ public class CustomHttpDataSource implements HttpDataSource {
             Map<String, List<String>> headers = connection.getHeaderFields();
             closeConnectionQuietly();
             InvalidResponseCodeException exception =
-                    new InvalidResponseCodeException(responseCode, headers, dataSpec);
+                    new InvalidResponseCodeException(responseCode, msg, headers, dataSpec);
             if (responseCode == 416) {
                 exception.initCause(new DataSourceException(DataSourceException.POSITION_OUT_OF_RANGE));
             }

@@ -196,11 +196,14 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                     case R.id.search_by_artist:
                         PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
                         return true;
-                    case R.id.get_album_cover:
-                        DownloadUtil.downloadTrackCover(mContext, item);
+                    case R.id.get_album_cover_tags:
+                        DownloadUtil.downloadTrackCoverAndTags(mContext, item);
                         return true;
                     case R.id.get_lyrics_menu:
                         get_lyrics(item);
+                        return true;
+                    case R.id.get_recommendation_by_audio:
+                        PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), item.getOwnerId(), item.getId()).tryOpenWith(mContext);
                         return true;
                     case R.id.copy_url:
                         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);

@@ -35,28 +35,32 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private final int ownerId;
     private boolean actualReceived;
     private int option_menu_id;
-    private boolean isAlbum;
+    private int isAlbum;
+    private boolean LoadFromCache;
 
-    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, boolean isAlbum, @Nullable Bundle savedInstanceState) {
+    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, int isAlbum, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.audioInteractor = InteractorFactory.createAudioInteractor();
         this.audios = new ArrayList<>();
         this.ownerId = ownerId;
         this.option_menu_id = option_menu_id;
         this.isAlbum = isAlbum;
-        if(!isAlbum && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
+    }
+
+    public void LoadAudiosTool()
+    {
+        if (isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
             audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
             actualReceived = true;
             setLoadingNow(false);
             callView(IAudiosView::notifyListChanged);
-        }
-        else
+        } else
             fireRefresh();
     }
 
     public boolean isMyAudio()
     {
-        if (!isAlbum && option_menu_id == -1 && ownerId == getAccountId())
+        if (isAlbum == 0 && option_menu_id == -1 && ownerId == getAccountId())
             return true;
         return false;
     }
@@ -87,15 +91,10 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private void requestNext() {
         setLoadingNow(true);
         final int offset = audios.size();
-        if (!isAlbum && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1)
             requestList(offset, null);
-        } else if (!isAlbum  && option_menu_id != -2) {
-            getListByGenre(offset, false, option_menu_id);
-        }
-        else if (!isAlbum) {
-            getRecommendations(offset);
-        }
-        else requestList(offset, option_menu_id);
+        else if(isAlbum == 1)
+            requestList(offset, option_menu_id);
     }
 
     public void requestList(int offset, Integer album_id) {
@@ -106,44 +105,64 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     private void onNextListReceived(List<Audio> next) {
+        LoadFromCache = false;
         audios.addAll(next);
-        endOfContent = next.isEmpty() || next.size() < 50;
+        endOfContent = next.isEmpty();
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
-        if (!isAlbum && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1) {
             MusicUtils.Audios.put(ownerId, audios);
         }
     }
 
     private void onListReceived(List<Audio> data) {
+        LoadFromCache = false;
         audios.clear();
         audios.addAll(data);
-        endOfContent = data.isEmpty() || data.size() < 50;
+        endOfContent = data.isEmpty();
         actualReceived = true;
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
 
-        if (!isAlbum && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1) {
             MusicUtils.Audios.put(ownerId, audios);
         }
+    }
+
+    private void onEndlessListReceived(List<Audio> data) {
+        LoadFromCache = false;
+        audios.clear();
+        audios.addAll(data);
+        endOfContent = true;
+        actualReceived = true;
+        setLoadingNow(false);
+        callView(IAudiosView::notifyListChanged);
     }
 
     public void playAudio(Context context, int position) {
         MusicPlaybackService.startForPlayList(context, audios, position, false);
     }
 
-    public void getListByGenre(int offset, boolean foreign, int genre) {
+    public void getListByGenre(boolean foreign, int genre) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.getPopular(getAccountId(), foreign ? 1 : 0, genre, offset)
+        audioListDisposable.add(audioInteractor.getPopular(getAccountId(), foreign ? 1 : 0, genre)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
+                .subscribe(this::onEndlessListReceived, this::onListGetError));
     }
 
-    public void getRecommendations(int offset) {
+    public void getRecommendations() {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.getRecommendations(getAccountId(), ownerId, offset)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
+        if(isAlbum == 2)
+        {
+            audioListDisposable.add(audioInteractor.getRecommendationsByAudio(getAccountId(), ownerId + "_" + option_menu_id)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(this::onEndlessListReceived));
+        }
+        else {
+            audioListDisposable.add(audioInteractor.getRecommendations(getAccountId(), ownerId)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(this::onEndlessListReceived, this::onListGetError));
+        }
     }
 
     @Override
@@ -154,7 +173,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     private ArrayList<Audio> listFiles() {
 
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString());
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
         if(dir.listFiles() == null || dir.listFiles().length <= 0)
             return new ArrayList<>();
         ArrayList<File> files = new ArrayList<>();
@@ -189,6 +208,18 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         return audios;
     }
 
+    public void doLoadCache()
+    {
+        LoadFromCache = true;
+        getView().ProvideReadCachedAudio();
+        audios.clear();
+        audios.addAll(listFiles());
+        endOfContent = true;
+        actualReceived = true;
+        setLoadingNow(false);
+        callView(IAudiosView::notifyListChanged);
+    }
+
     private void onListGetError(Throwable t) {
         setLoadingNow(false);
 
@@ -198,13 +229,12 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             return;
         }
         if (isGuiResumed()) {
-            getView().ProvideReadCachedAudio();
-            audios.clear();
-            audios.addAll(listFiles());
-            endOfContent = true;
-            actualReceived = true;
-            setLoadingNow(false);
-            callView(IAudiosView::notifyListChanged);
+            if(!LoadFromCache) {
+                showError(getView(), Utils.getCauseIfRuntime(t));
+                callView(IAudiosView::doesLoadCache);
+            }
+            else
+                doLoadCache();
         }
     }
 
@@ -227,13 +257,13 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void fireRefresh() {
         audioListDisposable.clear();
-        if (!isAlbum && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1) {
             requestList(0, null);
-        } else if (!isAlbum  && option_menu_id != -2) {
-            getListByGenre(0, false, option_menu_id);
+        } else if (isAlbum == 0  && option_menu_id != -2) {
+            getListByGenre(false, option_menu_id);
         }
-        else if (!isAlbum) {
-            getRecommendations(0);
+        else if (isAlbum == 0 || isAlbum == 2) {
+            getRecommendations();
         }
         else requestList(0, option_menu_id);
     }

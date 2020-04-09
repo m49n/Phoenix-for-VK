@@ -76,13 +76,16 @@ public interface IAudioService {
     @POST("audio.getPopular")
     Single<BaseResponse<List<VKApiAudio>>> getPopular(@Field("only_eng") Integer foreign,
                                                 @Field("genre_id") Integer genre,
-                                                @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
     Single<BaseResponse<Items<VKApiAudio>>> getRecommendations(@Field("user_id") Integer user_id,
-                                                               @Field("offset") Integer offset,
+                                                               @Field("count") Integer count);
+
+    @FormUrlEncoded
+    @POST("audio.getRecommendations")
+    Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsByAudio(@Field("target_audio") String audio,
                                                                @Field("count") Integer count);
 
     @FormUrlEncoded

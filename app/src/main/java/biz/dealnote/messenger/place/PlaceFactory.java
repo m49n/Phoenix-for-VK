@@ -332,6 +332,10 @@ public class PlaceFactory {
         return new Place(Place.AUDIOS_IN_ALBUM).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId).withIntExtra(Extra.ID, album_id);
     }
 
+    public static Place SearchByAudioPlace(int accountId, int audio_ownerId, int audio_id){
+        return new Place(Place.SEARCH_BY_AUDIO).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, audio_ownerId).withIntExtra(Extra.ID, audio_id);
+    }
+
     public static Place getPlayerPlace(int accountId){
         return new Place(Place.PLAYER).setArguments(AudioPlayerFragment.buildArgs(accountId));
     }

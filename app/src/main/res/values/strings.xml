@@ -243,6 +243,7 @@
 
     <string name="saved">Сохранено</string>
     <string name="tag_modified">MP3 теги обновлены!</string>
+    <string name="please_download_track">Сначала скачайте MP3!</string>
     <string name="save_to_drive">Сохранить на накопитель</string>
 
     <string name="reply">Ответить</string>
@@ -1232,6 +1233,7 @@
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
     <string name="get_lyrics">ТЕКСТ ПЕСНИ</string>
     <string name="get_lyrics_menu">Текст песни</string>
+    <string name="get_recommendation_by_audio">Искать похожее</string>
     <string name="uploaded">Загружено:</string>
     <string name="has_tags">Содержит отметки</string>
     <string name="pages">Страницы</string>
@@ -1257,4 +1259,5 @@
     <string name="do_upload_video">Загрузить видео из локального хранилища?</string>
     <string name="null_audio">Нет проигрываемых аудио</string>
     <string name="audio_not_found">Аудио не найдено в списке</string>
+    <string name="load_saved_audios">Ошибка сети! Загрузить из кэша?</string>
 </resources>

@@ -28,9 +28,11 @@ public interface IAudioInteractor {
 
     Single<String> getLyrics(int lyrics_id);
 
-    Single<List<Audio>> getPopular(int accountId, int foreign, int genre, int offset);
+    Single<List<Audio>> getPopular(int accountId, int foreign, int genre);
 
-    Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId, Integer offset);
+    Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId);
+
+    Single<List<Audio>> getRecommendationsByAudio(int accountId, String audio);
 
     Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
 

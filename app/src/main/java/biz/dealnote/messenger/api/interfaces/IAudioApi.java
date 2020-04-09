@@ -40,7 +40,7 @@ public interface IAudioApi {
 
     @CheckResult
     Single<List<VKApiAudio>> getPopular(Integer foreign,
-                                         Integer genre, Integer offset);
+                                         Integer genre);
 
     @CheckResult
     Single<Integer> deletePlaylist(int playlist_id, int ownerId);
@@ -49,7 +49,10 @@ public interface IAudioApi {
     Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId);
 
     @CheckResult
-    Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId, Integer offset);
+    Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId);
+
+    @CheckResult
+    Single<Items<VKApiAudio>> getRecommendationsByAudio(String audio);
 
     @CheckResult
     Single<List<VKApiAudio>> getById(String audios);

@@ -9,8 +9,12 @@
         android:id="@+id/save_item_audio"
         android:title="@string/save" />
     <item
-        android:id="@+id/get_album_cover"
+        android:id="@+id/get_album_cover_tags"
         android:title="@string/get_album_cover" />
+
+    <item
+        android:id="@+id/get_recommendation_by_audio"
+        android:title="@string/get_recommendation_by_audio" />
 
     <item
         android:id="@+id/get_lyrics_menu"

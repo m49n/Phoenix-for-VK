@@ -6,19 +6,10 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -88,11 +79,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
     private void preparePlayer() {
         setStatus(STATUS_PREPARING);
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory trackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(trackSelectionFactory);
-
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(app, trackSelector);
+        exoPlayer = new SimpleExoPlayer.Builder(app).build();
 
         // DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.
@@ -118,9 +105,6 @@ public class ExoVoicePlayer implements IVoicePlayer {
         String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:
         // MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
@@ -128,7 +112,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
         String url = playingEntry.getAudio().getLinkMp3();
 
-        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(url), factory, extractorsFactory, null, null);
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override

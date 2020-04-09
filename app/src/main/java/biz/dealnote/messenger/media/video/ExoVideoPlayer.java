@@ -4,18 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.SurfaceHolder;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.video.VideoListener;
 
 import java.lang.ref.WeakReference;
 import java.net.Authenticator;
@@ -48,10 +40,10 @@ public class ExoVideoPlayer implements IVideoPlayer {
     public ExoVideoPlayer(Context context, String url, ProxyConfig config) {
         this.player = createPlayer(context);
         this.player.addVideoListener(onVideoSizeChangedListener);
-        this.source = createMediaSource(context, url, config);
+        this.source = createMediaSource(url, config);
     }
 
-    private static MediaSource createMediaSource(Context context, String url, ProxyConfig proxyConfig) {
+    private static MediaSource createMediaSource(String url, ProxyConfig proxyConfig) {
         Proxy proxy = null;
         if (nonNull(proxyConfig)) {
             proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
@@ -72,22 +64,15 @@ public class ExoVideoPlayer implements IVideoPlayer {
         String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:
         // MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
         // FOR LIVESTREAM LINK:
-        return new ExtractorMediaSource(Uri.parse(url), factory, extractorsFactory, null, null);
+        return new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
     }
 
     private static SimpleExoPlayer createPlayer(Context context) {
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        return ExoPlayerFactory.newSimpleInstance(context.getApplicationContext(), trackSelector);
+        return new SimpleExoPlayer.Builder(context.getApplicationContext()).build();
     }
 
     private boolean supposedToBePlaying;
@@ -156,7 +141,7 @@ public class ExoVideoPlayer implements IVideoPlayer {
         player.setVideoSurfaceHolder(holder);
     }
 
-    private static final class OnVideoSizeChangedListener implements SimpleExoPlayer.VideoListener {
+    private static final class OnVideoSizeChangedListener implements VideoListener {
 
         final WeakReference<ExoVideoPlayer> ref;
 

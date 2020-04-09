@@ -46,6 +46,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     private TextView mEmpty;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AudioPlaylistsAdapter mAdapter;
+    private boolean doAudioLoadTabs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +88,11 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     @Override
     public void onResume() {
         super.onResume();
+        if(!doAudioLoadTabs)
+        {
+            doAudioLoadTabs = true;
+            getPresenter().LoadAudiosTool();
+        }
     }
 
     @Override

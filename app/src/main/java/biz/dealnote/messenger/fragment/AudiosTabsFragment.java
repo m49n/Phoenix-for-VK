@@ -39,6 +39,7 @@ public class AudiosTabsFragment extends BaseFragment {
     private int accountId;
     private int ownerId;
 
+    public static final int PLAYLISTS = -3;
     public static final int MY_RECOMENDATIONS = -2;
     public static final int MY_AUDIO = -1;
     public static final int TOP_ALL = 0;
@@ -83,7 +84,17 @@ public class AudiosTabsFragment extends BaseFragment {
         setupViewPager(viewPager, adapter);
 
         new TabLayoutMediator(view.findViewById(R.id.fragment_audios_tabs), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
-            tab.setText(adapter.mFragmentTitles.get(position));
+            Integer fid = adapter.mFragments.get(position);
+            if(fid == MY_AUDIO)
+                tab.setText(getString(R.string.my_saved));
+            else if(fid == PLAYLISTS)
+                tab.setText(getString(R.string.playlists));
+            else if(fid == MY_RECOMENDATIONS)
+                tab.setText(getString(R.string.recommendation));
+            else if(fid == TOP_ALL)
+                tab.setText(getString(R.string.top));
+            else
+                tab.setText(VKApiAudio.Genre.getTitleByGenre(requireActivity(), fid));
         }).attach();
     }
 
@@ -91,36 +102,40 @@ public class AudiosTabsFragment extends BaseFragment {
         return accountId;
     }
 
-    private AudiosFragment CreateAudiosFragment(int option_menu)
+    private Fragment CreateAudiosFragment(int option_menu)
     {
-        AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, false);
-        fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
-        return fragment;
+        if(option_menu == PLAYLISTS)
+            return AudioPlaylistsFragment.newInstance(getAccountId(), ownerId);
+        else {
+            AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0);
+            fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
+            return fragment;
+        }
     }
 
     private void setupViewPager(ViewPager2 viewPager, Adapter adapter) {
-        adapter.addFragment(CreateAudiosFragment(MY_AUDIO), getString(R.string.my_saved));
-        adapter.addFragment(AudioPlaylistsFragment.newInstance(getAccountId(), ownerId), getString(R.string.playlists));
+        adapter.addFragment(MY_AUDIO);
+        adapter.addFragment(PLAYLISTS);
         if(ownerId >= 0)
-            adapter.addFragment(CreateAudiosFragment(MY_RECOMENDATIONS), getString(R.string.recommendation));
+            adapter.addFragment(MY_RECOMENDATIONS);
         if(getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
-            adapter.addFragment(CreateAudiosFragment(TOP_ALL), getString(R.string.top));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ETHNIC), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ETHNIC));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.INSTRUMENTAL), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.INSTRUMENTAL));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ACOUSTIC_AND_VOCAL), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ACOUSTIC_AND_VOCAL));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ALTERNATIVE), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ALTERNATIVE));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.CLASSICAL), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.CLASSICAL));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.DANCE_AND_HOUSE), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.DANCE_AND_HOUSE));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.DRUM_AND_BASS), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.DRUM_AND_BASS));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.EASY_LISTENING), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.EASY_LISTENING));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ELECTROPOP_AND_DISCO), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ELECTROPOP_AND_DISCO));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.INDIE_POP), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.INDIE_POP));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.METAL), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.METAL));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.OTHER), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.OTHER));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.POP), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.POP));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.REGGAE), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.REGGAE));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.ROCK), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.ROCK));
-            adapter.addFragment(CreateAudiosFragment(VKApiAudio.Genre.TRANCE), VKApiAudio.Genre.getTitleByGenre(requireActivity(), VKApiAudio.Genre.TRANCE));
+            adapter.addFragment(TOP_ALL);
+            adapter.addFragment(VKApiAudio.Genre.ETHNIC);
+            adapter.addFragment(VKApiAudio.Genre.INSTRUMENTAL);
+            adapter.addFragment(VKApiAudio.Genre.ACOUSTIC_AND_VOCAL);
+            adapter.addFragment(VKApiAudio.Genre.ALTERNATIVE);
+            adapter.addFragment(VKApiAudio.Genre.CLASSICAL);
+            adapter.addFragment(VKApiAudio.Genre.DANCE_AND_HOUSE);
+            adapter.addFragment(VKApiAudio.Genre.DRUM_AND_BASS);
+            adapter.addFragment(VKApiAudio.Genre.EASY_LISTENING);
+            adapter.addFragment(VKApiAudio.Genre.ELECTROPOP_AND_DISCO);
+            adapter.addFragment(VKApiAudio.Genre.INDIE_POP);
+            adapter.addFragment(VKApiAudio.Genre.METAL);
+            adapter.addFragment(VKApiAudio.Genre.OTHER);
+            adapter.addFragment(VKApiAudio.Genre.POP);
+            adapter.addFragment(VKApiAudio.Genre.REGGAE);
+            adapter.addFragment(VKApiAudio.Genre.ROCK);
+            adapter.addFragment(VKApiAudio.Genre.TRANCE);
         }
         viewPager.setAdapter(adapter);
     }
@@ -148,23 +163,21 @@ public class AudiosTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
-    private static class Adapter extends FragmentStateAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+    private class Adapter extends FragmentStateAdapter {
+        private final List<Integer> mFragments = new ArrayList<>();
 
         public Adapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
 
-        void addFragment(Fragment fragment, String title) {
+        void addFragment(Integer fragment) {
             mFragments.add(fragment);
-            mFragmentTitles.add(title);
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return mFragments.get(position);
+            return CreateAudiosFragment(mFragments.get(position));
         }
 
         @Override

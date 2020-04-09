@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -98,6 +100,16 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
         if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
             AppPerms.requestReadWriteStoragePermission(requireActivity());
         }
+    }
+
+    @Override
+    public void doesLoadCache()
+    {
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.choose_action)
+                .setNegativeButton(R.string.button_cancel, null)
+                .setPositiveButton(R.string.button_go, (dialog, whichButton) -> getPresenter().doLoadCache())
+                .setMessage(R.string.load_saved_audios).show();
     }
 
     private final class PlaybackStatus extends BroadcastReceiver {

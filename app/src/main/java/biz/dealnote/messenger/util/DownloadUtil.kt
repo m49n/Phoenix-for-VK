@@ -34,7 +34,7 @@ object DownloadUtil
         if (audio.url == null || audio.url.isEmpty()) return 2
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName)
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
@@ -42,8 +42,8 @@ object DownloadUtil
         } while (false)
 
 
-        FFmpeg.execute(arrayOf("-i", audio.url, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName))
-        FFmpeg.execute(arrayOf("-i", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName, "-i", audio.thumb_image_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/covered_" + audioName, "-map", "0:0", "-map", "1:0", "-c", "copy", "-id3v2_version", "3"))
+        FFmpeg.execute(arrayOf("-i", audio.url, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName))
+        FFmpeg.execute(arrayOf("-i", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName, "-i", audio.thumb_image_big, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/covered_" + audioName, "-map", "0:0", "-map", "1:0", "-c", "copy", "-id3v2_version", "3"))
         return 0
     }
      */
@@ -58,7 +58,7 @@ object DownloadUtil
         if (HURl == null || HURl.isEmpty()) return 2
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName)
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
@@ -149,13 +149,14 @@ object DownloadUtil
 
     @Suppress("DEPRECATION")
     @JvmStatic
-    fun downloadTrackCover(context: Context, audio: Audio) {
+    fun downloadTrackCoverAndTags(context: Context, audio: Audio) {
         if (audio.url.contains("file://"))
             return
-        val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "jpg")
-        if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).exists())
+        if (!File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")).exists()) {
+            CreatePhoenixToast(context).showToastError(R.string.please_download_track)
             return
-        SomeInternalDownloader(context, audio, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString() + "/" + audioName).doDownload()
+        }
+        SomeInternalDownloader(context, audio, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "jpg")).doDownload()
     }
 
     private class SomeInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file) {

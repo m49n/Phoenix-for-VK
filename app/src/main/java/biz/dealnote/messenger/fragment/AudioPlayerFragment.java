@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -579,7 +580,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         if (coverUrl != null) {
             ivCover.setScaleType(ImageView.ScaleType.FIT_START);
-            PicassoInstance.with().load(coverUrl).into(ivCover);
+            PicassoInstance.with().load(coverUrl).tag(Constants.PICASSO_TAG).into(ivCover);
         } else {
             ivCover.setScaleType(ImageView.ScaleType.CENTER);
             ivCover.setImageResource(R.drawable.itunes);

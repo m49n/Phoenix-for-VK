@@ -89,24 +89,33 @@ class AudioApi extends AbsApi implements IAudioApi {
     public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .get(album_id, ownerId, offset, 50)
+                        .get(album_id, ownerId, offset, 200)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
     public Single<List<VKApiAudio>> getPopular(Integer foreign,
-                                                Integer genre, Integer offset) {
+                                                Integer genre) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .getPopular(foreign, genre, offset, 50)
+                        .getPopular(foreign, genre, 1000)
                         .map(extractResponseWithErrorHandling()));
     }
     @Override
-    public Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId, Integer offset)
+    public Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId)
     {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .getRecommendations(audioOwnerId, offset, 50)
+                        .getRecommendations(audioOwnerId, 1000)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiAudio>> getRecommendationsByAudio(String audio)
+    {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getRecommendationsByAudio(audio, 1000)
                         .map(extractResponseWithErrorHandling()));
     }
 

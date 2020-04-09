@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Collections;
@@ -52,12 +53,12 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView>
         implements IAudiosView{
 
-    public static AudiosFragment newInstance(int accountId, int ownerId, int option_menu_id, boolean isAlbum) {
+    public static AudiosFragment newInstance(int accountId, int ownerId, int option_menu_id, int isAlbum) {
         Bundle args = new Bundle();
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putInt(Extra.ID, option_menu_id);
-        args.putInt(Extra.ALBUM, isAlbum ? 1 : 0);
+        args.putInt(Extra.ALBUM, isAlbum);
         AudiosFragment fragment = new AudiosFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,6 +68,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     private AudioRecyclerAdapter mAudioRecyclerAdapter;
     private PlaybackStatus mPlaybackStatus;
     private boolean inTabsContainer;
+    private boolean doAudioLoadTabs;
 
     public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
 
@@ -146,6 +148,11 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
                     .build()
                     .apply(requireActivity());
         }
+        if(!doAudioLoadTabs)
+        {
+            doAudioLoadTabs = true;
+            getPresenter().LoadAudiosTool();
+        }
         this.mPlaybackStatus = new PlaybackStatus();
         final IntentFilter filter = new IntentFilter();
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
@@ -163,7 +170,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
                 requireArguments().getInt(Extra.ACCOUNT_ID),
                 requireArguments().getInt(Extra.OWNER_ID),
                 requireArguments().getInt(Extra.ID),
-                requireArguments().getInt(Extra.ALBUM) == 1,
+                requireArguments().getInt(Extra.ALBUM),
                 saveInstanceState
         );
     }
@@ -195,6 +202,16 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
             AppPerms.requestReadWriteStoragePermission(requireActivity());
         }
+    }
+
+    @Override
+    public void doesLoadCache()
+    {
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.choose_action)
+                .setNegativeButton(R.string.button_cancel, null)
+                .setPositiveButton(R.string.button_go, (dialog, whichButton) -> getPresenter().doLoadCache())
+                .setMessage(R.string.load_saved_audios).show();
     }
 
     @Override

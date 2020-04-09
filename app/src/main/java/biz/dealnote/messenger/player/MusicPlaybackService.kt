@@ -24,6 +24,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.media.session.MediaButtonReceiver
 import biz.dealnote.messenger.Constants
+import biz.dealnote.messenger.Constants.PICASSO_TAG
 import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.Injection
 import biz.dealnote.messenger.R
@@ -485,12 +486,13 @@ class MusicPlaybackService : Service() {
     }
 
     private fun fetchCoverAndUpdateMetadata() {
+        updateMetadata()
         if (CoverBitmap != null || albumCover == null || albumCover!!.isEmpty()) {
-            updateMetadata()
             return
         }
         PicassoInstance.with()
                 .load(albumCover)
+                .tag(PICASSO_TAG)
                 .into(object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom) {
                         CoverBitmap = bitmap
@@ -501,7 +503,6 @@ class MusicPlaybackService : Service() {
                     }
 
                     override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
-                        updateMetadata()
                     }
 
                 })
@@ -511,7 +512,7 @@ class MusicPlaybackService : Service() {
         updateNotification()
         mMediaMetadataCompat = MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artistName)
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, if (AlbumTitle == null) albumName else AlbumTitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, albumName)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, trackName)
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, Utils.firstNonNull(CoverBitmap, NullCoverBitmap))
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration())
@@ -591,6 +592,11 @@ class MusicPlaybackService : Service() {
                 fetchCoverAndUpdateMetadata()
                 notifyChange(META_CHANGED)
             }
+            else
+            {
+                fetchCoverAndUpdateMetadata()
+                notifyChange(META_CHANGED)
+            }
         }
     }
 
@@ -653,7 +659,9 @@ class MusicPlaybackService : Service() {
             synchronized(this) {
                 return if (currentTrack == null) {
                     null
-                } else currentTrack!!.albumId.toString()
+                } else {
+                    if (AlbumTitle == null) currentTrack!!.albumId.toString() else AlbumTitle
+                }
             }
         }
 

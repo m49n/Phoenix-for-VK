@@ -19,6 +19,7 @@ import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.view.search.IAudioSearchView;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.util.Pair;
+import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
 /**
@@ -28,6 +29,7 @@ import io.reactivex.Single;
 public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, AudioSearchCriteria, Audio, IntNextFrom> {
 
     private final IAudioInteractor audioInteractor;
+    private boolean LoadFromCache;
 
     public AudiosSearchPresenter(int accountId, @Nullable AudioSearchCriteria criteria, @Nullable Bundle savedInstanceState) {
         super(accountId, criteria, savedInstanceState);
@@ -47,7 +49,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
     private ArrayList<Audio> listFiles(String query) {
         if(query == null)
             return new ArrayList<>();
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString());
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
         if(dir.listFiles() == null || dir.listFiles().length <= 0)
             return new ArrayList<>();
         ArrayList<File> files = new ArrayList<>();
@@ -82,12 +84,23 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
         return audios;
     }
 
+    public void doLoadCache()
+    {
+        LoadFromCache = true;
+        getView().ProvideReadCachedAudio();
+        LocalSeached(listFiles(getCriteria().getQuery()), (AudioSearchCriteria)getCriteria().safellyClone(), getNextFrom());
+    }
+
     @Override
     void onSeacrhError(Throwable throwable) {
         super.onSeacrhError(throwable);
         if (isGuiResumed()) {
-            getView().ProvideReadCachedAudio();
-            LocalSeached(listFiles(getCriteria().getQuery()), getCriteria());
+            if(!LoadFromCache) {
+                showError(getView(), Utils.getCauseIfRuntime(throwable));
+                callView(IAudioSearchView::doesLoadCache);
+            }
+            else
+                doLoadCache();
         }
     }
 

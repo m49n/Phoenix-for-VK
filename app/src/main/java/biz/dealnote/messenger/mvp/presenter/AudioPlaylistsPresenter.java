@@ -40,7 +40,10 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         this.owner_id = ownerId;
         this.pages = new ArrayList<>();
         this.fInteractor = InteractorFactory.createAudioInteractor();
+    }
 
+    public void LoadAudiosTool()
+    {
         loadActualData(0);
     }
 

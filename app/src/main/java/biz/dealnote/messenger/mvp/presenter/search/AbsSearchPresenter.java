@@ -39,9 +39,9 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
     private C resultsForCriteria;
     private boolean endOfContent;
 
-    void LocalSeached(List<T> data, C criteria) {
+    void LocalSeached(List<T> data, C criteria, N nextFrom) {
         setLoadingNow(false);
-        this.nextFrom = getInitialNextFrom();
+        this.nextFrom = nextFrom;
         this.resultsForCriteria = criteria;
         this.endOfContent = true;
         this.data.clear();
@@ -78,6 +78,10 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
 
     C getCriteria() {
         return criteria;
+    }
+
+    N getNextFrom() {
+        return nextFrom;
     }
 
     abstract N getInitialNextFrom();

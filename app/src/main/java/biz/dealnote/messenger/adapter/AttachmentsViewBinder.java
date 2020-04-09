@@ -701,8 +701,11 @@ public class AttachmentsViewBinder {
                             case R.id.get_lyrics_menu:
                                 get_lyrics(audio);
                                 return true;
-                            case R.id.get_album_cover:
-                                DownloadUtil.downloadTrackCover(mContext, audio);
+                            case R.id.get_recommendation_by_audio:
+                                PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), audio.getOwnerId(), audio.getId()).tryOpenWith(mContext);
+                                return true;
+                            case R.id.get_album_cover_tags:
+                                DownloadUtil.downloadTrackCoverAndTags(mContext, audio);
                                 return true;
                             case R.id.add_item_audio:
                                 boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
