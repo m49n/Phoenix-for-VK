@@ -59,8 +59,6 @@ public interface ISettings {
 
         void setAudioBroadcastActive(boolean active);
 
-        boolean isForceExoplayer();
-
         boolean isShow_audio_cover();
 
         boolean isForce_hls();
@@ -88,6 +86,8 @@ public interface ISettings {
         boolean isEnable_show_recent_dialogs();
 
         boolean isEnable_show_audio_top();
+
+        boolean isAuto_merge_audio_tag();
     }
 
     interface IAccountsSettings {

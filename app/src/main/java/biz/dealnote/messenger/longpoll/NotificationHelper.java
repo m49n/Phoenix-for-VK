@@ -203,6 +203,8 @@ public class NotificationHelper {
     public static final int NOTIFICATION_LIKE = 71;
     public static final int NOTIFICATION_BIRTHDAY = 72;
     public static final int NOTIFICATION_UPLOAD = 73;
+    public static final int NOTIFICATION_DOWNLOADING = 74;
+    public static final int NOTIFICATION_DOWNLOAD = 75;
 
     public static Uri findNotificationSound() {
         try {

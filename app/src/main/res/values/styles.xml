@@ -125,15 +125,15 @@
         <item name="my_messages_bubble_color">#D4E3D096</item>
     </style>
 
-    <style name="App.DayNight.GreenVioletSec" parent="App.DayNight">
-        <item name="colorPrimary">#4CAF74</item>
-        <item name="colorControlNormal">#4CAF74</item>
-        <item name="colorSecondary">#8500ff</item>
+    <style name="App.DayNight.RedViolet" parent="App.DayNight">
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorControlNormal">#9800ff</item>
+        <item name="colorSecondary">#9800ff</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#4CAF74</item>
+        <item name="icon_color_active">#9800ff</item>
         <item name="icon_color_inactive">#AA151515</item>
-        <item name="my_messages_bubble_color">#A165B385</item>
+        <item name="my_messages_bubble_color">#B4E46161</item>
     </style>
 
     <style name="App.DayNight.Violet" parent="App.DayNight">

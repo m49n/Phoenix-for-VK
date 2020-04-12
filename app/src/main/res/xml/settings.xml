@@ -140,6 +140,13 @@
             android:title="@string/show_audio_top"
             app:iconSpaceReserved="false" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_merge_audio_tag"
+            android:summary="@string/auto_merge_audio_tag"
+            android:title="@string/auto_merge_audio_tag"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -198,10 +205,6 @@
         android:key="dev"
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false">
-        <CheckBoxPreference
-            android:key="force_exoplayer"
-            android:title="@string/settings_force_exoplayer_title"
-            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="show_audio_cover"

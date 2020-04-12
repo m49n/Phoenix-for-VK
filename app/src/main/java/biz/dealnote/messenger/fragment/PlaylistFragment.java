@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
@@ -27,7 +29,9 @@ import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.PhoenixToast;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
@@ -68,6 +72,23 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
         mData = requireArguments().getParcelableArrayList(Extra.AUDIOS);
     }
 
+    private int getAudioPos(Audio audio)
+    {
+        if(mData != null && !mData.isEmpty()) {
+            int pos = 0;
+            for(final Audio i : mData)
+            {
+                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
+                    i.setAnimationNow(true);
+                    mAdapter.notifyDataSetChanged();
+                    return pos;
+                }
+                pos++;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_playlist, container, false);
@@ -76,6 +97,23 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
         mRecyclerView = root.findViewById(R.id.list);
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
+        FloatingActionButton Goto = root.findViewById(R.id.goto_button);
+        Goto.setOnClickListener(v -> {
+            Audio curr = MusicUtils.getCurrentAudio();
+            if (curr != null) {
+                int index = getAudioPos(curr);
+                if (index >= 0) {
+                    if(Settings.get().other().isShow_audio_cover())
+                        mRecyclerView.scrollToPosition(index);
+                    else
+                        mRecyclerView.smoothScrollToPosition(index);
+                }
+                else
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found);
+            }
+            else
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
+        });
         return root;
     }
 

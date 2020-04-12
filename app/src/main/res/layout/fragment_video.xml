@@ -71,19 +71,19 @@
                                 android:layout_centerInParent="true"
                                 android:background="?attr/selectableItemBackgroundBorderless">
 
-                                <biz.dealnote.messenger.view.ColorFilterImageView
+                                <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/circle_white"
-                                    app:filter_color="?attr/colorAccent" />
+                                    android:background="@drawable/audio_button"
+                                    android:contentDescription="@string/play" />
 
                                 <biz.dealnote.messenger.view.ColorFilterImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:src="@drawable/play"
-                                    app:filter_color="?android:textColorPrimary" />
+                                    app:filter_color="@color/white" />
 
                             </FrameLayout>
 

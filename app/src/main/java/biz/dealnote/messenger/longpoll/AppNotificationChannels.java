@@ -21,6 +21,7 @@ public class AppNotificationChannels {
     public static final String AUDIO_CHANNEL_ID = "audio_channel";
     public static final String COMMENTS_CHANNEL_ID = "comments_channel";
     public static final String NEW_POST_CHANNEL_ID = "new_post_channel";
+    public static final String DOWNLOAD_CHANNEL_ID = "download_channel";
     public static final String GROUP_INVITES_CHANNEL_ID = "group_invites_channel";
     public static final String FRIEND_REQUESTS_CHANNEL_ID = "friend_requests_channel";
     public static final String BIRTHDAYS_CHANNEL_ID = "birthdays_channel";
@@ -97,6 +98,15 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public static NotificationChannel getDownloadChannel(Context context){
+        String channelName = context.getString(R.string.downloading);
+        NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
+        channel.enableLights(true);
+        channel.enableVibration(true);
+        return channel;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static NotificationChannel getGroupInvitesChannel(Context context){
         String channelName = context.getString(R.string.group_invites_channel);
         NotificationChannel channel = new NotificationChannel(GROUP_INVITES_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
@@ -108,7 +118,7 @@ public class AppNotificationChannels {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static NotificationChannel getFriendRequestsChannel(Context context){
         String channelName = context.getString(R.string.friend_requests_channel);
-        NotificationChannel channel = new NotificationChannel(FRIEND_REQUESTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(FRIEND_REQUESTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
         channel.enableVibration(true);
         return channel;

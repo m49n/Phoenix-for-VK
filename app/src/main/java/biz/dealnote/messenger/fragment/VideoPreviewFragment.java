@@ -55,6 +55,7 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.AppPrefs;
 import biz.dealnote.messenger.util.DownloadUtil;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.YoutubeDeveloperKey;
 import biz.dealnote.messenger.view.CircleCounterButton;
@@ -330,7 +331,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         static final int P_480 = 480;
         static final int P_720 = 720;
         static final int P_1080 = 1080;
-        //static final int HLS = -7;
+        static final int HLS = -10;
         static final int LIVE = -8;
         static final int P_EXTERNAL_PLAYER = -1;
 
@@ -344,8 +345,14 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         static final int COPY_LINK = -9;
     }
 
-    private List<Item> createDirectVkPlayItems(Video video, Section section) {
+    private List<Item> createDirectVkPlayItems(Video video, Section section, boolean isDownload) {
         List<Item> items = new ArrayList<>();
+        if (nonEmpty(video.getHls()) && !isDownload) {
+            items.add(new Item(Menu.HLS, new Text(R.string.play_hls))
+                    .setIcon(R.drawable.video)
+                    .setSection(section));
+        }
+
         if (nonEmpty(video.getMp4link240())) {
             items.add(new Item(Menu.P_240, new Text(R.string.play_240))
                     .setIcon(R.drawable.video)
@@ -376,7 +383,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                     .setSection(section));
         }
 
-        if (nonEmpty(video.getLive())) {
+        if (nonEmpty(video.getLive()) && !isDownload) {
             items.add(new Item(Menu.LIVE, new Text(R.string.player_live))
                     .setSection(section)
                     .setIcon(R.drawable.video));
@@ -390,7 +397,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             return;
         }
 
-        List<Item> items = new ArrayList<>(createDirectVkPlayItems(video, SECTION_PLAY));
+        List<Item> items = new ArrayList<>(createDirectVkPlayItems(video, SECTION_PLAY, false));
 
         String external = video.getExternalLink();
 
@@ -422,7 +429,8 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 video.getMp4link480(),
                 video.getMp4link720(),
                 video.getMp4link1080(),
-                video.getLive()))) {
+                video.getLive(),
+                video.getHls()))) {
 
             // потом выбираем качество
             items.add(new Item(Menu.P_EXTERNAL_PLAYER, new Text(R.string.play_in_external_player))
@@ -486,6 +494,10 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 openInternal(video, InternalVideoSize.SIZE_LIVE);
                 break;
 
+            case Menu.HLS:
+                openInternal(video, InternalVideoSize.SIZE_HLS);
+                break;
+
             case Menu.P_EXTERNAL_PLAYER:
                 showPlayExternalPlayerMenu(video);
                 break;
@@ -517,13 +529,14 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("response", video.getExternalLink());
                 clipboard.setPrimaryClip(clip);
+                PhoenixToast.CreatePhoenixToast(getContext()).showToast(R.string.copied);
                 break;
         }
     }
 
     private void showPlayExternalPlayerMenu(Video video) {
         Section section = new Section(new Text(R.string.title_select_resolution));
-        List<Item> items = createDirectVkPlayItems(video, section);
+        List<Item> items = createDirectVkPlayItems(video, section, false);
         MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
 
         new MaterialAlertDialogBuilder(requireActivity())
@@ -548,6 +561,9 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                         case Menu.LIVE:
                             playDirectVkLinkInExternalPlayer(video.getLive());
                             break;
+                        case Menu.HLS:
+                            playDirectVkLinkInExternalPlayer(video.getHls());
+                            break;
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, null)
@@ -556,7 +572,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
 
     private void showDownloadPlayerMenu(Video video) {
         Section section = new Section(new Text(R.string.download));
-        List<Item> items = createDirectVkPlayItems(video, section);
+        List<Item> items = createDirectVkPlayItems(video, section, true);
         MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
 
         new MaterialAlertDialogBuilder(requireActivity())

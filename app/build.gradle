@@ -16,8 +16,8 @@ android {
         applicationId "dev.freya.phoenix"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 29000
-        versionName '2.9.0'
+        versionCode 29100
+        versionName '2.9.1'
 
         buildConfigField 'int', 'VK_API_APP_ID', getProps("vk_app_id")
         buildConfigField 'String', 'FCM_SENDER_ID', getProps("fcm_sender_id")
@@ -124,8 +124,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.3'
-    implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.3'
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation project(path: ':spots')

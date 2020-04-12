@@ -191,8 +191,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         for (File file : files) {
 
             Audio rt = new Audio().setId(++id).setUrl("file://" + file.getAbsolutePath());
-            if(new File(file.getAbsolutePath().replace(".mp3", ".jpg")).exists())
-                rt.setThumb_image_big("file://" + file.getAbsolutePath().replace(".mp3", ".jpg"));
             String TrackName = file.getName().replace(".mp3", "");
             String Artist = "";
             String[] arr = TrackName.split(" - ");

@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.adapter;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -75,6 +77,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.WaveFormView;
+import biz.dealnote.messenger.view.WeakViewAnimatorAdapter;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -684,9 +687,12 @@ public class AttachmentsViewBinder {
 
 
                 holder.Track.setOnClickListener(view -> {
+                    holder.cancelSelectionAnimation();
+                    holder.startSomeAnimation();
                     PopupMenu popup = new PopupMenu(mContext, holder.Track);
                     popup.inflate(R.menu.audio_item_menu);
                     popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(audio.getLyricsId() != 0);
+                    popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
                     popup.setOnMenuItemClickListener(item1 -> {
                         switch (item1.getItemId()) {
                             case R.id.search_by_artist:
@@ -723,11 +729,18 @@ public class AttachmentsViewBinder {
                                     AppPerms.requestReadWriteStoragePermission((Activity)mContext);
                                     return true;
                                 }
-                                int ret = DownloadUtil.downloadTrack(mContext, audio);
+                                int ret = DownloadUtil.downloadTrack(mContext, audio, false);
                                 if(ret == 0)
                                     PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
-                                else if(ret == 1)
+                                else if(ret == 1) {
                                     PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
+                                    new MaterialAlertDialogBuilder(mContext)
+                                            .setTitle(R.string.error)
+                                            .setMessage(R.string.audio_force_download)
+                                            .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, audio, true))
+                                            .setNegativeButton(R.string.cancel, null)
+                                            .show();
+                                }
                                 else
                                     PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
                                 return true;
@@ -818,7 +831,7 @@ public class AttachmentsViewBinder {
         void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index);
     }
 
-    private static class AudioHolder {
+    private class AudioHolder {
 
         TextView tvTitle;
         TextView tvSubtitle;
@@ -828,6 +841,7 @@ public class AttachmentsViewBinder {
         ImageView lyric;
         ImageView my;
         ViewGroup Track;
+        View selectionView;
 
         AudioHolder(View root) {
             tvTitle = root.findViewById(R.id.dialog_title);
@@ -838,6 +852,45 @@ public class AttachmentsViewBinder {
             lyric = root.findViewById(R.id.lyric);
             Track = root.findViewById(R.id.track_option);
             my = root.findViewById(R.id.my);
+            selectionView = root.findViewById(R.id.item_audio_selection);
+            animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
+                @Override
+                public void onAnimationEnd(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationStart(View view) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onAnimationCancel(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+
+        Animator.AnimatorListener animationAdapter;
+        ObjectAnimator animator;
+
+        void startSomeAnimation(){
+            selectionView.setBackgroundColor(CurrentTheme.getColorSecondary(mContext));
+            selectionView.setAlpha(0.5f);
+
+            animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
+            animator.setDuration(500);
+            animator.addListener(animationAdapter);
+            animator.start();
+        }
+
+        void cancelSelectionAnimation(){
+            if(animator != null){
+                animator.cancel();
+                animator = null;
+            }
+
+            selectionView.setVisibility(View.INVISIBLE);
         }
     }
 

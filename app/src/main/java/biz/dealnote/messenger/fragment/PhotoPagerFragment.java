@@ -506,14 +506,14 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                         try {
                             TextView tv = dlg.findViewById(android.R.id.message);
                             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        } catch (Exception e) {}
+                        } catch (Exception ignored) {}
                     }, throwable -> {
                         dlg.setMessage(Html.fromHtml(finalRes));
                         dlg.show();
                         try {
                             TextView tv = dlg.findViewById(android.R.id.message);
                             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        } catch (Exception e) {}
+                        } catch (Exception ignored) {}
                     }));
             return;
         }

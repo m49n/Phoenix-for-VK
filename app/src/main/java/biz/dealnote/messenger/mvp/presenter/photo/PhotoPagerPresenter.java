@@ -330,15 +330,15 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             }
         }
         while(false);
-        new InternalDownloader(this, getApplicationContext(), url, file).doDownload();
+        new InternalDownloader(this, getApplicationContext(), url, file, photo).doDownload();
     }
 
     private final class InternalDownloader extends DownloadImageTask {
 
         final WeakReference<PhotoPagerPresenter> ref;
 
-        InternalDownloader(PhotoPagerPresenter presenter, Context context, String url, String file) {
-            super(context, url, file);
+        InternalDownloader(PhotoPagerPresenter presenter, Context context, String url, String file, Photo photo) {
+            super(context, url, file, photo.getId() + "_" + photo.getOwnerId());
             this.ref = new WeakReference<>(presenter);
         }
 

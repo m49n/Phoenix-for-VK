@@ -32,7 +32,10 @@ public class LinkSpan extends ClickableSpan {
     @Override
     public void updateDrawState(TextPaint textPaint) {
         super.updateDrawState(textPaint);
-        textPaint.setColor(CurrentTheme.getColorPrimary(context));
+        if(is_underline)
+            textPaint.setColor(CurrentTheme.getColorPrimary(context));
+        else
+            textPaint.setColor(CurrentTheme.getColorSecondary(context));
         textPaint.setUnderlineText(is_underline);
     }
 }

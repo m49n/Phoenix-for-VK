@@ -303,11 +303,18 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             return;
         }
 
-        int ret = DownloadUtil.downloadTrack(getContext(), audio);
+        int ret = DownloadUtil.downloadTrack(getContext(), audio, false);
         if(ret == 0)
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved_audio);
-        else if(ret == 1)
+        else if(ret == 1) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio);
+            new MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(R.string.error)
+                    .setMessage(R.string.audio_force_download)
+                    .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(getContext(), audio, true))
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
         else
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.error_audio);
     }

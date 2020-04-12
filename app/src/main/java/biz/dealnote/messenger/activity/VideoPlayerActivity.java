@@ -1,56 +1,78 @@
 package biz.dealnote.messenger.activity;
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.io.IOException;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
 
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.media.video.DefaultVideoPlayer;
-import biz.dealnote.messenger.media.video.ExoVideoPlayer;
-import biz.dealnote.messenger.media.video.IVideoPlayer;
+import biz.dealnote.messenger.api.ProxyUtil;
+import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.model.InternalVideoSize;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.Video;
-import biz.dealnote.messenger.model.VideoSize;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
-import biz.dealnote.messenger.view.VideoControllerView;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback,
-        VideoControllerView.MediaPlayerControl, IVideoPlayer.IVideoSizeChangeListener {
+public class VideoPlayerActivity extends AppCompatActivity {
 
     public static final String EXTRA_VIDEO = "video";
     public static final String EXTRA_SIZE = "size";
 
     private View mDecorView;
-    private SurfaceView mSurfaceView;
-    private VideoControllerView mControllerView;
+    private PlayerView mSurfaceView;
 
-    private IVideoPlayer mPlayer;
+    private Player mPlayer;
 
     private Video video;
     private int size;
 
-    private boolean isLandscape = false;
+    private static MediaSource createMediaSource(String url, ProxyConfig proxyConfig, boolean isHLS) {
+        Proxy proxy = null;
+        if (nonNull(proxyConfig)) {
+            proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
+
+            if (proxyConfig.isAuthEnabled()) {
+                Authenticator authenticator = new Authenticator() {
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
+                    }
+                };
+
+                Authenticator.setDefault(authenticator);
+            } else {
+                Authenticator.setDefault(null);
+            }
+        }
+
+        String userAgent = Constants.USER_AGENT(null);
+        CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
+        if(!isHLS)
+            return new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+        else
+            return new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,63 +105,45 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             actionBar.setSubtitle(video.getDescription());
         }
 
-        mControllerView = new VideoControllerView(this);
-
         mSurfaceView = findViewById(R.id.videoSurface);
-        mSurfaceView.setOnClickListener(v -> resolveControlsVisibility());
 
-        SurfaceHolder videoHolder = mSurfaceView.getHolder();
-        videoHolder.addCallback(this);
+        resolveControlsVisibility(false);
 
-        resolveControlsVisibility();
+        mPlayer = createPlayer(size == InternalVideoSize.SIZE_HLS || size == InternalVideoSize.SIZE_LIVE);
+        mPlayer.setPlayWhenReady(true);
 
-        try {
-            mPlayer = createPlayer();
-            mPlayer.addVideoSizeChangeListener(this);
-            mPlayer.play();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mControllerView.setMediaPlayer(this);
-        mControllerView.setAnchorView(findViewById(R.id.videoSurfaceContainer));
+        mSurfaceView.setPlayer(mPlayer);
+        mSurfaceView.setControllerVisibilityListener(visibility -> resolveControlsVisibility(visibility == View.VISIBLE));
     }
 
-    private IVideoPlayer createPlayer() throws IOException {
+    private Player createPlayer(boolean isHLS) {
         IProxySettings settings = Injection.provideProxySettings();
         ProxyConfig config = settings.getActiveProxy();
 
         final String url = getFileUrl();
-        return nonNull(config) || Settings.get().other().isForceExoplayer() ? new ExoVideoPlayer(this, url, config) : new DefaultVideoPlayer(url);
+        SimpleExoPlayer ret = new SimpleExoPlayer.Builder(this).build();
+        ret.prepare(createMediaSource(url, config, isHLS));
+        ret.setPlayWhenReady(true);
+        return ret;
     }
 
-    private void resolveControlsVisibility() {
+    private void resolveControlsVisibility(boolean show) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null)
             return;
 
-        if (actionBar.isShowing()) {
+        if (actionBar.isShowing() && !show) {
             //toolbar_with_elevation.animate().translationY(-toolbar_with_elevation.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
             actionBar.hide();
-            mControllerView.hide();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-            } else {
-                mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
-            }
-        } else {
+            mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        } else if (!actionBar.isShowing() && show){
             //toolbar_with_elevation.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
             actionBar.show();
-            mControllerView.show();
             mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
     }
@@ -152,83 +156,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     @Override
     protected void onPause() {
-        mPlayer.pause();
+        mPlayer.setPlayWhenReady(false);
+        mPlayer.getPlaybackState();
         super.onPause();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        mPlayer.setSurfaceHolder(holder);
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public boolean canPause() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekBackward() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekForward() {
-        return true;
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return mPlayer.getBufferPercentage();
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        return mPlayer.getCurrentPosition();
-    }
-
-    @Override
-    public int getDuration() {
-        return mPlayer.getDuration();
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return mPlayer.isPlaying();
-    }
-
-    @Override
-    public void pause() {
-        mPlayer.pause();
-    }
-
-    @Override
-    public void seekTo(int i) {
-        mPlayer.seekTo(i);
-    }
-
-    @Override
-    public void start() {
-        mPlayer.play();
-    }
-
-    @Override
-    public boolean isFullScreen() {
-        return false;
-    }
-
-    @Override
-    public void toggleFullScreen() {
-        setRequestedOrientation(isLandscape ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     private String getFileUrl() {
@@ -250,45 +180,5 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             default:
                 throw new IllegalArgumentException("Unknown video size");
         }
-    }
-
-    private void setFitToFillAspectRatio(int videoWidth, int videoHeight) {
-        Point size = new Point();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            getWindowManager().getDefaultDisplay().getRealSize(size);
-        } else {
-            getWindowManager().getDefaultDisplay().getSize(size);
-        }
-
-        int screenWidth = size.x;
-        int screenHeight = size.y;
-        ViewGroup.LayoutParams videoParams = mSurfaceView.getLayoutParams();
-
-        if (videoWidth > videoHeight) {
-            videoParams.width = screenWidth;
-            videoParams.height = screenWidth * videoHeight / videoWidth;
-        } else {
-            videoParams.width = screenHeight * videoWidth / videoHeight;
-            videoParams.height = screenHeight;
-        }
-
-        mSurfaceView.setLayoutParams(videoParams);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setFitToFillAspectRatio(mSurfaceView.getWidth(), mSurfaceView.getHeight());
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            isLandscape = true;
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            isLandscape = false;
-        }
-    }
-
-    @Override
-    public void onVideoSizeChanged(@NonNull IVideoPlayer player, VideoSize size) {
-        setFitToFillAspectRatio(size.getWidth(), size.getHeight());
     }
 }

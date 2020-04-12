@@ -112,11 +112,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isForceExoplayer() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_exoplayer", false);
-    }
-
-    @Override
     public boolean isShow_audio_cover() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_cover", true);
     }
@@ -162,5 +157,10 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isEnable_show_audio_top() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", true);
+    }
+
+    @Override
+    public boolean isAuto_merge_audio_tag() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("auto_merge_audio_tag", true);
     }
 }

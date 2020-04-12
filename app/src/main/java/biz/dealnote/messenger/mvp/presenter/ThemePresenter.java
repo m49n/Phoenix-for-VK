@@ -40,8 +40,8 @@ public class ThemePresenter extends AbsPresenter<IThemeView> {
         categories.add(new ThemeValue("#8500ff", "#268000", "violet_green"));
         categories.add(new ThemeValue("#268000", "#8500ff", "green_violet"));
         categories.add(new ThemeValue("#9800ff", "#F44336", "violet_red"));
+        categories.add(new ThemeValue("#F44336", "#9800ff", "red_violet"));
         categories.add(new ThemeValue("#F8DF00", "#F44336", "yellow_red"));
-        categories.add(new ThemeValue("#4CAF74", "#8500ff", "green_violet_sec"));
         return categories;
     }
 

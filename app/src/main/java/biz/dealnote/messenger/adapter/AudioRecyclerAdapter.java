@@ -191,6 +191,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             PopupMenu popup = new PopupMenu(mContext, holder.Track);
             popup.inflate(R.menu.audio_item_menu);
             popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
+            popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
             popup.setOnMenuItemClickListener(item1 -> {
                 switch (item1.getItemId()) {
                     case R.id.search_by_artist:
@@ -227,11 +228,18 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                             AppPerms.requestReadWriteStoragePermission((Activity)mContext);
                             return true;
                         }
-                        int ret = DownloadUtil.downloadTrack(mContext, item);
+                        int ret = DownloadUtil.downloadTrack(mContext, item, false);
                         if(ret == 0)
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
-                        else if(ret == 1)
+                        else if(ret == 1) {
                             PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
+                            new MaterialAlertDialogBuilder(mContext)
+                                    .setTitle(R.string.error)
+                                    .setMessage(R.string.audio_force_download)
+                                    .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, item, true))
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .show();
+                        }
                         else
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
                         return true;

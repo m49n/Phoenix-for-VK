@@ -395,6 +395,7 @@
 
     <string name="open_profile">Открыть профиль</string>
 
+    <string name="play_hls">Потоковое видео</string>
     <string name="play_240" translatable="false">240p</string>
     <string name="play_360" translatable="false">360p</string>
     <string name="play_480" translatable="false">480p</string>
@@ -1154,7 +1155,6 @@
     <string name="instagram" translatable="false">Instagram</string>
     <string name="twitter" translatable="false">Twitter</string>
     <string name="facebook" translatable="false">Facebook</string>
-    <string name="settings_force_exoplayer_title">Принудительно ExoPlayer</string>
     <string name="force_hls">Принудительно Потоковое аудио</string>
     <string name="force_cache">Принудительно слушать из кэша</string>
     <string name="audio_from_cache">Восстановление аудио из загрузок</string>
@@ -1253,6 +1253,7 @@
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
     <string name="show_recent_dialogs">Последние чаты (перезапуск)"</string>
     <string name="show_audio_top">Популярные аудио"</string>
+    <string name="auto_merge_audio_tag">Автоматически внедрять обложку аудио</string>
     <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
     <string name="show_audio_cover">Обложки аудио</string>
@@ -1260,4 +1261,6 @@
     <string name="null_audio">Нет проигрываемых аудио</string>
     <string name="audio_not_found">Аудио не найдено в списке</string>
     <string name="load_saved_audios">Ошибка сети! Загрузить из кэша?</string>
+    <string name="audio_force_download">Данный трек уже скачен. Всё равно скачать?</string>
+    <string name="null_image_link">Отсутствует ссылка на скачивание</string>
 </resources>

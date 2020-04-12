@@ -89,7 +89,7 @@ class AudioApi extends AbsApi implements IAudioApi {
     public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset) {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .get(album_id, ownerId, offset, 200)
+                        .get(album_id, ownerId, offset, 100)
                         .map(extractResponseWithErrorHandling()));
     }
 
