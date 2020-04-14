@@ -32,6 +32,7 @@ import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.view.CircleRoadProgress;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 /**
@@ -62,12 +63,12 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         configView(attachment, holder);
 
         holder.vRemove.setOnClickListener(view -> {
-            int dataposition = holder.getAdapterPosition() - getHeadersCount();
+            int dataposition = holder.getBindingAdapterPosition() - getHeadersCount();
             callback.onRemoveClick(dataposition, attachment);
         });
 
         holder.vTitleRoot.setOnClickListener(v -> {
-            int dataposition = holder.getAdapterPosition() - getHeadersCount();
+            int dataposition = holder.getBindingAdapterPosition() - getHeadersCount();
             callback.onTitleClick(dataposition, attachment);
         });
     }
@@ -112,7 +113,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
 
         ImageView photoImageView;
         TextView tvTitle;
@@ -217,9 +218,15 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
     }
 
     private void bindAudio(ViewHolder holder, Audio audio) {
-        PicassoInstance.with()
-                .load(R.drawable.background_gray)
-                .into(holder.photoImageView);
+        if(isEmpty(audio.getThumb_image_big())){
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.generic_audio_nowplaying);
+        } else {
+            PicassoInstance.with()
+                    .load(audio.getThumb_image_big())
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        }
 
         String audiostr = audio.getArtist() + " - " + audio.getTitle();
         holder.tvTitle.setText(audiostr);

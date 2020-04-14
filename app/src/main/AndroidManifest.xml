@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="biz.dealnote.messenger">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="biz.dealnote.messenger">
 
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
@@ -24,7 +26,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/App.DayNight">
+        android:theme="@style/App.DayNight.Ice"
+        tools:targetApi="q">
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -181,6 +184,9 @@
         <activity
             android:name=".activity.VideoSelectActivity"
             android:label="@string/videos" />
+        <activity
+            android:name=".activity.AudioSelectActivity"
+            android:label="@string/audios" />
 
         <activity
             android:name=".activity.AccountsActivity"

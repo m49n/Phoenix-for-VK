@@ -37,19 +37,21 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private int option_menu_id;
     private int isAlbum;
     private boolean LoadFromCache;
+    private boolean iSSelectMode;
 
-    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, int isAlbum, @Nullable Bundle savedInstanceState) {
+    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, int isAlbum, boolean iSSelectMode, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.audioInteractor = InteractorFactory.createAudioInteractor();
         this.audios = new ArrayList<>();
         this.ownerId = ownerId;
         this.option_menu_id = option_menu_id;
         this.isAlbum = isAlbum;
+        this.iSSelectMode = iSSelectMode;
     }
 
     public void LoadAudiosTool()
     {
-        if (isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
+        if (!iSSelectMode && isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
             audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
             actualReceived = true;
             setLoadingNow(false);
@@ -110,7 +112,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         endOfContent = next.isEmpty();
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
-        if (isAlbum == 0 && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1 && !iSSelectMode) {
             MusicUtils.Audios.put(ownerId, audios);
         }
     }
@@ -124,7 +126,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         setLoadingNow(false);
         callView(IAudiosView::notifyListChanged);
 
-        if (isAlbum == 0 && option_menu_id == -1) {
+        if (isAlbum == 0 && option_menu_id == -1 && !iSSelectMode) {
             MusicUtils.Audios.put(ownerId, audios);
         }
     }
@@ -234,6 +236,16 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             else
                 doLoadCache();
         }
+    }
+
+    public ArrayList<Audio> getSelected()
+    {
+        ArrayList<Audio> ret = new ArrayList<>();
+        for(Audio i : audios) {
+            if(i.isSelected())
+                ret.add(i);
+        }
+        return ret;
     }
 
     public int getAudioPos(Audio audio)

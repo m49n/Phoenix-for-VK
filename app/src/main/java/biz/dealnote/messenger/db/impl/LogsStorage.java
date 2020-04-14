@@ -40,6 +40,12 @@ public class LogsStorage implements ILogsStorage {
     }
 
     @Override
+    public void Clear()
+    {
+        helper().Clear();
+    }
+
+    @Override
     public Single<LogEvent> add(int type, String tag, String body) {
         return Single.fromCallable(() -> {
             long now = System.currentTimeMillis();

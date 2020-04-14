@@ -21,6 +21,7 @@ import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.AttachmenEntry;
+import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
 import biz.dealnote.messenger.model.Photo;
@@ -99,6 +100,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindMessages(holder, (FwdMessages) model);
         } else if(model instanceof Document){
             bindDoc(holder, (Document) model);
+        } else if(model instanceof Audio){
+            bindAudio(holder, (Audio) model);
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
@@ -124,6 +127,26 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
                     .placeholder(R.drawable.background_gray)
                     .into(holder.image);
         }
+    }
+
+    private void bindImageAudioView(EntryHolder holder, String url){
+        if(isEmpty(url)){
+            PicassoInstance.with().cancelRequest(holder.image);
+            holder.image.setImageResource(R.drawable.generic_audio_nowplaying);
+        } else {
+            PicassoInstance.with()
+                    .load(url)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.image);
+        }
+    }
+
+    private void bindAudio(EntryHolder holder, Audio audio) {
+        String audiostr = audio.getArtist() + " - " + audio.getTitle();
+        holder.title.setText(audiostr);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.tintView.setVisibility(View.GONE);
+        bindImageAudioView(holder, audio.getThumb_image_big());
     }
 
     private void bindVideo(EntryHolder holder, Video video){

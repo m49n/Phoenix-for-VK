@@ -2,6 +2,9 @@ package biz.dealnote.messenger.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -56,6 +59,12 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private TextView mEmptyText;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -166,5 +175,22 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
     public void onShareClick(LogEventWrapper wrapper) {
         LogEvent event = wrapper.getEvent();
         Utils.shareLink(requireActivity(), event.getBody(), event.getTag());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_menu:
+                getPresenter().fireClear();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.logs_menu, menu);
     }
 }

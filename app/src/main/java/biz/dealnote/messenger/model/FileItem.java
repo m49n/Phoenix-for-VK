@@ -8,22 +8,28 @@ public class FileItem implements Parcelable {
     public boolean directory;
     public String file;
     public String details;
+    public String path;
     public int icon;
+    public long Modification;
     public boolean canRead;
 
-    public FileItem(boolean directory, String file, String details, int icon, boolean canRead) {
+    public FileItem(boolean directory, String file, String details, int icon, long Modification, String path, boolean canRead) {
         this.directory = directory;
         this.file = file;
         this.details = details;
+        this.path = path;
         this.icon = icon;
         this.canRead = canRead;
+        this.Modification = Modification;
     }
 
     protected FileItem(Parcel in) {
         directory = in.readByte() != 0;
         file = in.readString();
         details = in.readString();
+        path = in.readString();
         icon = in.readInt();
+        Modification = in.readLong();
         canRead = in.readByte() != 0;
     }
 
@@ -54,7 +60,9 @@ public class FileItem implements Parcelable {
         dest.writeByte((byte) (directory ? 1 : 0));
         dest.writeString(file);
         dest.writeString(details);
+        dest.writeString(path);
         dest.writeInt(icon);
+        dest.writeLong(Modification);
         dest.writeByte((byte) (canRead ? 1 : 0));
     }
 }

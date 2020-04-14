@@ -14,4 +14,6 @@ public interface ILogsStorage {
     Single<LogEvent> add(int type, String tag, String body);
 
     Single<List<LogEvent>> getAll(int type);
+
+    void Clear();
 }

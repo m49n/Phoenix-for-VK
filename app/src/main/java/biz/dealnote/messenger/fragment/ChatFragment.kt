@@ -504,6 +504,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         startActivityForResult(intent, REQUEST_ADD_ATTACHMENT)
     }
 
+    override fun startAudioSelection(accountId: Int, ownerId: Int) {
+        val intent = AudioSelectActivity.createIntent(activity, accountId, ownerId)
+        startActivityForResult(intent, REQUEST_ADD_ATTACHMENT)
+    }
+
     override fun startDocSelection(accountId: Int, ownerId: Int) {
         val intent = AttachmentsActivity.createIntent(activity, accountId, Types.DOC)
         startActivityForResult(intent, REQUEST_ADD_ATTACHMENT)
@@ -541,6 +546,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 R.id.buttonHide -> reference.get()?.hideEditAttachmentsDialog()
                 R.id.buttonSave -> reference.get()?.onEditAttachmentSaveClick()
                 R.id.buttonVideo -> reference.get()?.presenter?.onEditAddVideoClick()
+                R.id.buttonAudio -> reference.get()?.presenter?.onEditAddAudioClick()
                 R.id.buttonDoc -> reference.get()?.presenter?.onEditAddDocClick()
                 R.id.buttonCamera -> reference.get()?.onEditCameraClick()
             }
@@ -565,6 +571,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
             rootView.findViewById<View>(R.id.buttonHide).setOnClickListener(this)
             rootView.findViewById<View>(R.id.buttonVideo).setOnClickListener(this)
+            rootView.findViewById<View>(R.id.buttonAudio).setOnClickListener(this)
             rootView.findViewById<View>(R.id.buttonDoc).setOnClickListener(this)
             rootView.findViewById<View>(R.id.buttonCamera).setOnClickListener(this)
             rootView.findViewById<View>(R.id.buttonSave).setOnClickListener(this)

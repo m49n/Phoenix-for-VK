@@ -1677,6 +1677,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         view?.startVideoSelection(accountId, messagesOwnerId)
     }
 
+    fun onEditAddAudioClick() {
+        view?.startAudioSelection(accountId, messagesOwnerId)
+    }
+
     fun onEditAddDocClick() {
         view?.startDocSelection(accountId, messagesOwnerId)
     }

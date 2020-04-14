@@ -41,8 +41,6 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="false"
         android:layout_centerVertical="true"
-        android:background="@drawable/circle_back_white"
         android:checked="true"
-        android:padding="12dp"
-        android:src="@drawable/folder" />
+        android:padding="12dp"/>
 </RelativeLayout>

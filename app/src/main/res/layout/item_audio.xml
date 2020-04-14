@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -114,12 +115,28 @@
             android:src="@drawable/play" />
     </RelativeLayout>
 
-    <View
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/item_audio_selection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignTop="@+id/audio_root"
         android:layout_alignBottom="@+id/audio_root"
-        android:background="#ffb9b9b9"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="2dp"
+        app:contentPadding="0dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item_audio_select_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/audio_root"
+        android:layout_alignBottom="@+id/audio_root"
+        android:orientation="horizontal"
+        app:cardBackgroundColor="?my_messages_bubble_color"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="2dp"
+        app:contentPadding="0dp"
+        tools:visibility="gone" />
 </RelativeLayout>

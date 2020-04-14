@@ -522,7 +522,11 @@ public class Entity2Model {
                 .setOwnerId(dbo.getOwnerId())
                 .setLyricsId(dbo.getLyricsId())
                 .setTitle(dbo.getTitle())
-                .setGenre(dbo.getGenre());
+                .setGenre(dbo.getGenre())
+                .setAlbum_title(dbo.getAlbum_title())
+                .setThumb_image_big(dbo.getThumb_image_big())
+                .setThumb_image_little(dbo.getThumb_image_little())
+                .setThumb_image_very_big(dbo.getThumb_image_very_big());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {

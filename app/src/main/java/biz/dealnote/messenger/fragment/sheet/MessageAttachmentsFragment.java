@@ -23,6 +23,7 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.AttachmentsActivity;
+import biz.dealnote.messenger.activity.AudioSelectActivity;
 import biz.dealnote.messenger.activity.DualTabPhotoActivity;
 import biz.dealnote.messenger.activity.VideoSelectActivity;
 import biz.dealnote.messenger.adapter.AttachmentsBottomSheetAdapter;
@@ -93,6 +94,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
         view.findViewById(R.id.button_hide).setOnClickListener(v -> getDialog().dismiss());
         view.findViewById(R.id.button_video).setOnClickListener(v -> getPresenter().fireButtonVideoClick());
+        view.findViewById(R.id.button_audio).setOnClickListener(v -> getPresenter().fireButtonAudioClick());
         view.findViewById(R.id.button_doc).setOnClickListener(v -> getPresenter().fireButtonDocClick());
         view.findViewById(R.id.button_camera).setOnClickListener(v -> getPresenter().fireButtonCameraClick());
 
@@ -242,6 +244,13 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     @Override
     public void startAddVideoActivity(int accountId, int ownerId) {
         Intent intent = VideoSelectActivity.createIntent(requireActivity(), accountId, ownerId);
+        startActivityForResult(intent, REQUEST_SELECT_ATTACHMENTS);
+    }
+
+    @Override
+    public void startAddAudioActivity(int accountId, int ownerId)
+    {
+        Intent intent = AudioSelectActivity.createIntent(requireActivity(), accountId, ownerId);
         startActivityForResult(intent, REQUEST_SELECT_ATTACHMENTS);
     }
 

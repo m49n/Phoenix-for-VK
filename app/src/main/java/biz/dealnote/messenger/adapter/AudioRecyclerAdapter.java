@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -55,13 +56,15 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
     private List<Audio> mData;
     private IAudioInteractor mAudioInteractor;
     private boolean not_show_my;
+    private boolean iSSelectMode;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
 
-    public AudioRecyclerAdapter(Context context, List<Audio> data, boolean not_show_my) {
+    public AudioRecyclerAdapter(Context context, List<Audio> data, boolean not_show_my, boolean iSSelectMode) {
         this.mAudioInteractor = InteractorFactory.createAudioInteractor();
         this.mContext = context;
         this.mData = data;
         this.not_show_my = not_show_my;
+        this.iSSelectMode = iSSelectMode;
     }
 
     private void delete(final int accoutnId, Audio audio) {
@@ -121,6 +124,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         }
 
         holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
+        holder.isSelectedView.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
 
         if(not_show_my)
             holder.my.setVisibility(View.GONE);
@@ -185,80 +189,87 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                 }
             }
         });
-        holder.Track.setOnClickListener(view -> {
-            holder.cancelSelectionAnimation();
-            holder.startSomeAnimation();
-            PopupMenu popup = new PopupMenu(mContext, holder.Track);
-            popup.inflate(R.menu.audio_item_menu);
-            popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
-            popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
-            popup.setOnMenuItemClickListener(item1 -> {
-                switch (item1.getItemId()) {
-                    case R.id.search_by_artist:
-                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
-                        return true;
-                    case R.id.get_album_cover_tags:
-                        DownloadUtil.downloadTrackCoverAndTags(mContext, item);
-                        return true;
-                    case R.id.get_lyrics_menu:
-                        get_lyrics(item);
-                        return true;
-                    case R.id.get_recommendation_by_audio:
-                        PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), item.getOwnerId(), item.getId()).tryOpenWith(mContext);
-                        return true;
-                    case R.id.copy_url:
-                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("response", item.getUrl());
-                        clipboard.setPrimaryClip(clip);
-                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
-                        return true;
-                    case R.id.add_item_audio:
-                        boolean myAudio = item.getOwnerId() == Settings.get().accounts().getCurrent();
-                        if(myAudio) {
-                            delete(Settings.get().accounts().getCurrent(), item);
-                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
-                        }
-                        else {
-                            add(Settings.get().accounts().getCurrent(), item);
-                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
-                        }
-                        return true;
-                    case R.id.save_item_audio:
-                        if(!AppPerms.hasReadWriteStoragePermision(mContext)) {
-                            AppPerms.requestReadWriteStoragePermission((Activity)mContext);
+        if(!iSSelectMode) {
+            holder.Track.setOnClickListener(view -> {
+                holder.cancelSelectionAnimation();
+                holder.startSomeAnimation();
+                PopupMenu popup = new PopupMenu(mContext, holder.Track);
+                popup.inflate(R.menu.audio_item_menu);
+                popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
+                popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
+                popup.setOnMenuItemClickListener(item1 -> {
+                    switch (item1.getItemId()) {
+                        case R.id.search_by_artist:
+                            PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
                             return true;
-                        }
-                        int ret = DownloadUtil.downloadTrack(mContext, item, false);
-                        if(ret == 0)
-                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
-                        else if(ret == 1) {
-                            PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
-                            new MaterialAlertDialogBuilder(mContext)
-                                    .setTitle(R.string.error)
-                                    .setMessage(R.string.audio_force_download)
-                                    .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, item, true))
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .show();
-                        }
-                        else
-                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
-                        return true;
-                    case R.id.bitrate_item_audio:
-                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                        retriever.setDataSource(Audio.getMp3FromM3u8(item.getUrl()), new HashMap<>());
-                        String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-                        PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
-                        return true;
-                    default:
-                        return false;
-                }
+                        case R.id.get_album_cover_tags:
+                            DownloadUtil.downloadTrackCoverAndTags(mContext, item);
+                            return true;
+                        case R.id.get_lyrics_menu:
+                            get_lyrics(item);
+                            return true;
+                        case R.id.get_recommendation_by_audio:
+                            PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), item.getOwnerId(), item.getId()).tryOpenWith(mContext);
+                            return true;
+                        case R.id.copy_url:
+                            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("response", item.getUrl());
+                            clipboard.setPrimaryClip(clip);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
+                            return true;
+                        case R.id.add_item_audio:
+                            boolean myAudio = item.getOwnerId() == Settings.get().accounts().getCurrent();
+                            if (myAudio) {
+                                delete(Settings.get().accounts().getCurrent(), item);
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
+                            } else {
+                                add(Settings.get().accounts().getCurrent(), item);
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
+                            }
+                            return true;
+                        case R.id.save_item_audio:
+                            if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                                AppPerms.requestReadWriteStoragePermission((Activity) mContext);
+                                return true;
+                            }
+                            int ret = DownloadUtil.downloadTrack(mContext, item, false);
+                            if (ret == 0)
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
+                            else if (ret == 1) {
+                                PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
+                                new MaterialAlertDialogBuilder(mContext)
+                                        .setTitle(R.string.error)
+                                        .setMessage(R.string.audio_force_download)
+                                        .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, item, true))
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show();
+                            } else
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                            return true;
+                        case R.id.bitrate_item_audio:
+                            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                            retriever.setDataSource(Audio.getMp3FromM3u8(item.getUrl()), new HashMap<>());
+                            String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+                if (item.getOwnerId() == Settings.get().accounts().getCurrent())
+                    popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.delete);
+                else
+                    popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.action_add);
+                popup.show();
             });
-            if(item.getOwnerId() == Settings.get().accounts().getCurrent())
-                popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.delete);
-            else
-                popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.action_add);
-            popup.show();
-        });
+        }
+        else
+        {
+            holder.Track.setOnClickListener(view -> {
+                item.setIsSelected(!item.isSelected());
+                holder.isSelectedView.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
+            });
+        }
     }
 
     @Override
@@ -281,7 +292,8 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView lyric;
         ImageView my;
         ViewGroup Track;
-        View selectionView;
+        MaterialCardView selectionView;
+        MaterialCardView isSelectedView;
 
         AudioHolder(View itemView) {
             super(itemView);
@@ -293,11 +305,12 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             lyric = itemView.findViewById(R.id.lyric);
             Track = itemView.findViewById(R.id.track_option);
             my = itemView.findViewById(R.id.my);
+            isSelectedView = itemView.findViewById(R.id.item_audio_select_add);
             selectionView = itemView.findViewById(R.id.item_audio_selection);
             animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
                 @Override
                 public void onAnimationEnd(View view) {
-                    view.setVisibility(View.INVISIBLE);
+                    view.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -307,7 +320,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
 
                 @Override
                 protected void onAnimationCancel(View view) {
-                    view.setVisibility(View.INVISIBLE);
+                    view.setVisibility(View.GONE);
                 }
             };
         }
@@ -316,7 +329,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ObjectAnimator animator;
 
         void startSelectionAnimation(){
-            selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(mContext));
+            selectionView.setCardBackgroundColor(CurrentTheme.getColorPrimary(mContext));
             selectionView.setAlpha(0.5f);
 
             animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
@@ -326,7 +339,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         }
 
         void startSomeAnimation(){
-            selectionView.setBackgroundColor(CurrentTheme.getColorSecondary(mContext));
+            selectionView.setCardBackgroundColor(CurrentTheme.getColorSecondary(mContext));
             selectionView.setAlpha(0.5f);
 
             animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);

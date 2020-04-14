@@ -63,6 +63,7 @@ import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
+import biz.dealnote.messenger.view.ViewPagerTransformers;
 import biz.dealnote.messenger.view.pager.AbsImageDisplayHolder;
 import biz.dealnote.messenger.view.pager.AbsPagerAdapter;
 import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
@@ -176,6 +177,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setPageTransformer(true, ViewPagerTransformers.ZOOM_OUT);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {

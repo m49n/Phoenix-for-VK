@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -64,18 +65,33 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         return fragment;
     }
 
+    public static AudiosFragment newInstanceSelect(int accountId, int ownerId) {
+        Bundle args = new Bundle();
+        args.putInt(Extra.OWNER_ID, ownerId);
+        args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putInt(Extra.ID, -1);
+        args.putInt(Extra.ALBUM, 0);
+        args.putBoolean(ACTION_SELECT, true);
+        AudiosFragment fragment = new AudiosFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AudioRecyclerAdapter mAudioRecyclerAdapter;
     private PlaybackStatus mPlaybackStatus;
     private boolean inTabsContainer;
     private boolean doAudioLoadTabs;
+    private boolean isSelectMode;
 
     public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
+    public static final String ACTION_SELECT = "AudiosFragment.ACTION_SELECT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inTabsContainer = requireArguments().getBoolean(EXTRA_IN_TABS_CONTAINER);
+        isSelectMode = requireArguments().getBoolean(ACTION_SELECT);
     }
 
     @Override
@@ -103,24 +119,35 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             }
         });
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
+        if(isSelectMode)
+            Goto.setImageResource(R.drawable.check);
+        else
+            Goto.setImageResource(R.drawable.rune_mannaz_small);
         Goto.setOnClickListener(v -> {
-            Audio curr = MusicUtils.getCurrentAudio();
-            if (curr != null) {
-                int index = getPresenter().getAudioPos(curr);
-                if (index >= 0) {
-                    if(Settings.get().other().isShow_audio_cover())
-                        recyclerView.scrollToPosition(index);
-                    else
-                        recyclerView.smoothScrollToPosition(index);
-                }
-                else
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found);
+            if(isSelectMode)
+            {
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra(Extra.ATTACHMENTS, getPresenter().getSelected());
+                requireActivity().setResult(Activity.RESULT_OK, intent);
+                requireActivity().finish();
             }
-            else
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
+            else {
+                Audio curr = MusicUtils.getCurrentAudio();
+                if (curr != null) {
+                    int index = getPresenter().getAudioPos(curr);
+                    if (index >= 0) {
+                        if (Settings.get().other().isShow_audio_cover())
+                            recyclerView.scrollToPosition(index);
+                        else
+                            recyclerView.smoothScrollToPosition(index);
+                    } else
+                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found);
+                } else
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
+            }
         });
 
-        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio());
+        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio(), isSelectMode);
         mAudioRecyclerAdapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
         recyclerView.setAdapter(mAudioRecyclerAdapter);
         return root;
@@ -171,6 +198,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
                 requireArguments().getInt(Extra.OWNER_ID),
                 requireArguments().getInt(Extra.ID),
                 requireArguments().getInt(Extra.ALBUM),
+                requireArguments().getBoolean(ACTION_SELECT),
                 saveInstanceState
         );
     }

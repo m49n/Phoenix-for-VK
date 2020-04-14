@@ -76,6 +76,12 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         }
     }
 
+    public void fireClear()
+    {
+        store.Clear();
+        loadAll();
+    }
+
     private void loadAll() {
         final int type = getSelectedType();
 

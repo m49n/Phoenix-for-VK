@@ -29,6 +29,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.AttachmentsActivity;
+import biz.dealnote.messenger.activity.AudioSelectActivity;
 import biz.dealnote.messenger.activity.PhotoAlbumsActivity;
 import biz.dealnote.messenger.activity.PhotosActivity;
 import biz.dealnote.messenger.adapter.AttchmentsEditorAdapter;
@@ -187,8 +188,7 @@ public abstract class AbsAttachmentsEditFragment<P extends AbsAttachmentsEditPre
         }
 
         if (nonNull(mButtonAudio)) {
-            //mButtonAudio.setVisibility(audio ? View.VISIBLE : View.GONE);
-            mButtonAudio.setVisibility(View.GONE); //audio not supported
+            mButtonAudio.setVisibility(audio ? View.VISIBLE : View.GONE);
         }
 
         if (nonNull(mButtonVideo)) {
@@ -237,7 +237,8 @@ public abstract class AbsAttachmentsEditFragment<P extends AbsAttachmentsEditPre
 
     @Override
     public void openAddAudiosWindow(int maxSelectionCount, int accountId) {
-        startAttachmentsActivity(accountId, Types.AUDIO, REQUEST_AUDIO_SELECT);
+        Intent intent = AudioSelectActivity.createIntent(requireActivity(), accountId, accountId);
+        startActivityForResult(intent, REQUEST_AUDIO_SELECT);
     }
 
     @Override

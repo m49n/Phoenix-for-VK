@@ -406,6 +406,10 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         getView().startAddVideoActivity(accountId, messageOwnerId);
     }
 
+    public void fireButtonAudioClick() {
+        getView().startAddAudioActivity(accountId, messageOwnerId);
+    }
+
     public void fireButtonDocClick() {
         getView().startAddDocumentActivity(accountId); // TODO: 16.08.2017
     }

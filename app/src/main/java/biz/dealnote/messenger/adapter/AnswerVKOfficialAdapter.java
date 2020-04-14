@@ -109,7 +109,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
                 if (icn != null) {
                     PicassoInstance.with()
                             .load(icn)
-                            .tag("AnswerVKOfficial")
+                            .tag(Constants.PICASSO_TAG)
                             .placeholder(R.drawable.background_gray)
                             .transform(transformation)
                             .into(holder.avatar);

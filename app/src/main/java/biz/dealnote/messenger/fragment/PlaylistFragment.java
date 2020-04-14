@@ -121,7 +121,7 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     public void onViewCreated (View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = new AudioRecyclerAdapter(requireActivity(), mData, false);
+        mAdapter = new AudioRecyclerAdapter(requireActivity(), mData, false, false);
         mAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
     }

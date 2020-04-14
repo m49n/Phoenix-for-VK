@@ -1,5 +1,9 @@
 package biz.dealnote.messenger.adapter;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +13,24 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.FileItem;
-import biz.dealnote.messenger.settings.CurrentTheme;
-import biz.dealnote.messenger.util.Utils;
 
 public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.Holder> {
 
     private List<FileItem> data;
+    private Context mContext;
 
-    public FileManagerAdapter(List<FileItem> data) {
+    public FileManagerAdapter(Context context, List<FileItem> data) {
         this.data = data;
+        this.mContext = context;
     }
 
     @Override
@@ -32,14 +41,35 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         final FileItem item = data.get(position);
-        holder.icon.setImageResource(item.icon);
+        holder.icon.setBackgroundResource(item.icon);
+        if(!item.directory) {
+            PicassoInstance.with()
+                    .load("file://" + item.path)
+                    .tag(Constants.PICASSO_TAG)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            holder.icon.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+        }
         holder.fileName.setText(item.file);
         holder.fileDetails.setText(item.details);
         holder.fileDetails.setVisibility(TextUtils.isEmpty(item.details) ? View.GONE : View.VISIBLE);
 
         holder.itemView.setOnClickListener(v -> {
             if(clickListener != null){
-                clickListener.onClick(holder.getAdapterPosition(), item);
+                clickListener.onClick(holder.getBindingAdapterPosition(), item);
             }
         });
     }
@@ -60,7 +90,6 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
             fileName = itemView.findViewById(R.id.item_file_name);
             fileDetails = itemView.findViewById(R.id.item_file_details);
             icon = itemView.findViewById(R.id.item_file_icon);
-            Utils.setColorFilter(icon.getBackground(), CurrentTheme.getColorPrimary(itemView.getContext()));
         }
     }
 

@@ -78,6 +78,16 @@
             android:tint="?attr/colorOnSurface" />
 
         <ImageView
+            android:id="@+id/buttonAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            android:src="@drawable/music"
+            android:tint="?attr/colorOnSurface" />
+
+        <ImageView
             android:id="@+id/buttonDoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

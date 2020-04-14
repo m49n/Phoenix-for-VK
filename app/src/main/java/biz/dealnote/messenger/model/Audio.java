@@ -46,6 +46,8 @@ public class Audio extends AbsModel implements Parcelable {
 
     private boolean animationNow;
 
+    private boolean isSelected;
+
     public Audio() {
 
     }
@@ -67,6 +69,7 @@ public class Audio extends AbsModel implements Parcelable {
         thumb_image_little = in.readString();
         album_title = in.readString();
         animationNow = in.readInt() != 0;
+        isSelected = in.readInt() != 0;
     }
 
     @Override
@@ -87,6 +90,7 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeString(thumb_image_little);
         dest.writeString(album_title);
         dest.writeInt(animationNow ? 1 : 0);
+        dest.writeInt(isSelected ? 1 : 0);
     }
 
     public static final Creator<Audio> CREATOR = new Creator<Audio>() {
@@ -105,9 +109,16 @@ public class Audio extends AbsModel implements Parcelable {
         return animationNow;
     }
 
-    public Audio setAnimationNow(boolean animationNow) {
+    public void setAnimationNow(boolean animationNow) {
         this.animationNow = animationNow;
-        return this;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     public int getId() {

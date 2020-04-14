@@ -149,7 +149,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
             resolveEmptyText();
         }
 
-        mAdapter = new FileManagerAdapter(fileList);
+        mAdapter = new FileManagerAdapter(requireActivity(), fileList);
         mAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -194,27 +194,41 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
             for (int i = 0; i < fList.length; i++) {
                 // Convert into file path
                 File file = new File(path, fList[i]);
-                int drawableID = R.drawable.file;
+                int drawableID = R.drawable.file_icon;
                 boolean canRead = file.canRead();
                 boolean isDirectory = file.isDirectory();
+                long mod = file.lastModified();
 
                 // Set drawables
                 if (isDirectory) {
                     if (canRead) {
-                        drawableID = R.drawable.ic_directory_can_read;
+                        drawableID = R.drawable.directory_can_read;
                     } else {
-                        drawableID = R.drawable.ic_directory_cant_read;
+                        drawableID = R.drawable.directory_cant_read;
                     }
                 }
 
                 String details = isDirectory ? null : formatBytes(file.length());
-                fileList.add(i, new FileItem(isDirectory, fList[i], details, drawableID, canRead));
+                fileList.add(i, new FileItem(isDirectory, fList[i], details, drawableID, mod, file.getAbsolutePath(), canRead));
             }
 
             if (fileList.size() == 0) {
                 directoryShownIsEmpty = true;
             } else {
-                Collections.sort(fileList, new ItemFileNameComparator());
+                ArrayList<FileItem> dirsList = new ArrayList<>();
+                ArrayList<FileItem> flsList = new ArrayList<>();
+                for(FileItem i : fileList)
+                {
+                    if(i.directory)
+                        dirsList.add(i);
+                    else
+                        flsList.add(i);
+                }
+                Collections.sort(dirsList, new ItemModificationComparator());
+                Collections.sort(flsList, new ItemModificationComparator());
+                fileList.clear();
+                fileList.addAll(dirsList);
+                fileList.addAll(flsList);
             }
         }
 
@@ -404,6 +418,17 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         @Override
         public int compare(FileItem lhs, FileItem rhs) {
             return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
+        }
+    }
+
+    private class ItemModificationComparator implements Comparator<FileItem> {
+        @Override
+        public int compare(FileItem lhs, FileItem rhs) {
+            if(lhs.Modification == rhs.Modification)
+                return 0;
+            if(lhs.Modification < rhs.Modification)
+                return 1;
+            return -1;
         }
     }
 

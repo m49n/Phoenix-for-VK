@@ -60,6 +60,8 @@ class UISettings implements ISettings.IUISettings {
         switch (theme) {
             case "fire":
                 return R.style.App_DayNight_Fire;
+            case "no_amoled_ice":
+                return R.style.App_NoAmoledIce;
             case "red":
                 return R.style.App_DayNight_Red;
             case "violet":
@@ -86,6 +88,8 @@ class UISettings implements ISettings.IUISettings {
                 return R.style.App_DayNight_VioletRed;
             case "yellow_red":
                 return R.style.App_DayNight_YellowRed;
+            case "no_amoled_red_violet":
+                return R.style.App_NoAmoledRedViolet;
             case "ice":
             default:
                 return R.style.App_DayNight_Ice;

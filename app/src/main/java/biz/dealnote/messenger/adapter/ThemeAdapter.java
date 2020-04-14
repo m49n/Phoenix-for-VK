@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,10 +31,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ThemeValue category = data.get(position);
 
+        holder.title.setText(category.name);
         holder.primary.setBackgroundColor(category.color_primary);
         holder.secondary.setBackgroundColor(category.color_secondary);
         holder.selected.setVisibility(Settings.get().ui().getMainThemeKey().equals(category.id) ? View.VISIBLE : View.GONE);
-
         holder.clicked.setOnClickListener(v -> clickListener.onClick(position, category));
     }
 
@@ -63,6 +64,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
         ImageView secondary;
         ImageView selected;
         ViewGroup clicked;
+        TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -70,6 +72,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             secondary = itemView.findViewById(R.id.theme_icon_secondary);
             selected = itemView.findViewById(R.id.selected);
             clicked = itemView.findViewById(R.id.theme_type);
+            title = itemView.findViewById(R.id.item_title);
         }
     }
 }

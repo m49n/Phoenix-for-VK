@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -841,7 +842,8 @@ public class AttachmentsViewBinder {
         ImageView lyric;
         ImageView my;
         ViewGroup Track;
-        View selectionView;
+        MaterialCardView selectionView;
+        MaterialCardView isSelectedView;
 
         AudioHolder(View root) {
             tvTitle = root.findViewById(R.id.dialog_title);
@@ -853,10 +855,12 @@ public class AttachmentsViewBinder {
             Track = root.findViewById(R.id.track_option);
             my = root.findViewById(R.id.my);
             selectionView = root.findViewById(R.id.item_audio_selection);
+            isSelectedView = root.findViewById(R.id.item_audio_select_add);
+            isSelectedView.setVisibility(View.GONE);
             animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
                 @Override
                 public void onAnimationEnd(View view) {
-                    view.setVisibility(View.INVISIBLE);
+                    view.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -866,7 +870,7 @@ public class AttachmentsViewBinder {
 
                 @Override
                 protected void onAnimationCancel(View view) {
-                    view.setVisibility(View.INVISIBLE);
+                    view.setVisibility(View.GONE);
                 }
             };
         }
@@ -875,7 +879,7 @@ public class AttachmentsViewBinder {
         ObjectAnimator animator;
 
         void startSomeAnimation(){
-            selectionView.setBackgroundColor(CurrentTheme.getColorSecondary(mContext));
+            selectionView.setCardBackgroundColor(CurrentTheme.getColorSecondary(mContext));
             selectionView.setAlpha(0.5f);
 
             animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);

@@ -773,6 +773,7 @@ public class Dto2Entity {
                 .setAlbumId(dto.album_id)
                 .setGenre(dto.genre_id)
                 .setAccessKey(dto.access_key)
+                .setAlbum_title(dto.album_title)
                 .setThumb_image_big(dto.thumb_image_big)
                 .setThumb_image_little(dto.thumb_image_little)
                 .setThumb_image_very_big(dto.thumb_image_very_big);

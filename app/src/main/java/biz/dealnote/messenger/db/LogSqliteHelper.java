@@ -48,4 +48,11 @@ public class LogSqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + LogColumns.TABLENAME);
         onCreate(db);
     }
+
+    public void Clear()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + LogColumns.TABLENAME);
+        onCreate(db);
+    }
 }
