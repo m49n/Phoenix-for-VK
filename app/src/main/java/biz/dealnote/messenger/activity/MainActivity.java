@@ -87,6 +87,7 @@ import biz.dealnote.messenger.fragment.LogsFragement;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.MiniPlayerFragment;
 import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
+import biz.dealnote.messenger.fragment.NewsfeedMentionsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
 import biz.dealnote.messenger.fragment.PlaylistFragment;
@@ -1086,6 +1087,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.AUDIOS:
                 attachToFront(AudiosTabsFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID)));
+                break;
+
+            case Place.MENTIONS:
+                attachToFront(NewsfeedMentionsFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID)));
                 break;
 
             case Place.AUDIOS_IN_ALBUM:

@@ -33,6 +33,15 @@ public interface INewsfeedService {
                                                                @Field("fields") String fields,
                                                                @Field("photo_sizes") Integer photoSizes);
 
+    //https://vk.com/dev/newsfeed.getMentions
+    @FormUrlEncoded
+    @POST("newsfeed.getMentions")
+    Single<BaseResponse<NewsfeedCommentsResponse>> getMentions(@Field("owner_id") Integer owner_id,
+                                                               @Field("count") Integer count,
+                                                               @Field("offset") Integer offset,
+                                                               @Field("start_time") Long startTime,
+                                                               @Field("end_time") Long endTime);
+
     //https://vk.com/dev/newsfeed.getLists
     @FormUrlEncoded
     @POST("newsfeed.getLists")

@@ -28,7 +28,7 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
 
         VKApiPost dto = new VKApiPost();
 
-        dto.id = getFirstInt(root, 0, "id", "post_id");
+        dto.id = getFirstInt(root, 0, "post_id", "id");
         dto.post_type = VKApiPost.Type.parse(optString(root, "post_type"));
         dto.owner_id = getFirstInt(root, 0, "owner_id", "to_id", "source_id");
 

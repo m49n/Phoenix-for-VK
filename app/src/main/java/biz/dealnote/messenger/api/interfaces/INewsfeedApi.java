@@ -28,6 +28,8 @@ public interface INewsfeedApi {
     Single<NewsfeedCommentsResponse> getComments(Integer count, String filters, String reposts,
                                                  Long startTime, Long endTime, Integer lastCommentsCount,
                                                  String startFrom, String fields);
+    @CheckResult
+    Single<NewsfeedCommentsResponse>  getMentions(Integer owner_id, Integer count, Integer offset, Long startTime, Long endTime);
 
     @CheckResult
     Single<NewsfeedResponse> get(String filters, Boolean returnBanned, Long startTime, Long endTime,

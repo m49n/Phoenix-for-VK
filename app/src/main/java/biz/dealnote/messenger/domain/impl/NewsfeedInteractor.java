@@ -49,6 +49,44 @@ public class NewsfeedInteractor implements INewsfeedInteractor {
     }
 
     @Override
+    public Single<Pair<List<NewsfeedComment>, String>> getMentions(int accountId, Integer owner_id, Integer count, Integer offset, Long startTime, Long endTime)
+    {
+        return networker.vkDefault(accountId)
+                .newsfeed()
+                .getMentions(owner_id, count, offset, startTime, endTime)
+                .flatMap(response -> {
+                    List<Owner> owners = Dto2Model.transformOwners(response.profiles, response.groups);
+
+                    VKOwnIds ownIds = new VKOwnIds();
+
+                    List<NewsfeedCommentsResponse.Dto> dtos = Utils.listEmptyIfNull(response.items);
+
+                    for (NewsfeedCommentsResponse.Dto dto : dtos) {
+                        if (dto instanceof NewsfeedCommentsResponse.PostDto) {
+                            VKApiPost post = ((NewsfeedCommentsResponse.PostDto) dto).post;
+                            ownIds.append(post);
+                            ownIds.append(post.comments);
+                        } else {
+                            // TODO: 08.05.2017
+                        }
+                    }
+
+                    return ownersRepository.findBaseOwnersDataAsBundle(accountId, ownIds.getAll(), IOwnersRepository.MODE_ANY, owners)
+                            .map(bundle -> {
+                                List<NewsfeedComment> comments = new ArrayList<>(dtos.size());
+                                for (NewsfeedCommentsResponse.Dto dto : dtos) {
+                                    NewsfeedComment comment = createFrom(dto, bundle);
+                                    if (nonNull(comment)) {
+                                        comments.add(comment);
+                                    }
+                                }
+
+                                return Pair.Companion.create(comments, response.nextFrom);
+                            });
+                });
+    }
+
+    @Override
     public Single<Pair<List<NewsfeedComment>, String>> getNewsfeedComments(int accountId, int count, String startFrom, String filter) {
         return networker.vkDefault(accountId)
                 .newsfeed()

@@ -900,7 +900,6 @@
     <string name="chat_background">Фон чата</string>
     <string name="go_to_post">Перейти к записи</string>
     <string name="success">Успех</string>
-    <string name="browser_future">Данная функция ещё не реализована</string>
     <string name="post_text">Текст записи</string>
     <string name="allow_text_selection">Разрешить выделение текста</string>
     <string name="in_a_civil_union">В гражданском браке</string>

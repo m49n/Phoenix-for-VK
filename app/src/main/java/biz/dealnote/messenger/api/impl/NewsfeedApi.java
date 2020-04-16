@@ -48,6 +48,14 @@ class NewsfeedApi extends AbsApi implements INewsfeedApi {
     }
 
     @Override
+    public Single<NewsfeedCommentsResponse>  getMentions(Integer owner_id, Integer count, Integer offset, Long startTime, Long endTime) {
+        return provideService(INewsfeedService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .getMentions(owner_id, count, offset, startTime, endTime)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
     public Single<NewsfeedResponse> get(String filters, Boolean returnBanned, Long startTime,
                                         Long endTime, Integer maxPhotoCount, String sourceIds,
                                         String startFrom, Integer count, String fields) {

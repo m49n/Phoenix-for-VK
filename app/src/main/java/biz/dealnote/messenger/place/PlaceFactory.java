@@ -328,6 +328,10 @@ public class PlaceFactory {
         return new Place(Place.AUDIOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
 
+    public static Place getMentionsPlace(int accountId, int ownerId){
+        return new Place(Place.MENTIONS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
+    }
+
     public static Place getAudiosInAlbumPlace(int accountId, int ownerId, int album_id){
         return new Place(Place.AUDIOS_IN_ALBUM).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId).withIntExtra(Extra.ID, album_id);
     }

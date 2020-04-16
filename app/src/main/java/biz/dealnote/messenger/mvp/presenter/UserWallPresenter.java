@@ -25,7 +25,6 @@ import biz.dealnote.messenger.domain.IRelationshipInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.fragment.friends.FriendsTabsFragment;
-import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.model.FriendsCounters;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.Peer;
@@ -35,6 +34,7 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.criteria.WallCriteria;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.upload.IUploadManager;
 import biz.dealnote.messenger.upload.Method;
 import biz.dealnote.messenger.upload.Upload;
@@ -524,8 +524,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
     public void fireMentions()
     {
-        getView().getPhoenixToast().showToastInfo(R.string.browser_future);
-        LinkHelper.openLinkInBrowser(context, "https://m.vk.com/search?c[section]=statuses&c[type]=1&c[q]=*id"+ getOwnerId());
+        PlaceFactory.getMentionsPlace(getAccountId(), getOwnerId()).tryOpenWith(context);
     }
 
     public void fireReport() {
