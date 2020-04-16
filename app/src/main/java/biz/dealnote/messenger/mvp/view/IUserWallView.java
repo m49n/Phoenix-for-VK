@@ -39,6 +39,8 @@ public interface IUserWallView extends IWallView, IProgressView, ISnackbarView {
 
     void displayUserStatus(String statusText);
 
+    void InvalidateOptionsMenu();
+
     void displayBaseUserInfo(User user);
 
     void openUserDetails(int accountId, @NonNull User user, @NonNull UserDetails details);

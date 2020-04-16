@@ -526,7 +526,8 @@ public class Entity2Model {
                 .setAlbum_title(dbo.getAlbum_title())
                 .setThumb_image_big(dbo.getThumb_image_big())
                 .setThumb_image_little(dbo.getThumb_image_little())
-                .setThumb_image_very_big(dbo.getThumb_image_very_big());
+                .setThumb_image_very_big(dbo.getThumb_image_very_big())
+                .setIsHq(dbo.getIsHq());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {

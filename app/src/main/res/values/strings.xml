@@ -900,6 +900,7 @@
     <string name="chat_background">Фон чата</string>
     <string name="go_to_post">Перейти к записи</string>
     <string name="success">Успех</string>
+    <string name="browser_future">Данная функция ещё не реализована</string>
     <string name="post_text">Текст записи</string>
     <string name="allow_text_selection">Разрешить выделение текста</string>
     <string name="in_a_civil_union">В гражданском браке</string>
@@ -1075,9 +1076,11 @@
     <string name="select_comment_author">Выберите автора</string>
     <string name="add_to_my_videos">Добавить себе</string>
     <string name="api_error_800">Это видео уже добавлено</string>
-    <string name="user_blacklist_title">Черный список</string>
-    <string name="add_to_blacklist">В черный список</string>
-    <string name="is_to_blacklist">Заблокирован</string>
+    <string name="user_blacklist_title">Чёрный список</string>
+    <string name="add_to_blacklist">В чёрный список</string>
+    <string name="report">Жалоба</string>
+    <string name="mentions">Упоминания</string>
+    <string name="is_to_blacklist">Разблокировать</string>
     <string name="button_activate">Aктивировать</string>
     <string name="proxy_address_helper_text">Адрес сервера</string>
     <string name="proxy_port_helper_text">Порт</string>
@@ -1263,4 +1266,5 @@
     <string name="load_saved_audios">Ошибка сети! Загрузить из кэша?</string>
     <string name="audio_force_download">Данный трек уже скачен. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
+    <string name="use_old_vk_api">Аудио с VK api 5.90</string>
 </resources>

@@ -207,7 +207,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             ParcelableOwnerWrapper wrapper = getArguments().getParcelable(Extra.OWNER);
             AssertUtils.requireNonNull(wrapper);
 
-            return new UserWallPresenter(accoutnId, ownerId, (User) wrapper.get(), saveInstanceState);
+            return new UserWallPresenter(accoutnId, ownerId, (User) wrapper.get(), requireActivity(), saveInstanceState);
         };
     }
 
@@ -311,6 +311,11 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     }
 
     @Override
+    public void InvalidateOptionsMenu() {
+        requireActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ActivityUtils.setToolbarTitle(this, R.string.profile);
@@ -324,14 +329,26 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             getPresenter().fireAddToBookmarks();
             return true;
         });
-        if(!NeedShowClBlk) {
-            menu.add(R.string.add_to_blacklist).setOnMenuItemClickListener(item -> {
-                getPresenter().fireAddToBlacklistClick();
+        menu.add(R.string.mentions).setOnMenuItemClickListener(item -> {
+            getPresenter().fireMentions();
+            return true;
+        });
+        if(getPresenter().getAccountId() != getPresenter().getOwnerId()) {
+            menu.add(R.string.report).setOnMenuItemClickListener(item -> {
+                getPresenter().fireReport();
                 return true;
             });
+            if (!NeedShowClBlk) {
+                menu.add(R.string.add_to_blacklist).setOnMenuItemClickListener(item -> {
+                    getPresenter().fireAddToBlacklistClick();
+                    return true;
+                });
+            } else
+                menu.add(R.string.is_to_blacklist).setOnMenuItemClickListener(item -> {
+                    getPresenter().fireRemoveBlacklistClick();
+                    return true;
+                });
         }
-        else
-            menu.add(R.string.is_to_blacklist);
     }
 
     private class UserHeaderHolder {

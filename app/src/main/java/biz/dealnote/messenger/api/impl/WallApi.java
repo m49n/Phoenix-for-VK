@@ -156,6 +156,22 @@ class WallApi extends AbsApi implements IWallApi {
     }
 
     @Override
+    public Single<Integer> reportPost(Integer owner_id, Integer post_id, Integer reason) {
+        return provideService(IWallService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .reportPost(owner_id, post_id, reason)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Integer> reportComment(Integer owner_id, Integer post_id, Integer reason) {
+        return provideService(IWallService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .reportComment(owner_id, post_id, reason)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
     public Single<DefaultCommentsResponse> getComments(int ownerId, int postId, Boolean needLikes,
                                                        Integer startCommentId, Integer offset, Integer count,
                                                        String sort, Boolean extended, String fields) {

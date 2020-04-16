@@ -1,8 +1,11 @@
-<!-- drawable/download.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="24dp"
-    android:width="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path android:fillColor="#fff" android:pathData="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+  <path
+      android:pathData="M41.5,44C42.3284,44 43,44.6716 43,45.5C43,46.3284 42.3284,47 41.5,47L13.5,47C12.6716,47 12,46.3284 12,45.5C12,44.6716 12.6716,44 13.5,44L41.5,44ZM27.5,4.5C28.3284,4.5 29,5.1716 29,6L29,6L29,34.378L39.4393,23.9393C39.9885,23.3902 40.8576,23.3558 41.4467,23.8364L41.5607,23.9393C42.1464,24.5251 42.1464,25.4749 41.5607,26.0607L41.5607,26.0607L28.5607,39.0607C27.9749,39.6464 27.0251,39.6464 26.4393,39.0607L26.4393,39.0607L13.4393,26.0607C12.8536,25.4749 12.8536,24.5251 13.4393,23.9393C14.0251,23.3536 14.9749,23.3536 15.5607,23.9393L15.5607,23.9393L26,34.378L26,6C26,5.2203 26.5949,4.5796 27.3555,4.5069Z"
+      android:strokeWidth="1"
+      android:fillColor="#fff"
+      android:fillType="nonZero" />
 </vector>

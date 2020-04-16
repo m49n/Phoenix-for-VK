@@ -206,4 +206,16 @@ public interface IWallService {
                                                 @Field("extended") Integer extended,
                                                 @Field("copy_history_depth") Integer copyHistoryDepth,
                                                 @Field("fields") String fields);
+
+    @POST("wall.reportComment")
+    @FormUrlEncoded
+    Single<BaseResponse<Integer>> reportComment(@Field("owner_id") Integer owner_id,
+                                         @Field("comment_id") Integer comment_id,
+                                         @Field("reason") Integer reason);
+
+    @POST("wall.reportPost")
+    @FormUrlEncoded
+    Single<BaseResponse<Integer>> reportPost(@Field("owner_id") Integer owner_id,
+                                                @Field("post_id") Integer post_id,
+                                                @Field("reason") Integer reason);
 }

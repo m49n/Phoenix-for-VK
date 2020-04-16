@@ -15,10 +15,10 @@ import biz.dealnote.messenger.domain.IUtilsInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.spots.SpotsDialog;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
-import dmax.dialog.SpotsDialog;
 
 public class ResolveDomainDialog extends AccountDependencyDialogFragment {
 
@@ -57,7 +57,7 @@ public class ResolveDomainDialog extends AccountDependencyDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog progressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setTheme(R.style.SpotsDialog).setMessage(getString(R.string.please_wait)).setCancelable(true).setCancelListener(this).build();
+        AlertDialog progressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setMessage(getString(R.string.please_wait)).setCancelable(true).setCancelListener(this).build();
 
         request();
         return progressDialog;

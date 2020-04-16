@@ -40,5 +40,7 @@ public interface IUsersApi {
     @CheckResult
     Single<List<VKApiUser>> get(Collection<Integer> userIds, Collection<String> domains,
                                 String fields, String nameCase);
+    @CheckResult
+    Single<Integer> report(Integer userId, String type, String comment);
 
 }

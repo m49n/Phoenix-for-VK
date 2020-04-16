@@ -1,3 +1,2 @@
 include ':app', ':mvpcore'
-include ':app', ':spots'
 include ':app', ':photoview'

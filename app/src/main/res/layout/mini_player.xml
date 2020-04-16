@@ -62,5 +62,5 @@
         android:backgroundTint="?colorPrimary"
         android:contentDescription="@string/close"
         android:scaleType="centerInside"
-        android:src="@drawable/close" />
+        android:src="@drawable/close_mini" />
 </LinearLayout>

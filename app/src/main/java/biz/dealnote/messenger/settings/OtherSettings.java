@@ -132,6 +132,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isUse_old_vk_api() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_old_vk_api", false);
+    }
+
+    @Override
     public boolean isInfo_reading() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("info_reading", true);
     }

@@ -74,6 +74,7 @@ public class AccountsInteractor implements IAccountsInteractor {
         return networker.vkDefault(accountId)
                 .account()
                 .unbanUser(userId)
+                .delay(1, TimeUnit.SECONDS) // чтобы не дергало UI
                 .ignoreElement()
                 .andThen(blacklistRepository.fireRemove(accountId, userId));
     }

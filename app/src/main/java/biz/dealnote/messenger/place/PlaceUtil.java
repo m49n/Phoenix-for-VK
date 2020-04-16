@@ -23,9 +23,9 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.WallEditorAttrs;
+import biz.dealnote.messenger.spots.SpotsDialog;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
-import dmax.dialog.SpotsDialog;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -114,7 +114,7 @@ public class PlaceUtil {
     }
 
     private static AlertDialog createProgressDialog(Activity activity) {
-        AlertDialog dialog = new SpotsDialog.Builder().setContext(activity).setTheme(R.style.SpotsDialog).setMessage(activity.getString(R.string.message_obtaining_owner_information)).setCancelable(true).build();
+        AlertDialog dialog = new SpotsDialog.Builder().setContext(activity).setMessage(activity.getString(R.string.message_obtaining_owner_information)).setCancelable(true).build();
         dialog.show();
         return dialog;
     }

@@ -63,6 +63,8 @@ public interface ISettings {
 
         boolean isForce_hls();
 
+        boolean isUse_old_vk_api();
+
         boolean isForce_cache();
 
         boolean isKeepLongpoll();

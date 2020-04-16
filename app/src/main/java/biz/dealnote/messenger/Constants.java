@@ -23,7 +23,7 @@ public class Constants {
     //public static final String DEVICE_COUNTRY_CODE = Injection.provideApplicationContext().getResources().getConfiguration().locale.getCountry().toLowerCase();
     public static final String DEVICE_COUNTRY_CODE = "ru";
     public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/59.1 lite-465 (Android %s; SDK %d; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL, DEVICE_COUNTRY_CODE);
-    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.1-5017 (Android %s; SDK %d; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL, DEVICE_COUNTRY_CODE);
+    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.1-5023 (Android %s; SDK %d; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MODEL, DEVICE_COUNTRY_CODE);
 
     public static String USER_AGENT(String type)
     {

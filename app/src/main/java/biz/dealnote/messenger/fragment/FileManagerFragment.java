@@ -194,7 +194,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
             for (int i = 0; i < fList.length; i++) {
                 // Convert into file path
                 File file = new File(path, fList[i]);
-                int drawableID = R.drawable.file_icon;
+                int drawableID = R.drawable.file;
                 boolean canRead = file.canRead();
                 boolean isDirectory = file.isDirectory();
                 long mod = file.lastModified();

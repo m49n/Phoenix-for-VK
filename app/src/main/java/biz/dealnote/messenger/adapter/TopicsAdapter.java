@@ -1,8 +1,11 @@
 package biz.dealnote.messenger.adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,7 @@ import biz.dealnote.messenger.model.Topic;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
@@ -48,6 +52,24 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
         holder.title.setText(item.getTitle());
         holder.subtitle.setText(context.getString(R.string.topic_comments_counter,
                 AppTextUtils.getDateFromUnixTime(item.getLastUpdateTime()), item.getCommentsCount()));
+
+        holder.itemView.setOnLongClickListener(view -> {
+            PopupMenu popup = new PopupMenu(context, holder.itemView);
+            popup.inflate(R.menu.topics_item_menu);
+            popup.setOnMenuItemClickListener(item1 -> {
+                if (item1.getItemId() == R.id.copy_url) {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(context.getString(R.string.link), "vk.com/topic" + item.getOwnerId() + "_" + item.getId());
+                    clipboard.setPrimaryClip(clip);
+
+                    PhoenixToast.CreatePhoenixToast(context).showToast(R.string.copied);
+                    return true;
+                }
+                return false;
+            });
+            popup.show();
+            return false;
+        });
 
         String avaUrl = Objects.isNull(item.getCreator()) ? null : item.getCreator().getMaxSquareAvatar();
 

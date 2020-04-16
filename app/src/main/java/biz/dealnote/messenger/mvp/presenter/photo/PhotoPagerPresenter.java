@@ -338,7 +338,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         final WeakReference<PhotoPagerPresenter> ref;
 
         InternalDownloader(PhotoPagerPresenter presenter, Context context, String url, String file, Photo photo) {
-            super(context, url, file, photo.getId() + "_" + photo.getOwnerId());
+            super(context, url, file, photo.getId() + "_" + photo.getOwnerId(), true);
             this.ref = new WeakReference<>(presenter);
         }
 

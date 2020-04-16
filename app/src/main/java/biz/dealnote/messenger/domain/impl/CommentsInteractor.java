@@ -596,4 +596,11 @@ public class CommentsInteractor implements ICommentsInteractor {
                             .map(data -> data.get(0)));
                 });
     }
+
+    @Override
+    public Single<Integer> reportComment(int accountId, int owner_id, int post_id, int reason) {
+        return networker.vkDefault(accountId)
+                .wall()
+                .reportComment(owner_id, post_id, reason);
+    }
 }

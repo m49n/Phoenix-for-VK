@@ -51,6 +51,7 @@ import biz.dealnote.messenger.mvp.view.ICommentsView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.spots.SpotsDialog;
 import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CommentsInputViewController;
@@ -58,7 +59,6 @@ import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
 import biz.dealnote.messenger.view.emoji.StickersGridView;
 import biz.dealnote.mvp.core.IPresenterFactory;
-import dmax.dialog.SpotsDialog;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -190,7 +190,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
                 requireArguments().remove(EXTRA_AT_COMMENT_OBJECT);
             }
 
-            return new CommentsPresenter(accountId, commented, focusTo, saveInstanceState);
+            return new CommentsPresenter(accountId, commented, focusTo, requireActivity(), saveInstanceState);
         };
     }
 
@@ -407,7 +407,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     @Override
     public void displayDeepLookingCommentProgress() {
-        mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setTheme(R.style.SpotsDialog).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
+        mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
         mDeepLookingProgressDialog.show();
     }
 
@@ -498,6 +498,11 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
         menu.add(R.string.reply).setOnMenuItemClickListener(item -> {
             getPresenter().fireReplyToCommentClick(comment);
+            return true;
+        });
+
+        menu.add(R.string.report).setOnMenuItemClickListener(item -> {
+            getPresenter().fireReport(comment);
             return true;
         });
 

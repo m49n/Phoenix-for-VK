@@ -36,6 +36,8 @@ public class AudioEntity extends Entity {
 
     private String album_title;
 
+    private boolean isHq;
+
     public AudioEntity(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
@@ -74,6 +76,15 @@ public class AudioEntity extends Entity {
 
     public AudioEntity setThumb_image_very_big(String thumb_image_very_big) {
         this.thumb_image_very_big = thumb_image_very_big;
+        return this;
+    }
+
+    public boolean getIsHq() {
+        return isHq;
+    }
+
+    public AudioEntity setIsHq(boolean isHq) {
+        this.isHq = isHq;
         return this;
     }
 

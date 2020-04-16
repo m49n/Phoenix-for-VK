@@ -146,6 +146,13 @@ public class OwnersRepository implements IOwnersRepository {
     }
 
     @Override
+    public Single<Integer> report(int accountId, int userId, String type, String comment) {
+        return networker.vkDefault(accountId)
+                .users()
+                .report(userId, type, comment);
+    }
+
+    @Override
     public Single<Pair<User, UserDetails>> getFullUserInfo(int accountId, int userId, int mode) {
         switch (mode) {
             case MODE_CACHE:

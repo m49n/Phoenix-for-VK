@@ -269,6 +269,13 @@ public class WallsRepository implements IWallsRepository {
     }
 
     @Override
+    public Single<Integer> reportPost(int accountId, int owner_id, int post_id, int reason) {
+        return networker.vkDefault(accountId)
+                .wall()
+                .reportPost(owner_id, post_id, reason);
+    }
+
+    @Override
     public Single<Post> getById(int accountId, int ownerId, int postId) {
         final IdPair id = new IdPair(postId, ownerId);
 

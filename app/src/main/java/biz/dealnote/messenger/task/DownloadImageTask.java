@@ -42,12 +42,14 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
     private String filename;
     private NotificationManagerCompat mNotifyManager;
     private NotificationCompat.Builder mBuilder;
+    private boolean UseMediaScanner;
 
-    public DownloadImageTask(Context context, String url, String file, String ID) {
+    public DownloadImageTask(Context context, String url, String file, String ID, boolean UseMediaScanner) {
         this.mContext = context.getApplicationContext();
         this.file = file;
         this.photourl = url;
         this.ID = ID;
+        this.UseMediaScanner = UseMediaScanner;
         this.mNotifyManager = NotificationManagerCompat.from(this.mContext);
         if (Utils.hasOreo()){
             this.mNotifyManager.createNotificationChannel(AppNotificationChannels.getDownloadChannel(this.mContext));
@@ -126,7 +128,8 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             output.flush();
             output.close();
             input.close();
-            mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(file))));
+            if(UseMediaScanner)
+                mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(file))));
             mBuilder.setContentText(mContext.getString(R.string.success) + " " + this.filename)
                     .setProgress(0,0,false)
                     .setAutoCancel(true)

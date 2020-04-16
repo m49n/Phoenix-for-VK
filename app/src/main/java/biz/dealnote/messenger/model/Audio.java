@@ -48,6 +48,8 @@ public class Audio extends AbsModel implements Parcelable {
 
     private boolean isSelected;
 
+    private boolean isHq;
+
     public Audio() {
 
     }
@@ -66,10 +68,12 @@ public class Audio extends AbsModel implements Parcelable {
         accessKey = in.readString();
         deleted = in.readInt() != 0;
         thumb_image_big = in.readString();
+        thumb_image_very_big = in.readString();
         thumb_image_little = in.readString();
         album_title = in.readString();
         animationNow = in.readInt() != 0;
         isSelected = in.readInt() != 0;
+        isHq = in.readInt() != 0;
     }
 
     @Override
@@ -87,10 +91,12 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeString(accessKey);
         dest.writeInt(deleted ? 1 : 0);
         dest.writeString(thumb_image_big);
+        dest.writeString(thumb_image_very_big);
         dest.writeString(thumb_image_little);
         dest.writeString(album_title);
         dest.writeInt(animationNow ? 1 : 0);
         dest.writeInt(isSelected ? 1 : 0);
+        dest.writeInt(isHq ? 1 : 0);
     }
 
     public static final Creator<Audio> CREATOR = new Creator<Audio>() {
@@ -127,6 +133,15 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public boolean getIsHq() {
+        return isHq;
+    }
+
+    public Audio setIsHq(boolean isHq) {
+        this.isHq = isHq;
         return this;
     }
 
@@ -170,8 +185,12 @@ public class Audio extends AbsModel implements Parcelable {
         return url;
     }
 
+    public boolean isHLS() {
+        return url.contains("index.m3u8");
+    }
+
     public static String getMp3FromM3u8(String url) {
-        if (url == null || !url.contains("index.m3u8?"))
+        if (url == null || !url.contains("index.m3u8"))
             return url;
         if (url.contains("/audios/")) {
             final String regex = "^(.+?)/[^/]+?/audios/([^/]+)/.+$";

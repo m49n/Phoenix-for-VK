@@ -313,12 +313,4 @@
         <item name="cornerSize">10dp</item>
     </style>
 
-    <style name="SpotsDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:background">#D4FFFFFF</item>
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">@string/loading</item>
-        <item name="DialogSpotColor">?colorPrimary</item>
-        <item name="DialogSpotCount">15</item>
-    </style>
-
 </resources>

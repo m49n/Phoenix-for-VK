@@ -30,6 +30,7 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.album_id = root.has("album_id") ? root.get("album_id").getAsInt() : 0;
         dto.genre_id = root.has("genre_id") ? root.get("genre_id").getAsInt() : 0;
         dto.access_key = root.has("access_key") ? root.get("access_key").getAsString() : null;
+        dto.isHq = root.has("is_hq") && root.get("is_hq").getAsBoolean();
 
         if(root.has("album"))
         {

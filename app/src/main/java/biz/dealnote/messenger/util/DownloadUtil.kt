@@ -167,7 +167,7 @@ object DownloadUtil
         TagAudioInternalDownloader(context, audio, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "jpg")).doDownload()
     }
 
-    private class AudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context,  Audio.getMp3FromM3u8(audio.url), file, "audio_" + createPeerTagFor(audio.id, audio.ownerId)) {
+    private class AudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context,  Audio.getMp3FromM3u8(audio.url), file, "audio_" + createPeerTagFor(audio.id, audio.ownerId), true) {
         @SuppressLint("CheckResult")
         private val current_audio = audio
         override fun onPostExecute(s: String?) {
@@ -183,7 +183,7 @@ object DownloadUtil
 
     }
 
-    private class TagAudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file, "cover_" + createPeerTagFor(audio.id, audio.ownerId)) {
+    private class TagAudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file, "cover_" + createPeerTagFor(audio.id, audio.ownerId), false) {
         private val current_audio = audio
         private fun FlushAudio(Cover: File, audioFile: AudioFile, Flaudio: File, lst:Long)
         {

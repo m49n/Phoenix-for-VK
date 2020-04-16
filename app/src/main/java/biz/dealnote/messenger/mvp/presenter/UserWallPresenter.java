@@ -1,10 +1,14 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +25,7 @@ import biz.dealnote.messenger.domain.IRelationshipInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.fragment.friends.FriendsTabsFragment;
+import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.model.FriendsCounters;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.Peer;
@@ -59,9 +64,11 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     private User user;
     private UserDetails details;
     private boolean loadingAvatarPhotosNow;
+    private Context context;
 
-    public UserWallPresenter(int accountId, int ownerId, @Nullable User owner, @Nullable Bundle savedInstanceState) {
+    public UserWallPresenter(int accountId, int ownerId, @Nullable User owner, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, ownerId, savedInstanceState);
+        this.context = context;
 
         ownersRepository = Repository.INSTANCE.getOwners();
         relationshipInteractor = InteractorFactory.createRelationshipInteractor();
@@ -151,6 +158,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         }
 
         resolveStatusView();
+        resolveMenu();
     }
 
     private void onUserDetalsUpdated() {
@@ -260,6 +268,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         getView().openVideosLibrary(getAccountId(), ownerId, user);
     }
 
+    @SuppressLint("ResourceType")
     @OnGuiCreated
     private void resolvePrimaryActionButton() {
         if (!isGuiReady()) return;
@@ -380,6 +389,13 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
             }
 
             getView().displayUserStatus(statusText);
+        }
+    }
+
+    @OnGuiCreated
+    private void resolveMenu() {
+        if (isGuiReady()) {
+            getView().InvalidateOptionsMenu();
         }
     }
 
@@ -506,12 +522,47 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 .subscribe(this::onBanComplete, this::onBanError));
     }
 
+    public void fireMentions()
+    {
+        getView().getPhoenixToast().showToastInfo(R.string.browser_future);
+        LinkHelper.openLinkInBrowser(context, "https://m.vk.com/search?c[section]=statuses&c[type]=1&c[q]=*id"+ getOwnerId());
+    }
+
+    public void fireReport() {
+        MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
+        alert.setTitle(R.string.report);
+        CharSequence[] items = {"porn", "spam", "insult", "advertisеment"};
+        alert.setSingleChoiceItems(items, -1, (dialog, item) -> {
+            String report = items[item].toString();
+            appendDisposable(ownersRepository.report(getAccountId(), getOwnerId(), report, null)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(p -> {
+                        if(p == 1)
+                            getView().getPhoenixToast().showToast(R.string.success);
+                        else
+                            getView().getPhoenixToast().showToast(R.string.error);
+                    }, t -> showError(getView(), getCauseIfRuntime(t))));
+            dialog.dismiss();
+        });
+        alert.show();
+    }
+
+    public void fireRemoveBlacklistClick() {
+        final int accountId = super.getAccountId();
+
+        appendDisposable(InteractorFactory.createAccountInteractor()
+                .unbanUser(accountId, user.getId())
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(this::onBanComplete, this::onBanError));
+    }
+
     private void onBanError(Throwable t) {
         showError(getView(), getCauseIfRuntime(t));
     }
 
     private void onBanComplete() {
-        safeShowToast(getView(), R.string.success, false);
+        onRefresh();
+        getView().getPhoenixToast().showToast(R.string.success);
     }
 
     public void fireChatClick() {

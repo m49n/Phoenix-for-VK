@@ -185,6 +185,10 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
                 getPresenter().fireCopyLinkClink();
                 return true;
 
+            case R.id.report:
+                getPresenter().fireReport();
+                return true;
+
             case R.id.copy_text:
                 getPresenter().fireCopyTextClick();
                 return true;
@@ -477,6 +481,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
                     getArguments().getInt(Extra.OWNER_ID),
                     getArguments().getParcelable(Extra.POST),
                     nonNull(wrapper) ? wrapper.get() : null,
+                    requireActivity(),
                     saveInstanceState
             );
         };

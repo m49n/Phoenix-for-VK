@@ -1,8 +1,11 @@
-<!-- drawable/plus.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="24dp"
     android:width="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path android:fillColor="#fff" android:pathData="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+    android:height="24dp"
+    android:viewportWidth="36"
+    android:viewportHeight="36">
+  <path
+      android:pathData="M19.5,19.5L19.5,28.5C19.5,29.3284 18.8284,30 18,30L18,30C17.1716,30 16.5,29.3284 16.5,28.5L16.5,19.5L7.5,19.5C6.6716,19.5 6,18.8284 6,18L6,18C6,17.1716 6.6716,16.5 7.5,16.5L16.5,16.5L16.5,7.5C16.5,6.6716 17.1716,6 18,6L18,6C18.8284,6 19.5,6.6716 19.5,7.5L19.5,16.5L28.5,16.5C29.3284,16.5 30,17.1716 30,18L30,18C30,18.8284 29.3284,19.5 28.5,19.5L19.5,19.5Z"
+      android:strokeWidth="1"
+      android:fillColor="#fff"
+      android:fillType="evenOdd" />
 </vector>

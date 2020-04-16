@@ -43,6 +43,8 @@ public interface IWallsRepository {
 
     Completable restore(int accountId, int ownerId, int postId);
 
+    Single<Integer> reportPost(int accountId, int owner_id, int post_id, int reason);
+
     Single<Post> getById(int accountId, int ownerId, int postId);
 
     Completable pinUnpin(int accountId, int ownerId, int postId, boolean pin);

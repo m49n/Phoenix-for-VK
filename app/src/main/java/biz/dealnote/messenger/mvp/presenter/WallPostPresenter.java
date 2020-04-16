@@ -1,11 +1,15 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.db.model.PostUpdate;
 import biz.dealnote.messenger.domain.IOwnersRepository;
 import biz.dealnote.messenger.domain.IWallsRepository;
@@ -42,7 +46,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
 
     private final int postId;
     private final int ownerId;
-
+    private Context context;
     private Post post;
     private Owner owner;
 
@@ -50,12 +54,14 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
     private final IOwnersRepository ownersRepository;
 
     public WallPostPresenter(int accountId, int postId, int ownerId, @Nullable Post post,
-                             @Nullable Owner owner, @Nullable Bundle savedInstanceState) {
+                             @Nullable Owner owner, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.postId = postId;
         this.ownerId = ownerId;
         this.ownersRepository = Repository.INSTANCE.getOwners();
         this.wallInteractor = Repository.INSTANCE.getWalls();
+
+        this.context = context;
 
         if (nonNull(savedInstanceState)) {
             ParcelableOwnerWrapper wrapper = savedInstanceState.getParcelable(SAVE_OWNER);
@@ -328,6 +334,24 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
     public void fireCopyLinkClink() {
         String link = String.format("vk.com/wall%s_%s", ownerId, postId);
         getView().copyLinkToClipboard(link);
+    }
+
+    public void fireReport() {
+        MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
+        alert.setTitle(R.string.report);
+        CharSequence[] items = {"Спам", "Детская порнография", "Экстремизм", "Насилие", "Пропаганда наркотиков", "Материал для взрослых", "Оскорбление", "Призывы к суициду"};
+        alert.setSingleChoiceItems(items, -1, (dialog, item) -> {
+            appendDisposable(wallInteractor.reportPost(getAccountId(), ownerId, postId, item)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(p -> {
+                        if(p == 1)
+                            getView().getPhoenixToast().showToast(R.string.success);
+                        else
+                            getView().getPhoenixToast().showToast(R.string.error);
+                    }, t -> showError(getView(), getCauseIfRuntime(t))));
+            dialog.dismiss();
+        });
+        alert.show();
     }
 
     @OnGuiCreated

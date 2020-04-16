@@ -34,6 +34,18 @@ public interface IAudioService {
                                                    @Field("search_own") Integer searchOwn,
                                                    @Field("offset") Integer offset);
 
+    //https://vk.com/dev/audio.search
+    @FormUrlEncoded
+    @POST("audio.search")
+    Single<BaseResponse<Items<VKApiAudio>>> searchOld(@Field("q") String query,
+                                                   @Field("auto_complete") Integer autoComplete,
+                                                   @Field("lyrics") Integer lyrics,
+                                                   @Field("performer_only") Integer performerOnly,
+                                                   @Field("sort") Integer sort,
+                                                   @Field("search_own") Integer searchOwn,
+                                                   @Field("offset") Integer offset,
+                                                      @Field("v") String version );
+
     //https://vk.com/dev/audio.restore
     @FormUrlEncoded
     @POST("audio.restore")
@@ -72,6 +84,15 @@ public interface IAudioService {
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
+    //https://vk.com/dev/audio.get
+    @FormUrlEncoded
+    @POST("audio.get")
+    Single<BaseResponse<Items<VKApiAudio>>> getOld(@Field("album_id") Integer album_id,
+                                                @Field("owner_id") Integer ownerId,
+                                                @Field("offset") Integer offset,
+                                                @Field("count") Integer count,
+                                                @Field("v") String version );
+
     @FormUrlEncoded
     @POST("audio.getPopular")
     Single<BaseResponse<List<VKApiAudio>>> getPopular(@Field("only_eng") Integer foreign,
@@ -85,12 +106,28 @@ public interface IAudioService {
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
+    Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsOld(@Field("user_id") Integer user_id,
+                                                                  @Field("count") Integer count,
+                                                                  @Field("v") String version );
+
+    @FormUrlEncoded
+    @POST("audio.getRecommendations")
     Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsByAudio(@Field("target_audio") String audio,
                                                                @Field("count") Integer count);
 
     @FormUrlEncoded
+    @POST("audio.getRecommendations")
+    Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsByAudioOld(@Field("target_audio") String audio,
+                                                                         @Field("count") Integer count,
+                                                                         @Field("v") String version );
+
+    @FormUrlEncoded
     @POST("audio.getById")
     Single<BaseResponse<List<VKApiAudio>>> getById(@Field("audios") String audios);
+
+    @FormUrlEncoded
+    @POST("audio.getById")
+    Single<BaseResponse<List<VKApiAudio>>> getByIdOld(@Field("audios") String audios, @Field("v") String version);
 
     @FormUrlEncoded
     @POST("audio.getLyrics")

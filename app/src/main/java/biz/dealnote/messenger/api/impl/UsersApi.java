@@ -93,8 +93,7 @@ class UsersApi extends AbsApi implements IUsersApi {
     }
 
     @Override
-    public Single<Items<VKApiUser>> getRequests(Integer offset, Integer count, Integer extended, Integer out, String fields)
-    {
+    public Single<Items<VKApiUser>> getRequests(Integer offset, Integer count, Integer extended, Integer out, String fields) {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service.getRequests(offset, count, extended, out, fields)
                         .map(extractResponseWithErrorHandling()));
@@ -109,6 +108,14 @@ class UsersApi extends AbsApi implements IUsersApi {
                                 ageFrom, ageTo, birthDay, birthMonth, birthYear, integerFromBoolean(online),
                                 integerFromBoolean(hasPhoto), schoolCountry, schoolCity, schoolClass, school,
                                 schoolYear, religion, interests, company, position, groupId, fromList)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Integer> report(Integer userId, String type, String comment) {
+        return provideService(IUsersService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .report(userId, type, comment)
                         .map(extractResponseWithErrorHandling()));
     }
 

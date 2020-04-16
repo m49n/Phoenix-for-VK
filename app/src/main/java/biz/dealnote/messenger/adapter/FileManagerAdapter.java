@@ -22,6 +22,7 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.FileItem;
+import biz.dealnote.messenger.util.ElipseTransformation;
 
 public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.Holder> {
 
@@ -46,6 +47,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
             PicassoInstance.with()
                     .load("file://" + item.path)
                     .tag(Constants.PICASSO_TAG)
+                    .transform(new ElipseTransformation())
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -69,7 +71,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
 
         holder.itemView.setOnClickListener(v -> {
             if(clickListener != null){
-                clickListener.onClick(holder.getBindingAdapterPosition(), item);
+                clickListener.onClick(holder.getAdapterPosition(), item);
             }
         });
     }

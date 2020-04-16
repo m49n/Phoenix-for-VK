@@ -42,6 +42,7 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
+import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
@@ -114,7 +115,11 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         }
 
         holder.artist.setText(item.getArtist());
-        holder.title.setText(item.getTitle());
+        String title_temp = item.getTitle();
+        if(Settings.get().other().isUse_old_vk_api() && !Objects.isNullOrEmptyString(title_temp))
+            title_temp += (" [" + (item.isHLS() ? "m3u8" : (item.getIsHq() ? "hq" : "low")) + "]");
+
+        holder.title.setText(title_temp);
         holder.title.setSelected(true);
         if(item.getDuration() <= 0)
             holder.time.setVisibility(View.GONE);

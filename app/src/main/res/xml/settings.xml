@@ -216,6 +216,10 @@
             android:defaultValue="true"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
+            android:key="use_old_vk_api"
+            android:title="@string/use_old_vk_api"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
             android:key="force_cache"
             android:title="@string/force_cache"
             app:iconSpaceReserved="false" />

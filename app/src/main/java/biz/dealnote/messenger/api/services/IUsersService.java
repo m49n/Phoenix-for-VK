@@ -101,4 +101,10 @@ public interface IUsersService {
                                               @Field("fields") String fields,
                                               @Field("name_case") String nameCase);
 
+    @POST("users.report")
+    @FormUrlEncoded
+    Single<BaseResponse<Integer>> report(@Field("user_id") Integer userId,
+                                         @Field("type") String type,
+                                         @Field("comment") String comment);
+
 }

@@ -606,7 +606,8 @@ public class Dto2Model {
                 .setAlbum_title(dto.album_title)
                 .setThumb_image_big(dto.thumb_image_big)
                 .setThumb_image_little(dto.thumb_image_little)
-                .setThumb_image_very_big(dto.thumb_image_very_big);
+                .setThumb_image_very_big(dto.thumb_image_very_big)
+                .setIsHq(dto.isHq);
     }
 
     public static Link transform(@NonNull VKApiLink link) {

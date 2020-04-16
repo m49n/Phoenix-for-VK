@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -84,13 +87,16 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     private boolean directionDesc;
 
-    public CommentsPresenter(int accountId, Commented commented, Integer focusToComment, @Nullable Bundle savedInstanceState) {
+    private Context context;
+
+    public CommentsPresenter(int accountId, Commented commented, Integer focusToComment, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.authorId = accountId;
         this.ownersRepository = Repository.INSTANCE.getOwners();
         this.interactor = new CommentsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
         this.commented = commented;
         this.focusToComment = focusToComment;
+        this.context = context;
         this.directionDesc = Settings.get().other().isCommentsDesc();
 
         this.data = new ArrayList<>();
@@ -599,6 +605,24 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
             this.replyTo = comment;
             resolveReplyViews();
         }
+    }
+
+    public void fireReport(Comment comment) {
+        MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
+        alert.setTitle(R.string.report);
+        CharSequence[] items = {"Спам", "Детская порнография", "Экстремизм", "Насилие", "Пропаганда наркотиков", "Материал для взрослых", "Оскорбление", "Призывы к суициду"};
+        alert.setSingleChoiceItems(items, -1, (dialog, item) -> {
+            appendDisposable(interactor.reportComment(getAccountId(), comment.getFromId(), comment.getId(), item)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(p -> {
+                        if(p == 1)
+                            getView().getPhoenixToast().showToast(R.string.success);
+                        else
+                            getView().getPhoenixToast().showToast(R.string.error);
+                    }, t -> showError(getView(), getCauseIfRuntime(t))));
+            dialog.dismiss();
+        });
+        alert.show();
     }
 
     public void fireWhoLikesClick(Comment comment) {

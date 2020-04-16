@@ -10,20 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.mvp.view.IErrorView;
 import biz.dealnote.messenger.mvp.view.IProgressView;
 import biz.dealnote.messenger.mvp.view.IToastView;
 import biz.dealnote.messenger.mvp.view.IToolbarView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
+import biz.dealnote.messenger.spots.SpotsDialog;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.compat.AbsMvpFragment;
 import biz.dealnote.mvp.core.AbsPresenter;
 import biz.dealnote.mvp.core.IMvpView;
-import dmax.dialog.SpotsDialog;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
@@ -123,7 +122,7 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
     public void displayProgressDialog(@StringRes int title, @StringRes int message, boolean cancelable) {
         dismissProgressDialog();
 
-        mLoadingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setTheme(R.style.SpotsDialog).setMessage(getString(title) + ": " + getString(message)).setCancelable(cancelable).build();
+        mLoadingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setMessage(getString(title) + ": " + getString(message)).setCancelable(cancelable).build();
         mLoadingProgressDialog.show();
     }
 

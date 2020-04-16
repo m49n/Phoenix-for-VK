@@ -37,7 +37,7 @@ public class VKApiAudio implements VKApiAttachment {
     public int duration;
 
     /**
-     * Link to mp3.
+     * Link to mp3 or hls.
      */
     public String url;
 
@@ -63,6 +63,8 @@ public class VKApiAudio implements VKApiAttachment {
     public String thumb_image_very_big;
 
     public String album_title;
+
+    public boolean isHq;
 
     /**
      * An access key using for get information about hidden objects.

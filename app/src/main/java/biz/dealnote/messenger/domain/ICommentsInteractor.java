@@ -41,4 +41,6 @@ public interface ICommentsInteractor {
     Single<List<Owner>> getAvailableAuthors(int accountId);
 
     Single<Comment> edit(int accountId, Commented commented, int commentId, String body, List<AbsModel> attachments);
+
+    Single<Integer> reportComment(int accountId, int owner_id, int post_id, int reason);
 }

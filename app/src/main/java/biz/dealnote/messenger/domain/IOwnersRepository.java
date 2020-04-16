@@ -59,4 +59,6 @@ public interface IOwnersRepository {
     Completable handleOnlineChanges(int accountId, @Nullable List<UserIsOfflineUpdate> offlineUpdates, @Nullable List<UserIsOnlineUpdate> onlineUpdates);
 
     Flowable<List<UserUpdate>> observeUpdates();
+
+    Single<Integer> report(int accountId, int userId, String type, String comment);
 }
