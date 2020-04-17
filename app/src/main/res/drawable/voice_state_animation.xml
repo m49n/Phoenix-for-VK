@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:aapt="http://schemas.android.com/aapt"
+                 android:drawable="@drawable/voice_state_normal">
+    <target android:name="one">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M10 70 v80"
+                    android:valueFrom="M10 35 v150"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="two">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M30 60 v100"
+                    android:valueFrom="M30 0 v300"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="third">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M50 10 v200"
+                    android:valueFrom="M50 81 v58"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="four">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M70 66 v88"
+                    android:valueFrom="M70 80 v60"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="five">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M90 30 v160"
+                    android:valueFrom="M90 70 v80"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="six">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M110 90 v40"
+                    android:valueFrom="M110 50 v120"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="seven">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M130 15 v190"
+                    android:valueFrom="M130 85 v50"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="eight">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M150 100 v20"
+                    android:valueFrom="M150 25 v170"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="nine">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M170 45 v130"
+                    android:valueFrom="M170 85 v50"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="ten">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M190 72 v77"
+                    android:valueFrom="M190 105 v10"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="eleven">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M210 77 v66"
+                    android:valueFrom="M210 50 v120"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="twelve">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="pathData"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueType="pathType"
+                    android:valueTo="M230 55 v111"
+                    android:valueFrom="M230 80 v60"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

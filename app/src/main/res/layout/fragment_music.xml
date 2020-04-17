@@ -42,9 +42,10 @@
                 android:layout_marginTop="@dimen/fab_margin"
                 android:layout_marginEnd="@dimen/fab_margin"
                 android:layout_marginBottom="46dp"
-                android:src="@drawable/rune_mannaz_small"
+                android:src="@drawable/audio_player"
                 app:fabSize="normal"
-                app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
+                app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
+                app:maxImageSize="30dp" />
         </RelativeLayout>
 
     </FrameLayout>

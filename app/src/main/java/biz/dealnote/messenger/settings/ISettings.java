@@ -81,7 +81,7 @@ public interface ISettings {
 
         boolean isUse_stop_audio();
 
-        boolean isEnable_save_photo_to_album();
+        boolean isEnable_Photo_advanced();
 
         boolean isNo_hide_mini_player();
 

@@ -191,12 +191,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
      */
     private AbsMenuItem mCurrentFrontSection;
     private Toolbar mToolbar;
-    private ViewGroup mSheetContainer;
     private BottomNavigationView mBottomNavigation;
     private ViewGroup mBottomNavigationContainer;
-    private ViewGroup mMiniPlayer;
     private MusicUtils.ServiceToken mAudioPlayServiceToken;
-    //OnSwipeTouchListener SwipeTouchListener;
 
     private FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = () -> {
         resolveToolbarNavigationIcon();
@@ -258,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
 
         mBottomNavigationContainer = findViewById(R.id.bottom_navigation_menu_container);
-        mMiniPlayer = findViewById(R.id.miniplayer);
 
         getSupportFragmentManager().addOnBackStackChangedListener(mOnBackStackChangedListener);
         resolveToolbarNavigationIcon();
@@ -1412,73 +1408,4 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
         return false;
     }
-
-    /*
-    public class OnSwipeTouchListener implements View.OnTouchListener {
-
-        private GestureDetector gestureDetector;
-        private Context M_context;
-
-        public OnSwipeTouchListener(Context c) {
-            M_context = c;
-            gestureDetector = new GestureDetector(c, new GestureListener());
-        }
-
-        public GestureDetector getGestureDetector(){
-            return  gestureDetector;
-        }
-
-        public boolean onTouch(final View view, final MotionEvent motionEvent) {
-            return gestureDetector.onTouchEvent(motionEvent);
-        }
-
-        private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-            private static final int SWIPE_THRESHOLD = 100;
-            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                try {
-                    float diffY = e2.getY() - e1.getY();
-                    float diffX = e2.getX() - e1.getX();
-                    if (Math.abs(diffX) > Math.abs(diffY)) {
-                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                            if (diffX > 0) {
-                                onSwipeRight();
-                            } else {
-                                onSwipeLeft();
-                            }
-                        }
-                    }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-                return false;
-            }
-        }
-
-        public void onSwipeRight() {
-            if( mCurrentFrontSection == null || getNavigationFragment() == null || getNavigationFragment().getDrawerItems() == null
-                    || getNavigationFragment().getDrawerItems().size() <= 0) {return;}
-            AbsMenuItem selected = mCurrentFrontSection;
-            int index = -1;
-            for(int i =0; i <getNavigationFragment().getDrawerItems().size(); i++)
-            {
-                if(getNavigationFragment().getDrawerItems().get(i) == selected) {
-                    index = i;
-                    break;
-                }
-            }
-            if(index < 0 || getNavigationFragment().getDrawerItems().size() - index <= 1)
-                return;
-            openPageAndCloseSheet(getNavigationFragment().getDrawerItems().get(index + 1));
-        }
-
-        public void onSwipeLeft() {
-
-        }
-    }
-
-     */
 }

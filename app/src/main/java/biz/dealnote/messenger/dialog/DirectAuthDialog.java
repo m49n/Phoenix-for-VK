@@ -133,6 +133,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         if(Constants.IS_HAS_LOGIN_WEB)
             builder.setNeutralButton(R.string.button_login_via_web, (dialogInterface, i) -> getPresenter().fireLoginViaWebClick());
         builder.setTitle(R.string.login_title);
+        builder.setIcon(R.drawable.logo_vk);
 
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);

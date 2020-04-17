@@ -6,15 +6,16 @@
     android:background="?attr/message_bubble_color"
     android:orientation="horizontal">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_play_pause"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="3dp"
         android:background="@drawable/audio_button_material"
         android:contentDescription="@string/play"
         android:scaleType="centerInside"
-        android:src="@drawable/play" />
+        android:src="@drawable/song" />
 
     <LinearLayout
         android:layout_width="0dp"

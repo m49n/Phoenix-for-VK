@@ -1230,6 +1230,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         requestAtStart()
     }
 
+    fun fireShow_Profile() {
+        view?.showUserWall(accountId, peerId)
+    }
+
     fun fireLeaveChatClick() {
         val chatId = Peer.toChatId(peerId)
         val accountId = super.getAccountId()
@@ -1351,7 +1355,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                     .getEncryptionLocationPolicy(messagesOwnerId, peerId) == KeyLocationPolicy.RAM
         }
 
-        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport, !HronoType)
+        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport, !HronoType, peerId < 2000000000)
     }
 
     fun fireEncriptionStatusClick() {

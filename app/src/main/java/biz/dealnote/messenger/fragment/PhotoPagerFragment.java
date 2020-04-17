@@ -241,11 +241,14 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(Settings.get().other().isEnable_save_photo_to_album())
+        if(Settings.get().other().isEnable_Photo_advanced()) {
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
-        else
+            menu.findItem(R.id.action_delete).setVisible(mCanDelete);
+        }
+        else {
             menu.findItem(R.id.save_yourself).setVisible(false);
-        menu.findItem(R.id.action_delete).setVisible(mCanDelete);
+            menu.findItem(R.id.action_delete).setVisible(false);
+        }
 
         int imageSize = getPhotoSizeFromPrefs();
         menu.findItem(R.id.photo_size).setTitle(getTitleForPhotoSize(imageSize));

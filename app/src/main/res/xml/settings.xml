@@ -120,10 +120,10 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="enable_save_photo_to_album"
-            android:summary="@string/enable_save_photo_to_album"
-            android:title="@string/enable_save_photo_to_album"
+            android:defaultValue="true"
+            android:key="enable_photo_advanced"
+            android:summary="@string/enable_photo_advanced"
+            android:title="@string/enable_photo_advanced"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference

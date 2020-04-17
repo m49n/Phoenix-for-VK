@@ -34,7 +34,7 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun notifyItemRemoved(position: Int)
 
     fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                         encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean)
+                         encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean)
 
     fun goToSearchMessage(accountId: Int, peer: Peer)
     fun showImageSizeSelectDialog(streams: List<Uri>)
@@ -45,6 +45,7 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun goToConversationAttachments(accountId: Int, peerId: Int)
     fun goToChatMembers(accountId: Int, chatId: Int)
     fun showChatTitleChangeDialog(initialValue: String?)
+    fun showUserWall(accountId: Int, peerId: Int)
     fun forwardMessagesToAnotherConversation(messages: ArrayList<Message>, accountId: Int)
     fun diplayForwardTypeSelectDialog(messages: ArrayList<Message>)
     fun setEmptyTextVisible(visible: Boolean)

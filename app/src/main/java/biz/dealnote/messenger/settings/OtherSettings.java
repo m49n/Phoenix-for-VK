@@ -145,8 +145,8 @@ class OtherSettings implements ISettings.IOtherSettings {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }
     @Override
-    public boolean isEnable_save_photo_to_album() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_save_photo_to_album", false);
+    public boolean isEnable_Photo_advanced() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_photo_advanced", true);
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.graphics.BlendMode;
 import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -898,5 +900,27 @@ public class Utils {
         } else {
             dr.setColorFilter(Color, PorterDuff.Mode.MULTIPLY);
         }
+    }
+
+    public static void doAnimate(Drawable dr, boolean Play)
+    {
+        if (dr instanceof Animatable) {
+            if(Play)
+                ((Animatable) dr).start();
+            else
+                ((Animatable) dr).stop();
+        }
+    }
+
+    public static Drawable AnimateDrawable(Context context, @DrawableRes int Res, boolean Play)
+    {
+        Drawable dr = context.getDrawable(Res);
+        if (dr instanceof Animatable) {
+            if(Play)
+                ((Animatable) dr).start();
+            else
+                ((Animatable) dr).stop();
+        }
+        return dr;
     }
 }

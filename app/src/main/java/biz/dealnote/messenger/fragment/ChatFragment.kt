@@ -669,7 +669,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean) {
+                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean) {
         optionMenuSettings.put(LEAVE_CHAT_VISIBLE, canLeaveChat)
         optionMenuSettings.put(CHANGE_CHAT_TITLE_VISIBLE, canChangeTitle)
         optionMenuSettings.put(CHAT_MEMBERS_VISIBLE, canShowMembers)
@@ -678,6 +678,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         optionMenuSettings.put(ENCRYPTION_PLUS_ENABLED, encryptionPlusEnabled)
         optionMenuSettings.put(KEY_EXCHANGE_VISIBLE, keyExchangeVisible)
         optionMenuSettings.put(HRONO_VISIBLE, HronoVisible)
+        optionMenuSettings.put(PROFILE_VISIBLE, ProfileVisible)
 
         try {
             requireActivity().invalidateOptionsMenu()
@@ -740,6 +741,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 .setTitleRes(R.string.change_chat_title)
                 .setCallback { newValue -> presenter?.fireChatTitleTyped(newValue) }
                 .show()
+    }
+
+    override fun showUserWall(accountId: Int, peerId: Int) {
+        PlaceFactory.getOwnerWallPlace(accountId, peerId, null).tryOpenWith(requireActivity())
     }
 
     override fun forwardMessagesToAnotherConversation(messages: ArrayList<Message>, accountId: Int) {
@@ -828,6 +833,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         menu.findItem(R.id.action_chat_members).isVisible = optionMenuSettings.get(CHAT_MEMBERS_VISIBLE, false)
         menu.findItem(R.id.action_key_exchange).isVisible = optionMenuSettings.get(KEY_EXCHANGE_VISIBLE, false)
         menu.findItem(R.id.change_hrono_history).isVisible = optionMenuSettings.get(HRONO_VISIBLE, false)
+        menu.findItem(R.id.show_profile).isVisible = optionMenuSettings.get(PROFILE_VISIBLE, false)
 
         val encryptionStatusItem = menu.findItem(R.id.crypt_state)
         val encryptionStatusVisible = optionMenuSettings.get(ENCRYPTION_STATUS_VISIBLE, false)
@@ -862,6 +868,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 recyclerView?.scrollToPosition(0);
                 presenter?.reset_Hrono()
                 presenter?.fireRefreshClick()
+                return true
+            }
+            R.id.show_profile -> {
+                presenter?.fireShow_Profile()
                 return true
             }
             R.id.change_hrono_history -> {
@@ -1000,5 +1010,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         private const val ENCRYPTION_PLUS_ENABLED = 6
         private const val KEY_EXCHANGE_VISIBLE = 7
         private const val HRONO_VISIBLE = 8
+        private const val PROFILE_VISIBLE = 9
     }
 }

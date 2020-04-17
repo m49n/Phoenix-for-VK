@@ -5,6 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,25 +16,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import java.lang.ref.WeakReference;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
+import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.player.util.MusicUtils.mService;
 import static biz.dealnote.messenger.player.util.MusicUtils.observeServiceBinding;
 import static biz.dealnote.messenger.util.Objects.isNull;
+import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
@@ -40,12 +52,12 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
 
     private static final int REFRESH_TIME = 1;
     private PlaybackStatus mPlaybackStatus;
-    private ImageButton mPlay;
+    private ImageView mPlay;
     private TextView Title;
     private SeekBar mProgress;
     private boolean mFromTouch = false;
     private long mPosOverride = -1;
-    private LinearLayout lnt;
+    private View lnt;
 
     private TimeHandler mTimeHandler;
     private boolean mIsPaused = false;
@@ -96,16 +108,17 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             lnt.setVisibility(View.GONE);
             }
         );
-        ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
-        mOpenPlayer.setOnClickListener(v -> PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(requireActivity()));
         mPlay.setOnClickListener(v -> {
             MusicUtils.playOrPause();
             if (MusicUtils.isPlaying()) {
-                mPlay.setImageResource(R.drawable.pause);
+                mPlay.setImageResource(R.drawable.voice_state_animation);
+                Utils.doAnimate(mPlay.getDrawable(), true);
             } else {
-                mPlay.setImageResource(R.drawable.play);
+                mPlay.setImageResource(R.drawable.song);
             }
         });
+        ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
+        mOpenPlayer.setOnClickListener(v -> PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(requireActivity()));
         Title = root.findViewById(R.id.mini_artist);
         Title.setSelected(true);
         mProgress = root.findViewById(R.id.SeekBar01);
@@ -121,10 +134,36 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             return;
         }
         if (nonNull(mPlay)) {
+            Audio audio = MusicUtils.getCurrentAudio();
+            if (audio != null && !isNullOrEmptyString(audio.getThumb_image_little())) {
+                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+                PicassoInstance.with()
+                        .load(audio.getThumb_image_little())
+                        .transform(new PolyTransformation())
+                        .tag(Constants.PICASSO_TAG)
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                mPlay.setBackground(new BitmapDrawable(getResources(), bitmap));
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+            } else
+                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+
             if (MusicUtils.isPlaying()) {
-                mPlay.setImageResource(R.drawable.pause);
+                mPlay.setImageResource(R.drawable.voice_state_animation);
+                Utils.doAnimate(mPlay.getDrawable(), true);
             } else {
-                mPlay.setImageResource(R.drawable.play);
+                mPlay.setImageResource(R.drawable.song);
             }
         }
     }

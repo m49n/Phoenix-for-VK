@@ -122,7 +122,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         if(isSelectMode)
             Goto.setImageResource(R.drawable.check);
         else
-            Goto.setImageResource(R.drawable.rune_mannaz_small);
+            Goto.setImageResource(R.drawable.audio_player);
         Goto.setOnClickListener(v -> {
             if(isSelectMode)
             {

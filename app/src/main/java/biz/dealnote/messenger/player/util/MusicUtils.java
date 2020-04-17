@@ -46,6 +46,8 @@ public final class MusicUtils {
 
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
 
+    public static boolean SuperCloseMiniPlayer = false;
+
     static {
         mConnectionMap = new WeakHashMap<>();
     }
@@ -227,6 +229,7 @@ public final class MusicUtils {
     }
 
     public static void setMiniPlayerVisibility(boolean visiable) {
+        SuperCloseMiniPlayer = !visiable;
         try {
             if (mService != null) {
                 mService.setMiniPlayerVisibility(visiable);
@@ -489,6 +492,20 @@ public final class MusicUtils {
 
     public static boolean isNowPlayingOrPreparing(Audio audio) {
         return audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying());
+    }
+
+    public static boolean isNowPlayingOrPreparingOrPaused(Audio audio) {
+        return audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying() || isPaused());
+    }
+
+    public static Integer AudioStatus(Audio audio) {
+        if(!audio.equals(getCurrentAudio()))
+            return -1;
+        if(audio.equals(getCurrentAudio()) && (isPaused()))
+            return 2;
+        if(audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying()))
+            return 1;
+        return 0;
     }
 
     public static boolean isNowPaused(Audio audio) {

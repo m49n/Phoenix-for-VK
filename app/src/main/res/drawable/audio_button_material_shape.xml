@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<inset xmlns:android="http://schemas.android.com/apk/res/android"
-       android:insetLeft="6dp"
-       android:insetTop="6dp"
-       android:insetRight="6dp"
-       android:insetBottom="6dp">
+<inset xmlns:android="http://schemas.android.com/apk/res/android">
     <shape android:shape="rectangle">
         <gradient
             android:startColor="?colorPrimary"
             android:endColor="?colorSecondary"
             android:angle="45"
             android:type="linear" />
-        <corners android:radius="2dp" />
+        <corners android:radius="4dp" />
         <padding android:left="6dp"
                  android:top="6dp"
                  android:right="6dp"

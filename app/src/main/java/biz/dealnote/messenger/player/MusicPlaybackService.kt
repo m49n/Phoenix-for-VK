@@ -38,6 +38,7 @@ import biz.dealnote.messenger.media.exo.ExoEventAdapter
 import biz.dealnote.messenger.media.exo.ExoUtil
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.IdPair
+import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.util.*
 import biz.dealnote.messenger.util.Objects
@@ -80,7 +81,7 @@ class MusicPlaybackService : Service() {
      * Used to track what type of audio focus loss caused the playback to pause
      */
     private var OnceCloseMiniPlayer = false
-    private var SuperCloseMiniPlayer = false
+    private var SuperCloseMiniPlayer = MusicUtils.SuperCloseMiniPlayer
     private var mPausedByTransientLossOfFocus = false
     private var mAnyActivityInForeground = false
     private var mMediaSession: MediaSessionCompat? = null
@@ -1028,6 +1029,7 @@ class MusicPlaybackService : Service() {
          * ready to play, false otherwise
          */
         fun setDataSource(remoteUrl: String?) {
+            isPaused = false
             isPreparing = true
             val url = Utils.firstNonEmptyString(remoteUrl, "https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/audio_error.mp3")
             var proxy: Proxy? = null

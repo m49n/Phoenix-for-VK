@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="22dp"
+        android:viewportWidth="240.0"
+        android:viewportHeight="220">
+
+    <group
+        android:name="camera"
+        android:pivotX="12"
+        android:pivotY="12">
+        <path
+            android:name="one"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M10 70 v80">
+        </path>
+
+        <path
+            android:name="two"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M30 60 v100">
+        </path>
+
+        <path
+            android:name="third"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M50 10 v200">
+        </path>
+
+        <path
+            android:name="four"
+            android:strokeLineCap="round"
+            android:strokeColor="#fff"
+            android:strokeWidth="7"
+            android:pathData="M70 66 v88">
+        </path>
+
+        <path
+            android:name="five"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M90 30 v160">
+        </path>
+
+        <path
+            android:name="six"
+            android:strokeLineCap="round"
+            android:strokeColor="#fff"
+            android:strokeWidth="7"
+            android:pathData="M110 90 v40">
+        </path>
+
+        <path
+            android:name="seven"
+            android:strokeLineCap="round"
+            android:strokeColor="#fff"
+            android:strokeWidth="7"
+            android:pathData="M130 15 v190">
+        </path>
+
+        <path
+            android:name="eight"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M150 100 v20">
+        </path>
+
+        <path
+            android:name="nine"
+            android:strokeLineCap="round"
+            android:strokeColor="#fff"
+            android:strokeWidth="7"
+            android:pathData="M170 45 v130">
+        </path>
+
+        <path
+            android:name="ten"
+            android:strokeLineCap="round"
+            android:strokeColor="#fff"
+            android:strokeWidth="7"
+            android:pathData="M190 72 v77">
+        </path>
+
+        <path
+            android:name="eleven"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:strokeColor="#fff"
+            android:pathData="M210 77 v66">
+        </path>
+
+        <path
+            android:name="twelve"
+            android:strokeColor="#fff"
+            android:strokeLineCap="round"
+            android:strokeWidth="7"
+            android:pathData="M230 55 v111">
+        </path>
+    </group>
+
+</vector>
