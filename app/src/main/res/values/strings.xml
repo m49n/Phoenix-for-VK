@@ -192,7 +192,8 @@
 
     <string name="high_notif_priority_title">Высокий приоритет уведомлений</string>
     <string name="high_notif_priority_summary">Уведомления из приложения будут располагаться выше по отношению к другим уведомлениям. Для Android версии 5.0 и выше данная опция также включает всплывающие уведомления</string>
-    <string name="night_mode_title">Amoled режим</string>
+    <string name="night_mode_title">Ночной режим</string>
+    <string name="amoled_theme">Amoled тема</string>
 
     <string name="photos">Фотографии</string>
     <string name="from_vk_albums">Из альбомов ВК</string>

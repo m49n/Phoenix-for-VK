@@ -222,9 +222,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
         getDelegate().applyDayNight();
+        super.onCreate(savedInstanceState);
 
         mCompositeDisposable.add(Settings.get()
                 .accounts()
@@ -242,8 +242,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         bindToAudioPlayService();
 
         setContentView(mLayoutRes);
-
-        //SwipeTouchListener = new OnSwipeTouchListener(this);
 
         mAccountId = Settings.get()
                 .accounts()

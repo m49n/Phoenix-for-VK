@@ -17,8 +17,8 @@ public class AccountsActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_main);
 
         Window w = getWindow();

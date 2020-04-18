@@ -130,6 +130,8 @@ public interface ISettings {
 
         boolean isMy_message_no_color();
 
+        boolean isAmoledTheme();
+
         boolean isCustomTabEnabled();
 
         @Nullable

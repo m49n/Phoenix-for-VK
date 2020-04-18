@@ -610,7 +610,6 @@ public class AttachmentsViewBinder {
 
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
-                holder.tvSubtitle.setSelected(true);
 
                 if(!audio.isHLS()) {
                     holder.quality.setVisibility(View.VISIBLE);
@@ -854,7 +853,7 @@ public class AttachmentsViewBinder {
         ImageView lyric;
         ImageView my;
         ImageView quality;
-        ViewGroup Track;
+        View Track;
         MaterialCardView selectionView;
         MaterialCardView isSelectedView;
 

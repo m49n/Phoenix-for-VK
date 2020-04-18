@@ -126,7 +126,6 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             holder.quality.setVisibility(View.GONE);
 
         holder.title.setText(item.getTitle());
-        holder.title.setSelected(true);
         if(item.getDuration() <= 0)
             holder.time.setVisibility(View.GONE);
         else {
@@ -303,7 +302,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         ImageView lyric;
         ImageView my;
         ImageView quality;
-        ViewGroup Track;
+        View Track;
         MaterialCardView selectionView;
         MaterialCardView isSelectedView;
 

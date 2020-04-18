@@ -60,11 +60,8 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             fireRefresh();
     }
 
-    public boolean isMyAudio()
-    {
-        if (isAlbum == 0 && option_menu_id == -1 && ownerId == getAccountId())
-            return true;
-        return false;
+    public boolean isMyAudio() {
+        return isAlbum == 0 && option_menu_id == -1 && ownerId == getAccountId();
     }
 
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
@@ -248,9 +245,22 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         return ret;
     }
 
+    public void doAnimate(Audio audio)
+    {
+        if(audios != null && !audios.isEmpty() && audio != null) {
+            for(final Audio i : audios)
+            {
+                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
+                    i.setAnimationNow(true);
+                    break;
+                }
+            }
+        }
+    }
+
     public int getAudioPos(Audio audio)
     {
-        if(audios != null && !audios.isEmpty()) {
+        if(audios != null && !audios.isEmpty() && audio != null) {
             int pos = 0;
             for(final Audio i : audios)
             {

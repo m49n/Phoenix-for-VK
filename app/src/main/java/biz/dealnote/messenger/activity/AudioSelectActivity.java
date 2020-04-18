@@ -21,8 +21,8 @@ public class AudioSelectActivity extends NoMainActivity implements PlaceProvider
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
 
         if (Objects.isNull(savedInstanceState)) {
             int accountId = super.getIntent().getExtras().getInt(Extra.ACCOUNT_ID);

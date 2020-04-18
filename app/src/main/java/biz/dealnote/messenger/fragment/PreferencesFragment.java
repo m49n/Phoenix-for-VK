@@ -159,6 +159,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        CheckBoxPreference prefAmoled = findPreference("amoled_theme");
+        prefAmoled.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
         ListPreference prefPhotoPreview = findPreference("photo_preview_size");
         prefPhotoPreview.setOnPreferenceChangeListener((preference, newValue) -> {
             Settings.get().main().notifyPrefPreviewSizeChanged();

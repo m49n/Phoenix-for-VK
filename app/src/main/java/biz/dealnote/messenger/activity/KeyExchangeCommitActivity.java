@@ -16,6 +16,7 @@ import biz.dealnote.messenger.crypt.ExchangeMessage;
 import biz.dealnote.messenger.crypt.KeyExchangeService;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.ViewUtils;
 
 /**
@@ -26,8 +27,8 @@ public class KeyExchangeCommitActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
         super.onCreate(savedInstanceState);
-        setTheme(R.style.QuickReply);
 
         setContentView(R.layout.activity_key_exchange_commit);
 

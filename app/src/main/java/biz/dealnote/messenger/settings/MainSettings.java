@@ -41,6 +41,11 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
+    public boolean isAmoledTheme() {
+        return getDefaultPreferences().getBoolean("amoled_theme", true);
+    }
+
+    @Override
     public boolean isMy_message_no_color() {
         return getDefaultPreferences().getBoolean("my_message_no_color", false);
     }

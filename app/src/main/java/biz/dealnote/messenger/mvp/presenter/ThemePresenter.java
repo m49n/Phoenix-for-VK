@@ -28,7 +28,7 @@ public class ThemePresenter extends AbsPresenter<IThemeView> {
     private ArrayList<ThemeValue> createInitialData() {
         ArrayList<ThemeValue> categories = new ArrayList<>();
         categories.add(new ThemeValue("#448AFF", "#1E88E5", "ice", "Ice"));
-        categories.add(new ThemeValue("#448AFF", "#82B1FF", "no_amoled_ice", "No Amoled Ice"));
+        categories.add(new ThemeValue("#448AFF", "#82B1FF", "old_ice", "Old Ice"));
         categories.add(new ThemeValue("#FF9800", "#FFA726", "fire", "Fire"));
         categories.add(new ThemeValue("#FF0000", "#F44336", "red", "Red"));
         categories.add(new ThemeValue("#9800ff", "#8500ff", "violet", "Violet"));
@@ -42,7 +42,6 @@ public class ThemePresenter extends AbsPresenter<IThemeView> {
         categories.add(new ThemeValue("#268000", "#8500ff", "green_violet", "Green Violet"));
         categories.add(new ThemeValue("#9800ff", "#F44336", "violet_red", "Violet Red"));
         categories.add(new ThemeValue("#F44336", "#9800ff", "red_violet", "Red Violet"));
-        categories.add(new ThemeValue("#F44336", "#9800ff", "no_amoled_red_violet", "No Amoled Red Violet"));
         categories.add(new ThemeValue("#F8DF00", "#F44336", "yellow_red", "Fire Red"));
         return categories;
     }

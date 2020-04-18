@@ -50,8 +50,8 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_publish_prepare);
 
         adapter = new RecyclerMenuAdapter(R.layout.item_advanced_menu_alternative, Collections.emptyList());

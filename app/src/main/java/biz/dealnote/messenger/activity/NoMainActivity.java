@@ -25,8 +25,8 @@ public abstract class NoMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_main);
 
         Window w = getWindow();

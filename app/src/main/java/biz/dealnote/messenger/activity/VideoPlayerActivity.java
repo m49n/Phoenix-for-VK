@@ -76,8 +76,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
         if (Utils.hasLollipop()) {

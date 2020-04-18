@@ -63,8 +63,8 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
         super.onCreate(savedInstanceState);
-        setTheme(Settings.get().ui().getMainTheme());
 
         this.messagesRepository = Repository.INSTANCE.getMessages();
 
@@ -73,8 +73,6 @@ public class QuickAnswerActivity extends AppCompatActivity {
         if (!focusToField) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-
-        setTheme(R.style.QuickReply);
 
         messageId = getIntent().getExtras().getInt(Extra.MESSAGE_ID);
         accountId = getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
