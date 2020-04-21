@@ -8,7 +8,9 @@ import biz.dealnote.messenger.api.IServiceProvider;
 import biz.dealnote.messenger.api.TokenType;
 import biz.dealnote.messenger.api.interfaces.IUsersApi;
 import biz.dealnote.messenger.api.model.Items;
+import biz.dealnote.messenger.api.model.VKApiSticker;
 import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.api.model.response.StoryResponse;
 import biz.dealnote.messenger.api.model.response.UserWallInfoResponse;
 import biz.dealnote.messenger.api.services.IUsersService;
 import biz.dealnote.messenger.exception.NotFoundException;
@@ -116,6 +118,22 @@ class UsersApi extends AbsApi implements IUsersApi {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service
                         .report(userId, type, comment)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields)
+    {
+        return provideService(IUsersService.class, TokenType.USER)
+                .flatMap(service -> service.getStory(owner_id, extended, fields)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiSticker>> getRecentStickers()
+    {
+        return provideService(IUsersService.class, TokenType.USER)
+                .flatMap(service -> service.getRecentStickers()
                         .map(extractResponseWithErrorHandling()));
     }
 

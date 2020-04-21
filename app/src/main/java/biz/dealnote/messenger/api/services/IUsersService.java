@@ -3,8 +3,10 @@ package biz.dealnote.messenger.api.services;
 import java.util.List;
 
 import biz.dealnote.messenger.api.model.Items;
+import biz.dealnote.messenger.api.model.VKApiSticker;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
+import biz.dealnote.messenger.api.model.response.StoryResponse;
 import biz.dealnote.messenger.api.model.response.UserWallInfoResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
@@ -106,5 +108,13 @@ public interface IUsersService {
     Single<BaseResponse<Integer>> report(@Field("user_id") Integer userId,
                                          @Field("type") String type,
                                          @Field("comment") String comment);
+
+    @POST("stories.get")
+    @FormUrlEncoded
+    Single<BaseResponse<StoryResponse>> getStory(@Field("owner_id") Integer owner_id,
+                                                @Field("extended") Integer extended,
+                                                @Field("fields") String fields);
+    @POST("messages.getRecentStickers")
+    Single<BaseResponse<Items<VKApiSticker>>> getRecentStickers();
 
 }

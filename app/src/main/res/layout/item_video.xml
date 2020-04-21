@@ -13,14 +13,13 @@
 
     <ImageView
         android:id="@+id/item_video_play"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/circle_back_white"
         android:padding="6dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/play" />
+        android:src="@drawable/view" />
 
     <TextView
         android:id="@+id/item_video_title"

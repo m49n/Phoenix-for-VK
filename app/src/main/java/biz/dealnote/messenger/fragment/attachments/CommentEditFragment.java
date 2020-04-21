@@ -30,10 +30,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditPresenter, ICommentEditView>
         implements ICommentEditView {
 
-    public static CommentEditFragment newInstance(int accountId, Comment comment) {
+    public static CommentEditFragment newInstance(int accountId, Comment comment, Integer CommentThread) {
         Bundle args = new Bundle();
         args.putParcelable(Extra.COMMENT, comment);
         args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putInt(Extra.COMMENT_ID, CommentThread);
         CommentEditFragment fragment = new CommentEditFragment();
         fragment.setArguments(args);
         return fragment;
@@ -49,9 +50,10 @@ public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditP
     public IPresenterFactory<CommentEditPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
             int aid = requireArguments().getInt(Extra.ACCOUNT_ID);
+            Integer CommentThread = requireArguments().getParcelable(Extra.COMMENT_ID);
             Comment comment = requireArguments().getParcelable(Extra.COMMENT);
             AssertUtils.requireNonNull(comment);
-            return new CommentEditPresenter(comment, aid, saveInstanceState);
+            return new CommentEditPresenter(comment, aid, CommentThread, saveInstanceState);
         };
     }
 

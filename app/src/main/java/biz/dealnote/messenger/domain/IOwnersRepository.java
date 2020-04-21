@@ -14,6 +14,7 @@ import biz.dealnote.messenger.model.Community;
 import biz.dealnote.messenger.model.CommunityDetails;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.UserUpdate;
@@ -61,4 +62,6 @@ public interface IOwnersRepository {
     Flowable<List<UserUpdate>> observeUpdates();
 
     Single<Integer> report(int accountId, int userId, String type, String comment);
+
+    Single<List<Story>> getStory(int accountId, Integer owner_id);
 }

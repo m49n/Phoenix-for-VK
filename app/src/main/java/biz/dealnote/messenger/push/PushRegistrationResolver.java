@@ -168,7 +168,7 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
             json.put("birthday", "on"); // уведомления о днях рождениях на текущую дату
 
             //(хер приходят)
-            json.put("like", "on"); // отметки "Мне нравится"
+            json.put("like", fr_of_fr); // отметки "Мне нравится"
             json.put("group_accepted", fr_of_fr); // подтверждение заявки на вступление в группу - (хер приходят) 09.01.2016
             json.put("mention", fr_of_fr); // упоминания - (хер приходят) 09.01.2016
             json.put("repost", fr_of_fr); // действия "Рассказать друзьям" - (хер приходят) 09.01.2016

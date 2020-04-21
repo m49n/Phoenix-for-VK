@@ -72,6 +72,8 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
     //not parcelable
     private boolean animationNow;
 
+    private int threads;
+
     public Comment(Commented commented) {
         this.commented = commented;
     }
@@ -93,6 +95,7 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         author = ParcelableOwnerWrapper.readOwner(in);
         dbid = in.readInt();
         deleted = in.readByte() != 0;
+        threads = in.readInt();
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -110,6 +113,16 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
     @Override
     public int getId() {
         return id;
+    }
+
+    public Comment setThreads(int threads)
+    {
+        this.threads = threads;
+        return this;
+    }
+
+    public int getThreads() {
+        return threads;
     }
 
     public Comment setId(int id) {
@@ -277,6 +290,7 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         ParcelableOwnerWrapper.writeOwner(dest, flags, author);
         dest.writeInt(dbid);
         dest.writeByte((byte) (deleted ? 1 : 0));
+        dest.writeInt(threads);
     }
 
     public int getAttachmentsCount() {

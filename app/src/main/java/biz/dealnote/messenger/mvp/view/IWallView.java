@@ -8,6 +8,7 @@ import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
@@ -21,6 +22,8 @@ public interface IWallView extends IAttachmentsPlacesView,
     void displayWallData(List<Post> data);
 
     void notifyWallDataSetChanged();
+
+    void updateStory(List<Story> stories);
 
     void notifyWallItemChanged(int position);
 

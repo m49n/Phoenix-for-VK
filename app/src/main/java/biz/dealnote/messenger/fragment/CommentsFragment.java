@@ -74,6 +74,8 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     private static final String EXTRA_AT_COMMENT_OBJECT = "at_comment_object";
 
+    private static final String EXTRA_AT_COMMENT_THREAD = "at_comment_thread";
+
     private static final int REQUEST_CODE_ATTACHMENTS = 17;
     private static final int REQUEST_EDIT = 18;
 
@@ -83,13 +85,15 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         return fragment;
     }
 
-    public static Bundle buildArgs(int accountId, Commented commented, Integer focusToComment) {
+    public static Bundle buildArgs(int accountId, Commented commented, Integer focusToComment, Integer CommentThread) {
         Bundle bundle = new Bundle();
         bundle.putInt(Extra.ACCOUNT_ID, accountId);
         bundle.putParcelable(Extra.COMMENTED, commented);
         if (focusToComment != null) {
             bundle.putInt(EXTRA_AT_COMMENT_OBJECT, focusToComment);
         }
+        if(CommentThread != null)
+            bundle.putInt(EXTRA_AT_COMMENT_THREAD, CommentThread);
 
         return bundle;
     }
@@ -185,12 +189,18 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
             Commented commented = requireArguments().getParcelable(Extra.COMMENTED);
 
             Integer focusTo = null;
+            Integer ThreadComment = null;
             if (requireArguments().containsKey(EXTRA_AT_COMMENT_OBJECT)) {
                 focusTo = requireArguments().getInt(EXTRA_AT_COMMENT_OBJECT);
                 requireArguments().remove(EXTRA_AT_COMMENT_OBJECT);
             }
 
-            return new CommentsPresenter(accountId, commented, focusTo, requireActivity(), saveInstanceState);
+            if (requireArguments().containsKey(EXTRA_AT_COMMENT_THREAD)) {
+                ThreadComment = requireArguments().getInt(EXTRA_AT_COMMENT_THREAD);
+                requireArguments().remove(EXTRA_AT_COMMENT_THREAD);
+            }
+
+            return new CommentsPresenter(accountId, commented, focusTo, requireActivity(), ThreadComment, saveInstanceState);
         };
     }
 
@@ -314,8 +324,8 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
     }
 
     @Override
-    public void goToCommentEdit(int accountId, Comment comment) {
-        PlaceFactory.getEditCommentPlace(accountId, comment)
+    public void goToCommentEdit(int accountId, Comment comment, Integer commemtId) {
+        PlaceFactory.getEditCommentPlace(accountId, comment, commemtId)
                 .targetTo(this, REQUEST_EDIT)
                 .tryOpenWith(requireActivity());
     }

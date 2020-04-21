@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.domain.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.api.interfaces.INetworker;
@@ -7,7 +8,9 @@ import biz.dealnote.messenger.api.model.VKApiStickerSet;
 import biz.dealnote.messenger.db.interfaces.IStickersStorage;
 import biz.dealnote.messenger.domain.IStickersInteractor;
 import biz.dealnote.messenger.domain.mappers.Dto2Entity;
+import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.domain.mappers.Entity2Model;
+import biz.dealnote.messenger.model.Sticker;
 import biz.dealnote.messenger.model.StickerSet;
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -33,7 +36,7 @@ public class StickersInteractor implements IStickersInteractor {
     public Completable getAndStore(int accountId) {
         return networker.vkDefault(accountId)
                 .store()
-                .getProducts(true, "active", "stickers")
+                .getProducts(true, "active,purchased", "stickers")
                 .flatMapCompletable(items -> {
                     List<VKApiStickerSet.Product> list = listEmptyIfNull(items.items);
                     return storage.store(accountId, mapAll(list, Dto2Entity::mapStikerSet));
@@ -44,5 +47,17 @@ public class StickersInteractor implements IStickersInteractor {
     public Single<List<StickerSet>> getStickers(int accountId) {
         return storage.getPurchasedAndActive(accountId)
                 .map(entities -> mapAll(entities, Entity2Model::map));
+    }
+
+    @Override
+    public Single<List<StickerSet>> getRecentStickers(int accountId)
+    {
+        return networker.vkDefault(accountId).users().getRecentStickers().flatMap(t -> {
+            List<Sticker> list = Dto2Model.transformStickers(listEmptyIfNull(t.items));
+            List<StickerSet> ret = new ArrayList<>();
+            StickerSet temp = new StickerSet("recent", list);
+            ret.add(temp);
+            return Single.just(ret);
+        });
     }
 }

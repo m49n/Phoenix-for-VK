@@ -20,4 +20,5 @@ public interface IFeedbackView extends IAccountDependencyView, IMvpView, IAttach
     void notifyDataSetChanged();
     void configLoadMore(@LoadMoreState int loadmoreState);
     void showLinksDialog(int accountId, @NonNull Feedback notification);
+    void notifyUpdateCounter();
 }

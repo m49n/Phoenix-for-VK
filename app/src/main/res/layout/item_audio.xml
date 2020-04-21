@@ -30,7 +30,7 @@
                 android:layout_toStartOf="@id/item_audio_time"
                 android:orientation="vertical"
                 android:paddingStart="0dp"
-                android:paddingEnd="28dp">
+                android:paddingEnd="18dp">
 
                 <TextView
                     android:id="@+id/dialog_title"
@@ -71,15 +71,15 @@
 
                 <ImageView
                     android:id="@+id/my"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:src="@drawable/my"
                     android:tint="?colorSecondary" />
 
                 <ImageView
                     android:id="@+id/lyric"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="end"
                     android:src="@drawable/lyric"
                     android:tint="?colorSecondary" />

@@ -51,13 +51,15 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void LoadAudiosTool()
     {
-        if (!iSSelectMode && isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
-            audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
-            actualReceived = true;
-            setLoadingNow(false);
-            callView(IAudiosView::notifyListChanged);
-        } else
-            fireRefresh();
+        if(audios.size() <= 0) {
+            if (!iSSelectMode && isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
+                audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
+                actualReceived = true;
+                setLoadingNow(false);
+                callView(IAudiosView::notifyListChanged);
+            } else
+                fireRefresh();
+        }
     }
 
     public boolean isMyAudio() {

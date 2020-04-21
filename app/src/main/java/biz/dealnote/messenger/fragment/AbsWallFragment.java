@@ -25,6 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.adapter.WallAdapter;
+import biz.dealnote.messenger.adapter.horizontal.HorizontalStoryAdapter;
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.WallSearchCriteria;
@@ -45,11 +47,14 @@ import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
+import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.presenter.AbsWallPresenter;
 import biz.dealnote.messenger.mvp.view.IWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
@@ -70,6 +75,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WallAdapter mWallAdapter;
     private LoadMoreFooterHelper mLoadMoreFooterHelper;
+    private HorizontalStoryAdapter mStoryAdapter;
 
     public static Bundle buildArgs(int accoutnId, int ownerId, @Nullable Owner owner) {
         Bundle args = new Bundle();
@@ -141,8 +147,34 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         FloatingActionButton fabCreate = root.findViewById(R.id.fragment_user_profile_fab);
         fabCreate.setOnClickListener(v -> getPresenter().fireCreateClick());
 
+
+        View headerStory = inflater.inflate(R.layout.header_story, recyclerView, false);
+        RecyclerView headerStoryRecyclerView = headerStory.findViewById(R.id.header_story);
+        headerStoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
+        mStoryAdapter.setListener((item, pos) -> {
+            if(item.getVideo() != null)
+                openVideo(Settings.get().accounts().getCurrent(), item.getVideo());
+            else if(item.getPhoto() != null) {
+                ArrayList<Story> photos_story = new ArrayList<>();
+                ArrayList<Photo> tmp = new ArrayList<>();
+                List<Story> st = getPresenter().getStories();
+                for(Story i : st) {
+                    if(i.getPhoto() != null)
+                        photos_story.add(i);
+                }
+                for(Story i : photos_story) {
+                    if(i.getPhoto() != null)
+                        tmp.add(i.getPhoto());
+                }
+                openSimplePhotoGallery(Settings.get().accounts().getCurrent(), tmp, photos_story.indexOf(item), false);
+            }
+        });
+        headerStoryRecyclerView.setAdapter(mStoryAdapter);
+
         mWallAdapter = new WallAdapter(requireActivity(), Collections.emptyList(), this, this);
         mWallAdapter.addHeader(headerView);
+        mWallAdapter.addHeader(headerStoryRecyclerView);
         mWallAdapter.addFooter(footerView);
         mWallAdapter.setNonPublishedPostActionListener(this);
 
@@ -253,6 +285,15 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     public void notifyWallDataSetChanged() {
         if (nonNull(mWallAdapter)) {
             mWallAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void updateStory(List<Story> stories)
+    {
+        if (nonNull(mStoryAdapter)) {
+            mStoryAdapter.setItems(stories);
+            mStoryAdapter.notifyDataSetChanged();
         }
     }
 

@@ -23,6 +23,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.Auth;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 import biz.dealnote.messenger.model.Token;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
@@ -40,6 +41,7 @@ public class LoginActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(Settings.get().ui().getMainTheme());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

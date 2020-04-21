@@ -14,6 +14,7 @@ import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VKApiNews;
 import biz.dealnote.messenger.api.model.VKApiPost;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.model.VkApiDialog;
@@ -40,6 +41,11 @@ public class VKOwnIds {
             append(id);
         }
 
+        return this;
+    }
+
+    public VKOwnIds appendStory(VKApiStory story){
+        append(story.owner_id);
         return this;
     }
 

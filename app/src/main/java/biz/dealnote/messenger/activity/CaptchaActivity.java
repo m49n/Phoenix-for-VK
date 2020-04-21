@@ -16,6 +16,7 @@ import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.ICaptchaProvider;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -36,6 +37,7 @@ public class CaptchaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(Settings.get().ui().getMainTheme());
         super.onCreate(savedInstanceState);
         setFinishOnTouchOutside(false);
 

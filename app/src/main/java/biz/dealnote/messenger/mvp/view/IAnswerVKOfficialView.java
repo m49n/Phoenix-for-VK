@@ -11,8 +11,8 @@ import biz.dealnote.mvp.core.IMvpView;
 public interface IAnswerVKOfficialView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(AnswerVKOfficialList pages);
     void notifyDataSetChanged();
+    void notifyUpdateCounter();
     void notifyDataAdded(int position, int count);
 
     void showRefreshing(boolean refreshing);
-    void openOwnerWall(int owner_id);
 }

@@ -32,6 +32,7 @@ import biz.dealnote.messenger.model.StickerSet;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.view.emoji.section.Cars;
 import biz.dealnote.messenger.view.emoji.section.Electronics;
 import biz.dealnote.messenger.view.emoji.section.Emojicon;
@@ -40,12 +41,14 @@ import biz.dealnote.messenger.view.emoji.section.Nature;
 import biz.dealnote.messenger.view.emoji.section.People;
 import biz.dealnote.messenger.view.emoji.section.Sport;
 import biz.dealnote.messenger.view.emoji.section.Symbols;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class EmojiconsPopup {
 
     private static final String KEY_PAGE = "emoji_page";
 
     private EmojisPagerAdapter mEmojisAdapter;
+    private CompositeDisposable audioListDisposable = new CompositeDisposable();
     private int keyBoardHeight;
 
     private boolean isOpened;
@@ -203,6 +206,7 @@ public class EmojiconsPopup {
         sections.add(new EmojiSection(EmojiSection.TYPE_SYMBOLS, getTintedDrawable(R.drawable.pound_box)));
 
         List<StickersGridView> stickersGridViews = new ArrayList<>();
+
         for (StickerSet stickerSet : stickerSets) {
             stickersGridViews.add(new StickersGridView(mContext, stickerSet, this));
             sections.add(new StickerSection(stickerSet));
@@ -229,6 +233,19 @@ public class EmojiconsPopup {
         sections.get(emojisPager.getCurrentItem()).active = true;
 
         final SectionsAdapter topSectionAdapter = new SectionsAdapter(sections, mContext);
+
+        audioListDisposable.add(InteractorFactory.createStickersInteractor()
+                .getRecentStickers(accountId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(t -> {
+                    for (StickerSet stickerSet : t) {
+                        stickersGridViews.add(new StickersGridView(mContext, stickerSet, this));
+                        sections.add(new StickerSection(stickerSet));
+                        topSectionAdapter.notifyDataSetChanged();
+                        mEmojisAdapter.notifyDataSetChanged();
+                        emojisPager.setCurrentItem(sections.size() - 1);
+                    }
+                }, throwable -> {}));
         recyclerView.setAdapter(topSectionAdapter);
 
         view.findViewById(R.id.backspase).setOnTouchListener(new RepeatListener(700, 50, v -> {
@@ -295,6 +312,7 @@ public class EmojiconsPopup {
 
         rootView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
         rootView = null;
+        audioListDisposable.dispose();
     }
 
     private static class EmojisPagerAdapter extends PagerAdapter {

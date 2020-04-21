@@ -310,7 +310,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:tint="?colorSecondary"
+                        android:tint="?android:attr/textColorPrimary"
                         app:srcCompat="@drawable/account_circle" />
 
                     <TextView
@@ -336,7 +336,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:tint="?colorSecondary"
+                        android:tint="?android:attr/textColorPrimary"
                         app:srcCompat="@drawable/share" />
 
                     <TextView

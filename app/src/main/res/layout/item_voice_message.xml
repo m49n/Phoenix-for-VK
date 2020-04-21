@@ -24,10 +24,10 @@
             android:id="@+id/item_voice_button_play"
             android:layout_width="@dimen/audio_play_button_size"
             android:layout_height="@dimen/audio_play_button_size"
-            android:background="@drawable/audio_button"
             android:padding="6dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/play" />
+            android:src="@drawable/headphones"
+            android:tint="?colorPrimary" />
 
         <biz.dealnote.messenger.view.WaveFormView
             android:id="@+id/item_voice_wave_form_view"

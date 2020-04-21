@@ -370,6 +370,7 @@ public class Entity2Model {
                 .setCanEdit(dbo.isCanEdit())
                 .setAttachments(attachments)
                 .setAuthor(owners.getById(dbo.getFromId()))
+                .setThreads(dbo.getThreads())
                 .setDeleted(dbo.isDeleted());
     }
 

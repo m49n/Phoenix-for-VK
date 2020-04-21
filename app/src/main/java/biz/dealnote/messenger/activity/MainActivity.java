@@ -56,6 +56,7 @@ import biz.dealnote.messenger.api.HttpLogger;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.db.Stores;
 import biz.dealnote.messenger.dialog.ResolveDomainDialog;
+import biz.dealnote.messenger.domain.impl.CountersInteractor;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
 import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
 import biz.dealnote.messenger.fragment.AnswerVKOfficialFragment;
@@ -124,6 +125,7 @@ import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Manager;
 import biz.dealnote.messenger.model.Peer;
+import biz.dealnote.messenger.model.SectionCounters;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.drawer.AbsMenuItem;
@@ -273,7 +275,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             if (!isAuthValid()) {
                 startAccountsActivity();
             } else {
+                MusicUtils.PlaceToAudioCache(this);
                 CheckUpdate();
+                UpdateNotificationCount();
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);
                 if (needPin) {
@@ -281,6 +285,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 }
             }
         }
+    }
+
+    public void UpdateNotificationCount()
+    {
+        mCompositeDisposable.add(new CountersInteractor(Injection.provideNetworkInterfaces()).getApiCounters(mAccountId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::updateNotificationsBagde, t -> removeNotificationsBagde()));
     }
 
     private void CheckUpdate()
@@ -1034,7 +1045,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             case Place.EDIT_COMMENT: {
                 Comment comment = args.getParcelable(Extra.COMMENT);
                 int accountId = args.getInt(Extra.ACCOUNT_ID);
-                CommentEditFragment commentEditFragment = CommentEditFragment.newInstance(accountId, comment);
+                Integer commemtId = args.getInt(Extra.COMMENT_ID);
+                CommentEditFragment commentEditFragment = CommentEditFragment.newInstance(accountId, comment, commemtId);
                 place.applyTargetingTo(commentEditFragment);
                 attachToFront(commentEditFragment);
                 break;
@@ -1378,6 +1390,26 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             } else {
                 mBottomNavigation.removeBadge(R.id.menu_messages);
             }
+        }
+    }
+
+    private void updateNotificationsBagde(SectionCounters counters) {
+        if (mBottomNavigation != null) {
+            if (counters.getNotifications() > 0) {
+                BadgeDrawable badgeDrawable = mBottomNavigation.getOrCreateBadge(R.id.menu_feedback);
+                badgeDrawable.setBackgroundColor(CurrentTheme.getColorPrimary(this));
+                badgeDrawable.setBadgeTextColor(CurrentTheme.getColorOnPrimary(this));
+                badgeDrawable.setNumber(counters.getNotifications());
+            } else {
+                mBottomNavigation.removeBadge(R.id.menu_feedback);
+            }
+        }
+    }
+
+    private void removeNotificationsBagde()
+    {
+        if (mBottomNavigation != null) {
+            mBottomNavigation.removeBadge(R.id.menu_feedback);
         }
     }
 

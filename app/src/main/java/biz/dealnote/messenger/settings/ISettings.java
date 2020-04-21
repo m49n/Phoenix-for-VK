@@ -89,7 +89,7 @@ public interface ISettings {
 
         boolean isEnable_show_audio_top();
 
-        boolean isAuto_merge_audio_tag();
+        boolean isUse_internal_video_downloader();
     }
 
     interface IAccountsSettings {

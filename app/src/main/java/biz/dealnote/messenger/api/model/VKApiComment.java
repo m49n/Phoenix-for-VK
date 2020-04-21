@@ -1,7 +1,5 @@
 package biz.dealnote.messenger.api.model;
 
-import java.util.List;
-
 /**
  * Comment object describes a comment.
  */
@@ -59,9 +57,7 @@ public class VKApiComment {
      */
     public VkApiAttachments attachments;
 
-    public List<VKApiComment> threads;
-
-    public boolean in_thread;
+    public int threads;
 
     /**
      * Creates empty Comment instance.

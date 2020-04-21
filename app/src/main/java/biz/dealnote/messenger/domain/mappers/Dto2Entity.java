@@ -632,7 +632,8 @@ public class Dto2Entity {
                 .setCanEdit(comment.can_edit)
                 .setDeleted(false)
                 .setAttachmentsCount(comment.getAttachmentsCount())
-                .setAttachments(attachmentsEntities);
+                .setAttachments(attachmentsEntities)
+                .setThreads(comment.threads);
     }
 
     public static SimpleDialogEntity mapConversation(VkApiConversation dto) {

@@ -18,7 +18,6 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static biz.dealnote.messenger.util.RxUtils.dummy;
 import static biz.dealnote.messenger.util.RxUtils.ignore;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
@@ -105,7 +104,7 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
 
         appendDisposable(feedbackInteractor.maskAaViewed(accountId)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                .subscribe(dummy(), ignore()));
+                .subscribe(() -> callView(IFeedbackView::notifyUpdateCounter), ignore()));
     }
 
     private void onActualDataReceived(String startFrom, List<Feedback> feedbacks, String nextFrom) {

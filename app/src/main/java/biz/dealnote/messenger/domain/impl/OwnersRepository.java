@@ -13,6 +13,7 @@ import java.util.Set;
 
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.model.Items;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOfflineUpdate;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOnlineUpdate;
@@ -37,12 +38,14 @@ import biz.dealnote.messenger.model.CommunityDetails;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.SparseArrayOwnersBundle;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.UserUpdate;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.Unixtime;
+import biz.dealnote.messenger.util.VKOwnIds;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -150,6 +153,36 @@ public class OwnersRepository implements IOwnersRepository {
         return networker.vkDefault(accountId)
                 .users()
                 .report(userId, type, comment);
+    }
+
+    @Override
+    public Single<List<Story>> getStory(int accountId, Integer owner_id)
+    {
+        return networker.vkDefault(accountId)
+                .users()
+                .getStory(owner_id, 1, UserColumns.API_FIELDS)
+                .flatMap(story -> {
+                    List<List<VKApiStory>> dtos_multy = listEmptyIfNull(story.items);
+                    List<VKApiStory>dtos = new ArrayList<>();
+                    for(List<VKApiStory> itst : dtos_multy)
+                    {
+                        for(VKApiStory itys : itst)
+                            dtos.add(itys);
+                    }
+                    List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
+                    VKOwnIds ownIds = new VKOwnIds();
+                    for (VKApiStory news : dtos) {
+                        ownIds.appendStory(news);
+                    }
+                    return findBaseOwnersDataAsBundle(accountId, ownIds.getAll(), IOwnersRepository.MODE_ANY, owners)
+                            .map(owners1 -> {
+                                List<Story> stories = new ArrayList<>(dtos.size());
+                                for (VKApiStory dto : dtos) {
+                                    stories.add(Dto2Model.transformStory(dto, owners1));
+                                }
+                                return stories;
+                            });
+                });
     }
 
     @Override

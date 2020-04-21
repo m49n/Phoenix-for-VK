@@ -17,9 +17,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.player.IAudioPlayerService;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Optional;
 import io.reactivex.Observable;
@@ -47,6 +50,8 @@ public final class MusicUtils {
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
 
     public static boolean SuperCloseMiniPlayer = false;
+
+    public static ArrayList<String> CachedAudios = new ArrayList<>();
 
     static {
         mConnectionMap = new WeakHashMap<>();
@@ -70,7 +75,22 @@ public final class MusicUtils {
         return null;
     }
 
-
+    public static void PlaceToAudioCache(Context context) {
+        if(!AppPerms.hasReadWriteStoragePermision(context))
+            return;
+        File temp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+        if(!temp.exists())
+            return;
+        File[] file_list = temp.listFiles();
+        if(file_list == null || file_list.length <= 0)
+            return;
+        CachedAudios.clear();
+        for(File u : file_list)
+        {
+            if(u.isFile())
+                CachedAudios.add(u.getAbsolutePath());
+        }
+    }
 
     /**
      * @param token The {@link ServiceToken} to unbind from

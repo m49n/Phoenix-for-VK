@@ -202,7 +202,7 @@ public class AttachmentsViewBinder {
 
     private void bindVoiceHolderPlayState(VoiceHolder holder, boolean play, boolean paused, float progress, boolean anim) {
         @DrawableRes
-        int icon = play && !paused ? R.drawable.pause : R.drawable.play;
+        int icon = play && !paused ? R.drawable.pause : R.drawable.headphones;
 
         holder.mButtonPlay.setImageResource(icon);
         holder.mWaveFormView.setCurrentActiveProgress(play ? progress : 1.0f, anim);
@@ -704,7 +704,6 @@ public class AttachmentsViewBinder {
                     PopupMenu popup = new PopupMenu(mContext, holder.Track);
                     popup.inflate(R.menu.audio_item_menu);
                     popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(audio.getLyricsId() != 0);
-                    popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
                     popup.setOnMenuItemClickListener(item1 -> {
                         switch (item1.getItemId()) {
                             case R.id.search_by_artist:
@@ -721,9 +720,6 @@ public class AttachmentsViewBinder {
                                 return true;
                             case R.id.get_recommendation_by_audio:
                                 PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), audio.getOwnerId(), audio.getId()).tryOpenWith(mContext);
-                                return true;
-                            case R.id.get_album_cover_tags:
-                                DownloadUtil.downloadTrackCoverAndTags(mContext, audio);
                                 return true;
                             case R.id.add_item_audio:
                                 boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();

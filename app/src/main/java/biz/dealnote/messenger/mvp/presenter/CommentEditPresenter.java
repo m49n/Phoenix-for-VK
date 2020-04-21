@@ -47,14 +47,16 @@ public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEd
     private final UploadDestination destination;
     private boolean editingNow;
     private boolean canGoBack;
+    private Integer CommentThread;
 
     private final ICommentsInteractor commentsInteractor;
 
-    public CommentEditPresenter(Comment comment, int accountId, @Nullable Bundle savedInstanceState) {
+    public CommentEditPresenter(Comment comment, int accountId, Integer CommentThread, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.commentsInteractor = new CommentsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
         this.orig = comment;
         this.destination = new UploadDestination(comment.getId(), comment.getCommented().getSourceOwnerId(), Method.PHOTO_TO_COMMENT);
+        this.CommentThread = CommentThread;
 
         if (isNull(savedInstanceState)) {
             super.setTextBody(orig.getText());
@@ -168,7 +170,7 @@ public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEd
         final int commentId = this.orig.getId();
         final String body = super.getTextBody();
 
-        appendDisposable(commentsInteractor.edit(accountId, commented, commentId, body, models)
+        appendDisposable(commentsInteractor.edit(accountId, commented, commentId, body, CommentThread, models)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onEditComplete, this::onEditError));
     }

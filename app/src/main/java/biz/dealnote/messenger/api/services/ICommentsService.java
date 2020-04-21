@@ -23,6 +23,7 @@ public interface ICommentsService {
                                                      @Field("count") Integer count,
                                                      @Field("sort") String sort,
                                                      @Field("start_comment_id") Integer startCommentId,
+                                                     @Field("comment_id") int thread_id,
                                                      @Field("access_key") String accessKey,
                                                      @Field("fields") String fields);
 }

@@ -14,11 +14,13 @@ import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.db.model.PostUpdate;
+import biz.dealnote.messenger.domain.IOwnersRepository;
 import biz.dealnote.messenger.domain.IWallsRepository;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.criteria.WallCriteria;
 import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IWallView;
@@ -50,6 +52,10 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
 
     protected final List<Post> wall;
 
+    protected final List<Story> stories;
+
+    private final IOwnersRepository ownersRepository;
+
     private final IWallsRepository walls;
 
     private int wallFilter;
@@ -59,11 +65,17 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         super(accountId, savedInstanceState);
         this.ownerId = ownerId;
         this.wall = new ArrayList<>();
+        this.stories = new ArrayList<>();
         this.wallFilter = WallCriteria.MODE_ALL;
         this.walls = Repository.INSTANCE.getWalls();
+        this.ownersRepository = Repository.INSTANCE.getOwners();
 
         loadWallCachedData();
         requestWall(0);
+
+        appendDisposable(ownersRepository.getStory(accountId, accountId == ownerId ? null : ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> {stories.clear(); stories.addAll(data);  getView().updateStory(data);}, t -> {}));
 
         appendDisposable(walls
                 .observeMinorChanges()
@@ -82,6 +94,10 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
                 .filter(pair -> pair.getOwnerId() == ownerId)
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(pair -> onPostInvalid(pair.getId())));
+    }
+
+    public List<Story> getStories() {
+        return stories;
     }
 
     private void onPostInvalid(int postVkid) {
@@ -159,6 +175,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
     public void onGuiCreated(@NonNull V viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayWallData(wall);
+        viewHost.updateStory(stories);
     }
 
     private CompositeDisposable cacheCompositeDisposable = new CompositeDisposable();
@@ -314,6 +331,9 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         this.cacheCompositeDisposable.clear();
 
         requestWall(0);
+        appendDisposable(ownersRepository.getStory(getAccountId(), getAccountId() == ownerId ? null : ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> getView().updateStory(data), t -> {}));
 
         onRefresh();
     }

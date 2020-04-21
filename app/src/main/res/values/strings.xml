@@ -1098,7 +1098,7 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
-    <string name="get_album_cover">Внедрить обложку и теги</string>
+    <string name="use_internal_video_downloader">Использовать внутренний загрузчик для видео</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
@@ -1243,7 +1243,7 @@
     <string name="pages">Страницы</string>
     <string name="succ_offline">Вы стали Оффлайн</string>
     <string name="err_offline">Ошибка, вы Онлайн!</string>
-    <string name="user_readed_yor_message">Прочитал ваше сообщение</string>
+    <string name="user_readed_yor_message">Прочитал(а) ваше сообщение</string>
     <string name="copy_track_info">Скопировать информацию трека</string>
     <string name="search_by_artist">Поиск по исполнителю</string>
     <string name="auto_update">Получать обновления</string>
@@ -1257,7 +1257,6 @@
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
     <string name="show_recent_dialogs">Последние чаты (перезапуск)"</string>
     <string name="show_audio_top">Популярные аудио"</string>
-    <string name="auto_merge_audio_tag">Автоматически внедрять обложку аудио</string>
     <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
     <string name="show_audio_cover">Обложки аудио</string>
@@ -1268,4 +1267,5 @@
     <string name="audio_force_download">Данный трек уже скачен. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
     <string name="use_old_vk_api">Аудио с VK api 5.90</string>
+    <string name="expires">%1$s %2$s</string>
 </resources>

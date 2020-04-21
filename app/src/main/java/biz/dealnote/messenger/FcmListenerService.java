@@ -81,6 +81,7 @@ public class FcmListenerService extends FirebaseMessagingService {
 
         try {
             switch (pushType) {
+                case PushType.VALIDATE_DEVICE:
                 case PushType.MSG:
                 case "chat":
                     FCMMessage.fromRemoteMessage(message).notify(context, accountId);

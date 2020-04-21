@@ -23,6 +23,7 @@ import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
 import biz.dealnote.messenger.api.model.VKApiPoll;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSticker;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VKApiVideo;
@@ -71,6 +72,7 @@ import biz.dealnote.messenger.model.PostSource;
 import biz.dealnote.messenger.model.Privacy;
 import biz.dealnote.messenger.model.SimplePrivacy;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Topic;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.Video;
@@ -115,6 +117,21 @@ public class Dto2Model {
                 .setPhoto100(chat.photo_100)
                 .setPhoto200(chat.photo_200)
                 .setTitle(chat.title);
+    }
+
+    public static Sticker.Image transformStickerImage(VKApiSticker.Image dto) {
+        return new Sticker.Image(dto.url, dto.width, dto.height);
+    }
+
+    public static Sticker transformSticker(VKApiSticker sticker) {
+        return new Sticker(sticker.sticker_id)
+                .setImages(mapAll(sticker.images, Dto2Model::transformStickerImage))
+                .setImagesWithBackground(mapAll(sticker.images_with_background, Dto2Model::transformStickerImage))
+                .setAnimationUrl(sticker.animation_url);
+    }
+
+    public static List<Sticker> transformStickers(List<VKApiSticker> dto) {
+        return mapAll(dto, Dto2Model::transformSticker);
     }
 
     public static Owner transformOwner(VKApiOwner owner) {
@@ -506,6 +523,7 @@ public class Dto2Model {
                 .setUserLikes(dto.user_likes)
                 .setCanLike(dto.can_like)
                 .setCanEdit(dto.can_edit)
+                .setThreads(dto.threads)
                 .setAuthor(owners.getById(dto.from_id));
 
         if (dto.attachments != null) {
@@ -568,6 +586,16 @@ public class Dto2Model {
                 .setCanShare(dto.can_share)
                 .setEndDate(dto.end_date)
                 .setMultiple(dto.multiple);
+    }
+
+    public static Story transformStory(@NonNull VKApiStory dto, @NonNull IOwnersBundle owners) {
+        return new Story().setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setDate(dto.date)
+                .setExpires(dto.expires_at)
+                .setPhoto(dto.photo != null ? transform(dto.photo) : null)
+                .setVideo(dto.video != null ? transform(dto.video) : null)
+                .setOwner(owners.getById(dto.owner_id));
     }
 
     public static Photo transform(@NonNull VKApiPhoto dto) {

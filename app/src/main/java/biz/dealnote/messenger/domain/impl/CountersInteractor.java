@@ -3,7 +3,6 @@ package biz.dealnote.messenger.domain.impl;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.domain.ICountersInteractor;
 import biz.dealnote.messenger.model.SectionCounters;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -19,12 +18,7 @@ public class CountersInteractor implements ICountersInteractor {
     }
 
     @Override
-    public Observable<SectionCounters> getCounters(int accountId) {
-        Single<SectionCounters> net = getApiCounters(accountId);
-        return net.toObservable();
-    }
-
-    private Single<SectionCounters> getApiCounters(int accountId) {
+    public Single<SectionCounters> getApiCounters(int accountId) {
         return networker.vkDefault(accountId)
                 .account()
                 .getCounters("friends,messages,photos,videos,gifts,events,groups,notifications")

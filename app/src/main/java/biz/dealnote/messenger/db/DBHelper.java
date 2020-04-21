@@ -373,6 +373,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + CommentsColumns.TEXT + "] TEXT, " +
                 " [" + CommentsColumns.REPLY_TO_USER + "] INTEGER, " +
                 " [" + CommentsColumns.REPLY_TO_COMMENT + "] INTEGER, " +
+                " [" + CommentsColumns.THREADS + "] INTEGER, " +
                 " [" + CommentsColumns.LIKES + "] INTEGER, " +
                 " [" + CommentsColumns.USER_LIKES + "] BOOLEAN, " +
                 " [" + CommentsColumns.CAN_LIKE + "] BOOLEAN, " +

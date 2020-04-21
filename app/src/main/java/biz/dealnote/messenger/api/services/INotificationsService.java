@@ -14,7 +14,6 @@ import retrofit2.http.POST;
  */
 public interface INotificationsService {
 
-    @FormUrlEncoded
     @POST("notifications.markAsViewed")
     Single<BaseResponse<Integer>> markAsViewed();
 

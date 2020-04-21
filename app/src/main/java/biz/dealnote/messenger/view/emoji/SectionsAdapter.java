@@ -47,11 +47,18 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
 
             case AbsSection.TYPE_STICKER:
                 StickerSection stickerSection = (StickerSection) section;
-                PicassoInstance.with()
-                        .load(stickerSection.stickerSet.getPhoto70())
-                        .placeholder(R.drawable.sticker_pack_with_alpha)
-                        .into(holder.icon);
-                holder.icon.setColorFilter(null);
+                if(stickerSection.stickerSet.getPhoto70() != null && stickerSection.stickerSet.getPhoto70().equals("recent"))
+                {
+                    holder.icon.setImageResource(R.drawable.pin);
+                    holder.icon.getDrawable().setTint(CurrentTheme.getColorPrimary(mContext));
+                }
+                else {
+                    PicassoInstance.with()
+                            .load(stickerSection.stickerSet.getPhoto70())
+                            .placeholder(R.drawable.sticker_pack_with_alpha)
+                            .into(holder.icon);
+                    holder.icon.setColorFilter(null);
+                }
                 break;
             case AbsSection.TYPE_PHOTO_ALBUM:
                 PicassoInstance.with()

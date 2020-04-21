@@ -318,10 +318,11 @@ public class PlaceFactory {
         return new Place(Place.REPOST).setArguments(RepostFragment.buildArgs(accountId, gid, post));
     }
 
-    public static Place getEditCommentPlace(int accountId, Comment comment){
+    public static Place getEditCommentPlace(int accountId, Comment comment, Integer commemtId){
         return new Place(Place.EDIT_COMMENT)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId)
-                .withParcelableExtra(Extra.COMMENT, comment);
+                .withParcelableExtra(Extra.COMMENT, comment)
+                .withIntExtra(Extra.COMMENT_ID, commemtId);
     }
 
     public static Place getAudiosPlace(int accountId, int ownerId){
@@ -449,7 +450,12 @@ public class PlaceFactory {
 
     public static Place getCommentsPlace(int accountId, Commented commented, Integer focusToCommentId){
         return new Place(Place.COMMENTS)
-                .setArguments(CommentsFragment.buildArgs(accountId, commented, focusToCommentId));
+                .setArguments(CommentsFragment.buildArgs(accountId, commented, focusToCommentId, null));
+    }
+
+    public static Place getCommentsThreadPlace(int accountId, Commented commented, Integer focusToCommentId, Integer commemtId){
+        return new Place(Place.COMMENTS)
+                .setArguments(CommentsFragment.buildArgs(accountId, commented, focusToCommentId, commemtId));
     }
 
     private PlaceFactory(){

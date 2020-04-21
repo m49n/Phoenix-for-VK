@@ -15,6 +15,7 @@ import biz.dealnote.messenger.mvp.view.IAnswerVKOfficialView;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static biz.dealnote.messenger.util.RxUtils.ignore;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
@@ -60,8 +61,14 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
         actualDataDisposable.add(fInteractor.getOfficial(accountId, 100, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onActualDataReceived(offset, data), this::onActualDataGetError));
+    }
 
+    private void safelyMarkAsViewed() {
+        final int accountId = super.getAccountId();
 
+        appendDisposable(fInteractor.maskAaViewed(accountId)
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(() -> callView(IAnswerVKOfficialView::notifyUpdateCounter), ignore()));
     }
 
     private void onActualDataGetError(Throwable t) {
@@ -78,6 +85,7 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
         this.actualDataReceived = true;
 
         if (offset == 0) {
+            safelyMarkAsViewed();
             this.pages.items.clear();
             this.pages.fields.clear();
             this.pages.items.addAll(data.items);

@@ -46,7 +46,7 @@ public interface ICommentsView extends IAccountDependencyView, IAttachmentsPlace
 
     void replaceBodySelectionTextTo(String replyText);
 
-    void goToCommentEdit(int accountId, Comment comment);
+    void goToCommentEdit(int accountId, Comment comment, Integer commemtId);
 
     void goToWallPost(int accountId, int postId, int postOwnerId);
 

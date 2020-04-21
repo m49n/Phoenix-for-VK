@@ -165,7 +165,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isAuto_merge_audio_tag() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("auto_merge_audio_tag", true);
+    public boolean isUse_internal_video_downloader() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_internal_video_downloader", false);
     }
 }

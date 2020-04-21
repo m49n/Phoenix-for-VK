@@ -141,10 +141,10 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="auto_merge_audio_tag"
-            android:summary="@string/auto_merge_audio_tag"
-            android:title="@string/auto_merge_audio_tag"
+            android:defaultValue="false"
+            android:key="use_internal_video_downloader"
+            android:summary="@string/use_internal_video_downloader"
+            android:title="@string/use_internal_video_downloader"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

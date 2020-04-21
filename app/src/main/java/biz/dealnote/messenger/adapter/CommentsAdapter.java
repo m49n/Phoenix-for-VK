@@ -28,7 +28,9 @@ import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.link.internal.TopicLink;
 import biz.dealnote.messenger.model.Comment;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -111,6 +113,11 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             }
         });
 
+        holder.item_comment_thread_root.setVisibility(comment.getThreads() > 0 ? View.VISIBLE : View.GONE);
+        if(comment.getThreads() > 0) {
+            holder.itemView.setOnClickListener(v -> PlaceFactory.getCommentsThreadPlace(Settings.get().accounts().getCurrent(), comment.getCommented(), null, comment.getId()).tryOpenWith(context));
+            holder.item_comment_thread_counter.setText(String.valueOf(comment.getThreads()));
+        }
         holder.tvText.setText(text, TextView.BufferType.SPANNABLE);
         holder.tvText.setVisibility(TextUtils.isEmpty(comment.getText()) ? View.GONE : View.VISIBLE);
         holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -217,6 +224,8 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         TextView tvLikeCounter;
         View selectionView;
         View vAttachmentsRoot;
+        View item_comment_thread_root;
+        TextView item_comment_thread_counter;
 
         AttachmentsHolder attachmentContainers;
 
@@ -232,6 +241,8 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
                 }
             });
 
+            item_comment_thread_root = root.findViewById(R.id.item_comment_thread_root);
+            item_comment_thread_counter = root.findViewById(R.id.item_comment_thread_counter);
             tvTime = root.findViewById(R.id.item_comment_time);
             ivLike = root.findViewById(R.id.item_comment_like);
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);

@@ -118,6 +118,7 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
         cv.put(CommentsColumns.TEXT, dbo.getText());
         cv.put(CommentsColumns.REPLY_TO_USER, dbo.getReplyToUserId());
         cv.put(CommentsColumns.REPLY_TO_COMMENT, dbo.getReplyToComment());
+        cv.put(CommentsColumns.THREADS, dbo.getThreads());
         cv.put(CommentsColumns.LIKES, dbo.getLikesCount());
         cv.put(CommentsColumns.USER_LIKES, dbo.isUserLikes());
         cv.put(CommentsColumns.CAN_LIKE, dbo.isCanLike());
@@ -233,6 +234,7 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
             contentValues.put(CommentsColumns.DATE, Unixtime.now());
             contentValues.put(CommentsColumns.REPLY_TO_USER, replyToUser);
             contentValues.put(CommentsColumns.REPLY_TO_COMMENT, replyToComment);
+            contentValues.put(CommentsColumns.THREADS, 0);
             contentValues.put(CommentsColumns.LIKES, 0);
             contentValues.put(CommentsColumns.USER_LIKES, 0);
 
@@ -338,6 +340,7 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
                 .setDate(cursor.getLong(cursor.getColumnIndex(CommentsColumns.DATE)))
                 .setText(cursor.getString(cursor.getColumnIndex(CommentsColumns.TEXT)))
                 .setReplyToUserId(cursor.getInt(cursor.getColumnIndex(CommentsColumns.REPLY_TO_USER)))
+                .setThreads(cursor.getInt(cursor.getColumnIndex(CommentsColumns.THREADS)))
                 .setReplyToComment(cursor.getInt(cursor.getColumnIndex(CommentsColumns.REPLY_TO_COMMENT)))
                 .setLikesCount(cursor.getInt(cursor.getColumnIndex(CommentsColumns.LIKES)))
                 .setUserLikes(cursor.getInt(cursor.getColumnIndex(CommentsColumns.USER_LIKES)) == 1)

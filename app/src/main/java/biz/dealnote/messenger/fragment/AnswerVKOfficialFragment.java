@@ -19,6 +19,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
+import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.adapter.AnswerVKOfficialAdapter;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
@@ -114,6 +115,11 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
             mAdapter.setData(users);
             resolveEmptyText();
         }
+    }
+
+    @Override
+    public void notifyUpdateCounter() {
+        ((MainActivity)requireActivity()).UpdateNotificationCount();
     }
 
     @Override

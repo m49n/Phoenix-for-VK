@@ -22,6 +22,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
+import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
 import biz.dealnote.messenger.adapter.feedback.FeedbackAdapter;
 import biz.dealnote.messenger.dialog.FeedbackLinkDialog;
@@ -140,6 +141,11 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
         if(nonNull(mSwipeRefreshLayout)){
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
+    }
+
+    @Override
+    public void notifyUpdateCounter() {
+        ((MainActivity)requireActivity()).UpdateNotificationCount();
     }
 
     private void resolveEmptyTextVisibility() {

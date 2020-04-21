@@ -43,6 +43,8 @@ public class CommentEntity {
 
     private int attachmentsCount;
 
+    private int threads;
+
     private AttachmentsEntity attachments;
 
     public CommentEntity(int sourceId, int sourceOwnerId, int sourceType, String sourceAccessKey, int id) {
@@ -60,6 +62,16 @@ public class CommentEntity {
 
     public int getFromId() {
         return fromId;
+    }
+
+    public CommentEntity setThreads(int threads)
+    {
+        this.threads = threads;
+        return this;
+    }
+
+    public int getThreads() {
+        return threads;
     }
 
     public CommentEntity setFromId(int fromId) {

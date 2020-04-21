@@ -73,6 +73,8 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     private Integer focusToComment;
 
+    private Integer CommentThread;
+
     private final IOwnersRepository ownersRepository;
 
     private final ICommentsInteractor interactor;
@@ -89,7 +91,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     private Context context;
 
-    public CommentsPresenter(int accountId, Commented commented, Integer focusToComment, Context context, @Nullable Bundle savedInstanceState) {
+    public CommentsPresenter(int accountId, Commented commented, Integer focusToComment, Context context, Integer CommentThread, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.authorId = accountId;
         this.ownersRepository = Repository.INSTANCE.getOwners();
@@ -98,10 +100,10 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         this.focusToComment = focusToComment;
         this.context = context;
         this.directionDesc = Settings.get().other().isCommentsDesc();
-
+        this.CommentThread = CommentThread;
         this.data = new ArrayList<>();
 
-        if (Objects.isNull(focusToComment)) {
+        if (Objects.isNull(focusToComment) && Objects.isNull(CommentThread)) {
             // если надо сфокусироваться на каком-то комментарии - не грузим из кэша
             loadCachedData();
         }
@@ -225,11 +227,11 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
         Single<CommentsBundle> single;
         if (nonNull(focusToComment)) {
-            single = interactor.getCommentsPortion(accountId, commented, -10, COUNT, focusToComment, true, "asc");
+            single = interactor.getCommentsPortion(accountId, commented, -10, COUNT, focusToComment, CommentThread, true, "asc");
         } else if (directionDesc) {
-            single = interactor.getCommentsPortion(accountId, commented, 0, COUNT, null, true, "desc");
+            single = interactor.getCommentsPortion(accountId, commented, 0, COUNT, null, CommentThread, true, "desc");
         } else {
-            single = interactor.getCommentsPortion(accountId, commented, 0, COUNT, null, true, "asc");
+            single = interactor.getCommentsPortion(accountId, commented, 0, COUNT, null, CommentThread, true, "asc");
         }
 
         setLoadingState(LoadingState.INITIAL);
@@ -252,7 +254,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         final int accountId = super.getAccountId();
 
         setLoadingState(LoadingState.UP);
-        actualLoadingDisposable.add(interactor.getCommentsPortion(accountId, commented, 1, COUNT, first.getId(), false, "desc")
+        actualLoadingDisposable.add(interactor.getCommentsPortion(accountId, commented, 1, COUNT, first.getId(), CommentThread, false, "desc")
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onCommentsPortionPortionReceived,
                         throwable -> onCommentPortionError(getCauseIfRuntime(throwable))));
@@ -267,7 +269,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         final int accountId = super.getAccountId();
 
         setLoadingState(LoadingState.DOWN);
-        actualLoadingDisposable.add(interactor.getCommentsPortion(accountId, commented, 0, COUNT, last.getId(), false, "asc")
+        actualLoadingDisposable.add(interactor.getCommentsPortion(accountId, commented, 0, COUNT, last.getId(), CommentThread, false, "asc")
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onCommentsPortionPortionReceived,
                         throwable -> onCommentPortionError(getCauseIfRuntime(throwable))));
@@ -653,8 +655,10 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
         final int accountId = super.getAccountId();
         final CommentIntent intent = createCommentIntent();
+        if(intent.getReplyToComment() == null && CommentThread != null)
+            intent.setReplyToComment(CommentThread);
 
-        appendDisposable(interactor.send(accountId, commented, intent)
+        appendDisposable(interactor.send(accountId, commented, CommentThread, intent)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onNormalSendResponse, this::onSendError));
     }
@@ -662,8 +666,11 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
     private void sendQuickComment(CommentIntent intent) {
         setSendingNow(true);
 
+        if(intent.getReplyToComment() == null && CommentThread != null)
+            intent.setReplyToComment(CommentThread);
+
         final int accountId = super.getAccountId();
-        appendDisposable(interactor.send(accountId, commented, intent)
+        appendDisposable(interactor.send(accountId, commented, CommentThread, intent)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onQuickSendResponse, this::onSendError));
     }
@@ -779,7 +786,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     public void fireCommentEditClick(Comment comment) {
         final int accountId = super.getAccountId();
-        getView().goToCommentEdit(accountId, comment);
+        getView().goToCommentEdit(accountId, comment, CommentThread);
     }
 
     public void fireCommentLikeClick(Comment comment, boolean add) {

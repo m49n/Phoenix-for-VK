@@ -130,30 +130,21 @@ public class CommentsInteractor implements ICommentsInteractor {
                 .map(bundle -> {
                     List<Comment> data = new ArrayList<>(comments.size());
                     for (VKApiComment dto : comments) {
-                        if(dto.threads != null)
-                        {
-                            Collections.sort(dto.threads, (o1, o2) -> Integer.compare(o2.id, o1.id));
-                            for(VKApiComment th : dto.threads) {
-                                if(th.from_id != 0)
-                                    data.add(Dto2Model.buildComment(commented, th, bundle));
-                            }
-                        }
                         if(dto.from_id != 0)
                             data.add(Dto2Model.buildComment(commented, dto, bundle));
                     }
-
-                    //Collections.sort(data, (o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
+                    Collections.sort(data, (o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
                     return data;
                 });
     }
 
     @Override
-    public Single<CommentsBundle> getCommentsPortion(int accountId, @NonNull Commented commented, int offset, int count, Integer startCommentId, boolean invalidateCache, String sort) {
+    public Single<CommentsBundle> getCommentsPortion(int accountId, @NonNull Commented commented, int offset, int count, Integer startCommentId, Integer threadComment, boolean invalidateCache, String sort) {
         final String type = commented.getTypeForStoredProcedure();
 
         return networker.vkDefault(accountId)
                 .comments()
-                .get(type, commented.getSourceOwnerId(), commented.getSourceId(), offset, count, sort, startCommentId, commented.getAccessKey(), Constants.MAIN_OWNER_FIELDS)
+                .get(type, commented.getSourceOwnerId(), commented.getSourceId(), offset, count, sort, startCommentId, threadComment, commented.getAccessKey(), Constants.MAIN_OWNER_FIELDS)
                 .flatMap(response -> {
                     List<VKApiComment> commentDtos = nonNull(response.main) ? listEmptyIfNull(response.main.comments) : emptyList();
                     List<VKApiUser> users = nonNull(response.main) ? listEmptyIfNull(response.main.profiles) : emptyList();
@@ -162,8 +153,25 @@ public class CommentsInteractor implements ICommentsInteractor {
                     Single<List<Comment>> modelsSingle = transform(accountId, commented, commentDtos, users, groups);
 
                     List<CommentEntity> dbos = new ArrayList<>(commentDtos.size());
-                    for (VKApiComment dto : commentDtos) {
+                    for (VKApiComment dto : commentDtos)
                         dbos.add(Dto2Entity.mapComment(commented.getSourceId(), commented.getSourceOwnerId(), commented.getSourceType(), commented.getAccessKey(), dto));
+
+                    if(threadComment != null)
+                    {
+                        return modelsSingle.map(data -> {
+                            CommentsBundle bundle = new CommentsBundle(data)
+                                    .setAdminLevel(response.admin_level)
+                                    .setFirstCommentId(response.firstId)
+                                    .setLastCommentId(response.lastId);
+
+                            if (nonNull(response.main) && nonNull(response.main.poll)) {
+                                Poll poll = Dto2Model.transform(response.main.poll);
+                                poll.setBoard(true); // так как это может быть только из топика
+                                bundle.setTopicPoll(poll);
+                            }
+
+                            return bundle;
+                        });
                     }
 
                     return cacheData(accountId, commented, dbos, Dto2Entity.mapOwners(users, groups), invalidateCache)
@@ -296,7 +304,7 @@ public class CommentsInteractor implements ICommentsInteractor {
     }
 
     @Override
-    public Single<Comment> send(int accountId, Commented commented, final CommentIntent intent) {
+    public Single<Comment> send(int accountId, Commented commented, Integer commentThread, final CommentIntent intent) {
         final Single<List<IAttachmentToken>> cachedAttachments;
 
         if (nonNull(intent.getDraftMessageId())) {
@@ -318,7 +326,7 @@ public class CommentsInteractor implements ICommentsInteractor {
                     }
 
                     return sendComment(accountId, commented, intent, tokens)
-                            .flatMap(id -> getCommentByIdAndStore(accountId, commented, id, true))
+                            .flatMap(id -> getCommentByIdAndStore(accountId, commented, id,  commentThread,true))
                             .flatMap(comment -> {
                                 if (isNull(intent.getDraftMessageId())) {
                                     return Single.just(comment);
@@ -381,7 +389,7 @@ public class CommentsInteractor implements ICommentsInteractor {
     }
 
     @Override
-    public Single<Comment> edit(int accountId, Commented commented, int commentId, String body, List<AbsModel> attachments) {
+    public Single<Comment> edit(int accountId, Commented commented, int commentId, String body, Integer commentThread, List<AbsModel> attachments) {
         List<IAttachmentToken> tokens = new ArrayList<>();
 
         try {
@@ -430,7 +438,7 @@ public class CommentsInteractor implements ICommentsInteractor {
                 return Single.error(new IllegalArgumentException("Unknown commented source type"));
         }
 
-        return editSingle.flatMap(ignored -> getCommentByIdAndStore(accountId, commented, commentId, true));
+        return editSingle.flatMap(ignored -> getCommentByIdAndStore(accountId, commented, commentId, commentThread, true));
     }
 
     private Completable startLooking(int accountId, Commented commented, TempData tempData, int startFromCommentId, int continueToCommentId) {
@@ -559,7 +567,7 @@ public class CommentsInteractor implements ICommentsInteractor {
         }
     }
 
-    private Single<Comment> getCommentByIdAndStore(int accountId, Commented commented, int commentId, boolean storeToCache) {
+    private Single<Comment> getCommentByIdAndStore(int accountId, Commented commented, int commentId, Integer commentThread, boolean storeToCache) {
         final String type = commented.getTypeForStoredProcedure();
         final int sourceId = commented.getSourceId();
         final int ownerId = commented.getSourceOwnerId();
@@ -568,7 +576,7 @@ public class CommentsInteractor implements ICommentsInteractor {
         return networker.vkDefault(accountId)
                 .comments()
                 .get(type, commented.getSourceOwnerId(), commented.getSourceId(), 0, 1,
-                        null, commentId, commented.getAccessKey(), Constants.MAIN_OWNER_FIELDS)
+                        null, commentId, commentThread, commented.getAccessKey(), Constants.MAIN_OWNER_FIELDS)
                 .flatMap(response -> {
                     if (isNull(response.main) || safeCountOf(response.main.comments) != 1) {
                         throw new NotFoundException();

@@ -206,14 +206,10 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                 PopupMenu popup = new PopupMenu(mContext, holder.Track);
                 popup.inflate(R.menu.audio_item_menu);
                 popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(item.getLyricsId() != 0);
-                popup.getMenu().findItem(R.id.get_album_cover_tags).setVisible(!Settings.get().other().isAuto_merge_audio_tag());
                 popup.setOnMenuItemClickListener(item1 -> {
                     switch (item1.getItemId()) {
                         case R.id.search_by_artist:
                             PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
-                            return true;
-                        case R.id.get_album_cover_tags:
-                            DownloadUtil.downloadTrackCoverAndTags(mContext, item);
                             return true;
                         case R.id.get_lyrics_menu:
                             get_lyrics(item);

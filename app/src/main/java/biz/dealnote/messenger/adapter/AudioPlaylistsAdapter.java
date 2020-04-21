@@ -2,6 +2,7 @@ package biz.dealnote.messenger.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +13,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Transformation;
-
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
-import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.ImageHelper;
+import biz.dealnote.messenger.util.PolyTransformation;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
@@ -30,12 +30,10 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
 
     private List<VKApiAudioPlaylist> data;
     private Context context;
-    private Transformation transformation;
 
     public AudioPlaylistsAdapter(List<VKApiAudioPlaylist> data, Context context) {
         this.data = data;
         this.context = context;
-        this.transformation = CurrentTheme.createTransformationForAvatar(context);
     }
 
     @NonNull
@@ -49,7 +47,9 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
     public void onBindViewHolder(@NonNull final Holder holder, int position) {
         final VKApiAudioPlaylist playlist = data.get(position);
         if(!isNullOrEmptyString(playlist.thumb_image))
-            ViewUtils.displayAvatar(holder.thumb, transformation, playlist.thumb_image, Constants.PICASSO_TAG);
+            ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.thumb_image, Constants.PICASSO_TAG);
+        else
+            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.generic_audio_nowplaying)));
         holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
         holder.name.setText(playlist.title);
         if(isNullOrEmptyString(playlist.description))
