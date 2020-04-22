@@ -24,6 +24,7 @@ import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.criteria.WallCriteria;
 import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IWallView;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Analytics;
 import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.RxUtils;
@@ -73,9 +74,16 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         loadWallCachedData();
         requestWall(0);
 
-        appendDisposable(ownersRepository.getStory(accountId, accountId == ownerId ? null : ownerId)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> {stories.clear(); stories.addAll(data);  getView().updateStory(data);}, t -> {}));
+        if(!Settings.get().other().isDisable_history()) {
+            appendDisposable(ownersRepository.getStory(accountId, accountId == ownerId ? null : ownerId)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(data -> {
+                        stories.clear();
+                        stories.addAll(data);
+                        getView().updateStory(data);
+                    }, t -> {
+                    }));
+        }
 
         appendDisposable(walls
                 .observeMinorChanges()
@@ -331,9 +339,12 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         this.cacheCompositeDisposable.clear();
 
         requestWall(0);
-        appendDisposable(ownersRepository.getStory(getAccountId(), getAccountId() == ownerId ? null : ownerId)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().updateStory(data), t -> {}));
+        if(!Settings.get().other().isDisable_history()) {
+            appendDisposable(ownersRepository.getStory(getAccountId(), getAccountId() == ownerId ? null : ownerId)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(data -> getView().updateStory(data), t -> {
+                    }));
+        }
 
         onRefresh();
     }

@@ -72,7 +72,7 @@
         app:iconSpaceReserved="false">
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="emojis_type"
             android:summary="@string/emojis_type_summary"
             android:title="@string/emojis_type_title"
@@ -84,6 +84,22 @@
             android:summary="@string/send_on_enter_summary"
             android:title="@string/send_on_enter_title"
             app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/custom_chat">
+
+        <Preference
+            android:key="chat_light_background"
+            android:title="@string/chat_light_background" />
+
+        <Preference
+            android:key="chat_dark_background"
+            android:title="@string/chat_dark_background" />
+
+        <Preference
+            android:key="reset_chat_background"
+            android:title="@string/set_default" />
 
     </PreferenceCategory>
 
@@ -174,6 +190,12 @@
             android:title="@string/chat_background"
             app:iconSpaceReserved="false" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="audio_round_icon"
+            android:title="@string/audio_round_icon"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="avatar_style"
             android:summary="@string/avatar_style_summary"
@@ -224,6 +246,10 @@
         <CheckBoxPreference
             android:key="use_old_vk_api"
             android:title="@string/use_old_vk_api"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:key="disable_history"
+            android:title="@string/disable_history"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="force_cache"

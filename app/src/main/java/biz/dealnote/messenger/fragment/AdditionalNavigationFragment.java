@@ -35,7 +35,6 @@ import biz.dealnote.messenger.model.drawer.IconMenuItem;
 import biz.dealnote.messenger.model.drawer.RecentChat;
 import biz.dealnote.messenger.model.drawer.SectionMenuItem;
 import biz.dealnote.messenger.place.PlaceFactory;
-import biz.dealnote.messenger.settings.AppPrefs;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.Settings;
@@ -44,7 +43,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.model.SwitchableCategory.BOOKMARKS;
 import static biz.dealnote.messenger.model.SwitchableCategory.DOCS;
-import static biz.dealnote.messenger.model.SwitchableCategory.FEED;
 import static biz.dealnote.messenger.model.SwitchableCategory.FRIENDS;
 import static biz.dealnote.messenger.model.SwitchableCategory.GROUPS;
 import static biz.dealnote.messenger.model.SwitchableCategory.MUSIC;
@@ -60,19 +58,18 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
 
     public static final int PAGE_FRIENDS = 0;
     public static final int PAGE_DIALOGS = 1;
-    public static final int PAGE_FEED = 7;
-    public static final int PAGE_MUSIC = 2;
-    public static final int PAGE_DOCUMENTS = 3;
-    public static final int PAGE_PHOTOS = 6;
-    public static final int PAGE_PREFERENSES = 4;
-    public static final int PAGE_ACCOUNTS = 5;
+    public static final int PAGE_FEED = 2;
+    public static final int PAGE_MUSIC = 3;
+    public static final int PAGE_DOCUMENTS = 4;
+    public static final int PAGE_PHOTOS = 5;
+    public static final int PAGE_PREFERENSES = 6;
+    public static final int PAGE_ACCOUNTS = 7;
     public static final int PAGE_GROUPS = 8;
     public static final int PAGE_VIDEOS = 9;
     public static final int PAGE_BOOKMARKS = 10;
-    public static final int PAGE_BUY_FULL_APP = 11;
-    public static final int PAGE_NOTIFICATION = 12;
-    public static final int PAGE_SEARCH = 13;
-    public static final int PAGE_NEWSFEED_COMMENTS = 14;
+    public static final int PAGE_NOTIFICATION = 11;
+    public static final int PAGE_SEARCH = 12;
+    public static final int PAGE_NEWSFEED_COMMENTS = 13;
 
     public static final SectionMenuItem SECTION_ITEM_FRIENDS = new IconMenuItem(PAGE_FRIENDS, R.drawable.friends, R.string.friends);
     public static final SectionMenuItem SECTION_ITEM_DIALOGS = new IconMenuItem(PAGE_DIALOGS, R.drawable.email, R.string.dialogs);
@@ -88,7 +85,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
     public static final SectionMenuItem SECTION_ITEM_SEARCH = new IconMenuItem(PAGE_SEARCH, R.drawable.magnify, R.string.search);
 
     public static final SectionMenuItem SECTION_ITEM_SETTINGS = new IconMenuItem(PAGE_PREFERENSES, R.drawable.settings, R.string.settings);
-    public static final SectionMenuItem SECTION_ITEM_BY_FULL_APP = new IconMenuItem(PAGE_BUY_FULL_APP, R.drawable.phoenix, R.string.buy_phoenix);
     public static final SectionMenuItem SECTION_ITEM_ACCOUNTS = new IconMenuItem(PAGE_ACCOUNTS, R.drawable.account_circle, R.string.accounts);
 
     private static final int MAX_RECENT_COUNT = 5;
@@ -114,8 +110,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         switch (type) {
             case FRIENDS:
                 return SECTION_ITEM_FRIENDS;
-            case FEED:
-                return SECTION_ITEM_FEED;
             case NEWSFEED_COMMENTS:
                 return SECTION_ITEM_NEWSFEED_COMMENTS;
             case GROUPS:
@@ -248,11 +242,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
 //        items.add(new DividerMenuItem());
 
         items.add(SECTION_ITEM_SETTINGS);
-
-        if (!AppPrefs.isFullApp()) {
-            items.add(SECTION_ITEM_BY_FULL_APP);
-        }
-
         items.add(SECTION_ITEM_ACCOUNTS);
 
         if (nonEmpty(mRecentChats) &&  Settings.get().other().isEnable_show_recent_dialogs()) {

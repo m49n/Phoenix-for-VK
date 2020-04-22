@@ -26,7 +26,7 @@ public class Constants {
     //public static final String DEVICE_COUNTRY_CODE = Injection.provideApplicationContext().getResources().getConfiguration().locale.getCountry().toLowerCase();
     public static final String DEVICE_COUNTRY_CODE = "ru";
     public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/59.1 lite-465 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
-    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.1.1-5046 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
+    public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.1.2-5056 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
 
     public static String SCREEN_RESOLUTION()
     {

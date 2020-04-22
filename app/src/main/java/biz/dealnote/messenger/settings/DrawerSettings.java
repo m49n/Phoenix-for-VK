@@ -11,8 +11,6 @@ import io.reactivex.subjects.PublishSubject;
 
 import static biz.dealnote.messenger.model.SwitchableCategory.BOOKMARKS;
 import static biz.dealnote.messenger.model.SwitchableCategory.DOCS;
-import static biz.dealnote.messenger.model.SwitchableCategory.FEED;
-import static biz.dealnote.messenger.model.SwitchableCategory.FEEDBACK;
 import static biz.dealnote.messenger.model.SwitchableCategory.FRIENDS;
 import static biz.dealnote.messenger.model.SwitchableCategory.GROUPS;
 import static biz.dealnote.messenger.model.SwitchableCategory.MUSIC;
@@ -68,7 +66,7 @@ class DrawerSettings implements ISettings.IDrawerSettings {
     @Override
     public int[] getCategoriesOrder() {
         @SwitchableCategory
-        int[] all = {FEED, FRIENDS, FEEDBACK, NEWSFEED_COMMENTS, GROUPS, PHOTOS, VIDEOS, MUSIC, DOCS, BOOKMARKS};
+        int[] all = {FRIENDS, NEWSFEED_COMMENTS, GROUPS, PHOTOS, VIDEOS, MUSIC, DOCS, BOOKMARKS};
         String line = PreferenceManager.getDefaultSharedPreferences(app).getString("drawer_categories_order", null);
 
         String[] parts = isEmpty(line) ? new String[0] : line.split("-");
@@ -84,7 +82,8 @@ class DrawerSettings implements ISettings.IDrawerSettings {
         for (int i = 0; i < positions.length; i++) {
             int category = positions[i];
             // категория "category" должна быть в положении "i"
-
+            if(i >= all.length)
+                break;
             if (all[i] != category) {
                 try {
                     int currentCategoryIndex = findCategoryIndex(all, category);

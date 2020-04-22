@@ -36,12 +36,6 @@ public class DrawerEditPresenter extends AbsPresenter<IDrawerEditView> {
         switch (type) {
             case SwitchableCategory.FRIENDS:
                 return R.string.friends;
-            case SwitchableCategory.DIALOGS:
-                return R.string.dialogs;
-            case SwitchableCategory.FEED:
-                return R.string.feed;
-            case SwitchableCategory.FEEDBACK:
-                return R.string.drawer_feedback;
             case SwitchableCategory.NEWSFEED_COMMENTS:
                 return R.string.drawer_newsfeed_comments;
             case SwitchableCategory.GROUPS:
@@ -56,8 +50,6 @@ public class DrawerEditPresenter extends AbsPresenter<IDrawerEditView> {
                 return R.string.documents;
             case SwitchableCategory.BOOKMARKS:
                 return R.string.bookmarks;
-            case SwitchableCategory.SEARCH:
-                return R.string.search;
         }
 
         throw new IllegalArgumentException();

@@ -80,6 +80,7 @@ class MusicPlaybackService : Service() {
     /**
      * Used to track what type of audio focus loss caused the playback to pause
      */
+    private var ErrorsCount = 0;
     private var OnceCloseMiniPlayer = false
     private var SuperCloseMiniPlayer = MusicUtils.SuperCloseMiniPlayer
     private var mPausedByTransientLossOfFocus = false
@@ -575,6 +576,7 @@ class MusicPlaybackService : Service() {
             if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio))
                 audio.setUrl(DownloadUtil.GetLocalTrackLink(audio))
             if (UpdateMeta) {
+                ErrorsCount = 0
                 CoverAudio = null
                 AlbumTitle = null
                 CoverBitmap = null
@@ -1080,10 +1082,17 @@ class MusicPlaybackService : Service() {
                     }
 
                     override fun onPlayerError(error: ExoPlaybackException) {
-                        val playbackPos = mCurrentMediaPlayer.currentPosition
-                        mService.get()!!.playCurrentTrack(false)
-                        mCurrentMediaPlayer.seekTo(playbackPos)
-                        mService.get()!!.notifyChange(META_CHANGED)
+                        mService.get()!!.ErrorsCount++
+                        if(mService.get()!!.ErrorsCount > 10) {
+                            mService.get()!!.ErrorsCount = 0
+                            mService.get()!!.stopSelf()
+                        }
+                        else {
+                            val playbackPos = mCurrentMediaPlayer.currentPosition
+                            mService.get()!!.playCurrentTrack(false)
+                            mCurrentMediaPlayer.seekTo(playbackPos)
+                            mService.get()!!.notifyChange(META_CHANGED)
+                        }
                     }
                 })
             }

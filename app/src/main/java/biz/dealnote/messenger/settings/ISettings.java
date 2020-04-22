@@ -65,6 +65,8 @@ public interface ISettings {
 
         boolean isUse_old_vk_api();
 
+        boolean isDisable_history();
+
         boolean isForce_cache();
 
         boolean isKeepLongpoll();
@@ -131,6 +133,8 @@ public interface ISettings {
         boolean isMy_message_no_color();
 
         boolean isAmoledTheme();
+
+        boolean isAudio_round_icon();
 
         boolean isCustomTabEnabled();
 

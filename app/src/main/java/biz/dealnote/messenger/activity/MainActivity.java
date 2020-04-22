@@ -645,12 +645,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             return;
         }
 
-        if (sectionDrawerItem.getSection() == AdditionalNavigationFragment.PAGE_BUY_FULL_APP) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PreferencesFragment.FULL_APP_URL));
-            startActivity(browserIntent);
-            return;
-        }
-
         mCurrentFrontSection = item;
         getNavigationFragment().selectPage(item);
 

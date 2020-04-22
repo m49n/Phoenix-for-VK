@@ -14,6 +14,8 @@ import androidx.preference.PreferenceManager;
 
 import com.squareup.picasso.Transformation;
 
+import java.io.File;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.ElipseTransformation;
 import biz.dealnote.messenger.util.RoundTransformation;
@@ -22,7 +24,19 @@ public class CurrentTheme {
 
     private static final String KEY_CHAT_BACKGROUND = "chat_background";
 
+    private static File getDrawerBackgroundFile(Context context, boolean light) {
+        return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
+    }
+
     public static Drawable getChatBackground(Activity activity) {
+
+        boolean dark = Settings.get().ui().isDarkModeEnabled(activity);
+        File bitmap = getDrawerBackgroundFile(activity, !dark);
+        if(bitmap.exists())
+        {
+            Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+            return d;
+        }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String page = preferences.getString(KEY_CHAT_BACKGROUND, "1");
         switch (page) {

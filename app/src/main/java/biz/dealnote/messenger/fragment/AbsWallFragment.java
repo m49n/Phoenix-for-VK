@@ -167,7 +167,8 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                     if(i.getPhoto() != null)
                         tmp.add(i.getPhoto());
                 }
-                openSimplePhotoGallery(Settings.get().accounts().getCurrent(), tmp, photos_story.indexOf(item), false);
+                int indx = photos_story.indexOf(item);
+                openSimplePhotoGallery(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
             }
         });
         headerStoryRecyclerView.setAdapter(mStoryAdapter);

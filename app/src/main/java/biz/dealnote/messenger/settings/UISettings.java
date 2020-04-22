@@ -148,7 +148,7 @@ class UISettings implements ISettings.IUISettings {
                 case Place.DOCS:
                     return PlaceFactory.getDocumentsPlace(accountId, accountId, null);
                 case Place.BOOKMARKS:
-                    return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PHOTOS);
+                    return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PAGES);
                 case Place.SEARCH:
                     return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE, null);
                 case Place.VIDEOS:
@@ -178,7 +178,11 @@ class UISettings implements ISettings.IUISettings {
             case "9":
                 return PlaceFactory.getDocumentsPlace(accountId, accountId, null);
             case "10":
-                return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PHOTOS);
+                return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PAGES);
+            case "11":
+                return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE, null);
+            case "12":
+                return PlaceFactory.getNewsfeedCommentsPlace(accountId);
             default:
                 return PlaceFactory.getDialogsPlace(accountId, accountId, null);
         }
@@ -193,6 +197,6 @@ class UISettings implements ISettings.IUISettings {
 
     @Override
     public boolean isSystemEmoji() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", false);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", true);
     }
 }

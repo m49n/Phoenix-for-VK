@@ -20,10 +20,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
 
@@ -38,6 +40,7 @@ import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.player.util.MusicUtils.mService;
@@ -96,6 +99,15 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         }
     }
 
+    @DrawableRes
+    private int getAudioCoverSimple() {
+        return Settings.get().main().isAudio_round_icon() ? R.drawable.audio_button : R.drawable.audio_button_material;
+    }
+
+    private Transformation TransformCover() {
+        return Settings.get().main().isAudio_round_icon() ? new RoundTransformation() : new PolyTransformation();
+    }
+
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mini_player, container, false);
@@ -136,10 +148,10 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         if (nonNull(mPlay)) {
             Audio audio = MusicUtils.getCurrentAudio();
             if (audio != null && !isNullOrEmptyString(audio.getThumb_image_little())) {
-                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+                mPlay.setBackground(getResources().getDrawable(getAudioCoverSimple(), requireActivity().getTheme()));
                 PicassoInstance.with()
                         .load(audio.getThumb_image_little())
-                        .transform(new PolyTransformation())
+                        .transform(TransformCover())
                         .tag(Constants.PICASSO_TAG)
                         .into(new Target() {
                             @Override
@@ -157,7 +169,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
                             }
                         });
             } else
-                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+                mPlay.setBackground(getResources().getDrawable(getAudioCoverSimple(), requireActivity().getTheme()));
 
             if (MusicUtils.isPlaying()) {
                 mPlay.setImageResource(R.drawable.voice_state_animation);

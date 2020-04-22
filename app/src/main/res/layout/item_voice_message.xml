@@ -26,7 +26,7 @@
             android:layout_height="@dimen/audio_play_button_size"
             android:padding="6dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/headphones"
+            android:src="@drawable/play"
             android:tint="?colorPrimary" />
 
         <biz.dealnote.messenger.view.WaveFormView

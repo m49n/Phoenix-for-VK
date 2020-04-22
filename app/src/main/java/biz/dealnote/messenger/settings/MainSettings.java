@@ -46,6 +46,11 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
+    public boolean isAudio_round_icon() {
+        return getDefaultPreferences().getBoolean("audio_round_icon", false);
+    }
+
+    @Override
     public boolean isMy_message_no_color() {
         return getDefaultPreferences().getBoolean("my_message_no_color", false);
     }

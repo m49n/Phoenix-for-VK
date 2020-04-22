@@ -74,6 +74,7 @@ import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -202,7 +203,7 @@ public class AttachmentsViewBinder {
 
     private void bindVoiceHolderPlayState(VoiceHolder holder, boolean play, boolean paused, float progress, boolean anim) {
         @DrawableRes
-        int icon = play && !paused ? R.drawable.pause : R.drawable.headphones;
+        int icon = play && !paused ? R.drawable.pause : R.drawable.play;
 
         holder.mButtonPlay.setImageResource(icon);
         holder.mWaveFormView.setCurrentActiveProgress(play ? progress : 1.0f, anim);
@@ -584,12 +585,22 @@ public class AttachmentsViewBinder {
         dlgAlert.create().show();
     }
 
+    @DrawableRes
+    private int getAudioCoverSimple() {
+        return Settings.get().main().isAudio_round_icon() ? R.drawable.audio_button : R.drawable.audio_button_material;
+    }
+
+    private Transformation TransformCover() {
+        return Settings.get().main().isAudio_round_icon() ? new RoundTransformation() : new PolyTransformation();
+    }
+
     /**
      * Отображение аудиозаписей
      *
      * @param audios    аудиозаписи
      * @param container контейнер для аудиозаписей
      */
+
     private void displayAudios(final ArrayList<Audio> audios, ViewGroup container) {
         container.setVisibility(safeIsEmpty(audios) ? View.GONE : View.VISIBLE);
         if (safeIsEmpty(audios)) {
@@ -639,10 +650,10 @@ public class AttachmentsViewBinder {
                 {
                     if(!isNullOrEmptyString(audio.getThumb_image_little()))
                     {
-                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button_material, mContext.getTheme()));
+                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                         PicassoInstance.with()
                                 .load(audio.getThumb_image_little())
-                                .transform(new PolyTransformation())
+                                .transform(TransformCover())
                                 .tag(Constants.PICASSO_TAG)
                                 .into(new Target() {
                                     @Override
@@ -661,7 +672,7 @@ public class AttachmentsViewBinder {
                                 });
                     }
                     else
-                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button_material, mContext.getTheme()));
+                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                 }
 
                 holder.ibPlay.setOnClickListener(v -> {

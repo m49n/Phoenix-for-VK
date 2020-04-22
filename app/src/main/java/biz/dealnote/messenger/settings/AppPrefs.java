@@ -3,11 +3,7 @@ package biz.dealnote.messenger.settings;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import biz.dealnote.messenger.BuildConfig;
-
 public class AppPrefs {
-
-    public static final boolean FULL_APP = BuildConfig.FULL_APP;
 
     public static boolean isCoubInstalled(Context context) {
         return isPackageIntalled(context, "com.coub.android");
@@ -26,13 +22,4 @@ public class AppPrefs {
             return false;
         }
     }
-
-    public static boolean isFullApp() {
-        return FULL_APP;
-    }
-
-    public static final String[] ONLY_FULL_APP_PREFS = {
-            "night_switch", "app_theme", "night_mode_time", "night_theme", "avatar_style",
-            "light_sidebar_background", "dark_sidebar_background", "reset_sidebar_background"
-    };
 }

@@ -165,10 +165,7 @@ public class OwnersRepository implements IOwnersRepository {
                     List<List<VKApiStory>> dtos_multy = listEmptyIfNull(story.items);
                     List<VKApiStory>dtos = new ArrayList<>();
                     for(List<VKApiStory> itst : dtos_multy)
-                    {
-                        for(VKApiStory itys : itst)
-                            dtos.add(itys);
-                    }
+                        dtos.addAll(itst);
                     List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
                     VKOwnIds ownIds = new VKOwnIds();
                     for (VKApiStory news : dtos) {

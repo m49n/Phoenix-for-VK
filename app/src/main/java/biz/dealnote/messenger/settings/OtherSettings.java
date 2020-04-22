@@ -137,6 +137,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isDisable_history() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_history", false);
+    }
+
+    @Override
     public boolean isInfo_reading() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("info_reading", true);
     }

@@ -17,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,7 @@ import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.WeakViewAnimatorAdapter;
@@ -104,6 +107,15 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         return new AudioHolder(LayoutInflater.from(mContext).inflate(R.layout.item_audio, parent, false));
     }
 
+    @DrawableRes
+    private int getAudioCoverSimple() {
+        return Settings.get().main().isAudio_round_icon() ? R.drawable.audio_button : R.drawable.audio_button_material;
+    }
+
+    private Transformation TransformCover() {
+        return Settings.get().main().isAudio_round_icon() ? new RoundTransformation() : new PolyTransformation();
+    }
+
     @Override
     public void onBindViewHolder(final AudioHolder holder, int position) {
         final Audio item = mData.get(position);
@@ -150,10 +162,10 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
         {
             if(!isNullOrEmptyString(item.getThumb_image_little()))
             {
-                holder.play.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button_material, mContext.getTheme()));
+                holder.play.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                 PicassoInstance.with()
                         .load(item.getThumb_image_little())
-                        .transform(new PolyTransformation())
+                        .transform(TransformCover())
                         .tag(Constants.PICASSO_TAG)
                         .into(new Target() {
                             @Override
@@ -172,7 +184,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                         });
             }
             else
-                holder.play.setBackground(mContext.getResources().getDrawable(R.drawable.audio_button_material, mContext.getTheme()));
+                holder.play.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
         }
 
         holder.play.setOnClickListener(v -> {

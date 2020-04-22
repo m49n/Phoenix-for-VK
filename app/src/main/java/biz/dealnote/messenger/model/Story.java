@@ -122,4 +122,13 @@ public class Story extends AbsModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Story))
+            return false;
+
+        Story story = (Story) o;
+        return id == story.id && owner_id == story.owner_id;
+    }
 }

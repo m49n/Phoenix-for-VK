@@ -330,10 +330,6 @@
     <string name="error_audio">Ошибка аудио</string>
 
     <string name="error_sending">Ошибка входа, повторите попытку позже</string>
-
-    <string name="get_full_app_title">Получить полное приложение</string>
-    <string name="get_full_app_summary">Если хотите получить больше возможностей, попробуйте Phoenix для ВК</string>
-    <string name="buy_phoenix">Купить Phoenix</string>
     <string name="default_category_summary">Выберите страницу, которая будет показана при запуске приложения</string>
     <string name="default_category_title">Стартовая страница</string>
 
@@ -735,6 +731,7 @@
     <string name="wall_publish_notification">Опубликована предложенная Вами запись</string>
     <string name="set_default">Установить по умолчанию</string>
     <string name="sidebar_settings">Боковое меню</string>
+    <string name="custom_chat">Кастомизировать чат</string>
     <string name="formatted_date_today">Сегодня в %1$s</string>
     <string name="formatted_date_tomorrow">Завтра в %1$s</string>
     <string name="formatted_date_yesterday">Вчера в %1$s</string>
@@ -900,6 +897,8 @@
     <string name="like_title">Мне нравится</string>
     <string name="likes">Отметки \"Мне нравится\"</string>
     <string name="chat_background">Фон чата</string>
+    <string name="chat_light_background">Светлый фон чата</string>
+    <string name="chat_dark_background">Ночной фон чата</string>
     <string name="go_to_post">Перейти к записи</string>
     <string name="success">Успех</string>
     <string name="post_text">Текст записи</string>
@@ -1268,4 +1267,6 @@
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
     <string name="use_old_vk_api">Аудио с VK api 5.90</string>
     <string name="expires">%1$s %2$s</string>
+    <string name="disable_history">Не показывать Истории</string>
+    <string name="audio_round_icon">Круглые обложки аудио</string>
 </resources>
