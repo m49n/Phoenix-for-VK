@@ -81,6 +81,14 @@ public interface ISettings {
 
         boolean isInfo_reading();
 
+        int getColorChat();
+
+        boolean isCustom_chat_color();
+
+        int getColorMyMessage();
+
+        boolean isCustom_MyMessage();
+
         boolean isUse_stop_audio();
 
         boolean isEnable_Photo_advanced();

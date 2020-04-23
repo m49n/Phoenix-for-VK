@@ -613,7 +613,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
         alert.setTitle(R.string.report);
         CharSequence[] items = {"Спам", "Детская порнография", "Экстремизм", "Насилие", "Пропаганда наркотиков", "Материал для взрослых", "Оскорбление", "Призывы к суициду"};
-        alert.setSingleChoiceItems(items, -1, (dialog, item) -> {
+        alert.setItems(items, (dialog, item) -> {
             appendDisposable(interactor.reportComment(getAccountId(), comment.getFromId(), comment.getId(), item)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(p -> {

@@ -256,11 +256,16 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 break;
             case CryptStatus.NO_ENCRYPTION:
             case CryptStatus.DECRYPTED:
-                if(message.isOut())
-                    if(Settings.get().main().isMy_message_no_color())
-                        holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
-                    else
-                        holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
+                if(message.isOut()) {
+                    if(Settings.get().other().isCustom_MyMessage())
+                        holder.bubble.setBubbleColor(Settings.get().other().getColorMyMessage());
+                    else {
+                        if (Settings.get().main().isMy_message_no_color())
+                            holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
+                        else
+                            holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
+                    }
+                }
                 else
                     holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
                 break;

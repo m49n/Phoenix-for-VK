@@ -154,8 +154,9 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.GONE);
+        holder.saved.setImageResource(R.drawable.downloaded);
 
-        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(item) ? R.drawable.voice_state_normal : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+        holder.play.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(item) ? R.drawable.paused : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
         Utils.doAnimate(holder.play.getDrawable(), true);
 
         if(Settings.get().other().isShow_audio_cover())
@@ -191,7 +192,7 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
             if (MusicUtils.isNowPlayingOrPreparingOrPaused(item)) {
                 if(!Settings.get().other().isUse_stop_audio()) {
                     if(!MusicUtils.isNowPaused(item))
-                        holder.play.setImageResource(R.drawable.voice_state_normal);
+                        holder.play.setImageResource(R.drawable.paused);
                     else {
                         holder.play.setImageResource(R.drawable.voice_state_animation);
                         Utils.doAnimate(holder.play.getDrawable(), true);
@@ -250,6 +251,8 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                                 AppPerms.requestReadWriteStoragePermission((Activity) mContext);
                                 return true;
                             }
+                            holder.saved.setVisibility(View.VISIBLE);
+                            holder.saved.setImageResource(R.drawable.save);
                             int ret = DownloadUtil.downloadTrack(mContext, item, false);
                             if (ret == 0)
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
@@ -261,8 +264,10 @@ public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdap
                                         .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, item, true))
                                         .setNegativeButton(R.string.cancel, null)
                                         .show();
-                            } else
+                            } else {
+                                holder.saved.setVisibility(View.GONE);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                            }
                             return true;
                         case R.id.bitrate_item_audio:
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();

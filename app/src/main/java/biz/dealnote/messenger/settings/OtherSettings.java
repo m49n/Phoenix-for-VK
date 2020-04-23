@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.settings;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import androidx.preference.PreferenceManager;
 
@@ -139,6 +140,26 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isDisable_history() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_history", false);
+    }
+
+    @Override
+    public int getColorChat() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt("custom_chat_color", Color.argb(255, 255, 255, 255));
+    }
+
+    @Override
+    public boolean isCustom_chat_color() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("custom_chat_color_usage", false);
+    }
+
+    @Override
+    public int getColorMyMessage() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt("custom_message_color", Color.argb(255, 255, 255, 255));
+    }
+
+    @Override
+    public boolean isCustom_MyMessage() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("custom_message_color_usage", false);
     }
 
     @Override

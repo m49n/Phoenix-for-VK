@@ -23,15 +23,16 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:paddingBottom="72dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/settings"
+            android:paddingBottom="72dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never" >
+                android:overScrollMode="never">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -61,21 +62,23 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom|start"
+        android:layout_marginStart="4dp"
         android:layout_marginBottom="14dp"
-        android:backgroundTint="?colorSecondary"
+        android:background="@drawable/audio_button"
         android:contentDescription="@string/kate_import"
         android:padding="32dp"
         android:src="@drawable/ic_kate_mobile" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/dav_acc"
         android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_height="43dp"
         android:layout_gravity="bottom|end"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="14dp"
+        android:background="@drawable/settings"
         android:backgroundTint="?colorPrimary"
         android:contentDescription="@string/development"
-        android:padding="32dp"
-        android:src="@drawable/dev" />
+        android:padding="32dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

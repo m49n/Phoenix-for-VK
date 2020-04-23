@@ -19,6 +19,7 @@ import java.io.File;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.ElipseTransformation;
 import biz.dealnote.messenger.util.RoundTransformation;
+import biz.dealnote.messenger.util.Utils;
 
 public class CurrentTheme {
 
@@ -29,27 +30,38 @@ public class CurrentTheme {
     }
 
     public static Drawable getChatBackground(Activity activity) {
-
         boolean dark = Settings.get().ui().isDarkModeEnabled(activity);
         File bitmap = getDrawerBackgroundFile(activity, !dark);
         if(bitmap.exists())
         {
             Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+            if(Settings.get().other().isCustom_chat_color())
+                Utils.setColorFilter(d, Settings.get().other().getColorChat());
             return d;
         }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String page = preferences.getString(KEY_CHAT_BACKGROUND, "1");
+        assert page != null;
+        Drawable ret;
         switch (page) {
             case "1":
-                return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_cookies);
+                ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_cookies);
+                break;
             case "2":
-                return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_lines);
+                ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_lines);
+                break;
             case "3":
-                return CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
+                ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
+                break;
             default: //"0
+                if(Settings.get().other().isCustom_chat_color())
+                    return new ColorDrawable(Settings.get().other().getColorChat());
                 int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
                 return new ColorDrawable(color);
         }
+        if(Settings.get().other().isCustom_chat_color())
+            Utils.setColorFilter(ret, Settings.get().other().getColorChat());
+        return ret;
     }
 
     public static Transformation createTransformationForAvatar(Context context) {

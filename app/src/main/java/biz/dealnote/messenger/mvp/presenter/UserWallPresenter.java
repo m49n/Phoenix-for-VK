@@ -531,7 +531,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
         alert.setTitle(R.string.report);
         CharSequence[] items = {"porn", "spam", "insult", "advertisеment"};
-        alert.setSingleChoiceItems(items, -1, (dialog, item) -> {
+        alert.setItems(items, (dialog, item) -> {
             String report = items[item].toString();
             appendDisposable(ownersRepository.report(getAccountId(), getOwnerId(), report, null)
                     .compose(RxUtils.applySingleIOToMainSchedulers())

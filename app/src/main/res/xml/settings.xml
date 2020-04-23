@@ -101,6 +101,31 @@
             android:key="reset_chat_background"
             android:title="@string/set_default" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="custom_chat_color_usage"
+            android:title="@string/custom_chat_color"
+            android:summary="@string/custom_chat_color_summary"
+            app:iconSpaceReserved="false" />
+
+        <biz.dealnote.messenger.settings.ColorPickerPreference
+            android:key="custom_chat_color"
+            android:title="@string/custom_chat_color"
+            android:defaultValue="#ffffff"
+            alphaSlider="true" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="custom_message_color_usage"
+            android:title="@string/custom_message_color"
+            app:iconSpaceReserved="false" />
+
+        <biz.dealnote.messenger.settings.ColorPickerPreference
+            android:key="custom_message_color"
+            android:title="@string/custom_message_color"
+            android:defaultValue="#ffffff"
+            alphaSlider="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

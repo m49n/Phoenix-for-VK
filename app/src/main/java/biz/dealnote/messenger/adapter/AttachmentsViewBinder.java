@@ -632,7 +632,7 @@ public class AttachmentsViewBinder {
                 else
                     holder.quality.setVisibility(View.GONE);
 
-                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.voice_state_normal : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
                 Utils.doAnimate(holder.ibPlay.getDrawable(), true);
                 int finalG = g;
                 AtomicInteger PlayState = new AtomicInteger(MusicUtils.AudioStatus(audio));
@@ -640,7 +640,7 @@ public class AttachmentsViewBinder {
                     Integer PlayStateCurrent = MusicUtils.AudioStatus(audio);
                     if(PlayStateCurrent != PlayState.get()) {
                         PlayState.set(PlayStateCurrent);
-                        holder.ibPlay.setImageResource(PlayStateCurrent == 1 ? R.drawable.voice_state_animation : (PlayStateCurrent == 2 ? R.drawable.voice_state_normal : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+                        holder.ibPlay.setImageResource(PlayStateCurrent == 1 ? R.drawable.voice_state_animation : (PlayStateCurrent == 2 ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
                         Utils.doAnimate(holder.ibPlay.getDrawable(), true);
                     }
                     return true;
@@ -679,7 +679,7 @@ public class AttachmentsViewBinder {
                     if (MusicUtils.isNowPlayingOrPreparingOrPaused(audio)) {
                         if(!Settings.get().other().isUse_stop_audio()) {
                             if(!MusicUtils.isNowPaused(audio))
-                                holder.ibPlay.setImageResource(R.drawable.voice_state_normal);
+                                holder.ibPlay.setImageResource(R.drawable.paused);
                             else {
                                 holder.ibPlay.setImageResource(R.drawable.voice_state_animation);
                                 Utils.doAnimate(holder.ibPlay.getDrawable(), true);
@@ -705,6 +705,7 @@ public class AttachmentsViewBinder {
                 }
 
                 holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.GONE);
+                holder.saved.setImageResource(R.drawable.downloaded);
                 holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
                 holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
@@ -748,6 +749,8 @@ public class AttachmentsViewBinder {
                                     AppPerms.requestReadWriteStoragePermission((Activity)mContext);
                                     return true;
                                 }
+                                holder.saved.setVisibility(View.VISIBLE);
+                                holder.saved.setImageResource(R.drawable.save);
                                 int ret = DownloadUtil.downloadTrack(mContext, audio, false);
                                 if(ret == 0)
                                     PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
@@ -760,8 +763,10 @@ public class AttachmentsViewBinder {
                                             .setNegativeButton(R.string.cancel, null)
                                             .show();
                                 }
-                                else
+                                else {
+                                    holder.saved.setVisibility(View.GONE);
                                     PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                                }
                                 return true;
                             case R.id.bitrate_item_audio:
                                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();

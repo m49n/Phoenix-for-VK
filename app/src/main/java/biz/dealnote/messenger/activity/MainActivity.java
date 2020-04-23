@@ -86,7 +86,6 @@ import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
 import biz.dealnote.messenger.fragment.LogsFragement;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
-import biz.dealnote.messenger.fragment.MiniPlayerFragment;
 import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
 import biz.dealnote.messenger.fragment.NewsfeedMentionsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
@@ -604,11 +603,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private AdditionalNavigationFragment getNavigationFragment() {
         FragmentManager fm = getSupportFragmentManager();
         return (AdditionalNavigationFragment) fm.findFragmentById(R.id.additional_navigation_menu);
-    }
-
-    private MiniPlayerFragment getMiniPlayerFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        return (MiniPlayerFragment) fm.findFragmentById(R.id.miniplayer);
     }
 
     private void openNavigationPage(@NonNull AbsMenuItem item) {

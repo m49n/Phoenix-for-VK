@@ -4,12 +4,14 @@
     <string name="app_name">Phoenix V</string>
 
     <string-array name="array_chat_background_names">
+        <item>Статик</item>
         <item>Печеньки</item>
         <item>Линии</item>
         <item>Руны</item>
     </string-array>
 
     <string-array name="array_chat_background_items" translatable="false">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -1269,4 +1271,9 @@
     <string name="expires">%1$s %2$s</string>
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
+    <string name="dialog_color_picker">Выбрать цвет</string>
+    <string name="press_color_to_apply">Нажмите на цвет для применения</string>
+    <string name="custom_chat_color">Цвет фона в чате</string>
+    <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
+    <string name="custom_message_color">Цвет исходящего сообщения</string>
 </resources>

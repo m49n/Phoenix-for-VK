@@ -12,7 +12,7 @@ Requirements:
   1) Android Studio 4 Beta 4 or higher
   2) Android SDK r28
   
-<b>Setting up enviroment:</b>
+<b>Setting up environment:</b>
 
   All project variables are setup now.
 
