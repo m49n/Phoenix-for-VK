@@ -319,10 +319,12 @@ public class PlaceFactory {
     }
 
     public static Place getEditCommentPlace(int accountId, Comment comment, Integer commemtId){
-        return new Place(Place.EDIT_COMMENT)
+        Place ret = new Place(Place.EDIT_COMMENT)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId)
-                .withParcelableExtra(Extra.COMMENT, comment)
-                .withIntExtra(Extra.COMMENT_ID, commemtId);
+                .withParcelableExtra(Extra.COMMENT, comment);
+        if(commemtId != null)
+            ret.withIntExtra(Extra.COMMENT_ID, commemtId);
+        return ret;
     }
 
     public static Place getAudiosPlace(int accountId, int ownerId){
@@ -333,8 +335,8 @@ public class PlaceFactory {
         return new Place(Place.MENTIONS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
 
-    public static Place getAudiosInAlbumPlace(int accountId, int ownerId, int album_id){
-        return new Place(Place.AUDIOS_IN_ALBUM).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId).withIntExtra(Extra.ID, album_id);
+    public static Place getAudiosInAlbumPlace(int accountId, int ownerId, int album_id, String access_key){
+        return new Place(Place.AUDIOS_IN_ALBUM).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId).withIntExtra(Extra.ID, album_id).withStringExtra(Extra.ACCESS_KEY, access_key);
     }
 
     public static Place SearchByAudioPlace(int accountId, int audio_ownerId, int audio_id){

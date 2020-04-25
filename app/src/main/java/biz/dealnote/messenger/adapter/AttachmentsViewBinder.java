@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
@@ -60,10 +61,12 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Text;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.model.WikiPage;
+import biz.dealnote.messenger.model.menu.Item;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.CurrentTheme;
@@ -554,11 +557,11 @@ public class AttachmentsViewBinder {
         }
     }
 
-    private void delete(final int accoutnId, Audio audio) {
+    private void deleteTrack(final int accoutnId, Audio audio) {
         audioListDisposable.add(mAudioInteractor.delete(accoutnId, audio.getId(), audio.getOwnerId()).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {}, ignore -> {}));
     }
 
-    private void add(int accountId, Audio audio) {
+    private void addTrack(int accountId, Audio audio) {
         audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {}, ignore -> {}));
     }
 
@@ -713,76 +716,93 @@ public class AttachmentsViewBinder {
                 holder.Track.setOnClickListener(view -> {
                     holder.cancelSelectionAnimation();
                     holder.startSomeAnimation();
-                    PopupMenu popup = new PopupMenu(mContext, holder.Track);
-                    popup.inflate(R.menu.audio_item_menu);
-                    popup.getMenu().findItem(R.id.get_lyrics_menu).setVisible(audio.getLyricsId() != 0);
-                    popup.setOnMenuItemClickListener(item1 -> {
-                        switch (item1.getItemId()) {
-                            case R.id.search_by_artist:
-                                PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
-                                return true;
-                            case R.id.copy_url:
-                                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("response", audio.getUrl());
-                                clipboard.setPrimaryClip(clip);
-                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
-                                return true;
-                            case R.id.get_lyrics_menu:
-                                get_lyrics(audio);
-                                return true;
-                            case R.id.get_recommendation_by_audio:
-                                PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), audio.getOwnerId(), audio.getId()).tryOpenWith(mContext);
-                                return true;
-                            case R.id.add_item_audio:
-                                boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
-                                if(myAudio) {
-                                    delete(Settings.get().accounts().getCurrent(), audio);
-                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
-                                }
-                                else {
-                                    add(Settings.get().accounts().getCurrent(), audio);
-                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
-                                }
-                                return true;
-                            case R.id.save_item_audio:
-                                if(!AppPerms.hasReadWriteStoragePermision(mContext)) {
-                                    AppPerms.requestReadWriteStoragePermission((Activity)mContext);
-                                    return true;
-                                }
-                                holder.saved.setVisibility(View.VISIBLE);
-                                holder.saved.setImageResource(R.drawable.save);
-                                int ret = DownloadUtil.downloadTrack(mContext, audio, false);
-                                if(ret == 0)
-                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
-                                else if(ret == 1) {
-                                    PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
-                                    new MaterialAlertDialogBuilder(mContext)
-                                            .setTitle(R.string.error)
-                                            .setMessage(R.string.audio_force_download)
-                                            .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(mContext, audio, true))
-                                            .setNegativeButton(R.string.cancel, null)
-                                            .show();
-                                }
-                                else {
-                                    holder.saved.setVisibility(View.GONE);
-                                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
-                                }
-                                return true;
-                            case R.id.bitrate_item_audio:
-                                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                                retriever.setDataSource(Audio.getMp3FromM3u8(audio.getUrl()), new HashMap<>());
-                                String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-                                PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
-                                return true;
-                            default:
-                                return false;
-                        }
-                    });
-                    if(audio.getOwnerId() == Settings.get().accounts().getCurrent())
-                        popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.delete);
+                    final List<Item> items = new ArrayList<>();
+                    if (audio.getOwnerId() != Settings.get().accounts().getCurrent())
+                        items.add(new Item(R.id.add_item_audio, new Text(R.string.action_add)).setIcon(R.drawable.list_add));
                     else
-                        popup.getMenu().findItem(R.id.add_item_audio).setTitle(R.string.action_add);
-                    popup.show();
+                        items.add(new Item(R.id.add_item_audio, new Text(R.string.delete)).setIcon(R.drawable.delete));
+                    items.add(new Item(R.id.share_button, new Text(R.string.share)).setIcon(R.drawable.share_variant));
+                    items.add(new Item(R.id.save_item_audio, new Text(R.string.save)).setIcon(R.drawable.save));
+                    if(audio.getAlbumId() != 0)
+                        items.add(new Item(R.id.open_album, new Text(R.string.open_album)).setIcon(R.drawable.audio_album));
+                    items.add(new Item(R.id.get_recommendation_by_audio, new Text(R.string.get_recommendation_by_audio)).setIcon(R.drawable.music_mic));
+                    if(audio.getLyricsId() != 0)
+                        items.add(new Item(R.id.get_lyrics_menu, new Text(R.string.get_lyrics_menu)).setIcon(R.drawable.lyric));
+                    items.add(new Item(R.id.bitrate_item_audio, new Text(R.string.get_bitrate)).setIcon(R.drawable.high_quality));
+                    items.add(new Item(R.id.search_by_artist, new Text(R.string.search_by_artist)).setIcon(R.drawable.magnify));
+                    items.add(new Item(R.id.copy_url, new Text(R.string.copy_url)).setIcon(R.drawable.content_copy));
+
+                    MenuAdapter mAdapter = new MenuAdapter(mContext, items);
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext)
+                            .setIcon(holder.ibPlay.getBackground().mutate())
+                            .setTitle(Utils.firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle())
+                            .setAdapter(mAdapter, (dialog, which) -> {
+                                switch(items.get(which).getKey())
+                                {
+                                    case R.id.share_button:
+                                        SendAttachmentsActivity.startForSendAttachments(mContext, Settings.get().accounts().getCurrent(), audio);
+                                        break;
+                                    case R.id.search_by_artist:
+                                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
+                                        break;
+                                    case R.id.get_lyrics_menu:
+                                        get_lyrics(audio);
+                                        break;
+                                    case R.id.get_recommendation_by_audio:
+                                        PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), audio.getOwnerId(), audio.getId()).tryOpenWith(mContext);
+                                        break;
+                                    case R.id.open_album:
+                                        PlaceFactory.getAudiosInAlbumPlace(Settings.get().accounts().getCurrent(), audio.getAlbum_owner_id(), audio.getAlbumId(), audio.getAlbum_access_key()).tryOpenWith(mContext);
+                                        break;
+                                    case R.id.copy_url:
+                                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData clip = ClipData.newPlainText("response", audio.getUrl());
+                                        clipboard.setPrimaryClip(clip);
+                                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
+                                        break;
+                                    case R.id.add_item_audio:
+                                        boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
+                                        if (myAudio) {
+                                            deleteTrack(Settings.get().accounts().getCurrent(), audio);
+                                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
+                                        } else {
+                                            addTrack(Settings.get().accounts().getCurrent(), audio);
+                                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
+                                        }
+                                        break;
+                                    case R.id.save_item_audio:
+                                        if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                                            AppPerms.requestReadWriteStoragePermission((Activity) mContext);
+                                            break;
+                                        }
+                                        holder.saved.setVisibility(View.VISIBLE);
+                                        holder.saved.setImageResource(R.drawable.save);
+                                        int ret = DownloadUtil.downloadTrack(mContext, audio, false);
+                                        if (ret == 0)
+                                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
+                                        else if (ret == 1) {
+                                            PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
+                                            new MaterialAlertDialogBuilder(mContext)
+                                                    .setTitle(R.string.error)
+                                                    .setMessage(R.string.audio_force_download)
+                                                    .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
+                                                    .setNegativeButton(R.string.cancel, null)
+                                                    .show();
+                                        } else {
+                                            holder.saved.setVisibility(View.GONE);
+                                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                                        }
+                                        break;
+                                    case R.id.bitrate_item_audio:
+                                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                                        retriever.setDataSource(Audio.getMp3FromM3u8(audio.getUrl()), new HashMap<>());
+                                        String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                                        PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                                        break;
+                                }
+                            })
+                            .setNegativeButton(R.string.button_cancel, null);
+                    builder.show();
                 });
 
                 root.setVisibility(View.VISIBLE);

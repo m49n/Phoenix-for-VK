@@ -51,7 +51,7 @@ public final class MusicUtils {
 
     public static boolean SuperCloseMiniPlayer = false;
 
-    public static ArrayList<String> CachedAudios = new ArrayList<>();
+    public static List<String> CachedAudios = new ArrayList<>();
 
     static {
         mConnectionMap = new WeakHashMap<>();
@@ -88,7 +88,7 @@ public final class MusicUtils {
         for(File u : file_list)
         {
             if(u.isFile())
-                CachedAudios.add(u.getAbsolutePath());
+                CachedAudios.add(u.getName());
         }
     }
 

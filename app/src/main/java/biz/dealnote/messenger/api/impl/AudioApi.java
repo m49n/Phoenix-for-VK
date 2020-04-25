@@ -89,20 +89,29 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId)
+    public Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId, String accessKey)
     {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
-                        .followPlaylist(playlist_id, ownerId)
+                        .followPlaylist(playlist_id, ownerId, accessKey)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
-    public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset) {
+    public Single<VKApiAudioPlaylist> getPlaylistById(int playlist_id, int ownerId, String accessKey)
+    {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getPlaylistById(playlist_id, ownerId, accessKey)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset, String accessKey) {
         if(Settings.get().other().isUse_old_vk_api())
-            return provideService(IAudioService.class).flatMap(service -> service.getOld(album_id, ownerId, offset, 100, "5.90").map(extractResponseWithErrorHandling()));
+            return provideService(IAudioService.class).flatMap(service -> service.getOld(album_id, ownerId, offset, 100, "5.90", accessKey).map(extractResponseWithErrorHandling()));
         else
-            return provideService(IAudioService.class).flatMap(service -> service.get(album_id, ownerId, offset, 100).map(extractResponseWithErrorHandling()));
+            return provideService(IAudioService.class).flatMap(service -> service.get(album_id, ownerId, offset, 100, accessKey).map(extractResponseWithErrorHandling()));
     }
 
     @Override

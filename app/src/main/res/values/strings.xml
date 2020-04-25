@@ -1206,6 +1206,7 @@
     <string name="phoenix_player">Phoenix Плеер</string>
     <string name="choose_theme_title">Тема приложения</string>
     <string name="album">Альбом:</string>
+    <string name="open_album">Открыть Альбом</string>
     <string name="acoustic">Акустика</string>
     <string name="by_artist">По исполнителю</string>
     <string name="auto_compete">Автоисправление</string>
@@ -1258,7 +1259,6 @@
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
     <string name="show_recent_dialogs">Последние чаты (перезапуск)"</string>
     <string name="show_audio_top">Популярные аудио"</string>
-    <string name="no_hide_mini_player">Не скрывать мини-плеер (перезапуск)"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
     <string name="show_audio_cover">Обложки аудио</string>
     <string name="do_upload_video">Загрузить видео из локального хранилища?</string>

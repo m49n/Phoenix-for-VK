@@ -27,7 +27,6 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.duration = root.has("duration") ? root.get("duration").getAsInt() : 0;
         dto.url = root.has("url") ? root.get("url").getAsString() : null;
         dto.lyrics_id = root.has("lyrics_id") ? root.get("lyrics_id").getAsInt() : 0;
-        dto.album_id = root.has("album_id") ? root.get("album_id").getAsInt() : 0;
         dto.genre_id = root.has("genre_id") ? root.get("genre_id").getAsInt() : 0;
         dto.access_key = root.has("access_key") ? root.get("access_key").getAsString() : null;
         dto.isHq = root.has("is_hq") && root.get("is_hq").getAsBoolean();
@@ -35,6 +34,9 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         if(root.has("album"))
         {
             JsonObject thmb = root.getAsJsonObject("album");
+            dto.album_id = thmb.has("id") ? thmb.get("id").getAsInt() : 0;
+            dto.album_owner_id = thmb.has("owner_id") ? thmb.get("owner_id").getAsInt() : 0;
+            dto.album_access_key = thmb.has("access_key") ? thmb.get("access_key").getAsString() : null;
             if(root.has("title"))
                 dto.album_title = thmb.get("title").getAsString();
             if(thmb.has("thumb")) {

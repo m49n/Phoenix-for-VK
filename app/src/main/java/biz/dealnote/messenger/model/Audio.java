@@ -30,6 +30,10 @@ public class Audio extends AbsModel implements Parcelable {
 
     private int albumId;
 
+    private int album_owner_id;
+
+    private String album_access_key;
+
     private int genre;
 
     private String accessKey;
@@ -64,6 +68,8 @@ public class Audio extends AbsModel implements Parcelable {
         url = in.readString();
         lyricsId = in.readInt();
         albumId = in.readInt();
+        album_owner_id = in.readInt();
+        album_access_key = in.readString();
         genre = in.readInt();
         accessKey = in.readString();
         deleted = in.readInt() != 0;
@@ -87,6 +93,8 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeString(url);
         dest.writeInt(lyricsId);
         dest.writeInt(albumId);
+        dest.writeInt(album_owner_id);
+        dest.writeString(album_access_key);
         dest.writeInt(genre);
         dest.writeString(accessKey);
         dest.writeInt(deleted ? 1 : 0);
@@ -251,6 +259,24 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setThumb_image_very_big(String thumb_image_very_big) {
         this.thumb_image_very_big = thumb_image_very_big;
+        return this;
+    }
+
+    public int getAlbum_owner_id() {
+        return album_owner_id;
+    }
+
+    public Audio setAlbum_owner_id(int album_owner_id) {
+        this.album_owner_id = album_owner_id;
+        return this;
+    }
+
+    public String getAlbum_access_key() {
+        return album_access_key;
+    }
+
+    public Audio setAlbum_access_key(String album_access_key) {
+        this.album_access_key = album_access_key;
         return this;
     }
 

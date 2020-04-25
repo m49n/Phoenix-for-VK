@@ -941,8 +941,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void hideMenu(boolean hide) {
-        if(!Settings.get().other().isNo_hide_mini_player())
-            MusicUtils.setMiniPlayerVisibility(!hide);
+        MusicUtils.setMiniPlayerVisibility(!hide);
         if (hide) {
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();
@@ -1088,11 +1087,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.AUDIOS_IN_ALBUM:
-                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getInt(Extra.ID), 1));
+                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getInt(Extra.ID), 1, args.getString(Extra.ACCESS_KEY)));
                 break;
 
             case Place.SEARCH_BY_AUDIO:
-                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getInt(Extra.ID), 2));
+                attachToFront(AudiosFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getInt(Extra.ID), 2, null));
                 break;
 
             case Place.VIDEO_ALBUM:

@@ -27,6 +27,7 @@ public class AudioPlaylistDtoAdapter extends AbsAdapter implements JsonDeseriali
         album.count = optInt(root, "count");
         album.owner_id = optInt(root, "owner_id");
         album.title = optString(root, "title");
+        album.access_key = optString(root, "access_key");
         album.description = optString(root, "description");
         album.update_time = optInt(root, "update_time");
         if(root.getAsJsonObject().has("photo"))

@@ -10,10 +10,6 @@
         layout="@layout/toolbar"
         tools:visibility="gone" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
             android:layout_width="match_parent"
@@ -47,6 +43,4 @@
                 app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
                 app:maxImageSize="30dp" />
         </RelativeLayout>
-
-    </FrameLayout>
 </LinearLayout>

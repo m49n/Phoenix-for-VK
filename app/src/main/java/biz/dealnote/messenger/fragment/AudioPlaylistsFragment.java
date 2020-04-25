@@ -137,7 +137,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     @Override
     public void onAlbumClick(int index, VKApiAudioPlaylist album)
     {
-        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), getPresenter().getOwner_id(), album.id).tryOpenWith(requireActivity());
+        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), getPresenter().getOwner_id(), album.id, album.access_key).tryOpenWith(requireActivity());
     }
     @Override
     public void onDelete(int index, VKApiAudioPlaylist album)

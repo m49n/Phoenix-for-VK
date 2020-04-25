@@ -137,7 +137,7 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
     public void onAdd(VKApiAudioPlaylist album)
     {
         final int accountId = super.getAccountId();
-        actualDataDisposable.add(fInteractor.followPlaylist(accountId, album.id, album.owner_id)
+        actualDataDisposable.add(fInteractor.followPlaylist(accountId, album.id, album.owner_id, album.access_key)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
                     getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));

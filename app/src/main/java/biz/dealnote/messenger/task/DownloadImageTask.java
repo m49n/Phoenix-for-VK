@@ -26,7 +26,6 @@ import biz.dealnote.messenger.api.HttpLogger;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.longpoll.AppNotificationChannels;
 import biz.dealnote.messenger.longpoll.NotificationHelper;
-import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,10 +60,10 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             if (lastExt!=-1){
                 String ext = this.file.substring(lastExt);
                 String file_temp = this.file.substring(0, lastExt);
-                this.file = file_temp + ("."+ AppTextUtils.getDateFromUnixTime(this.mContext, Calendar.getInstance().getTime().getTime())) + ext;
+                this.file = file_temp + ("."+ Calendar.getInstance().getTime().getTime() / 1000) + ext;
             }
             else
-                this.file += ("."+ AppTextUtils.getDateFromUnixTime(this.mContext, Calendar.getInstance().getTime().getTime()));
+                this.file += ("."+ Calendar.getInstance().getTime().getTime() / 1000);
         }
 
         this.filename = this.file;

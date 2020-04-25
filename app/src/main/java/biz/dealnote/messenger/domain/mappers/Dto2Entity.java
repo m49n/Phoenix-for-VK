@@ -772,6 +772,8 @@ public class Dto2Entity {
                 .setUrl(dto.url)
                 .setLyricsId(dto.lyrics_id)
                 .setAlbumId(dto.album_id)
+                .setAlbum_owner_id(dto.album_owner_id)
+                .setAlbum_access_key(dto.album_access_key)
                 .setGenre(dto.genre_id)
                 .setAccessKey(dto.access_key)
                 .setAlbum_title(dto.album_title)

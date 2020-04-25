@@ -118,7 +118,12 @@ object DownloadUtil
     @JvmStatic
     fun TrackIsDownloaded(audio: Audio): Boolean {
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
-        return MusicUtils.CachedAudios.contains(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.absolutePath + "/" + audioName)
+        for(i in  MusicUtils.CachedAudios)
+        {
+            if(i.equals(audioName, true))
+                return true;
+        }
+        return false
     }
 
     @Suppress("DEPRECATION")

@@ -59,8 +59,11 @@ public class CurrentTheme {
                 int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
                 return new ColorDrawable(color);
         }
-        if(Settings.get().other().isCustom_chat_color())
-            Utils.setColorFilter(ret, Settings.get().other().getColorChat());
+        if(Settings.get().other().isCustom_chat_color()) {
+            Drawable r1 = ret.mutate();
+            Utils.setColorFilter(r1, Settings.get().other().getColorChat());
+            return r1;
+        }
         return ret;
     }
 

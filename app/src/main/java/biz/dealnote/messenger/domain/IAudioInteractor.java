@@ -22,7 +22,7 @@ public interface IAudioInteractor {
 
     Completable sendBroadcast(int accountId, int audioOwnerId, int audioId, @Nullable Collection<Integer> targetIds);
 
-    Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset);
+    Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset, String accessKey);
 
     Single<List<Audio>> getById(List<IdPair> audios);
 
@@ -38,7 +38,9 @@ public interface IAudioInteractor {
 
     Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset);
 
-    Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId);
+    Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey);
+
+    Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey);
 
     Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId);
 }

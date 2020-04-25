@@ -662,9 +662,7 @@ class MusicPlaybackService : Service() {
             synchronized(this) {
                 return if (currentTrack == null) {
                     null
-                } else {
-                    if (AlbumTitle == null) currentTrack!!.albumId.toString() else AlbumTitle
-                }
+                } else AlbumTitle
             }
         }
 

@@ -64,6 +64,8 @@ public class AudioInteractor implements IAudioInteractor {
                             .setOwnerId(targetOwnerId)
                             .setAccessKey(orig.getAccessKey())
                             .setAlbumId(Objects.nonNull(albumId) ? albumId : 0)
+                            .setAlbum_owner_id(orig.getAlbum_owner_id())
+                            .setAlbum_access_key(orig.getAlbum_access_key())
                             .setArtist(orig.getArtist())
                             .setTitle(orig.getTitle())
                             .setUrl(orig.getUrl())
@@ -103,17 +105,19 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset) {
+    public Single<List<Audio>> get(int accountId, Integer album_id, int ownerId, int offset, String accessKey) {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .get(album_id, ownerId, offset).map(out-> {
+                .get(album_id, ownerId, offset, accessKey).map(out-> {
                     List<Audio> ret = new ArrayList<>();
                     for(int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
                             .setId(out.items.get(i).id)
                             .setOwnerId(out.items.get(i).owner_id)
                             .setAlbumId(out.items.get(i).album_id)
+                            .setAlbum_owner_id(out.items.get(i).album_owner_id)
+                            .setAlbum_access_key(out.items.get(i).album_access_key)
                             .setAccessKey(out.items.get(i).access_key)
                             .setArtist(out.items.get(i).artist)
                             .setTitle(out.items.get(i).title)
@@ -141,6 +145,8 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setId(out.get(i).id)
                                 .setOwnerId(out.get(i).owner_id)
                                 .setAlbumId(out.get(i).album_id)
+                                .setAlbum_owner_id(out.get(i).album_owner_id)
+                                .setAlbum_access_key(out.get(i).album_access_key)
                                 .setAccessKey(out.get(i).access_key)
                                 .setArtist(out.get(i).artist)
                                 .setTitle(out.get(i).title)
@@ -176,6 +182,8 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setId(out.get(i).id)
                                 .setOwnerId(out.get(i).owner_id)
                                 .setAlbumId(out.get(i).album_id)
+                                .setAlbum_owner_id(out.get(i).album_owner_id)
+                                .setAlbum_access_key(out.get(i).album_access_key)
                                 .setAccessKey(out.get(i).access_key)
                                 .setArtist(out.get(i).artist)
                                 .setTitle(out.get(i).title)
@@ -204,6 +212,8 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)
                                 .setAlbumId(out.items.get(i).album_id)
+                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
+                                .setAlbum_access_key(out.items.get(i).album_access_key)
                                 .setAccessKey(out.items.get(i).access_key)
                                 .setArtist(out.items.get(i).artist)
                                 .setTitle(out.items.get(i).title)
@@ -232,6 +242,8 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)
                                 .setAlbumId(out.items.get(i).album_id)
+                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
+                                .setAlbum_access_key(out.items.get(i).album_access_key)
                                 .setAccessKey(out.items.get(i).access_key)
                                 .setArtist(out.items.get(i).artist)
                                 .setTitle(out.items.get(i).title)
@@ -257,11 +269,20 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId)
+    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey)
     {
         return networker.vkDefault(accountId)
                 .audio()
-                .followPlaylist(playlist_id, ownerId)
+                .followPlaylist(playlist_id, ownerId, accessKey)
+                .map(resultId -> resultId);
+    }
+
+    @Override
+    public Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey)
+    {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getPlaylistById(playlist_id, ownerId, accessKey)
                 .map(resultId -> resultId);
     }
 
@@ -292,6 +313,8 @@ public class AudioInteractor implements IAudioInteractor {
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)
                                 .setAlbumId(out.items.get(i).album_id)
+                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
+                                .setAlbum_access_key(out.items.get(i).album_access_key)
                                 .setAccessKey(out.items.get(i).access_key)
                                 .setArtist(out.items.get(i).artist)
                                 .setTitle(out.items.get(i).title)

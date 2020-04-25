@@ -107,8 +107,8 @@ public class AudiosTabsFragment extends BaseFragment {
         if(option_menu == PLAYLISTS)
             return AudioPlaylistsFragment.newInstance(getAccountId(), ownerId);
         else {
-            AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0);
-            fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
+            AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0, null);
+            fragment.requireArguments().putBoolean(AudiosFragment.EXTRA_IN_TABS_CONTAINER, true);
             return fragment;
         }
     }

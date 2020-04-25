@@ -14,6 +14,10 @@
         android:title="@string/get_recommendation_by_audio" />
 
     <item
+        android:id="@+id/open_album"
+        android:title="@string/open_album" />
+
+    <item
         android:id="@+id/get_lyrics_menu"
         android:title="@string/get_lyrics_menu" />
 

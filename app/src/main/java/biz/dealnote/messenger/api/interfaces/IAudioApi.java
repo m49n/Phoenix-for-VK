@@ -36,7 +36,7 @@ public interface IAudioApi {
     Single<Integer> add(int audioId, int ownerId, Integer groupId, Integer album_id);
     @CheckResult
     Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerI,
-                                  Integer offset);
+                                  Integer offset, String accessKey);
 
     @CheckResult
     Single<List<VKApiAudio>> getPopular(Integer foreign,
@@ -46,7 +46,10 @@ public interface IAudioApi {
     Single<Integer> deletePlaylist(int playlist_id, int ownerId);
 
     @CheckResult
-    Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId);
+    Single<VKApiAudioPlaylist> followPlaylist(int playlist_id, int ownerId, String accessKey);
+
+    @CheckResult
+    Single<VKApiAudioPlaylist> getPlaylistById(int playlist_id, int ownerId, String accessKey);
 
     @CheckResult
     Single<Items<VKApiAudio>> getRecommendations(Integer audioOwnerId);

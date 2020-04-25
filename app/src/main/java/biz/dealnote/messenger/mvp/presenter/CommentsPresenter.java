@@ -692,6 +692,11 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
     }
 
     private void handleCommentAdded(Comment comment) {
+        callView(ICommentsView::showCommentSentToast);
+        fireRefreshClick();
+    }
+
+    private void handleCommentAddedNotFixable(Comment comment) {
         boolean canAdd;
 
         if (isNull(commentedState)) {

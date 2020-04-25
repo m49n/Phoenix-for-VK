@@ -51,6 +51,10 @@ public class VKApiAudio implements VKApiAttachment {
      */
     public int album_id;
 
+    public int album_owner_id;
+
+    public String album_access_key;
+
     /**
      * Genre ID. See the list of audio genres.
      */

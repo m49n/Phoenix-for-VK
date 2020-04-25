@@ -515,6 +515,8 @@ public class Entity2Model {
         return new Audio()
                 .setAccessKey(dbo.getAccessKey())
                 .setAlbumId(dbo.getAlbumId())
+                .setAlbum_owner_id(dbo.getAlbum_owner_id())
+                .setAlbum_access_key(dbo.getAlbum_access_key())
                 .setArtist(dbo.getArtist())
                 .setDeleted(dbo.isDeleted())
                 .setDuration(dbo.getDuration())

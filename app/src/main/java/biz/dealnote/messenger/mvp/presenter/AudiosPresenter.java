@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
@@ -38,8 +40,10 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private int isAlbum;
     private boolean LoadFromCache;
     private boolean iSSelectMode;
+    private List<VKApiAudioPlaylist> Curr;
+    private String accessKey;
 
-    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, int isAlbum, boolean iSSelectMode, @Nullable Bundle savedInstanceState) {
+    public AudiosPresenter(int accountId, int ownerId, int option_menu_id, int isAlbum, boolean iSSelectMode, String accessKey, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.audioInteractor = InteractorFactory.createAudioInteractor();
         this.audios = new ArrayList<>();
@@ -47,6 +51,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         this.option_menu_id = option_menu_id;
         this.isAlbum = isAlbum;
         this.iSSelectMode = iSSelectMode;
+        this.accessKey = accessKey;
     }
 
     public void LoadAudiosTool()
@@ -60,6 +65,14 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             } else
                 fireRefresh();
         }
+    }
+
+    private void loadedPlaylist(VKApiAudioPlaylist t)
+    {
+        List<VKApiAudioPlaylist> ret = new ArrayList<>(1);
+        ret.add(t);
+        Objects.requireNonNull(getView()).updatePlaylists(ret);
+        Curr = ret;
     }
 
     public boolean isMyAudio() {
@@ -100,7 +113,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void requestList(int offset, Integer album_id) {
         setLoadingNow(true);
-        audioListDisposable.add(audioInteractor.get(getAccountId(), album_id, ownerId, offset)
+        audioListDisposable.add(audioInteractor.get(getAccountId(), album_id, ownerId, offset, accessKey)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(offset == 0 ? this::onListReceived : this::onNextListReceived, this::onListGetError));
     }
@@ -247,19 +260,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         return ret;
     }
 
-    public void doAnimate(Audio audio)
-    {
-        if(audios != null && !audios.isEmpty() && audio != null) {
-            for(final Audio i : audios)
-            {
-                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
-                    i.setAnimationNow(true);
-                    break;
-                }
-            }
-        }
-    }
-
     public int getAudioPos(Audio audio)
     {
         if(audios != null && !audios.isEmpty() && audio != null) {
@@ -287,7 +287,32 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         else if (isAlbum == 0 || isAlbum == 2) {
             getRecommendations();
         }
-        else requestList(0, option_menu_id);
+        else {
+            if(isAlbum == 1) {
+                audioListDisposable.add(audioInteractor.getPlaylistById(getAccountId(), option_menu_id, ownerId, accessKey)
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                        .subscribe(this::loadedPlaylist, t -> showError(getView(), Utils.getCauseIfRuntime(t))));
+            }
+            requestList(0, option_menu_id);
+        }
+    }
+
+    public void onDelete(VKApiAudioPlaylist album)
+    {
+        final int accountId = super.getAccountId();
+        audioListDisposable.add(audioInteractor.deletePlaylist(accountId, album.id, album.owner_id)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
+                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
+    }
+
+    public void onAdd(VKApiAudioPlaylist album)
+    {
+        final int accountId = super.getAccountId();
+        audioListDisposable.add(audioInteractor.followPlaylist(accountId, album.id, album.owner_id, album.access_key)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
+                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
     }
 
     public void fireScrollToEnd() {
@@ -300,6 +325,8 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     public void onGuiCreated(@NonNull IAudiosView view) {
         super.onGuiCreated(view);
         view.displayList(audios);
+        if(Curr != null)
+            Objects.requireNonNull(getView()).updatePlaylists(Curr);
     }
 
 }

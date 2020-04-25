@@ -82,7 +82,8 @@ public interface IAudioService {
     Single<BaseResponse<Items<VKApiAudio>>> get(@Field("album_id") Integer album_id,
                                                 @Field("owner_id") Integer ownerId,
                                                 @Field("offset") Integer offset,
-                                                @Field("count") Integer count);
+                                                @Field("count") Integer count,
+                                                @Field("access_key") String accessKey);
 
     //https://vk.com/dev/audio.get
     @FormUrlEncoded
@@ -91,7 +92,8 @@ public interface IAudioService {
                                                 @Field("owner_id") Integer ownerId,
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count,
-                                                @Field("v") String version );
+                                                @Field("v") String version,
+                                                   @Field("access_key") String accessKey);
 
     @FormUrlEncoded
     @POST("audio.getPopular")
@@ -147,7 +149,14 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.followPlaylist")
     Single<BaseResponse<VKApiAudioPlaylist>> followPlaylist(@Field("playlist_id") int playlist_id,
-                                                 @Field("owner_id") int ownerId);
+                                                 @Field("owner_id") int ownerId,
+                                                            @Field("access_key") String accessKey);
+
+    @FormUrlEncoded
+    @POST("audio.getPlaylistById")
+    Single<BaseResponse<VKApiAudioPlaylist>> getPlaylistById(@Field("playlist_id") int playlist_id,
+                                                            @Field("owner_id") int ownerId,
+                                                            @Field("access_key") String accessKey);
 
 
 }

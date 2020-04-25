@@ -33,4 +33,5 @@ public class VKApiAudioPlaylist {
     public String title;
     public String description;
     public String thumb_image;
+    public String access_key;
 }
