@@ -1,8 +1,10 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
@@ -42,8 +47,11 @@ import biz.dealnote.messenger.mvp.presenter.UserWallPresenter;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
+import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -63,6 +71,59 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
     private UserHeaderHolder mHeaderHolder;
     boolean NeedShowClBlk;
+
+    private String transform_owner(int owner_id)
+    {
+        if(owner_id < 0)
+            return "club" + Math.abs(owner_id);
+        else
+            return "id" + owner_id;
+    }
+
+    private void downloadAvatar(User user)
+    {
+        String dcim = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File dir = new File(dcim + "/" + Constants.PHOTOS_PATH);
+        if (!dir.isDirectory()) {
+            boolean created = dir.mkdirs();
+            if (!created) {
+                return;
+            }
+        }
+        else
+            dir.setLastModified(Calendar.getInstance().getTime().getTime());
+
+        if(user.getFullName() != null) {
+            File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
+            if (!dir_final.isDirectory()) {
+                boolean created = dir_final.mkdirs();
+                if (!created) {
+                    return;
+                }
+            }
+            else
+                dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
+            dir = dir_final;
+        }
+        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user.getId()) + ".profile." + Calendar.getInstance().getTime().getTime() / 1000 + ".jpg";
+        String url = user.getOriginalAvatar();
+        new InternalDownloader(requireActivity(), url, file, user).doDownload();
+    }
+
+    private final class InternalDownloader extends DownloadImageTask {
+        InternalDownloader(Context context, String url, String file, User user) {
+            super(context, url, file, "profile_" + user.getId(), true);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (Objects.isNull(s)) {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved);
+            } else {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
+            }
+        }
+    }
 
     @Override
     public void displayBaseUserInfo(User user) {
@@ -88,6 +149,11 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     .transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
+
+        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
+            downloadAvatar(user);
+            return true;
+        });
 
         Integer onlineIcon = ViewUtils.getOnlineIcon(true, user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
         if(!user.isOnline())

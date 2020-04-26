@@ -717,6 +717,7 @@ public class AttachmentsViewBinder {
                     holder.cancelSelectionAnimation();
                     holder.startSomeAnimation();
                     final List<Item> items = new ArrayList<>();
+                    items.add(new Item(R.id.btn_play_pause, new Text(R.string.play)).setIcon(R.drawable.play));
                     if (audio.getOwnerId() != Settings.get().accounts().getCurrent())
                         items.add(new Item(R.id.add_item_audio, new Text(R.string.action_add)).setIcon(R.drawable.list_add));
                     else
@@ -739,6 +740,10 @@ public class AttachmentsViewBinder {
                             .setAdapter(mAdapter, (dialog, which) -> {
                                 switch(items.get(which).getKey())
                                 {
+                                    case R.id.btn_play_pause:
+                                        mAttachmentsActionCallback.onAudioPlay(finalG, audios);
+                                        PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
+                                        break;
                                     case R.id.share_button:
                                         SendAttachmentsActivity.startForSendAttachments(mContext, Settings.get().accounts().getCurrent(), audio);
                                         break;

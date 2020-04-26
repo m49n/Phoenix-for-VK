@@ -24,6 +24,7 @@ public final class UserColumns implements BaseColumns {
     public static final String PHOTO_50 = "photo_50";
     public static final String PHOTO_100 = "photo_100";
     public static final String PHOTO_200 = "photo_200";
+    public static final String PHOTO_MAX = "photo_max";
     public static final String LAST_SEEN = "last_seen";
     public static final String PLATFORM = "platform";
     public static final String USER_STATUS = "user_status";
@@ -47,6 +48,7 @@ public final class UserColumns implements BaseColumns {
     public static final String FULL_PHOTO_50 = TABLENAME + "." + PHOTO_50;
     public static final String FULL_PHOTO_100 = TABLENAME + "." + PHOTO_100;
     public static final String FULL_PHOTO_200 = TABLENAME + "." + PHOTO_200;
+    public static final String FULL_PHOTO_MAX = TABLENAME + "." + PHOTO_MAX;
     public static final String FULL_LAST_SEEN = TABLENAME + "." + LAST_SEEN;
     public static final String FULL_PLATFORM = TABLENAME + "." + PLATFORM;
     public static final String FULL_USER_STATUS = TABLENAME + "." + USER_STATUS;

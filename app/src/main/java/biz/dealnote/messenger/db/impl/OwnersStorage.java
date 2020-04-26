@@ -115,6 +115,7 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
         cv.put(UserColumns.PHOTO_50, dbo.getPhoto50());
         cv.put(UserColumns.PHOTO_100, dbo.getPhoto100());
         cv.put(UserColumns.PHOTO_200, dbo.getPhoto200());
+        cv.put(UserColumns.PHOTO_MAX, dbo.getPhotoMax());
         cv.put(UserColumns.LAST_SEEN, dbo.getLastSeen());
         cv.put(UserColumns.PLATFORM, dbo.getPlatform());
         cv.put(UserColumns.USER_STATUS, dbo.getStatus());
@@ -550,6 +551,7 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
                 .setPhoto50(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_50)))
                 .setPhoto100(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_100)))
                 .setPhoto200(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_200)))
+                .setPhotoMax(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_MAX)))
                 .setLastSeen(cursor.getLong(cursor.getColumnIndex(UserColumns.LAST_SEEN)))
                 .setPlatform(cursor.getInt(cursor.getColumnIndex(UserColumns.PLATFORM)))
                 .setStatus(cursor.getString(cursor.getColumnIndex(UserColumns.USER_STATUS)))

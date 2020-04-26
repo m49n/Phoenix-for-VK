@@ -333,6 +333,7 @@ public class MessengerContentProvider extends ContentProvider {
         sUsersProjectionMap.put(UserColumns.PHOTO_50, UserColumns.FULL_PHOTO_50);
         sUsersProjectionMap.put(UserColumns.PHOTO_100, UserColumns.FULL_PHOTO_100);
         sUsersProjectionMap.put(UserColumns.PHOTO_200, UserColumns.FULL_PHOTO_200);
+        sUsersProjectionMap.put(UserColumns.PHOTO_MAX, UserColumns.FULL_PHOTO_MAX);
         sUsersProjectionMap.put(UserColumns.LAST_SEEN, UserColumns.FULL_LAST_SEEN);
         sUsersProjectionMap.put(UserColumns.PLATFORM, UserColumns.FULL_PLATFORM);
         sUsersProjectionMap.put(UserColumns.USER_STATUS, UserColumns.FULL_USER_STATUS);
@@ -356,6 +357,7 @@ public class MessengerContentProvider extends ContentProvider {
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_50, UserColumns.FULL_PHOTO_50 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_50);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_100, UserColumns.FULL_PHOTO_100 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_100);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_200, UserColumns.FULL_PHOTO_200 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_200);
+        sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_MAX, UserColumns.FULL_PHOTO_MAX + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_MAX);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_SEEN, UserColumns.FULL_LAST_SEEN + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_SEEN);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_PLATFORM, UserColumns.FULL_PLATFORM + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_PLATFORM);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS, UserColumns.FULL_USER_STATUS + " AS " + RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS);

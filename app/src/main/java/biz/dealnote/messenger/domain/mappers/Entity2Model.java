@@ -303,6 +303,7 @@ public class Entity2Model {
                 .setPhoto50(entity.getPhoto50())
                 .setPhoto100(entity.getPhoto100())
                 .setPhoto200(entity.getPhoto200())
+                .setPhotoMax(entity.getPhotoMax())
                 .setLastSeen(entity.getLastSeen())
                 .setPlatform(entity.getPlatform())
                 .setStatus(entity.getStatus())

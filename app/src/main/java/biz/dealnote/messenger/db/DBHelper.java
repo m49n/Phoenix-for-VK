@@ -661,6 +661,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + UserColumns.PHOTO_50 + "] TEXT, " +
                 " [" + UserColumns.PHOTO_100 + "] TEXT, " +
                 " [" + UserColumns.PHOTO_200 + "] TEXT, " +
+                " [" + UserColumns.PHOTO_MAX + "] TEXT, " +
                 " [" + UserColumns.LAST_SEEN + "] BIGINT, " +
                 " [" + UserColumns.PLATFORM + "] INTEGER, " +
                 " [" + UserColumns.USER_STATUS + "] TEXT, " +

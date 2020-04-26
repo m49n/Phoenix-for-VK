@@ -24,6 +24,8 @@ public class UserEntity {
 
     private String photo200;
 
+    private String photoMax;
+
     private long lastSeen;
 
     private int platform;
@@ -175,6 +177,15 @@ public class UserEntity {
 
     public UserEntity setFriendStatus(int friendStatus) {
         this.friendStatus = friendStatus;
+        return this;
+    }
+
+    public String getPhotoMax() {
+        return photoMax;
+    }
+
+    public UserEntity setPhotoMax(String photoMax) {
+        this.photoMax = photoMax;
         return this;
     }
 

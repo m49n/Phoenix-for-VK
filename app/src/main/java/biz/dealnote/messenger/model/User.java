@@ -31,6 +31,8 @@ public class User extends Owner implements Parcelable, Identificable {
 
     private String photo200;
 
+    private String photoMax;
+
     private long lastSeen;
 
     @UserPlatform
@@ -133,6 +135,15 @@ public class User extends Owner implements Parcelable, Identificable {
         return this;
     }
 
+    public String getPhotoMax() {
+        return photoMax;
+    }
+
+    public User setPhotoMax(String photoMax) {
+        this.photoMax = photoMax;
+        return this;
+    }
+
     public long getLastSeen() {
         return lastSeen;
     }
@@ -228,6 +239,7 @@ public class User extends Owner implements Parcelable, Identificable {
         photo50 = in.readString();
         photo100 = in.readString();
         photo200 = in.readString();
+        photoMax = in.readString();
         lastSeen = in.readLong();
         //noinspection ResourceType
         platform = in.readInt();
@@ -253,6 +265,7 @@ public class User extends Owner implements Parcelable, Identificable {
         dest.writeString(photo50);
         dest.writeString(photo100);
         dest.writeString(photo200);
+        dest.writeString(photoMax);
         dest.writeLong(lastSeen);
         dest.writeInt(platform);
         dest.writeString(status);
@@ -298,5 +311,10 @@ public class User extends Owner implements Parcelable, Identificable {
     @Override
     public String getMaxSquareAvatar() {
         return firstNonEmptyString(photo200, photo100, photo50);
+    }
+
+    @Override
+    public String getOriginalAvatar() {
+        return firstNonEmptyString(photoMax, photo200, photo100, photo50);
     }
 }

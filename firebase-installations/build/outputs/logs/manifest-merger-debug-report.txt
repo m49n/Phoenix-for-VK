@@ -1,0 +1,53 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+	package
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:3:5-48
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:1-15:12
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:4:5-79
+	android:name
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:4:22-76
+uses-permission#android.permission.INTERNET
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:5:22-64
+application
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:6:5-14:19
+service#com.google.firebase.components.ComponentDiscoveryService
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:7:9-13:19
+	android:exported
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:9:13-37
+	android:name
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:8:13-84
+meta-data#com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar
+ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:10:13-12:85
+	android:value
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:12:17-82
+	android:name
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml:11:17-127
+uses-sdk
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		ADDED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml
+		INJECTED from /home/umerov/Phoenix-for-VK-5.x/firebase-installations/src/main/AndroidManifest.xml

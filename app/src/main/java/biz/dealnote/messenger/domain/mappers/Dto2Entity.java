@@ -424,6 +424,7 @@ public class Dto2Entity {
                 .setPhoto50(user.photo_50)
                 .setPhoto100(user.photo_100)
                 .setPhoto200(user.photo_200)
+                .setPhotoMax(user.photo_max_orig)
                 .setLastSeen(user.last_seen)
                 .setPlatform(user.platform)
                 .setStatus(user.status)

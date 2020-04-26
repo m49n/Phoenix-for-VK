@@ -204,6 +204,7 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
                 .setPhoto50(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_50)))
                 .setPhoto100(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_100)))
                 .setPhoto200(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_200)))
+                .setPhotoMax(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_MAX)))
                 .setLastSeen(cursor.getLong(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_SEEN)))
                 .setPlatform(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PLATFORM)))
                 .setStatus(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS)))

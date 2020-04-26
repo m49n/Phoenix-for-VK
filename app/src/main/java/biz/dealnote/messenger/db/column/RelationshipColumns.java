@@ -40,6 +40,7 @@ public class RelationshipColumns implements BaseColumns {
     public static final String FOREIGN_SUBJECT_USER_PHOTO_50 = "subject_user_photo_50";
     public static final String FOREIGN_SUBJECT_USER_PHOTO_100 = "subject_user_photo_100";
     public static final String FOREIGN_SUBJECT_USER_PHOTO_200 = "subject_user_photo_200";
+    public static final String FOREIGN_SUBJECT_USER_PHOTO_MAX = "subject_user_photo_max";
     public static final String FOREIGN_SUBJECT_USER_LAST_SEEN = "subject_user_last_seen";
     public static final String FOREIGN_SUBJECT_USER_PLATFORM = "subject_user_platform";
     public static final String FOREIGN_SUBJECT_USER_STATUS = "subject_user_status";

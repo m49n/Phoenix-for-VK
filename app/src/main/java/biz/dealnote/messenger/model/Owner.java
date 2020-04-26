@@ -45,6 +45,10 @@ public abstract class Owner extends AbsModel implements Parcelable {
         throw new UnsupportedOperationException();
     }
 
+    public String getOriginalAvatar(){
+        throw new UnsupportedOperationException();
+    }
+
     public String get100photoOrSmaller(){
         throw new UnsupportedOperationException();
     }
