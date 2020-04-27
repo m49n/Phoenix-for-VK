@@ -505,7 +505,7 @@ public class AttachmentsViewBinder {
                         }
                         else
                             ivPhoto.setVisibility(View.GONE);
-                        Utils.setColorFilter(ivType.getBackground(), Color.parseColor("#00FFFFFF"));
+                        Utils.setColorFilter(ivType.getBackground(), Color.TRANSPARENT);
                         ivType.setImageResource(R.drawable.share_colored);
                         break;
                     case Types.POLL:

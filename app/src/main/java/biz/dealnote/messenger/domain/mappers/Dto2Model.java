@@ -647,6 +647,7 @@ public class Dto2Model {
                 .setTitle(link.title)
                 .setCaption(link.caption)
                 .setDescription(link.description)
+                .setPreviewPhoto(link.preview_photo)
                 .setPhoto(Objects.isNull(link.photo) ? null : transform(link.photo));
     }
 
@@ -840,7 +841,6 @@ public class Dto2Model {
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));
                     break;
                 case VKApiAttachment.TYPE_WIKI_PAGE:
-                case VKApiAttachment.TYPE_ARTICLE:
                     attachments.prepareWikiPages().add(transform((VKApiWikiPage) attachment));
                     break;
                 case VKApiAttachment.TYPE_POST:

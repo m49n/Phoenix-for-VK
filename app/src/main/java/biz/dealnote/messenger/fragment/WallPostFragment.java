@@ -31,6 +31,7 @@ import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.NewsFeedCriteria;
+import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
@@ -42,6 +43,7 @@ import biz.dealnote.messenger.mvp.view.IWallPostView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.CircleCounterButton;
@@ -383,6 +385,10 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
             @Override
             public void onOwnerClick(int ownerId) {
                 onOpenOwner(ownerId);
+            }
+            @Override
+            public void onOtherClick(String URL) {
+                LinkHelper.openUrl(requireActivity(), Settings.get().accounts().getCurrent(), URL);
             }
         });
 

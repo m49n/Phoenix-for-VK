@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
@@ -716,9 +717,9 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun goToConversationAttachments(accountId: Int, peerId: Int) {
-        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO)
+        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK)
 
-        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music))
+        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links))
 
         MaterialAlertDialogBuilder(requireActivity()).setItems(items) { _, which ->
             showConversationAttachments(accountId, peerId, types[which])
@@ -825,6 +826,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 .apply(requireActivity())
     }
 
+    @SuppressLint("ResourceType")
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
 
@@ -862,8 +864,16 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
+    override fun ScrollTo(position: Int) {
+        recyclerView?.scrollToPosition(position);
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.last_read -> {
+                recyclerView?.smoothScrollToPosition(presenter?.getConversation()!!.unreadCount)
+                return true
+            }
             R.id.action_refresh -> {
                 recyclerView?.scrollToPosition(0);
                 presenter?.reset_Hrono()

@@ -4,6 +4,8 @@ import android.os.SystemClock;
 
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.Random;
 
@@ -42,6 +44,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
     private static final Random RANDOM = new Random();
 
+    @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
@@ -79,6 +82,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         while (true) {
             response = chain.proceed(request);
             responseBody = response.body();
+            assert responseBody != null;
             responseBodyString = responseBody.string();
 
             VkReponse vkReponse = gson.fromJson(responseBodyString, VkReponse.class);
@@ -143,7 +147,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         }
 
         Response.Builder builder = response.newBuilder()
-                .body(ResponseBody.create(responseBody.contentType(), responseBodyString));
+                .body(ResponseBody.create(responseBodyString, responseBody.contentType()));
 
         return builder.build();
     }

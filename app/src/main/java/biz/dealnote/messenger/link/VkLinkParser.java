@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import biz.dealnote.messenger.link.types.AbsLink;
+import biz.dealnote.messenger.link.types.AudioPlaylistLink;
 import biz.dealnote.messenger.link.types.AudiosLink;
 import biz.dealnote.messenger.link.types.AwayLink;
 import biz.dealnote.messenger.link.types.BoardLink;
@@ -46,6 +47,7 @@ public class VkLinkParser {
     private static final Pattern PATTERN_WALL = Pattern.compile("vk\\.com/wall(-?\\d*)");
     private static final Pattern PATTERN_PHOTO = Pattern.compile("vk\\.com/(\\w)*(-)?(\\d)*(\\?z=)?photo(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_VIDEO = Pattern.compile("vk\\.com/video(-?\\d*)_(\\d*)"); //+
+    private static final Pattern PATTERN_PLAYLIST = Pattern.compile("vk\\.com/music/album/(-?\\d*)_(\\d*)_([^&]*)"); //+
     private static final Pattern PATTERN_DOC = Pattern.compile("vk\\.com/doc(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_TOPIC = Pattern.compile("vk\\.com/topic-(\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_FAVE = Pattern.compile("vk\\.com/fave");
@@ -205,6 +207,11 @@ public class VkLinkParser {
         }
 
         vkLink = parseVideo(string);
+        if (vkLink != null) {
+            return vkLink;
+        }
+
+        vkLink = parsePlaylist(string);
         if (vkLink != null) {
             return vkLink;
         }
@@ -417,6 +424,20 @@ public class VkLinkParser {
         try {
             if (matcher.find()) {
                 return new VideoLink(parseInt(matcher.group(1)), parseInt(matcher.group(2)));
+            }
+        } catch (NumberFormatException ignored) {
+
+        }
+
+        return null;
+    }
+
+    private static AbsLink parsePlaylist(String string) {
+        Matcher matcher = PATTERN_PLAYLIST.matcher(string);
+
+        try {
+            if (matcher.find()) {
+                return new AudioPlaylistLink(parseInt(matcher.group(1)), parseInt(matcher.group(2)), matcher.group(3));
             }
         } catch (NumberFormatException ignored) {
 

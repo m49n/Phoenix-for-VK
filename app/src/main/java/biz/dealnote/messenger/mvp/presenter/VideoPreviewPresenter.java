@@ -29,17 +29,20 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
     private final int videoId;
     private final int ownerId;
     private final String accessKey;
+    private final boolean isStory;
 
     private Video video;
 
     private final IVideosInteractor interactor;
 
-    public VideoPreviewPresenter(int accountId, int videoId, int ownerId, @Nullable Video video, @Nullable Bundle savedInstanceState) {
+    public VideoPreviewPresenter(int accountId, int videoId, int ownerId, @Nullable Video video, Integer Story, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.interactor = InteractorFactory.createVideosInteractor();
         this.videoId = videoId;
         this.ownerId = ownerId;
         this.accessKey = nonNull(video) ? video.getAccessKey() : null;
+
+        this.isStory = nonNull(Story) && Story == 1;
 
         if (Objects.isNull(savedInstanceState)) {
             this.video = video;
@@ -112,6 +115,12 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
 
         if(isNull(video)){
             callView(IVideoPreviewView::displayLoading);
+        }
+
+        if(isStory)
+        {
+            onActualInfoReceived(this.video);
+            return;
         }
 
         appendDisposable(interactor.getById(accountId, ownerId, videoId, accessKey, false)

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
@@ -91,6 +92,18 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
                 return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);
             else if(o.getAsJsonObject().has("video"))
                 return context.deserialize(o.getAsJsonObject().get("video"), VKApiVideo.class);
+        }
+        else if(VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)){
+            VKApiLink ret = new VKApiLink();
+            VKApiAudioPlaylist pl = context.deserialize(o, VKApiAudioPlaylist.class);
+            ret.url = "https://vk.com/music/album/" + pl.owner_id + "_" + pl.id;
+            if(pl.access_key != null)
+                ret.url += "_" + pl.access_key;
+            ret.caption = pl.title;
+            ret.description = pl.description;
+            ret.title = pl.title;
+            ret.preview_photo = pl.thumb_image;
+            return ret;
         }
 
         return null;

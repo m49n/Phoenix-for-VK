@@ -93,6 +93,21 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         return bundle;
     }
 
+    public static Bundle buildArgsStory(int accountId, int ownerId, int videoId, @Nullable Video video) {
+        Bundle bundle = new Bundle();
+
+        bundle.putInt(Extra.ACCOUNT_ID, accountId);
+        bundle.putInt(Extra.OWNER_ID, ownerId);
+        bundle.putInt(EXTRA_VIDEO_ID, videoId);
+        bundle.putInt(Extra.STORY, 1);
+
+        if (nonNull(video)) {
+            bundle.putParcelable(Extra.VIDEO, video);
+        }
+
+        return bundle;
+    }
+
     public static VideoPreviewFragment newInstance(int accountId, int ownerId, int videoId, @Nullable Video video) {
         return newInstance(buildArgs(accountId, ownerId, videoId, video));
     }
@@ -201,6 +216,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 requireArguments().getInt(EXTRA_VIDEO_ID),
                 requireArguments().getInt(Extra.OWNER_ID),
                 requireArguments().getParcelable(Extra.VIDEO),
+                requireArguments().getInt(Extra.STORY),
                 saveInstanceState
         );
     }

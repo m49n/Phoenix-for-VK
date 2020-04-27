@@ -127,4 +127,5 @@ public class Extra {
     public static final String SOURCE = "source";
     public static final String SOURCES = "sources";
     public static final String MANAGER = "manager";
+    public static final String STORY = "story";
 }

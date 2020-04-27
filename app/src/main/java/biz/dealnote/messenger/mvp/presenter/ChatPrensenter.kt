@@ -79,6 +79,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private var conversation: Conversation? = null
 
+    fun getConversation() : Conversation? {
+        return conversation;
+    }
+
     private var HronoType = false
 
     private var isLoadingFromDbNow = false

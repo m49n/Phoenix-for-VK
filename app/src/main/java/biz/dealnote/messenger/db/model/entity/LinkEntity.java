@@ -14,6 +14,8 @@ public class LinkEntity extends Entity {
 
     private String description;
 
+    private String preview_photo;
+
     private PhotoEntity photo;
 
     public LinkEntity(String url) {
@@ -57,6 +59,15 @@ public class LinkEntity extends Entity {
 
     public LinkEntity setPhoto(PhotoEntity photo) {
         this.photo = photo;
+        return this;
+    }
+
+    public String getPreviewPhoto() {
+        return preview_photo;
+    }
+
+    public LinkEntity setPreviewPhoto(String photo) {
+        this.preview_photo = photo;
         return this;
     }
 }

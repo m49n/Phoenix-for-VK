@@ -7,12 +7,12 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
-import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.WikiPage;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Objects;
 
@@ -58,7 +58,7 @@ public class DocLink {
         switch (type) {
             case Types.DOC:
                 Document doc = (Document) attachment;
-                return doc.getPreviewWithSize(PhotoSize.Y, true);
+                return doc.getPreviewWithSize(Settings.get().main().getPrefPreviewImageSize(), true);
 
             case Types.POST:
                 return ((Post) attachment).getAuthorPhoto();
@@ -66,9 +66,12 @@ public class DocLink {
             case Types.LINK:
                 Link link = (Link) attachment;
 
+                if(link.getPhoto() == null && link.getPreviewPhoto() != null)
+                    return link.getPreviewPhoto();
+
                 if(Objects.nonNull(link.getPhoto()) && Objects.nonNull(link.getPhoto().getSizes())){
                     PhotoSizes sizes = link.getPhoto().getSizes();
-                    return sizes.getUrlForSize(PhotoSize.Y, true);
+                    return sizes.getUrlForSize(Settings.get().main().getPrefPreviewImageSize(), true);
                 }
 
                 return null;

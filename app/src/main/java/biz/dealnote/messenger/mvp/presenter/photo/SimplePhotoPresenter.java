@@ -13,6 +13,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.util.RxUtils;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
+import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
 /**
@@ -22,10 +23,13 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 public class SimplePhotoPresenter extends PhotoPagerPresenter {
 
     private boolean mDataRefreshSuccessfull;
+    private boolean isHistory;
 
     public SimplePhotoPresenter(@NonNull ArrayList<Photo> photos, int index, boolean needToRefreshData,
-                                int accountId, @Nullable Bundle savedInstanceState) {
+                                int accountId, Integer History, @Nullable Bundle savedInstanceState) {
         super(photos, accountId, savedInstanceState);
+
+        isHistory = nonNull(History) && History == 1;
 
         if (savedInstanceState == null) {
             setCurrentIndex(index);
@@ -39,6 +43,8 @@ public class SimplePhotoPresenter extends PhotoPagerPresenter {
     }
 
     private void refreshData() {
+        if(isHistory)
+            return;
         final ArrayList<AccessIdPair> ids = new ArrayList<>(getData().size());
         final int accountId = super.getAccountId();
 

@@ -22,6 +22,7 @@ public abstract class AbsLink {
     public static final int WALL_COMMENT = 17;
     public static final int BOARD = 18;
     public static final int FEED_SEARCH = 19;
+    public static final int PLAYLIST = 20;
 
     public int type;
 

@@ -20,10 +20,12 @@ public class OwnerLinkSpanFactory {
 
     private static Pattern ownerPattern;
     private static Pattern topicCommentPattern;
+    private static Pattern linkPattern;
 
     static {
         ownerPattern = Pattern.compile("\\[(id|club)(\\d+)\\|([^]]+)]");
         topicCommentPattern = Pattern.compile("\\[(id|club)(\\d*):bp(-\\d*)_(\\d*)\\|([^]]+)]");
+        linkPattern = Pattern.compile("\\[(https:[^]]+)\\|([^]]+)]");
     }
 
     public static Spannable withSpans(String input, boolean owners, boolean topics, final ActionListener listener) {
@@ -33,8 +35,9 @@ public class OwnerLinkSpanFactory {
 
         List<OwnerLink> ownerLinks = owners ? findOwnersLinks(input) : null;
         List<TopicLink> topicLinks = topics ? findTopicLinks(input) : null;
+        List<OtherLink> othersLinks = findOthersLinks(input);
 
-        int count = Utils.safeCountOfMultiple(ownerLinks, topicLinks);
+        int count = Utils.safeCountOfMultiple(ownerLinks, topicLinks, othersLinks);
 
         if(count > 0){
             List<AbsInternalLink> all = new ArrayList<>(count);
@@ -45,6 +48,10 @@ public class OwnerLinkSpanFactory {
 
             if(nonEmpty(topicLinks)){
                 all.addAll(topicLinks);
+            }
+
+            if(nonEmpty(othersLinks)){
+                all.addAll(othersLinks);
             }
 
             Collections.sort(all, LINK_COMPARATOR);
@@ -63,6 +70,10 @@ public class OwnerLinkSpanFactory {
                             if(link instanceof OwnerLink){
                                 listener.onOwnerClick(((OwnerLink) link).ownerId);
                             }
+
+                            if(link instanceof OtherLink){
+                                listener.onOtherClick(((OtherLink) link).Link);
+                            }
                         }
                     }
                 };
@@ -79,6 +90,7 @@ public class OwnerLinkSpanFactory {
     public interface ActionListener {
         void onTopicLinkClicked(TopicLink link);
         void onOwnerClick(int ownerId);
+        void onOtherClick(String URL);
     }
 
     private static List<TopicLink> findTopicLinks(String input) {
@@ -120,6 +132,20 @@ public class OwnerLinkSpanFactory {
             int ownerId = Integer.parseInt(matcher.group(2)) * (club ? -1 : 1);
             String name = matcher.group(3);
             links.add(new OwnerLink(matcher.start(), matcher.end(), ownerId, name));
+        }
+
+        return links;
+    }
+
+    private static List<OtherLink> findOthersLinks(String input) {
+        List<OtherLink> links = null;
+
+        Matcher matcher = linkPattern.matcher(input);
+        while (matcher.find()) {
+            if (links == null) {
+                links = new ArrayList<>(1);
+            }
+            links.add(new OtherLink(matcher.start(), matcher.end(), matcher.group(1),  matcher.group(2)));
         }
 
         return links;

@@ -20,8 +20,10 @@ import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
@@ -155,6 +157,8 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     public void playAudio(Context context, int position) {
         MusicPlaybackService.startForPlayList(context, audios, position, false);
+        if(!Settings.get().other().isShow_mini_player())
+            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(context);
     }
 
     public void getListByGenre(boolean foreign, int genre) {

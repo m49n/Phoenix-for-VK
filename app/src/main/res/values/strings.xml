@@ -718,6 +718,7 @@
     <string name="audios_count">%1$d аудиозаписей</string>
     <string name="audios_pattern_count">аудиозаписей</string>
     <string name="documents_count">%1$d документов</string>
+    <string name="links_count">%1$d ссылок</string>
     <string name="cancel_invitation">Отклонить приглашение</string>
     <string name="invitation_has_been_declined">Приглашение было отклонено</string>
     <string name="request_canceled">Заявка отменена</string>
@@ -791,6 +792,7 @@
     <string name="copy_data">Копировать</string>
     <string name="forward">Переслать</string>
     <string name="answer">Ответить</string>
+    <string name="read">Прочесть</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
     <string name="updated_profile_photo_at">обновил фотографию на странице: %1$s</string>
@@ -1258,6 +1260,7 @@
     <string name="biometric">Приложите палец к сканеру"</string>
     <string name="biometric_not_support">Данная фича не поддерживается"</string>
     <string name="show_recent_dialogs">Последние чаты (перезапуск)"</string>
+    <string name="show_mini_player">Показывать Мини-Плеер (перезапуск)"</string>
     <string name="show_audio_top">Популярные аудио"</string>
     <string name="my_message_no_color">Отключить цвет в исходящих сообщениях"</string>
     <string name="show_audio_cover">Обложки аудио</string>
@@ -1276,4 +1279,5 @@
     <string name="custom_chat_color">Цвет фона в чате</string>
     <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
+    <string name="last_read">Последнее прочитанное</string>
 </resources>

@@ -18,6 +18,7 @@ import biz.dealnote.messenger.fragment.fave.FaveTabsFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.NewsFeedCriteria;
 import biz.dealnote.messenger.link.types.AbsLink;
+import biz.dealnote.messenger.link.types.AudioPlaylistLink;
 import biz.dealnote.messenger.link.types.AudiosLink;
 import biz.dealnote.messenger.link.types.BoardLink;
 import biz.dealnote.messenger.link.types.DialogLink;
@@ -63,6 +64,12 @@ public class LinkHelper {
 
     public static boolean openVKLink(Activity activity, int accountId, AbsLink link) {
         switch (link.type) {
+
+            case AbsLink.PLAYLIST:
+                AudioPlaylistLink plLink = (AudioPlaylistLink) link;
+                PlaceFactory.getAudiosInAlbumPlace(accountId, plLink.ownerId, plLink.playlistId, plLink.access_key).tryOpenWith(activity);
+                break;
+
             case AbsLink.WALL_COMMENT:
                 WallCommentLink wallCommentLink = (WallCommentLink) link;
 

@@ -173,7 +173,8 @@ public class Model2Entity {
                 .setPhoto(isNull(link.getPhoto()) ? null : buildPhotoEntity(link.getPhoto()))
                 .setTitle(link.getTitle())
                 .setDescription(link.getDescription())
-                .setCaption(link.getCaption());
+                .setCaption(link.getCaption())
+                .setPreviewPhoto(link.getPreviewPhoto());
     }
 
     public static PostEntity buildPostDbo(Post post){

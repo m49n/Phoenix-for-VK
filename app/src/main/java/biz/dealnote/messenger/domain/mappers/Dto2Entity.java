@@ -894,6 +894,7 @@ public class Dto2Entity {
                 .setCaption(link.caption)
                 .setDescription(link.description)
                 .setTitle(link.title)
+                .setPreviewPhoto(link.preview_photo)
                 .setPhoto(nonNull(link.photo) ? mapPhoto(link.photo) : null);
     }
 

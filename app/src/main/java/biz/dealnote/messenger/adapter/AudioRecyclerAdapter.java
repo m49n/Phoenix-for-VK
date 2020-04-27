@@ -240,7 +240,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                                 case R.id.btn_play_pause:
                                     if (mClickListener != null) {
                                         mClickListener.onClick(position, item);
-                                        PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
+                                        if(Settings.get().other().isShow_mini_player())
+                                            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
                                     }
                                     break;
                                 case R.id.share_button:

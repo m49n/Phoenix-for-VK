@@ -17,6 +17,7 @@ import biz.dealnote.messenger.model.SaveMessageBuilder;
 public class QuickReplyService extends IntentService {
 
     public static final String ACTION_ADD_MESSAGE = "SendService.ACTION_ADD_MESSAGE";
+    public static final String ACTION_MARK_AS_READ = "SendService.ACTION_MARK_AS_READ";
 
     public QuickReplyService() {
         super(QuickReplyService.class.getName());
@@ -34,6 +35,12 @@ public class QuickReplyService extends IntentService {
                 addMessage(accountId, peerId, body == null ? null : body.toString());
             }
         }
+        else if (intent != null && ACTION_MARK_AS_READ.equals(intent.getAction()) && intent.getExtras() != null) {
+            int accountId = intent.getExtras().getInt(Extra.ACCOUNT_ID);
+            int peerId = intent.getExtras().getInt(Extra.PEER_ID);
+            int msgId = intent.getExtras().getInt(Extra.MESSAGE_ID);
+            Throwable ret = Repository.INSTANCE.getMessages().markAsRead(accountId, peerId, msgId).blockingGet();
+        }
     }
 
     private void addMessage(int accountId, int peerId, String body) {
@@ -50,6 +57,15 @@ public class QuickReplyService extends IntentService {
         intent.setAction(ACTION_ADD_MESSAGE);
         intent.putExtra(Extra.ACCOUNT_ID, accountId);
         intent.putExtra(Extra.PEER_ID, peerId);
+        return intent;
+    }
+
+    public static Intent intentForReadMessage(Context context, int accountId, int peerId, int msgId) {
+        Intent intent = new Intent(context, QuickReplyService.class);
+        intent.setAction(ACTION_MARK_AS_READ);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE_ID, msgId);
         return intent;
     }
 }

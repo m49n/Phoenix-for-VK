@@ -95,13 +95,21 @@ public class NotificationHelper {
                 .setLabel(context.getResources().getString(R.string.reply))
                 .build();
 
+        Intent ReadIntent = QuickReplyService.intentForReadMessage(context, accountId, peerId, mid);
+
         Intent directIntent = QuickReplyService.intentForAddMessage(context, accountId, peerId);
+        PendingIntent ReadPendingIntent = PendingIntent.getService(context, mid, ReadIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent directPendingIntent = PendingIntent.getService(context, mid, directIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action actionDirectReply = new NotificationCompat.Action.Builder
                 (/*may be missing in some cases*/ R.drawable.reply,
                         context.getResources().getString(R.string.reply), directPendingIntent)
                 .addRemoteInput(remoteInput)
+                .build();
+
+        NotificationCompat.Action actionRead = new NotificationCompat.Action.Builder
+                (/*may be missing in some cases*/ R.drawable.share,
+                        context.getResources().getString(R.string.read), ReadPendingIntent)
                 .build();
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -119,8 +127,11 @@ public class NotificationHelper {
             builder.addAction(actionDirectReply);
         }
 
+        builder.addAction(actionRead);
+
         //Для часов игнорирует все остальные action, тем самым убирает QuickReply
         builder.extend(new NotificationCompat.WearableExtender().addAction(actionDirectReply));
+        builder.extend(new NotificationCompat.WearableExtender().addAction(actionRead));
 
         Notification notification = builder.build();
 

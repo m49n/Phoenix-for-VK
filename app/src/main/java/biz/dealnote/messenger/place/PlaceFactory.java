@@ -197,6 +197,11 @@ public class PlaceFactory {
                 .setArguments(PhotoPagerFragment.buildArgsForSimpleGallery(accountId, position, photos, needRefresh));
     }
 
+    public static Place getSimpleGalleryHistoryPlace(int accountId, ArrayList<Photo> photos, int position, boolean needRefresh){
+        return new Place(Place.SIMPLE_PHOTO_GALLERY)
+                .setArguments(PhotoPagerFragment.buildArgsForSimpleGalleryHistory(accountId, position, photos, needRefresh));
+    }
+
     public static Place getFavePhotosGallery(int accountId, ArrayList<Photo> photos, int position){
         return new Place(Place.FAVE_PHOTOS_GALLERY)
                 .setArguments(PhotoPagerFragment.buildArgsForFave(accountId, photos, position));
@@ -359,6 +364,11 @@ public class PlaceFactory {
     public static Place getVideoPreviewPlace(int accountId, @NonNull Video video){
         return new Place(Place.VIDEO_PREVIEW)
                 .setArguments(VideoPreviewFragment.buildArgs(accountId, video.getOwnerId(), video.getId(), video));
+    }
+
+    public static Place getHistoryVideoPreviewPlace(int accountId, @NonNull Video video){
+        return new Place(Place.VIDEO_PREVIEW)
+                .setArguments(VideoPreviewFragment.buildArgsStory(accountId, video.getOwnerId(), video.getId(), video));
     }
 
     public static Place getVideoPreviewPlace(int accountId, int ownerId, int videoId, @Nullable Video video){

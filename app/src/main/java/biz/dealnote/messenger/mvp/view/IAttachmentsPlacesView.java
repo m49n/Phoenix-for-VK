@@ -33,6 +33,8 @@ public interface IAttachmentsPlacesView {
 
     void openSimplePhotoGallery(int accountId, @NonNull ArrayList<Photo> photos, int index, boolean needUpdate);
 
+    void openSimplePhotoGalleryHistory(int accountId, @NonNull ArrayList<Photo> photos, int index, boolean needUpdate);
+
     void openPost(int accountId, @NonNull Post post);
 
     void openDocPreview(int accountId, @NonNull Document document);
@@ -44,6 +46,8 @@ public interface IAttachmentsPlacesView {
     void playAudioList(int accountId, int position, @NonNull ArrayList<Audio> apiAudio);
 
     void openVideo(int accountId, @NonNull Video apiVideo);
+
+    void openHistoryVideo(int accountId, @NonNull Video apiVideo);
 
     void openPoll(int accoountId, @NonNull Poll apiPoll);
 

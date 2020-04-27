@@ -32,6 +32,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.player.IAudioPlayerService;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Optional;
@@ -259,6 +260,8 @@ public final class MusicUtils {
     }
 
     public static boolean getMiniPlayerVisibility() {
+        if(!Settings.get().other().isShow_mini_player())
+            return false;
         try {
             if (mService != null) {
                 return mService.getMiniplayerVisibility();

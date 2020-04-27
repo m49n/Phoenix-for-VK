@@ -34,6 +34,8 @@ public class VKApiLink implements VKApiAttachment {
     /* адрес страницы для предпросмотра содержимого страницы. */
     public String preview_url;
 
+    public String preview_photo;
+
     public String caption;
 
     public VKApiLink() {

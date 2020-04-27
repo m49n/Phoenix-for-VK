@@ -19,6 +19,8 @@ public class Link extends AbsModel implements Parcelable {
 
     private Photo photo;
 
+    private String preview_photo;
+
     public Link(){
 
     }
@@ -29,6 +31,7 @@ public class Link extends AbsModel implements Parcelable {
         title = in.readString();
         caption = in.readString();
         description = in.readString();
+        preview_photo = in.readString();
         photo = in.readParcelable(Photo.class.getClassLoader());
     }
 
@@ -39,6 +42,7 @@ public class Link extends AbsModel implements Parcelable {
         dest.writeString(title);
         dest.writeString(caption);
         dest.writeString(description);
+        dest.writeString(preview_photo);
         dest.writeParcelable(photo, flags);
     }
 
@@ -96,6 +100,15 @@ public class Link extends AbsModel implements Parcelable {
 
     public Link setPhoto(Photo photo) {
         this.photo = photo;
+        return this;
+    }
+
+    public String getPreviewPhoto() {
+        return preview_photo;
+    }
+
+    public Link setPreviewPhoto(String photo) {
+        this.preview_photo = photo;
         return this;
     }
 

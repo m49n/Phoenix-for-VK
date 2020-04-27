@@ -155,6 +155,13 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="show_mini_player"
+            android:summary="@string/show_mini_player"
+            android:title="@string/show_mini_player"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="enable_photo_advanced"
             android:summary="@string/enable_photo_advanced"
             android:title="@string/enable_photo_advanced"

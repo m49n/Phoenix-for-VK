@@ -530,9 +530,10 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     public void fireReport() {
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(context);
         alert.setTitle(R.string.report);
-        CharSequence[] items = {"porn", "spam", "insult", "advertisеment"};
+        CharSequence[] values = {"porn", "spam", "insult", "advertisеment"};
+        CharSequence[] items = {"Порнография", "Спам, Мошенничество", "Оскорбительное поведение", "Рекламная страница"};
         alert.setItems(items, (dialog, item) -> {
-            String report = items[item].toString();
+            String report = values[item].toString();
             appendDisposable(ownersRepository.report(getAccountId(), getOwnerId(), report, null)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(p -> {

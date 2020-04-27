@@ -91,6 +91,8 @@ public interface ISettings {
 
         boolean isUse_stop_audio();
 
+        boolean isShow_mini_player();
+
         boolean isEnable_Photo_advanced();
 
         boolean isEnable_show_recent_dialogs();

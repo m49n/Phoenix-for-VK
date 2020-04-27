@@ -170,6 +170,12 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }
+
+    @Override
+    public boolean isShow_mini_player() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_mini_player", true);
+    }
+
     @Override
     public boolean isEnable_Photo_advanced() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_photo_advanced", true);

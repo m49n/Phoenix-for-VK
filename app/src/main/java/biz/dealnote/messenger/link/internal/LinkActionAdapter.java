@@ -11,4 +11,9 @@ public class LinkActionAdapter implements OwnerLinkSpanFactory.ActionListener {
     public void onOwnerClick(int ownerId) {
 
     }
+
+    @Override
+    public void onOtherClick(String URL){
+
+    }
 }

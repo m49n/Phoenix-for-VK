@@ -28,6 +28,7 @@ import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
@@ -133,6 +134,8 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     @Override
     public void onClick(int position, Audio audio) {
         MusicPlaybackService.startForPlayList(requireActivity(), mData, position, false);
+        if(!Settings.get().other().isShow_mini_player())
+            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 
     @Override

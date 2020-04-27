@@ -34,6 +34,7 @@ import biz.dealnote.messenger.mvp.view.IAttachmentsPlacesView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IMvpView;
@@ -129,6 +130,11 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
+    public void openSimplePhotoGalleryHistory(int accountId, @NonNull ArrayList<Photo> photos, int index, boolean needUpdate) {
+        PlaceFactory.getSimpleGalleryHistoryPlace(accountId, photos, index, true).tryOpenWith(requireActivity());
+    }
+
+    @Override
     public void openPost(int accountId, @NonNull Post post) {
         PlaceFactory.getPostPreviewPlace(accountId, post.getVkid(), post.getOwnerId(), post).tryOpenWith(requireActivity());
     }
@@ -151,11 +157,18 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void playAudioList(int accountId, int position, @NonNull ArrayList<Audio> apiAudio) {
         MusicPlaybackService.startForPlayList(requireActivity(), apiAudio, position, false);
+        if(!Settings.get().other().isShow_mini_player())
+            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 
     @Override
     public void openVideo(int accountId, @NonNull Video apiVideo) {
         PlaceFactory.getVideoPreviewPlace(accountId, apiVideo).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void openHistoryVideo(int accountId, @NonNull Video apiVideo) {
+        PlaceFactory.getHistoryVideoPreviewPlace(accountId, apiVideo).tryOpenWith(requireActivity());
     }
 
     @Override

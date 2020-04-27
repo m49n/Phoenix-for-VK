@@ -67,7 +67,7 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA448AFF</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="my_messages_bubble_color">#D490BDFF</item>
+        <item name="my_messages_bubble_color">#D4BAD2F6</item>
     </style>
 
     <style name="App.DayNight.BlueRed" parent="App.DayNight">

@@ -651,6 +651,7 @@ public class Entity2Model {
                 .setTitle(dbo.getTitle())
                 .setCaption(dbo.getCaption())
                 .setDescription(dbo.getDescription())
+                .setPreviewPhoto(dbo.getPreviewPhoto())
                 .setPhoto(nonNull(dbo.getPhoto()) ? map(dbo.getPhoto()) : null);
     }
 

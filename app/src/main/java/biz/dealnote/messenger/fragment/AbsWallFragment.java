@@ -154,7 +154,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
         mStoryAdapter.setListener((item, pos) -> {
             if(item.getVideo() != null)
-                openVideo(Settings.get().accounts().getCurrent(), item.getVideo());
+                openHistoryVideo(Settings.get().accounts().getCurrent(), item.getVideo());
             else if(item.getPhoto() != null) {
                 ArrayList<Story> photos_story = new ArrayList<>();
                 ArrayList<Photo> tmp = new ArrayList<>();
@@ -168,7 +168,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                         tmp.add(i.getPhoto());
                 }
                 int indx = photos_story.indexOf(item);
-                openSimplePhotoGallery(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
+                openSimplePhotoGalleryHistory(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
             }
         });
         headerStoryRecyclerView.setAdapter(mStoryAdapter);

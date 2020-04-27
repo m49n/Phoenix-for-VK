@@ -29,6 +29,9 @@ public class ConversationFragmentFactory {
             case VKApiAttachment.TYPE_AUDIO:
                 fragment = new ConversationAudiosFragment();
                 break;
+            case VKApiAttachment.TYPE_LINK:
+                fragment = new ConversationLinksFragment();
+                break;
         }
 
         if(fragment != null){

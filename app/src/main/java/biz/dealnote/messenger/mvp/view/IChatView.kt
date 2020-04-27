@@ -67,4 +67,5 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun startDocSelection(accountId: Int, ownerId: Int)
     fun startCamera(fileUri: Uri)
     fun showDeleteForAllDialog(ids: ArrayList<Int>)
+    fun ScrollTo(position: Int)
 }

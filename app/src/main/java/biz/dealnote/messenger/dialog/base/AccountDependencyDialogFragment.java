@@ -109,7 +109,8 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onAudioPlay(int position, @NonNull ArrayList<Audio> audios) {
         MusicPlaybackService.startForPlayList(requireActivity(), audios, position, false);
-        //PlaceFactory.getPlayerPlace(getAccountId()).tryOpenWith(requireActivity());
+        if(!Settings.get().other().isShow_mini_player())
+            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 
     @Override
