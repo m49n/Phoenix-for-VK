@@ -48,6 +48,7 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WallAdapter mAdapter;
     private TextView mEmpty;
+    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -174,5 +175,14 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
     @Override
     public IPresenterFactory<FavePostsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FavePostsPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!isRequestLast) {
+            isRequestLast = true;
+            getPresenter().LoadTool();
+        }
     }
 }

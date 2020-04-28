@@ -102,7 +102,7 @@ public class NotificationHelper {
         PendingIntent directPendingIntent = PendingIntent.getService(context, mid, directIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action actionDirectReply = new NotificationCompat.Action.Builder
-                (/*may be missing in some cases*/ R.drawable.reply,
+                (/*may be missing in some cases*/ R.drawable.view,
                         context.getResources().getString(R.string.reply), directPendingIntent)
                 .addRemoteInput(remoteInput)
                 .build();
@@ -130,8 +130,13 @@ public class NotificationHelper {
         builder.addAction(actionRead);
 
         //Для часов игнорирует все остальные action, тем самым убирает QuickReply
-        builder.extend(new NotificationCompat.WearableExtender().addAction(actionDirectReply));
-        builder.extend(new NotificationCompat.WearableExtender().addAction(actionRead));
+
+        NotificationCompat.WearableExtender War = new NotificationCompat.WearableExtender();
+        War.addAction(actionDirectReply);
+        War.addAction(actionRead);
+        War.setStartScrollBottom(true);
+
+        builder.extend(War);
 
         Notification notification = builder.build();
 

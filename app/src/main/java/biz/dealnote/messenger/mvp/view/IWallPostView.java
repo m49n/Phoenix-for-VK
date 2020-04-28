@@ -36,6 +36,8 @@ public interface IWallPostView extends IAttachmentsPlacesView, IAccountDependenc
 
     void copyLinkToClipboard(String link);
 
+    void showSuccessToast();
+
     void copyTextToClipboard(String text);
 
     void displayDefaultToolbaSubitle();

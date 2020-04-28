@@ -39,6 +39,10 @@ public class FaveLinksPresenter extends AccountDependencyPresenter<IFaveLinksVie
         this.faveInteractor = InteractorFactory.createFaveInteractor();
 
         loadCachedData();
+    }
+
+    public void LoadTool()
+    {
         loadActual(0);
     }
 

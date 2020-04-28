@@ -28,11 +28,11 @@ public interface IFaveInteractor {
 
     Single<List<Video>> getVideos(int accountId, int count, int offset);
 
-    Single<List<FavePage>> getCachedPages(int accountId);
+    Single<List<FavePage>> getCachedPages(int accountId, boolean isUser);
 
-    Single<EndlessData<FavePage>> getPages(int accountId, int count, int offset);
+    Single<EndlessData<FavePage>> getPages(int accountId, int count, int offset, boolean isUser);
 
-    Completable removePage(int accountId, int ownerId);
+    Completable removePage(int accountId, int ownerId, boolean isUser);
 
     Single<List<FaveLink>> getCachedLinks(int accountId);
 
@@ -41,4 +41,8 @@ public interface IFaveInteractor {
     Completable removeLink(int accountId, String id);
 
     Completable addPage(int accountId, int ownerId);
+
+    Completable addVideo(int accountId, Integer owner_id, Integer id, String access_key);
+
+    Completable addPost(int accountId, Integer owner_id, Integer id, String access_key);
 }

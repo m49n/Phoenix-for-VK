@@ -40,6 +40,10 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
         this.faveInteractor = InteractorFactory.createFaveInteractor();
 
         loadAllCachedData();
+    }
+
+    public void LoadTool()
+    {
         requestAtLast();
     }
 

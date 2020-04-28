@@ -37,6 +37,10 @@ public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosV
         mVideos = new ArrayList<>();
 
         loadCachedData();
+    }
+
+    public void LoadTool()
+    {
         requestAtLast();
     }
 

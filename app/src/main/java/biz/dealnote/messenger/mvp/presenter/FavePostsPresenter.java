@@ -49,6 +49,10 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
                 .subscribe(this::onPostUpdate));
 
         loadCachedData();
+    }
+
+    public void LoadTool()
+    {
         requestActual(0);
     }
 

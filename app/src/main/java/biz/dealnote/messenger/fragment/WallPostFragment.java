@@ -200,6 +200,10 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
                 resolveTextSelection();
                 return true;
 
+            case R.id.add_to_bookmarks:
+                getPresenter().fireAddBookmark();
+                return true;
+
             case R.id.edit_post:
                 getPresenter().firePostEditClick();
                 return true;
@@ -210,6 +214,11 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showSuccessToast() {
+        Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
     }
 
     @Override

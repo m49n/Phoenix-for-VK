@@ -22,6 +22,7 @@ import biz.dealnote.messenger.api.adapters.CommentDtoAdapter;
 import biz.dealnote.messenger.api.adapters.CommunityDtoAdapter;
 import biz.dealnote.messenger.api.adapters.CustomCommentsResponseAdapter;
 import biz.dealnote.messenger.api.adapters.DocsEntryDtoAdapter;
+import biz.dealnote.messenger.api.adapters.FaveLinkDtoAdapter;
 import biz.dealnote.messenger.api.adapters.FeedbackDtoAdapter;
 import biz.dealnote.messenger.api.adapters.FeedbackUserArrayDtoAdapter;
 import biz.dealnote.messenger.api.adapters.GroupSettingsAdapter;
@@ -43,6 +44,7 @@ import biz.dealnote.messenger.api.adapters.UserDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoAlbumDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoDtoAdapter;
 import biz.dealnote.messenger.api.model.ChatUserDto;
+import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.GroupSettingsDto;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
@@ -125,6 +127,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(CustomCommentsResponse.class, new CustomCommentsResponseAdapter())
             .registerTypeAdapter(VKApiAudioPlaylist.class, new AudioPlaylistDtoAdapter())
             .registerTypeAdapter(VKApiStory.class, new StoryDtoAdapter())
+            .registerTypeAdapter(FaveLinkDto.class, new FaveLinkDtoAdapter())
             .create();
 
     private static final GsonConverterFactory GSON_CONVERTER_FACTORY = GsonConverterFactory.create(VKGSON);

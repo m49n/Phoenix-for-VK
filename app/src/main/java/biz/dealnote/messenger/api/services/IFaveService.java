@@ -3,7 +3,7 @@ package biz.dealnote.messenger.api.services;
 import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
-import biz.dealnote.messenger.api.model.VKApiVideo;
+import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
 import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.api.model.response.FavePostsResponse;
@@ -20,17 +20,34 @@ public interface IFaveService {
 
     @FormUrlEncoded
     @POST("fave.getPages")
-    Single<BaseResponse<Items<FavePageResponse>>> getUsers(@Field("offset") Integer offset,
+    Single<BaseResponse<Items<FavePageResponse>>> getPages(@Field("offset") Integer offset,
                                                            @Field("count") Integer count,
                                                            @Field("type") String type,
                                                            @Field("fields") String fields);
 
     @FormUrlEncoded
-    @POST("fave.getPages")
-    Single<BaseResponse<Items<FavePageResponse>>> getGroups(@Field("offset") Integer offset,
+    @POST("fave.get")
+    Single<BaseResponse<Items<VkApiAttachments.Entry>>> getVideos(@Field("offset") Integer offset,
                                                             @Field("count") Integer count,
-                                                            @Field("type") String type,
-                                                            @Field("fields") String fields);
+                                                                  @Field("item_type") String item_type,
+                                                                  @Field("extended") Integer extended,
+                                                                    @Field("fields") String fields);
+
+    @FormUrlEncoded
+    @POST("fave.get")
+    Single<BaseResponse<FavePostsResponse>> getPosts(@Field("offset") Integer offset,
+                                                                  @Field("count") Integer count,
+                                                                  @Field("item_type") String item_type,
+                                                                  @Field("extended") Integer extended,
+                                                                  @Field("fields") String fields);
+
+    @FormUrlEncoded
+    @POST("fave.get")
+    Single<BaseResponse<Items<FaveLinkDto>>> getLinks(@Field("offset") Integer offset,
+                                                                  @Field("count") Integer count,
+                                                                  @Field("item_type") String item_type,
+                                                                  @Field("extended") Integer extended,
+                                                                  @Field("fields") String fields);
 
     @FormUrlEncoded
     @POST("fave.getPhotos")
@@ -38,26 +55,21 @@ public interface IFaveService {
                                                       @Field("count") Integer count);
 
     @FormUrlEncoded
-    @POST("fave.getVideos")
-    Single<BaseResponse<Items<VKApiVideo>>> getVideos(@Field("offset") Integer offset,
-                                                      @Field("count") Integer count,
-                                                      @Field("extended") Integer extended);
-
-    @FormUrlEncoded
-    @POST("fave.getPosts")
-    Single<BaseResponse<FavePostsResponse>> getPosts(@Field("offset") Integer offset,
-                                                     @Field("count") Integer count,
-                                                     @Field("extended") Integer extended);
-
-    @FormUrlEncoded
-    @POST("fave.getLinks")
-    Single<BaseResponse<Items<FaveLinkDto>>> getLinks(@Field("offset") Integer offset,
-                                                      @Field("count") Integer count);
-
-    @FormUrlEncoded
     @POST("fave.addPage")
     Single<BaseResponse<Integer>> addPage(@Field("user_id") Integer userId,
                                           @Field("group_id") Integer groupId);
+
+    @FormUrlEncoded
+    @POST("fave.addVideo")
+    Single<BaseResponse<Integer>> addVideo(@Field("owner_id") Integer owner_id,
+                                          @Field("id") Integer id,
+                                           @Field("access_key") String access_key);
+
+    @FormUrlEncoded
+    @POST("fave.addPost")
+    Single<BaseResponse<Integer>> addPost(@Field("owner_id") Integer owner_id,
+                                           @Field("id") Integer id,
+                                           @Field("access_key") String access_key);
 
     //https://vk.com/dev/fave.removePage
     @FormUrlEncoded

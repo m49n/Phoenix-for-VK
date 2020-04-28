@@ -35,9 +35,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFaveUsersView> implements IFaveUsersView, FavePagesAdapter.ClickListener {
 
-    public static FavePagesFragment newInstance(int accountId) {
+    public static FavePagesFragment newInstance(int accountId, boolean isUser) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putBoolean(Extra.USER, isUser);
         FavePagesFragment fragment = new FavePagesFragment();
         fragment.setArguments(args);
         return fragment;
@@ -46,10 +47,11 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     private TextView mEmpty;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FavePagesAdapter mAdapter;
+    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_fave_users, container, false);
+        View root = inflater.inflate(R.layout.fragment_fave_pages, container, false);
         mEmpty = root.findViewById(R.id.empty);
 
         RecyclerView recyclerView = root.findViewById(android.R.id.list);
@@ -149,6 +151,7 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     public IPresenterFactory<FavePagesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FavePagesPresenter(
                 getArguments().getInt(Extra.ACCOUNT_ID),
+                getArguments().getBoolean(Extra.USER),
                 saveInstanceState
         );
     }
@@ -161,5 +164,14 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     @Override
     public void onDelete(int index, Owner owner) {
         getPresenter().fireOwnerDelete(owner);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!isRequestLast) {
+            isRequestLast = true;
+            getPresenter().LoadTool();
+        }
     }
 }

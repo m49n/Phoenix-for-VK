@@ -1,10 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
-import android.app.DownloadManager;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +39,7 @@ import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -346,12 +343,7 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
             return;
         }
 
-        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(document.getUrl()));
-        req.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, document.getTitle());
-        req.allowScanningByMediaScanner();
-        req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        DownloadManager dm = (DownloadManager) requireActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-        dm.enqueue(req);
+        DownloadUtil.downloadDocs(requireActivity(), document, document.getUrl());
     }
 
     private void openOwnerWall() {

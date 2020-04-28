@@ -862,6 +862,16 @@ public class Dto2Model {
     }
 
     @NonNull
+    public static List<Post> transformAttachmentsPosts(Collection<VkApiAttachments.Entry> dtos, IOwnersBundle bundle) {
+        List<Post> posts = new ArrayList<>(safeCountOf(dtos));
+        for (VkApiAttachments.Entry dto : dtos) {
+            if(dto.attachment instanceof VKApiPost)
+                posts.add(transform((VKApiPost)dto.attachment, bundle));
+        }
+        return posts;
+    }
+
+    @NonNull
     public static Post transform(@NonNull VKApiPost dto, @NonNull IOwnersBundle owners) {
         Post post = new Post()
                 .setDbid(Post.NO_STORED)

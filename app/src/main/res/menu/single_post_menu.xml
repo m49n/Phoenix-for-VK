@@ -46,6 +46,10 @@
         android:title="@string/allow_text_selection" />
 
     <item
+        android:id="@+id/add_to_bookmarks"
+        android:title="@string/add_to_bookmarks" />
+
+    <item
         android:id="@+id/refresh"
         android:title="@string/refresh" />
 

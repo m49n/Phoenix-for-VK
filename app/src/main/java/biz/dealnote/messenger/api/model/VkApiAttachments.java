@@ -15,6 +15,7 @@ public class VkApiAttachments {
     public static final String TYPE_AUDIO = "audio";
     public static final String TYPE_DOC = "doc";
     public static final String TYPE_POST = "wall";
+    public static final String TYPE_FAVE_POST = "post";
     public static final String TYPE_LINK = "link";
     public static final String TYPE_NOTE = "note";
     public static final String TYPE_APP = "app";

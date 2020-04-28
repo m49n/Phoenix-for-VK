@@ -319,7 +319,9 @@ public class Entity2Model {
         return new FavePage(entity.getId())
                 .setDescription(entity.getDescription())
                 .setUpdatedDate(entity.getUpdateDate())
-                .setFaveType(entity.getFaveType());
+                .setFaveType(entity.getFaveType())
+                .setUser(nonNull(entity.getUser()) ? map(entity.getUser()) : null)
+                .setGroup(nonNull(entity.getGroup()) ? map(entity.getGroup()) : null);
     }
 
     public static Community map(CommunityEntity entity) {

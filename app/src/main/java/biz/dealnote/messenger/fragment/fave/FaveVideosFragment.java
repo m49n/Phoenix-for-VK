@@ -45,6 +45,7 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private VideosAdapter mAdapter;
     private TextView mEmpty;
+    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,5 +137,14 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
     @Override
     public IPresenterFactory<FaveVideosPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FaveVideosPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!isRequestLast) {
+            isRequestLast = true;
+            getPresenter().LoadTool();
+        }
     }
 }

@@ -53,6 +53,7 @@ import biz.dealnote.messenger.view.emoji.EmojiconTextView
 import biz.dealnote.messenger.view.emoji.StickersGridView
 import biz.dealnote.mvp.core.IPresenterFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -87,6 +88,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
+
+    private var goto_button : FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,6 +139,16 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         pinnedSubtitle = pinnedView?.findViewById(R.id.pinned_subtitle)
         buttonUnpin = pinnedView?.findViewById(R.id.buttonUnpin)
         buttonUnpin?.setOnClickListener { presenter?.fireUnpinClick() }
+
+        goto_button = root.findViewById(R.id.goto_button)
+        if(Settings.get().accounts().getType(Settings.get().accounts().current).equals("hacked")) {
+            goto_button?.setImageResource(R.drawable.attachment)
+            goto_button?.setOnClickListener { presenter?.fireDialogAttachmentsClick() }
+        }
+        else {
+            goto_button?.setImageResource(R.drawable.view)
+            goto_button?.setOnClickListener { recyclerView?.smoothScrollToPosition(presenter?.getConversation()!!.unreadCount) }
+        }
 
         editMessageGroup = root.findViewById(R.id.editMessageGroup)
         editMessageText = editMessageGroup?.findViewById(R.id.editMessageText)

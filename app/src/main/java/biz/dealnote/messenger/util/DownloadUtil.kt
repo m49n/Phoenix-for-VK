@@ -9,6 +9,7 @@ import biz.dealnote.messenger.R
 import biz.dealnote.messenger.domain.IAudioInteractor
 import biz.dealnote.messenger.domain.InteractorFactory
 import biz.dealnote.messenger.model.Audio
+import biz.dealnote.messenger.model.Document
 import biz.dealnote.messenger.model.Video
 import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
@@ -169,11 +170,57 @@ object DownloadUtil
         }
     }
 
+    @Suppress("DEPRECATION")
+    @JvmStatic
+    fun downloadDocs(context: Context, doc: Document, URL: String?) {
+        if (URL == null || URL.isEmpty()) return
+        val docName = makeLegalFilename(doc.getTitle(), null)
+        CheckDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/")
+        do {
+            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/" + docName)
+            if (Temp.exists()) {
+                Temp.setLastModified(Calendar.getInstance().time.time)
+                CreatePhoenixToast(context).showToastError(R.string.exist_audio)
+                return
+            }
+        } while (false)
+        try {
+            if(Settings.get().other().isUse_internal_video_downloader())
+               DocsInternalDownloader(context, doc, URL, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/" + docName).doDownload()
+
+            else {
+                val downloadRequest = DownloadManager.Request(Uri.parse(URL))
+                downloadRequest.allowScanningByMediaScanner()
+                downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                downloadRequest.setDescription(docName)
+                downloadRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/Phoenix/$docName")
+                val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                downloadManager.enqueue(downloadRequest)
+                CreatePhoenixToast(context).showToast(R.string.downloading)
+            }
+        } catch (e: Exception) {
+            CreatePhoenixToast(context).showToastError("Docs Error: " + e.message)
+            return
+        }
+    }
+
     private fun createPeerTagFor(aid: Int, peerId: Int): String? {
         return aid.toString() + "_" + peerId
     }
 
     private class VideoInternalDownloader internal constructor(private val context: Context, video: Video, URL: String?, file: String?) : DownloadImageTask(context,  URL, file, "video_" + createPeerTagFor(video.id, video.ownerId), true) {
+        @SuppressLint("CheckResult")
+        override fun onPostExecute(s: String?) {
+            if (Objects.isNull(s)) {
+                CreatePhoenixToast(context).showToast(R.string.saved)
+            } else {
+                CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
+            }
+        }
+
+    }
+
+    private class DocsInternalDownloader internal constructor(private val context: Context, doc: Document, URL: String?, file: String?) : DownloadImageTask(context,  URL, file, "doc_" + createPeerTagFor(doc.id, doc.ownerId), true) {
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {

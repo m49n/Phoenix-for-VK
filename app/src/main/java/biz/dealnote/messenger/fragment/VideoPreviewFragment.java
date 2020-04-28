@@ -359,6 +359,8 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         static final int PLAY_BROWSER = -6;
         static final int DOWNLOAD = -7;
         static final int COPY_LINK = -9;
+
+        static final int ADD_TO_FAVE = -11;
     }
 
     private List<Item> createDirectVkPlayItems(Video video, Section section, boolean isDownload) {
@@ -465,6 +467,10 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                     .setSection(SECTION_OTHER));
         }
 
+        items.add(new Item(Menu.ADD_TO_FAVE, new Text(R.string.add_to_bookmarks))
+                .setIcon(R.drawable.star)
+                .setSection(SECTION_OTHER));
+
         if(nonEmpty(firstNonEmptyString(video.getMp4link240(),
                 video.getMp4link360(),
                 video.getMp4link480(),
@@ -540,6 +546,9 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
 
             case Menu.DOWNLOAD:
                 showDownloadPlayerMenu(video);
+                break;
+            case  Menu.ADD_TO_FAVE:
+                getPresenter().fireAddFaveVideo();
                 break;
             case Menu.COPY_LINK:
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);

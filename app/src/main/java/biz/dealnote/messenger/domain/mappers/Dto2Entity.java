@@ -411,7 +411,9 @@ public class Dto2Entity {
         return new FavePageEntity(id)
                 .setDescription(favePage.description)
                 .setUpdateDate(favePage.updated_date)
-                .setFaveType(favePage.type);
+                .setFaveType(favePage.type)
+                .setGroup(isNull(favePage.group) ? null : mapCommunity(favePage.group))
+                .setUser(isNull(favePage.user) ? null : mapUser(favePage.user));
     }
 
     public static UserEntity mapUser(VKApiUser user) {

@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import biz.dealnote.messenger.api.model.VKApiCommunity;
-import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiUser;
+import biz.dealnote.messenger.api.model.VkApiAttachments;
 
 public class FavePostsResponse {
 
@@ -14,7 +14,7 @@ public class FavePostsResponse {
     public int count;
 
     @SerializedName("items")
-    public List<VKApiPost> posts;
+    public List<VkApiAttachments.Entry> posts;
 
     @SerializedName("profiles")
     public List<VKApiUser> profiles;

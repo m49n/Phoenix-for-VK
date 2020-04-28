@@ -187,4 +187,19 @@
         android:text="@string/chat_empty_text"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/goto_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/view"
+        app:fabSize="normal"
+        app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
+        app:maxImageSize="30dp" />
+
 </RelativeLayout>

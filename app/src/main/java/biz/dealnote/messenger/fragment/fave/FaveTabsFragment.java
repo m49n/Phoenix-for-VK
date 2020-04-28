@@ -168,7 +168,8 @@ public class FaveTabsFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(FavePagesFragment.newInstance(getAccountId()), getString(R.string.page));
+        adapter.addFragment(FavePagesFragment.newInstance(getAccountId(), true), getString(R.string.pages));
+        adapter.addFragment(FavePagesFragment.newInstance(getAccountId(), false), getString(R.string.groups));
         adapter.addFragment(FaveLinksFragment.newInstance(getAccountId()), getString(R.string.links));
         adapter.addFragment(FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts));
         adapter.addFragment(FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos));

@@ -11,8 +11,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.db.model.PostUpdate;
+import biz.dealnote.messenger.domain.IFaveInteractor;
 import biz.dealnote.messenger.domain.IOwnersRepository;
 import biz.dealnote.messenger.domain.IWallsRepository;
+import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.CommentedType;
@@ -52,6 +54,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
 
     private final IWallsRepository wallInteractor;
     private final IOwnersRepository ownersRepository;
+    private IFaveInteractor faveInteractor;
 
     public WallPostPresenter(int accountId, int postId, int ownerId, @Nullable Post post,
                              @Nullable Owner owner, Context context, @Nullable Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         this.ownerId = ownerId;
         this.ownersRepository = Repository.INSTANCE.getOwners();
         this.wallInteractor = Repository.INSTANCE.getWalls();
+        this.faveInteractor = InteractorFactory.createFaveInteractor();
 
         this.context = context;
 
@@ -282,6 +286,18 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         } else {
             getView().showPostNotReadyToast();
         }
+    }
+
+    public void fireAddBookmark()
+    {
+        appendDisposable(faveInteractor.addPost(getAccountId(), ownerId, postId, null)
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(this::onVideoAddedToBookmarks, t -> showError(getView(), getCauseIfRuntime(t))));
+    }
+
+    private void onVideoAddedToBookmarks() {
+        if (isGuiReady())
+            getView().showSuccessToast();
     }
 
     public void fireDeleteClick() {

@@ -41,7 +41,7 @@ public interface IFaveStorage extends IStorage {
 
     Single<List<FavePageEntity>> getFaveUsers(int accountId);
 
-    Completable removePage(int accountId, int ownerId);
+    Completable removePage(int accountId, int ownerId, boolean isUser);
 
     @CheckResult
     Single<int[]> storePhotos(int accountId, List<PhotoEntity> photos, boolean clearBeforeStore);
@@ -54,4 +54,8 @@ public interface IFaveStorage extends IStorage {
 
     @CheckResult
     Single<int[]> storeVideos(int accountId, List<VideoEntity> videos, boolean clearBeforeStore);
+
+    Single<List<FavePageEntity>> getFaveGroups(int accountId);
+
+    Completable storeGroups(int accountId, List<FavePageEntity> groups, boolean clearBeforeStore);
 }

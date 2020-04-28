@@ -78,7 +78,5 @@ public class FavePage implements Identificable {
         this.group = group;
         return this;
     }
-
-
 }
 

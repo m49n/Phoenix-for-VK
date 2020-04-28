@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import biz.dealnote.messenger.domain.IFaveInteractor;
 import biz.dealnote.messenger.domain.IVideosInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Commented;
@@ -31,6 +32,8 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
     private final String accessKey;
     private final boolean isStory;
 
+    private IFaveInteractor faveInteractor;
+
     private Video video;
 
     private final IVideosInteractor interactor;
@@ -41,6 +44,7 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
         this.videoId = videoId;
         this.ownerId = ownerId;
         this.accessKey = nonNull(video) ? video.getAccessKey() : null;
+        this.faveInteractor = InteractorFactory.createFaveInteractor();
 
         this.isStory = nonNull(Story) && Story == 1;
 
@@ -63,6 +67,18 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
 
     private void setRefreshingNow(boolean refreshingNow) {
         this.refreshingNow = refreshingNow;
+    }
+
+    private void onVideoAddedToBookmarks() {
+        if (isGuiReady())
+            getView().showSuccessToast();
+    }
+
+    public void fireAddFaveVideo()
+    {
+        appendDisposable(faveInteractor.addVideo(getAccountId(), video.getOwnerId(), video.getId(), video.getAccessKey())
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(this::onVideoAddedToBookmarks, t -> showError(getView(), getCauseIfRuntime(t))));
     }
 
     @OnGuiCreated

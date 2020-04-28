@@ -19,6 +19,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.listener.TextWatcherAdapter;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.emoji.EmojiconsPopup;
 import biz.dealnote.messenger.view.emoji.StickersGridView;
 
@@ -202,6 +203,9 @@ public class InputViewController {
     public void setTextQuietly(String text) {
         this.mInputField.removeTextChangedListener(mTextWatcher);
         this.mInputField.setText(text);
+        this.mInputField.requestFocus();
+        if(!Utils.isEmpty(text))
+            this.mInputField.setSelection(text.length());
         this.mInputField.addTextChangedListener(mTextWatcher);
     }
 

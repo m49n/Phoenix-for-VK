@@ -2,6 +2,8 @@ package biz.dealnote.messenger.api.interfaces;
 
 import androidx.annotation.CheckResult;
 
+import java.util.List;
+
 import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
@@ -17,16 +19,16 @@ import io.reactivex.Single;
 public interface IFaveApi {
 
     @CheckResult
-    Single<Items<FavePageResponse>> getPages(Integer offset, Integer count, String fields);
+    Single<Items<FavePageResponse>> getPages(Integer offset, Integer count, String fields, String type);
 
     @CheckResult
     Single<Items<VKApiPhoto>> getPhotos(Integer offset, Integer count);
 
     @CheckResult
-    Single<Items<VKApiVideo>> getVideos(Integer offset, Integer count, Boolean extended);
+    Single<List<VKApiVideo>> getVideos(Integer offset, Integer count);
 
     @CheckResult
-    Single<FavePostsResponse> getPosts(Integer offset, Integer count, Boolean extended);
+    Single<FavePostsResponse> getPosts(Integer offset, Integer count);
 
     @CheckResult
     Single<Items<FaveLinkDto>> getLinks(Integer offset, Integer count);
@@ -39,5 +41,11 @@ public interface IFaveApi {
 
     @CheckResult
     Single<Boolean> removeLink(String linkId);
+
+    @CheckResult
+    Single<Boolean> addVideo(Integer owner_id, Integer id, String access_key);
+
+    @CheckResult
+    Single<Boolean> addPost(Integer owner_id, Integer id, String access_key);
 
 }

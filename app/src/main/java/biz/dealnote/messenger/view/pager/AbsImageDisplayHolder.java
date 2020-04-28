@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Callback;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.api.PicassoInstance;
 
 /**
@@ -40,6 +41,7 @@ public abstract class AbsImageDisplayHolder extends AbsPagerHolder implements Ca
 
         PicassoInstance.with()
                 .load(url)
+                .tag(Constants.PICASSO_TAG)
                 .into(mPhotoView, mPicassoLoadCallback);
     }
 

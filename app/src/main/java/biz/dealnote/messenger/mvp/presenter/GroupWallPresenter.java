@@ -11,9 +11,9 @@ import java.util.List;
 
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.api.Apis;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.domain.ICommunitiesInteractor;
+import biz.dealnote.messenger.domain.IFaveInteractor;
 import biz.dealnote.messenger.domain.IOwnersRepository;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
@@ -45,6 +45,8 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
 
     private Community community;
 
+    private final IFaveInteractor faveInteractor;
+
     private CommunityDetails details;
 
     private final IOwnersRepository ownersRepository;
@@ -61,6 +63,7 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         }
 
         ownersRepository = Repository.INSTANCE.getOwners();
+        faveInteractor = InteractorFactory.createFaveInteractor();
         communitiesInteractor = InteractorFactory.createCommunitiesInteractor();
         settings = Injection.provideSettings().accounts();
 
@@ -471,13 +474,13 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
     public void fireAddToBookmarksClick() {
         final int accountId = super.getAccountId();
 
-        appendDisposable(Apis.get()
-                .vkDefault(accountId)
-                .fave()
-                .addPage(null, Math.abs(ownerId))
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(ignore -> safeShowToast(getView(), R.string.success, false),
-                        throwable -> showError(getView(), getCauseIfRuntime(throwable))));
+        appendDisposable(faveInteractor.addPage(accountId, ownerId)
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(this::onGroupAddedToBookmarks, t -> showError(getView(), getCauseIfRuntime(t))));
+    }
+
+    private void onGroupAddedToBookmarks() {
+        safeShowToast(getView(), R.string.success, false);
     }
 
     public void fireOptionMenuViewCreated(IGroupWallView.IOptionMenuView view) {

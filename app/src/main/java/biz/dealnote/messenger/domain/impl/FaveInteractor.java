@@ -8,6 +8,7 @@ import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiVideo;
+import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.db.column.UserColumns;
 import biz.dealnote.messenger.db.interfaces.IStorages;
@@ -82,28 +83,30 @@ public class FaveInteractor implements IFaveInteractor {
     public Single<List<Post>> getPosts(int accountId, int count, int offset) {
         return networker.vkDefault(accountId)
                 .fave()
-                .getPosts(offset, count, true)
+                .getPosts(offset, count)
                 .flatMap(response -> {
-                    List<VKApiPost> dtos = listEmptyIfNull(response.posts);
+                    List<VkApiAttachments.Entry> dtos = listEmptyIfNull(response.posts);
 
                     List<Owner> owners = Dto2Model.transformOwners(response.profiles, response.groups);
 
                     VKOwnIds ids = new VKOwnIds();
-                    for (VKApiPost dto : dtos) {
-                        ids.append(dto);
+                    for (VkApiAttachments.Entry dto : dtos) {
+                        if(dto.attachment instanceof VKApiPost)
+                            ids.append((VKApiPost)dto.attachment);
                     }
 
                     final OwnerEntities ownerEntities = Dto2Entity.mapOwners(response.profiles, response.groups);
 
                     final List<PostEntity> dbos = new ArrayList<>(safeCountOf(response.posts));
                     if (nonNull(response.posts)) {
-                        for (VKApiPost dto : response.posts) {
-                            dbos.add(Dto2Entity.mapPost(dto));
+                        for (VkApiAttachments.Entry dto : response.posts) {
+                            if(dto.attachment instanceof VKApiPost)
+                                dbos.add(Dto2Entity.mapPost((VKApiPost)dto.attachment));
                         }
                     }
 
                     return ownersRepository.findBaseOwnersDataAsBundle(accountId, ids.getAll(), IOwnersRepository.MODE_ANY, owners)
-                            .map(bundle -> Dto2Model.transformPosts(dtos, bundle))
+                            .map(bundle -> Dto2Model.transformAttachmentsPosts(dtos, bundle))
                             .flatMap(posts -> cache.fave()
                                     .storePosts(accountId, dbos, ownerEntities, offset == 0)
                                     .andThen(Single.just(posts)));
@@ -184,9 +187,9 @@ public class FaveInteractor implements IFaveInteractor {
     public Single<List<Video>> getVideos(int accountId, int count, int offset) {
         return networker.vkDefault(accountId)
                 .fave()
-                .getVideos(offset, count, false)
+                .getVideos(offset, count)
                 .flatMap(items -> {
-                    List<VKApiVideo> dtos = listEmptyIfNull(items.getItems());
+                    List<VKApiVideo> dtos = listEmptyIfNull(items);
 
                     List<VideoEntity> dbos = new ArrayList<>(dtos.size());
                     List<Video> videos = new ArrayList<>(dtos.size());
@@ -202,17 +205,25 @@ public class FaveInteractor implements IFaveInteractor {
     }
 
     @Override
-    public Single<List<FavePage>> getCachedPages(int accountId) {
-        return cache.fave()
-                .getFaveUsers(accountId)
-                .map(Entity2Model::buildFaveUsersFromDbo);
+    public Single<List<FavePage>> getCachedPages(int accountId, boolean isUser) {
+        if(isUser) {
+            return cache.fave()
+                    .getFaveUsers(accountId)
+                    .map(Entity2Model::buildFaveUsersFromDbo);
+        }
+        else
+        {
+            return cache.fave()
+                    .getFaveGroups(accountId)
+                    .map(Entity2Model::buildFaveUsersFromDbo);
+        }
     }
 
     @Override
-    public Single<EndlessData<FavePage>> getPages(int accountId, int count, int offset) {
+    public Single<EndlessData<FavePage>> getPages(int accountId, int count, int offset, boolean isUser) {
         return networker.vkDefault(accountId)
                 .fave()
-                .getPages(offset, count, UserColumns.API_FIELDS)
+                .getPages(offset, count, UserColumns.API_FIELDS, isUser ? "users" : "groups")
                 .flatMap(items -> {
                     boolean hasNext = count + offset < items.count;
 
@@ -234,10 +245,18 @@ public class FaveInteractor implements IFaveInteractor {
                     List<FavePageEntity> entities = mapAll(dtos, Dto2Entity::mapFavePage, true);
                     List<FavePage> pages = mapAll(dtos, Dto2Model::transformFaveUser, true);
 
-                    return cache.fave()
-                            .storePages(accountId, entities, offset == 0)
-                            .andThen(cache.owners().storeOwnerEntities(accountId, new OwnerEntities(userEntities, communityEntities)))
-                            .andThen(Single.just(EndlessData.create(pages, hasNext)));
+                    if(isUser) {
+                        return cache.fave()
+                                .storePages(accountId, entities, offset == 0)
+                                .andThen(cache.owners().storeOwnerEntities(accountId, new OwnerEntities(userEntities, communityEntities)))
+                                .andThen(Single.just(EndlessData.create(pages, hasNext)));
+                    }
+                    else {
+                        return cache.fave()
+                                .storeGroups(accountId, entities, offset == 0)
+                                .andThen(cache.owners().storeOwnerEntities(accountId, new OwnerEntities(userEntities, communityEntities)))
+                                .andThen(Single.just(EndlessData.create(pages, hasNext)));
+                    }
                 });
     }
 
@@ -297,10 +316,26 @@ public class FaveInteractor implements IFaveInteractor {
     }
 
     @Override
-    public Completable removePage(int accountId, int ownerId) {
+    public Completable addVideo(int accountId, Integer owner_id, Integer id, String access_key) {
+        return networker.vkDefault(accountId)
+                .fave()
+                .addVideo(owner_id, id, access_key)
+                .ignoreElement();
+    }
+
+    @Override
+    public Completable addPost(int accountId, Integer owner_id, Integer id, String access_key) {
+        return networker.vkDefault(accountId)
+                .fave()
+                .addPost(owner_id, id, access_key)
+                .ignoreElement();
+    }
+
+    @Override
+    public Completable removePage(int accountId, int ownerId, boolean isUser) {
         return networker.vkDefault(accountId)
                 .fave()
                 .removePage(ownerId > 0 ? ownerId : null, ownerId < 0 ? Math.abs(ownerId) : null)
-                .flatMapCompletable(ignored -> cache.fave().removePage(accountId, ownerId));
+                .flatMapCompletable(ignored -> cache.fave().removePage(accountId, ownerId, isUser));
     }
 }

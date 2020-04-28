@@ -183,6 +183,7 @@ public class DBHelper extends SQLiteOpenHelper {
         createFavePhotosTable(db);
         createFaveVideosTable(db);
         createFavePageTable(db);
+        createFaveGroupsTable(db);
         createFaveLinksTable(db);
         createFavePostsTable(db);
         createCountriesTable(db);
@@ -263,6 +264,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FavePhotosColumns.TABLENAME);
         db.execSQL("DROP TABLE IF EXISTS " + FaveVideosColumns.TABLENAME);
         db.execSQL("DROP TABLE IF EXISTS " + FavePageColumns.TABLENAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FavePageColumns.GROUPSTABLENAME);
         db.execSQL("DROP TABLE IF EXISTS " + FaveLinksColumns.TABLENAME);
         db.execSQL("DROP TABLE IF EXISTS " + FavePostsColumns.TABLENAME);
         db.execSQL("DROP TABLE IF EXISTS " + "peers");
@@ -439,6 +441,16 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private void createFavePageTable(SQLiteDatabase db) {
         String create = "CREATE TABLE [" + FavePageColumns.TABLENAME + "] (" +
+                " [" + FavePageColumns._ID + "] BIGINT NOT NULL UNIQUE, " +
+                " [" + FavePageColumns.DESCRIPTION + "] TEXT, " +
+                " [" + FavePageColumns.UPDATED_TIME + "] BIGINT, " +
+                " [" + FavePageColumns.FAVE_TYPE + "] TEXT, " +
+                " CONSTRAINT [] PRIMARY KEY([" + FavePageColumns._ID + "]) ON CONFLICT REPLACE);";
+        db.execSQL(create);
+    }
+
+    private void createFaveGroupsTable(SQLiteDatabase db) {
+        String create = "CREATE TABLE [" + FavePageColumns.GROUPSTABLENAME + "] (" +
                 " [" + FavePageColumns._ID + "] BIGINT NOT NULL UNIQUE, " +
                 " [" + FavePageColumns.DESCRIPTION + "] TEXT, " +
                 " [" + FavePageColumns.UPDATED_TIME + "] BIGINT, " +

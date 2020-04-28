@@ -712,6 +712,30 @@ public class AttachmentsViewBinder {
                 holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
                 holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
+                holder.Track.setOnLongClickListener(v -> {
+                    if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                        AppPerms.requestReadWriteStoragePermission((Activity) mContext);
+                        return false;
+                    }
+                    holder.saved.setVisibility(View.VISIBLE);
+                    holder.saved.setImageResource(R.drawable.save);
+                    int ret = DownloadUtil.downloadTrack(mContext, audio, false);
+                    if (ret == 0)
+                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
+                    else if (ret == 1) {
+                        PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
+                        new MaterialAlertDialogBuilder(mContext)
+                                .setTitle(R.string.error)
+                                .setMessage(R.string.audio_force_download)
+                                .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+                    } else {
+                        holder.saved.setVisibility(View.GONE);
+                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                    }
+                    return true;
+                });
 
                 holder.Track.setOnClickListener(view -> {
                     holder.cancelSelectionAnimation();

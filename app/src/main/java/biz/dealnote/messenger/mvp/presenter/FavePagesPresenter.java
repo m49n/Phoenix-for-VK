@@ -13,7 +13,6 @@ import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.EndlessData;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.Owner;
-import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IFaveUsersView;
 import biz.dealnote.messenger.util.Objects;
@@ -37,18 +36,23 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
     private final IFaveInteractor faveInteractor;
 
     private boolean actualDataReceived;
-
+    private boolean isUser;
     private boolean endOfContent;
 
     private String q;
 
-    public FavePagesPresenter(int accountId, @Nullable Bundle savedInstanceState) {
+    public FavePagesPresenter(int accountId, boolean isUser, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.pages = new ArrayList<>();
         this.search_pages = new ArrayList<>();
         this.faveInteractor = InteractorFactory.createFaveInteractor();
+        this.isUser = isUser;
 
         loadAllCachedData();
+    }
+
+    public void LoadTool()
+    {
         loadActualData(0);
     }
 
@@ -62,13 +66,10 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         if (Objects.safeEquals(q, this.q)) {
             return;
         }
-        while(!fireScrollToEnd());
         this.q = query;
         search_pages.clear();
         for(int i =0; i < pages.size(); i++) {
             if (pages.get(i).getOwner().getFullName().toLowerCase().contains(q.toLowerCase()))
-                search_pages.add(pages.get(i));
-            if((q.toLowerCase().contains("group") || q.toLowerCase().contains("групп")) &&  pages.get(i).getOwner().getOwnerType() == OwnerType.COMMUNITY)
                 search_pages.add(pages.get(i));
         }
 
@@ -96,7 +97,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         resolveRefreshingView();
 
         final int accountId = super.getAccountId();
-        actualDataDisposable.add(faveInteractor.getPages(accountId, 50, offset)
+        actualDataDisposable.add(faveInteractor.getPages(accountId, 500, offset, isUser)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onActualDataReceived(offset, data), this::onActualDataGetError));
 
@@ -129,6 +130,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         }
 
         resolveRefreshingView();
+        fireScrollToEnd();
     }
 
     @Override
@@ -147,7 +149,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         this.cacheLoadingNow = true;
         final int accountId = super.getAccountId();
 
-        cacheDisposable.add(faveInteractor.getCachedPages(accountId)
+        cacheDisposable.add(faveInteractor.getCachedPages(accountId, isUser)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onCachedDataReceived, this::onCachedGetError));
 
@@ -200,7 +202,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
             return;
         }
 
-        int index = findIndexById(this.pages, ownerId);
+        int index = findIndexById(this.pages, Math.abs(ownerId));
 
         if (index != -1) {
             this.pages.remove(index);
@@ -210,7 +212,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
 
     public void fireOwnerDelete(Owner owner) {
         final int accountId = super.getAccountId();
-        appendDisposable(faveInteractor.removePage(accountId, owner.getOwnerId())
+        appendDisposable(faveInteractor.removePage(accountId, owner.getOwnerId(), isUser)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(() -> onUserRemoved(accountId, owner.getOwnerId()), t -> showError(getView(), getCauseIfRuntime(t))));
     }

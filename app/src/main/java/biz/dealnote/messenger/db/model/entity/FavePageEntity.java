@@ -12,6 +12,10 @@ public class FavePageEntity {
 
     private long updateDate;
 
+    private UserEntity user;
+
+    private CommunityEntity group;
+
     public FavePageEntity(int id) {
         this.id = id;
     }
@@ -45,6 +49,24 @@ public class FavePageEntity {
 
     public FavePageEntity setUpdateDate(long updateDate) {
         this.updateDate = updateDate;
+        return this;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public FavePageEntity setUser(UserEntity user) {
+        this.user = user;
+        return this;
+    }
+
+    public CommunityEntity getGroup() {
+        return group;
+    }
+
+    public FavePageEntity setGroup(CommunityEntity group) {
+        this.group = group;
         return this;
     }
 }
