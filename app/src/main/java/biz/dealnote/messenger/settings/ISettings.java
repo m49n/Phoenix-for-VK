@@ -99,7 +99,9 @@ public interface ISettings {
 
         boolean isEnable_show_audio_top();
 
-        boolean isUse_internal_video_downloader();
+        boolean isUse_internal_downloader();
+
+        boolean isEnable_last_read();
     }
 
     interface IAccountsSettings {

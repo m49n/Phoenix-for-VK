@@ -50,6 +50,24 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
             holder.description.setVisibility(View.VISIBLE);
             holder.description.setText(playlist.description);
         }
+        if(isNullOrEmptyString(playlist.artist_name))
+        holder.artist.setVisibility(View.GONE);
+        else {
+            holder.artist.setVisibility(View.VISIBLE);
+            holder.artist.setText(playlist.artist_name);
+        }
+        if(playlist.Year == 0)
+            holder.year.setVisibility(View.GONE);
+        else {
+            holder.year.setVisibility(View.VISIBLE);
+            holder.year.setText(String.valueOf(playlist.Year));
+        }
+        if(isNullOrEmptyString(playlist.genre))
+            holder.genre.setVisibility(View.GONE);
+        else {
+            holder.genre.setVisibility(View.VISIBLE);
+            holder.genre.setText(playlist.genre);
+        }
         holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
         holder.add.setOnClickListener(v -> listener.onPlayListClick(playlist, position));
         if(playlist.owner_id == Settings.get().accounts().getCurrent())
@@ -74,6 +92,9 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
         TextView name;
         TextView description;
         TextView count;
+        TextView year;
+        TextView artist;
+        TextView genre;
         TextView update;
         View playlist_container;
         FloatingActionButton add;
@@ -86,6 +107,9 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
             playlist_container = itemView.findViewById(R.id.playlist_container);
             description = itemView.findViewById(R.id.item_description);
             update = itemView.findViewById(R.id.item_time);
+            year = itemView.findViewById(R.id.item_year);
+            artist = itemView.findViewById(R.id.item_artist);
+            genre = itemView.findViewById(R.id.item_genre);
             add = itemView.findViewById(R.id.add_playlist);
         }
     }

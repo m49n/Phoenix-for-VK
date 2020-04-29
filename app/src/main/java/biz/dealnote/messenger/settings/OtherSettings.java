@@ -182,6 +182,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isEnable_last_read() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_last_read", true);
+    }
+
+    @Override
     public boolean isEnable_show_recent_dialogs() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_recent_dialogs", true);
     }
@@ -192,7 +197,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isUse_internal_video_downloader() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_internal_video_downloader", false);
+    public boolean isUse_internal_downloader() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_internal_downloader", false);
     }
 }

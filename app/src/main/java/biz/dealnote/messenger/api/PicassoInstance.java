@@ -17,10 +17,8 @@ import biz.dealnote.messenger.task.LocalPhotoRequestHandler;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by Ruslan Kolbasa on 28.07.2017.
@@ -33,6 +31,8 @@ public class PicassoInstance {
     private final IProxySettings proxySettings;
 
     private final Context app;
+
+    private Cache cache_data;
 
     private PicassoInstance(Context app, IProxySettings proxySettings) {
         this.app = app;
@@ -77,6 +77,10 @@ public class PicassoInstance {
         return instance.getSingleton();
     }
 
+    public static void clear_cache() throws IOException {
+        instance.cache_data.evictAll();
+    }
+
     private Picasso create() {
         Logger.d(TAG, "Picasso singleton creation");
 
@@ -86,13 +90,13 @@ public class PicassoInstance {
             cache.mkdirs();
         }
 
+        cache_data = new Cache(cache, calculateDiskCacheSize(cache));
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .cache(new Cache(cache, calculateDiskCacheSize(cache))).addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
-                        return chain.proceed(request);
-                    }});
+                .cache(cache_data).addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                    return chain.proceed(request);
+                });
 
         ProxyConfig config = proxySettings.getActiveProxy();
 
@@ -121,7 +125,7 @@ public class PicassoInstance {
         return new Picasso.Builder(app)
                 .downloader(downloader)
                 .addRequestHandler(new LocalPhotoRequestHandler(app))
-                .defaultBitmapConfig(Bitmap.Config.RGB_565)
+                .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
                 .build();
 
         //Picasso.setSingletonInstance(picasso);

@@ -1102,6 +1102,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun readAllUnreadMessagesIfExists() {
+        if (Settings.get().accounts().getType(accountId) == "hacked") return
         val last = if (data.nonEmpty()) data[0] else return
 
         if (!last.isOut && last.id > lastReadId.incoming) {

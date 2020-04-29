@@ -32,8 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/item_playlist_avatar_container"
-            android:orientation="vertical"
-            android:paddingEnd="8dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_name"
@@ -45,12 +44,21 @@
                 tools:text="Name" />
 
             <TextView
+                android:id="@+id/item_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textColor="?colorSecondary"
+                tools:text="Artist" />
+
+            <TextView
                 android:id="@+id/item_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="5"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="?colorSecondary"
+                android:textSize="12sp"
                 tools:text="Description" />
 
             <TextView
@@ -71,6 +79,24 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="time" />
 
+            <TextView
+                android:id="@+id/item_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                tools:text="genre" />
+
+            <TextView
+                android:id="@+id/item_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                tools:text="year" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/add_playlist"
                 android:layout_width="wrap_content"
@@ -80,6 +106,4 @@
                 app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
 
         </LinearLayout>
-
-
     </RelativeLayout>

@@ -30,6 +30,27 @@ public class AudioPlaylistDtoAdapter extends AbsAdapter implements JsonDeseriali
         album.access_key = optString(root, "access_key");
         album.description = optString(root, "description");
         album.update_time = optInt(root, "update_time");
+        album.Year = optInt(root, "year");
+
+        if(root.has("genres") && root.getAsJsonArray("genres").size() > 0)
+        {
+            StringBuilder build = new StringBuilder();
+            JsonArray gnr = root.getAsJsonArray("genres");
+            boolean isFirst = true;
+            for(JsonElement i : gnr)
+            {
+                if(isFirst)
+                    isFirst = false;
+                else
+                    build.append(", ");
+                String val = optString(i.getAsJsonObject(), "name");
+                if(val != null)
+                    build.append(val);
+            }
+            album.genre = build.toString();
+        }
+        if(root.has("main_artists") && root.getAsJsonArray("main_artists").size() > 0)
+            album.artist_name = optString(root.getAsJsonArray("main_artists").get(0).getAsJsonObject(), "name");
         if(root.getAsJsonObject().has("photo"))
         {
             JsonObject thmb = root.getAsJsonObject("photo");

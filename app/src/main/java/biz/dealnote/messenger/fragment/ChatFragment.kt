@@ -150,6 +150,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             goto_button?.setOnClickListener { recyclerView?.smoothScrollToPosition(presenter?.getConversation()!!.unreadCount) }
         }
 
+
+        if(!Settings.get().other().isEnable_last_read())
+            goto_button?.visibility = View.GONE
+        else
+            goto_button?.visibility = View.VISIBLE
+
         editMessageGroup = root.findViewById(R.id.editMessageGroup)
         editMessageText = editMessageGroup?.findViewById(R.id.editMessageText)
         editMessageGroup?.findViewById<View>(R.id.buttonCancelEditing)?.setOnClickListener { presenter?.fireCancelEditingClick() }

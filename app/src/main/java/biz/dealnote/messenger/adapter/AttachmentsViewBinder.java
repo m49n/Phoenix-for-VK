@@ -653,11 +653,11 @@ public class AttachmentsViewBinder {
                 {
                     if(!isNullOrEmptyString(audio.getThumb_image_little()))
                     {
-                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                         PicassoInstance.with()
                                 .load(audio.getThumb_image_little())
+                                .placeholder(R.drawable.background_gray)
                                 .transform(TransformCover())
-                                .tag(Constants.PICASSO_TAG)
+                                .tag("audio_" + audio.getOwnerId() + "_" + audio.getId())
                                 .into(new Target() {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -674,8 +674,10 @@ public class AttachmentsViewBinder {
                                     }
                                 });
                     }
-                    else
+                    else {
+                        PicassoInstance.with().cancelTag("audio_" + audio.getOwnerId() + "_" + audio.getId());
                         holder.ibPlay.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
+                    }
                 }
 
                 holder.ibPlay.setOnClickListener(v -> {

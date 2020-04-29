@@ -14,6 +14,7 @@ import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.feedback.Feedback;
 import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IFeedbackView;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
@@ -101,6 +102,8 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
 
     private void safelyMarkAsViewed() {
         final int accountId = super.getAccountId();
+        if(Settings.get().accounts().getType(accountId).equals("hacked"))
+            return;
 
         appendDisposable(feedbackInteractor.maskAaViewed(accountId)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())

@@ -151,7 +151,7 @@ object DownloadUtil
             }
         } while (false)
         try {
-            if(Settings.get().other().isUse_internal_video_downloader())
+            if(Settings.get().other().isUse_internal_downloader())
                 VideoInternalDownloader(context, video, URL, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.absolutePath + "/Phoenix/" + videoName).doDownload()
 
             else {
@@ -185,7 +185,7 @@ object DownloadUtil
             }
         } while (false)
         try {
-            if(Settings.get().other().isUse_internal_video_downloader())
+            if(Settings.get().other().isUse_internal_downloader())
                DocsInternalDownloader(context, doc, URL, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/" + docName).doDownload()
 
             else {

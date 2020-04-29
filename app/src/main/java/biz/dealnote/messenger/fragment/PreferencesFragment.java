@@ -239,9 +239,29 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     return true;
                 });
 
-        findPreference("cache_cleaner")
+        findPreference("picture_cache_cleaner")
+                .setOnPreferenceClickListener(preference -> {
+
+                    try {
+                        PicassoInstance.clear_cache();
+                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
+                    }
+                    return true;
+                });
+
+        findPreference("account_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
                     DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
+                    try {
+                        PicassoInstance.clear_cache();
+                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
+                    }
                     PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
                     return true;
                 });

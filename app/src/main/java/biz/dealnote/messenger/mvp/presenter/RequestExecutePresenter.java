@@ -90,6 +90,8 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                     String value = parts[1];
                     value = value.replaceAll("\"", "");
 
+                    if(name.equals("user_id") || name.equals("owner_id") && (value.toLowerCase().equals("my") || value.toLowerCase().equals("я")))
+                        value = String.valueOf(accountId);
                     params.put(name, value);
                 }
             } catch (Exception e) {
@@ -214,9 +216,9 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                         List<String> trimmed = new ArrayList<>();
 
                         for (String line : lines) {
-                            if (trimmed.size() > 200) {
+                            if (trimmed.size() > 2000) {
                                 trimmed.add("\n");
-                                trimmed.add("... and more " + (lines.length - 200) + " lines");
+                                trimmed.add("... and more " + (lines.length - 2000) + " lines");
                                 break;
                             }
 

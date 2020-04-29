@@ -61,7 +61,8 @@
     <string name="general_settings">Общие</string>
     <string name="other_settings">Другие</string>
     <string name="about_settings">О приложении</string>
-    <string name="cache_cleaner">Очистить кэш для данного аккаунта</string>
+    <string name="account_cache_cleaner">Очистить кэш для данного аккаунта</string>
+    <string name="picture_cache_cleaner">Очистить кэш Изображений</string>
     <string name="share_text">Поделиться приложением с друзьями</string>
     <string name="rate_text">Оценить приложение в Google Play</string>
     <!-- Quick Reply-->
@@ -216,7 +217,7 @@
 
     <string name="repost_title">Отправка записи</string>
     <string name="repost_send_message">Отправить личным сообщением</string>
-    <string name="repost_to_wall">Друзья и подписчики</string>
+    <string name="repost_to_wall">На стену</string>
     <string name="pin">Закрепить</string>
     <string name="unpin">Открепить</string>
     <string name="restore">Восстановить</string>
@@ -616,7 +617,7 @@
     <string name="mutual_friends">Общие друзья</string>
     <string name="results_in_a_network">Найденное в сети</string>
     <string name="type_here_to_start_searching">Введите, чтобы начать поиск…</string>
-    <string name="results_in_the_cache">Результаты из кэша</string>
+    <string name="results_in_the_cache">Результаты из загрузок</string>
     <string name="wiki_page">Вики-страница</string>
     <string name="title">Название: %1$s</string>
     <string name="browser">Браузер</string>
@@ -1101,7 +1102,8 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
-    <string name="use_internal_video_downloader">Использовать внутренний загрузчик для видео</string>
+    <string name="use_internal_downloader">Внутренний загрузчик</string>
+    <string name="use_internal_downloader_summary">Для Видео и Документов</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
     <string name="login_sms_code_hint">SMS-код</string>
@@ -1163,7 +1165,7 @@
     <string name="twitter" translatable="false">Twitter</string>
     <string name="facebook" translatable="false">Facebook</string>
     <string name="force_hls">Принудительно Потоковое аудио</string>
-    <string name="force_cache">Принудительно слушать из кэша</string>
+    <string name="force_cache">Принудительно слушать из загрузок</string>
     <string name="audio_from_cache">Восстановление аудио из загрузок</string>
     <string name="player_live" translatable="false">Live</string>
     <string name="activity_until_now">текущее время</string>
@@ -1267,7 +1269,7 @@
     <string name="do_upload_video">Загрузить видео из локального хранилища?</string>
     <string name="null_audio">Нет проигрываемых аудио</string>
     <string name="audio_not_found">Аудио не найдено в списке</string>
-    <string name="load_saved_audios">Ошибка сети! Загрузить из кэша?</string>
+    <string name="load_saved_audios">Ошибка сети! Загрузить из загрузок?</string>
     <string name="audio_force_download">Данный трек уже скачен. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
     <string name="use_old_vk_api">Аудио с VK api 5.90</string>
@@ -1280,4 +1282,5 @@
     <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
+    <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
 </resources>

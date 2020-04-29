@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
@@ -159,11 +158,11 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         {
             if(!isNullOrEmptyString(item.getThumb_image_little()))
             {
-                holder.play.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                 PicassoInstance.with()
                         .load(item.getThumb_image_little())
+                        .placeholder(R.drawable.background_gray)
                         .transform(TransformCover())
-                        .tag(Constants.PICASSO_TAG)
+                        .tag("audio_" + item.getOwnerId() + "_" + item.getId())
                         .into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -180,8 +179,10 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                             }
                         });
             }
-            else
+            else {
+                PicassoInstance.with().cancelTag("audio_" + item.getOwnerId() + "_" + item.getId());
                 holder.play.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
+            }
         }
 
         holder.play.setOnClickListener(v -> {
