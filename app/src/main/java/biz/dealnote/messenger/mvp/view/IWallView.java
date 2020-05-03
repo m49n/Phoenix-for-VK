@@ -2,11 +2,13 @@ package biz.dealnote.messenger.mvp.view;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
@@ -43,7 +45,7 @@ public interface IWallView extends IAttachmentsPlacesView,
 
     void copyToClipboard(String label, String body);
 
-    void openPhotoAlbum(int accountId, int ownerId, int albumId, @Nullable Integer focusPhotoId);
+    void openPhotoAlbum(int accountId, int ownerId, int albumId, ArrayList<Photo> photos, int position);
 
     void goToWallSearch(int accountId, int ownerId);
 

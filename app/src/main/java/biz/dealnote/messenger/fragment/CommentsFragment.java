@@ -57,7 +57,7 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CommentsInputViewController;
 import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 import biz.dealnote.messenger.view.emoji.EmojiconTextView;
-import biz.dealnote.messenger.view.emoji.StickersGridView;
+import biz.dealnote.messenger.view.emoji.EmojiconsPopup;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -69,7 +69,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  * phoenix
  */
 public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter, ICommentsView> implements
-        ICommentsView, StickersGridView.OnStickerClickedListener, CommentsInputViewController.OnInputActionCallback,
+        ICommentsView, EmojiconsPopup.OnStickerClickedListener, CommentsInputViewController.OnInputActionCallback,
         CommentsAdapter.OnCommentActionListener, EmojiconTextView.OnHashTagClickListener, BackPressCallback {
 
     private static final String EXTRA_AT_COMMENT_OBJECT = "at_comment_object";

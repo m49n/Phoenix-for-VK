@@ -68,7 +68,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
         FloatingActionButton Add = root.findViewById(R.id.add_button);
 
         if(Add != null) {
-            Add.setVisibility(View.INVISIBLE);
+            Add.setVisibility(View.GONE);
         }
 
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout, true);

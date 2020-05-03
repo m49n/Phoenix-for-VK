@@ -18,7 +18,6 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.listener.TextWatcherAdapter;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.view.emoji.EmojiconsPopup;
-import biz.dealnote.messenger.view.emoji.StickersGridView;
 
 public class CommentsInputViewController {
 
@@ -194,7 +193,7 @@ public class CommentsInputViewController {
         return true;
     }
 
-    public void setOnSickerClickListener(StickersGridView.OnStickerClickedListener sickerClickListener) {
+    public void setOnSickerClickListener(EmojiconsPopup.OnStickerClickedListener sickerClickListener) {
         if (emojiPopup != null) {
             emojiPopup.setOnStickerClickedListener(sickerClickListener);
         }

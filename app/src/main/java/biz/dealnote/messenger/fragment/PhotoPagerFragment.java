@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -24,21 +25,25 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.api.model.VKApiPhotoTags;
 import biz.dealnote.messenger.domain.ILikesInteractor;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
@@ -60,16 +65,16 @@ import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.AssertUtils;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
 import biz.dealnote.messenger.view.ViewPagerTransformers;
-import biz.dealnote.messenger.view.pager.AbsImageDisplayHolder;
-import biz.dealnote.messenger.view.pager.AbsPagerAdapter;
-import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
 import biz.dealnote.messenger.view.pager.GoBackCallback;
 import biz.dealnote.messenger.view.pager.WeakGoBackAnimationAdapter;
+import biz.dealnote.messenger.view.pager.WeakPicassoLoadCallback;
 import biz.dealnote.mvp.core.IPresenterFactory;
+import su.rbv.flingPhotoView.FlingPhotoView;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
@@ -80,8 +85,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
         implements IPhotoPagerView, GoBackCallback, BackPressCallback {
-
-    private static final String EXTRA_FOCUS_PHOTO_ID = "focus_photo_id";
 
     private static final String EXTRA_PHOTOS = "photos";
     private static final String EXTRA_NEED_UPDATE = "need_update";
@@ -98,7 +101,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         SIZES.put(4, PhotoSize.W);
     }
 
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private CircleCounterButton mButtonLike;
     private CircleCounterButton mButtonComments;
     private ProgressBar mLoadingProgressBar;
@@ -131,15 +134,13 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         return args;
     }
 
-    public static Bundle buildArgsForAlbum(int aid, int albumId, int ownerId, Integer focusPhotoId, Integer Index) {
+    public static Bundle buildArgsForAlbum(int aid, int albumId, int ownerId, ArrayList<Photo> photos, int position) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, aid);
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putInt(Extra.ALBUM_ID, albumId);
-        args.putInt(Extra.INDEX, Index);
-        if (focusPhotoId != null) {
-            args.putInt(EXTRA_FOCUS_PHOTO_ID, focusPhotoId);
-        }
+        args.putInt(Extra.INDEX, position);
+        args.putParcelableArrayList(EXTRA_PHOTOS, photos);
 
         return args;
     }
@@ -188,10 +189,11 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setPageTransformer(true, ViewPagerTransformers.ZOOM_OUT);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.setPageTransformer(ViewPagerTransformers.ZOOM_OUT);
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
                 getPresenter().firePageSelected(position);
             }
         });
@@ -288,7 +290,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     .main()
                     .setPrefDisplayImageSize(SIZES.get(key));
 
-            onImageDisplayedImageSizeChanged();
             requireActivity().invalidateOptionsMenu();
             return true;
         });
@@ -308,12 +309,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 return 2048 + "px";
             default:
                 throw new IllegalArgumentException("Unsupported size");
-        }
-    }
-
-    private void onImageDisplayedImageSizeChanged() {
-        if (nonNull(mPagerAdapter)) {
-            mPagerAdapter.rebindHolders();
         }
     }
 
@@ -340,9 +335,9 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     int indexx = requireArguments().getInt(Extra.INDEX);
                     int ownerId = requireArguments().getInt(Extra.OWNER_ID);
                     int albumId = requireArguments().getInt(Extra.ALBUM_ID);
-                    Integer focusTo = requireArguments().containsKey(EXTRA_FOCUS_PHOTO_ID)
-                            ? requireArguments().getInt(EXTRA_FOCUS_PHOTO_ID) : null;
-                    return new PhotoAlbumPagerPresenter(indexx, Injection.provideNetworkInterfaces(), aid, ownerId, albumId, focusTo, saveInstanceState);
+                    ArrayList<Photo> photos_album = requireArguments().getParcelableArrayList(EXTRA_PHOTOS);
+                    AssertUtils.requireNonNull(photos_album);
+                    return new PhotoAlbumPagerPresenter(indexx, aid, ownerId, albumId, photos_album, saveInstanceState);
 
                 case Place.FAVE_PHOTOS_GALLERY:
                     int findex = requireArguments().getInt(Extra.INDEX);
@@ -382,7 +377,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         if (nonNull(mViewPager)) {
             mPagerAdapter = new Adapter(photos);
             mViewPager.setAdapter(mPagerAdapter);
-            mViewPager.setCurrentItem(initialIndex);
+            mViewPager.setCurrentItem(initialIndex, false);
         }
     }
 
@@ -482,7 +477,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void rebindPhotoAt(int position) {
         if (nonNull(mPagerAdapter)) {
-            mPagerAdapter.rebindHolderAt(position);
+            mPagerAdapter.notifyItemChanged(position);
         }
     }
 
@@ -551,15 +546,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void onDestroyView() {
-        if (nonNull(mPagerAdapter)) {
-            mPagerAdapter.release();
-        }
-
-        super.onDestroyView();
-    }
-
-    @Override
     public void goBack() {
         if (isAdded() && canGoBack()) {
             requireActivity().getSupportFragmentManager().popBackStack();
@@ -600,62 +586,91 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         return false;
     }
 
-    private class Holder extends AbsImageDisplayHolder implements Callback {
+    private class PhotoViewHolder extends RecyclerView.ViewHolder implements Callback {
+        public FlingPhotoView photo;
+        public ProgressBar progress;
+        public FloatingActionButton reload;
+        private boolean mLoadingNow;
+        private WeakPicassoLoadCallback mPicassoLoadCallback;
+        public PhotoViewHolder(View view) {
+            super(view);
+            photo = view.findViewById(R.id.image_view);
+            progress = view.findViewById(R.id.progress_bar);
+            photo.setOnFlingDoneFinishListener(PhotoPagerFragment.this::goBack);
+            photo = view.findViewById(idOfImageView());
+            photo.setMaximumScale(7f);
 
-        Holder(int adapterPosition, View root) {
-            super(adapterPosition, root);
-            // TODO: 10.01.2017 каким образом root.getContext() получается NULL ?
+            progress = view.findViewById(idOfProgressBar());
+            reload = view.findViewById(R.id.goto_button);
+            mPicassoLoadCallback = new WeakPicassoLoadCallback(this);
 
-            mPhotoView.setOnSingleFlingListener(new CloseOnFlingListener(root.getContext()) {
-                @Override
-                public boolean onVerticalFling(float distanceByY) {
-                    if (canGoBack()) {
-                        animateImageViewAndGoBack(distanceByY);
-                        return true;
-                    }
-
-                    return false;
-                }
-            });
-
-            mPhotoView.setOnPhotoTapListener((view, x, y) -> callPresenter(PhotoPagerPresenter::firePhotoTap));
+            photo.setOnPhotoTapListener((view_photo, x, y) -> callPresenter(PhotoPagerPresenter::firePhotoTap));
         }
 
-        private void animateImageViewAndGoBack(float distance) {
-            ObjectAnimator objectAnimatorPosition = ObjectAnimator.ofFloat(mItemView, "translationY", -distance);
-            ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mItemView, View.ALPHA, 1, 0);
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(objectAnimatorPosition, objectAnimatorAlpha);
-            animatorSet.setDuration(200);
-            animatorSet.addListener(mGoBackAnimationAdapter);
-            animatorSet.start();
-        }
-
-        void bindTo(@NonNull Photo photo) {
+        public void bindTo(@NonNull Photo photo_image) {
             int size = getPhotoSizeFromPrefs();
 
-            String url = photo.getUrlForSize(size, true);
+            String url = photo_image.getUrlForSize(size, true);
+
+            reload.setOnClickListener(v -> {
+                reload.setVisibility(View.INVISIBLE);
+                if (nonEmpty(url)) {
+                    loadImage(url);
+                }
+                else
+                    PicassoInstance.with().cancelRequest(photo);
+            });
 
             if (nonEmpty(url)) {
                 loadImage(url);
-            } else {
-                // waiting for image valid URL
-                //showError(R.string.image_load_error);
             }
+            else {
+                PicassoInstance.with().cancelRequest(photo);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.empty_url);
+            }
+
+        }
+        private void resolveProgressVisibility() {
+            progress.setVisibility(mLoadingNow ? View.VISIBLE : View.GONE);
         }
 
-        @Override
+        protected void loadImage(@NonNull String url) {
+            mLoadingNow = true;
+
+            resolveProgressVisibility();
+
+            PicassoInstance.with()
+                    .load(url)
+                    .tag(Constants.PICASSO_TAG)
+                    .into(photo, mPicassoLoadCallback);
+        }
+
+        @IdRes
         protected int idOfImageView() {
             return R.id.image_view;
         }
 
-        @Override
+        @IdRes
         protected int idOfProgressBar() {
             return R.id.progress_bar;
         }
+
+        @Override
+        public void onSuccess() {
+            mLoadingNow = false;
+            resolveProgressVisibility();
+            reload.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onError(Exception e) {
+            mLoadingNow = false;
+            resolveProgressVisibility();
+            reload.setVisibility(View.VISIBLE);
+        }
     }
 
-    private class Adapter extends AbsPagerAdapter<Holder> {
+    private class Adapter extends RecyclerView.Adapter<PhotoViewHolder> {
 
         final List<Photo> mPhotos;
 
@@ -663,21 +678,29 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             mPhotos = data;
         }
 
+        @NonNull
         @Override
-        public int getCount() {
-            return mPhotos.size();
-        }
-
-        @Override
-        protected Holder createHolder(int adapterPosition, ViewGroup container) {
-            return new Holder(adapterPosition, LayoutInflater.from(container.getContext())
+        public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
+            return new PhotoViewHolder(LayoutInflater.from(container.getContext())
                     .inflate(R.layout.content_photo_page, container, false));
         }
 
         @Override
-        protected void bindHolder(@NonNull Holder holder, int position) {
+        public void onViewDetachedFromWindow(PhotoViewHolder holder)
+        {
+            super.onViewDetachedFromWindow(holder);
+            PicassoInstance.with().cancelRequest(holder.photo);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
             Photo photo = mPhotos.get(position);
             holder.bindTo(photo);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mPhotos.size();
         }
     }
 }

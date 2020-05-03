@@ -5,9 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,9 +18,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.lang.ref.WeakReference;
 
@@ -52,7 +46,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
 
     private static final int REFRESH_TIME = 1;
     private PlaybackStatus mPlaybackStatus;
-    private ImageView mPlay;
+    private View play;
+    private ImageView play_icon;
+    private ImageView play_cover;
     private TextView Title;
     private SeekBar mProgress;
     private boolean mFromTouch = false;
@@ -99,7 +95,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mini_player, container, false);
-        mPlay = root.findViewById(R.id.btn_play_pause);
+        play = root.findViewById(R.id.item_audio_play);
+        play_icon = root.findViewById(R.id.item_audio_play_icon);
+        play_cover = root.findViewById(R.id.item_audio_play_cover);
         lnt = root.findViewById(R.id.miniplayer_layout);
         lnt.setVisibility(MusicUtils.getMiniPlayerVisibility() ? View.VISIBLE : View.GONE);
         ImageButton mPClosePlay = root.findViewById(R.id.close_player);
@@ -108,13 +106,13 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             lnt.setVisibility(View.GONE);
             }
         );
-        mPlay.setOnClickListener(v -> {
+        play.setOnClickListener(v -> {
             MusicUtils.playOrPause();
             if (MusicUtils.isPlaying()) {
-                mPlay.setImageResource(R.drawable.voice_state_animation);
-                Utils.doAnimate(mPlay.getDrawable(), true);
+                play_icon.setImageResource(R.drawable.voice_state_animation);
+                Utils.doAnimate(play_icon.getDrawable(), true);
             } else {
-                mPlay.setImageResource(R.drawable.song);
+                play_icon.setImageResource(R.drawable.song);
             }
         });
         ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
@@ -133,37 +131,25 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         if (!isAdded()) {
             return;
         }
-        if (nonNull(mPlay)) {
+        if (nonNull(play_cover) && nonNull(play_icon)) {
             Audio audio = MusicUtils.getCurrentAudio();
             if (audio != null && !isNullOrEmptyString(audio.getThumb_image_little())) {
-                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
                 PicassoInstance.with()
                         .load(audio.getThumb_image_little())
+                        .placeholder(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()))
                         .transform(new PolyTransformation())
                         .tag(Constants.PICASSO_TAG)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                mPlay.setBackground(new BitmapDrawable(getResources(), bitmap));
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
-            } else
-                mPlay.setBackground(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+                        .into(play_cover);
+            } else {
+                PicassoInstance.with().cancelRequest(play_cover);
+                play_cover.setImageDrawable(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+            }
 
             if (MusicUtils.isPlaying()) {
-                mPlay.setImageResource(R.drawable.voice_state_animation);
-                Utils.doAnimate(mPlay.getDrawable(), true);
+                play_icon.setImageResource(R.drawable.voice_state_animation);
+                Utils.doAnimate(play_icon.getDrawable(), true);
             } else {
-                mPlay.setImageResource(R.drawable.song);
+                play_icon.setImageResource(R.drawable.song);
             }
         }
     }

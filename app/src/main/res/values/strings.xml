@@ -1241,6 +1241,7 @@
     <string name="open_clipboard_url">Открыть ссылку из буфера</string>
     <string name="set_offline">Стать Offline</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
+    <string name="empty_url">Пустая ссылка</string>
     <string name="get_lyrics">ТЕКСТ ПЕСНИ</string>
     <string name="get_lyrics_menu">Текст песни</string>
     <string name="get_recommendation_by_audio">Искать похожее</string>

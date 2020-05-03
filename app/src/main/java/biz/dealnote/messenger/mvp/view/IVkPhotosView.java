@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.model.Photo;
@@ -32,7 +33,7 @@ public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorV
 
     void notifyUploadProgressChanged(int id, int progress);
 
-    void displayGallery(int accountId, int albumId, int ownerId, Integer focusToId, Integer Index);
+    void displayGallery(int accountId, int albumId, int ownerId, ArrayList<Photo> photos, int position);
 
     void displayDefaultToolbarTitle();
 

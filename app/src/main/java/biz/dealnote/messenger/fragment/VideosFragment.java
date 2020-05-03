@@ -240,7 +240,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
         if(Add != null) {
             if (getPresenter().getAccountId() != getPresenter().getOwnerId())
-                Add.setVisibility(View.INVISIBLE);
+                Add.setVisibility(View.GONE);
             else {
                 Add.setVisibility(View.VISIBLE);
                 Add.setOnClickListener(v -> {

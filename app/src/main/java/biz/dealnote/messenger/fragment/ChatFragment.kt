@@ -17,6 +17,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.activity.*
@@ -49,8 +50,9 @@ import biz.dealnote.messenger.util.Utils.nonEmpty
 import biz.dealnote.messenger.util.ViewUtils
 import biz.dealnote.messenger.view.InputViewController
 import biz.dealnote.messenger.view.LoadMoreFooterHelper
+import biz.dealnote.messenger.view.SwipeDismissBehavior2
 import biz.dealnote.messenger.view.emoji.EmojiconTextView
-import biz.dealnote.messenger.view.emoji.StickersGridView
+import biz.dealnote.messenger.view.emoji.EmojiconsPopup
 import biz.dealnote.mvp.core.IPresenterFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -63,7 +65,7 @@ import java.util.*
  */
 class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChatView, InputViewController.OnInputActionCallback,
         BackPressCallback, MessagesAdapter.OnMessageActionListener, InputViewController.RecordActionsCallback,
-        AttachmentsViewBinder.VoiceActionListener, StickersGridView.OnStickerClickedListener,
+        AttachmentsViewBinder.VoiceActionListener, EmojiconsPopup.OnStickerClickedListener,
         EmojiconTextView.OnHashTagClickListener {
 
     private var headerView: View? = null
@@ -88,6 +90,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
+
+    private var mSwipe: SwipeDismissBehavior2<RecyclerView>? = null
 
     private var goto_button : FloatingActionButton? = null
 
@@ -119,6 +123,21 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 }
             })
         }
+
+        mSwipe = SwipeDismissBehavior2<RecyclerView>()
+        mSwipe?.setSwipeDirection(SwipeDismissBehavior2.SWIPE_DIRECTION_START_TO_END)
+        mSwipe?.setSensitivity(0.08f);
+        mSwipe!!.setListener(object : SwipeDismissBehavior2.OnDismissListener {
+            override fun onDismiss(view: View?) {
+                goBack()
+            }
+
+            override fun onDragStateChanged(state: Int) {
+            }
+        })
+
+        val layoutParams: CoordinatorLayout.LayoutParams = recyclerView!!.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParams.setBehavior(mSwipe)
 
         headerView = inflater.inflate(R.layout.footer_load_more, recyclerView, false)
 
@@ -880,6 +899,16 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 // 'android.content.res.Resources$Theme android.app.Activity.getTheme()' on a null object reference
             }
 
+        }
+    }
+
+    private fun canGoBack(): Boolean {
+        return requireActivity().supportFragmentManager.backStackEntryCount > 1
+    }
+
+    private fun goBack() {
+        if (isAdded && canGoBack()) {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

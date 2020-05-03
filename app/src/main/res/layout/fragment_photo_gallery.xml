@@ -5,47 +5,51 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <include layout="@layout/toolbar" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+            <!--app:layout_anchor="@id/list"-->
+            <!--app:layout_anchorGravity="bottom|right|end"-->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fr_photo_gallery_attach"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingTop="@dimen/recyclerview_toolbar_offset"
-                android:scrollbars="vertical" />
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/plus"
+                app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/empty"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:text="@string/no_photos" />
-
-
-        <!--app:layout_anchor="@id/list"-->
-        <!--app:layout_anchorGravity="bottom|right|end"-->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fr_photo_gallery_attach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/plus"
-            app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="@string/no_photos" />
 </RelativeLayout>

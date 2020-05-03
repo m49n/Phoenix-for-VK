@@ -12,14 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -76,25 +73,26 @@ public class VideosTabsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        ViewPager viewPager = view.findViewById(R.id.fragment_videos_pager);
-        setupViewPager(viewPager);
+        ViewPager2 viewPager = view.findViewById(R.id.fragment_videos_pager);
+        viewPager.setOffscreenPageLimit(1);
+        Adapter adapter = new Adapter(requireActivity());
+        viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = view.findViewById(R.id.fragment_videos_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        new TabLayoutMediator(view.findViewById(R.id.fragment_videos_tabs), viewPager, (tab, position) -> {
+            switch (position)
+            {
+                case 0:
+                    tab.setText(R.string.videos_my);
+                    break;
+                case 1:
+                    tab.setText(R.string.videos_albums);
+                    break;
+            }
+        }).attach();
     }
 
     public int getAccountId() {
         return accountId;
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        VideosFragment fragment = VideosFragment.newInstance(getAccountId(), ownerId, 0, action, null);
-        fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
-
-        Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(fragment, getString(R.string.videos_my));
-        adapter.addFragment(VideoAlbumsFragment.newInstance(getAccountId(), ownerId, action), getString(R.string.videos_albums));
-        viewPager.setAdapter(adapter);
     }
 
     private boolean isMy() {
@@ -128,33 +126,29 @@ public class VideosTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
-    static class Adapter extends FragmentStatePagerAdapter {
-
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    class Adapter extends FragmentStateAdapter {
+        public Adapter(FragmentActivity fm) {
+            super(fm);
         }
 
-        void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position)
+            {
+                case 0:
+                    VideosFragment fragment = VideosFragment.newInstance(getAccountId(), ownerId, 0, action, null);
+                    fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
+                    return fragment;
+                case 1:
+                    return VideoAlbumsFragment.newInstance(getAccountId(), ownerId, action);
+            }
+            throw new UnsupportedOperationException();
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+        public int getItemCount() {
+            return 2;
         }
     }
 

@@ -432,13 +432,17 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
 
     public void firePhotoClick(SelectablePhotoWrapper wrapper) {
         int Index = 0;
+        boolean trig = false;
+        ArrayList<Photo> photos_ret = new ArrayList<>(photos.size());
         for (int i = 0; i < photos.size(); i++) {
             SelectablePhotoWrapper photo = photos.get(i);
-            if (photo.getPhoto().getId() == wrapper.getPhoto().getId()) {
+            photos_ret.add(photo.getPhoto());
+            if (!trig && photo.getPhoto().getId() == wrapper.getPhoto().getId() && photo.getPhoto().getOwnerId() == wrapper.getPhoto().getOwnerId()) {
                 Index = i;
+                trig = true;
             }
         }
-        getView().displayGallery(getAccountId(), albumId, ownerId, wrapper.getPhoto().getId(), Index);
+        getView().displayGallery(getAccountId(), albumId, ownerId, photos_ret, Index);
     }
 
     public void fireSelectionCommitClick() {

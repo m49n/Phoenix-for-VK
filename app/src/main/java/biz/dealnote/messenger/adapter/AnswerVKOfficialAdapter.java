@@ -117,11 +117,15 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
                     holder.avatar.setOnClickListener(v -> clickListener.openOwnerWall(finalId));
                     LoadIcon(holder, Page, true);
                 }
-                else
+                else {
+                    PicassoInstance.with().cancelRequest(holder.avatar);
                     LoadIcon(holder, Page, false);
+                }
             }
-            else
+            else {
+                PicassoInstance.with().cancelRequest(holder.avatar);
                 LoadIcon(holder, Page, false);
+            }
         }
         else {
             holder.name.setText("");

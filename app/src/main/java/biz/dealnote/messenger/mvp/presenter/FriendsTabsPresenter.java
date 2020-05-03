@@ -81,6 +81,7 @@ public class FriendsTabsPresenter extends AccountDependencyPresenter<IFriendsTab
     }
 
     private void onCountersGetError(Throwable t) {
+        callView(view -> view.displayConters(counters));
         showError(getView(), t);
     }
 

@@ -9,16 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.LongSparseArray;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.lang.ref.WeakReference;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
-import biz.dealnote.messenger.adapter.MyFragmentStatePagerAdapter;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.BackPressCallback;
@@ -30,6 +33,7 @@ import biz.dealnote.messenger.model.selection.LocalVideosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.model.selection.Types;
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
+import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
@@ -75,20 +79,23 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
         View root = inflater.inflate(R.layout.activity_dual_tab_photos, container, false);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
-        TabLayout tabLayout = root.findViewById(R.id.tablayout);
+        ViewPager2 viewPager = root.findViewById(R.id.view_pager);
 
-        ViewPager viewPager = root.findViewById(R.id.view_pager);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mPagerAdapter = new Adapter(requireActivity(), mSources);
+        viewPager.setAdapter(mPagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
                 mCurrentTab = position;
             }
         });
 
-        mPagerAdapter = new Adapter(getChildFragmentManager(), mSources);
-        viewPager.setAdapter(mPagerAdapter);
-
-        tabLayout.setupWithViewPager(viewPager, true);
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), viewPager, (tab, position) -> {
+            tab.setText(mPagerAdapter.getPageTitle(position));
+        }).attach();
         return root;
     }
 
@@ -113,64 +120,17 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
         return true;
     }
 
-    private class Adapter extends MyFragmentStatePagerAdapter {
+    private class Adapter extends FragmentStateAdapter {
 
         private final Sources mSources;
+        private LongSparseArray<WeakReference<Fragment>> fragments;
 
-        public Adapter(FragmentManager fm, Sources mSources) {
+        public Adapter(@NonNull FragmentActivity fm, Sources mSources) {
             super(fm);
             this.mSources = mSources;
+            this.fragments = new LongSparseArray<>();
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            AbsSelectableSource source = mSources.get(position);
-
-            if (source instanceof LocalPhotosSelectableSource) {
-                Bundle args = new Bundle();
-                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
-                LocalImageAlbumsFragment fragment = new LocalImageAlbumsFragment();
-                fragment.setArguments(args);
-                return fragment;
-            }
-
-            if (source instanceof LocalGallerySelectableSource) {
-                Bundle args = new Bundle();
-                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
-                LocalPhotosFragment fragment = LocalPhotosFragment.newInstance(10, null);
-                fragment.setArguments(args);
-                return fragment;
-            }
-
-            if (source instanceof LocalVideosSelectableSource) {
-                Bundle args = new Bundle();
-                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
-                LocalVideosFragment fragment = LocalVideosFragment.newInstance();
-                fragment.setArguments(args);
-                return fragment;
-            }
-
-            if (source instanceof VkPhotosSelectableSource) {
-                final VkPhotosSelectableSource vksource = (VkPhotosSelectableSource) source;
-                VKPhotoAlbumsFragment fragment = VKPhotoAlbumsFragment.newInstance(vksource.getAccountId(), vksource.getOwnerId(), null, null);
-                fragment.requireArguments().putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
-                return fragment;
-            }
-
-            if (source instanceof FileManagerSelectableSource) {
-                Bundle args = new Bundle();
-                args.putInt(Extra.ACTION, FileManagerFragment.SELECT_FILE);
-                args.putBoolean(FileManagerFragment.EXTRA_SHOW_CANNOT_READ, true);
-
-                FileManagerFragment fileManagerFragment = new FileManagerFragment();
-                fileManagerFragment.setArguments(args);
-                return fileManagerFragment;
-            }
-
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public CharSequence getPageTitle(int position) {
             @Types
             int tabtype = mSources.get(position).getType();
@@ -195,9 +155,64 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             throw new UnsupportedOperationException();
         }
 
+        @NonNull
         @Override
-        public int getCount() {
+        public Fragment createFragment(int position) {
+            AbsSelectableSource source = mSources.get(position);
+
+            if (source instanceof LocalPhotosSelectableSource) {
+                Bundle args = new Bundle();
+                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
+                LocalImageAlbumsFragment fragment = new LocalImageAlbumsFragment();
+                fragment.setArguments(args);
+                fragments.put(position, new WeakReference<>(fragment));
+                return fragment;
+            }
+
+            if (source instanceof LocalGallerySelectableSource) {
+                LocalPhotosFragment fragment = LocalPhotosFragment.newInstance(10, null, true);
+                fragments.put(position, new WeakReference<>(fragment));
+                return fragment;
+            }
+
+            if (source instanceof LocalVideosSelectableSource) {
+                Bundle args = new Bundle();
+                args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
+                LocalVideosFragment fragment = LocalVideosFragment.newInstance();
+                fragment.setArguments(args);
+                fragments.put(position, new WeakReference<>(fragment));
+                return fragment;
+            }
+
+            if (source instanceof VkPhotosSelectableSource) {
+                final VkPhotosSelectableSource vksource = (VkPhotosSelectableSource) source;
+                VKPhotoAlbumsFragment fragment = VKPhotoAlbumsFragment.newInstance(vksource.getAccountId(), vksource.getOwnerId(), null, null, true);
+                fragments.put(position, new WeakReference<>(fragment));
+                return fragment;
+            }
+
+            if (source instanceof FileManagerSelectableSource) {
+                Bundle args = new Bundle();
+                args.putInt(Extra.ACTION, FileManagerFragment.SELECT_FILE);
+                args.putBoolean(FileManagerFragment.EXTRA_SHOW_CANNOT_READ, true);
+
+                FileManagerFragment fileManagerFragment = new FileManagerFragment();
+                fileManagerFragment.setArguments(args);
+                fragments.put(position, new WeakReference<>(fileManagerFragment));
+                return fileManagerFragment;
+            }
+
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getItemCount() {
             return mSources.count();
+        }
+
+        public Fragment findFragmentByPosition(int position){
+            WeakReference<Fragment> weak = fragments.get(position);
+            return Objects.isNull(weak) ? null : weak.get();
         }
     }
 }

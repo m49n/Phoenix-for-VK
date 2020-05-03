@@ -28,6 +28,7 @@ import biz.dealnote.messenger.fragment.friends.FriendsTabsFragment;
 import biz.dealnote.messenger.model.FriendsCounters;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.Peer;
+import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.PostFilter;
 import biz.dealnote.messenger.model.User;
@@ -320,9 +321,28 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     }
 
     private void openAvatarPhotoAlbum() {
-        Integer currentAvatarPhotoId = nonNull(details) && nonNull(details.getPhotoId()) ? details.getPhotoId().getId() : null;
+        appendDisposable(photosInteractor.get(getAccountId(), ownerId, -6,200, 0, true)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::DisplayUserProfileAlbum, tt -> showError(getView(), getCauseIfRuntime(tt))));
+    }
 
-        callView(view -> view.openPhotoAlbum(getAccountId(), ownerId, -6, currentAvatarPhotoId));
+    private void DisplayUserProfileAlbum(List<Photo> photos)
+    {
+        Integer currentAvatarPhotoId = nonNull(details) && nonNull(details.getPhotoId()) ? details.getPhotoId().getId() : null;
+        Integer currentAvatarOwner_id = nonNull(details) && nonNull(details.getPhotoId()) ? details.getPhotoId().getOwnerId() : null;
+        int sel = 0;
+        if(currentAvatarPhotoId != null && currentAvatarOwner_id != null) {
+            int ut = 0;
+            for (Photo i : photos) {
+                if (i.getOwnerId() == currentAvatarOwner_id && i.getId() == currentAvatarPhotoId) {
+                    sel = ut;
+                    break;
+                }
+                ut++;
+            }
+        }
+        final int curr = sel;
+        callView(view -> view.openPhotoAlbum(getAccountId(), ownerId, -6, new ArrayList<Photo>(photos), curr));
     }
 
     private void onAddFriendResult(int resultCode) {

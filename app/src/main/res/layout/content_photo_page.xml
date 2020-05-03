@@ -2,12 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <su.rbv.flingPhotoView.FlingPhotoView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:fling_type="top"
+        app:done_duration="200"
+        app:end_scale="0.5"
+        app:done_deltaY_threshold="50dp"
+        app:return_duration="200"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
@@ -19,5 +25,22 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:indeterminate="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/goto_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/refresh"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
+        app:maxImageSize="30dp" />
 
 </RelativeLayout>

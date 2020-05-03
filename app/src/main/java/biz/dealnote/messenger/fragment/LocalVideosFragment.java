@@ -45,10 +45,7 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
     private FloatingActionButton fabAttach;
 
     public static LocalVideosFragment newInstance() {
-        Bundle args = new Bundle();
-        LocalVideosFragment fragment = new LocalVideosFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new LocalVideosFragment();
     }
 
     @Override

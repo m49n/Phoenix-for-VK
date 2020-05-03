@@ -23,7 +23,7 @@ public class PhotoAlbumsActivity extends NoMainActivity implements PlaceProvider
             final int ownerId = intent.getExtras().getInt(Extra.OWNER_ID);
             final String action = intent.getStringExtra(Extra.ACTION);
 
-            VKPhotoAlbumsFragment fragment = VKPhotoAlbumsFragment.newInstance(accountId, ownerId, action, null);
+            VKPhotoAlbumsFragment fragment = VKPhotoAlbumsFragment.newInstance(accountId, ownerId, action, null, false);
 
             getSupportFragmentManager()
                     .beginTransaction()

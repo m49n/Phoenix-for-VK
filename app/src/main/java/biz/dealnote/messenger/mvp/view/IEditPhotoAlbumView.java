@@ -8,6 +8,6 @@ import biz.dealnote.messenger.view.steppers.impl.CreatePhotoAlbumStepsHost;
  * Created by ruslan.kolbasa on 30.11.2016.
  * phoenix
  */
-public interface IEditPhotoAlbumView extends IAccountDependencyView, ISteppersView<CreatePhotoAlbumStepsHost> {
+public interface IEditPhotoAlbumView extends IAccountDependencyView, ISteppersView<CreatePhotoAlbumStepsHost>, IErrorView {
 
 }

@@ -1,2 +1,2 @@
 include ':app', ':mvpcore'
-include ':app', ':photoview'
+include ':app', ':flingPhotoView'

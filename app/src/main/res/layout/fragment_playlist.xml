@@ -6,6 +6,9 @@
 
     <include layout="@layout/toolbar" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:paddingTop="@dimen/recyclerview_toolbar_offset"
@@ -19,15 +22,14 @@
             android:id="@+id/goto_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-
+            android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/fab_margin"
             android:layout_marginTop="@dimen/fab_margin"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="46dp"
+            android:layout_marginBottom="50dp"
             android:src="@drawable/audio_player"
             app:fabSize="normal"
             app:layout_behavior="biz.dealnote.messenger.view.FABBehavior"
             app:maxImageSize="30dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

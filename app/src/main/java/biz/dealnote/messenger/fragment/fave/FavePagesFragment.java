@@ -54,7 +54,7 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
         View root = inflater.inflate(R.layout.fragment_fave_pages, container, false);
         mEmpty = root.findViewById(R.id.empty);
 
-        RecyclerView recyclerView = root.findViewById(android.R.id.list);
+        RecyclerView recyclerView = root.findViewById(R.id.list);
         int columns = getContext().getResources().getInteger(R.integer.photos_column_count);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), columns);

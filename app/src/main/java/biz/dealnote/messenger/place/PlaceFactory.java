@@ -187,9 +187,9 @@ public class PlaceFactory {
                 .withStringExtra(Extra.BODY, body);
     }
 
-    public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, Integer focusPhotoId, Integer Index){
+    public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, ArrayList<Photo> photos, int position){
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY)
-                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, focusPhotoId, Index));
+                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, photos, position));
     }
 
     public static Place getSimpleGalleryPlace(int accountId, ArrayList<Photo> photos, int position, boolean needRefresh){
@@ -409,8 +409,8 @@ public class PlaceFactory {
         return new Place(Place.TOPICS).setArguments(TopicsFragment.buildArgs(accountId, ownerId));
     }
 
-    public static Place getSearchPlace(int accountId, int tab, @Nullable BaseSearchCriteria criteria){
-        return new Place(Place.SEARCH).setArguments(SearchTabsFragment.buildArgs(accountId, tab, criteria));
+    public static Place getSearchPlace(int accountId, int tab){
+        return new Place(Place.SEARCH).setArguments(SearchTabsFragment.buildArgs(accountId, tab));
     }
 
     public static Place getCreatePostPlace(int accountId, int ownerId, @EditingPostType int editingType,

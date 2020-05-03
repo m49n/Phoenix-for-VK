@@ -61,7 +61,7 @@ public class CommunityControlFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         ViewPager2 pager = root.findViewById(R.id.view_pager);
-        pager.setOffscreenPageLimit(2);
+        pager.setOffscreenPageLimit(1);
 
         List<ITab> tabs = new ArrayList<>();
         if(mCommunity.getAdminLevel() > 0)

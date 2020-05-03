@@ -27,7 +27,7 @@ public class StickersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
     private StickerSet stickers;
-    private StickersGridView.OnStickerClickedListener stickerClickedListener;
+    private EmojiconsPopup.OnStickerClickedListener stickerClickedListener;
 
     public StickersAdapter(Context context, StickerSet stickers) {
         this.context = context;
@@ -46,7 +46,7 @@ public class StickersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        super.onViewDetachedFromWindow(holder);
 //    }
 
-    public void setStickerClickedListener(StickersGridView.OnStickerClickedListener listener) {
+    public void setStickerClickedListener(EmojiconsPopup.OnStickerClickedListener listener) {
         this.stickerClickedListener = listener;
     }
 
@@ -64,7 +64,8 @@ public class StickersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        return stickers.getStickers().get(position).isAnimated() ? TYPE_ANIMATED : TYPE_IMAGE;
+        //return stickers.getStickers().get(position).isAnimated() ? TYPE_ANIMATED : TYPE_IMAGE;
+        return TYPE_IMAGE;
     }
 
     @Override

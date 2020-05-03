@@ -37,7 +37,7 @@ public class PhotosActivity extends NoMainActivity implements PlaceProvider {
         if(place.type == Place.LOCAL_IMAGE_ALBUM){
             int maxSelectionCount = getIntent().getIntExtra(EXTRA_MAX_SELECTION_COUNT, 10);
             LocalImageAlbum album = place.getArgs().getParcelable(Extra.ALBUM);
-            LocalPhotosFragment localPhotosFragment = LocalPhotosFragment.newInstance(maxSelectionCount, album);
+            LocalPhotosFragment localPhotosFragment = LocalPhotosFragment.newInstance(maxSelectionCount, album, false);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, localPhotosFragment)

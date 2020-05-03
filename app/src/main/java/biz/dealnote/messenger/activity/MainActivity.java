@@ -685,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 openPlace(PlaceFactory.getBookmarksPlace(aid, FaveTabsFragment.TAB_PHOTOS));
                 break;
             case AdditionalNavigationFragment.PAGE_SEARCH:
-                openPlace(PlaceFactory.getSearchPlace(aid, SearchTabsFragment.TAB_PEOPLE, null));
+                openPlace(PlaceFactory.getSearchPlace(aid, SearchTabsFragment.TAB_PEOPLE));
                 break;
             case AdditionalNavigationFragment.PAGE_NEWSFEED_COMMENTS:
                 openPlace(PlaceFactory.getNewsfeedCommentsPlace(aid));
@@ -1107,7 +1107,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                         args.getInt(Extra.ACCOUNT_ID),
                         args.getInt(Extra.OWNER_ID),
                         args.getString(Extra.ACTION),
-                        args.getParcelable(Extra.OWNER)
+                        args.getParcelable(Extra.OWNER), false
                 ));
                 break;
 

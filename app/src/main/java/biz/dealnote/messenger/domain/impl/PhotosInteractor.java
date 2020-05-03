@@ -80,9 +80,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                         dbos.add(Dto2Entity.mapPhoto(dto));
                     }
 
-                    return cache.photos()
-                            .insertPhotosRx(accountId, ownerId, -9000, dbos, offset == 0)
-                            .andThen(Single.just(photos));
+                    return Single.just(photos);
                 });
     }
 
@@ -101,9 +99,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                         dbos.add(Dto2Entity.mapPhoto(dto));
                     }
 
-                    return cache.photos()
-                            .insertPhotosRx(accountId, ownerId, -9001, dbos, offset == 0)
-                            .andThen(Single.just(photos));
+                    return Single.just(photos);
                 });
     }
 
@@ -160,8 +156,8 @@ public class PhotosInteractor implements IPhotosInteractor {
                 .flatMap(items -> {
                     List<VKApiPhotoAlbum> dtos = Utils.listEmptyIfNull(items.getItems());
 
-                    List<PhotoAlbumEntity> dbos = new ArrayList<>(dtos.size() + 2);
-                    List<PhotoAlbum> albums = new ArrayList<>(dbos.size() + 2);
+                    List<PhotoAlbumEntity> dbos = new ArrayList<>(dtos.size());
+                    List<PhotoAlbum> albums = new ArrayList<>(dbos.size());
 
                     VKApiPhotoAlbum Allph = new VKApiPhotoAlbum();
                     Allph.title = "Все фото";
@@ -175,24 +171,26 @@ public class PhotosInteractor implements IPhotosInteractor {
                     usersPh.owner_id = ownerId;
                     usersPh.size = -1;
 
-                    dbos.add(Dto2Entity.buildPhotoAlbumDbo(Allph));
-                    albums.add(Dto2Model.transform(Allph));
-
                     if(ownerId >= 0) {
-                        boolean HasUserPhotoAlb = false;
                         for (VKApiPhotoAlbum dto : dtos) {
                             if (dto.id == -9000) {
-                                HasUserPhotoAlb = true;
+                                usersPh = dto;
                                 break;
                             }
                         }
-                        if (!HasUserPhotoAlb) {
-                            dbos.add(Dto2Entity.buildPhotoAlbumDbo(usersPh));
-                            albums.add(Dto2Model.transform(usersPh));
-                        }
+                    }
+
+                    if(offset == 0) {
+                        dbos.add(Dto2Entity.buildPhotoAlbumDbo(Allph));
+                        albums.add(Dto2Model.transform(Allph));
+
+                        dbos.add(Dto2Entity.buildPhotoAlbumDbo(usersPh));
+                        albums.add(Dto2Model.transform(usersPh));
                     }
 
                     for(VKApiPhotoAlbum dto : dtos){
+                        if (dto.id == -9000)
+                            continue;
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(dto));
                         albums.add(Dto2Model.transform(dto));
                     }

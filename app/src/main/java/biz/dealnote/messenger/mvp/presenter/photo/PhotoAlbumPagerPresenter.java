@@ -8,17 +8,11 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import biz.dealnote.messenger.api.interfaces.INetworker;
-import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.domain.IPhotosInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
-import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.util.RxUtils;
-import biz.dealnote.messenger.util.Utils;
-import io.reactivex.Single;
 
-import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
 /**
@@ -27,30 +21,28 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
-    private final INetworker networker;
     private static final int COUNT_PER_LOAD = 100;
 
     private int mOwnerId;
     private int mAlbumId;
-    private int indexx;
-    private Integer mFocusPhotoId;
+    private boolean canLoad;
     private final IPhotosInteractor photosInteractor;
 
-    public PhotoAlbumPagerPresenter(int indexx, INetworker networker, int accountId, int ownerId, int albumId, Integer focusPhotoId,
+    public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo>photos,
                                     @Nullable Bundle savedInstanceState) {
         super(new ArrayList<>(0), accountId, savedInstanceState);
-        this.networker = networker;
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
         this.mOwnerId = ownerId;
         this.mAlbumId = albumId;
-        this.indexx = indexx;
+        this.canLoad = true;
 
-        if (nonNull(savedInstanceState)) {
-            this.mFocusPhotoId = null; // because has saved last view index
-        } else {
-            this.mFocusPhotoId = focusPhotoId;
-        }
-        loadData(ownerId, albumId);
+        getData().addAll(photos);
+        setCurrentIndex(indexx);
+
+        refreshPagerView();
+        resolveButtonsBarVisible();
+        resolveToolbarVisibility();
+        refreshInfoViews();
     }
 
     @Override
@@ -63,74 +55,27 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
         //no saving state
     }
 
-    public Single<List<Photo>> get(int accountId, int ownerId, int albumId, int count, int offset, boolean rev) {
-        return networker.vkDefault(accountId)
-                .photos()
-                .get(ownerId, String.valueOf(albumId), null, rev, offset, count)
-                .map(items -> Utils.listEmptyIfNull(items.getItems()))
-                .flatMap(dtos -> {
-                    List<Photo> photos = new ArrayList<>(dtos.size());
-
-                    for(VKApiPhoto dto : dtos){
-                        photos.add(Dto2Model.transform(dto));
-                    }
-
-                    return Single.just(photos);
-                });
-    }
-
-    public Single<List<Photo>> getUsersPhoto(int accountId, Integer ownerId, Integer extended, Integer offset, Integer count) {
-        return networker.vkDefault(accountId)
-                .photos()
-                .getUsersPhoto(ownerId, extended, offset, count)
-                .map(items -> Utils.listEmptyIfNull(items.getItems()))
-                .flatMap(dtos -> {
-                    List<Photo> photos = new ArrayList<>(dtos.size());
-
-                    for(VKApiPhoto dto : dtos){
-                        photos.add(Dto2Model.transform(dto));
-                    }
-
-                    return Single.just(photos);
-                });
-    }
-
-    public Single<List<Photo>> getAll(int accountId, Integer ownerId, Integer extended, Integer photo_sizes, Integer offset, Integer count) {
-        return networker.vkDefault(accountId)
-                .photos()
-                .getAll(ownerId, extended, photo_sizes, offset, count)
-                .map(items -> Utils.listEmptyIfNull(items.getItems()))
-                .flatMap(dtos -> {
-                    List<Photo> photos = new ArrayList<>(dtos.size());
-
-                    for(VKApiPhoto dto : dtos){
-                        photos.add(Dto2Model.transform(dto));
-                    }
-
-                    return Single.just(photos);
-                });
-    }
-
-    private void loadData(int ownerId, int albumId)
+    private void loadData()
     {
+        if(!canLoad)
+            return;
         changeLoadingNowState(true);
 
-        if(albumId != -9001 && albumId != -9000) {
-            appendDisposable(get(getAccountId(), ownerId, albumId, COUNT_PER_LOAD, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), true)
+        if(mAlbumId != -9001 && mAlbumId != -9000) {
+            appendDisposable(photosInteractor.get(getAccountId(), mOwnerId, mAlbumId, COUNT_PER_LOAD, mPhotos.size(), true)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
+                    .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
         }
-        else if(albumId == -9000)
+        else if(mAlbumId == -9000)
         {
-            appendDisposable(getUsersPhoto(getAccountId(), ownerId, 1, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), COUNT_PER_LOAD)
+            appendDisposable(photosInteractor.getUsersPhoto(getAccountId(), mOwnerId, 1, mPhotos.size(), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
+                    .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
         }
-        else if(albumId == -9001)
-        {
-            appendDisposable(getAll(getAccountId(), ownerId, 1, 1, Math.max(0, indexx - (COUNT_PER_LOAD / 2)), COUNT_PER_LOAD)
+        else {
+            appendDisposable(photosInteractor.getAll(getAccountId(), mOwnerId, 1, 1, mPhotos.size(), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(photos -> onActualPhotosReceived(photos), this::onActualDataGetError));
+                    .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
         }
     }
 
@@ -140,27 +85,17 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
     private void onActualPhotosReceived(List<Photo> data) {
         changeLoadingNowState(false);
+        if(data.isEmpty()) {
+            canLoad = false;
+            return;
+        }
 
         getData().addAll(data);
-
-        if (mFocusPhotoId != null) {
-            for (int i = 0; i < data.size(); i++) {
-                if (mFocusPhotoId == data.get(i).getId()) {
-                    setCurrentIndex(i);
-                    break;
-                }
-            }
-        }
 
         refreshPagerView();
         resolveButtonsBarVisible();
         resolveToolbarVisibility();
         refreshInfoViews();
-    }
-
-    private void onInitialDataGetError(Throwable t) {
-        showError(getView(), getCauseIfRuntime(t));
-        changeLoadingNowState(true);
     }
 
     @Override
@@ -170,30 +105,7 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
             return;
 
         if (newPage == count() - 1) {
-
-            if(mAlbumId != -9001 && mAlbumId != -9000) {
-                appendDisposable(get(getAccountId(), mOwnerId, mAlbumId, COUNT_PER_LOAD, count(), true)
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(this::onLoadingAtRangeFinished, t -> showError(getView(), getCauseIfRuntime(t))));
-            }
-            else if(mAlbumId == -9000)
-            {
-                appendDisposable(getUsersPhoto(getAccountId(), mOwnerId, 1, count(), COUNT_PER_LOAD)
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(this::onLoadingAtRangeFinished, t -> showError(getView(), getCauseIfRuntime(t))));
-            }
-            else if(mAlbumId == -9001)
-            {
-                appendDisposable(getAll(getAccountId(), mOwnerId, 1, 1, count(), COUNT_PER_LOAD)
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(this::onLoadingAtRangeFinished, t -> showError(getView(), getCauseIfRuntime(t))));
-            }
+            loadData();
         }
-    }
-
-    private void onLoadingAtRangeFinished(List<Photo> photos) {
-        getData().addAll(photos);
-        refreshPagerView();
-        resolveToolbarTitleSubtitleView();
     }
 }

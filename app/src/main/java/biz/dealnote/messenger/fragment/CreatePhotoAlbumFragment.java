@@ -303,10 +303,10 @@ public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPres
                 PhotoAlbumEditor editor = getArguments().getParcelable(EXTRA_EDITOR);
                 AssertUtils.requireNonNull(abum);
                 AssertUtils.requireNonNull(editor);
-                return new EditPhotoAlbumPresenter(accountId, abum, editor, saveInstanceState);
+                return new EditPhotoAlbumPresenter(accountId, abum, editor, requireActivity(), saveInstanceState);
             } else {
                 int ownerId = getArguments().getInt(Extra.OWNER_ID);
-                return new EditPhotoAlbumPresenter(accountId, ownerId, saveInstanceState);
+                return new EditPhotoAlbumPresenter(accountId, ownerId, requireActivity(), saveInstanceState);
             }
         };
     }

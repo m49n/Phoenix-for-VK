@@ -50,13 +50,14 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     public static final String ACTION_SELECT_ALBUM = "biz.dealnote.messenger.ACTION_SELECT_ALBUM";
 
-    public static VKPhotoAlbumsFragment newInstance(int accountId, int ownerId, String action, ParcelableOwnerWrapper ownerWrapper) {
+    public static VKPhotoAlbumsFragment newInstance(int accountId, int ownerId, String action, ParcelableOwnerWrapper ownerWrapper, boolean hide_toolbar) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putParcelable(Extra.OWNER, ownerWrapper);
         args.putString(Extra.ACTION, action);
-
+        if(hide_toolbar)
+            args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
         VKPhotoAlbumsFragment fragment = new VKPhotoAlbumsFragment();
         fragment.setArguments(args);
         return fragment;

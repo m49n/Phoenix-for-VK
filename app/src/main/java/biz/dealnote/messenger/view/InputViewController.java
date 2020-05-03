@@ -21,7 +21,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.emoji.EmojiconsPopup;
-import biz.dealnote.messenger.view.emoji.StickersGridView;
 
 public class InputViewController {
 
@@ -233,7 +232,7 @@ public class InputViewController {
         return true;
     }
 
-    public void setOnSickerClickListener(StickersGridView.OnStickerClickedListener sickerClickListener) {
+    public void setOnSickerClickListener(EmojiconsPopup.OnStickerClickedListener sickerClickListener) {
         if (emojiPopup != null) {
             emojiPopup.setOnStickerClickedListener(sickerClickListener);
         }

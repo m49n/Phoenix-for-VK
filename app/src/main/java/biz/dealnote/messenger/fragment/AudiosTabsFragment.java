@@ -83,7 +83,7 @@ public class AudiosTabsFragment extends BaseFragment {
         Adapter adapter = new Adapter(requireActivity());
         setupViewPager(viewPager, adapter);
 
-        new TabLayoutMediator(view.findViewById(R.id.fragment_audios_tabs), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+        new TabLayoutMediator(view.findViewById(R.id.fragment_audios_tabs), viewPager, (tab, position) -> {
             Integer fid = adapter.mFragments.get(position);
             if(fid == MY_AUDIO)
                 tab.setText(getString(R.string.my_saved));

@@ -4,11 +4,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
@@ -23,12 +24,13 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    </LinearLayout>
+
         <TextView
             android:id="@+id/empty"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="center"
             android:text="@string/no_photos" />
-    </RelativeLayout>
 
 </RelativeLayout>

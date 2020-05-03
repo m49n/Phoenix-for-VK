@@ -1,19 +1,27 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.interfaces.IPhotosApi;
+import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
+import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoAlbumEditor;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IEditPhotoAlbumView;
 import biz.dealnote.messenger.mvp.view.base.ISteppersView;
+import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.view.steppers.impl.CreatePhotoAlbumStepsHost;
+
+import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
 /**
  * Created by ruslan.kolbasa on 30.11.2016.
@@ -23,29 +31,32 @@ public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPho
 
     private int ownerId;
     private PhotoAlbum album;
+    private Context context;
     private PhotoAlbumEditor editor;
     private CreatePhotoAlbumStepsHost stepsHost;
 
     private final INetworker networker;
     private final boolean editing;
 
-    public EditPhotoAlbumPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
+    public EditPhotoAlbumPresenter(int accountId, int ownerId, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.networker = Injection.provideNetworkInterfaces();
         this.ownerId = ownerId;
         this.editor = PhotoAlbumEditor.create();
         this.editing = false;
+        this.context = context;
 
         init(savedInstanceState);
     }
 
-    public EditPhotoAlbumPresenter(int accountId, @NonNull PhotoAlbum album, @NonNull PhotoAlbumEditor editor, @Nullable Bundle savedInstanceState) {
+    public EditPhotoAlbumPresenter(int accountId, @NonNull PhotoAlbum album, @NonNull PhotoAlbumEditor editor, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.networker = Injection.provideNetworkInterfaces();
         this.album = album;
         this.ownerId = album.getOwnerId();
         this.editor = editor;
         this.editing = true;
+        this.context = context;
 
         init(savedInstanceState);
     }
@@ -113,23 +124,38 @@ public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPho
         final String title = state().getTitle();
         final String description = state().getDescription();
 
-        //final VkApiPrivacy privacyView = state().getPrivacyView().toDto();
-        //final VkApiPrivacy privacyComment = state().getPrivacyComment().toDto();
-
         final boolean uploadsByAdminsOnly = state().isUploadByAdminsOnly();
         final boolean commentsDisabled = state().isCommentsDisabled();
 
-        /*if (editing) {
-            appendDisposable(api.editAlbum(album.getId(), title, description, ownerId, privacyView,
-                    privacyComment, uploadsByAdminsOnly, commentsDisabled)
+        if (editing) {
+            appendDisposable(api.editAlbum(album.getId(), title, description, ownerId, null,
+                    null, uploadsByAdminsOnly, commentsDisabled)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe());
+                    .subscribe(t -> goToEditedAlbum(album, t), v -> showError(getView(), getCauseIfRuntime(v))));
         } else {
             final Integer groupId = ownerId < 0 ? Math.abs(ownerId) : null;
-            appendDisposable(api.createAlbum(title, groupId, description, privacyView, privacyComment, uploadsByAdminsOnly, commentsDisabled)
+            appendDisposable(api.createAlbum(title, groupId, description, null, null, uploadsByAdminsOnly, commentsDisabled)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe());
-        }*/
+                    .subscribe(this::goToAlbum, t -> showError(getView(), getCauseIfRuntime(t))));
+        }
+    }
+
+    private void goToAlbum(VKApiPhotoAlbum album)
+    {
+        PlaceFactory.getVKPhotosAlbumPlace(getAccountId(), album.owner_id, album.id,
+                VKPhotosFragment.ACTION_SHOW_PHOTOS)
+                .withParcelableExtra(Extra.ALBUM, new PhotoAlbum(album.id, album.owner_id))
+                .tryOpenWith(context);
+    }
+
+    private void goToEditedAlbum(PhotoAlbum album, Boolean ret)
+    {
+        if(ret == null || !ret)
+            return;
+        PlaceFactory.getVKPhotosAlbumPlace(getAccountId(), album.getOwnerId(), album.getId(),
+                VKPhotosFragment.ACTION_SHOW_PHOTOS)
+                .withParcelableExtra(Extra.ALBUM, album)
+                .tryOpenWith(context);
     }
 
     public boolean fireBackButtonClick() {
@@ -152,11 +178,11 @@ public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPho
     }
 
     public void fireUploadByAdminsOnlyChecked(boolean checked) {
-
+        state().setUploadByAdminsOnly(checked);
     }
 
     public void fireDisableCommentsClick(boolean checked) {
-
+        state().setCommentsDisabled(checked);
     }
 
     private CreatePhotoAlbumStepsHost.PhotoAlbumState state() {

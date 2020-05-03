@@ -6,10 +6,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -28,8 +25,6 @@ import androidx.annotation.Nullable;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
@@ -48,7 +43,7 @@ import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
-import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
+import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
@@ -635,16 +630,16 @@ public class AttachmentsViewBinder {
                 else
                     holder.quality.setVisibility(View.GONE);
 
-                holder.ibPlay.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
-                Utils.doAnimate(holder.ibPlay.getDrawable(), true);
+                holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+                Utils.doAnimate(holder.play_icon.getDrawable(), true);
                 int finalG = g;
                 AtomicInteger PlayState = new AtomicInteger(MusicUtils.AudioStatus(audio));
-                holder.ibPlay.getViewTreeObserver().addOnPreDrawListener(() -> {
+                holder.play_icon.getViewTreeObserver().addOnPreDrawListener(() -> {
                     Integer PlayStateCurrent = MusicUtils.AudioStatus(audio);
                     if(PlayStateCurrent != PlayState.get()) {
                         PlayState.set(PlayStateCurrent);
-                        holder.ibPlay.setImageResource(PlayStateCurrent == 1 ? R.drawable.voice_state_animation : (PlayStateCurrent == 2 ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
-                        Utils.doAnimate(holder.ibPlay.getDrawable(), true);
+                        holder.play_icon.setImageResource(PlayStateCurrent == 1 ? R.drawable.voice_state_animation : (PlayStateCurrent == 2 ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+                        Utils.doAnimate(holder.play_icon.getDrawable(), true);
                     }
                     return true;
                 });
@@ -655,28 +650,14 @@ public class AttachmentsViewBinder {
                     {
                         PicassoInstance.with()
                                 .load(audio.getThumb_image_little())
-                                .placeholder(R.drawable.background_gray)
+                                .placeholder(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()))
                                 .transform(TransformCover())
-                                .tag("audio_" + audio.getOwnerId() + "_" + audio.getId())
-                                .into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                        holder.ibPlay.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
-                                    }
-
-                                    @Override
-                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                    }
-
-                                    @Override
-                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                                    }
-                                });
+                                .tag(Constants.PICASSO_TAG)
+                                .into(holder.play_cover);
                     }
                     else {
-                        PicassoInstance.with().cancelTag("audio_" + audio.getOwnerId() + "_" + audio.getId());
-                        holder.ibPlay.setBackground(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
+                        PicassoInstance.with().cancelRequest(holder.play_cover);
+                        holder.play_cover.setImageDrawable(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                     }
                 }
 
@@ -684,21 +665,21 @@ public class AttachmentsViewBinder {
                     if (MusicUtils.isNowPlayingOrPreparingOrPaused(audio)) {
                         if(!Settings.get().other().isUse_stop_audio()) {
                             if(!MusicUtils.isNowPaused(audio))
-                                holder.ibPlay.setImageResource(R.drawable.paused);
+                                holder.play_icon.setImageResource(R.drawable.paused);
                             else {
-                                holder.ibPlay.setImageResource(R.drawable.voice_state_animation);
-                                Utils.doAnimate(holder.ibPlay.getDrawable(), true);
+                                holder.play_icon.setImageResource(R.drawable.voice_state_animation);
+                                Utils.doAnimate(holder.play_icon.getDrawable(), true);
                             }
                             MusicUtils.playOrPause();
                         }
                         else {
-                            holder.ibPlay.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
+                            holder.play_icon.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
                             MusicUtils.stop();
                         }
                     }
                     else {
-                        holder.ibPlay.setImageResource(R.drawable.voice_state_animation);
-                        Utils.doAnimate(holder.ibPlay.getDrawable(), true);
+                        holder.play_icon.setImageResource(R.drawable.voice_state_animation);
+                        Utils.doAnimate(holder.play_icon.getDrawable(), true);
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                     }
                 });
@@ -743,7 +724,7 @@ public class AttachmentsViewBinder {
                     holder.cancelSelectionAnimation();
                     holder.startSomeAnimation();
                     final List<Item> items = new ArrayList<>();
-                    items.add(new Item(R.id.btn_play_pause, new Text(R.string.play)).setIcon(R.drawable.play));
+                    items.add(new Item(R.id.play_item_audio, new Text(R.string.play)).setIcon(R.drawable.play));
                     if (audio.getOwnerId() != Settings.get().accounts().getCurrent())
                         items.add(new Item(R.id.add_item_audio, new Text(R.string.action_add)).setIcon(R.drawable.list_add));
                     else
@@ -761,12 +742,12 @@ public class AttachmentsViewBinder {
 
                     MenuAdapter mAdapter = new MenuAdapter(mContext, items);
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext)
-                            .setIcon(holder.ibPlay.getBackground().mutate())
+                            .setIcon(holder.play_cover.getDrawable().mutate())
                             .setTitle(Utils.firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle())
                             .setAdapter(mAdapter, (dialog, which) -> {
                                 switch(items.get(which).getKey())
                                 {
-                                    case R.id.btn_play_pause:
+                                    case R.id.play_item_audio:
                                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                                         PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
                                         break;
@@ -774,7 +755,7 @@ public class AttachmentsViewBinder {
                                         SendAttachmentsActivity.startForSendAttachments(mContext, Settings.get().accounts().getCurrent(), audio);
                                         break;
                                     case R.id.search_by_artist:
-                                        PlaceFactory.getSearchPlace(Settings.get().accounts().getCurrent(), SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
+                                        PlaceFactory.getSingleTabSearchPlace(Settings.get().accounts().getCurrent(), SearchContentType.AUDIOS, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
                                         break;
                                     case R.id.get_lyrics_menu:
                                         get_lyrics(audio);
@@ -910,7 +891,9 @@ public class AttachmentsViewBinder {
 
         TextView tvTitle;
         TextView tvSubtitle;
-        ImageView ibPlay;
+        View ibPlay;
+        ImageView play_icon;
+        ImageView play_cover;
         TextView time;
         ImageView saved;
         ImageView lyric;
@@ -924,6 +907,8 @@ public class AttachmentsViewBinder {
             tvTitle = root.findViewById(R.id.dialog_title);
             tvSubtitle = root.findViewById(R.id.dialog_message);
             ibPlay = root.findViewById(R.id.item_audio_play);
+            play_icon = root.findViewById(R.id.item_audio_play_icon);
+            play_cover = root.findViewById(R.id.item_audio_play_cover);
             time = root.findViewById(R.id.item_audio_time);
             saved = root.findViewById(R.id.saved);
             lyric = root.findViewById(R.id.lyric);

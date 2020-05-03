@@ -406,12 +406,15 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     public boolean onBackPressed() {
         Logger.d("FileManager", "onBackPressed");
 
-        boolean root = path.toString().equalsIgnoreCase("/");
-        if (!root) {
-            loadDirectoryUp();
+        if(path != null) {
+            boolean root = path.toString().equalsIgnoreCase("/");
+            if (!root) {
+                loadDirectoryUp();
+            }
+            return root;
         }
 
-        return root;
+        return true;
     }
 
     private class ItemFileNameComparator implements Comparator<FileItem> {

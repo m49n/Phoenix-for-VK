@@ -235,7 +235,10 @@ public interface IPhotosService {
                                                           @Field("extended") Integer extended,
                                                           @Field("photo_sizes") Integer photo_sizes,
                                                           @Field("offset") Integer offset,
-                                                          @Field("count") Integer count);
+                                                          @Field("count") Integer count,
+                                                   @Field("no_service_albums") Integer no_service_albums,
+                                                   @Field("need_hidden") Integer need_hidden,
+                                                   @Field("skip_hidden") Integer skip_hidden);
 
     @GET("photos.getMessagesUploadServer")
     Single<BaseResponse<VkApiPhotoMessageServer>> getMessagesUploadServer();

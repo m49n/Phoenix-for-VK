@@ -10,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,12 +77,9 @@ public class FaveTabsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        ViewPager viewPager = view.findViewById(R.id.viewpager);
+        ViewPager2 viewPager = view.findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(1);
-        setupViewPager(viewPager);
-
-        TabLayout tabLayout = view.findViewById(R.id.tablayout);
-        tabLayout.setupWithViewPager(viewPager);
+        setupViewPager(viewPager, view);
 
         if (getArguments().containsKey(Extra.TAB)) {
             int tab = getArguments().getInt(Extra.TAB);
@@ -136,44 +133,70 @@ public class FaveTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
-    static class Adapter extends FragmentStatePagerAdapter {
+    private static class Tab implements ITab {
 
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+        final String title;
+        final IFragmentCreator creator;
 
-        public Adapter(FragmentManager fm) {
-            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
+        private Tab(IFragmentCreator creator, String title) {
+            this.title = title;
+            this.creator = creator;
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
+        public String getTabTitle() {
+            return title;
         }
 
         @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+        public IFragmentCreator getFragmentCreator() {
+            return creator;
         }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(FavePagesFragment.newInstance(getAccountId(), true), getString(R.string.pages));
-        adapter.addFragment(FavePagesFragment.newInstance(getAccountId(), false), getString(R.string.groups));
-        adapter.addFragment(FaveLinksFragment.newInstance(getAccountId()), getString(R.string.links));
-        adapter.addFragment(FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts));
-        adapter.addFragment(FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos));
-        adapter.addFragment(FaveVideosFragment.newInstance(getAccountId()), getString(R.string.videos));
+    private interface ITab {
+        String getTabTitle();
+        IFragmentCreator getFragmentCreator();
+    }
+
+    private interface IFragmentCreator {
+        Fragment create();
+    }
+
+    static class Adapter extends FragmentStateAdapter {
+
+        private final List<ITab> tabs;
+
+        public Adapter(List<ITab> tabs, @NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+            this.tabs = tabs;
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            return tabs.get(position).getFragmentCreator().create();
+        }
+
+        @Override
+        public int getItemCount() {
+            return tabs.size();
+        }
+    }
+
+    private void setupViewPager(ViewPager2 viewPager, @NonNull View view) {
+        List<ITab> tabs = new ArrayList<>();
+        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), true), getString(R.string.pages)));
+        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), false), getString(R.string.groups)));
+        tabs.add(new Tab(() -> FaveLinksFragment.newInstance(getAccountId()), getString(R.string.links)));
+        tabs.add(new Tab(() -> FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts)));
+        tabs.add(new Tab(() -> FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos)));
+        tabs.add(new Tab(() -> FaveVideosFragment.newInstance(getAccountId()), getString(R.string.videos)));
+        Adapter adapter = new Adapter(tabs, requireActivity());
         viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+            tab.setText(tabs.get(position).getTabTitle());
+        }).attach();
     }
 }

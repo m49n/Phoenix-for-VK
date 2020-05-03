@@ -48,7 +48,7 @@ import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
-import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
+import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.Audio;
@@ -204,7 +204,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
                 return true;
             case R.id.search_by_artist:
-                PlaceFactory.getSearchPlace(mAccountId, SearchTabsFragment.TAB_MUSIC, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true, false)).tryOpenWith(requireActivity());
+                PlaceFactory.getSingleTabSearchPlace(mAccountId, SearchContentType.AUDIOS, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true, false)).tryOpenWith(requireActivity());
                 return true;
         }
 

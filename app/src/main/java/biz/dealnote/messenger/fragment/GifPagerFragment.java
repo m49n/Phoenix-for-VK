@@ -15,9 +15,12 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
@@ -33,7 +36,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.AlternativeAspectRatioFrameLayout;
 import biz.dealnote.messenger.view.CircleCounterButton;
 import biz.dealnote.messenger.view.FlingRelativeLayout;
-import biz.dealnote.messenger.view.pager.AbsPagerHolder;
 import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -44,7 +46,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresenter, IGifPagerView>
         implements IGifPagerView {
 
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
 
     private Toolbar mToolbar;
     private View mButtonsRoot;
@@ -87,9 +89,11 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
                 getPresenter().firePageSelected(position);
             }
         });
@@ -164,13 +168,13 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         if (Objects.nonNull(mViewPager)) {
             Adapter adapter = new Adapter(pageCount);
             mViewPager.setAdapter(adapter);
-            mViewPager.setCurrentItem(selectedIndex);
+            mViewPager.setCurrentItem(selectedIndex, false);
         }
     }
 
     @Override
     public void setAspectRatioAt(int position, int w, int h) {
-        Holder holder = mHolderSparseArray.get(position);
+        Holder holder = findByPosition(position);
         if (Objects.nonNull(holder)) {
             holder.mAspectRatioLayout.setAspectRatio(w, h);
         }
@@ -180,7 +184,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     public void setPreparingProgressVisible(int position, boolean preparing) {
         for (int i = 0; i < mHolderSparseArray.size(); i++) {
             int key = mHolderSparseArray.keyAt(i);
-            Holder holder = mHolderSparseArray.get(key);
+            Holder holder = findByPosition(key);
 
             if (Objects.nonNull(holder)) {
                 boolean isCurrent = position == key;
@@ -201,7 +205,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
     @Override
     public void attachDisplayToPlayer(int adapterPosition, IGifPlayer gifPlayer) {
-        Holder holder = mHolderSparseArray.get(adapterPosition);
+        Holder holder = findByPosition(adapterPosition);
         if (Objects.nonNull(holder) && Objects.nonNull(gifPlayer) && holder.isSurfaceReady()) {
             gifPlayer.setDisplay(holder.mSurfaceHolder);
         }
@@ -225,7 +229,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
     @Override
     public void configHolder(int adapterPosition, boolean progress, int aspectRatioW, int aspectRatioH) {
-        Holder holder = mHolderSparseArray.get(adapterPosition);
+        Holder holder = findByPosition(adapterPosition);
         if(Objects.nonNull(holder)){
             holder.setProgressVisible(progress);
             holder.mAspectRatioLayout.setAspectRatio(aspectRatioW, aspectRatioH);
@@ -233,15 +237,11 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         }
     }
 
-    private void fireHolderDestroy(@NonNull Holder holder) {
-
-    }
-
     private void fireHolderCreate(@NonNull Holder holder) {
         getPresenter().fireHolderCreate(holder.getAdapterPosition());
     }
 
-    private final class Holder extends AbsPagerHolder implements SurfaceHolder.Callback {
+    private final class Holder extends RecyclerView.ViewHolder implements SurfaceHolder.Callback {
 
         SurfaceView mSurfaceView;
         SurfaceHolder mSurfaceHolder;
@@ -249,8 +249,8 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         AlternativeAspectRatioFrameLayout mAspectRatioLayout;
         boolean mSurfaceReady;
 
-        Holder(int adapterPosition, View rootView) {
-            super(adapterPosition, rootView);
+        Holder(View rootView) {
+            super(rootView);
             FlingRelativeLayout flingRelativeLayout = rootView.findViewById(R.id.fling_root_view);
             flingRelativeLayout.setOnClickListener(v -> toggleFullscreen());
             flingRelativeLayout.setOnSingleFlingListener(new CloseOnFlingListener(rootView.getContext()) {
@@ -296,9 +296,14 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         }
     }
 
-    private SparseArray<Holder> mHolderSparseArray = new SparseArray<>();
+    private SparseArray<WeakReference<Holder>> mHolderSparseArray = new SparseArray<>();
 
-    private class Adapter extends PagerAdapter {
+    public Holder findByPosition(int position){
+        WeakReference<Holder> weak = mHolderSparseArray.get(position);
+        return Objects.isNull(weak) ? null : weak.get();
+    }
+
+    private class Adapter extends RecyclerView.Adapter<Holder> {
 
         int mPageCount;
 
@@ -308,39 +313,35 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
             mHolderSparseArray.clear();
         }
 
+        @NonNull
         @Override
-        public int getCount() {
+        public Holder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
+            return new Holder(LayoutInflater.from(container.getContext()).inflate(R.layout.content_gif_page, container, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
             return mPageCount;
         }
 
-        @NonNull
         @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            View stepView = LayoutInflater.from(requireActivity()).inflate(R.layout.content_gif_page, container, false);
+        public void onViewDetachedFromWindow(@NotNull Holder holder)
+        {
+            super.onViewDetachedFromWindow(holder);
+            mHolderSparseArray.remove(holder.getAdapterPosition());
+        }
 
-            final Holder holder = new Holder(position, stepView);
-
-            mHolderSparseArray.put(position, holder);
-
+        @Override
+        public void onViewAttachedToWindow(@NotNull Holder holder)
+        {
+            super.onViewAttachedToWindow(holder);
+            mHolderSparseArray.put(holder.getAdapterPosition(), new WeakReference<>(holder));
             fireHolderCreate(holder);
-            container.addView(stepView);
-            return stepView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object view) {
-            Holder holder = mHolderSparseArray.get(position);
-            if (holder != null) {
-                fireHolderDestroy(holder);
-            }
-
-            mHolderSparseArray.remove(position);
-            container.removeView((View) view);
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object key) {
-            return key == view;
         }
     }
 }

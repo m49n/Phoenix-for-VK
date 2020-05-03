@@ -1,6 +1,6 @@
 package biz.dealnote.messenger.fragment.search;
 
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -15,9 +16,11 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
+import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.MySearchView;
 
 /**
@@ -35,6 +38,15 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
     }
 
     public static SingleTabSearchFragment newInstance(Bundle args) {
+        SingleTabSearchFragment fragment = new SingleTabSearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SingleTabSearchFragment newInstance(int accountId, @SearchContentType int contentType) {
+        Bundle args = new Bundle();
+        args.putInt(Extra.TYPE, contentType);
+        args.putInt(Extra.ACCOUNT_ID, accountId);
         SingleTabSearchFragment fragment = new SingleTabSearchFragment();
         fragment.setArguments(args);
         return fragment;
@@ -69,6 +81,16 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
 
     private boolean attachedChild;
 
+    private void resolveLeftButton(MySearchView searchView) {
+        int count = requireActivity().getSupportFragmentManager().getBackStackEntryCount();
+        if (searchView != null) {
+            Drawable tr = AppCompatResources.getDrawable(requireActivity(), count == 1 && requireActivity() instanceof AppStyleable ?
+                    R.drawable.magnify : R.drawable.arrow_left);
+            Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
+            searchView.setLeftIcon(tr);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,16 +98,16 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
 
         MySearchView searchView = root.findViewById(R.id.searchview);
         searchView.setOnQueryTextListener(this);
-        searchView.setOnBackButtonClickListener(() -> requireActivity().onBackPressed());
+        searchView.setOnBackButtonClickListener(() -> onBackButtonClick());
         searchView.setOnAdditionalButtonClickListener(this);
         searchView.setQuery(getInitialCriteriaText(), true);
+
+        resolveLeftButton(searchView);
 
         if(!attachedChild){
             attachChildFragment();
             this.attachedChild = true;
         }
-
-        root.setBackgroundColor(getRequiredBackgroundColor(mContentType));
         return root;
     }
 
@@ -158,17 +180,12 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         return false;
     }
 
-    private int getRequiredBackgroundColor(int type) {
-        switch (type) {
-            case SearchContentType.NEWS:
-            case SearchContentType.WALL:
-            case SearchContentType.VIDEOS:
-            case SearchContentType.MESSAGES:
-                return CurrentTheme.getColorFromAttrs(requireActivity(),
-                        R.attr.messages_background_color, Color.WHITE);
-            default:
-                return CurrentTheme.getColorFromAttrs(requireActivity(),
-                        android.R.attr.colorBackground, Color.WHITE);
+    public void onBackButtonClick() {
+        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() == 1
+                && requireActivity() instanceof AppStyleable) {
+            ((AppStyleable) requireActivity()).openMenu(true);
+        } else {
+            requireActivity().onBackPressed();
         }
     }
 

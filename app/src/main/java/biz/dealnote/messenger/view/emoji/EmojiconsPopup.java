@@ -13,14 +13,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.model.Sticker;
 import biz.dealnote.messenger.model.StickerSet;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
@@ -53,15 +56,23 @@ public class EmojiconsPopup {
 
     private boolean isOpened;
 
-    private EmojiconGridView.OnEmojiconClickedListener onEmojiconClickedListener;
-    private StickersGridView.OnStickerClickedListener onStickerClickedListener;
+    private OnEmojiconClickedListener onEmojiconClickedListener;
+    private OnStickerClickedListener onStickerClickedListener;
     private OnEmojiconBackspaceClickedListener onEmojiconBackspaceClickedListener;
     private OnSoftKeyboardOpenCloseListener onSoftKeyboardOpenCloseListener;
 
     private View rootView;
     private View emojiContainer;
     private Activity mContext;
-    private ViewPager emojisPager;
+    private ViewPager2 emojisPager;
+
+    public interface OnStickerClickedListener {
+        void onStickerClick(Sticker stickerId);
+    }
+
+    public interface OnEmojiconClickedListener {
+        void onEmojiconClicked(Emojicon emojicon);
+    }
 
     public EmojiconsPopup(View rootView, Activity context) {
         this.mContext = context;
@@ -82,11 +93,11 @@ public class EmojiconsPopup {
         this.onSoftKeyboardOpenCloseListener = listener;
     }
 
-    public void setOnEmojiconClickedListener(EmojiconGridView.OnEmojiconClickedListener listener) {
+    public void setOnEmojiconClickedListener(OnEmojiconClickedListener listener) {
         this.onEmojiconClickedListener = listener;
     }
 
-    public void setOnStickerClickedListener(StickersGridView.OnStickerClickedListener onStickerClickedListener) {
+    public void setOnStickerClickedListener(OnStickerClickedListener onStickerClickedListener) {
         this.onStickerClickedListener = onStickerClickedListener;
     }
 
@@ -94,11 +105,11 @@ public class EmojiconsPopup {
         this.onEmojiconBackspaceClickedListener = listener;
     }
 
-    public EmojiconGridView.OnEmojiconClickedListener getOnEmojiconClickedListener() {
+    public OnEmojiconClickedListener getOnEmojiconClickedListener() {
         return onEmojiconClickedListener;
     }
 
-    public StickersGridView.OnStickerClickedListener getOnStickerClickedListener() {
+    public OnStickerClickedListener getOnStickerClickedListener() {
         return onStickerClickedListener;
     }
 
@@ -186,14 +197,14 @@ public class EmojiconsPopup {
         View view = LayoutInflater.from(mContext).inflate(R.layout.emojicons, parent, false);
         emojisPager = view.findViewById(R.id.emojis_pager);
 
-        List<EmojiconGridView> views = Arrays.asList(
-                new EmojiconGridView(mContext, People.DATA, this),
-                new EmojiconGridView(mContext, Nature.DATA, this),
-                new EmojiconGridView(mContext, Food.DATA, this),
-                new EmojiconGridView(mContext, Sport.DATA, this),
-                new EmojiconGridView(mContext, Cars.DATA, this),
-                new EmojiconGridView(mContext, Electronics.DATA, this),
-                new EmojiconGridView(mContext, Symbols.DATA, this)
+        List<Emojicon[]> views = Arrays.asList(
+                People.DATA,
+                Nature.DATA,
+                Food.DATA,
+                Sport.DATA,
+                Cars.DATA,
+                Electronics.DATA,
+                Symbols.DATA
         );
 
         final List<AbsSection> sections = new ArrayList<>();
@@ -205,19 +216,19 @@ public class EmojiconsPopup {
         sections.add(new EmojiSection(EmojiSection.TYPE_ELECTRONICS, getTintedDrawable(R.drawable.laptop_chromebook)));
         sections.add(new EmojiSection(EmojiSection.TYPE_SYMBOLS, getTintedDrawable(R.drawable.pound_box)));
 
-        List<StickersGridView> stickersGridViews = new ArrayList<>();
+        List<StickerSet> stickersGridViews = new ArrayList<>();
 
         for (StickerSet stickerSet : stickerSets) {
-            stickersGridViews.add(new StickersGridView(mContext, stickerSet, this));
+            stickersGridViews.add(stickerSet);
             sections.add(new StickerSection(stickerSet));
         }
 
 
-        mEmojisAdapter = new EmojisPagerAdapter(views, stickersGridViews);
+        mEmojisAdapter = new EmojisPagerAdapter(views, stickersGridViews, this);
         emojisPager.setAdapter(mEmojisAdapter);
 
         int storedPage = PreferenceManager.getDefaultSharedPreferences(mContext).getInt(KEY_PAGE, 0);
-        if (mEmojisAdapter.getCount() > storedPage) {
+        if (mEmojisAdapter.getItemCount() > storedPage) {
             emojisPager.setCurrentItem(storedPage);
         }
 
@@ -239,7 +250,7 @@ public class EmojiconsPopup {
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(t -> {
                     for (StickerSet stickerSet : t) {
-                        stickersGridViews.add(new StickersGridView(mContext, stickerSet, this));
+                        stickersGridViews.add(stickerSet);
                         sections.add(new StickerSection(stickerSet));
                         topSectionAdapter.notifyDataSetChanged();
                         mEmojisAdapter.notifyDataSetChanged();
@@ -256,9 +267,10 @@ public class EmojiconsPopup {
 
         topSectionAdapter.setListener(position -> emojisPager.setCurrentItem(position));
 
-        emojisPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        emojisPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
                 int oldSelectionIndex = -1;
                 for (int i = 0; i < sections.size(); i++) {
                     AbsSection section = sections.get(i);
@@ -315,24 +327,51 @@ public class EmojiconsPopup {
         audioListDisposable.dispose();
     }
 
-    private static class EmojisPagerAdapter extends PagerAdapter {
+    private final static class Holder extends RecyclerView.ViewHolder
+    {
+        Holder(View rootView) {
+            super(rootView);
+        }
+    }
 
-        private List<EmojiconGridView> views;
-        private List<StickersGridView> stickersGridViews;
+    private static class EmojisPagerAdapter extends RecyclerView.Adapter<Holder> {
 
-        EmojisPagerAdapter(List<EmojiconGridView> views, List<StickersGridView> stickersGridViews) {
+        private List<Emojicon[]> views;
+        private List<StickerSet> stickersGridViews;
+        private EmojiconsPopup mEmojiconPopup;
+
+        EmojisPagerAdapter(List<Emojicon[]> views, List<StickerSet> stickersGridViews, EmojiconsPopup mEmojiconPopup) {
             super();
             this.views = views;
             this.stickersGridViews = stickersGridViews;
+            this.mEmojiconPopup = mEmojiconPopup;
         }
 
         @Override
-        public int getCount() {
-            return views.size() + stickersGridViews.size();
+        public int getItemViewType(int position) {
+            switch (position)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    return 0;
+                default:
+                    return 1;
+            }
+        }
+
+        @NonNull
+        @Override
+        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new Holder(LayoutInflater.from(parent.getContext()).inflate(viewType == 0 ? R.layout.emojicon_grid : R.layout.stickers_grid, parent, false));
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
             switch (position) {
                 case 0:
                 case 1:
@@ -341,24 +380,43 @@ public class EmojiconsPopup {
                 case 4:
                 case 5:
                 case 6:
-                    View v = views.get(position).rootView;
-                    container.addView(v, 0);
-                    return v;
+                    GridView gridView = holder.itemView.findViewById(R.id.Emoji_GridView);
+                    Emojicon[] mData;
+                    if (views.get(position) == null) {
+                        mData = People.DATA;
+                    } else {
+                        mData = views.get(position).clone();
+                    }
+
+                    EmojiAdapter mAdapter = new EmojiAdapter(holder.itemView.getContext(), mData);
+                    mAdapter.setEmojiClickListener(emojicon -> {
+                        if (mEmojiconPopup.getOnEmojiconClickedListener() != null) {
+                            mEmojiconPopup.getOnEmojiconClickedListener().onEmojiconClicked(emojicon);
+                        }
+                    });
+
+                    gridView.setAdapter(mAdapter);
+                    break;
                 default:
-                    View sView = stickersGridViews.get(position - 7).rootView;
-                    container.addView(sView, 0);
-                    return sView;
+                    RecyclerView recyclerView = holder.itemView.findViewById(R.id.grid_stickers);
+
+                    StickersAdapter mAdaptert = new StickersAdapter(holder.itemView.getContext(), stickersGridViews.get(position - 7));
+                    mAdaptert.setStickerClickedListener(stickerId -> {
+                        if (mEmojiconPopup.getOnStickerClickedListener() != null) {
+                            mEmojiconPopup.getOnStickerClickedListener().onStickerClick(stickerId);
+                        }
+                    });
+
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(holder.itemView.getContext(), 4);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    recyclerView.setAdapter(mAdaptert);
+                    break;
             }
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object view) {
-            container.removeView((View) view);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object key) {
-            return key == view;
+        public int getItemCount() {
+            return views.size() + stickersGridViews.size();
         }
     }
 

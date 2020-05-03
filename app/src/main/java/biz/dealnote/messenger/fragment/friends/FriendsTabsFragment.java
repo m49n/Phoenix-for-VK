@@ -11,11 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     private Adapter adapter;
     private TabLayout tabLayout;
 
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,16 +134,16 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         setupTabCounterView(TAB_FOLLOWERS, counters.getFollowers());
         setupTabCounterView(TAB_REQUESTS, 0);
         setupTabCounterView(TAB_MUTUAL, counters.getMutual());
-
-        tabLayout.setupWithViewPager(viewPager);
+        new TabLayoutMediator(tabLayout, viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+            tab.setText(adapter.getPageTitle(position));
+        }).attach();
     }
 
     @Override
     public void configTabs(int accountId, int userId, boolean showMutualTab) {
-        adapter = new Adapter(requireActivity(), getChildFragmentManager(), accountId, userId, showMutualTab);
+        adapter = new Adapter(requireActivity(), requireActivity(), accountId, userId, showMutualTab);
 
         viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
 
         if (getArguments().containsKey(Extra.TAB)) {
             int tab = getArguments().getInt(Extra.TAB);
@@ -167,7 +168,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         }
     }
 
-    private static class Adapter extends FragmentStatePagerAdapter {
+    private static class Adapter extends FragmentStateAdapter {
 
         private final int accountId;
         private final int userId;
@@ -175,8 +176,8 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
 
         private final List<String> mFragmentTitles = new ArrayList<>(5);
 
-        public Adapter(Context context, FragmentManager fm, int accountId, int userId, boolean showMutualTab) {
-            super(fm, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        public Adapter(Context context, FragmentActivity fm, int accountId, int userId, boolean showMutualTab) {
+            super(fm);
             this.accountId = accountId;
             this.userId = userId;
             this.showMutualTab = showMutualTab;
@@ -191,8 +192,17 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
             }
         }
 
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitles.get(position);
+        }
+
+        void setPageTitle(int position, String title) {
+            mFragmentTitles.set(position, title);
+        }
+
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
                 case TAB_ALL_FRIENDS:
                     return AllFriendsFragment.newInstance(accountId, userId);
@@ -210,17 +220,8 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return showMutualTab ? 5 : 4;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-
-        void setPageTitle(int position, String title) {
-            mFragmentTitles.set(position, title);
         }
     }
 }

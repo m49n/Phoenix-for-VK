@@ -88,17 +88,33 @@
             android:background="?attr/dividerColor" />
 
     </LinearLayout>
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@id/pinned_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_friend_dialog_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
-        android:layout_below="@id/pinned_root_view"
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:scrollbars="vertical" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/goto_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/view"
+        app:fabSize="mini"
+        app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -186,19 +202,5 @@
         android:padding="16dp"
         android:text="@string/chat_empty_text"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/goto_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/linearLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/view"
-        app:fabSize="mini"
-        app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
 
 </RelativeLayout>

@@ -20,11 +20,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <biz.dealnote.messenger.view.MySearchView
-                android:id="@+id/searchview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tablayout"
                 style="@style/Theme.Tablayout"
@@ -37,10 +32,9 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:colorBackground" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

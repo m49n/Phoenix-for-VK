@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -48,10 +49,12 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
     private TextView mEmptyTextView;
     private FloatingActionButton fabAttach;
 
-    public static LocalPhotosFragment newInstance(int maxSelectionItemCount, LocalImageAlbum album) {
+    public static LocalPhotosFragment newInstance(int maxSelectionItemCount, LocalImageAlbum album, boolean hide_toolbar) {
         Bundle args = new Bundle();
         args.putInt(EXTRA_MAX_SELECTION_COUNT, maxSelectionItemCount);
         args.putParcelable(Extra.ALBUM, album);
+        if(hide_toolbar)
+            args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
         LocalPhotosFragment fragment = new LocalPhotosFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,7 +63,12 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(view.findViewById(R.id.toolbar));
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        if(!hasHideToolbarExtra()){
+            ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        } else {
+            toolbar.setVisibility(View.GONE);
+        }
 
         mSwipeRefreshLayout = view.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);

@@ -150,7 +150,7 @@ class UISettings implements ISettings.IUISettings {
                 case Place.BOOKMARKS:
                     return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PAGES);
                 case Place.SEARCH:
-                    return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE, null);
+                    return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE);
                 case Place.VIDEOS:
                     return PlaceFactory.getVideosPlace(accountId, accountId, null);
                 case Place.PREFERENCES:
@@ -180,7 +180,7 @@ class UISettings implements ISettings.IUISettings {
             case "10":
                 return PlaceFactory.getBookmarksPlace(accountId, FaveTabsFragment.TAB_PAGES);
             case "11":
-                return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE, null);
+                return PlaceFactory.getSearchPlace(accountId, SearchTabsFragment.TAB_PEOPLE);
             case "12":
                 return PlaceFactory.getNewsfeedCommentsPlace(accountId);
             default:

@@ -85,7 +85,7 @@ public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvide
             case Place.LOCAL_IMAGE_ALBUM:
                 LocalImageAlbum album = place.getArgs().getParcelable(Extra.ALBUM);
 
-                LocalPhotosFragment localPhotosFragment = LocalPhotosFragment.newInstance(mMaxSelectionCount, album);
+                LocalPhotosFragment localPhotosFragment = LocalPhotosFragment.newInstance(mMaxSelectionCount, album, false);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment, localPhotosFragment)
