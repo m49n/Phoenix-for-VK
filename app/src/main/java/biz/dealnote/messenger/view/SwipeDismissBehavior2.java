@@ -9,6 +9,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -56,8 +58,8 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
     private boolean mSensitivitySet;
     private int mSwipeDirection = SWIPE_DIRECTION_ANY;
     private float mDragDismissThreshold = DEFAULT_DRAG_DISMISS_THRESHOLD;
-    private float mAlphaStartSwipeDistance = DEFAULT_ALPHA_START_DISTANCE;
-    private float mAlphaEndSwipeDistance = DEFAULT_ALPHA_END_DISTANCE;
+    public boolean canSwipe = true;
+
     /**
      * Callback interface used to notify the application that the view has been dismissed.
      */
@@ -65,14 +67,14 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
         /**
          * Called when {@code view} has been dismissed via swiping.
          */
-        public void onDismiss(View view);
+        void onDismiss(View view);
         /**
          * Called when the drag state has changed.
          *
          * @param state the new state. One of
          * {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
          */
-        public void onDragStateChanged(int state);
+        void onDragStateChanged(int state);
     }
     /**
      * Set the listener to be used when a dismiss event occurs.
@@ -105,7 +107,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
      * @param fraction the distance as a fraction of the view's width.
      */
     public void setStartAlphaSwipeDistance(float fraction) {
-        mAlphaStartSwipeDistance = clamp(0f, fraction, 1f);
+        float mAlphaStartSwipeDistance = clamp(0f, fraction, 1f);
     }
     /**
      * The maximum swipe distance for the view's alpha is modified.
@@ -113,7 +115,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
      * @param fraction the distance as a fraction of the view's width.
      */
     public void setEndAlphaSwipeDistance(float fraction) {
-        mAlphaEndSwipeDistance = clamp(0f, fraction, 1f);
+        float mAlphaEndSwipeDistance = clamp(0f, fraction, 1f);
     }
     /**
      * Set the sensitivity used for detecting the start of a swipe. This only takes effect if
@@ -127,7 +129,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
         mSensitivitySet = true;
     }
     @Override
-    public boolean onInterceptTouchEvent(CoordinatorLayout parent, V child, MotionEvent event) {
+    public boolean onInterceptTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -149,7 +151,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
         return mViewDragHelper.shouldInterceptTouchEvent(event);
     }
     @Override
-    public boolean onTouchEvent(CoordinatorLayout parent, V child, MotionEvent event) {
+    public boolean onTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, @NotNull MotionEvent event) {
         if (mViewDragHelper != null) {
             mViewDragHelper.processTouchEvent(event);
             return true;
@@ -160,6 +162,8 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
         private int mOriginalCapturedViewLeft;
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
+            if(!canSwipe)
+                return false;
             mOriginalCapturedViewLeft = child.getLeft();
             return true;
         }
@@ -220,7 +224,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
             return child.getWidth();
         }
         @Override
-        public int clampViewPositionHorizontal(View child, int left, int dx) {
+        public int clampViewPositionHorizontal(@NotNull View child, int left, int dx) {
             final boolean isRtl = ViewCompat.getLayoutDirection(child)
                     == ViewCompat.LAYOUT_DIRECTION_RTL;
             int min, max;

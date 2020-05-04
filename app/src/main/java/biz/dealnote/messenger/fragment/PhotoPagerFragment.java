@@ -3,6 +3,7 @@ package biz.dealnote.messenger.fragment;
 import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,7 +32,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ortiz.touchview.TouchImageView;
 import com.squareup.picasso.Callback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,8 +78,13 @@ import biz.dealnote.messenger.view.ViewPagerTransformers;
 import biz.dealnote.messenger.view.pager.GoBackCallback;
 import biz.dealnote.messenger.view.pager.WeakGoBackAnimationAdapter;
 import biz.dealnote.messenger.view.pager.WeakPicassoLoadCallback;
+import biz.dealnote.messenger.view.verticalswipe.BelowFractionalClamp;
+import biz.dealnote.messenger.view.verticalswipe.NegativeFactorFilterSideEffect;
+import biz.dealnote.messenger.view.verticalswipe.PropertySideEffect;
+import biz.dealnote.messenger.view.verticalswipe.SensitivityClamp;
+import biz.dealnote.messenger.view.verticalswipe.SettleOnTopAction;
+import biz.dealnote.messenger.view.verticalswipe.VerticalSwipeBehavior;
 import biz.dealnote.mvp.core.IPresenterFactory;
-import su.rbv.flingPhotoView.FlingPhotoView;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
@@ -104,6 +114,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     private ViewPager2 mViewPager;
     private CircleCounterButton mButtonLike;
     private CircleCounterButton mButtonComments;
+    private CircleCounterButton buttonShare;
     private ProgressBar mLoadingProgressBar;
     private Toolbar mToolbar;
     private View mButtonsRoot;
@@ -209,7 +220,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         mButtonComments = root.findViewById(R.id.comments_button);
         mButtonComments.setOnClickListener(v -> getPresenter().fireCommentsButtonClick());
 
-        CircleCounterButton buttonShare = root.findViewById(R.id.share_button);
+        buttonShare = root.findViewById(R.id.share_button);
         buttonShare.setOnClickListener(v -> getPresenter().fireShareButtonClick());
 
         mButtonRestore.setOnClickListener(v -> getPresenter().fireButtonRestoreClick());
@@ -356,11 +367,19 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void setupLikeButton(boolean like, int likes) {
+    public void setupLikeButton(boolean visible, boolean like, int likes) {
         if (nonNull(mButtonLike)) {
+            mButtonLike.setVisibility(visible ? View.VISIBLE : View.GONE);
             mButtonLike.setActive(like);
             mButtonLike.setCount(likes);
             mButtonLike.setIcon(like ? R.drawable.heart_filled : R.drawable.heart);
+        }
+    }
+
+    @Override
+    public void setupShareButton(boolean visible) {
+        if (nonNull(buttonShare)) {
+            buttonShare.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -587,7 +606,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder implements Callback {
-        public FlingPhotoView photo;
+        public TouchImageView photo;
         public ProgressBar progress;
         public FloatingActionButton reload;
         private boolean mLoadingNow;
@@ -596,15 +615,13 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             super(view);
             photo = view.findViewById(R.id.image_view);
             progress = view.findViewById(R.id.progress_bar);
-            photo.setOnFlingDoneFinishListener(PhotoPagerFragment.this::goBack);
             photo = view.findViewById(idOfImageView());
-            photo.setMaximumScale(7f);
-
+            photo.setMaxZoom(8);
             progress = view.findViewById(idOfProgressBar());
             reload = view.findViewById(R.id.goto_button);
             mPicassoLoadCallback = new WeakPicassoLoadCallback(this);
 
-            photo.setOnPhotoTapListener((view_photo, x, y) -> callPresenter(PhotoPagerPresenter::firePhotoTap));
+            photo.setOnClickListener(v -> callPresenter(PhotoPagerPresenter::firePhotoTap));
         }
 
         public void bindTo(@NonNull Photo photo_image) {
@@ -678,15 +695,64 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             mPhotos = data;
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         @NonNull
         @Override
         public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
-            return new PhotoViewHolder(LayoutInflater.from(container.getContext())
+            PhotoViewHolder ret = new PhotoViewHolder(LayoutInflater.from(container.getContext())
                     .inflate(R.layout.content_photo_page, container, false));
+
+
+            VerticalSwipeBehavior<TouchImageView> ui = VerticalSwipeBehavior.Companion.from(ret.photo);
+            ui.setSettle(new SettleOnTopAction());
+            PropertySideEffect sideDelegate = new PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y);
+            ui.setSideEffect(new NegativeFactorFilterSideEffect(sideDelegate));
+            BelowFractionalClamp clampDelegate = new BelowFractionalClamp(3f, 3f);
+            ui.setClamp(new SensitivityClamp(0.5f, clampDelegate, 0.5f));
+            ui.setListener(new VerticalSwipeBehavior.SwipeListener() {
+                @Override
+                public void onReleased() {
+                    container.requestDisallowInterceptTouchEvent(false);
+                }
+
+                @Override
+                public void onCaptured() {
+                    container.requestDisallowInterceptTouchEvent(true);
+                }
+
+                @Override
+                public void onPreSettled(int diff) {
+                }
+
+                @Override
+                public void onPostSettled(int diff) {
+                    if (diff < 0) {
+                        goBack();
+                    }
+                }
+            });
+
+            ret.photo.setOnTouchListener((view, event) -> {
+                if (event.getPointerCount() >= 2 || view.canScrollHorizontally(1) && view.canScrollHorizontally(-1)) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_MOVE:
+                            ui.setCanSwipe(false);
+                            container.requestDisallowInterceptTouchEvent(true);
+                            return false;
+                        case MotionEvent.ACTION_UP:
+                            ui.setCanSwipe(true);
+                            container.requestDisallowInterceptTouchEvent(false);
+                            return true;
+                    }
+                }
+                return true;
+            });
+            return ret;
         }
 
         @Override
-        public void onViewDetachedFromWindow(PhotoViewHolder holder)
+        public void onViewDetachedFromWindow(@NotNull PhotoViewHolder holder)
         {
             super.onViewDetachedFromWindow(holder);
             PicassoInstance.with().cancelRequest(holder.photo);

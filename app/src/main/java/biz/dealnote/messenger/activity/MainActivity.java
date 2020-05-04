@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     public static final String ACTION_MAIN = "android.intent.action.MAIN";
     public static final String ACTION_CHAT_FROM_SHORTCUT = "biz.dealnote.messenger.ACTION_CHAT_FROM_SHORTCUT";
     public static final String ACTION_OPEN_PLACE = "biz.dealnote.messenger.activity.MainActivity.openPlace";
+    public static final String ACTION_OPEN_FILE = "biz.dealnote.messenger.activity.MainActivity.openFile";
     public static final String ACTION_SEND_ATTACHMENTS = "biz.dealnote.messenger.ACTION_SEND_ATTACHMENTS";
     public static final String ACTION_SWITH_ACCOUNT = "biz.dealnote.messenger.ACTION_SWITH_ACCOUNT";
 
@@ -458,6 +461,22 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         Accounts.showAccountSwitchedToast(this);
     }
 
+    private static String getFileExtension(File file) {
+        String extension = "";
+
+        try {
+            if (file != null && file.exists()) {
+                String name = file.getName();
+                extension = name.substring(name.lastIndexOf(".") + 1);
+            }
+        } catch (Exception e) {
+            extension = "";
+        }
+
+        return extension;
+
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -502,6 +521,20 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         if (ACTION_OPEN_PLACE.equals(action)) {
             Place place = intent.getParcelableExtra(Extra.PLACE);
             openPlace(place);
+            return true;
+        }
+
+        if(ACTION_OPEN_FILE.equals(action))
+        {
+            Uri data = intent.getData();
+            Intent intent_open = new Intent(Intent.ACTION_VIEW);
+            intent_open.setDataAndType(data, MimeTypeMap.getSingleton().getMimeTypeFromExtension(getFileExtension(new File(data.toString()))));
+
+            if (nonNull(getPackageManager().resolveActivity(intent_open, 0))) {
+                startActivity(intent_open);
+            } else {
+                Utils.showRedTopToast(this, R.string.no_compatible_software_installed);
+            }
             return true;
         }
 

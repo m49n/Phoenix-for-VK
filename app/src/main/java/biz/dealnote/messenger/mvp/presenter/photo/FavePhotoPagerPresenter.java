@@ -27,7 +27,7 @@ public class FavePhotoPagerPresenter extends PhotoPagerPresenter {
     private boolean[] refreshing;
 
     public FavePhotoPagerPresenter(@NonNull ArrayList<Photo> photos, int index, int accountId, @Nullable Bundle savedInstanceState) {
-        super(photos, accountId, savedInstanceState);
+        super(photos, accountId, false, savedInstanceState);
         this.refreshing = new boolean[photos.size()];
 
         if (savedInstanceState == null) {

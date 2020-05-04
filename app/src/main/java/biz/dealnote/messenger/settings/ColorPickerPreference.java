@@ -48,22 +48,22 @@ public class ColorPickerPreference
     ColorPickerDialog mDialog;
     private int mValue = Color.BLACK;
     private float mDensity = 0;
-    private boolean mAlphaSliderEnabled = false;
-    private boolean mHexValueEnabled = false;
+    private boolean mAlphaSliderEnabled = true;
+    private boolean mHexValueEnabled = true;
 
     public ColorPickerPreference(Context context) {
         super(context);
-        init(context, null);
+        init();
     }
 
     public ColorPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init();
     }
 
     public ColorPickerPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context, attrs);
+        init();
     }
 
     /**Method edited by
@@ -85,17 +85,13 @@ public class ColorPickerPreference
     }
 
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        onColorChanged(restoreValue ? getPersistedInt(mValue) : (Integer) defaultValue);
+    protected void onSetInitialValue(Object defaultValue) {
+        onColorChanged(getPersistedInt(mValue));
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init() {
         mDensity = getContext().getResources().getDisplayMetrics().density;
         setOnPreferenceClickListener(this);
-        if (attrs != null) {
-            mAlphaSliderEnabled = attrs.getAttributeBooleanValue(null, "alphaSlider", false);
-            mHexValueEnabled = attrs.getAttributeBooleanValue(null, "hexValue", false);
-        }
     }
 
     @Override

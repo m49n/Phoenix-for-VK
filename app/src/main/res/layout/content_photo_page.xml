@@ -5,17 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <su.rbv.flingPhotoView.FlingPhotoView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/flip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <com.ortiz.touchview.TouchImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:fling_type="top"
-        app:done_duration="200"
-        app:end_scale="0.5"
-        app:done_deltaY_threshold="50dp"
-        app:return_duration="200"
+        app:layout_behavior="biz.dealnote.messenger.view.verticalswipe.VerticalSwipeBehavior"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"

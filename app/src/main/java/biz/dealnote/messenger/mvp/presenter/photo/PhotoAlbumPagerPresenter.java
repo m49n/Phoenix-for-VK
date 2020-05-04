@@ -30,7 +30,7 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
     public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo>photos,
                                     @Nullable Bundle savedInstanceState) {
-        super(new ArrayList<>(0), accountId, savedInstanceState);
+        super(new ArrayList<>(0), accountId, false, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
         this.mOwnerId = ownerId;
         this.mAlbumId = albumId;

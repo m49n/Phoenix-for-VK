@@ -25,7 +25,7 @@ public class TmpGalleryPagerPresenter extends PhotoPagerPresenter {
 
     public TmpGalleryPagerPresenter(int accountId, @NonNull TmpSource source, int index,
                                     @Nullable Bundle savedInstanceState) {
-        super(new ArrayList<>(0), accountId, savedInstanceState);
+        super(new ArrayList<>(0), accountId, false, savedInstanceState);
         this.source = source;
         setCurrentIndex(index);
 

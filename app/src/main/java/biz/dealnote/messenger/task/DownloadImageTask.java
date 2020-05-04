@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.task;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.api.HttpLogger;
 import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.longpoll.AppNotificationChannels;
@@ -127,8 +129,22 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             output.flush();
             output.close();
             input.close();
-            if(UseMediaScanner)
+
+            if(UseMediaScanner) {
                 mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(file))));
+
+                Intent intent = new Intent(Injection.provideApplicationContext(), MainActivity.class);
+                intent.setAction(MainActivity.ACTION_OPEN_FILE);
+                intent.setData(Uri.parse(file));
+
+                PendingIntent ReadPendingIntent = PendingIntent.getActivity(mContext, ID.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationCompat.Action actionRead = new NotificationCompat.Action.Builder
+                        (/*may be missing in some cases*/ R.drawable.succ,
+                                mContext.getResources().getString(R.string.open), ReadPendingIntent)
+                        .build();
+                mBuilder.addAction(actionRead);
+            }
             mBuilder.setContentText(mContext.getString(R.string.success) + " " + this.filename)
                     .setProgress(0,0,false)
                     .setAutoCancel(true)

@@ -111,8 +111,7 @@
         <biz.dealnote.messenger.settings.ColorPickerPreference
             android:key="custom_chat_color"
             android:title="@string/custom_chat_color"
-            android:defaultValue="#ffffff"
-            alphaSlider="true" />
+            android:defaultValue="#ffffff" />
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -123,8 +122,7 @@
         <biz.dealnote.messenger.settings.ColorPickerPreference
             android:key="custom_message_color"
             android:title="@string/custom_message_color"
-            android:defaultValue="#ffffff"
-            alphaSlider="true" />
+            android:defaultValue="#ffffff" />
 
     </PreferenceCategory>
 

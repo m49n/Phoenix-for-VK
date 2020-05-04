@@ -16,7 +16,8 @@ import biz.dealnote.mvp.core.IMvpView;
 public interface IPhotoPagerView extends IMvpView, IAccountDependencyView, IErrorView, IToastView {
 
     void goToLikesList(int accountId, int ownerId, int photoId);
-    void setupLikeButton(boolean like, int likes);
+    void setupLikeButton(boolean visible, boolean like, int likes);
+    void setupShareButton(boolean visible);
     void setupCommentsButton(boolean visible, int count);
     void displayPhotos(@NonNull List<Photo> photos, int initialIndex);
     void setToolbarTitle(String title);

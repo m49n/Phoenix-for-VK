@@ -51,12 +51,14 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private int mCurrentIndex;
     private boolean mLoadingNow;
     private boolean mFullScreen;
+    private boolean isStory;
 
     final IPhotosInteractor photosInteractor;
 
-    PhotoPagerPresenter(@NonNull ArrayList<Photo> initialData, int accountId, @Nullable Bundle savedInstanceState) {
+    PhotoPagerPresenter(@NonNull ArrayList<Photo> initialData, int accountId, boolean Story, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
+        this.isStory = Story;
 
         if(Objects.nonNull(savedInstanceState)){
             mCurrentIndex = savedInstanceState.getInt(SAVE_INDEX);
@@ -168,14 +170,28 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
     private void resolveLikeView() {
         if (isGuiReady() && hasPhotos()) {
+            if(isStory) {
+                getView().setupLikeButton(false, false, 0);
+                return;
+            }
             Photo photo = getCurrent();
-            getView().setupLikeButton(photo.isUserLikes(), photo.getLikesCount());
+            getView().setupLikeButton(true, photo.isUserLikes(), photo.getLikesCount());
+        }
+    }
+
+    private void resolveShareView() {
+        if (isGuiReady() && hasPhotos()) {
+            getView().setupShareButton(!isStory);
         }
     }
 
     private void resolveCommentsView() {
         if (isGuiReady() && hasPhotos()) {
             Photo photo = getCurrent();
+            if(isStory) {
+                getView().setupCommentsButton(false, 0);
+                return;
+            }
             //boolean visible = photo.isCanComment() || photo.getCommentsCount() > 0;
             getView().setupCommentsButton(true, photo.getCommentsCount());
         }
@@ -221,6 +237,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     void refreshInfoViews() {
         resolveToolbarTitleSubtitleView();
         resolveLikeView();
+        resolveShareView();
         resolveCommentsView();
         resolveOptionMenu();
     }

@@ -25,13 +25,16 @@ public class Constants {
 
     //public static final String DEVICE_COUNTRY_CODE = Injection.provideApplicationContext().getResources().getConfiguration().locale.getCountry().toLowerCase();
     public static final String DEVICE_COUNTRY_CODE = "ru";
-    public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/59.1 lite-465 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
+    public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/60 lite-466 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
     public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.2-5112 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
 
     public static String SCREEN_RESOLUTION()
     {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowmanager = (WindowManager) Injection.provideApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        if(windowmanager == null || windowmanager.getDefaultDisplay() == null) {
+            return "1080x1920";
+        }
         windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels + "x" + displayMetrics.widthPixels;
     }

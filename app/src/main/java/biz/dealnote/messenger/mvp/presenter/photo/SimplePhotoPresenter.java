@@ -27,7 +27,7 @@ public class SimplePhotoPresenter extends PhotoPagerPresenter {
 
     public SimplePhotoPresenter(@NonNull ArrayList<Photo> photos, int index, boolean needToRefreshData,
                                 int accountId, Integer History, @Nullable Bundle savedInstanceState) {
-        super(photos, accountId, savedInstanceState);
+        super(photos, accountId, History == 1, savedInstanceState);
 
         isHistory = nonNull(History) && History == 1;
 

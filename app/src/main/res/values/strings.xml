@@ -794,6 +794,7 @@
     <string name="forward">Переслать</string>
     <string name="answer">Ответить</string>
     <string name="read">Прочесть</string>
+    <string name="open">Открыть</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
     <string name="updated_profile_photo_at">обновил фотографию на странице: %1$s</string>
