@@ -119,7 +119,7 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
 
     @Override
     public void notifyUpdateCounter() {
-        ((MainActivity)requireActivity()).UpdateNotificationCount();
+        ((MainActivity)requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
     }
 
     @Override

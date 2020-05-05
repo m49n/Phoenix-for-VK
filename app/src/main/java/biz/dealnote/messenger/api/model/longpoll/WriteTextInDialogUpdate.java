@@ -7,6 +7,7 @@ public class WriteTextInDialogUpdate extends AbsLongpollEvent {
     }
 
     public int user_id;
+    public int chat_id;
     public int flags;
 
     public int getUserId() {

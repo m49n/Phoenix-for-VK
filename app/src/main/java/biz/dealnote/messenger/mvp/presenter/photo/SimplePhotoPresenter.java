@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,8 @@ public class SimplePhotoPresenter extends PhotoPagerPresenter {
     private boolean isHistory;
 
     public SimplePhotoPresenter(@NonNull ArrayList<Photo> photos, int index, boolean needToRefreshData,
-                                int accountId, Integer History, @Nullable Bundle savedInstanceState) {
-        super(photos, accountId, History == 1, savedInstanceState);
+                                int accountId, Integer History, Context context, @Nullable Bundle savedInstanceState) {
+        super(photos, accountId, History == 1, context, savedInstanceState);
 
         isHistory = nonNull(History) && History == 1;
 

@@ -153,6 +153,7 @@ public class EmojiconsPopup {
 
                 if (Objects.nonNull(emojiContainer)) {
                     emojiContainer.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, keyBoardHeight));
+                    emojiContainer.invalidate();
                 }
 
                 if (!isOpened) {
@@ -180,6 +181,7 @@ public class EmojiconsPopup {
 
             final int finalKeyboardHeight = this.keyBoardHeight > 0 ? keyBoardHeight : (int) mContext.getResources().getDimension(R.dimen.keyboard_height);
             emojiContainer.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, finalKeyboardHeight));
+            emojiContainer.invalidate();
         }
 
         return emojiContainer;
@@ -254,7 +256,8 @@ public class EmojiconsPopup {
                         sections.add(new StickerSection(stickerSet));
                         topSectionAdapter.notifyDataSetChanged();
                         mEmojisAdapter.notifyDataSetChanged();
-                        emojisPager.setCurrentItem(sections.size() - 1);
+                        if(Settings.get().ui().isEmojis_recents())
+                            emojisPager.setCurrentItem(sections.size() - 1);
                     }
                 }, throwable -> {}));
         recyclerView.setAdapter(topSectionAdapter);

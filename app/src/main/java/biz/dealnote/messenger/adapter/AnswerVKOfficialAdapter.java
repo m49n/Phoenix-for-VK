@@ -35,11 +35,13 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
     private AnswerVKOfficialList data;
     private Context context;
     private Transformation transformation;
+    private long mStartOfToday;
 
     public AnswerVKOfficialAdapter(AnswerVKOfficialList data, Context context) {
         this.data = data;
         this.context = context;
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
+        this.mStartOfToday = Utils.startOfTodayMillis();
     }
 
     @NonNull
@@ -91,9 +93,73 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         void openOwnerWall(int owner_id);
     }
 
+    private static final int DIV_DISABLE = 0;
+    private static final int DIV_TODAY = 1;
+    private static final int DIV_YESTERDAY = 2;
+    private static final int DIV_THIS_WEEK = 3;
+    private static final int DIV_OLD = 4;
+
+    private int getDivided(long messageDateJavaTime, Long previousMessageDateJavaTime) {
+        int stCurrent = getStatus(messageDateJavaTime);
+        if (previousMessageDateJavaTime == null) {
+            return stCurrent;
+        } else {
+            int stPrevious = getStatus(previousMessageDateJavaTime);
+            if (stCurrent == stPrevious) {
+                return DIV_DISABLE;
+            } else {
+                return stCurrent;
+            }
+        }
+    }
+
+    private int getStatus(long time) {
+        if (time >= mStartOfToday) {
+            return DIV_TODAY;
+        }
+
+        if (time >= mStartOfToday - 86400000) {
+            return DIV_YESTERDAY;
+        }
+
+        if (time >= mStartOfToday - 864000000) {
+            return DIV_THIS_WEEK;
+        }
+
+        return DIV_OLD;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int position) {
         final AnswerVKOfficial Page = data.items.get(position);
+        AnswerVKOfficial previous = position == 0 ? null : data.items.get(position - 1);
+
+        long lastMessageJavaTime = Page.time * 1000;
+        int headerStatus = getDivided(lastMessageJavaTime, previous == null ? null : previous.time * 1000);
+
+        switch (headerStatus) {
+            case DIV_DISABLE:
+                holder.mHeaderRoot.setVisibility(View.GONE);
+                break;
+            case DIV_OLD:
+                holder.mHeaderRoot.setVisibility(View.VISIBLE);
+                holder.mHeaderTitle.setText(R.string.dialog_day_older);
+                break;
+            case DIV_TODAY:
+                holder.mHeaderRoot.setVisibility(View.VISIBLE);
+                holder.mHeaderTitle.setText(R.string.dialog_day_today);
+                break;
+            case DIV_YESTERDAY:
+                holder.mHeaderRoot.setVisibility(View.VISIBLE);
+                holder.mHeaderTitle.setText(R.string.dialog_day_yesterday);
+                break;
+            case DIV_THIS_WEEK:
+                holder.mHeaderRoot.setVisibility(View.VISIBLE);
+                holder.mHeaderTitle.setText(R.string.dialog_day_ten_days);
+                break;
+        }
+
+
         holder.small.setVisibility(View.INVISIBLE);
         if(Page.header != null) {
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.header));
@@ -270,6 +336,8 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         TextView description;
         TextView time;
         ImageView small;
+        View mHeaderRoot;
+        TextView mHeaderTitle;
 
         public Holder(View itemView) {
             super(itemView);
@@ -281,6 +349,8 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             description.setMovementMethod(LinkMovementMethod.getInstance());
             time = itemView.findViewById(R.id.item_friend_time);
             small = itemView.findViewById(R.id.item_icon);
+            mHeaderRoot = itemView.findViewById(R.id.header_root);
+            mHeaderTitle = itemView.findViewById(R.id.header_title);
         }
     }
 }

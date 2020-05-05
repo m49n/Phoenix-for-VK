@@ -340,7 +340,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     boolean needUpdate = requireArguments().getBoolean(EXTRA_NEED_UPDATE);
                     ArrayList<Photo> photos = requireArguments().getParcelableArrayList(EXTRA_PHOTOS);
                     AssertUtils.requireNonNull(photos);
-                    return new SimplePhotoPresenter(photos, index, needUpdate, aid, requireArguments().getInt(Extra.STORY), saveInstanceState);
+                    return new SimplePhotoPresenter(photos, index, needUpdate, aid, requireArguments().getInt(Extra.STORY), requireActivity(), saveInstanceState);
 
                 case Place.VK_PHOTO_ALBUM_GALLERY:
                     int indexx = requireArguments().getInt(Extra.INDEX);
@@ -348,18 +348,18 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     int albumId = requireArguments().getInt(Extra.ALBUM_ID);
                     ArrayList<Photo> photos_album = requireArguments().getParcelableArrayList(EXTRA_PHOTOS);
                     AssertUtils.requireNonNull(photos_album);
-                    return new PhotoAlbumPagerPresenter(indexx, aid, ownerId, albumId, photos_album, saveInstanceState);
+                    return new PhotoAlbumPagerPresenter(indexx, aid, ownerId, albumId, photos_album, requireActivity(), saveInstanceState);
 
                 case Place.FAVE_PHOTOS_GALLERY:
                     int findex = requireArguments().getInt(Extra.INDEX);
                     ArrayList<Photo> favePhotos = requireArguments().getParcelableArrayList(EXTRA_PHOTOS);
                     AssertUtils.requireNonNull(favePhotos);
-                    return new FavePhotoPagerPresenter(favePhotos, findex, aid, saveInstanceState);
+                    return new FavePhotoPagerPresenter(favePhotos, findex, aid, requireActivity(), saveInstanceState);
 
                 case Place.VK_PHOTO_TMP_SOURCE:
                     TmpSource source = requireArguments().getParcelable(Extra.SOURCE);
                     AssertUtils.requireNonNull(source);
-                    return new TmpGalleryPagerPresenter(aid, source, requireArguments().getInt(Extra.INDEX), saveInstanceState);
+                    return new TmpGalleryPagerPresenter(aid, source, requireArguments().getInt(Extra.INDEX), requireActivity(), saveInstanceState);
             }
 
             throw new UnsupportedOperationException();

@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,9 +29,9 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
     private boolean canLoad;
     private final IPhotosInteractor photosInteractor;
 
-    public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo>photos,
+    public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo>photos, Context context,
                                     @Nullable Bundle savedInstanceState) {
-        super(new ArrayList<>(0), accountId, false, savedInstanceState);
+        super(new ArrayList<>(0), accountId, false, context, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
         this.mOwnerId = ownerId;
         this.mAlbumId = albumId;

@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,9 +24,9 @@ public class TmpGalleryPagerPresenter extends PhotoPagerPresenter {
 
     private final TmpSource source;
 
-    public TmpGalleryPagerPresenter(int accountId, @NonNull TmpSource source, int index,
+    public TmpGalleryPagerPresenter(int accountId, @NonNull TmpSource source, int index, Context context,
                                     @Nullable Bundle savedInstanceState) {
-        super(new ArrayList<>(0), accountId, false, savedInstanceState);
+        super(new ArrayList<>(0), accountId, false, context, savedInstanceState);
         this.source = source;
         setCurrentIndex(index);
 

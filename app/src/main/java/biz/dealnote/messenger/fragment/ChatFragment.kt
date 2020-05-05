@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.fragment
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
@@ -51,6 +52,7 @@ import biz.dealnote.messenger.util.ViewUtils
 import biz.dealnote.messenger.view.InputViewController
 import biz.dealnote.messenger.view.LoadMoreFooterHelper
 import biz.dealnote.messenger.view.SwipeDismissBehavior2
+import biz.dealnote.messenger.view.WeakViewAnimatorAdapter
 import biz.dealnote.messenger.view.emoji.EmojiconTextView
 import biz.dealnote.messenger.view.emoji.EmojiconsPopup
 import biz.dealnote.mvp.core.IPresenterFactory
@@ -95,6 +97,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     private var goto_button : FloatingActionButton? = null
 
+    private var Writing_msg_Group : View? = null
+    private var Writing_msg : TextView? = null
+    private var Writing_msg_Ava : ImageView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -108,6 +114,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
         emptyText = root.findViewById(R.id.fragment_chat_empty_text)
         toolbarRootView = root.findViewById(R.id.toolbar_root)
+
+        Writing_msg_Group = root.findViewById(R.id.writingGroup)
+        Writing_msg = root.findViewById(R.id.writing)
+        Writing_msg_Ava = root.findViewById(R.id.writingava)
+
+        Writing_msg_Group?.visibility = View.GONE
 
         recyclerView = root.findViewById(R.id.fragment_friend_dialog_list)
         recyclerView?.apply {
@@ -129,7 +141,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                mSwipe!!.canSwipe = dy < 20
+                mSwipe!!.canSwipe = dy < 10
             }
         })
 
@@ -192,6 +204,39 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         message?.run {
             editMessageText?.text = if (body.isNullOrEmpty()) getString(R.string.attachments) else body
         }
+    }
+
+    override fun displayWriting(owner_id: Int) {
+        Writing_msg_Group?.visibility = View.VISIBLE
+        Writing_msg_Group?.alpha = 0.0f
+        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 1.0f).setDuration(200).start()
+        Writing_msg?.setText(R.string.user_type_message)
+        Writing_msg_Ava?.setImageResource(R.drawable.background_gray_round)
+        presenter?.ResolveWritingInfo(requireActivity(), owner_id)
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun displayWriting(owner: Owner)
+    {
+        Writing_msg?.text = owner.fullName + " " + getString(R.string.user_type_message)
+        ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
+                owner.get100photoOrSmaller(), null)
+    }
+
+    override fun hideWriting() {
+
+        val animator: ObjectAnimator? = ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 0.0f)
+        animator?.addListener(object : WeakViewAnimatorAdapter<View>(Writing_msg_Group) {
+            override fun onAnimationEnd(view: View) {
+                Writing_msg_Group?.visibility = View.GONE
+            }
+            override fun onAnimationStart(view: View) {
+            }
+            override fun onAnimationCancel(view: View) {
+            }
+        })
+
+        animator?.setDuration(200)?.start()
     }
 
     private class ActionModeHolder(val rootView: View, fragment: ChatFragment) : View.OnClickListener {

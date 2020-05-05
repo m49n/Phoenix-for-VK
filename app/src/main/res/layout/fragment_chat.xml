@@ -116,6 +116,36 @@
         app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <RelativeLayout
+        android:id="@+id/writingGroup"
+        android:layout_below="@+id/pinned_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?message_bubble_color"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/writingava"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/writing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@+id/writingava"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            tools:text="Writing message...." />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"

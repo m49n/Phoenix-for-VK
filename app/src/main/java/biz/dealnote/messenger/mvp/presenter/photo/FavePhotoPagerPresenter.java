@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter.photo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,8 @@ public class FavePhotoPagerPresenter extends PhotoPagerPresenter {
     private boolean[] mUpdated;
     private boolean[] refreshing;
 
-    public FavePhotoPagerPresenter(@NonNull ArrayList<Photo> photos, int index, int accountId, @Nullable Bundle savedInstanceState) {
-        super(photos, accountId, false, savedInstanceState);
+    public FavePhotoPagerPresenter(@NonNull ArrayList<Photo> photos, int index, int accountId, Context context, @Nullable Bundle savedInstanceState) {
+        super(photos, accountId, false, context, savedInstanceState);
         this.refreshing = new boolean[photos.size()];
 
         if (savedInstanceState == null) {

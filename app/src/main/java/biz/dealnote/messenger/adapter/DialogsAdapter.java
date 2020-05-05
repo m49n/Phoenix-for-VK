@@ -42,8 +42,8 @@ import biz.dealnote.messenger.view.OnlineView;
  */
 public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogViewHolder> {
 
-    private static final SimpleDateFormat DF_TODAY = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    private static final SimpleDateFormat DF_OLD = new SimpleDateFormat("dd.MM.yy", Locale.getDefault());
+    private static SimpleDateFormat DF_TODAY = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private static SimpleDateFormat DF_OLD = new SimpleDateFormat("dd.MM.yy", Locale.getDefault());
 
     private Context mContext;
     private List<Dialog> mDialogs;
@@ -186,7 +186,14 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         }
 
         DATE.setTime(lastMessageJavaTime);
-        holder.tvDate.setText(lastMessageJavaTime >= mStartOfToday ? DF_TODAY.format(DATE) : DF_OLD.format(DATE));
+        holder.tvDate.setText(DF_TODAY.format(DATE));
+        if(lastMessageJavaTime < mStartOfToday) {
+            holder.tvOldDate.setVisibility(View.VISIBLE);
+            holder.tvOldDate.setText(DF_OLD.format(DATE));
+        }
+        else {
+            holder.tvOldDate.setVisibility(View.GONE);
+        }
 
         ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
 
@@ -283,6 +290,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         ImageView ivUnreadTicks;
         OnlineView ivOnline;
         TextView tvDate;
+        TextView tvOldDate;
         View mHeaderRoot;
         TextView mHeaderTitle;
 
@@ -297,6 +305,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             tvUnreadCount = view.findViewById(R.id.item_chat_unread_count);
             ivOnline = view.findViewById(R.id.item_chat_online);
             tvDate = view.findViewById(R.id.item_chat_date);
+            tvOldDate = view.findViewById(R.id.item_chat_old_date);
             mHeaderRoot = view.findViewById(R.id.header_root);
             mHeaderTitle = view.findViewById(R.id.header_title);
         }

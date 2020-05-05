@@ -52,13 +52,15 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private boolean mLoadingNow;
     private boolean mFullScreen;
     private boolean isStory;
+    private Context context;
 
     final IPhotosInteractor photosInteractor;
 
-    PhotoPagerPresenter(@NonNull ArrayList<Photo> initialData, int accountId, boolean Story, @Nullable Bundle savedInstanceState) {
+    PhotoPagerPresenter(@NonNull ArrayList<Photo> initialData, int accountId, boolean Story, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
         this.isStory = Story;
+        this.context = context;
 
         if(Objects.nonNull(savedInstanceState)){
             mCurrentIndex = savedInstanceState.getInt(SAVE_INDEX);
@@ -307,7 +309,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
         Photo photo = getCurrent();
 
-        appendDisposable(OwnerInfo.getRx(getApplicationContext(), getAccountId(), photo.getOwnerId())
+        appendDisposable(OwnerInfo.getRx(context, getAccountId(), photo.getOwnerId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(userInfo -> DownloadResult(DownloadUtil.makeLegalFilename(userInfo.getOwner().getFullName(), null), dir, photo), throwable -> DownloadResult(null, dir, photo)));
     }

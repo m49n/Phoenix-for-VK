@@ -54,8 +54,15 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
             case AbsLongpollEvent.ACTION_USER_WRITE_TEXT_IN_DIALOG:
                 WriteTextInDialogUpdate w = new WriteTextInDialogUpdate();
                 w.user_id = optInt(array, 1);
+                w.chat_id = -1;
                 w.flags = optInt(array, 2);
                 return w;
+
+            case AbsLongpollEvent.ACTION_USER_WRITE_TEXT_IN_CHAT:
+                WriteTextInDialogUpdate wc = new WriteTextInDialogUpdate();
+                wc.chat_id = optInt(array, 2);
+                wc.user_id = optInt(array, 1);
+                return wc;
 
             case AbsLongpollEvent.ACTION_USER_IS_ONLINE:
                 UserIsOnlineUpdate u = new UserIsOnlineUpdate();

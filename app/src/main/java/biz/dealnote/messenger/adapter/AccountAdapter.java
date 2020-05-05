@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -39,13 +42,15 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         this.callback = callback;
     }
 
+    @NotNull
     @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         return new Holder(LayoutInflater.from(context).inflate(R.layout.item_account, parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(Holder holder, int position) {
+    public void onBindViewHolder(@NotNull Holder holder, int position) {
         final Account account = data.get(position);
 
         Owner owner = account.getOwner();
@@ -83,7 +88,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         return data.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView firstName;
         TextView lastName;

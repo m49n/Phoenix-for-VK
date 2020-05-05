@@ -354,7 +354,10 @@ public class MessagesRepository implements IMessagesRepository {
         return Completable.fromAction(() -> {
             List<WriteText> list = new ArrayList<>();
             for (WriteTextInDialogUpdate update : updates) {
-                list.add(new WriteText(accountId, update.user_id, update.user_id));
+                if(update.chat_id != -1)
+                    list.add(new WriteText(accountId, update.user_id, 2000000000 + update.chat_id));
+                else
+                    list.add(new WriteText(accountId, update.user_id, update.user_id));
             }
             writeTextPublisher.onNext(list);
         });

@@ -155,7 +155,6 @@ import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             } else {
                 MusicUtils.PlaceToAudioCache(this);
                 CheckUpdate();
-                UpdateNotificationCount();
+                UpdateNotificationCount(mAccountId);
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);
                 if (needPin) {
@@ -289,9 +288,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
-    public void UpdateNotificationCount()
+    public void UpdateNotificationCount(int account)
     {
-        mCompositeDisposable.add(new CountersInteractor(Injection.provideNetworkInterfaces()).getApiCounters(mAccountId)
+        mCompositeDisposable.add(new CountersInteractor(Injection.provideNetworkInterfaces()).getApiCounters(account)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::updateNotificationsBagde, t -> removeNotificationsBagde()));
     }
@@ -302,12 +301,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             return;
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
-                        return chain.proceed(request);
-                    }});
+                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                    return chain.proceed(request);
+                });
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
         Request request = new Request.Builder()
                 .url("https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/current_version.json").build();
@@ -357,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                             try {
                                 TextView tv = dlg.findViewById(android.R.id.message);
                                 if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                            } catch (Exception e) {}
+                            } catch (Exception ignored) {}
                         });
 
                     } catch (JSONException e) {
@@ -459,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private void onCurrentAccountChange(int newAccountId) {
         this.mAccountId = newAccountId;
         Accounts.showAccountSwitchedToast(this);
+        UpdateNotificationCount(newAccountId);
     }
 
     private static String getFileExtension(File file) {

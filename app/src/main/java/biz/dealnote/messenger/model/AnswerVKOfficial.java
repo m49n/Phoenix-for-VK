@@ -5,5 +5,5 @@ public class AnswerVKOfficial {
     public String text;
     public String iconURL;
     public String iconType;
-    public Integer time;
+    public Long time;
 }

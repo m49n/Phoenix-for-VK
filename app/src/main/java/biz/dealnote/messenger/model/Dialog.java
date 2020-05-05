@@ -228,19 +228,16 @@ public class Dialog implements Identificable, Parcelable {
     }
 
     public String getImageUrl() {
-        switch (Peer.getType(peerId)) {
-            default:
-                return interlocutor == null ? null : interlocutor.get100photoOrSmaller();
-            case Peer.CHAT:
-                String img = firstNonEmptyString(photo100, photo50);
+        if (Peer.getType(peerId) == Peer.CHAT) {
+            String img = firstNonEmptyString(photo200, photo100, photo50);
 
-                if (isEmpty(img) && interlocutor != null) {
-                    img = interlocutor.get100photoOrSmaller();
-                }
+            if (isEmpty(img) && interlocutor != null) {
+                img = interlocutor.getMaxSquareAvatar();
+            }
 
-                return img;
-
+            return img;
         }
+        return interlocutor == null ? null : interlocutor.getMaxSquareAvatar();
     }
 
     public Dialog setInRead(int inRead) {

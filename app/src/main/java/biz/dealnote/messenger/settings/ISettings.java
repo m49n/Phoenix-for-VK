@@ -291,5 +291,7 @@ public interface ISettings {
         void notifyPlaceResumed(int type);
 
         boolean isSystemEmoji();
+
+        boolean isEmojis_recents();
     }
 }

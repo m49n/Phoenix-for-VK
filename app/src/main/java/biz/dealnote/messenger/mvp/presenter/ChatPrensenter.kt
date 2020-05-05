@@ -2,6 +2,7 @@ package biz.dealnote.messenger.mvp.presenter
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -29,6 +30,7 @@ import biz.dealnote.messenger.media.record.Recorder
 import biz.dealnote.messenger.model.*
 import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter
 import biz.dealnote.messenger.mvp.view.IChatView
+import biz.dealnote.messenger.push.OwnerInfo
 import biz.dealnote.messenger.realtime.Processors
 import biz.dealnote.messenger.settings.ISettings
 import biz.dealnote.messenger.settings.Settings
@@ -238,9 +240,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun onUserWriteInDialog(writeText: WriteText) {
-        if (peerId == writeText.peerId && !isGroupChat) {
-            displayUserTextingInToolbar()
-        }
+        if (peerId == writeText.peerId)
+            displayUserTextingInToolbar(writeText.userId)
     }
 
     private fun onUserUpdates(updates: List<UserUpdate>) {
@@ -936,10 +937,16 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         return !isGroupChat && Peer.toUserId(peerId) == userId
     }
 
-    private fun displayUserTextingInToolbar() {
-        val typingText = getString(R.string.user_type_message)
-        view?.displayToolbarSubtitle(typingText)
+    private fun displayUserTextingInToolbar(ownerId: Int) {
+        view?.displayWriting(ownerId)
         toolbarSubtitleHandler.restoreToolbarWithDelay()
+    }
+
+    fun ResolveWritingInfo(context: Context, owner_id: Int)
+    {
+        appendDisposable(OwnerInfo.getRx(context, Settings.get().accounts().current, owner_id)
+                .compose(applySingleIOToMainSchedulers())
+                .subscribe({t -> view?.displayWriting(t.owner)}, { run {} }))
     }
 
     private fun updateSubtitle() {
@@ -998,6 +1005,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     @OnGuiCreated
     private fun resolveToolbarSubtitle() {
         view?.displayToolbarSubtitle(subtitle)
+    }
+
+    @OnGuiCreated
+    private fun hideWriting() {
+        view?.hideWriting()
     }
 
     private fun checkLongpoll() {
@@ -1739,7 +1751,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         override fun handleMessage(msg: android.os.Message) {
             reference.get()?.run {
                 when (msg.what) {
-                    RESTORE_TOLLBAR -> resolveToolbarSubtitle()
+                    RESTORE_TOLLBAR -> hideWriting()
                 }
             }
         }

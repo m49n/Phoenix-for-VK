@@ -199,4 +199,9 @@ class UISettings implements ISettings.IUISettings {
     public boolean isSystemEmoji() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", true);
     }
+
+    @Override
+    public boolean isEmojis_recents() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_recents", true);
+    }
 }

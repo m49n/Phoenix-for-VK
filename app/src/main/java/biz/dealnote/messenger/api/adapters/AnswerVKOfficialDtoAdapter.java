@@ -75,7 +75,7 @@ public class AnswerVKOfficialDtoAdapter extends AbsAdapter implements JsonDeseri
             if (dto.text != null)
                 dto.text = dto.text.replace("{date}", "").replaceAll("'''(((?!''').)*)'''", "<b>$1</b>").replaceAll("\\[vk(ontakte)?:\\/\\/[A-Za-z0-9\\/\\?=]+\\|([^\\]]+)\\]", "$2");
             ;
-            dto.time = optInt(root_item, "date");
+            dto.time = optLong(root_item, "date");
             dto.iconURL = optString(root_item, "icon_url");
 
             if (root_item.has("main_item")) {

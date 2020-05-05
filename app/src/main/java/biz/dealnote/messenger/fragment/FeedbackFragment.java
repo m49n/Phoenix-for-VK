@@ -145,7 +145,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void notifyUpdateCounter() {
-        ((MainActivity)requireActivity()).UpdateNotificationCount();
+        ((MainActivity)requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
     }
 
     private void resolveEmptyTextVisibility() {
