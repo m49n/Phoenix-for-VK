@@ -293,5 +293,9 @@ public interface ISettings {
         boolean isSystemEmoji();
 
         boolean isEmojis_recents();
+
+        boolean isPhoto_swipe_pos_top_to_bottom();
+
+        boolean isShow_profile_in_additional_page();
     }
 }

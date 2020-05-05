@@ -178,6 +178,10 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
 
         vgProfileContainer = root.findViewById(R.id.content_root);
+        if(!Settings.get().ui().isShow_profile_in_additional_page())
+            vgProfileContainer.setVisibility(View.GONE);
+        else
+            vgProfileContainer.setVisibility(View.VISIBLE);
         ivHeaderAvatar = root.findViewById(R.id.header_navi_menu_avatar);
         tvUserName = root.findViewById(R.id.header_navi_menu_username);
         tvDomain = root.findViewById(R.id.header_navi_menu_usernick);

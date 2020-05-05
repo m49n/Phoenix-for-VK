@@ -87,6 +87,20 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="photo_swipe_pos_top_to_bottom"
+            android:summary="@string/photo_swipe_pos_top_to_bottom"
+            android:title="@string/photo_swipe_pos_top_to_bottom"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_profile_in_additional_page"
+            android:summary="@string/show_profile_in_additional_page"
+            android:title="@string/show_profile_in_additional_page"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="send_by_enter"
             android:summary="@string/send_on_enter_summary"
             android:title="@string/send_on_enter_title"

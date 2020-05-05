@@ -204,4 +204,14 @@ class UISettings implements ISettings.IUISettings {
     public boolean isEmojis_recents() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_recents", true);
     }
+
+    @Override
+    public boolean isPhoto_swipe_pos_top_to_bottom() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("photo_swipe_pos_top_to_bottom", false);
+    }
+
+    @Override
+    public boolean isShow_profile_in_additional_page() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_profile_in_additional_page", true);
+    }
 }

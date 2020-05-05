@@ -617,6 +617,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             progress = view.findViewById(R.id.progress_bar);
             photo = view.findViewById(idOfImageView());
             photo.setMaxZoom(8);
+            photo.setDoubleTapScale(3);
             progress = view.findViewById(idOfProgressBar());
             reload = view.findViewById(R.id.goto_button);
             mPicassoLoadCallback = new WeakPicassoLoadCallback(this);
@@ -726,7 +727,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
                 @Override
                 public void onPostSettled(int diff) {
-                    if (diff < 0) {
+                    if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff > 0 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff < 0) {
                         goBack();
                     }
                 }
