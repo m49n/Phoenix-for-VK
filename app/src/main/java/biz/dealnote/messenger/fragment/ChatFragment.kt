@@ -138,14 +138,25 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
         mSwipe = SwipeDismissBehavior2<RecyclerView>()
         mSwipe?.setSwipeDirection(SwipeDismissBehavior2.SWIPE_DIRECTION_START_TO_END)
-        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                mSwipe!!.canSwipe = dy < 10
-            }
-        })
-
+        if(!Settings.get().ui().isDisable_swipes) {
+            recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    mSwipe!!.canSwipe = dy < 10
+                }
+            })
+        }
+        else
+            mSwipe?.canSwipe = false
         mSwipe!!.setListener(object : SwipeDismissBehavior2.OnDismissListener {
+            override fun onReleased(view: View?) {
+
+            }
+
+            override fun onCaptured(view: View?) {
+
+            }
+
             override fun onDismiss(view: View?) {
                 goBack()
             }

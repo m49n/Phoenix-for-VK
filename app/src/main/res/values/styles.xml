@@ -353,4 +353,8 @@
         <item name="cornerSize">10dp</item>
     </style>
 
+    <style name="SplashTheme" parent="App.DayNight">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
 </resources>

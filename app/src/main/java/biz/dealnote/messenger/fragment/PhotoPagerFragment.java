@@ -727,9 +727,11 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
                 @Override
                 public void onPostSettled(int diff) {
-                    if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff > 0 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff < 0) {
+                    if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
                         goBack();
                     }
+                    else
+                        container.requestDisallowInterceptTouchEvent(false);
                 }
             });
 

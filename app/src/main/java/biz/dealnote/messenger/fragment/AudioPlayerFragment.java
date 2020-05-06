@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -68,6 +71,12 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
+import biz.dealnote.messenger.view.verticalswipe.BelowFractionalClamp;
+import biz.dealnote.messenger.view.verticalswipe.NegativeFactorFilterSideEffect;
+import biz.dealnote.messenger.view.verticalswipe.PropertySideEffect;
+import biz.dealnote.messenger.view.verticalswipe.SensitivityClamp;
+import biz.dealnote.messenger.view.verticalswipe.SettleOnTopAction;
+import biz.dealnote.messenger.view.verticalswipe.VerticalSwipeBehavior;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.player.util.MusicUtils.isPlaying;
@@ -110,6 +119,8 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private TextView tvSubtitle;
 
     private ImageView ivCover;
+
+    private boolean isCaptured = false;
 
     // Broadcast receiver
     private PlaybackStatus mPlaybackStatus;
@@ -211,6 +222,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutRes;
@@ -224,6 +236,39 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
+        ConstraintLayout Root = root.findViewById(R.id.player_layout);
+
+        VerticalSwipeBehavior<ConstraintLayout> ui = VerticalSwipeBehavior.Companion.from(Root);
+        ui.setSettle(new SettleOnTopAction());
+        PropertySideEffect sideDelegate = new PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y);
+        ui.setSideEffect(new NegativeFactorFilterSideEffect(sideDelegate));
+        BelowFractionalClamp clampDelegate = new BelowFractionalClamp(3f, 3f);
+        ui.setClamp(new SensitivityClamp(0.5f, clampDelegate, 0.5f));
+        ui.setListener(new VerticalSwipeBehavior.SwipeListener() {
+            @Override
+            public void onReleased() {
+                isCaptured = false;
+            }
+
+            @Override
+            public void onCaptured() {
+                isCaptured = true;
+            }
+
+            @Override
+            public void onPreSettled(int diff) {
+            }
+
+            @Override
+            public void onPostSettled(int diff) {
+                if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
+                    goBack();
+                }
+                else
+                    isCaptured = false;
+            }
+        });
+
         mPlayPauseButton = root.findViewById(R.id.action_button_play);
         mShuffleButton = root.findViewById(R.id.action_button_shuffle);
         mRepeatButton = root.findViewById(R.id.action_button_repeat);
@@ -236,6 +281,23 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mCurrentTime = root.findViewById(R.id.audio_player_current_time);
         mTotalTime = root.findViewById(R.id.audio_player_total_time);
         mProgress = root.findViewById(android.R.id.progress);
+
+        if(!Settings.get().ui().isDisable_swipes()) {
+            mProgress.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
+                        ui.setCanSwipe(false);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        ui.setCanSwipe(true);
+                        break;
+                }
+                return false;
+            });
+        }
+        else
+            ui.setCanSwipe(false);
         tvTitle = root.findViewById(R.id.audio_player_title);
         tvAlbum = root.findViewById(R.id.audio_player_album);
         tvSubtitle = root.findViewById(R.id.audio_player_subtitle);
@@ -273,6 +335,16 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         resolveAddButton();
 
         return root;
+    }
+
+    private boolean canGoBack() {
+        return requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1;
+    }
+
+    private void goBack() {
+        if (isAdded() && canGoBack()) {
+            requireActivity().getSupportFragmentManager().popBackStack();
+        }
     }
 
     private void onAudioBroadcastButtonClick() {
@@ -960,6 +1032,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         public void handleMessage(final Message msg) {
             switch (msg.what) {
                 case REFRESH_TIME:
+                    if(mAudioPlayer.get().isCaptured) {
+                        mAudioPlayer.get().queueNextRefresh(300);
+                        break;
+                    }
                     final long next = mAudioPlayer.get().refreshCurrentTime();
                     mAudioPlayer.get().queueNextRefresh(next);
                     break;

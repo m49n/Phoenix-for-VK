@@ -214,4 +214,9 @@ class UISettings implements ISettings.IUISettings {
     public boolean isShow_profile_in_additional_page() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_profile_in_additional_page", true);
     }
+
+    @Override
+    public boolean isDisable_swipes() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_swipes", false);
+    }
 }

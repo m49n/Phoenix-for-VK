@@ -99,6 +99,15 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
+
+        Goto.setOnLongClickListener(v -> {
+            Audio curr = MusicUtils.getCurrentAudio();
+            if (curr != null) {
+                PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
+            } else
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
+            return false;
+        });
         Goto.setOnClickListener(v -> {
             Audio curr = MusicUtils.getCurrentAudio();
             if (curr != null) {

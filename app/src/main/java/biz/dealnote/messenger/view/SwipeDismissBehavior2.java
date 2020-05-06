@@ -75,6 +75,9 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
          * {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
          */
         void onDragStateChanged(int state);
+
+        void onCaptured(View view);
+        void onReleased(View view);
     }
     /**
      * Set the listener to be used when a dismiss event occurs.
@@ -168,6 +171,11 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
             return true;
         }
         @Override
+        public void onViewCaptured(View child, int activePointerId) {
+            super.onViewCaptured(child, activePointerId);
+            mListener.onCaptured(child);
+        }
+        @Override
         public void onViewDragStateChanged(int state) {
             if (mListener != null) {
                 mListener.onDragStateChanged(state);
@@ -175,6 +183,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
         }
         @Override
         public void onViewReleased(View child, float xvel, float yvel) {
+            mListener.onReleased(child);
             final int childWidth = child.getWidth();
             int targetLeft;
             boolean dismiss = false;

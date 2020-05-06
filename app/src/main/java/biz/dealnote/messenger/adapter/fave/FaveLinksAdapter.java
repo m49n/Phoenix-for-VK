@@ -45,7 +45,7 @@ public class FaveLinksAdapter extends RecyclerView.Adapter<FaveLinksAdapter.Hold
 
         holder.itemView.setOnClickListener(v -> {
             if(clickListener != null){
-                clickListener.onLinkClick(holder.getAdapterPosition(), link);
+                clickListener.onLinkClick(holder.getBindingAdapterPosition(), link);
             }
         });
     }

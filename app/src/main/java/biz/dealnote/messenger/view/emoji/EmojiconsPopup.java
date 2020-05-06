@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -152,8 +151,10 @@ public class EmojiconsPopup {
                 keyBoardHeight = heightDifference;
 
                 if (Objects.nonNull(emojiContainer)) {
-                    emojiContainer.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, keyBoardHeight));
-                    emojiContainer.invalidate();
+                    ViewGroup.LayoutParams layoutParams = emojiContainer.getLayoutParams();
+                    layoutParams.height = keyBoardHeight;
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    emojiContainer.setLayoutParams(layoutParams);
                 }
 
                 if (!isOpened) {
@@ -180,8 +181,10 @@ public class EmojiconsPopup {
             emojiContainer = createCustomView(emojiParentView);
 
             final int finalKeyboardHeight = this.keyBoardHeight > 0 ? keyBoardHeight : (int) mContext.getResources().getDimension(R.dimen.keyboard_height);
-            emojiContainer.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, finalKeyboardHeight));
-            emojiContainer.invalidate();
+            ViewGroup.LayoutParams layoutParams = emojiContainer.getLayoutParams();
+            layoutParams.height = finalKeyboardHeight;
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            emojiContainer.setLayoutParams(layoutParams);
         }
 
         return emojiContainer;

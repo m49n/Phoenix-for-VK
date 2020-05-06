@@ -93,6 +93,13 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="disable_swipes"
+            android:summary="@string/disable_swipes"
+            android:title="@string/disable_swipes"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="show_profile_in_additional_page"
             android:summary="@string/show_profile_in_additional_page"

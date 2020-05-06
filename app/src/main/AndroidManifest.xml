@@ -113,6 +113,7 @@
 
         <activity
             android:name=".activity.MainActivity"
+            android:theme="@style/SplashTheme"
             android:configChanges="keyboardHidden"
             android:label="@string/app_name"
             android:launchMode="singleTask"

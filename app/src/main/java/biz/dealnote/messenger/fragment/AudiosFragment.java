@@ -39,6 +39,7 @@ import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
+import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
@@ -131,6 +132,18 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             Goto.setImageResource(R.drawable.check);
         else
             Goto.setImageResource(R.drawable.audio_player);
+        if(!isSelectMode)
+        {
+            Goto.setOnLongClickListener(v -> {
+                Audio curr = MusicUtils.getCurrentAudio();
+                if (curr != null) {
+                    PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
+                }
+                else
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
+                return false;
+            });
+        }
         Goto.setOnClickListener(v -> {
             if (isSelectMode) {
                 Intent intent = new Intent();

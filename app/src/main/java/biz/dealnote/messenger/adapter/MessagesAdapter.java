@@ -292,7 +292,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         holder.buttonRestore.setVisibility(message.isDeletedForAll() ? View.GONE : View.VISIBLE);
         holder.buttonRestore.setOnClickListener(v -> {
             if (onMessageActionListener != null) {
-                onMessageActionListener.onRestoreClick(message, holder.getAdapterPosition());
+                onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
             }
         });
     }

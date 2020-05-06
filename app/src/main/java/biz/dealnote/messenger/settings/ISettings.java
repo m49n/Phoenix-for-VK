@@ -297,5 +297,7 @@ public interface ISettings {
         boolean isPhoto_swipe_pos_top_to_bottom();
 
         boolean isShow_profile_in_additional_page();
+
+        boolean isDisable_swipes();
     }
 }

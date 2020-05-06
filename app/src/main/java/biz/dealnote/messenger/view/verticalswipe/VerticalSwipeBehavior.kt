@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.customview.widget.ViewDragHelper
+import biz.dealnote.messenger.settings.Settings
 
 class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
 
@@ -73,10 +74,9 @@ class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
         }
 
         override fun onViewReleased(child: View, xvel: Float, yvel: Float) {
-            listener?.onReleased()
             val diff = child.top - originTop
             val settled = dragHelper?.let {
-                if (diff > 0) {
+                if (diff > -120 && !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom || diff > 120 && Settings.get().ui().isPhoto_swipe_pos_top_to_bottom) {
                     settle.releasedBelow(it, diff, child)
                 } else {
                     settle.releasedAbove(it, diff, child)
@@ -86,6 +86,8 @@ class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
                 listener?.onPreSettled(diff)
                 child.postOnAnimation(RecursiveSettle(child, diff))
             }
+            else
+                listener?.onReleased()
             currentPointer = INVALID_POINTER_ID
         }
 
