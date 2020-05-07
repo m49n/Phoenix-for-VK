@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -167,7 +166,7 @@ public class FaveTabsFragment extends BaseFragment {
 
         private final List<ITab> tabs;
 
-        public Adapter(List<ITab> tabs, @NonNull FragmentActivity fragmentActivity) {
+        public Adapter(List<ITab> tabs, @NonNull Fragment fragmentActivity) {
             super(fragmentActivity);
             this.tabs = tabs;
         }
@@ -192,7 +191,7 @@ public class FaveTabsFragment extends BaseFragment {
         tabs.add(new Tab(() -> FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts)));
         tabs.add(new Tab(() -> FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos)));
         tabs.add(new Tab(() -> FaveVideosFragment.newInstance(getAccountId()), getString(R.string.videos)));
-        Adapter adapter = new Adapter(tabs, requireActivity());
+        Adapter adapter = new Adapter(tabs, this);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -75,7 +74,7 @@ public class VideosTabsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         ViewPager2 viewPager = view.findViewById(R.id.fragment_videos_pager);
         viewPager.setOffscreenPageLimit(1);
-        Adapter adapter = new Adapter(requireActivity());
+        Adapter adapter = new Adapter(this);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(view.findViewById(R.id.fragment_videos_tabs), viewPager, (tab, position) -> {
@@ -127,7 +126,7 @@ public class VideosTabsFragment extends BaseFragment {
     }
 
     class Adapter extends FragmentStateAdapter {
-        public Adapter(FragmentActivity fm) {
+        public Adapter(@NonNull Fragment fm) {
             super(fm);
         }
 

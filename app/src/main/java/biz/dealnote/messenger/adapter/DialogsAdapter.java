@@ -199,7 +199,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         holder.mContentRoot.setOnClickListener(v -> {
             if (mClickListener != null) {
-                mClickListener.onDialogClick(dialog);
+                mClickListener.onDialogClick(dialog, position);
             }
         });
 
@@ -207,7 +207,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         holder.ivAvatar.setOnClickListener(view -> {
             if (Objects.nonNull(mClickListener)) {
-                mClickListener.onAvatarClick(dialog);
+                mClickListener.onAvatarClick(dialog, position);
             }
         });
     }
@@ -267,11 +267,11 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
     }
 
     public interface ClickListener extends EventListener {
-        void onDialogClick(Dialog dialog);
+        void onDialogClick(Dialog dialog, int offset);
 
         boolean onDialogLongClick(Dialog dialog);
 
-        void onAvatarClick(Dialog dialog);
+        void onAvatarClick(Dialog dialog, int offset);
     }
 
     @Override

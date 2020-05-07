@@ -78,7 +78,7 @@ public class LinkHelper {
                 break;
 
             case AbsLink.DIALOGS:
-                PlaceFactory.getDialogsPlace(accountId, accountId, null).tryOpenWith(activity);
+                PlaceFactory.getDialogsPlace(accountId, accountId, null, 0).tryOpenWith(activity);
                 break;
 
             case AbsLink.PHOTO:
@@ -123,7 +123,7 @@ public class LinkHelper {
             case AbsLink.DIALOG:
                 DialogLink dialogLink = (DialogLink) link;
                 Peer peer = new Peer(dialogLink.peerId);
-                PlaceFactory.getChatPlace(accountId, accountId, peer).tryOpenWith(activity);
+                PlaceFactory.getChatPlace(accountId, accountId, peer, 0).tryOpenWith(activity);
                 break;
 
             case AbsLink.WALL:

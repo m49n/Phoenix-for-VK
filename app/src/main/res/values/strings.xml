@@ -1288,5 +1288,5 @@
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
-    <string name="disable_swipes">Отключить свайпы для чатов и плеера</string>
+    <string name="disable_swipes">Отключить свайпы для плеера</string>
 </resources>

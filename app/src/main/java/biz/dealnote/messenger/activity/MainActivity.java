@@ -78,6 +78,7 @@ import biz.dealnote.messenger.fragment.CommunityManagerEditFragment;
 import biz.dealnote.messenger.fragment.CreatePhotoAlbumFragment;
 import biz.dealnote.messenger.fragment.CreatePollFragment;
 import biz.dealnote.messenger.fragment.DialogsFragment;
+import biz.dealnote.messenger.fragment.DialogsTabsFragment;
 import biz.dealnote.messenger.fragment.DocPreviewFragment;
 import biz.dealnote.messenger.fragment.DocsFragment;
 import biz.dealnote.messenger.fragment.DrawerEditFragment;
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private Toolbar mToolbar;
     private BottomNavigationView mBottomNavigation;
     private ViewGroup mBottomNavigationContainer;
+    private View mMiniPlayer;
     private MusicUtils.ServiceToken mAudioPlayServiceToken;
 
     private FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = () -> {
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
 
         mBottomNavigationContainer = findViewById(R.id.bottom_navigation_menu_container);
+        mMiniPlayer = findViewById(R.id.miniplayer);
 
         getSupportFragmentManager().addOnBackStackChangedListener(mOnBackStackChangedListener);
         resolveToolbarNavigationIcon();
@@ -429,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                                     .subscribe(this::OnSetOffline, t -> OnSetOffline(false))));
                     builder.setNegativeButton(R.string.open_clipboard_url, (dialog, which) -> {
                         final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
+                        if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
                             String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
                             LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
                         }
@@ -553,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             String imgUrl = intent.getStringExtra(Extra.IMAGE);
 
             final Peer peer = new Peer(peerId).setTitle(title).setAvaUrl(imgUrl);
-            PlaceFactory.getChatPlace(aid, aid, peer).tryOpenWith(this);
+            PlaceFactory.getChatPlace(aid, aid, peer, 0).tryOpenWith(this);
             return true;
         }
 
@@ -579,33 +582,22 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         resolveToolbarNavigationIcon();
     }
 
-    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer) {
-        if(Settings.get().other().isEnable_show_recent_dialogs()) {
+    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset) {
+        if (Settings.get().other().isEnable_show_recent_dialogs()) {
             RecentChat recentChat = new RecentChat(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
             getNavigationFragment().appendRecentChat(recentChat);
             getNavigationFragment().refreshNavigationItems();
             getNavigationFragment().selectPage(recentChat);
         }
-
-        Fragment fragment = getFrontFragment();
-
-        if (fragment instanceof ChatFragment) {
-            Logger.d(TAG, "Chat fragment is present. Try to re-init");
-            ChatFragment chatFragment = (ChatFragment) fragment;
-            chatFragment.reInit(peer);
-            onChatResume(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
-        } else {
-            Logger.d(TAG, "Create new chat fragment");
-
-            ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
-            attachToFront(chatFragment);
-        }
+        clearBackStack();
+        DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
+        attachToFront(chatFragment);
     }
 
     private void openRecentChat(RecentChat chat) {
         final int accountId = this.mAccountId;
         final int messagesOwnerId = this.mAccountId;
-        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()));
+        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()), 0);
     }
 
     private void openTargetPage() {
@@ -683,7 +675,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         switch (sectionDrawerItem.getSection()) {
             case AdditionalNavigationFragment.PAGE_DIALOGS:
-                openPlace(PlaceFactory.getDialogsPlace(aid, aid, null));
+                openPlace(PlaceFactory.getDialogsPlace(aid, aid, null, 0));
                 break;
             case AdditionalNavigationFragment.PAGE_FRIENDS:
                 openPlace(PlaceFactory.getFriendsFollowersPlace(aid, aid, FriendsTabsFragment.TAB_ALL_FRIENDS, null));
@@ -973,6 +965,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     @Override
     public void hideMenu(boolean hide) {
         MusicUtils.setMiniPlayerVisibility(!hide);
+        if(hide)
+            mMiniPlayer.setVisibility(View.GONE);
         if (hide) {
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();
@@ -1047,7 +1041,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             case Place.CHAT:
                 final Peer peer = args.getParcelable(Extra.PEER);
                 AssertUtils.requireNonNull(peer);
-                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer);
+                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer, args.getInt(Extra.OFFSET));
                 break;
 
             case Place.SEARCH:
@@ -1084,7 +1078,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 attachToFront(DialogsFragment.newInstance(
                         args.getInt(Extra.ACCOUNT_ID),
                         args.getInt(Extra.OWNER_ID),
-                        args.getString(Extra.SUBTITLE)
+                        args.getString(Extra.SUBTITLE),
+                        args.getInt(Extra.OFFSET)
                 ));
                 break;
 

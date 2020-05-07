@@ -1467,49 +1467,6 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
-    fun reInitWithNewPeer(newPeer: Peer) {
-        saveDraftMessageBody()
-
-        this.peer = newPeer
-
-        if (isGuiResumed) {
-            Processors.realtimeMessages().registerNotificationsInterceptor(id, Pair.create(messagesOwnerId, peerId))
-        }
-
-        checkLongpoll()
-
-        resolveAccountHotSwapSupport()
-
-        netLoadingDisposable.dispose()
-        cacheLoadingDisposable.dispose()
-        fetchConversationDisposable.dispose()
-
-        super.getData().clear()
-        view?.notifyDataChanged()
-
-        updateSubtitle()
-
-        resolveToolbarTitle()
-        resolveToolbarSubtitle()
-        resolveOptionMenu()
-        resolveResumePeer()
-
-        textingNotifier.shutdown()
-        textingNotifier = TextingNotifier(messagesOwnerId)
-
-        draftMessageId = null
-        draftMessageText = null
-        draftMessageDbAttachmentsCount = 0
-
-        val needToRestoreDraftMessageBody = outConfig.initialText.isNullOrEmpty()
-        if (!needToRestoreDraftMessageBody) {
-            draftMessageText = outConfig.initialText
-        }
-
-        fetchConversationThenCachedThenActual()
-        tryToRestoreDraftMessage(!needToRestoreDraftMessageBody)
-    }
-
     fun fireTermsOfUseAcceptClick(requestCode: Int) {
         Settings.get().security().isKeyEncryptionPolicyAccepted = true
 

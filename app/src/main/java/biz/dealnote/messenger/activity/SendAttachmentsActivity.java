@@ -30,7 +30,7 @@ public class SendAttachmentsActivity extends MainActivity {
         intent.setAction(ACTION_SEND_ATTACHMENTS);
         intent.putExtra(EXTRA_INPUT_ATTACHMENTS, bundle);
         intent.putExtra(MainActivity.EXTRA_NO_REQUIRE_PIN, true);
-        intent.putExtra(Extra.PLACE, PlaceFactory.getDialogsPlace(accountId, accountId,null));
+        intent.putExtra(Extra.PLACE, PlaceFactory.getDialogsPlace(accountId, accountId,null, 0));
         context.startActivity(intent);
     }
 

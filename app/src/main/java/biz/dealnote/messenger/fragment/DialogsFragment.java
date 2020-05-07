@@ -1,22 +1,23 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,13 +33,13 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
-import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SelectProfilesActivity;
 import biz.dealnote.messenger.adapter.DialogsAdapter;
 import biz.dealnote.messenger.dialog.DialogNotifOptionsDialog;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.DialogsSearchCriteria;
+import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
@@ -50,6 +51,7 @@ import biz.dealnote.messenger.mvp.presenter.DialogsPresenter;
 import biz.dealnote.messenger.mvp.view.IDialogsView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
@@ -57,6 +59,7 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
+import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
 /**
@@ -66,12 +69,13 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsView>
         implements IDialogsView, DialogsAdapter.ClickListener {
 
-    public static DialogsFragment newInstance(int accountId, int dialogsOwnerId, @Nullable String subtitle) {
+    public static DialogsFragment newInstance(int accountId, int dialogsOwnerId, @Nullable String subtitle, int Offset) {
         DialogsFragment fragment = new DialogsFragment();
         Bundle args = new Bundle();
         args.putString(Extra.SUBTITLE, subtitle);
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putInt(Extra.OWNER_ID, dialogsOwnerId);
+        args.putInt(Extra.OFFSET, Offset);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,20 +83,28 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     private RecyclerView mRecyclerView;
     private DialogsAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Toolbar toolbar;
 
     private FloatingActionButton mFab;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dialogs, container, false);
 
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        toolbar = root.findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_dialogs);
+
+        OptionView optionView = new OptionView();
+        getPresenter().fireOptionViewCreated(optionView);
+        toolbar.getMenu().findItem(R.id.action_search).setVisible(optionView.canSearch);
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_search:
+                    getPresenter().fireSearchClick();
+                    break;
+            }
+            return true;
+        });
 
         mRecyclerView = root.findViewById(R.id.recycleView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
@@ -151,20 +163,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_dialogs, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        OptionView optionView = new OptionView();
-        getPresenter().fireOptionViewCreated(optionView);
-        menu.findItem(R.id.action_search).setVisible(optionView.canSearch);
-    }
-
     private static final class OptionView implements IOptionView {
 
         boolean canSearch;
@@ -173,16 +171,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         public void setCanSearch(boolean can) {
             this.canSearch = can;
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                getPresenter().fireSearchClick();
-                break;
-        }
-        return true;
     }
 
     @Override
@@ -198,8 +186,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     }
 
     @Override
-    public void onDialogClick(Dialog dialog) {
-        getPresenter().fireDialogClick(dialog);
+    public void onDialogClick(Dialog dialog, int offset) {
+        getPresenter().fireDialogClick(dialog, offset);
     }
 
     private static final class ContextView implements IContextView {
@@ -279,8 +267,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     }
 
     @Override
-    public void onAvatarClick(Dialog dialog) {
-        getPresenter().fireDialogAvatarClick(dialog);
+    public void onAvatarClick(Dialog dialog, int offset) {
+        getPresenter().fireDialogAvatarClick(dialog, offset);
     }
 
     private static final int REQUEST_CODE_SELECT_USERS_FOR_CHAT = 114;
@@ -306,15 +294,39 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
 
      */
 
+    private void resolveToolbarNavigationIcon() {
+        if (isNull(toolbar)) return;
+
+        FragmentManager manager = requireActivity().getSupportFragmentManager();
+        if (manager.getBackStackEntryCount() > 1) {
+            Drawable tr = AppCompatResources.getDrawable(requireActivity(), R.drawable.arrow_left);
+            Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
+            toolbar.setNavigationIcon(tr);
+            toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        } else {
+            Drawable tr = AppCompatResources.getDrawable(requireActivity(), R.drawable.phoenix_round);
+            Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
+            toolbar.setNavigationIcon(tr);
+            toolbar.setNavigationOnClickListener(v -> {
+
+                final ClipboardManager clipBoard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
+                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                    LinkHelper.openUrl(requireActivity(), Settings.get().accounts().getCurrent(), temp);
+                }
+            });
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         Settings.get().ui().notifyPlaceResumed(Place.DIALOGS);
 
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.dialogs);
-            actionBar.setSubtitle(requireArguments().getString(Extra.SUBTITLE));
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.dialogs);
+            toolbar.setSubtitle(requireArguments().getString(Extra.SUBTITLE));
+            resolveToolbarNavigationIcon();
         }
 
         if (requireActivity() instanceof OnSectionResumeCallback) {
@@ -344,6 +356,13 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     }
 
     @Override
+    public void scroll_pos(int pos) {
+        if (nonNull(mRecyclerView)) {
+            mRecyclerView.scrollToPosition(pos);
+        }
+    }
+
+    @Override
     public void notifyDataAdded(int position, int count) {
         if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
@@ -358,8 +377,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     }
 
     @Override
-    public void goToChat(int accountId, int messagesOwnerId, int peerId, String title, String avaurl) {
-        PlaceFactory.getChatPlace(accountId, messagesOwnerId, new Peer(peerId).setTitle(title).setAvaUrl(avaurl)).tryOpenWith(requireActivity());
+    public void goToChat(int accountId, int messagesOwnerId, int peerId, String title, String avaurl, int offset) {
+        PlaceFactory.getChatPlace(accountId, messagesOwnerId, new Peer(peerId).setTitle(title).setAvaUrl(avaurl), offset).tryOpenWith(requireActivity());
     }
 
     @Override
@@ -404,6 +423,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         return () -> new DialogsPresenter(
                 requireArguments().getInt(Extra.ACCOUNT_ID),
                 requireArguments().getInt(Extra.OWNER_ID),
+                requireArguments().getInt(Extra.OFFSET),
                 saveInstanceState
         );
     }

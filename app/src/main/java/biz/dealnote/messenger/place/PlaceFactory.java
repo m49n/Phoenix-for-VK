@@ -285,17 +285,19 @@ public class PlaceFactory {
         return new Place(Place.PREFERENCES).setArguments(PreferencesFragment.buildArgs(aid));
     }
 
-    public static Place getDialogsPlace(int accountId, int dialogsOwnerId, @Nullable String subtitle){
+    public static Place getDialogsPlace(int accountId, int dialogsOwnerId, @Nullable String subtitle, int Offset){
         return new Place(Place.DIALOGS)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId)
                 .withIntExtra(Extra.OWNER_ID, dialogsOwnerId)
+                .withIntExtra(Extra.OFFSET, Offset)
                 .withStringExtra(Extra.SUBTITLE, subtitle);
     }
 
-    public static Place getChatPlace(int accountId, int messagesOwnerId, @NonNull Peer peer){
+    public static Place getChatPlace(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset){
         return new Place(Place.CHAT)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId)
                 .withIntExtra(Extra.OWNER_ID, messagesOwnerId)
+                .withIntExtra(Extra.OFFSET, Offset)
                 .withParcelableExtra(Extra.PEER, peer);
     }
 

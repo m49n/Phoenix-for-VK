@@ -17,8 +17,8 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.annotation.AttrRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.activity.*
@@ -45,13 +45,11 @@ import biz.dealnote.messenger.place.PlaceFactory
 import biz.dealnote.messenger.settings.CurrentTheme
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.upload.UploadDestination
-import biz.dealnote.messenger.util.AppPerms
-import biz.dealnote.messenger.util.InputTextDialog
+import biz.dealnote.messenger.util.*
+import biz.dealnote.messenger.util.Objects
 import biz.dealnote.messenger.util.Utils.nonEmpty
-import biz.dealnote.messenger.util.ViewUtils
 import biz.dealnote.messenger.view.InputViewController
 import biz.dealnote.messenger.view.LoadMoreFooterHelper
-import biz.dealnote.messenger.view.SwipeDismissBehavior2
 import biz.dealnote.messenger.view.WeakViewAnimatorAdapter
 import biz.dealnote.messenger.view.emoji.EmojiconTextView
 import biz.dealnote.messenger.view.emoji.EmojiconsPopup
@@ -93,24 +91,24 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
 
-    private var mSwipe: SwipeDismissBehavior2<RecyclerView>? = null
-
     private var goto_button : FloatingActionButton? = null
 
     private var Writing_msg_Group : View? = null
     private var Writing_msg : TextView? = null
     private var Writing_msg_Ava : ImageView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private var toolbar: Toolbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_chat, container, false) as ViewGroup
         root.background = CurrentTheme.getChatBackground(activity)
 
-        (requireActivity() as AppCompatActivity).setSupportActionBar(root.findViewById(R.id.toolbar))
+        toolbar = root.findViewById(R.id.toolbar)
+        toolbar?.inflateMenu(R.menu.menu_chat)
+        PrepareOptionsMenu(toolbar?.menu!!)
+        toolbar!!.setOnMenuItemClickListener { item: MenuItem ->
+            OptionsItemSelected(item)
+        }
 
         emptyText = root.findViewById(R.id.fragment_chat_empty_text)
         toolbarRootView = root.findViewById(R.id.toolbar_root)
@@ -135,38 +133,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 }
             })
         }
-
-        mSwipe = SwipeDismissBehavior2<RecyclerView>()
-        mSwipe?.setSwipeDirection(SwipeDismissBehavior2.SWIPE_DIRECTION_START_TO_END)
-        if(!Settings.get().ui().isDisable_swipes) {
-            recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    mSwipe!!.canSwipe = dy < 10
-                }
-            })
-        }
-        else
-            mSwipe?.canSwipe = false
-        mSwipe!!.setListener(object : SwipeDismissBehavior2.OnDismissListener {
-            override fun onReleased(view: View?) {
-
-            }
-
-            override fun onCaptured(view: View?) {
-
-            }
-
-            override fun onDismiss(view: View?) {
-                goBack()
-            }
-
-            override fun onDragStateChanged(state: Int) {
-            }
-        })
-
-        val layoutParams: CoordinatorLayout.LayoutParams = recyclerView!!.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParams.setBehavior(mSwipe)
 
         headerView = inflater.inflate(R.layout.footer_load_more, recyclerView, false)
 
@@ -322,11 +288,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     override fun onResumePauseClick() {
         presenter?.fireRecordResumePauseClick()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_chat, menu)
     }
 
     private fun createLayoutManager(): RecyclerView.LayoutManager {
@@ -782,7 +743,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         optionMenuSettings.put(PROFILE_VISIBLE, ProfileVisible)
 
         try {
-            requireActivity().invalidateOptionsMenu()
+            PrepareOptionsMenu(toolbar?.menu!!)
         } catch (ignored: Exception) {
 
         }
@@ -810,10 +771,30 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         ActivityUtils.resetInputText(requireActivity())
     }
 
+    private fun resolveLeftButton(peerId: Int) {
+        try {
+            if (Objects.nonNull(toolbar)) {
+                val tr = AppCompatResources.getDrawable(requireActivity(), (if (peerId >= 2000000000) R.drawable.groups else R.drawable.person))
+                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()))
+                toolbar?.navigationIcon = tr
+                if(peerId in 0..1999999999) {
+                    toolbar?.setNavigationOnClickListener {
+                        run {
+                            showUserWall(Settings.get().accounts().current, peerId)
+                        }
+                    }
+                }
+            }
+        } catch (ignored: java.lang.Exception) {
+        }
+    }
+
     override fun notifyChatResume(accountId: Int, peerId: Int, title: String?, image: String?) {
         if (activity is OnSectionResumeCallback) {
             (activity as OnSectionResumeCallback).onChatResume(accountId, peerId, title, image)
         }
+        toolbar?.title = title
+        resolveLeftButton(peerId)
     }
 
     override fun goToConversationAttachments(accountId: Int, peerId: Int) {
@@ -927,8 +908,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     @SuppressLint("ResourceType")
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    fun PrepareOptionsMenu(menu: Menu) {
 
         menu.findItem(R.id.action_leave_chat).isVisible = optionMenuSettings.get(LEAVE_CHAT_VISIBLE, false)
         menu.findItem(R.id.action_change_chat_title).isVisible = optionMenuSettings.get(CHANGE_CHAT_TITLE_VISIBLE, false)
@@ -964,21 +944,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
-    private fun canGoBack(): Boolean {
-        return requireActivity().supportFragmentManager.backStackEntryCount > 1
-    }
-
-    private fun goBack() {
-        if (isAdded && canGoBack()) {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-    }
-
     override fun ScrollTo(position: Int) {
         recyclerView?.scrollToPosition(position);
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    fun OptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.last_read -> {
                 recyclerView?.smoothScrollToPosition(presenter?.getConversation()!!.unreadCount)
@@ -1058,10 +1028,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         return presenter?.onBackPressed() == true
     }
 
-    fun reInit(newPeer: Peer) {
-        presenter?.reInitWithNewPeer(newPeer)
-    }
-
     private fun isActionModeVisible(): Boolean {
         return actionModeHolder?.rootView?.visibility == View.VISIBLE
     }
@@ -1101,15 +1067,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         private const val REQUEST_ADD_ATTACHMENT = 152
         private const val REQUEST_PERMISSION_CAMERA_EDIT = 153
         private const val REQUEST_PHOTO_FROM_CAMERA = 154
-
-        fun buildArgs(accountId: Int, peerId: Int, title: String, avaUrl: String): Bundle {
-            val bundle = Bundle()
-            bundle.putInt(Extra.ACCOUNT_ID, accountId)
-            bundle.putInt(Extra.PEER_ID, peerId)
-            bundle.putString(Extra.TITLE, title)
-            bundle.putString(Extra.IMAGE, avaUrl)
-            return bundle
-        }
 
         fun newInstance(accountId: Int, messagesOwnerId: Int, peer: Peer): ChatFragment {
             val args = Bundle()

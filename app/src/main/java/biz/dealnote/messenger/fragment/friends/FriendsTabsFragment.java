@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -141,7 +140,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
 
     @Override
     public void configTabs(int accountId, int userId, boolean showMutualTab) {
-        adapter = new Adapter(requireActivity(), requireActivity(), accountId, userId, showMutualTab);
+        adapter = new Adapter(requireActivity(), this, accountId, userId, showMutualTab);
 
         viewPager.setAdapter(adapter);
 
@@ -176,7 +175,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
 
         private final List<String> mFragmentTitles = new ArrayList<>(5);
 
-        public Adapter(Context context, FragmentActivity fm, int accountId, int userId, boolean showMutualTab) {
+        public Adapter(Context context, @NonNull Fragment fm, int accountId, int userId, boolean showMutualTab) {
             super(fm);
             this.accountId = accountId;
             this.userId = userId;

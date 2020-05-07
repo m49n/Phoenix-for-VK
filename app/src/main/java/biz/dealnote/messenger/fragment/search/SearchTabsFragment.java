@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -64,7 +63,7 @@ public class SearchTabsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_search_tabs, container, false);
         ViewPager2 mViewPager = root.findViewById(R.id.viewpager);
 
-        Adapter mAdapter = new Adapter(requireActivity());
+        Adapter mAdapter = new Adapter(this);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(ViewPagerTransformers.ZOOM_OUT);
         mViewPager.setOffscreenPageLimit(1);
@@ -131,7 +130,7 @@ public class SearchTabsFragment extends Fragment {
 
     private class Adapter extends FragmentStateAdapter {
 
-        public Adapter(@NonNull FragmentActivity fm) {
+        public Adapter(@NonNull Fragment fm) {
             super(fm);
         }
 

@@ -102,20 +102,20 @@ public class NotificationHelper {
         PendingIntent directPendingIntent = PendingIntent.getService(context, mid, directIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action actionDirectReply = new NotificationCompat.Action.Builder
-                (/*may be missing in some cases*/ R.drawable.view,
+                (/*may be missing in some cases*/ R.drawable.reply,
                         context.getResources().getString(R.string.reply), directPendingIntent)
                 .addRemoteInput(remoteInput)
                 .build();
 
         NotificationCompat.Action actionRead = new NotificationCompat.Action.Builder
-                (/*may be missing in some cases*/ R.drawable.share,
+                (/*may be missing in some cases*/ R.drawable.view,
                         context.getResources().getString(R.string.read), ReadPendingIntent)
                 .build();
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.setAction(MainActivity.ACTION_OPEN_PLACE);
 
-        Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, peer);
+        Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, peer, 0);
         intent.putExtra(Extra.PLACE, chatPlace);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, mid, intent, PendingIntent.FLAG_CANCEL_CURRENT);

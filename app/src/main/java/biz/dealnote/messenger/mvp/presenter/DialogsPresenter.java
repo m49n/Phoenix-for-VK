@@ -63,10 +63,12 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
     private final IMessagesRepository messagesInteractor;
     private final ILongpollManager longpollManager;
+    private int offset;
 
-    public DialogsPresenter(int accountId, int initialDialogsOwnerId, @Nullable Bundle savedInstanceState) {
+    public DialogsPresenter(int accountId, int initialDialogsOwnerId, int offset, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         setSupportAccountHotSwap(true);
+        this.offset = offset;
 
         dialogs = new ArrayList<>();
 
@@ -122,6 +124,12 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         dialogs.addAll(data);
 
         safeNotifyDataSetChanged();
+
+        if(offset > 0) {
+            safeScroll(offset);
+            offset = 0;
+        }
+
 
         try {
             appendDisposable(InteractorFactory.createStickersInteractor()
@@ -342,6 +350,12 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         }
     }
 
+    private void safeScroll(int position) {
+        if (isGuiReady()) {
+            getView().scroll_pos(position);
+        }
+    }
+
     @Override
     public void onDestroyed() {
         cacheLoadingDisposable.dispose();
@@ -379,23 +393,23 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         getView().goToSearch(getAccountId());
     }
 
-    public void fireDialogClick(Dialog dialog) {
-        this.openChat(dialog);
+    public void fireDialogClick(Dialog dialog, int offset) {
+        this.openChat(dialog, offset);
     }
 
-    private void openChat(Dialog dialog) {
+    private void openChat(Dialog dialog, int offset) {
         getView().goToChat(getAccountId(),
                 dialogsOwnerId,
                 dialog.getPeerId(),
                 dialog.getDisplayTitle(getApplicationContext()),
-                dialog.getImageUrl());
+                dialog.getImageUrl(), offset);
     }
 
-    public void fireDialogAvatarClick(Dialog dialog) {
+    public void fireDialogAvatarClick(Dialog dialog, int offset) {
         if (Peer.isUser(dialog.getPeerId()) || Peer.isGroup(dialog.getPeerId())) {
             getView().goToOwnerWall(super.getAccountId(), Peer.toOwnerId(dialog.getPeerId()), dialog.getInterlocutor());
         } else {
-            this.openChat(dialog);
+            this.openChat(dialog, offset);
         }
     }
 
@@ -427,14 +441,14 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     private void onGroupChatCreated(int chatId, String title) {
-        callView(view -> view.goToChat(getAccountId(), dialogsOwnerId, Peer.fromChatId(chatId), title, null));
+        callView(view -> view.goToChat(getAccountId(), dialogsOwnerId, Peer.fromChatId(chatId), title, null, 0));
     }
 
     public void fireUsersForChatSelected(@NonNull ArrayList<User> users) {
         if (users.size() == 1) {
             User user = users.get(0);
             // Post?
-            getView().goToChat(getAccountId(), dialogsOwnerId, Peer.fromUserId(user.getId()), user.getFullName(), user.getMaxSquareAvatar());
+            getView().goToChat(getAccountId(), dialogsOwnerId, Peer.fromUserId(user.getId()), user.getFullName(), user.getMaxSquareAvatar(), 0);
         } else if (users.size() > 1) {
             getView().showEnterNewGroupChatTitle(users);
         }

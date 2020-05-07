@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -69,7 +68,7 @@ public class CommunityControlFragment extends Fragment {
         tabs.add(new Tab(getString(R.string.community_links_tab_title), () -> CommunityLinksFragment.newInstance(mAccountId, mCommunity.getId())));
         tabs.add(new Tab(mCommunity.getAdminLevel() == 0 ? getString(R.string.community_managers_contacts) : getString(R.string.community_managers_tab_title), () -> CommunityManagersFragment.newInstance(mAccountId, mCommunity)));
 
-        Adapter tab_set = new Adapter(tabs, requireActivity());
+        Adapter tab_set = new Adapter(tabs, this);
         pager.setAdapter(tab_set);
 
         new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
@@ -129,7 +128,7 @@ public class CommunityControlFragment extends Fragment {
     private static class Adapter extends FragmentStateAdapter {
         private final List<ITab> tabs;
 
-        public Adapter(List<ITab> tabs, @NonNull FragmentActivity fragmentActivity) {
+        public Adapter(List<ITab> tabs, @NonNull Fragment fragmentActivity) {
             super(fragmentActivity);
             this.tabs = tabs;
         }

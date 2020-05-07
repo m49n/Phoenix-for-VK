@@ -134,7 +134,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
             Intent intent = new Intent(QuickAnswerActivity.this, MainActivity.class);
             intent.setAction(MainActivity.ACTION_OPEN_PLACE);
 
-            Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, new Peer(peerId).setAvaUrl(imgUrl).setTitle(title));
+            Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, new Peer(peerId).setAvaUrl(imgUrl).setTitle(title), 0);
             intent.putExtra(Extra.PLACE, chatPlace);
             startActivity(intent);
             finish();

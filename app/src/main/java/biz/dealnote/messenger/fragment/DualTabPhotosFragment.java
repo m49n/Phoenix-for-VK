@@ -11,7 +11,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.collection.LongSparseArray;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -81,7 +80,7 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
 
         ViewPager2 viewPager = root.findViewById(R.id.view_pager);
 
-        mPagerAdapter = new Adapter(requireActivity(), mSources);
+        mPagerAdapter = new Adapter(this, mSources);
         viewPager.setAdapter(mPagerAdapter);
         viewPager.setOffscreenPageLimit(1);
 
@@ -125,7 +124,7 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
         private final Sources mSources;
         private LongSparseArray<WeakReference<Fragment>> fragments;
 
-        public Adapter(@NonNull FragmentActivity fm, Sources mSources) {
+        public Adapter(@NonNull Fragment fm, Sources mSources) {
             super(fm);
             this.mSources = mSources;
             this.fragments = new LongSparseArray<>();

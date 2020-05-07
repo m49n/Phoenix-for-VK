@@ -19,10 +19,11 @@ public interface IDialogsView extends IAccountDependencyView, IMvpView, IErrorVi
 
     void displayData(List<Dialog> data);
     void notifyDataSetChanged();
+    void scroll_pos(int pos);
     void notifyDataAdded(int position, int count);
     void showRefreshing(boolean refreshing);
 
-    void goToChat(int accountId, int messagesOwnerId, int peerId, String title, String avaurl);
+    void goToChat(int accountId, int messagesOwnerId, int peerId, String title, String avaurl, int offset);
     void goToSearch(int accountId);
 
     void showSnackbar(@StringRes int res, boolean isLong);

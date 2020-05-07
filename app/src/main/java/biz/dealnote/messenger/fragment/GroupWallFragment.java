@@ -254,7 +254,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void openCommunityDialogs(int accountId, int groupId, String subtitle) {
-        PlaceFactory.getDialogsPlace(accountId, -groupId, subtitle).tryOpenWith(requireActivity());
+        PlaceFactory.getDialogsPlace(accountId, -groupId, subtitle, 0).tryOpenWith(requireActivity());
     }
 
     @Override

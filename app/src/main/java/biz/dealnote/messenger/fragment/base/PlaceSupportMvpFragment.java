@@ -55,7 +55,7 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
 
     @Override
     public void openChatWith(int accountId, int messagesOwnerId, @NonNull Peer peer) {
-        PlaceFactory.getChatPlace(accountId, messagesOwnerId, peer).tryOpenWith(requireActivity());
+        PlaceFactory.getChatPlace(accountId, messagesOwnerId, peer, 0).tryOpenWith(requireActivity());
     }
 
     @Override
