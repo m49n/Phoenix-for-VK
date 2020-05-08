@@ -27,7 +27,7 @@
             android:padding="6dp"
             android:scaleType="centerCrop"
             android:src="@drawable/play"
-            android:tint="?colorPrimary" />
+            app:tint="?colorPrimary" />
 
         <biz.dealnote.messenger.view.WaveFormView
             android:id="@+id/item_voice_wave_form_view"

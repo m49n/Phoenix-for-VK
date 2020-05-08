@@ -16,7 +16,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +48,8 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
     private NotificationCompat.Builder mBuilder;
     private boolean UseMediaScanner;
 
+    private static DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+
     public DownloadImageTask(Context context, String url, String file, String ID, boolean UseMediaScanner) {
         this.mContext = context.getApplicationContext();
         this.file = file;
@@ -61,11 +66,12 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             int lastExt = this.file.lastIndexOf(".");
             if (lastExt!=-1){
                 String ext = this.file.substring(lastExt);
+
                 String file_temp = this.file.substring(0, lastExt);
-                this.file = file_temp + ("."+ Calendar.getInstance().getTime().getTime() / 1000) + ext;
+                this.file = file_temp + ("."+ DOWNLOAD_DATE_FORMAT.format(new Date())) + ext;
             }
             else
-                this.file += ("."+ Calendar.getInstance().getTime().getTime() / 1000);
+                this.file += ("."+ DOWNLOAD_DATE_FORMAT.format(new Date()));
         }
 
         this.filename = this.file;

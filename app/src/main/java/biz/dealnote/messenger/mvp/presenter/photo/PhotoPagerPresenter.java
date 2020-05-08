@@ -2,7 +2,6 @@ package biz.dealnote.messenger.mvp.presenter.photo;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +13,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import biz.dealnote.messenger.App;
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.domain.IPhotosInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
@@ -24,6 +22,7 @@ import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IPhotoPagerView;
 import biz.dealnote.messenger.push.OwnerInfo;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
@@ -295,8 +294,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     }
 
     private void doSaveOnDrive() {
-        String dcim = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File dir = new File(dcim + "/" + Constants.PHOTOS_PATH);
+        File dir = new File(Settings.get().other().getPhotoDir());
         if (!dir.isDirectory()) {
             boolean created = dir.mkdirs();
             if (!created) {
@@ -324,7 +322,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
     private void DownloadResult(String Prefix, File dir, Photo photo)
     {
-        if(Prefix != null) {
+        if(Prefix != null && Settings.get().other().isPhoto_to_user_dir()) {
             File dir_final = new File(dir.getAbsolutePath() + "/" + Prefix);
             if (!dir_final.isDirectory()) {
                 boolean created = dir_final.mkdirs();
@@ -369,7 +367,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
             if(isGuiReady()) {
                 if (Objects.isNull(s)) {
-                    getView().getPhoenixToast().showToast(R.string.saved);
+                    getView().getPhoenixToast().showToastBottom(R.string.saved);
                 } else {
                     getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
                 }

@@ -102,6 +102,18 @@ public interface ISettings {
         boolean isUse_internal_downloader();
 
         boolean isEnable_last_read();
+
+        String getMusicDir();
+
+        String getPhotoDir();
+
+        String getVideoDir();
+
+        String getDocDir();
+
+        boolean isPhoto_to_user_dir();
+
+        boolean isUse_speach_voice();
     }
 
     interface IAccountsSettings {

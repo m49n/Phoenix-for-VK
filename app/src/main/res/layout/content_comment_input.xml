@@ -51,7 +51,7 @@
                 android:contentDescription="@string/attach"
                 android:padding="8dp"
                 android:src="@drawable/attachment"
-                android:tint="?colorOnSurface" />
+                app:tint="?colorOnSurface" />
 
             <TextView
                 android:id="@+id/fragment_input_att_count"
@@ -83,7 +83,7 @@
                         android:contentDescription="@string/emoji"
                         android:padding="8dp"
                         android:src="@drawable/emoticon"
-                        android:tint="?colorOnSurface" />
+                        app:tint="?colorOnSurface" />
 
                     <biz.dealnote.messenger.view.emoji.EmojiconEditText
                         android:id="@+id/fragment_input_text"

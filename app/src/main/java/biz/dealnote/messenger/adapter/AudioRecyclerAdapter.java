@@ -85,6 +85,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         String title = audio.getArtistAndTitle();
 
         MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
+        dlgAlert.setIcon(R.drawable.dir_song);
         dlgAlert.setMessage(Text);
         dlgAlert.setTitle(title != null ? title : mContext.getString(R.string.get_lyrics));
 
@@ -202,7 +203,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 holder.saved.setImageResource(R.drawable.save);
                 int ret = DownloadUtil.downloadTrack(mContext, item, false);
                 if (ret == 0)
-                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
+                    PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                 else if (ret == 1) {
                     PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
                     new MaterialAlertDialogBuilder(mContext)
@@ -213,7 +214,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                             .show();
                 } else {
                     holder.saved.setVisibility(View.GONE);
-                    PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                    PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.error_audio);
                 }
                 return true;
             });
@@ -239,7 +240,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
 
                 MenuAdapter mAdapter = new MenuAdapter(mContext, items);
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext)
-                        .setIcon(holder.play_cover.getDrawable().mutate())
+                        .setIcon(R.drawable.dir_song)
                         .setTitle(Utils.firstNonEmptyString(item.getArtist(), " ") + " - " + item.getTitle())
                         .setAdapter(mAdapter, (dialog, which) -> {
                             switch(items.get(which).getKey())
@@ -291,7 +292,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                                     holder.saved.setImageResource(R.drawable.save);
                                     int ret = DownloadUtil.downloadTrack(mContext, item, false);
                                     if (ret == 0)
-                                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.saved_audio);
+                                        PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                                     else if (ret == 1) {
                                         PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
                                         new MaterialAlertDialogBuilder(mContext)
@@ -302,7 +303,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                                                 .show();
                                     } else {
                                         holder.saved.setVisibility(View.GONE);
-                                        PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.error_audio);
+                                        PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.error_audio);
                                     }
                                     break;
                                 case R.id.bitrate_item_audio:

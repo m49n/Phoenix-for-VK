@@ -59,7 +59,7 @@
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?attr/colorPrimary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:displayHashTags="true"
             app:emojiconSize="20sp"

@@ -45,8 +45,8 @@ public class AppTextUtils {
         return newDouble + " Mb";
     }
 
-    private static final SimpleDateFormat SHORT_DATE = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    private static final SimpleDateFormat FULL_DATE = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+    private static SimpleDateFormat SHORT_DATE = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private static SimpleDateFormat FULL_DATE = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
     private static final Date DATE = new Date();
     private static final Calendar CALENDAR = Calendar.getInstance();
 

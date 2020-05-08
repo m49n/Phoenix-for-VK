@@ -44,7 +44,6 @@
                     android:layout_width="@dimen/online_dot_size_big"
                     android:layout_height="@dimen/online_dot_size_big"
                     android:layout_alignStart="@+id/avatar"
-                    android:layout_alignLeft="@+id/avatar"
                     android:layout_alignBottom="@+id/avatar"
                     android:layout_marginStart="4dp"
 

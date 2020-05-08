@@ -42,6 +42,24 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         showToast(M_context.resources.getString(message, *params))
     }
 
+    fun showToastBottom(message: String?) {
+        if (M_context == null) return
+        val t = AnimatedToast(M_context)
+        t.duration = duration
+        if(image == null)
+            t.set_image(R.mipmap.ic_launcher_round)
+        else
+            t.set_image(image)
+        t.setText(message!!)
+        t.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+        t.show()
+    }
+
+    fun showToastBottom(@StringRes message: Int, vararg params: Any?) {
+        if (M_context == null) return
+        showToastBottom(M_context.resources.getString(message, *params))
+    }
+
     fun showToastInfo(message: String?) {
         if (M_context == null) return
         val view = View.inflate(M_context, R.layout.phoenix_toast_info, null)

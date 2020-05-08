@@ -22,7 +22,7 @@ import biz.dealnote.messenger.Constants;
  */
 public class FileUtil {
 
-    private static final DateFormat PHOTO_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+    private static DateFormat PHOTO_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
 
     public static Uri getExportedUriForFile(Context context, File file){
         return FileProvider.getUriForFile(context, Constants.FILE_PROVIDER_AUTHORITY, file);

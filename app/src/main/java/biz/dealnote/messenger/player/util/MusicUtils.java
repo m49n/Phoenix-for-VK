@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -79,7 +78,7 @@ public final class MusicUtils {
     public static void PlaceToAudioCache(Context context) {
         if(!AppPerms.hasReadWriteStoragePermision(context))
             return;
-        File temp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+        File temp = new File(Settings.get().other().getMusicDir());
         if(!temp.exists())
             return;
         File[] file_list = temp.listFiles();

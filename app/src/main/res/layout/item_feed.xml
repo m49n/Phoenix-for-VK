@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_eye_white_vector"
-                    android:tint="?android:textColorSecondary" />
+                    app:tint="?android:textColorSecondary" />
 
             </LinearLayout>
 

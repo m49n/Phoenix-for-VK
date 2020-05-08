@@ -27,7 +27,7 @@
                 android:padding="10dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/send"
-                android:tint="?colorPrimary" />
+                app:tint="?colorPrimary" />
 
             <LinearLayout
                 android:id="@+id/message_input_container"
@@ -46,7 +46,7 @@
                     android:contentDescription="@string/attach"
                     android:padding="8dp"
                     android:src="@drawable/attachment"
-                    android:tint="?colorOnSurface" />
+                    app:tint="?colorOnSurface" />
 
                 <TextView
                     android:id="@+id/fragment_input_att_count"
@@ -78,7 +78,7 @@
                             android:contentDescription="@string/emoji"
                             android:padding="8dp"
                             android:src="@drawable/emoticon"
-                            android:tint="?colorOnSurface" />
+                            app:tint="?colorOnSurface" />
 
                         <biz.dealnote.messenger.view.emoji.EmojiconEditText
                             android:id="@+id/fragment_input_text"
@@ -121,7 +121,7 @@
                     android:contentDescription="@string/close"
                     android:padding="8dp"
                     android:src="@drawable/close"
-                    android:tint="?attr/colorOnSurface" />
+                    app:tint="?attr/colorOnSurface" />
 
                 <ImageView
                     android:id="@+id/pause_voice_message"
@@ -131,7 +131,7 @@
                     android:contentDescription="@string/pause"
                     android:padding="8dp"
                     android:src="@drawable/pause"
-                    android:tint="?colorOnSurface" />
+                    app:tint="?colorOnSurface" />
 
                 <TextView
                     android:id="@+id/recording_duration"

@@ -27,7 +27,8 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/backgroud_rectangle_border"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:importantForAutofill="no" />
 
     <TextView
         android:labelFor="@+id/description"
@@ -47,7 +48,8 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/backgroud_rectangle_border"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:importantForAutofill="no" />
 
     <LinearLayout
         android:id="@+id/community_type_root"

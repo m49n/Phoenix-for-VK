@@ -107,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:autoLink="web"
                     android:gravity="start"
+                    android:paddingStart="0dp"
                     android:paddingEnd="8dp"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     app:emojiconSize="18sp"

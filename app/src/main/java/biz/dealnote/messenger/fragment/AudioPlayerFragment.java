@@ -377,7 +377,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         int ret = DownloadUtil.downloadTrack(getContext(), audio, false);
         if(ret == 0)
-            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved_audio);
         else if(ret == 1) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio);
             new MaterialAlertDialogBuilder(requireActivity())
@@ -388,7 +388,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                     .show();
         }
         else
-            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.error_audio);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.error_audio);
     }
 
 
@@ -459,6 +459,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             title = MusicUtils.getCurrentAudio().getArtistAndTitle();
 
         MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(requireActivity());
+        dlgAlert.setIcon(R.drawable.dir_song);
         dlgAlert.setMessage(Text);
         dlgAlert.setTitle(title != null ? title : requireContext().getString(R.string.get_lyrics));
 

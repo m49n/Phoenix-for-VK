@@ -2,7 +2,6 @@ package biz.dealnote.messenger.mvp.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -191,7 +190,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     private ArrayList<Audio> listFiles() {
 
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+        File dir = new File(Settings.get().other().getMusicDir());
         if(dir.listFiles() == null || dir.listFiles().length <= 0)
             return new ArrayList<>();
         ArrayList<File> files = new ArrayList<>();

@@ -69,7 +69,7 @@
     <string name="go_to_dialog">К диалогу</string>
     <string name="send">Отправить</string>
 
-    <string name="text_hint">Введите текст</string>
+    <string name="text_hint">Сообщение</string>
     <!-- MessagesSending-->
     <string name="sending">Отправка</string>
     <string name="in_order">В очереди</string>
@@ -1280,8 +1280,6 @@
     <string name="expires">%1$s %2$s</string>
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
-    <string name="dialog_color_picker">Выбрать цвет</string>
-    <string name="press_color_to_apply">Нажмите на цвет для применения</string>
     <string name="custom_chat_color">Цвет фона в чате</string>
     <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
@@ -1291,4 +1289,11 @@
     <string name="disable_swipes">Отключить свайпы для плеера</string>
     <string name="chat_users_count">%1$d участников</string>
     <string name="display_writing">Показывать набор сообщения</string>
+    <string name="download_directory">Куда скачивать</string>
+    <string name="music_dir">Музыка</string>
+    <string name="photo_dir">Фото</string>
+    <string name="video_dir">Видео</string>
+    <string name="docs_dir">Документы</string>
+    <string name="photo_to_user_dir">Сортировать фото по папкам</string>
+    <string name="use_speach_voice">Разговорный динамик для голосовух</string>
 </resources>

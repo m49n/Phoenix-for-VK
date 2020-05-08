@@ -49,7 +49,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerView.ViewHolder> {
 
-    private final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+    private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
 
     private static final int TYPE_MY_MESSAGE = 1;
     private static final int TYPE_FRIEND_MESSAGE = 2;

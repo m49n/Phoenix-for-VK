@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import biz.dealnote.messenger.R
 import biz.dealnote.messenger.domain.IAudioInteractor
 import biz.dealnote.messenger.domain.InteractorFactory
@@ -40,7 +39,7 @@ object DownloadUtil
         if (audio.url == null || audio.url.isEmpty()) return 2
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName)
+            val Temp = File(Settings.get().other().getMusicDir() + "/" + audioName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
@@ -48,7 +47,7 @@ object DownloadUtil
         } while (false)
 
 
-        FFmpeg.execute(arrayOf("-i", audio.url, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName))
+        FFmpeg.execute(arrayOf("-i", audio.url, Settings.get().other().getMusicDir() + "/" + audioName))
         return 0
     }
      */
@@ -75,16 +74,16 @@ object DownloadUtil
         val HURl = Audio.getMp3FromM3u8(audio.url)
         if (HURl == null || HURl.isEmpty()) return 2
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
-        CheckDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath)
+        CheckDirectory(Settings.get().other().musicDir)
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName)
+            val Temp = File(Settings.get().other().musicDir + "/" + audioName)
             if (Temp.exists() && !Force) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
             }
         } while (false)
         try {
-            AudioInternalDownloader(context, audio, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/" + audioName).doDownload()
+            AudioInternalDownloader(context, audio, Settings.get().other().musicDir + "/" + audioName).doDownload()
         } catch (e: Exception) {
             CreatePhoenixToast(context).showToastError("Audio Error: " + e.message)
             return 2
@@ -133,7 +132,7 @@ object DownloadUtil
     fun GetLocalTrackLink(audio: Audio): String {
         if(audio.url.contains("file://"))
             return audio.url;
-        val audioName = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)?.absolutePath + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
+        val audioName = "file://" + Settings.get().other().musicDir + "/" + makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
         return audioName
     }
 
@@ -142,9 +141,9 @@ object DownloadUtil
     fun downloadVideo(context: Context, video: Video, URL: String?, Res: String) {
         if (URL == null || URL.isEmpty()) return
         val videoName = makeLegalFilename(if (video.title == null) "" else video.title + " - " + video.ownerId + "_" + video.id + "_" + Res + "P", "mp4")
-        CheckDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.absolutePath + "/Phoenix/")
+        CheckDirectory(Settings.get().other().videoDir)
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.absolutePath + "/Phoenix/" + videoName)
+            val Temp = File(Settings.get().other().videoDir + "/" + videoName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 CreatePhoenixToast(context).showToastError(R.string.exist_audio)
@@ -153,17 +152,17 @@ object DownloadUtil
         } while (false)
         try {
             if(Settings.get().other().isUse_internal_downloader())
-                VideoInternalDownloader(context, video, URL, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)?.absolutePath + "/Phoenix/" + videoName).doDownload()
+                VideoInternalDownloader(context, video, URL, Settings.get().other().videoDir + "/" + videoName).doDownload()
 
             else {
                 val downloadRequest = DownloadManager.Request(Uri.parse(URL))
                 downloadRequest.allowScanningByMediaScanner()
                 downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 downloadRequest.setDescription(videoName)
-                downloadRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, "/Phoenix/$videoName")
+                downloadRequest.setDestinationUri(Uri.fromFile(File(Settings.get().other().videoDir + "/$videoName")))
                 val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 downloadManager.enqueue(downloadRequest)
-                CreatePhoenixToast(context).showToast(R.string.downloading)
+                CreatePhoenixToast(context).showToastBottom(R.string.downloading)
             }
         } catch (e: Exception) {
             CreatePhoenixToast(context).showToastError("Video Error: " + e.message)
@@ -176,9 +175,9 @@ object DownloadUtil
     fun downloadDocs(context: Context, doc: Document, URL: String?) {
         if (URL == null || URL.isEmpty()) return
         val docName = makeLegalFilename(doc.getTitle(), null)
-        CheckDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/")
+        CheckDirectory(Settings.get().other().docDir)
         do {
-            val Temp = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/" + docName)
+            val Temp = File(Settings.get().other().docDir + "/" + docName)
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 CreatePhoenixToast(context).showToastError(R.string.exist_audio)
@@ -187,17 +186,17 @@ object DownloadUtil
         } while (false)
         try {
             if(Settings.get().other().isUse_internal_downloader())
-               DocsInternalDownloader(context, doc, URL, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Phoenix/" + docName).doDownload()
+               DocsInternalDownloader(context, doc, URL, Settings.get().other().docDir + "/" + docName).doDownload()
 
             else {
                 val downloadRequest = DownloadManager.Request(Uri.parse(URL))
                 downloadRequest.allowScanningByMediaScanner()
                 downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 downloadRequest.setDescription(docName)
-                downloadRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/Phoenix/$docName")
+                downloadRequest.setDestinationUri(Uri.fromFile(File( Settings.get().other().docDir + "/$docName")))
                 val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 downloadManager.enqueue(downloadRequest)
-                CreatePhoenixToast(context).showToast(R.string.downloading)
+                CreatePhoenixToast(context).showToastBottom(R.string.downloading)
             }
         } catch (e: Exception) {
             CreatePhoenixToast(context).showToastError("Docs Error: " + e.message)
@@ -213,7 +212,7 @@ object DownloadUtil
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
-                CreatePhoenixToast(context).showToast(R.string.saved)
+                CreatePhoenixToast(context).showToastBottom(R.string.saved)
             } else {
                 CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
             }
@@ -225,7 +224,7 @@ object DownloadUtil
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
-                CreatePhoenixToast(context).showToast(R.string.saved)
+                CreatePhoenixToast(context).showToastBottom(R.string.saved)
             } else {
                 CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
             }
@@ -239,7 +238,7 @@ object DownloadUtil
         private val ctx = context;
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
-                CreatePhoenixToast(context).showToast(R.string.saved)
+                CreatePhoenixToast(context).showToastBottom(R.string.saved)
                 if(!Objects.isNullOrEmptyString(current_audio.thumb_image_very_big) || !Objects.isNullOrEmptyString(current_audio.thumb_image_little))
                     TagAudioInternalDownloader(context, current_audio, file.replace(".mp3", ".jpg")).doDownload()
                 else
@@ -260,7 +259,7 @@ object DownloadUtil
             audioFile.save();
             Flaudio.setLastModified(lst)
             Cover.delete()
-            CreatePhoenixToast(context).showToast(R.string.tag_modified)
+            CreatePhoenixToast(context).showToastBottom(R.string.tag_modified)
             MusicUtils.PlaceToAudioCache(ctx)
         }
         @SuppressLint("CheckResult")

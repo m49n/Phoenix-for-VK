@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style='style="?android:attr/borderlessButtonStyle"'
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/lock_outline"
-            android:tint="?colorOnSurface" />
+            app:tint="?colorOnSurface" />
 
         <LinearLayout
             android:id="@+id/post_views_counter_root"
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:src="@drawable/ic_eye_white_vector"
-                android:tint="?colorOnSurface" />
+                app:tint="?colorOnSurface" />
 
         </LinearLayout>
 
@@ -90,7 +91,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginStart="4dp"
-                android:tint="?colorOnSurface" />
+                app:tint="?colorOnSurface" />
 
         </LinearLayout>
 

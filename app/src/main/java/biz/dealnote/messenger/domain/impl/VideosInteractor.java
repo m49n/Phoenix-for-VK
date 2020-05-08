@@ -149,7 +149,7 @@ public class VideosInteractor implements IVideosInteractor {
     public Single<List<VideoAlbum>> getActualAlbums(int accoutnId, int ownerId, int count, int offset) {
         return networker.vkDefault(accoutnId)
                 .video()
-                .getAlbums(ownerId, offset, count, false)
+                .getAlbums(ownerId, offset, count, true)
                 .flatMap(items -> {
                     List<VKApiVideoAlbum> dtos = listEmptyIfNull(items.getItems());
                     List<VideoAlbumEntity> dbos = new ArrayList<>(dtos.size());

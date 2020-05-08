@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,7 +19,11 @@ import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
+import com.developer.filepicker.model.DialogConfigs;
+import com.developer.filepicker.model.DialogProperties;
+import com.developer.filepicker.view.FilePickerDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
@@ -226,6 +232,74 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        findPreference("music_dir")
+                .setOnPreferenceClickListener(preference -> {
+                    DialogProperties properties = new DialogProperties();
+                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    properties.selection_type = DialogConfigs.DIR_SELECT;
+                    properties.root = Environment.getExternalStorageDirectory();
+                    properties.error_dir = Environment.getExternalStorageDirectory();
+                    properties.offset = new File(Settings.get().other().getMusicDir());
+                    properties.extensions = null;
+                    properties.show_hidden_files = true;
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    dialog.setTitle(R.string.music_dir);
+                    dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("music_dir", files[0]).apply());
+                    dialog.show();
+                    return true;
+                });
+
+        findPreference("photo_dir")
+                .setOnPreferenceClickListener(preference -> {
+                    DialogProperties properties = new DialogProperties();
+                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    properties.selection_type = DialogConfigs.DIR_SELECT;
+                    properties.root = Environment.getExternalStorageDirectory();
+                    properties.error_dir = Environment.getExternalStorageDirectory();
+                    properties.offset = new File(Settings.get().other().getPhotoDir());
+                    properties.extensions = null;
+                    properties.show_hidden_files = true;
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    dialog.setTitle(R.string.photo_dir);
+                    dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("photo_dir", files[0]).apply());
+                    dialog.show();
+                    return true;
+                });
+
+        findPreference("video_dir")
+                .setOnPreferenceClickListener(preference -> {
+                    DialogProperties properties = new DialogProperties();
+                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    properties.selection_type = DialogConfigs.DIR_SELECT;
+                    properties.root = Environment.getExternalStorageDirectory();
+                    properties.error_dir = Environment.getExternalStorageDirectory();
+                    properties.offset = new File(Settings.get().other().getVideoDir());
+                    properties.extensions = null;
+                    properties.show_hidden_files = true;
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    dialog.setTitle(R.string.video_dir);
+                    dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("video_dir", files[0]).apply());
+                    dialog.show();
+                    return true;
+                });
+
+        findPreference("docs_dir")
+                .setOnPreferenceClickListener(preference -> {
+                    DialogProperties properties = new DialogProperties();
+                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    properties.selection_type = DialogConfigs.DIR_SELECT;
+                    properties.root = Environment.getExternalStorageDirectory();
+                    properties.error_dir = Environment.getExternalStorageDirectory();
+                    properties.offset = new File(Settings.get().other().getDocDir());
+                    properties.extensions = null;
+                    properties.show_hidden_files = true;
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    dialog.setTitle(R.string.docs_dir);
+                    dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("docs_dir", files[0]).apply());
+                    dialog.show();
+                    return true;
+                });
 
         findPreference("show_logs")
                 .setOnPreferenceClickListener(preference -> {

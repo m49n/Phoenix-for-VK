@@ -46,7 +46,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="8dp"
                     android:src="@drawable/close"
-                    android:tint="?attr/icon_color_active" />
+                    app:tint="?attr/icon_color_active" />
 
             </RelativeLayout>
 

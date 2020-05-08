@@ -30,7 +30,7 @@
                 android:scaleType="center"
                 android:backgroundTint="?colorPrimary"
                 android:src="@drawable/ic_log_vector"
-                android:tint="@android:color/white" />
+                app:tint="@android:color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@drawable/share_variant"
-                android:tint="?android:textColorSecondary" />
+                app:tint="?android:textColorSecondary" />
 
         </RelativeLayout>
 

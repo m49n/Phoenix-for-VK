@@ -74,7 +74,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/my"
-                    android:tint="?colorSecondary" />
+                    app:tint="?colorSecondary" />
 
                 <ImageView
                     android:id="@+id/lyric"
@@ -82,7 +82,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="end"
                     android:src="@drawable/lyric"
-                    android:tint="?colorSecondary" />
+                    app:tint="?colorSecondary" />
             </LinearLayout>
 
             <TextView
@@ -101,7 +101,7 @@
                 android:layout_below="@id/item_audio_time"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/downloaded"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/quality"
@@ -112,7 +112,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="2dp"
                 android:src="@drawable/high_quality"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
         </RelativeLayout>
 

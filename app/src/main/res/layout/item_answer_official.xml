@@ -71,6 +71,7 @@
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/item_friend_avatar_container"
             android:orientation="vertical"
+            android:paddingStart="0dp"
             android:paddingEnd="8dp">
 
             <TextView

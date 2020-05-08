@@ -116,7 +116,7 @@
                     android:layout_height="32dp"
                     android:padding="4dp"
                     android:src="@drawable/comment_thread"
-                    android:tint="?colorPrimary" />
+                    app:tint="?colorPrimary" />
 
                 <TextView
                     android:id="@+id/item_comment_thread_counter"

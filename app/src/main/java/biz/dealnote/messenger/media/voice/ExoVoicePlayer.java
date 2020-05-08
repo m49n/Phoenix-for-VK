@@ -5,9 +5,11 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
@@ -22,6 +24,7 @@ import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.VoiceMessage;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Optional;
@@ -114,6 +117,10 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+        if(Settings.get().other().isUse_speach_voice())
+            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build());
+        else
+            exoPlayer.setAudioAttributes(AudioAttributes.DEFAULT);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override
             public void onPlayerStateChanged(boolean b, int i) {

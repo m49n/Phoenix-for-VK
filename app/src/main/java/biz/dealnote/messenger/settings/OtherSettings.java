@@ -2,9 +2,13 @@ package biz.dealnote.messenger.settings;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Environment;
 
 import androidx.preference.PreferenceManager;
 
+import java.io.File;
+
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.util.Objects;
 
 /**
@@ -199,5 +203,56 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isUse_internal_downloader() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_internal_downloader", false);
+    }
+
+    @Override
+    public String getMusicDir() {
+        String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("music_dir", null);
+        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
+        {
+            ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putString("music_dir", ret).apply();
+        }
+        return ret;
+    }
+    @Override
+    public String getPhotoDir() {
+        String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("photo_dir", null);
+        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
+        {
+            ret = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.PHOTOS_PATH;
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putString("photo_dir", ret).apply();
+        }
+        return ret;
+    }
+    @Override
+    public String getVideoDir() {
+        String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("video_dir", null);
+        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
+        {
+            ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/Phoenix";
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putString("video_dir", ret).apply();
+        }
+        return ret;
+    }
+    @Override
+    public String getDocDir() {
+        String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("docs_dir", null);
+        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
+        {
+            ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/Phoenix";
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putString("docs_dir", ret).apply();
+        }
+        return ret;
+    }
+
+    @Override
+    public boolean isPhoto_to_user_dir() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("photo_to_user_dir", true);
+    }
+
+    @Override
+    public boolean isUse_speach_voice() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_speach_voice", true);
     }
 }

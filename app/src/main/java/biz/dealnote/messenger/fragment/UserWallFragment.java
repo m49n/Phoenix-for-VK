@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +23,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
@@ -47,6 +49,7 @@ import biz.dealnote.messenger.mvp.presenter.UserWallPresenter;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
@@ -82,8 +85,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
     private void downloadAvatar(User user)
     {
-        String dcim = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File dir = new File(dcim + "/" + Constants.PHOTOS_PATH);
+        File dir = new File(Settings.get().other().getPhotoDir());
         if (!dir.isDirectory()) {
             boolean created = dir.mkdirs();
             if (!created) {
@@ -93,7 +95,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         else
             dir.setLastModified(Calendar.getInstance().getTime().getTime());
 
-        if(user.getFullName() != null) {
+        if(user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
             File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
             if (!dir_final.isDirectory()) {
                 boolean created = dir_final.mkdirs();
@@ -105,7 +107,8 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                 dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
             dir = dir_final;
         }
-        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user.getId()) + ".profile." + Calendar.getInstance().getTime().getTime() / 1000 + ".jpg";
+        DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user.getId()) + ".profile." + DOWNLOAD_DATE_FORMAT.format(new Date()) + ".jpg";
         String url = user.getOriginalAvatar();
         new InternalDownloader(requireActivity(), url, file, user).doDownload();
     }
@@ -118,7 +121,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         @Override
         protected void onPostExecute(String s) {
             if (Objects.isNull(s)) {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
             } else {
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
             }

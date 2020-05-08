@@ -34,7 +34,7 @@ import android.graphics.drawable.Drawable;
  */
 public class AlphaPatternDrawable extends Drawable {
 
-    private int mRectangleSize;
+    private int mRectangleSize = 10;
 
     private Paint mPaint = new Paint();
     private Paint mPaintWhite = new Paint();

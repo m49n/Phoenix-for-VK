@@ -9,5 +9,5 @@
     android:gravity="center"
     android:padding="4dp"
     android:textColor="@android:color/black"
-    android:textSize="28dp"
+    android:textSize="28sp"
     emojicon:emojiconSize="36dp" />

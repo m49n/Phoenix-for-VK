@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="72dp">
 
     <LinearLayout
@@ -55,7 +56,7 @@
         android:layout_marginEnd="16dp"
         android:padding="2dp"
         android:src="@drawable/check"
-        android:tint="?colorPrimary" />
+        app:tint="?colorPrimary" />
 
 </RelativeLayout>
 

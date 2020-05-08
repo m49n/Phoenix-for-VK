@@ -118,7 +118,8 @@
         android:background="@drawable/backgroud_rectangle_border"
         android:inputType="textUri"
         android:padding="8dp"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:importantForAutofill="no" />
 
     <LinearLayout
         android:id="@+id/public_date_root"

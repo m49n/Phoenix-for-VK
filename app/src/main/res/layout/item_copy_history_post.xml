@@ -43,7 +43,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
             android:src="@drawable/ic_horisontal_dots"
-            android:tint="?android:textColorSecondary" />
+            app:tint="?android:textColorSecondary" />
 
     </RelativeLayout>
 

@@ -2,7 +2,6 @@ package biz.dealnote.messenger.mvp.presenter.search;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 
 import androidx.annotation.Nullable;
 
@@ -51,7 +50,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
     private ArrayList<Audio> listFiles(String query) {
         if(query == null)
             return new ArrayList<>();
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+        File dir = new File(Settings.get().other().getMusicDir());
         if(dir.listFiles() == null || dir.listFiles().length <= 0)
             return new ArrayList<>();
         ArrayList<File> files = new ArrayList<>();
