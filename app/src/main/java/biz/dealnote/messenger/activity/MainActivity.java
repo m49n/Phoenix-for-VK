@@ -1054,6 +1054,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 attachToFront(postCreateFragment);
                 break;
 
+            case Place.DIALOGS_TUBS_TOUCH:
+                Fragment ret = getFrontFragment();
+                if(ret instanceof DialogsTabsFragment) {
+                    ((DialogsTabsFragment)ret).DisableTouch(args.getBoolean(Extra.TYPE));
+                }
+                break;
+
             case Place.EDIT_COMMENT: {
                 Comment comment = args.getParcelable(Extra.COMMENT);
                 int accountId = args.getInt(Extra.ACCOUNT_ID);

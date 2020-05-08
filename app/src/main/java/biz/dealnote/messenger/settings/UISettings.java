@@ -219,4 +219,9 @@ class UISettings implements ISettings.IUISettings {
     public boolean isDisable_swipes() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_swipes", false);
     }
+
+    @Override
+    public boolean isDisplay_writing() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("display_writing", true);
+    }
 }

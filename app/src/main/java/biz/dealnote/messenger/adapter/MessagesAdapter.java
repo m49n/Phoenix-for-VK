@@ -285,16 +285,29 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
     private void bindServiceHolder(ServiceMessageHolder holder, Message message) {
         holder.tvAction.setText(message.getServiceText(context));
+        holder.itemView.setOnClickListener(v -> {
+            if (nonNull(onMessageActionListener)) {
+                onMessageActionListener.onMessageClicked(message);
+            }
+        });
         attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true);
     }
 
     private void bindDeletedHolder(final DeletedMessageHolder holder, final Message message) {
         holder.buttonRestore.setVisibility(message.isDeletedForAll() ? View.GONE : View.VISIBLE);
+        holder.text.setText(TextUtils.isEmpty(message.getBody()) ? context.getString(R.string.message_was_deleted) : message.getBody());
         holder.buttonRestore.setOnClickListener(v -> {
             if (onMessageActionListener != null) {
                 onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
             }
         });
+        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size() > 0);
+        holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
+
+        if (hasAttachments) {
+            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true);
+            attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
+        }
     }
 
     @Override
@@ -462,10 +475,26 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private class DeletedMessageHolder extends RecyclerView.ViewHolder {
 
         Button buttonRestore;
+        ViewGroup forwardMessagesRoot;
+        View attachmentsRoot;
+        AttachmentsHolder attachmentsHolder;
+        TextView text;
 
         DeletedMessageHolder(View itemView) {
             super(itemView);
             buttonRestore = itemView.findViewById(R.id.item_messages_deleted_restore);
+            text = itemView.findViewById(R.id.item_message_text);
+
+            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
+
+            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
+            attachmentsHolder = new AttachmentsHolder();
+            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
+                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
+                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
+                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
+                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
+                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
         }
     }
 

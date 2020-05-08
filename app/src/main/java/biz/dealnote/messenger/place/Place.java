@@ -83,6 +83,7 @@ public class Place implements Parcelable {
     public static final int SETTINGS_THEME = 71;
     public static final int SEARCH_BY_AUDIO = 72;
     public static final int MENTIONS = 73;
+    public static final int DIALOGS_TUBS_TOUCH = 74;
 
     public int type;
     private Bundle args;

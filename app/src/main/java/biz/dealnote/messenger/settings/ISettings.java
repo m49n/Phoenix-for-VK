@@ -299,5 +299,7 @@ public interface ISettings {
         boolean isShow_profile_in_additional_page();
 
         boolean isDisable_swipes();
+
+        boolean isDisplay_writing();
     }
 }

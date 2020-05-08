@@ -1,6 +1,7 @@
 package biz.dealnote.messenger.place;
 
 import android.net.Uri;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -205,6 +206,13 @@ public class PlaceFactory {
     public static Place getFavePhotosGallery(int accountId, ArrayList<Photo> photos, int position){
         return new Place(Place.FAVE_PHOTOS_GALLERY)
                 .setArguments(PhotoPagerFragment.buildArgsForFave(accountId, photos, position));
+    }
+
+    public static Place enableTouchViewPagerDialogs(boolean Enable){
+        Bundle args = new Bundle();
+        args.putBoolean(Extra.TYPE, Enable);
+        return new Place(Place.DIALOGS_TUBS_TOUCH)
+                .setArguments(args);
     }
 
     public static Place getCreatePollPlace(int accountId, int ownerId){

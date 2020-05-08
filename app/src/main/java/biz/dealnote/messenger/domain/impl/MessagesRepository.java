@@ -355,7 +355,7 @@ public class MessagesRepository implements IMessagesRepository {
             List<WriteText> list = new ArrayList<>();
             for (WriteTextInDialogUpdate update : updates) {
                 if(update.chat_id != -1)
-                    list.add(new WriteText(accountId, update.user_id, 2000000000 + update.chat_id));
+                    list.add(new WriteText(accountId, update.user_id, VKApiMessage.CHAT_PEER + update.chat_id));
                 else
                     list.add(new WriteText(accountId, update.user_id, update.user_id));
             }
@@ -379,7 +379,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(outgoing)) {
             for (OutputMessagesSetReadUpdate update : outgoing) {
 
-                if(Settings.get().other().isInfo_reading() && update.peer_id < 2000000000) {
+                if(Settings.get().other().isInfo_reading() && update.peer_id < VKApiMessage.CHAT_PEER) {
                     compositeDisposable.add(OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {

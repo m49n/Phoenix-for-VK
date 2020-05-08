@@ -1,9 +1,11 @@
 package biz.dealnote.messenger.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
@@ -68,8 +70,11 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 mCurrentTab = position;
+                    ((InputMethodManager)requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
             }
         });
+
         viewPager.setCurrentItem(1, false);
     }
 
@@ -87,6 +92,10 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
             return ret;
         }
         return true;
+    }
+
+    public void DisableTouch(boolean Enable) {
+        viewPager.setUserInputEnabled(Enable);
     }
 
     class Adapter extends FragmentStateAdapter {

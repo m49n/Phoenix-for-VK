@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
 import biz.dealnote.messenger.*
+import biz.dealnote.messenger.api.model.VKApiMessage
 import biz.dealnote.messenger.crypt.AesKeyPair
 import biz.dealnote.messenger.crypt.KeyExchangeService
 import biz.dealnote.messenger.crypt.KeyLocationPolicy
@@ -90,6 +91,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     private var isLoadingFromDbNow = false
     private var isLoadingFromNetNow = false
 
+    private var inPinned = false
+
     private val isLoadingNow: Boolean
         get() = isLoadingFromDbNow || isLoadingFromNetNow
 
@@ -104,6 +107,13 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private val peerId: Int
         get() = peer.id
+
+    val inPinnedHas: Boolean
+        get() = inPinned
+
+    fun setInPinnedHas(type: Boolean) {
+        inPinned = type
+    }
 
     private val isEncryptionSupport: Boolean
         get() = Peer.isUser(peerId) && peerId != messagesOwnerId
@@ -530,6 +540,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private fun requestFromNet(startMessageId: Int?) {
         setNetLoadingNow(true)
+        inPinned = false
 
         val peerId = this.peerId
         netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, null, startMessageId, !HronoType, HronoType)
@@ -543,7 +554,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         val peerId = this.peerId
         netLoadingDisposable = messagesRepository.getPeerMessages(messagesOwnerId, peerId, COUNT, -1, startMessageId, false, HronoType)
                 .fromIOToMain()
-                .subscribe({ messages -> onNetDataReceived(messages, null) }, { this.onMessagesGetError(it) })
+                .subscribe({ messages -> run { inPinned = true; onNetDataReceived(messages, null); } }, { this.onMessagesGetError(it) })
     }
 
     private fun onMessagesGetError(t: Throwable) {
@@ -938,6 +949,9 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun displayUserTextingInToolbar(ownerId: Int) {
+        if(!Settings.get().ui().isDisplay_writing)
+            return
+
         view?.displayWriting(ownerId)
         toolbarSubtitleHandler.restoreToolbarWithDelay()
     }
@@ -955,10 +969,18 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         val peerType = Peer.getType(peerId)
 
         when (peerType) {
-            Peer.CHAT, Peer.GROUP -> {
+           Peer.GROUP -> {
                 subtitle = null
                 resolveToolbarSubtitle()
             }
+
+            Peer.CHAT -> appendDisposable(messagesRepository.getChatUsers(accountId, Peer.toChatId(peerId))
+                    .compose(applySingleIOToMainSchedulers())
+                    .subscribe({t -> run {
+                        subtitle = getString(R.string.chat_users_count, t.size)
+                        resolveToolbarSubtitle()
+                    }}, { run {resolveToolbarSubtitle()} }))
+
 
             Peer.USER -> appendDisposable(Stores.getInstance()
                     .owners()
@@ -1372,7 +1394,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                     .getEncryptionLocationPolicy(messagesOwnerId, peerId) == KeyLocationPolicy.RAM
         }
 
-        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport, !HronoType, peerId < 2000000000)
+        view?.configOptionMenu(chat, chat, chat, isEncryptionSupport, isEncryptionEnabled, isPlusEncryption, isEncryptionSupport, !HronoType, peerId < VKApiMessage.CHAT_PEER)
     }
 
     fun fireEncriptionStatusClick() {

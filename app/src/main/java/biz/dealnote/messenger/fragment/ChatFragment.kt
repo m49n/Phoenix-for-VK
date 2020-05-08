@@ -26,6 +26,7 @@ import biz.dealnote.messenger.adapter.AttachmentsBottomSheetAdapter
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder
 import biz.dealnote.messenger.adapter.MessagesAdapter
 import biz.dealnote.messenger.api.model.VKApiAttachment
+import biz.dealnote.messenger.api.model.VKApiMessage
 import biz.dealnote.messenger.crypt.KeyLocationPolicy
 import biz.dealnote.messenger.dialog.ImageSizeAlertDialog
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment
@@ -278,6 +279,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         presenter?.fireRecordCancelClick()
     }
 
+    override fun onEmojiOpened(opened: Boolean) {
+        PlaceFactory.enableTouchViewPagerDialogs(!opened).tryOpenWith(requireActivity())
+    }
+
     override fun onSwithToRecordMode() {
         presenter?.fireRecordingButtonClick()
     }
@@ -373,11 +378,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun displayToolbarTitle(text: String?) {
-        ActivityUtils.supportToolbarFor(this)?.title = text
+        toolbar?.title = text
     }
 
     override fun displayToolbarSubtitle(text: String?) {
-        ActivityUtils.supportToolbarFor(this)?.subtitle = text
+        toolbar?.subtitle = text
     }
 
     override fun setupPrimaryButtonAsEditing(canSave: Boolean) {
@@ -774,10 +779,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     private fun resolveLeftButton(peerId: Int) {
         try {
             if (Objects.nonNull(toolbar)) {
-                val tr = AppCompatResources.getDrawable(requireActivity(), (if (peerId >= 2000000000) R.drawable.groups else R.drawable.person))
+                val tr = AppCompatResources.getDrawable(requireActivity(), (if (peerId >= VKApiMessage.CHAT_PEER) R.drawable.groups else R.drawable.person))
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()))
                 toolbar?.navigationIcon = tr
-                if(peerId in 0..1999999999) {
+                if(peerId in 0..VKApiMessage.CHAT_PEER) {
                     toolbar?.setNavigationOnClickListener {
                         run {
                             showUserWall(Settings.get().accounts().current, peerId)
@@ -1022,6 +1027,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
 
         if (inputViewController?.onBackPressed() == false) {
+            return false
+        }
+
+        if(presenter!!.inPinnedHas) {
+            presenter?.setInPinnedHas(false)
+            presenter?.fireRefreshClick()
             return false
         }
 

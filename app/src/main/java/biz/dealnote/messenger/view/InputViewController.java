@@ -161,6 +161,9 @@ public class InputViewController {
 
         rlEmojiContainer.setVisibility(visible ? View.VISIBLE : View.GONE);
         emojiOnScreen = visible;
+        if (mRecordActionsCallback != null) {
+            mRecordActionsCallback.onEmojiOpened(visible);
+        }
     }
 
     private void setupEmojiView() {
@@ -362,6 +365,8 @@ public class InputViewController {
         void onRecordSendClick();
 
         void onResumePauseClick();
+
+        void onEmojiOpened(boolean opened);
     }
 
     public static final class Mode {

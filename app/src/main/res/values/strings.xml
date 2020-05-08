@@ -1289,4 +1289,6 @@
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
     <string name="disable_swipes">Отключить свайпы для плеера</string>
+    <string name="chat_users_count">%1$d участников</string>
+    <string name="display_writing">Показывать набор сообщения</string>
 </resources>
