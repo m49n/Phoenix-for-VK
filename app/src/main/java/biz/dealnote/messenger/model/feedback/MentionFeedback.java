@@ -12,6 +12,17 @@ import biz.dealnote.messenger.model.ParcelableModelWrapper;
  */
 public final class MentionFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<MentionFeedback> CREATOR = new Creator<MentionFeedback>() {
+        @Override
+        public MentionFeedback createFromParcel(Parcel in) {
+            return new MentionFeedback(in);
+        }
+
+        @Override
+        public MentionFeedback[] newArray(int size) {
+            return new MentionFeedback[size];
+        }
+    };
     private AbsModel where;
 
     // one of FeedbackType.MENTION
@@ -34,18 +45,6 @@ public final class MentionFeedback extends Feedback implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MentionFeedback> CREATOR = new Creator<MentionFeedback>() {
-        @Override
-        public MentionFeedback createFromParcel(Parcel in) {
-            return new MentionFeedback(in);
-        }
-
-        @Override
-        public MentionFeedback[] newArray(int size) {
-            return new MentionFeedback[size];
-        }
-    };
 
     public AbsModel getWhere() {
         return where;

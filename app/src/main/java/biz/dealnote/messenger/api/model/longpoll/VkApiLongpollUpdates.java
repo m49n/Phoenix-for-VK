@@ -32,6 +32,10 @@ public final class VkApiLongpollUpdates {
     public List<OutputMessagesSetReadUpdate> output_messages_set_read_updates;
     public List<BadgeCountChangeUpdate> badge_count_change_updates;
 
+    public VkApiLongpollUpdates() {
+
+    }
+
     private static <T extends AbsLongpollEvent> List<T> crateAndAppend(T item) {
         List<T> data = new ArrayList<>(1);
         data.add(item);
@@ -46,6 +50,10 @@ public final class VkApiLongpollUpdates {
             return data;
         }
     }
+
+    //public VkApiLongpollUpdates(int account_id) {
+    //    this.account_id = account_id;
+    //}
 
     public void putUpdate(AbsLongpollEvent update) {
         switch (update.action) {
@@ -85,14 +93,6 @@ public final class VkApiLongpollUpdates {
                 badge_count_change_updates = addAndReturn(badge_count_change_updates, (BadgeCountChangeUpdate) update);
                 break;
         }
-    }
-
-    //public VkApiLongpollUpdates(int account_id) {
-    //    this.account_id = account_id;
-    //}
-
-    public VkApiLongpollUpdates() {
-
     }
 
     public int getUpdatesCount() {

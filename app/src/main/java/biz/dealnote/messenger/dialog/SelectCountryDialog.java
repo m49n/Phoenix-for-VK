@@ -47,7 +47,7 @@ public class SelectCountryDialog extends BaseMvpDialogFragment<CountriesPresente
                 .create();
 
         EditText filterView = view.findViewById(R.id.input);
-        filterView.addTextChangedListener(new TextWatcherAdapter(){
+        filterView.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireFilterEdit(s);

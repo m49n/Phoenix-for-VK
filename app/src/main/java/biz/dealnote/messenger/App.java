@@ -25,6 +25,15 @@ public class App extends Application {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    @NonNull
+    public static App getInstance() {
+        if (sInstanse == null) {
+            throw new IllegalStateException("App instance is null!!! WTF???");
+        }
+
+        return sInstanse;
+    }
+
     @Override
     public void onCreate() {
         sInstanse = this;
@@ -56,14 +65,5 @@ public class App extends Application {
                 .observeMessagesSendErrors()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(throwable -> PhoenixToast.CreatePhoenixToast(App.this).showToastError(ErrorLocalizer.localizeThrowable(App.this, throwable)), ignore()));
-    }
-
-    @NonNull
-    public static App getInstance() {
-        if (sInstanse == null) {
-            throw new IllegalStateException("App instance is null!!! WTF???");
-        }
-
-        return sInstanse;
     }
 }

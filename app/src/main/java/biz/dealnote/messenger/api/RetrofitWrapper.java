@@ -13,13 +13,21 @@ import retrofit2.Retrofit;
 public class RetrofitWrapper {
 
     private final Retrofit retrofit;
-    private Map<Class<?>, Object> servicesCache;
     private final boolean withCaching;
+    private Map<Class<?>, Object> servicesCache;
 
     private RetrofitWrapper(Retrofit retrofit, boolean withCaching) {
         this.retrofit = retrofit;
         this.withCaching = withCaching;
         this.servicesCache = withCaching ? Collections.synchronizedMap(new HashMap<>(4)) : Collections.emptyMap();
+    }
+
+    public static RetrofitWrapper wrap(Retrofit retrofit) {
+        return new RetrofitWrapper(retrofit, true);
+    }
+
+    public static RetrofitWrapper wrap(Retrofit retrofit, boolean withCaching) {
+        return new RetrofitWrapper(retrofit, withCaching);
     }
 
     @SuppressWarnings("unchecked")
@@ -37,15 +45,7 @@ public class RetrofitWrapper {
         return service;
     }
 
-    public void cleanup(){
+    public void cleanup() {
         servicesCache.clear();
-    }
-
-    public static RetrofitWrapper wrap(Retrofit retrofit) {
-        return new RetrofitWrapper(retrofit, true);
-    }
-
-    public static RetrofitWrapper wrap(Retrofit retrofit, boolean withCaching) {
-        return new RetrofitWrapper(retrofit, withCaching);
     }
 }

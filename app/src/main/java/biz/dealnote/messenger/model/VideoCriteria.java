@@ -23,11 +23,6 @@ public class VideoCriteria extends Criteria {
         this.albumId = albumId;
     }
 
-    public VideoCriteria setRange(DatabaseIdRange range) {
-        this.range = range;
-        return this;
-    }
-
     public int getAccountId() {
         return accountId;
     }
@@ -42,5 +37,10 @@ public class VideoCriteria extends Criteria {
 
     public DatabaseIdRange getRange() {
         return range;
+    }
+
+    public VideoCriteria setRange(DatabaseIdRange range) {
+        this.range = range;
+        return this;
     }
 }

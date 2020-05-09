@@ -29,8 +29,9 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
     private List<AppChatUser> data;
     private Transformation transformation;
     private int paddingForFirstLast;
+    private ActionListener actionListener;
 
-    public ChatMembersListAdapter(Context context, List<AppChatUser> users){
+    public ChatMembersListAdapter(Context context, List<AppChatUser> users) {
         this.data = users;
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
         this.paddingForFirstLast = Utils.is600dp(context) ? (int) Utils.dpToPx(16, context) : 0;
@@ -51,7 +52,7 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
         holder.vOnline.setVisibility(user instanceof User && ((User) user).isOnline() ? View.VISIBLE : View.GONE);
         String userAvatarUrl = user.getMaxSquareAvatar();
 
-        if(isEmpty(userAvatarUrl)){
+        if (isEmpty(userAvatarUrl)) {
             PicassoInstance.with()
                     .load(R.drawable.ic_avatar_unknown)
                     .transform(transformation)
@@ -66,21 +67,21 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
         holder.tvName.setText(user.getFullName());
         boolean isCreator = user.getOwnerId() == item.getInvitedBy();
 
-        if(isCreator){
+        if (isCreator) {
             holder.tvSubline.setText(R.string.creator_of_conversation);
         } else {
             holder.tvSubline.setText(context.getString(R.string.invited_by, item.getInviter().getFullName()));
         }
 
         holder.itemView.setOnClickListener(view -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onUserClick(item);
             }
         });
 
         holder.vRemove.setVisibility(item.isCanRemove() ? View.VISIBLE : View.GONE);
         holder.vRemove.setOnClickListener(v -> {
-            if(actionListener != null){
+            if (actionListener != null) {
                 actionListener.onRemoveClick(item);
             }
         });
@@ -103,6 +104,16 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
         notifyDataSetChanged();
     }
 
+    public void setActionListener(ActionListener actionListener) {
+        this.actionListener = actionListener;
+    }
+
+    public interface ActionListener {
+        void onRemoveClick(AppChatUser user);
+
+        void onUserClick(AppChatUser user);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         View vOnline;
@@ -111,7 +122,7 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
         TextView tvSubline;
         View vRemove;
 
-        ViewHolder(View root){
+        ViewHolder(View root) {
             super(root);
             vOnline = root.findViewById(R.id.item_user_online);
             ivAvatar = root.findViewById(R.id.item_user_avatar);
@@ -119,16 +130,5 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
             tvSubline = root.findViewById(R.id.item_user_invited_by);
             vRemove = root.findViewById(R.id.item_user_remove);
         }
-    }
-
-    private ActionListener actionListener;
-
-    public void setActionListener(ActionListener actionListener) {
-        this.actionListener = actionListener;
-    }
-
-    public interface ActionListener {
-        void onRemoveClick(AppChatUser user);
-        void onUserClick(AppChatUser user);
     }
 }

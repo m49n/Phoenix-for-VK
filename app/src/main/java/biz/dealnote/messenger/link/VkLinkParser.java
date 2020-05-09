@@ -58,6 +58,18 @@ public class VkLinkParser {
     private static final Pattern PATTERN_WALL_POST_COMMENT = Pattern.compile("vk\\.com/wall(-?\\d*)_(\\d*)\\?reply=(\\d*)");
     private static final Pattern PATTERN_BOARD = Pattern.compile("vk\\.com/board(\\d+)");
     private static final Pattern PATTERN_FEED_SEARCH = Pattern.compile("vk\\.com/feed\\?q=([^&]*)&section=search");
+    private static final List<IParser> PARSERS = new LinkedList<>();
+
+    static {
+        PARSERS.add(string -> {
+            Matcher matcher = PATTERN_FEED_SEARCH.matcher(string);
+            if (matcher.find()) {
+                String q = URLDecoder.decode(matcher.group(1), "UTF-8");
+                return Optional.wrap(new FeedSearchLink(q));
+            }
+            return Optional.empty();
+        });
+    }
 
     public static AbsLink parse(String string) {
         if (!string.contains("vk.com")) {
@@ -133,18 +145,18 @@ public class VkLinkParser {
             return new DialogsLink();
         }
 
-        for(IParser parser : PARSERS){
+        for (IParser parser : PARSERS) {
             try {
                 AbsLink link = parser.parse(string).get();
-                if(link != null){
+                if (link != null) {
                     return link;
                 }
-            } catch (Exception ignored){
+            } catch (Exception ignored) {
             }
         }
 
         vkLink = parseBoard(string);
-        if(vkLink != null){
+        if (vkLink != null) {
             return vkLink;
         }
 
@@ -244,31 +256,15 @@ public class VkLinkParser {
         return null;
     }
 
-    private static final List<IParser> PARSERS = new LinkedList<>();
-    static {
-        PARSERS.add(string -> {
-            Matcher matcher = PATTERN_FEED_SEARCH.matcher(string);
-            if(matcher.find()){
-                String q = URLDecoder.decode(matcher.group(1), "UTF-8");
-                return Optional.wrap(new FeedSearchLink(q));
-            }
-            return Optional.empty();
-        });
-    }
-
-    private interface IParser {
-        Optional<AbsLink> parse(String string) throws Exception;
-    }
-
-    private static AbsLink parseBoard(String string){
+    private static AbsLink parseBoard(String string) {
         Matcher matcher = PATTERN_BOARD.matcher(string);
 
         try {
-            if(matcher.find()){
+            if (matcher.find()) {
                 String groupId = matcher.group(1);
                 return new BoardLink(Integer.parseInt(groupId));
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
@@ -321,13 +317,13 @@ public class VkLinkParser {
         Matcher matcher = PATTERN_DIALOG.matcher(string);
 
         try {
-            if(matcher.find()){
+            if (matcher.find()) {
                 String chat = matcher.group(1);
                 int id = parseInt(matcher.group(2));
                 boolean isChat = nonEmpty(chat);
                 return new DialogLink(isChat ? Peer.fromChatId(id) : Peer.fromOwnerId(id));
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
         }
 
         return null;
@@ -364,7 +360,6 @@ public class VkLinkParser {
 
         return null;
     }
-
 
     private static AbsLink parsePhoto(String string) {
         Matcher matcher = PATTERN_PHOTO.matcher(string);
@@ -510,5 +505,9 @@ public class VkLinkParser {
         }
 
         return new WallPostLink(parseInt(matcher.group(1)), parseInt(matcher.group(2)));
+    }
+
+    private interface IParser {
+        Optional<AbsLink> parse(String string) throws Exception;
     }
 }

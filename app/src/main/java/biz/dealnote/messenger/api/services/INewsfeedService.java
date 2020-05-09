@@ -98,7 +98,7 @@ public interface INewsfeedService {
      *                      If the parameter is not set, all of the user's friends and communities
      *                      are returned, except for banned sources, which can be obtained with
      *                      the newsfeed.getBanned method.
-     * @param startFrom    identifier required to get the next page of results.
+     * @param startFrom     identifier required to get the next page of results.
      *                      Value for this parameter is returned in next_from field in a reply
      * @param count         Number of news items to return (default 50; maximum 100). For auto feed,
      *                      you can use the new_offset parameter returned by this method.
@@ -110,7 +110,8 @@ public interface INewsfeedService {
      * new_offset — Contains an offset parameter that is passed to get the next array of news.
      * next_from — Contains a from parameter that is passed to get the next array of news.
      */
-    @FormUrlEncoded    @POST("newsfeed.get")
+    @FormUrlEncoded
+    @POST("newsfeed.get")
     Single<BaseResponse<NewsfeedResponse>> get(@Field("filters") String filters,
                                                @Field("return_banned") Integer returnBanned,
                                                @Field("start_time") Long startTime,
@@ -121,12 +122,13 @@ public interface INewsfeedService {
                                                @Field("count") Integer count,
                                                @Field("fields") String fields);
 
-    @FormUrlEncoded    @POST("newsfeed.getRecommended")
+    @FormUrlEncoded
+    @POST("newsfeed.getRecommended")
     Single<BaseResponse<NewsfeedResponse>> getRecommended(@Field("start_time") Long startTime,
-                                               @Field("end_time") Long endTime,
-                                               @Field("max_photos") Integer maxPhotoCount,
-                                               @Field("start_from") String startFrom,
-                                               @Field("count") Integer count,
-                                               @Field("fields") String fields);
+                                                          @Field("end_time") Long endTime,
+                                                          @Field("max_photos") Integer maxPhotoCount,
+                                                          @Field("start_from") String startFrom,
+                                                          @Field("count") Integer count,
+                                                          @Field("fields") String fields);
 
 }

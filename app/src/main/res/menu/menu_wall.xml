@@ -4,17 +4,21 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/magnify"
-        app:showAsAction="always"
+        android:title="@string/search"
         app:iconTint="?colorOnSurface"
-        android:title="@string/search"/>
+        app:showAsAction="always" />
 
-    <item android:title="@string/refresh"
-        android:id="@+id/action_refresh"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/refresh" />
 
-    <item android:title="@string/copy_url"
-        android:id="@+id/action_copy_url"/>
-    <item android:title="@string/open_clipboard_url"
-        android:id="@+id/action_open_url"/>
-    <item android:title="@string/set_offline"
-        android:id="@+id/action_set_offline"/>
+    <item
+        android:id="@+id/action_copy_url"
+        android:title="@string/copy_url" />
+    <item
+        android:id="@+id/action_open_url"
+        android:title="@string/open_clipboard_url" />
+    <item
+        android:id="@+id/action_set_offline"
+        android:title="@string/set_offline" />
 </menu>

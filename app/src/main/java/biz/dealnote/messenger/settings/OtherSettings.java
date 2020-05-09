@@ -41,7 +41,7 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public void storeFeedScrollState(int accountId, String state) {
-        if(Objects.nonNull(state)){
+        if (Objects.nonNull(state)) {
             PreferenceManager
                     .getDefaultSharedPreferences(app)
                     .edit()
@@ -170,6 +170,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isInfo_reading() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("info_reading", true);
     }
+
     @Override
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
@@ -208,38 +209,37 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getMusicDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("music_dir", null);
-        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
-        {
+        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("music_dir", ret).apply();
         }
         return ret;
     }
+
     @Override
     public String getPhotoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("photo_dir", null);
-        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
-        {
+        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.PHOTOS_PATH;
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("photo_dir", ret).apply();
         }
         return ret;
     }
+
     @Override
     public String getVideoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("video_dir", null);
-        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
-        {
+        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("video_dir", ret).apply();
         }
         return ret;
     }
+
     @Override
     public String getDocDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("docs_dir", null);
-        if(Objects.isNullOrEmptyString(ret) || !new File(ret).exists())
-        {
+        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("docs_dir", ret).apply();
         }

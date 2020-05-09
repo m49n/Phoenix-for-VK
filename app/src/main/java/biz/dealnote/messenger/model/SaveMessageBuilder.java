@@ -34,13 +34,13 @@ public class SaveMessageBuilder {
         this.keyLocationPolicy = KeyLocationPolicy.PERSIST;
     }
 
+    public Integer getDraftMessageId() {
+        return draftMessageId;
+    }
+
     public SaveMessageBuilder setDraftMessageId(Integer draftMessageId) {
         this.draftMessageId = draftMessageId;
         return this;
-    }
-
-    public Integer getDraftMessageId() {
-        return draftMessageId;
     }
 
     public SaveMessageBuilder attach(List<AbsModel> attachments) {
@@ -51,22 +51,12 @@ public class SaveMessageBuilder {
         return this;
     }
 
-    private List<AbsModel> prepareAttachments(int initialSize){
-        if(attachments == null){
+    private List<AbsModel> prepareAttachments(int initialSize) {
+        if (attachments == null) {
             attachments = new ArrayList<>(initialSize);
         }
 
         return attachments;
-    }
-
-    public SaveMessageBuilder setForwardMessages(List<Message> forwardMessages) {
-        this.forwardMessages = forwardMessages;
-        return this;
-    }
-
-    public SaveMessageBuilder setBody(String body) {
-        this.body = body;
-        return this;
     }
 
     public SaveMessageBuilder attach(@NonNull AbsModel attachment) {
@@ -90,8 +80,18 @@ public class SaveMessageBuilder {
         return forwardMessages;
     }
 
+    public SaveMessageBuilder setForwardMessages(List<Message> forwardMessages) {
+        this.forwardMessages = forwardMessages;
+        return this;
+    }
+
     public String getBody() {
         return body;
+    }
+
+    public SaveMessageBuilder setBody(String body) {
+        this.body = body;
+        return this;
     }
 
     public File getVoiceMessageFile() {

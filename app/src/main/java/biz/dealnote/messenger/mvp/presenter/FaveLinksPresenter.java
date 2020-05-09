@@ -32,6 +32,10 @@ public class FaveLinksPresenter extends AccountDependencyPresenter<IFaveLinksVie
     private boolean endOfContent;
 
     private boolean actualDataReceived;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheLoading;
+    private CompositeDisposable actualDisposable = new CompositeDisposable();
+    private boolean actualLoading;
 
     public FaveLinksPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -41,14 +45,9 @@ public class FaveLinksPresenter extends AccountDependencyPresenter<IFaveLinksVie
         loadCachedData();
     }
 
-    public void LoadTool()
-    {
+    public void LoadTool() {
         loadActual(0);
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-
-    private boolean cacheLoading;
 
     private void loadCachedData() {
         this.cacheLoading = true;
@@ -57,10 +56,6 @@ public class FaveLinksPresenter extends AccountDependencyPresenter<IFaveLinksVie
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onCachedDataReceived, RxUtils.ignore()));
     }
-
-    private CompositeDisposable actualDisposable = new CompositeDisposable();
-
-    private boolean actualLoading;
 
     private void loadActual(int offset) {
         this.actualLoading = true;

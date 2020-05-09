@@ -30,16 +30,16 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterPinView>
         implements IEnterPinView, KeyboardView.OnKeyboardClickListener {
 
-    public static EnterPinFragment newInstance(){
+    private ImageView mAvatar;
+    private View mValuesRoot;
+    private View[] mValuesCircles;
+
+    public static EnterPinFragment newInstance() {
         Bundle bundle = new Bundle();
         EnterPinFragment fragment = new EnterPinFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
-
-    private ImageView mAvatar;
-    private View mValuesRoot;
-    private View[] mValuesCircles;
 
     @Nullable
     @Override
@@ -67,13 +67,13 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public void displayPin(int[] values, int noValueConstant) {
-        if(Objects.isNull(mValuesCircles)) return;
+        if (Objects.isNull(mValuesCircles)) return;
 
-        if(values.length != mValuesCircles.length){
+        if (values.length != mValuesCircles.length) {
             throw new IllegalStateException("Invalid pin length, view: " + mValuesCircles.length + ", target: " + values.length);
         }
 
-        for(int i = 0; i < mValuesCircles.length; i++){
+        for (int i = 0; i < mValuesCircles.length; i++) {
             boolean visible = values[i] != noValueConstant;
             mValuesCircles[i].setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
@@ -81,7 +81,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public void sendSuccessAndClose() {
-        if(isAdded()){
+        if (isAdded()) {
             requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         }
@@ -89,7 +89,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public void displayErrorAnimation() {
-        if(Objects.nonNull(mValuesRoot)){
+        if (Objects.nonNull(mValuesRoot)) {
             Animation animation = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_invalid_pin);
             mValuesRoot.startAnimation(animation);
         }
@@ -97,7 +97,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public void displayAvatarFromUrl(@NonNull String url) {
-        if(Objects.nonNull(mAvatar)){
+        if (Objects.nonNull(mAvatar)) {
             PicassoInstance.with()
                     .load(url)
                     .error(R.drawable.ic_avatar_unknown)
@@ -108,7 +108,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
 
     @Override
     public void displayDefaultAvatar() {
-        if(Objects.nonNull(mAvatar)){
+        if (Objects.nonNull(mAvatar)) {
             PicassoInstance.with()
                     .load(R.drawable.ic_avatar_unknown)
                     .transform(CurrentTheme.createTransformationForAvatar(requireActivity()))

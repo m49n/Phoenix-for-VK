@@ -14,25 +14,30 @@ import biz.dealnote.messenger.util.ParcelUtils;
  */
 public class ExchangeMessage implements Parcelable {
 
+    public static final Creator<ExchangeMessage> CREATOR = new Creator<ExchangeMessage>() {
+        @Override
+        public ExchangeMessage createFromParcel(Parcel in) {
+            return new ExchangeMessage(in);
+        }
+
+        @Override
+        public ExchangeMessage[] newArray(int size) {
+            return new ExchangeMessage[size];
+        }
+    };
     @SerializedName("v")
     private int version;
-
     @SerializedName("sid")
     private long sessionId;
-
     @SerializedName("public_key")
     private String publicKey;
-
     @SerializedName("aes_key")
     private String aesKey;
-
     @SessionState
     @SerializedName("session_state")
     private int senderSessionState;
-
     @SerializedName("error_code")
     private int errorCode;
-
     @KeyLocationPolicy
     @SerializedName("klp")
     private Integer keyLocationPolicy;
@@ -63,21 +68,9 @@ public class ExchangeMessage implements Parcelable {
         keyLocationPolicy = klp;
     }
 
-    public boolean isError(){
+    public boolean isError() {
         return errorCode != 0;
     }
-
-    public static final Creator<ExchangeMessage> CREATOR = new Creator<ExchangeMessage>() {
-        @Override
-        public ExchangeMessage createFromParcel(Parcel in) {
-            return new ExchangeMessage(in);
-        }
-
-        @Override
-        public ExchangeMessage[] newArray(int size) {
-            return new ExchangeMessage[size];
-        }
-    };
 
     @Override
     public String toString() {
@@ -132,17 +125,14 @@ public class ExchangeMessage implements Parcelable {
 
     public static final class Builder {
 
-        private String publicKey;
-        private String aesKey;
         private final int version;
         private final long sessionId;
-
-        @KeyLocationPolicy
-        private Integer keyLocationPolicy;
-
         @SessionState
         private final int sessionState;
-
+        private String publicKey;
+        private String aesKey;
+        @KeyLocationPolicy
+        private Integer keyLocationPolicy;
         private int errorCode;
 
         public Builder(int version, long sessionId, @SessionState int senderSessionState) {

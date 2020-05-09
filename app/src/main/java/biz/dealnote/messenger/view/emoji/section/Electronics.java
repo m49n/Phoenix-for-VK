@@ -5,7 +5,7 @@ package biz.dealnote.messenger.view.emoji.section;
  */
 public class Electronics {
     public static final Emojicon[] DATA = new Emojicon[]{
-            Emojicon.fromChar((char)0x231a),
+            Emojicon.fromChar((char) 0x231a),
             Emojicon.fromCodePoint(0x1f4f1),
             Emojicon.fromCodePoint(0x1f4f2),
             Emojicon.fromCodePoint(0x1f4bb),
@@ -38,10 +38,10 @@ public class Electronics {
             Emojicon.fromCodePoint(0x1f39b),
             //Emojicon.fromChar((char)0x23f1),
             //Emojicon.fromChar((char)0x23f2),
-            Emojicon.fromChar((char)0x23f0),
+            Emojicon.fromChar((char) 0x23f0),
             Emojicon.fromCodePoint(0x1f570),
-            Emojicon.fromChar((char)0x23f3),
-            Emojicon.fromChar((char)0x231b),
+            Emojicon.fromChar((char) 0x23f3),
+            Emojicon.fromChar((char) 0x231b),
             Emojicon.fromCodePoint(0x1f4e1),
             Emojicon.fromCodePoint(0x1f50b),
             Emojicon.fromCodePoint(0x1f50c),
@@ -58,7 +58,7 @@ public class Electronics {
             Emojicon.fromCodePoint(0x1f4b0),
             Emojicon.fromCodePoint(0x1f4b3),
             Emojicon.fromCodePoint(0x1f48e),
-            Emojicon.fromChar((char)0x2696),
+            Emojicon.fromChar((char) 0x2696),
             Emojicon.fromCodePoint(0x1f527),
             Emojicon.fromCodePoint(0x1f528),
             //Emojicon.fromChar((char)0x2692),

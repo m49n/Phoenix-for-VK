@@ -17,6 +17,7 @@ import biz.dealnote.messenger.settings.Settings;
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
 
     private List<ThemeValue> data;
+    private ClickListener clickListener;
 
     public ThemeAdapter(List<ThemeValue> data) {
         this.data = data;
@@ -38,12 +39,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
         holder.clicked.setOnClickListener(v -> clickListener.onClick(position, category));
     }
 
-    public interface ClickListener {
-        void onClick(int index, ThemeValue value);
-    }
-
-    private ClickListener clickListener;
-
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
@@ -56,6 +51,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     public void setData(List<ThemeValue> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public interface ClickListener {
+        void onClick(int index, ThemeValue value);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

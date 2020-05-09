@@ -43,10 +43,10 @@
                     android:layout_marginEnd="16dp"
                     android:layout_toEndOf="@+id/avatar"
                     android:orientation="vertical"
-                    android:paddingBottom="8dp"
                     android:paddingStart="16dp"
-                    android:paddingEnd="8dp"
                     android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     app:angle="@dimen/message_bubble_corner_radius"
                     app:arrowHeight="12dp"
                     app:arrowLocation="left"
@@ -99,17 +99,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
 
-                    android:layout_toEndOf="@+id/activity_quick_answer_to_dialog"
                     android:layout_toStartOf="@+id/activity_quick_answer_send"
+                    android:layout_toEndOf="@+id/activity_quick_answer_to_dialog"
                     android:background="?message_bubble_color"
                     android:gravity="center_vertical"
                     android:hint="@string/text_hint"
                     android:maxLines="3"
                     android:minHeight="48dp"
-                    android:paddingBottom="8dp"
                     android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
                     android:textColorHint="?android:textColorSecondary"
                     android:textSize="@dimen/font_size_title" />
 
@@ -123,11 +123,11 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/circle_back"
                     android:clickable="true"
+                    android:focusable="true"
                     android:padding="12dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/send"
-                    android:text="@string/send"
-                    android:focusable="true" />
+                    android:text="@string/send" />
 
             </RelativeLayout>
         </LinearLayout>

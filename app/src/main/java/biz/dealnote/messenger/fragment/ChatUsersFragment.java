@@ -47,6 +47,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, IChatMembersView>
         implements IChatMembersView, ChatMembersListAdapter.ActionListener {
 
+    private static final int REQUEST_CODE_ADD_USER = 110;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ChatMembersListAdapter mAdapter;
+
     public static Bundle buildArgs(int accountId, int chatId) {
         Bundle args = new Bundle();
         args.putInt(Extra.CHAT_ID, chatId);
@@ -59,9 +63,6 @@ public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, ICh
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ChatMembersListAdapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,8 +84,6 @@ public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, ICh
         fabAdd.setOnClickListener(v -> getPresenter().fireAddUserClick());
         return root;
     }
-
-    private static final int REQUEST_CODE_ADD_USER = 110;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,28 +126,28 @@ public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, ICh
 
     @Override
     public void displayData(List<AppChatUser> users) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setData(users);
         }
     }
 
     @Override
     public void notifyItemRemoved(int position) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(position);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
         }
     }
@@ -160,7 +159,7 @@ public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, ICh
 
     @Override
     public void displayRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }

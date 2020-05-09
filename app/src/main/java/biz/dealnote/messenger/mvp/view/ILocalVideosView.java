@@ -14,9 +14,14 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface ILocalVideosView extends IMvpView, IErrorView {
     void displayData(@NonNull List<LocalVideo> data);
+
     void setEmptyTextVisible(boolean visible);
+
     void displayProgress(boolean loading);
+
     void returnResultToParent(ArrayList<LocalVideo> photos);
+
     void updateSelectionAndIndexes();
+
     void setFabVisible(boolean visible, boolean anim);
 }

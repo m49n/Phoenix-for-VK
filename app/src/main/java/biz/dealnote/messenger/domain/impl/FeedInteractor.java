@@ -50,9 +50,17 @@ public class FeedInteractor implements IFeedInteractor {
         this.ownersRepository = ownersRepository;
     }
 
+    private static boolean hasNewsSupport(VKApiNews news) {
+        return "post".equals(news.type);
+    }
+
+    private static FeedList createFeedListFromEntity(FeedListEntity entity) {
+        return new FeedList(entity.getId(), entity.getTitle());
+    }
+
     @Override
     public Single<Pair<List<News>, String>> getActualFeed(int accountId, int count, String startFrom, String filters, Integer maxPhotos, String sourceIds) {
-        if(sourceIds == null || !sourceIds.equals("recommendation")) {
+        if (sourceIds == null || !sourceIds.equals("recommendation")) {
             return networker.vkDefault(accountId)
                     .newsfeed()
                     .get(filters, null, null, null, maxPhotos, sourceIds, startFrom, count, Constants.MAIN_OWNER_FIELDS)
@@ -84,9 +92,7 @@ public class FeedInteractor implements IFeedInteractor {
                                             });
                                 });
                     });
-        }
-        else
-        {
+        } else {
             return networker.vkDefault(accountId)
                     .newsfeed()
                     .getRecommended(null, null, maxPhotos, startFrom, count, Constants.MAIN_OWNER_FIELDS)
@@ -121,10 +127,6 @@ public class FeedInteractor implements IFeedInteractor {
         }
     }
 
-    private static boolean hasNewsSupport(VKApiNews news){
-        return "post".equals(news.type);
-    }
-
     @Override
     public Single<Pair<List<Post>, String>> search(int accountId, NewsFeedCriteria criteria, int count, String startFrom) {
         return networker.vkDefault(accountId)
@@ -135,7 +137,7 @@ public class FeedInteractor implements IFeedInteractor {
                     List<Owner> owners = Dto2Model.transformOwners(response.profiles, response.groups);
 
                     VKOwnIds ownIds = new VKOwnIds();
-                    for(VKApiPost post : dtos){
+                    for (VKApiPost post : dtos) {
                         ownIds.append(post);
                     }
 
@@ -154,15 +156,11 @@ public class FeedInteractor implements IFeedInteractor {
                 .getAllLists(criteria)
                 .map(entities -> {
                     List<FeedList> lists = new ArrayList<>(entities.size());
-                    for(FeedListEntity entity : entities){
+                    for (FeedListEntity entity : entities) {
                         lists.add(createFeedListFromEntity(entity));
                     }
                     return lists;
                 });
-    }
-
-    private static FeedList createFeedListFromEntity(FeedListEntity entity){
-        return new FeedList(entity.getId(), entity.getTitle());
     }
 
     @Override
@@ -175,7 +173,7 @@ public class FeedInteractor implements IFeedInteractor {
                     List<FeedListEntity> entities = new ArrayList<>(dtos.size());
                     List<FeedList> lists = new ArrayList<>();
 
-                    for(VkApiFeedList dto : dtos){
+                    for (VkApiFeedList dto : dtos) {
                         FeedListEntity entity = new FeedListEntity(dto.id)
                                 .setTitle(dto.title)
                                 .setNoReposts(dto.no_reposts)
@@ -198,14 +196,14 @@ public class FeedInteractor implements IFeedInteractor {
                 .findByCriteria(criteria)
                 .flatMap(dbos -> {
                     VKOwnIds ownIds = new VKOwnIds();
-                    for(NewsEntity dbo : dbos){
+                    for (NewsEntity dbo : dbos) {
                         Entity2Model.fillOwnerIds(ownIds, dbo);
                     }
 
                     return ownersRepository.findBaseOwnersDataAsBundle(accountId, ownIds.getAll(), IOwnersRepository.MODE_ANY)
                             .map(owners -> {
                                 List<News> news = new ArrayList<>(dbos.size());
-                                for(NewsEntity dbo : dbos){
+                                for (NewsEntity dbo : dbos) {
                                     news.add(Entity2Model.buildNewsFromDbo(dbo, owners));
                                 }
 

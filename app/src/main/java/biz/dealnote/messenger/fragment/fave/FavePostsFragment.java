@@ -37,6 +37,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresenter, IFavePostsView>
         implements WallAdapter.ClickListener, IFavePostsView {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private WallAdapter mAdapter;
+    private TextView mEmpty;
+    private boolean isRequestLast = false;
+
     public static FavePostsFragment newInstance(int accountId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -44,11 +49,6 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
         favePostsFragment.setArguments(args);
         return favePostsFragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private WallAdapter mAdapter;
-    private TextView mEmpty;
-    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,7 +136,7 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
 
     @Override
     public void displayData(List<Post> posts) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setItems(posts);
             resolveEmptyText();
         }
@@ -144,7 +144,7 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyText();
         }
@@ -152,7 +152,7 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position + mAdapter.getHeadersCount(), count);
             resolveEmptyText();
         }
@@ -160,14 +160,14 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
 
     @Override
     public void showRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }
 
     @Override
     public void notifyItemChanged(int index) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(index + mAdapter.getHeadersCount());
         }
     }
@@ -180,7 +180,7 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
     @Override
     public void onResume() {
         super.onResume();
-        if(!isRequestLast) {
+        if (!isRequestLast) {
             isRequestLast = true;
             getPresenter().LoadTool();
         }

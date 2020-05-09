@@ -135,7 +135,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     public static Bundle buildArgsForSimpleGalleryHistory(int aid, int index, ArrayList<Photo> photos,
-                                                   boolean needUpdate) {
+                                                          boolean needUpdate) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, aid);
         args.putParcelableArrayList(EXTRA_PHOTOS, photos);
@@ -177,6 +177,21 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         menu.getMenu()
                 .add(0, id, 0, getTitleForPhotoSize(size))
                 .setChecked(selectedItem == size);
+    }
+
+    private static String getTitleForPhotoSize(int size) {
+        switch (size) {
+            case PhotoSize.X:
+                return 604 + "px";
+            case PhotoSize.Y:
+                return 807 + "px";
+            case PhotoSize.Z:
+                return 1024 + "px";
+            case PhotoSize.W:
+                return 2048 + "px";
+            default:
+                throw new IllegalArgumentException("Unsupported size");
+        }
     }
 
     @Override
@@ -265,11 +280,10 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(Settings.get().other().isEnable_Photo_advanced()) {
+        if (Settings.get().other().isEnable_Photo_advanced()) {
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
             menu.findItem(R.id.action_delete).setVisible(mCanDelete);
-        }
-        else {
+        } else {
             menu.findItem(R.id.save_yourself).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(false);
         }
@@ -306,21 +320,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         });
 
         popupMenu.show();
-    }
-
-    private static String getTitleForPhotoSize(int size) {
-        switch (size) {
-            case PhotoSize.X:
-                return 604 + "px";
-            case PhotoSize.Y:
-                return 807 + "px";
-            case PhotoSize.Z:
-                return 1024 + "px";
-            case PhotoSize.W:
-                return 2048 + "px";
-            default:
-                throw new IllegalArgumentException("Unsupported size");
-        }
     }
 
     @Override
@@ -508,43 +507,46 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 .setCancelable(true)
                 .create();
         String res = "";
-        if(photo.getAlbumId() >= 0)
+        if (photo.getAlbumId() >= 0)
             res += "<p><i><a href=\"" + "https://vk.com/album" + photo.getOwnerId() + "_" + photo.getAlbumId() + "\">" + requireContext().getString(R.string.open_photo_album) + "</a></i></p>";
-        if(photo.getOwnerId() >= 0)
+        if (photo.getOwnerId() >= 0)
             res += "<p><i><a href=\"" + "https://vk.com/id" + photo.getOwnerId() + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
         else
             res += "<p><i><a href=\"" + "https://vk.com/club" + (photo.getOwnerId() * -1) + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
-        if(photo.getText().length() > 0)
-            res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" +  photo.getText());
-        if(photo.getTagsCount() > 0) {
+        if (photo.getText().length() > 0)
+            res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" + photo.getText());
+        if (photo.getTagsCount() > 0) {
             String finalRes = res;
             getPresenter().appendDisposable(
-            Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
-                    .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(userInfo -> {
-                        String tmp = finalRes;
-                        tmp += ("<p><b>" + requireContext().getString(R.string.has_tags) + ":</b></p>" +  photo.getText());
-                        for(VKApiPhotoTags i : userInfo)
-                        {
-                            if(i.user_id != 0)
-                                tmp += ("<i><a href=\"https://vk.com/id" + i.user_id + "\">" + (i.tagged_name != null ? i.tagged_name : "") + "</a></i>" + " ");
-                            else
-                                tmp += ((i.tagged_name != null ? i.tagged_name : "") + " ");
-                        }
-                        dlg.setMessage(Html.fromHtml(tmp));
-                        dlg.show();
-                        try {
-                            TextView tv = dlg.findViewById(android.R.id.message);
-                            if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        } catch (Exception ignored) {}
-                    }, throwable -> {
-                        dlg.setMessage(Html.fromHtml(finalRes));
-                        dlg.show();
-                        try {
-                            TextView tv = dlg.findViewById(android.R.id.message);
-                            if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        } catch (Exception ignored) {}
-                    }));
+                    Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
+                            .compose(RxUtils.applySingleIOToMainSchedulers())
+                            .subscribe(userInfo -> {
+                                String tmp = finalRes;
+                                tmp += ("<p><b>" + requireContext().getString(R.string.has_tags) + ":</b></p>" + photo.getText());
+                                for (VKApiPhotoTags i : userInfo) {
+                                    if (i.user_id != 0)
+                                        tmp += ("<i><a href=\"https://vk.com/id" + i.user_id + "\">" + (i.tagged_name != null ? i.tagged_name : "") + "</a></i>" + " ");
+                                    else
+                                        tmp += ((i.tagged_name != null ? i.tagged_name : "") + " ");
+                                }
+                                dlg.setMessage(Html.fromHtml(tmp));
+                                dlg.show();
+                                try {
+                                    TextView tv = dlg.findViewById(android.R.id.message);
+                                    if (tv != null)
+                                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+                                } catch (Exception ignored) {
+                                }
+                            }, throwable -> {
+                                dlg.setMessage(Html.fromHtml(finalRes));
+                                dlg.show();
+                                try {
+                                    TextView tv = dlg.findViewById(android.R.id.message);
+                                    if (tv != null)
+                                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+                                } catch (Exception ignored) {
+                                }
+                            }));
             return;
         }
 
@@ -553,7 +555,8 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         try {
             TextView tv = dlg.findViewById(android.R.id.message);
             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -611,6 +614,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         public FloatingActionButton reload;
         private boolean mLoadingNow;
         private WeakPicassoLoadCallback mPicassoLoadCallback;
+
         public PhotoViewHolder(View view) {
             super(view);
             photo = view.findViewById(R.id.image_view);
@@ -634,20 +638,19 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 reload.setVisibility(View.INVISIBLE);
                 if (nonEmpty(url)) {
                     loadImage(url);
-                }
-                else
+                } else
                     PicassoInstance.with().cancelRequest(photo);
             });
 
             if (nonEmpty(url)) {
                 loadImage(url);
-            }
-            else {
+            } else {
                 PicassoInstance.with().cancelRequest(photo);
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.empty_url);
             }
 
         }
+
         private void resolveProgressVisibility() {
             progress.setVisibility(mLoadingNow ? View.VISIBLE : View.GONE);
         }
@@ -729,8 +732,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 public void onPostSettled(int diff) {
                     if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
                         goBack();
-                    }
-                    else
+                    } else
                         container.requestDisallowInterceptTouchEvent(false);
                 }
             });
@@ -755,8 +757,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         }
 
         @Override
-        public void onViewDetachedFromWindow(@NotNull PhotoViewHolder holder)
-        {
+        public void onViewDetachedFromWindow(@NotNull PhotoViewHolder holder) {
             super.onViewDetachedFromWindow(holder);
             PicassoInstance.with().cancelRequest(holder.photo);
         }

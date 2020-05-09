@@ -56,7 +56,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.Holder> {
         }
 
         Integer serviceIcon = VideoServiceIcons.getIconByType(video.getPlatform());
-        if(Objects.nonNull(serviceIcon)){
+        if (Objects.nonNull(serviceIcon)) {
             holder.videoService.setVisibility(View.VISIBLE);
             holder.videoService.setImageResource(serviceIcon);
         } else {
@@ -64,7 +64,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.Holder> {
         }
 
         holder.card.setOnClickListener(v -> {
-            if(videoOnClickListener != null){
+            if (videoOnClickListener != null) {
                 videoOnClickListener.onVideoClick(position, video);
             }
         });

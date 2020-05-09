@@ -10,18 +10,12 @@ import biz.dealnote.messenger.model.Text;
  */
 public class Section {
 
+    private final Text title;
     @DrawableRes
     private Integer icon;
 
-    private final Text title;
-
     public Section(Text title) {
         this.title = title;
-    }
-
-    public Section setIcon(Integer icon) {
-        this.icon = icon;
-        return this;
     }
 
     public Text getTitle() {
@@ -30,5 +24,10 @@ public class Section {
 
     public Integer getIcon() {
         return icon;
+    }
+
+    public Section setIcon(Integer icon) {
+        this.icon = icon;
+        return this;
     }
 }

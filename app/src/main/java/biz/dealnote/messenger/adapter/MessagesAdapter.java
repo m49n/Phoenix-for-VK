@@ -49,8 +49,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerView.ViewHolder> {
 
-    private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-
     private static final int TYPE_MY_MESSAGE = 1;
     private static final int TYPE_FRIEND_MESSAGE = 2;
     private static final int TYPE_SERVICE = 3;
@@ -59,17 +57,25 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private static final int TYPE_STICKER_FRIEND = 6;
     private static final int TYPE_GIFT_MY = 7;
     private static final int TYPE_GIFT_FRIEND = 8;
-
+    private static final Date DATE = new Date();
+    private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     private Context context;
     private AttachmentsViewBinder attachmentsViewBinder;
     private Transformation avatarTransformation;
     private ShapeDrawable selectedDrawable;
     private int unreadColor;
-
     private EmojiconTextView.OnHashTagClickListener onHashTagClickListener;
     private OnMessageActionListener onMessageActionListener;
     private AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback;
     private LastReadId lastReadId;
+    private OwnerLinkSpanFactory.ActionListener ownerLinkAdapter = new LinkActionAdapter() {
+        @Override
+        public void onOwnerClick(int ownerId) {
+            if (nonNull(attachmentsActionCallback)) {
+                attachmentsActionCallback.onOpenOwner(ownerId);
+            }
+        }
+    };
 
     public MessagesAdapter(Context context, List<Message> items, AttachmentsViewBinder.OnAttachmentsActionCallback callback) {
         this(context, items, new LastReadId(0, 0), callback);
@@ -86,15 +92,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         this.selectedDrawable.getPaint().setColor(CurrentTheme.getColorPrimary(context));
         this.unreadColor = CurrentTheme.getMessageUnreadColor(context);
     }
-
-    private OwnerLinkSpanFactory.ActionListener ownerLinkAdapter = new LinkActionAdapter() {
-        @Override
-        public void onOwnerClick(int ownerId) {
-            if (nonNull(attachmentsActionCallback)) {
-                attachmentsActionCallback.onOpenOwner(ownerId);
-            }
-        }
-    };
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position, int type) {
@@ -154,8 +151,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 .into(holder.gift);
     }
 
-    private static final Date DATE = new Date();
-
     private void bindStatusText(TextView textView, int status, long time, long updateTime) {
         switch (status) {
             case MessageStatus.SENDING:
@@ -213,7 +208,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
             holder.avatar.setBackgroundColor(Color.TRANSPARENT);
         }
-        if(holder.user != null)
+        if (holder.user != null)
             holder.user.setText(message.getSender().getFullName());
 
         holder.avatar.setOnClickListener(v -> {
@@ -256,8 +251,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 break;
             case CryptStatus.NO_ENCRYPTION:
             case CryptStatus.DECRYPTED:
-                if(message.isOut()) {
-                    if(Settings.get().other().isCustom_MyMessage())
+                if (message.isOut()) {
+                    if (Settings.get().other().isCustom_MyMessage())
                         holder.bubble.setBubbleColor(Settings.get().other().getColorMyMessage());
                     else {
                         if (Settings.get().main().isMy_message_no_color())
@@ -265,8 +260,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                         else
                             holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
                     }
-                }
-                else
+                } else
                     holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
                 break;
         }

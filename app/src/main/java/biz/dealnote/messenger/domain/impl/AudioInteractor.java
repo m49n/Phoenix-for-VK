@@ -109,27 +109,27 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .get(album_id, ownerId, offset, accessKey).map(out-> {
+                .get(album_id, ownerId, offset, accessKey).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.items.size(); i++)
+                    for (int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
-                            .setId(out.items.get(i).id)
-                            .setOwnerId(out.items.get(i).owner_id)
-                            .setAlbumId(out.items.get(i).album_id)
-                            .setAlbum_owner_id(out.items.get(i).album_owner_id)
-                            .setAlbum_access_key(out.items.get(i).album_access_key)
-                            .setAccessKey(out.items.get(i).access_key)
-                            .setArtist(out.items.get(i).artist)
-                            .setTitle(out.items.get(i).title)
-                            .setUrl(out.items.get(i).url)
-                            .setLyricsId(out.items.get(i).lyrics_id)
-                            .setGenre(out.items.get(i).genre_id)
-                            .setDuration(out.items.get(i).duration)
-                            .setThumb_image_little(out.items.get(i).thumb_image_little)
-                            .setThumb_image_big(out.items.get(i).thumb_image_big)
-                            .setAlbum_title(out.items.get(i).album_title)
-                            .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
-                            .setIsHq(out.items.get(i).isHq));
+                                .setId(out.items.get(i).id)
+                                .setOwnerId(out.items.get(i).owner_id)
+                                .setAlbumId(out.items.get(i).album_id)
+                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
+                                .setAlbum_access_key(out.items.get(i).album_access_key)
+                                .setAccessKey(out.items.get(i).access_key)
+                                .setArtist(out.items.get(i).artist)
+                                .setTitle(out.items.get(i).title)
+                                .setUrl(out.items.get(i).url)
+                                .setLyricsId(out.items.get(i).lyrics_id)
+                                .setGenre(out.items.get(i).genre_id)
+                                .setDuration(out.items.get(i).duration)
+                                .setThumb_image_little(out.items.get(i).thumb_image_little)
+                                .setThumb_image_big(out.items.get(i).thumb_image_big)
+                                .setAlbum_title(out.items.get(i).album_title)
+                                .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
+                                .setIsHq(out.items.get(i).isHq));
                     return ret;
                 });
     }
@@ -138,9 +138,9 @@ public class AudioInteractor implements IAudioInteractor {
     public Single<List<Audio>> getById(List<IdPair> audios) {
         return networker.vkDefault(AccountId)
                 .audio()
-                .getById(join(audios, ",")).map(out-> {
+                .getById(join(audios, ",")).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.size(); i++)
+                    for (int i = 0; i < out.size(); i++)
                         ret.add(new Audio()
                                 .setId(out.get(i).id)
                                 .setOwnerId(out.get(i).owner_id)
@@ -164,10 +164,9 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<String> getLyrics(int lyrics_id)
-    {
+    public Single<String> getLyrics(int lyrics_id) {
         return networker.vkDefault(AccountId)
-                .audio().getLyrics(lyrics_id).map(out-> out.text);
+                .audio().getLyrics(lyrics_id).map(out -> out.text);
     }
 
     @Override
@@ -175,9 +174,9 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .getPopular(foreign,genre).map(out-> {
+                .getPopular(foreign, genre).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.size(); i++)
+                    for (int i = 0; i < out.size(); i++)
                         ret.add(new Audio()
                                 .setId(out.get(i).id)
                                 .setOwnerId(out.get(i).owner_id)
@@ -201,13 +200,12 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId)
-    {
+    public Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getRecommendations(audioOwnerId).map(out-> {
+                .getRecommendations(audioOwnerId).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.items.size(); i++)
+                    for (int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)
@@ -231,13 +229,12 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> getRecommendationsByAudio(int accountId, String audio)
-    {
+    public Single<List<Audio>> getRecommendationsByAudio(int accountId, String audio) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getRecommendationsByAudio(audio).map(out-> {
+                .getRecommendationsByAudio(audio).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.items.size(); i++)
+                    for (int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)
@@ -261,16 +258,14 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset)
-    {
+    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getPlaylists(owner_id, offset).map(out-> out.items);
+                .getPlaylists(owner_id, offset).map(out -> out.items);
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey)
-    {
+    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey) {
         return networker.vkDefault(accountId)
                 .audio()
                 .followPlaylist(playlist_id, ownerId, accessKey)
@@ -278,8 +273,7 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey)
-    {
+    public Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey) {
         return networker.vkDefault(accountId)
                 .audio()
                 .getPlaylistById(playlist_id, ownerId, accessKey)
@@ -287,8 +281,7 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId)
-    {
+    public Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId) {
         return networker.vkDefault(accountId)
                 .audio()
                 .deletePlaylist(playlist_id, ownerId)
@@ -306,9 +299,9 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .search(criteria.getQuery(), isautocmp, islyrics, isbyArtist, sort, isMyAudio, offset).map(out-> {
+                .search(criteria.getQuery(), isautocmp, islyrics, isbyArtist, sort, isMyAudio, offset).map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for(int i = 0; i < out.items.size(); i++)
+                    for (int i = 0; i < out.items.size(); i++)
                         ret.add(new Audio()
                                 .setId(out.items.get(i).id)
                                 .setOwnerId(out.items.get(i).owner_id)

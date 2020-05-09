@@ -131,6 +131,18 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
                 .subscribe(this::onUploadComplete));
     }
 
+    private static Post safelyClone(Post post) {
+        try {
+            return post.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalArgumentException("Unable to clone post");
+        }
+    }
+
+    private static boolean validatePublishDate(long unixtime) {
+        return Unixtime.now() < unixtime;
+    }
+
     @NonNull
     private Owner getOwner() {
         return attrs.getOwner();
@@ -213,14 +225,6 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
     @Override
     ArrayList<AttachmenEntry> getNeedParcelSavingEntries() {
         return copyToArrayListWithPredicate(getData(), entry -> !(entry.getAttachment() instanceof Upload));
-    }
-
-    private static Post safelyClone(Post post) {
-        try {
-            return post.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new IllegalArgumentException("Unable to clone post");
-        }
     }
 
     private void onUploadComplete(Pair<Upload, UploadResult<?>> data) {
@@ -472,10 +476,6 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
         super.setTimerValue(unixtime);
     }
 
-    private static boolean validatePublishDate(long unixtime) {
-        return Unixtime.now() < unixtime;
-    }
-
     @Override
     protected void onPollCreateClick() {
         getView().openPollCreationWindow(getAccountId(), post.getOwnerId());
@@ -487,7 +487,7 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
 
     public void fireExitWithoutSavingClick() {
         this.canExit = true;
-        uploadManager.cancelAll(getAccountId(),uploadDestination);
+        uploadManager.cancelAll(getAccountId(), uploadDestination);
         getView().closeAsSuccess();
     }
 }

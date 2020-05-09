@@ -38,7 +38,7 @@ public class EntitiesWrapperAdapter implements JsonSerializer<EntitiesWrapper>, 
         JsonArray array = jsonElement.getAsJsonArray();
         List<Entity> entities = new ArrayList<>(array.size());
 
-        for(int i = 0; i < array.size(); i++){
+        for (int i = 0; i < array.size(); i++) {
             JsonObject root = array.get(i).getAsJsonObject();
 
             boolean nonnull = root.get(KEY_NON_NULL).getAsBoolean();
@@ -63,7 +63,7 @@ public class EntitiesWrapperAdapter implements JsonSerializer<EntitiesWrapper>, 
         List<Entity> entities = wrapper.get();
         JsonArray array = new JsonArray(entities.size());
 
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             JsonObject root = new JsonObject();
             root.add(KEY_NON_NULL, new JsonPrimitive(entity != null));
 

@@ -38,41 +38,41 @@ public class Model2Dto {
         return tokens;
     }*/
 
-    public static List<IAttachmentToken> createTokens(Collection<? extends AbsModel> models){
+    public static List<IAttachmentToken> createTokens(Collection<? extends AbsModel> models) {
         return MapUtil.mapAll(models, Model2Dto::createToken);
     }
 
-    public static IAttachmentToken createToken(AbsModel model){
-        if(model instanceof Document){
+    public static IAttachmentToken createToken(AbsModel model) {
+        if (model instanceof Document) {
             Document document = (Document) model;
             return AttachmentsTokenCreator.ofDocument(document.getId(), document.getOwnerId(), document.getAccessKey());
         }
 
-        if(model instanceof Audio){
+        if (model instanceof Audio) {
             Audio audio = (Audio) model;
             return AttachmentsTokenCreator.ofAudio(audio.getId(), audio.getOwnerId(), audio.getAccessKey());
         }
 
-        if(model instanceof Link){
+        if (model instanceof Link) {
             return AttachmentsTokenCreator.ofLink(((Link) model).getUrl());
         }
 
-        if(model instanceof Photo){
+        if (model instanceof Photo) {
             Photo photo = (Photo) model;
             return AttachmentsTokenCreator.ofPhoto(photo.getId(), photo.getOwnerId(), photo.getAccessKey());
         }
 
-        if(model instanceof Poll){
+        if (model instanceof Poll) {
             Poll poll = (Poll) model;
             return AttachmentsTokenCreator.ofPoll(poll.getId(), poll.getOwnerId());
         }
 
-        if(model instanceof Post){
+        if (model instanceof Post) {
             Post post = (Post) model;
             return AttachmentsTokenCreator.ofPost(post.getVkid(), post.getOwnerId());
         }
 
-        if(model instanceof Video){
+        if (model instanceof Video) {
             Video video = (Video) model;
             return AttachmentsTokenCreator.ofVideo(video.getId(), video.getOwnerId(), video.getAccessKey());
         }

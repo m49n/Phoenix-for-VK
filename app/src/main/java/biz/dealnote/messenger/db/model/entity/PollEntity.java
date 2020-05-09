@@ -11,49 +11,34 @@ public class PollEntity extends Entity {
     private final int id;
 
     private final int ownerId;
-
+    public boolean closed;
+    public int authorId;
+    public boolean canVote;
+    public boolean canEdit;
+    public boolean canReport;
+    public boolean canShare;
+    public long endDate;
+    public boolean multiple;
     private long creationTime;
-
     private String question;
-
     private int voteCount;
-
     private int[] myAnswerIds;
-
     private boolean anonymous;
-
     private List<Answer> answers;
-
     private boolean board;
 
-    public boolean closed;
-
-    public int authorId;
-
-    public boolean canVote;
-
-    public boolean canEdit;
-
-    public boolean canReport;
-
-    public boolean canShare;
-
-    public long endDate;
-
-    public boolean multiple;
-
-    public PollEntity setMultiple(boolean multiple) {
-        this.multiple = multiple;
-        return this;
+    public PollEntity(int id, int ownerId) {
+        this.id = id;
+        this.ownerId = ownerId;
     }
 
     public boolean isMultiple() {
         return multiple;
     }
 
-    public PollEntity(int id, int ownerId) {
-        this.id = id;
-        this.ownerId = ownerId;
+    public PollEntity setMultiple(boolean multiple) {
+        this.multiple = multiple;
+        return this;
     }
 
     public boolean isClosed() {
@@ -117,40 +102,6 @@ public class PollEntity extends Entity {
     public PollEntity setEndDate(long endDate) {
         this.endDate = endDate;
         return this;
-    }
-
-    public static final class Answer {
-
-        private final int id;
-
-        private final String text;
-
-        private final int voteCount;
-
-        private final double rate;
-
-        public Answer(int id, String text, int voteCount, double rate) {
-            this.id = id;
-            this.text = text;
-            this.voteCount = voteCount;
-            this.rate = rate;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public double getRate() {
-            return rate;
-        }
-
-        public int getVoteCount() {
-            return voteCount;
-        }
     }
 
     public int getId() {
@@ -222,5 +173,39 @@ public class PollEntity extends Entity {
     public PollEntity setBoard(boolean board) {
         this.board = board;
         return this;
+    }
+
+    public static final class Answer {
+
+        private final int id;
+
+        private final String text;
+
+        private final int voteCount;
+
+        private final double rate;
+
+        public Answer(int id, String text, int voteCount, double rate) {
+            this.id = id;
+            this.text = text;
+            this.voteCount = voteCount;
+            this.rate = rate;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public double getRate() {
+            return rate;
+        }
+
+        public int getVoteCount() {
+            return voteCount;
+        }
     }
 }

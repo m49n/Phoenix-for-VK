@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:controller_layout_id="@layout/player_controls"/>
+            app:controller_layout_id="@layout/player_controls" />
     </FrameLayout>
 
     <include layout="@layout/toolbar_photo" />

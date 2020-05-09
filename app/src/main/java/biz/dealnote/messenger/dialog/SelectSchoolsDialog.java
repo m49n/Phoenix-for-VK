@@ -33,8 +33,17 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
 
     private static final int COUNT_PER_REQUEST = 1000;
     private static final int RUN_SEACRH_DELAY = 1000;
+    private int mAccountId;
+    private int cityId;
+    private IDatabaseInteractor mDatabaseInteractor;
+    private ArrayList<School> mData;
+    private RecyclerView mRecyclerView;
+    private SchoolsAdapter mAdapter;
+    private String filter;
+    private Handler mHandler = new Handler();
+    private Runnable runSearchRunnable = () -> request(0);
 
-    public static SelectSchoolsDialog newInstance(int aid, int cityId, Bundle additional){
+    public static SelectSchoolsDialog newInstance(int aid, int cityId, Bundle additional) {
         Bundle args = additional == null ? new Bundle() : additional;
         args.putInt(Extra.CITY_ID, cityId);
         args.putInt(Extra.ACCOUNT_ID, aid);
@@ -42,16 +51,6 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
         selectCityDialog.setArguments(args);
         return selectCityDialog;
     }
-
-    private int mAccountId;
-    private int cityId;
-    private IDatabaseInteractor mDatabaseInteractor;
-
-    private ArrayList<School> mData;
-    private RecyclerView mRecyclerView;
-    private SchoolsAdapter mAdapter;
-    private String filter;
-    private Handler mHandler = new Handler();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,14 +84,12 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
         return root;
     }
 
-    private Runnable runSearchRunnable = () -> request(0);
-
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
-        if(mData == null){
+        if (mData == null) {
             mData = new ArrayList<>();
             firstRun = true;
         }
@@ -101,19 +98,19 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
         mAdapter.setListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if(firstRun){
+        if (firstRun) {
             request(0);
         }
     }
 
-    private void request(int offset){
+    private void request(int offset) {
         appendDisposable(mDatabaseInteractor.getSchools(mAccountId, cityId, filter, COUNT_PER_REQUEST, offset)
-        .compose(RxUtils.applySingleIOToMainSchedulers())
-        .subscribe(schools -> onDataReceived(offset, schools), t -> {/*todo*/}));
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(schools -> onDataReceived(offset, schools), t -> {/*todo*/}));
     }
 
-    private void onDataReceived(int offset, List<School> schools){
-        if(offset == 0){
+    private void onDataReceived(int offset, List<School> schools) {
+        if (offset == 0) {
             mData.clear();
         }
 

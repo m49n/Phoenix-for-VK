@@ -17,63 +17,45 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 public class Post extends AbsModel implements Parcelable, Cloneable {
 
     public static final int NO_STORED = -1;
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
 
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
     private int dbid;
-
     private int vkid;
-
     private int ownerId;
-
     private Owner author;
-
     private int authorId;
-
     private long date;
-
     private String text;
-
     private int replyOwnerId;
-
     private int replyPostId;
-
     private boolean friendsOnly;
-
     private int commentsCount;
-
     private boolean canPostComment;
-
     private int likesCount;
-
     private boolean canLike;
-
     private boolean userLikes;
-
     private int repostCount;
-
     private boolean canRepost;
-
     private boolean userReposted;
-
     private int postType;
-
     private Attachments attachments;
-
     private int signerId;
-
     private User creator;
-
     private boolean canPin;
-
     private boolean pinned;
-
     private List<Post> copyHierarchy;
-
     private boolean deleted;
-
     private PostSource source;
-
     private int viewCount;
-
     private int creatorId;
     private boolean canEdit;
 
@@ -110,18 +92,6 @@ public class Post extends AbsModel implements Parcelable, Cloneable {
         viewCount = in.readInt();
         canEdit = in.readByte() != 0;
     }
-
-    public static final Creator<Post> CREATOR = new Creator<Post>() {
-        @Override
-        public Post createFromParcel(Parcel in) {
-            return new Post(in);
-        }
-
-        @Override
-        public Post[] newArray(int size) {
-            return new Post[size];
-        }
-    };
 
     public Post() {
 
@@ -370,13 +340,13 @@ public class Post extends AbsModel implements Parcelable, Cloneable {
         return this;
     }
 
+    public int getViewCount() {
+        return viewCount;
+    }
+
     public Post setViewCount(int viewCount) {
         this.viewCount = viewCount;
         return this;
-    }
-
-    public int getViewCount() {
-        return viewCount;
     }
 
     @NonNull
@@ -502,23 +472,23 @@ public class Post extends AbsModel implements Parcelable, Cloneable {
         return null;
     }
 
-    public String findFirstImageCopiesInclude(@PhotoSize int prefferedSize, boolean excludeNonAspectRatio){
-        if(hasPhotos()){
+    public String findFirstImageCopiesInclude(@PhotoSize int prefferedSize, boolean excludeNonAspectRatio) {
+        if (hasPhotos()) {
             return getAttachments().getPhotos().get(0).getUrlForSize(prefferedSize, excludeNonAspectRatio);
         }
 
-        if(hasVideos()){
+        if (hasVideos()) {
             return getAttachments().getVideos().get(0).getImage();
         }
 
-        if(hasDocs()){
+        if (hasDocs()) {
             return getAttachments().getDocs().get(0).getPreviewWithSize(prefferedSize, excludeNonAspectRatio);
         }
 
-        if(hasCopyHierarchy()){
-            for(Post copy : getCopyHierarchy()){
+        if (hasCopyHierarchy()) {
+            for (Post copy : getCopyHierarchy()) {
                 String url = copy.findFirstImageCopiesInclude(prefferedSize, excludeNonAspectRatio);
-                if(nonEmpty(url)){
+                if (nonEmpty(url)) {
                     return url;
                 }
             }
@@ -544,12 +514,12 @@ public class Post extends AbsModel implements Parcelable, Cloneable {
         return this;
     }
 
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
     public Post setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
         return this;
-    }
-
-    public boolean isCanEdit() {
-        return canEdit;
     }
 }

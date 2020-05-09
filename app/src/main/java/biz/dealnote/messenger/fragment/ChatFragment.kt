@@ -92,11 +92,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     private var editMessageGroup: ViewGroup? = null
     private var editMessageText: TextView? = null
 
-    private var goto_button : FloatingActionButton? = null
+    private var goto_button: FloatingActionButton? = null
 
-    private var Writing_msg_Group : View? = null
-    private var Writing_msg : TextView? = null
-    private var Writing_msg_Ava : ImageView? = null
+    private var Writing_msg_Group: View? = null
+    private var Writing_msg: TextView? = null
+    private var Writing_msg_Ava: ImageView? = null
 
     private var toolbar: Toolbar? = null
 
@@ -156,17 +156,16 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         buttonUnpin?.setOnClickListener { presenter?.fireUnpinClick() }
 
         goto_button = root.findViewById(R.id.goto_button)
-        if(Settings.get().accounts().getType(Settings.get().accounts().current).equals("hacked")) {
+        if (Settings.get().accounts().getType(Settings.get().accounts().current).equals("hacked")) {
             goto_button?.setImageResource(R.drawable.attachment)
             goto_button?.setOnClickListener { presenter?.fireDialogAttachmentsClick() }
-        }
-        else {
+        } else {
             goto_button?.setImageResource(R.drawable.view)
             goto_button?.setOnClickListener { recyclerView?.smoothScrollToPosition(presenter?.getConversation()!!.unreadCount) }
         }
 
 
-        if(!Settings.get().other().isEnable_last_read())
+        if (!Settings.get().other().isEnable_last_read())
             goto_button?.visibility = View.GONE
         else
             goto_button?.visibility = View.VISIBLE
@@ -194,8 +193,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     @SuppressLint("SetTextI18n")
-    override fun displayWriting(owner: Owner)
-    {
+    override fun displayWriting(owner: Owner) {
         Writing_msg?.text = owner.fullName + " " + getString(R.string.user_type_message)
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
@@ -208,8 +206,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             override fun onAnimationEnd(view: View) {
                 Writing_msg_Group?.visibility = View.GONE
             }
+
             override fun onAnimationStart(view: View) {
             }
+
             override fun onAnimationCancel(view: View) {
             }
         })
@@ -425,7 +425,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 pinnedTitle?.text = sender.fullName
                 pinnedSubtitle?.text = body
                 buttonUnpin?.visibility = if (canChange) View.VISIBLE else View.GONE
-                pinnedView?.setOnClickListener {recyclerView?.scrollToPosition(0); presenter?.requestFromNetInMessage(pinned.id);}
+                pinnedView?.setOnClickListener { recyclerView?.scrollToPosition(0); presenter?.requestFromNetInMessage(pinned.id); }
             }
         }
     }
@@ -502,7 +502,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         if (requestCode == REQUEST_EDIT_MESSAGE) {
             if (data != null && data.hasExtra(Extra.BUNDLE)) {
                 val bundle = data.getParcelableExtra<ModelsBundle>(Extra.BUNDLE)
-                if(bundle != null)
+                if (bundle != null)
                     presenter?.fireEditMessageResult(bundle)
             }
 
@@ -519,10 +519,9 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
             val file = data?.getStringExtra(FileManagerFragment.returnFileParameter)
 
-            if(file != null && nonEmpty(file)){
+            if (file != null && nonEmpty(file)) {
                 onEditLocalFileSelected(file)
-            }
-            else if (vkphotos.isNotEmpty()) {
+            } else if (vkphotos.isNotEmpty()) {
                 presenter?.fireEditAttachmentsSelected(vkphotos)
             } else if (localPhotos.isNotEmpty()) {
                 onEditLocalPhotosSelected(localPhotos)
@@ -782,7 +781,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 val tr = AppCompatResources.getDrawable(requireActivity(), (if (peerId >= VKApiMessage.CHAT_PEER) R.drawable.groups else R.drawable.person))
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()))
                 toolbar?.navigationIcon = tr
-                if(peerId in 0..VKApiMessage.CHAT_PEER) {
+                if (peerId in 0..VKApiMessage.CHAT_PEER) {
                     toolbar?.setNavigationOnClickListener {
                         run {
                             showUserWall(Settings.get().accounts().current, peerId)
@@ -1030,7 +1029,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             return false
         }
 
-        if(presenter!!.inPinnedHas) {
+        if (presenter!!.inPinnedHas) {
             presenter?.setInPinnedHas(false)
             presenter?.fireRefreshClick()
             return false

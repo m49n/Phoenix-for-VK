@@ -13,5 +13,7 @@ public class StikerSetColumns implements BaseColumns {
     public static final String PROMOTED = "promoted";
     public static final String ACTIVE = "active";
     public static final String STICKERS = "stickers";
-    private StikerSetColumns(){}
+
+    private StikerSetColumns() {
+    }
 }

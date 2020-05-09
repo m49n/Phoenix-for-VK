@@ -20,6 +20,13 @@ import biz.dealnote.messenger.util.Utils;
  */
 public class MySpinnerView extends RelativeLayout {
 
+    private String mHintText;
+    @ColorInt
+    private int mHintColor;
+    @ColorInt
+    private int mTextColor;
+    private TextView mTextView;
+
     public MySpinnerView(Context context) {
         this(context, null);
     }
@@ -28,16 +35,6 @@ public class MySpinnerView extends RelativeLayout {
         super(context, attrs);
         init(context, attrs);
     }
-
-    private String mHintText;
-
-    @ColorInt
-    private int mHintColor;
-
-    @ColorInt
-    private int mTextColor;
-
-    private TextView mTextView;
 
     private void init(Context context, AttributeSet attrs) {
         inflate(context, R.layout.view_my_spinner, this);
@@ -65,12 +62,12 @@ public class MySpinnerView extends RelativeLayout {
         mTextView.setTextColor(mHintColor);
     }
 
-    public void setIconOnClickListener(View.OnClickListener listener){
+    public void setIconOnClickListener(View.OnClickListener listener) {
         findViewById(R.id.icon).setOnClickListener(listener);
     }
 
-    public void setValue(String value){
-        if(value != null){
+    public void setValue(String value) {
+        if (value != null) {
             mTextView.setText(value);
             mTextView.setTextColor(mTextColor);
         } else {

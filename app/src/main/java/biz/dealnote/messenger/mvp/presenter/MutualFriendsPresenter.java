@@ -22,9 +22,10 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class MutualFriendsPresenter extends SimpleOwnersPresenter<ISimpleOwnersView> {
 
     private final int userId;
-    private boolean endOfContent;
     private final IRelationshipInteractor relationshipInteractor;
-
+    private boolean endOfContent;
+    private boolean actualDataLoading;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
     public MutualFriendsPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.userId = userId;
@@ -32,9 +33,6 @@ public class MutualFriendsPresenter extends SimpleOwnersPresenter<ISimpleOwnersV
 
         requestActualData(0);
     }
-
-    private boolean actualDataLoading;
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     private void resolveRefreshingView() {
         if (isGuiResumed()) {

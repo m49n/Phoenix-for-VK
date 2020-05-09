@@ -16,7 +16,7 @@ public class VkApiFeedList {
     @SerializedName("source_ids")
     public int[] source_ids;
 
-    public VkApiFeedList(){
+    public VkApiFeedList() {
 
     }
 }

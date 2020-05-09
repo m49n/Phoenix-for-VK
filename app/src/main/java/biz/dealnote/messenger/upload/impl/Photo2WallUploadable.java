@@ -49,7 +49,7 @@ public class Photo2WallUploadable implements IUploadable<Photo> {
         final int accountId = upload.getAccountId();
 
         Single<UploadServer> serverSingle;
-        if(Objects.nonNull(initialServer)){
+        if (Objects.nonNull(initialServer)) {
             serverSingle = Single.just(initialServer);
         } else {
             serverSingle = networker.vkDefault(accountId)
@@ -70,27 +70,27 @@ public class Photo2WallUploadable implements IUploadable<Photo> {
                                 .photos()
                                 .saveWallPhoto(userId, groupId, dto.photo, dto.server, dto.hash, null, null, null)
                                 .flatMap(photos -> {
-                                    if(photos.isEmpty()){
+                                    if (photos.isEmpty()) {
                                         return Single.error(new NotFoundException());
                                     }
 
                                     Photo photo = Dto2Model.transform(photos.get(0));
                                     UploadResult<Photo> result = new UploadResult<>(server, photo);
 
-                                    if(upload.isAutoCommit()){
+                                    if (upload.isAutoCommit()) {
                                         return commit(attachmentsRepository, upload, photo).andThen(Single.just(result));
                                     } else {
                                         return Single.just(result);
                                     }
                                 }));
-            } catch (Exception e){
+            } catch (Exception e) {
                 safelyClose(is[0]);
                 return Single.error(e);
             }
         });
     }
 
-    private Completable commit(IAttachmentsRepository repository, Upload upload, Photo photo){
+    private Completable commit(IAttachmentsRepository repository, Upload upload, Photo photo) {
         int accountId = upload.getAccountId();
         UploadDestination dest = upload.getDestination();
 

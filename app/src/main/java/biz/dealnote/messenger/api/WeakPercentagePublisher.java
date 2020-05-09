@@ -17,7 +17,7 @@ public class WeakPercentagePublisher implements PercentagePublisher {
     @Override
     public void onProgressChanged(int percentage) {
         PercentagePublisher orig = ref.get();
-        if(orig != null){
+        if (orig != null) {
             orig.onProgressChanged(percentage);
         }
     }

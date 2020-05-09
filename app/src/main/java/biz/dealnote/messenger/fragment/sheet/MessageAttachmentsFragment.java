@@ -59,6 +59,9 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     private static final int REQUEST_PERMISSION_CAMERA = 16;
     private static final int REQUEST_PHOTO_FROM_CAMERA = 15;
     private static final int REQUEST_SELECT_ATTACHMENTS = 14;
+    private AttachmentsBottomSheetAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private View mEmptyView;
 
     public static MessageAttachmentsFragment newInstance(int accountId, int messageOwnerId, int messageId, ModelsBundle bundle) {
         Bundle args = new Bundle();
@@ -70,10 +73,6 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         fragment.setArguments(args);
         return fragment;
     }
-
-    private AttachmentsBottomSheetAdapter mAdapter;
-    private RecyclerView mRecyclerView;
-    private View mEmptyView;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -107,14 +106,14 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         super.onActivityResult(requestCode, resultCode, data);
         Bundle extras = nonNull(data) ? data.getExtras() : null;
 
-        if(requestCode == REQUEST_ADD_VKPHOTO && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_ADD_VKPHOTO && resultCode == Activity.RESULT_OK) {
             ArrayList<Photo> vkphotos = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             ArrayList<LocalPhoto> localPhotos = data.getParcelableArrayListExtra(Extra.PHOTOS);
             String file = data.getStringExtra(FileManagerFragment.returnFileParameter);
             getPresenter().firePhotosSelected(vkphotos, localPhotos, file);
         }
 
-        if(requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK) {
             ArrayList<AbsModel> attachments = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             getPresenter().fireAttachmentsSelected(attachments);
         }
@@ -137,7 +136,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void displayAttachments(List<AttachmenEntry> entries) {
-        if(nonNull(mRecyclerView)){
+        if (nonNull(mRecyclerView)) {
             this.mAdapter = new AttachmentsBottomSheetAdapter(requireActivity(), entries, this);
             this.mRecyclerView.setAdapter(mAdapter);
         }
@@ -145,7 +144,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void notifyDataAdded(int positionStart, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(positionStart + 1, count);
         }
     }
@@ -164,7 +163,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void notifyEntryRemoved(int index) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index + 1);
         }
     }
@@ -193,21 +192,21 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void changePercentageSmoothly(int dataPosition, int progress) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.changeUploadProgress(dataPosition, progress, true);
         }
     }
 
     @Override
     public void notifyItemChanged(int index) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(index + 1);
         }
     }
 
     @Override
     public void setEmptyViewVisible(boolean visible) {
-        if(nonNull(mEmptyView)){
+        if (nonNull(mEmptyView)) {
             mEmptyView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
@@ -228,7 +227,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void syncAccompanyingWithParent(ModelsBundle accompanying) {
-        if(nonNull(getTargetFragment())){
+        if (nonNull(getTargetFragment())) {
             Intent data = new Intent()
                     .putExtra(Extra.BUNDLE, accompanying);
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, data);
@@ -248,8 +247,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     }
 
     @Override
-    public void startAddAudioActivity(int accountId, int ownerId)
-    {
+    public void startAddAudioActivity(int accountId, int ownerId) {
         Intent intent = AudioSelectActivity.createIntent(requireActivity(), accountId, ownerId);
         startActivityForResult(intent, REQUEST_SELECT_ATTACHMENTS);
     }
@@ -257,7 +255,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_PERMISSION_CAMERA){
+        if (requestCode == REQUEST_PERMISSION_CAMERA) {
             getPresenter().fireCameraPermissionResolved();
         }
     }
@@ -274,22 +272,21 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
 
     @Override
     public void showError(String errorText) {
-        if(isAdded()){
+        if (isAdded()) {
             Utils.showRedTopToast(requireActivity(), errorText);
         }
     }
 
     @Override
     public void showError(int titleTes, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             showError(getString(titleTes, params));
         }
     }
 
     @Override
-    public PhoenixToast getPhoenixToast()
-    {
-        if(isAdded()) {
+    public PhoenixToast getPhoenixToast() {
+        if (isAdded()) {
             return PhoenixToast.CreatePhoenixToast(requireActivity());
         }
         return PhoenixToast.CreatePhoenixToast(null);

@@ -36,6 +36,30 @@ class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
         super(base);
     }
 
+    private static ContentValues createCv(PhotoAlbumEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(PhotoAlbumsColumns.ALBUM_ID, dbo.getId());
+        cv.put(PhotoAlbumsColumns.OWNER_ID, dbo.getOwnerId());
+        cv.put(PhotoAlbumsColumns.TITLE, dbo.getTitle());
+        cv.put(PhotoAlbumsColumns.SIZE, dbo.getSize());
+        cv.put(PhotoAlbumsColumns.PRIVACY_VIEW, nonNull(dbo.getPrivacyView()) ? GSON.toJson(dbo.getPrivacyView()) : null);
+        cv.put(PhotoAlbumsColumns.PRIVACY_COMMENT, nonNull(dbo.getPrivacyComment()) ? GSON.toJson(dbo.getPrivacyComment()) : null);
+        cv.put(PhotoAlbumsColumns.DESCRIPTION, dbo.getDescription());
+        cv.put(PhotoAlbumsColumns.CAN_UPLOAD, dbo.isCanUpload());
+        cv.put(PhotoAlbumsColumns.UPDATED, dbo.getUpdatedTime());
+        cv.put(PhotoAlbumsColumns.CREATED, dbo.getCreatedTime());
+
+        if (Objects.nonNull(dbo.getSizes())) {
+            cv.put(PhotoAlbumsColumns.SIZES, GSON.toJson(dbo.getSizes()));
+        } else {
+            cv.putNull(PhotoAlbumsColumns.SIZES);
+        }
+
+        cv.put(PhotoAlbumsColumns.UPLOAD_BY_ADMINS, dbo.isUploadByAdminsOnly());
+        cv.put(PhotoAlbumsColumns.COMMENTS_DISABLED, dbo.isCommentsDisabled());
+        return cv;
+    }
+
     @Override
     public Single<Optional<PhotoAlbumEntity>> findAlbumById(int accountId, int ownerId, int albumId) {
         return Single.create(e -> {
@@ -46,8 +70,8 @@ class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
             Cursor cursor = getContext().getContentResolver().query(uri, null, where, args, null);
 
             PhotoAlbumEntity album = null;
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     album = mapAlbum(cursor);
                 }
 
@@ -88,14 +112,14 @@ class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
             ArrayList<ContentProviderOperation> operations = new ArrayList<>(clearBeforeStore ? albums.size() + 1 : albums.size());
             Uri uri = MessengerContentProvider.getPhotoAlbumsContentUriFor(accountId);
 
-            if(clearBeforeStore){
+            if (clearBeforeStore) {
                 operations.add(ContentProviderOperation
                         .newDelete(uri)
                         .withSelection(PhotoAlbumsColumns.OWNER_ID + " = ?", new String[]{String.valueOf(ownerId)})
                         .build());
             }
 
-            for(PhotoAlbumEntity dbo : albums){
+            for (PhotoAlbumEntity dbo : albums) {
                 operations.add(ContentProviderOperation
                         .newInsert(uri)
                         .withValues(createCv(dbo))
@@ -105,30 +129,6 @@ class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
             getContext().getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
             e.onComplete();
         });
-    }
-
-    private static ContentValues createCv(PhotoAlbumEntity dbo){
-        ContentValues cv = new ContentValues();
-        cv.put(PhotoAlbumsColumns.ALBUM_ID, dbo.getId());
-        cv.put(PhotoAlbumsColumns.OWNER_ID, dbo.getOwnerId());
-        cv.put(PhotoAlbumsColumns.TITLE, dbo.getTitle());
-        cv.put(PhotoAlbumsColumns.SIZE, dbo.getSize());
-        cv.put(PhotoAlbumsColumns.PRIVACY_VIEW, nonNull(dbo.getPrivacyView()) ? GSON.toJson(dbo.getPrivacyView()) : null);
-        cv.put(PhotoAlbumsColumns.PRIVACY_COMMENT, nonNull(dbo.getPrivacyComment()) ? GSON.toJson(dbo.getPrivacyComment()) : null);
-        cv.put(PhotoAlbumsColumns.DESCRIPTION, dbo.getDescription());
-        cv.put(PhotoAlbumsColumns.CAN_UPLOAD, dbo.isCanUpload());
-        cv.put(PhotoAlbumsColumns.UPDATED, dbo.getUpdatedTime());
-        cv.put(PhotoAlbumsColumns.CREATED, dbo.getCreatedTime());
-
-        if(Objects.nonNull(dbo.getSizes())){
-            cv.put(PhotoAlbumsColumns.SIZES, GSON.toJson(dbo.getSizes()));
-        } else {
-            cv.putNull(PhotoAlbumsColumns.SIZES);
-        }
-
-        cv.put(PhotoAlbumsColumns.UPLOAD_BY_ADMINS, dbo.isUploadByAdminsOnly());
-        cv.put(PhotoAlbumsColumns.COMMENTS_DISABLED, dbo.isCommentsDisabled());
-        return cv;
     }
 
     @Override
@@ -158,17 +158,17 @@ class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
                 .setCommentsDisabled(cursor.getInt(cursor.getColumnIndex(PhotoAlbumsColumns.COMMENTS_DISABLED)) == 1);
 
         String sizesJson = cursor.getString(cursor.getColumnIndex(PhotoAlbumsColumns.SIZES));
-        if(nonEmpty(sizesJson)){
+        if (nonEmpty(sizesJson)) {
             album.setSizes(GSON.fromJson(sizesJson, PhotoSizeEntity.class));
         }
 
         String privacyViewText = cursor.getString(cursor.getColumnIndex(PhotoAlbumsColumns.PRIVACY_VIEW));
-        if(nonEmpty(privacyViewText)){
+        if (nonEmpty(privacyViewText)) {
             album.setPrivacyView(GSON.fromJson(privacyViewText, PrivacyEntity.class));
         }
 
         String privacyCommentText = cursor.getString(cursor.getColumnIndex(PhotoAlbumsColumns.PRIVACY_COMMENT));
-        if(nonEmpty(privacyCommentText)){
+        if (nonEmpty(privacyCommentText)) {
             album.setPrivacyComment(GSON.fromJson(privacyCommentText, PrivacyEntity.class));
         }
 

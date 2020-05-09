@@ -30,9 +30,9 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
     private static final String TAG = NewsfeedCommentsPresenter.class.getSimpleName();
 
     private final List<NewsfeedComment> data;
-    private String nextFrom;
-
     private final INewsfeedInteractor interactor;
+    private String nextFrom;
+    private boolean loadingNow;
 
     public NewsfeedCommentsPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -41,8 +41,6 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
 
         loadAtLast();
     }
-
-    private boolean loadingNow;
 
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;
@@ -55,8 +53,8 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
         resolveLoadingView();
     }
 
-    private void resolveLoadingView(){
-        if(isGuiResumed()){
+    private void resolveLoadingView() {
+        if (isGuiResumed()) {
             getView().showLoading(loadingNow);
         }
     }
@@ -67,7 +65,7 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
         load(null);
     }
 
-    private void load(final String startFrom){
+    private void load(final String startFrom) {
         appendDisposable(interactor.getNewsfeedComments(getAccountId(), 10, startFrom, "post,photo,video,topic")
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(pair -> onDataReceived(startFrom, pair.getSecond(), pair.getFirst()), this::onRequestError));
@@ -80,18 +78,18 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
         load(startFrom);
     }
 
-    private void onRequestError(Throwable throwable){
+    private void onRequestError(Throwable throwable) {
         showError(getView(), getCauseIfRuntime(throwable));
         setLoadingNow(false);
     }
 
-    private void onDataReceived(String startFrom, String newNextFrom, List<NewsfeedComment> comments){
+    private void onDataReceived(String startFrom, String newNextFrom, List<NewsfeedComment> comments) {
         setLoadingNow(false);
 
         boolean atLast = isEmpty(startFrom);
         nextFrom = newNextFrom;
 
-        if(atLast){
+        if (atLast) {
             data.clear();
             data.addAll(comments);
             callView(INewsfeedCommentsView::notifyDataSetChanged);
@@ -108,18 +106,18 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
         viewHost.displayData(data);
     }
 
-    private boolean canLoadMore(){
+    private boolean canLoadMore() {
         return nonEmpty(nextFrom) && !loadingNow;
     }
 
     public void fireScrollToEnd() {
-        if(canLoadMore()){
+        if (canLoadMore()) {
             loadNext();
         }
     }
 
     public void fireRefresh() {
-        if(loadingNow){
+        if (loadingNow) {
             return;
         }
 
@@ -129,7 +127,7 @@ public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCo
     public void fireCommentBodyClick(NewsfeedComment newsfeedComment) {
         Comment comment = newsfeedComment.getComment();
         AssertUtils.requireNonNull(comment);
-        
+
         getView().openComments(getAccountId(), comment.getCommented(), null);
     }
 }

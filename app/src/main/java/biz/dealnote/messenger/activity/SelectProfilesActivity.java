@@ -26,12 +26,45 @@ import biz.dealnote.messenger.util.Utils;
 public class SelectProfilesActivity extends MainActivity implements SelectedProfilesAdapter.ActionListener, ProfileSelectable {
 
     private static final String TAG = SelectProfilesActivity.class.getSimpleName();
-
+    private static final String SAVE_SELECTED_USERS = "save_selected_users";
     private SelectProfileCriteria mSelectableCriteria;
-
     private ArrayList<User> mSelectedUsers;
     private RecyclerView mRecyclerView;
     private SelectedProfilesAdapter mProfilesAdapter;
+
+    public static Intent createIntent(Context context, @NonNull Place initialPlace, @NonNull SelectProfileCriteria criteria) {
+        return new Intent(context, SelectProfilesActivity.class)
+                .setAction(SelectProfilesActivity.ACTION_OPEN_PLACE)
+                .putExtra(Extra.PLACE, initialPlace)
+                .putExtra(Extra.CRITERIA, criteria);
+    }
+
+    /*public static void start(Activity activity, @Nullable ArrayList<VKApiUser> users, int requestCode){
+        int aid = Accounts.getCurrentUid(activity);
+        Place place = PlaceFactory.getFriendsFollowersPlace(aid, aid, FriendsTabsFragment.TAB_ALL_FRIENDS, null);
+
+        Intent intent = new Intent(activity, SelectProfilesActivity.class);
+        intent.setAction(SelectProfilesActivity.ACTION_OPEN_PLACE);
+        intent.putExtra(Extra.PLACE, place);
+        intent.putParcelableArrayListExtra(Extra.USERS, users);
+        activity.startActivityForResult(intent, requestCode);
+    }*/
+
+    public static void startFriendsSelection(@NonNull Fragment fragment, int requestCode) {
+        int aid = Settings.get()
+                .accounts()
+                .getCurrent();
+
+        Place place = PlaceFactory.getFriendsFollowersPlace(aid, aid, FriendsTabsFragment.TAB_ALL_FRIENDS, null);
+
+        SelectProfileCriteria criteria = new SelectProfileCriteria().setFriendsOnly(true);
+
+        Intent intent = new Intent(fragment.requireActivity(), SelectProfilesActivity.class);
+        intent.setAction(SelectProfilesActivity.ACTION_OPEN_PLACE);
+        intent.putExtra(Extra.PLACE, place);
+        intent.putExtra(Extra.CRITERIA, criteria);
+        fragment.startActivityForResult(intent, requestCode);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,42 +93,6 @@ public class SelectProfilesActivity extends MainActivity implements SelectedProf
 
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mProfilesAdapter);
-    }
-
-    private static final String SAVE_SELECTED_USERS = "save_selected_users";
-
-    /*public static void start(Activity activity, @Nullable ArrayList<VKApiUser> users, int requestCode){
-        int aid = Accounts.getCurrentUid(activity);
-        Place place = PlaceFactory.getFriendsFollowersPlace(aid, aid, FriendsTabsFragment.TAB_ALL_FRIENDS, null);
-
-        Intent intent = new Intent(activity, SelectProfilesActivity.class);
-        intent.setAction(SelectProfilesActivity.ACTION_OPEN_PLACE);
-        intent.putExtra(Extra.PLACE, place);
-        intent.putParcelableArrayListExtra(Extra.USERS, users);
-        activity.startActivityForResult(intent, requestCode);
-    }*/
-
-    public static Intent createIntent(Context context, @NonNull Place initialPlace, @NonNull SelectProfileCriteria criteria) {
-        return new Intent(context, SelectProfilesActivity.class)
-                .setAction(SelectProfilesActivity.ACTION_OPEN_PLACE)
-                .putExtra(Extra.PLACE, initialPlace)
-                .putExtra(Extra.CRITERIA, criteria);
-    }
-
-    public static void startFriendsSelection(@NonNull Fragment fragment, int requestCode) {
-        int aid = Settings.get()
-                .accounts()
-                .getCurrent();
-
-        Place place = PlaceFactory.getFriendsFollowersPlace(aid, aid, FriendsTabsFragment.TAB_ALL_FRIENDS, null);
-
-        SelectProfileCriteria criteria = new SelectProfileCriteria().setFriendsOnly(true);
-
-        Intent intent = new Intent(fragment.requireActivity(), SelectProfilesActivity.class);
-        intent.setAction(SelectProfilesActivity.ACTION_OPEN_PLACE);
-        intent.putExtra(Extra.PLACE, place);
-        intent.putExtra(Extra.CRITERIA, criteria);
-        fragment.startActivityForResult(intent, requestCode);
     }
 
     @Override

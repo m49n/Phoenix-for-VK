@@ -24,13 +24,14 @@ import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
  */
 public class MessagesSearchPresenter extends AbsSearchPresenter<IMessagesSearchView, MessageSeachCriteria, Message, IntNextFrom> {
 
+    private static final int COUNT = 50;
     private final IMessagesRepository messagesInteractor;
 
     public MessagesSearchPresenter(int accountId, @Nullable MessageSeachCriteria criteria, @Nullable Bundle savedInstanceState) {
         super(accountId, criteria, savedInstanceState);
         this.messagesInteractor = Repository.INSTANCE.getMessages();
 
-        if(canSearch(getCriteria())){
+        if (canSearch(getCriteria())) {
             doSearch();
         }
     }
@@ -44,8 +45,6 @@ public class MessagesSearchPresenter extends AbsSearchPresenter<IMessagesSearchV
     boolean isAtLast(IntNextFrom startFrom) {
         return startFrom.getOffset() == 0;
     }
-
-    private static final int COUNT = 50;
 
     @Override
     Single<Pair<List<Message>, IntNextFrom>> doSearch(int accountId, MessageSeachCriteria criteria, IntNextFrom nextFrom) {

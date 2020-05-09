@@ -34,8 +34,8 @@ public class ToticDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.is_fixed = optIntAsBoolean(root, "is_fixed");
 
         JsonElement commentsJson = root.get("comments");
-        if(nonNull(commentsJson)){
-            if(commentsJson.isJsonObject()){
+        if (nonNull(commentsJson)) {
+            if (commentsJson.isJsonObject()) {
                 dto.comments = context.deserialize(commentsJson, CommentsDto.class);
             } else {
                 dto.comments = new CommentsDto();

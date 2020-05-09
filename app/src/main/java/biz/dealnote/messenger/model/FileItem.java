@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class FileItem implements Parcelable {
 
+    public static final Creator<FileItem> CREATOR = new Creator<FileItem>() {
+        @Override
+        public FileItem createFromParcel(Parcel in) {
+            return new FileItem(in);
+        }
+
+        @Override
+        public FileItem[] newArray(int size) {
+            return new FileItem[size];
+        }
+    };
     public boolean directory;
     public String file;
     public String details;
@@ -32,18 +43,6 @@ public class FileItem implements Parcelable {
         Modification = in.readLong();
         canRead = in.readByte() != 0;
     }
-
-    public static final Creator<FileItem> CREATOR = new Creator<FileItem>() {
-        @Override
-        public FileItem createFromParcel(Parcel in) {
-            return new FileItem(in);
-        }
-
-        @Override
-        public FileItem[] newArray(int size) {
-            return new FileItem[size];
-        }
-    };
 
     @Override
     public String toString() {

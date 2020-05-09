@@ -15,6 +15,19 @@ import biz.dealnote.messenger.R;
 
 public class CircleRoadProgress extends View {
 
+    private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
+    private static final Property<CircleRoadProgress, Float> PROGRESS_PROPERTY = new Property<CircleRoadProgress, Float>(Float.class, "displayed-precentage") {
+        @Override
+        public Float get(CircleRoadProgress view) {
+            return view.displayedPercentage;
+        }
+
+        @Override
+        public void set(CircleRoadProgress view, Float value) {
+            view.displayedPercentage = value;
+            view.invalidate();
+        }
+    };
     private float circleCenterPointX;
     private float circleCenterPointY;
     private int roadColor;
@@ -23,8 +36,8 @@ public class CircleRoadProgress extends View {
     private int arcLoadingColor;
     private float arcLoadingStrokeWidth;
     private float arcLoadingStartAngle;
-
     private int percent;
+    private float displayedPercentage;
 
     public CircleRoadProgress(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,8 +52,6 @@ public class CircleRoadProgress extends View {
         int paddingInContainer = 3;
         roadRadius = (w / 2) - (roadStrokeWidth / 2) - paddingInContainer;
     }
-
-    private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -94,20 +105,7 @@ public class CircleRoadProgress extends View {
         invalidate();
     }
 
-    private static final Property<CircleRoadProgress, Float> PROGRESS_PROPERTY = new Property<CircleRoadProgress, Float>(Float.class, "displayed-precentage") {
-        @Override
-        public Float get(CircleRoadProgress view) {
-            return view.displayedPercentage;
-        }
-
-        @Override
-        public void set(CircleRoadProgress view, Float value) {
-            view.displayedPercentage = value;
-            view.invalidate();
-        }
-    };
-
-    public void changePercentageSmoothly(int percent){
+    public void changePercentageSmoothly(int percent) {
         this.percent = percent;
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, PROGRESS_PROPERTY, percent);
@@ -115,6 +113,4 @@ public class CircleRoadProgress extends View {
         //animator.setInterpolator(new AccelerateInterpolator(1.75f));
         animator.start();
     }
-
-    private float displayedPercentage;
 }

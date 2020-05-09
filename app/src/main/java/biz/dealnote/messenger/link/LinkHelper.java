@@ -50,10 +50,8 @@ import static biz.dealnote.messenger.util.Utils.singletonArrayList;
 public class LinkHelper {
 
 
-
     public static void openUrl(Activity context, int accountId, String link) {
-        if(link == null || link.length() <= 0)
-        {
+        if (link == null || link.length() <= 0) {
             PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.empty_clipboard_url);
             return;
         }

@@ -29,5 +29,6 @@ public interface IGroupSettingsInteractor {
     Single<Pair<List<Banned>, IntNextFrom>> getBanned(int accountId, int groupId, IntNextFrom startFrom, int count);
 
     Single<List<Manager>> getManagers(int accountId, int groupId);
+
     Single<List<ContactInfo>> getContacts(int accountId, int groupId);
 }

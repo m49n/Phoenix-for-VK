@@ -38,13 +38,13 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.search")
     Single<BaseResponse<Items<VKApiAudio>>> searchOld(@Field("q") String query,
-                                                   @Field("auto_complete") Integer autoComplete,
-                                                   @Field("lyrics") Integer lyrics,
-                                                   @Field("performer_only") Integer performerOnly,
-                                                   @Field("sort") Integer sort,
-                                                   @Field("search_own") Integer searchOwn,
-                                                   @Field("offset") Integer offset,
-                                                      @Field("v") String version );
+                                                      @Field("auto_complete") Integer autoComplete,
+                                                      @Field("lyrics") Integer lyrics,
+                                                      @Field("performer_only") Integer performerOnly,
+                                                      @Field("sort") Integer sort,
+                                                      @Field("search_own") Integer searchOwn,
+                                                      @Field("offset") Integer offset,
+                                                      @Field("v") String version);
 
     //https://vk.com/dev/audio.restore
     @FormUrlEncoded
@@ -69,11 +69,11 @@ public interface IAudioService {
     /**
      * Returns a list of audio files of a user or community.
      *
-     * @param ownerId  ID of the user or community that owns the audio file.
-     *                 Use a negative value to designate a community ID.
-     *                 Current user id is used by default
-     * @param offset   Offset needed to return a specific subset of audio files.
-     * @param count    Number of audio files to return.
+     * @param ownerId ID of the user or community that owns the audio file.
+     *                Use a negative value to designate a community ID.
+     *                Current user id is used by default
+     * @param offset  Offset needed to return a specific subset of audio files.
+     * @param count   Number of audio files to return.
      * @return Returns the total results number in count field and an array of objects describing audio in items field.
      */
     //https://vk.com/dev/audio.get
@@ -89,17 +89,17 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.get")
     Single<BaseResponse<Items<VKApiAudio>>> getOld(@Field("album_id") Integer album_id,
-                                                @Field("owner_id") Integer ownerId,
-                                                @Field("offset") Integer offset,
-                                                @Field("count") Integer count,
-                                                @Field("v") String version,
+                                                   @Field("owner_id") Integer ownerId,
+                                                   @Field("offset") Integer offset,
+                                                   @Field("count") Integer count,
+                                                   @Field("v") String version,
                                                    @Field("access_key") String accessKey);
 
     @FormUrlEncoded
     @POST("audio.getPopular")
     Single<BaseResponse<List<VKApiAudio>>> getPopular(@Field("only_eng") Integer foreign,
-                                                @Field("genre_id") Integer genre,
-                                                @Field("count") Integer count);
+                                                      @Field("genre_id") Integer genre,
+                                                      @Field("count") Integer count);
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
@@ -110,18 +110,18 @@ public interface IAudioService {
     @POST("audio.getRecommendations")
     Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsOld(@Field("user_id") Integer user_id,
                                                                   @Field("count") Integer count,
-                                                                  @Field("v") String version );
+                                                                  @Field("v") String version);
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
     Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsByAudio(@Field("target_audio") String audio,
-                                                               @Field("count") Integer count);
+                                                                      @Field("count") Integer count);
 
     @FormUrlEncoded
     @POST("audio.getRecommendations")
     Single<BaseResponse<Items<VKApiAudio>>> getRecommendationsByAudioOld(@Field("target_audio") String audio,
                                                                          @Field("count") Integer count,
-                                                                         @Field("v") String version );
+                                                                         @Field("v") String version);
 
     @FormUrlEncoded
     @POST("audio.getById")
@@ -149,14 +149,14 @@ public interface IAudioService {
     @FormUrlEncoded
     @POST("audio.followPlaylist")
     Single<BaseResponse<VKApiAudioPlaylist>> followPlaylist(@Field("playlist_id") int playlist_id,
-                                                 @Field("owner_id") int ownerId,
+                                                            @Field("owner_id") int ownerId,
                                                             @Field("access_key") String accessKey);
 
     @FormUrlEncoded
     @POST("audio.getPlaylistById")
     Single<BaseResponse<VKApiAudioPlaylist>> getPlaylistById(@Field("playlist_id") int playlist_id,
-                                                            @Field("owner_id") int ownerId,
-                                                            @Field("access_key") String accessKey);
+                                                             @Field("owner_id") int ownerId,
+                                                             @Field("access_key") String accessKey);
 
 
 }

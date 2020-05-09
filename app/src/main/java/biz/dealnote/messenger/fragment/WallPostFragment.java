@@ -68,6 +68,8 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
     private AttachmentsViewBinder attachmentsViewBinder;
     private Transformation transformation;
     private ViewGroup root;
+    private AttachmentsHolder mAttachmentsViews;
+    private boolean mTextSelectionAllowed;
 
     public static WallPostFragment newInstance(Bundle args) {
         WallPostFragment fragment = new WallPostFragment();
@@ -118,8 +120,6 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
                 .build()
                 .apply(requireActivity());
     }
-
-    private AttachmentsHolder mAttachmentsViews;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -239,19 +239,17 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         getPhoenixToast().showToast(R.string.copied_text);
     }
 
-    private boolean mTextSelectionAllowed;
-
-    private void resolveTextSelection(){
-        if(nonNull(mText)){
+    private void resolveTextSelection() {
+        if (nonNull(mText)) {
             mText.setTextIsSelectable(mTextSelectionAllowed);
         }
 
         ViewGroup copiesRoot = mAttachmentsViews.getVgPosts();
 
-        for(int i = 0; i < copiesRoot.getChildCount(); i++){
+        for (int i = 0; i < copiesRoot.getChildCount(); i++) {
             ViewGroup copyRoot = (ViewGroup) copiesRoot.getChildAt(i);
             TextView textView = copyRoot.findViewById(R.id.item_post_copy_text);
-            if(nonNull(textView)){
+            if (nonNull(textView)) {
                 textView.setTextIsSelectable(mTextSelectionAllowed);
             }
         }
@@ -271,38 +269,10 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         menu.findItem(R.id.restore_post).setVisible(optionView.canRestore);
     }
 
-    private static final class OptionView implements IWallPostView.IOptionView {
-
-        boolean canDelete;
-        boolean canRestore;
-        boolean canPin;
-        boolean canUnpin;
-        boolean canEdit;
-
-        @Override
-        public void setCanDelete(boolean can) {
-            this.canDelete = can;
-        }
-
-        @Override
-        public void setCanRestore(boolean can) {
-            this.canRestore = can;
-        }
-
-        @Override
-        public void setCanPin(boolean can) {
-            this.canPin = can;
-        }
-
-        @Override
-        public void setCanUnpin(boolean can) {
-            this.canUnpin = can;
-        }
-
-        @Override
-        public void setCanEdit(boolean can) {
-            this.canEdit = can;
-        }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.single_post_menu, menu);
     }
 
     /*private boolean canEdit() {
@@ -332,12 +302,6 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
     }*/
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.single_post_menu, menu);
-    }
-
-    @Override
     public void displayDefaultToolbaTitle() {
         super.setToolbarTitle(getString(R.string.wall_post));
     }
@@ -351,7 +315,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
     public void displayToolbatSubtitle(int subtitleType, long datetime) {
         String formattedDate = AppTextUtils.getDateFromUnixTime(requireActivity(), datetime);
 
-        switch (subtitleType){
+        switch (subtitleType) {
             case SUBTITLE_NORMAL:
                 super.setToolbarSubtitle(formattedDate);
                 break;
@@ -373,7 +337,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
 
     @Override
     public void displayPostInfo(Post post) {
-        if(isNull(root)){
+        if (isNull(root)) {
             return;
         }
 
@@ -395,6 +359,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
             public void onOwnerClick(int ownerId) {
                 onOpenOwner(ownerId);
             }
+
             @Override
             public void onOtherClick(String URL) {
                 LinkHelper.openUrl(requireActivity(), Settings.get().accounts().getCurrent(), URL);
@@ -421,7 +386,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
 
     @Override
     public void displayLoading() {
-        if(nonNull(root)){
+        if (nonNull(root)) {
             root.findViewById(R.id.fragment_post_deleted).setVisibility(View.GONE);
             root.findViewById(R.id.post_content).setVisibility(View.GONE);
             root.findViewById(R.id.post_loading_root).setVisibility(View.VISIBLE);
@@ -447,7 +412,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
 
     @Override
     public void displayLikes(int count, boolean userLikes) {
-        if(nonNull(mLikeButton)){
+        if (nonNull(mLikeButton)) {
             mLikeButton.setActive(userLikes);
             mLikeButton.setCount(count);
             mLikeButton.setIcon(userLikes ? R.drawable.heart_filled : R.drawable.heart);
@@ -456,21 +421,21 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
 
     @Override
     public void setCommentButtonVisible(boolean visible) {
-        if(nonNull(mCommentsButton)){
+        if (nonNull(mCommentsButton)) {
             mCommentsButton.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
     @Override
     public void displayCommentCount(int count) {
-        if(nonNull(mCommentsButton)){
+        if (nonNull(mCommentsButton)) {
             mCommentsButton.setCount(count);
         }
     }
 
     @Override
     public void displayReposts(int count, boolean userReposted) {
-        if(nonNull(mShareButton)){
+        if (nonNull(mShareButton)) {
             mShareButton.setCount(count);
             mShareButton.setActive(userReposted);
         }
@@ -511,5 +476,39 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
     @Override
     public void onHashTagClicked(String hashTag) {
         getPresenter().fireHasgTagClick(hashTag);
+    }
+
+    private static final class OptionView implements IWallPostView.IOptionView {
+
+        boolean canDelete;
+        boolean canRestore;
+        boolean canPin;
+        boolean canUnpin;
+        boolean canEdit;
+
+        @Override
+        public void setCanDelete(boolean can) {
+            this.canDelete = can;
+        }
+
+        @Override
+        public void setCanRestore(boolean can) {
+            this.canRestore = can;
+        }
+
+        @Override
+        public void setCanPin(boolean can) {
+            this.canPin = can;
+        }
+
+        @Override
+        public void setCanUnpin(boolean can) {
+            this.canUnpin = can;
+        }
+
+        @Override
+        public void setCanEdit(boolean can) {
+            this.canEdit = can;
+        }
     }
 }

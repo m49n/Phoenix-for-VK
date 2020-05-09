@@ -32,7 +32,7 @@ import static biz.dealnote.messenger.push.NotificationUtils.configOtherPushNotif
  */
 public class NewPostPushMessage {
 
-//key: image_type, value: user, class: class java.lang.String
+    //key: image_type, value: user, class: class java.lang.String
 //key: from_id, value: 216143660, class: class java.lang.String
 //key: id, value: new_post_216143660_1137, class: class java.lang.String
 //key: url, value: https://vk.com/wall216143660_1137, class: class java.lang.String
@@ -64,18 +64,7 @@ public class NewPostPushMessage {
     private int owner_id;
     private String context_type;
 
-    class PostContext {
-        @SerializedName("item_id")
-        int item_id;
-
-        @SerializedName("owner_id")
-        int owner_id;
-
-        @SerializedName("type")
-        String type;
-    }
-
-    public NewPostPushMessage(int accountId, RemoteMessage remote){
+    public NewPostPushMessage(int accountId, RemoteMessage remote) {
         this.accountId = accountId;
         Map<String, String> data = remote.getData();
         this.from = Long.parseLong(remote.getFrom());
@@ -96,8 +85,8 @@ public class NewPostPushMessage {
         this.context_type = context.type;
     }
 
-    public void notifyIfNeed(Context context){
-        if(from_id == 0){
+    public void notifyIfNeed(Context context) {
+        if (from_id == 0) {
             Logger.wtf("NewPostPushMessage", "from_id is NULL!!!");
             return;
         }
@@ -111,9 +100,9 @@ public class NewPostPushMessage {
         notifyImpl(context);
     }
 
-    private void notifyImpl(Context context){
+    private void notifyImpl(Context context) {
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(context));
         }
 
@@ -139,5 +128,16 @@ public class NewPostPushMessage {
         configOtherPushNotification(notification);
 
         nManager.notify(String.valueOf(from_id), NotificationHelper.NOTIFICATION_NEW_POSTS_ID, notification);
+    }
+
+    class PostContext {
+        @SerializedName("item_id")
+        int item_id;
+
+        @SerializedName("owner_id")
+        int owner_id;
+
+        @SerializedName("type")
+        String type;
     }
 }

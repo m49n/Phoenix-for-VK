@@ -49,6 +49,44 @@ class FaveStorage extends AbsStorage implements IFaveStorage {
         super(mRepositoryContext);
     }
 
+    private static ContentValues createFaveCv(FavePageEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(FavePageColumns._ID, dbo.getId());
+        cv.put(FavePageColumns.DESCRIPTION, dbo.getDescription());
+        cv.put(FavePageColumns.FAVE_TYPE, dbo.getFaveType());
+        cv.put(FavePageColumns.UPDATED_TIME, dbo.getUpdateDate());
+        return cv;
+    }
+
+    private static UserEntity mapUser(int accountId, int id) {
+        return Injection.provideStores().owners().findUserDboById(accountId, id).blockingGet().get();
+    }
+
+    private static CommunityEntity mapGroup(int accountId, int id) {
+        return Injection.provideStores().owners().findCommunityDboById(accountId, Math.abs(id)).blockingGet().get();
+    }
+
+    private static FavePageEntity mapFaveUserDbo(Cursor cursor, int accountId) {
+        return new FavePageEntity(cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID)))
+                .setDescription(cursor.getString(cursor.getColumnIndex(FavePageColumns.DESCRIPTION)))
+                .setUpdateDate(cursor.getLong(cursor.getColumnIndex(FavePageColumns.UPDATED_TIME)))
+                .setFaveType(cursor.getString(cursor.getColumnIndex(FavePageColumns.FAVE_TYPE)))
+                .setUser(mapUser(accountId, cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID))));
+    }
+
+    private static FavePageEntity mapFaveGroupDbo(Cursor cursor, int accountId) {
+        return new FavePageEntity(cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID)))
+                .setDescription(cursor.getString(cursor.getColumnIndex(FavePageColumns.DESCRIPTION)))
+                .setUpdateDate(cursor.getLong(cursor.getColumnIndex(FavePageColumns.UPDATED_TIME)))
+                .setFaveType(cursor.getString(cursor.getColumnIndex(FavePageColumns.FAVE_TYPE)))
+                .setGroup(mapGroup(accountId, cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID))));
+    }
+
+    private static PhotoEntity mapFavePhoto(Cursor cursor) {
+        String json = cursor.getString(cursor.getColumnIndex(FavePhotosColumns.PHOTO));
+        return GSON.fromJson(json, PhotoEntity.class);
+    }
+
     @Override
     public Single<List<PostEntity>> getFavePosts(@NonNull FavePostsCriteria criteria) {
         return Single.create(e -> {
@@ -169,39 +207,6 @@ class FaveStorage extends AbsStorage implements IFaveStorage {
         });
     }
 
-    private static ContentValues createFaveCv(FavePageEntity dbo) {
-        ContentValues cv = new ContentValues();
-        cv.put(FavePageColumns._ID, dbo.getId());
-        cv.put(FavePageColumns.DESCRIPTION, dbo.getDescription());
-        cv.put(FavePageColumns.FAVE_TYPE, dbo.getFaveType());
-        cv.put(FavePageColumns.UPDATED_TIME, dbo.getUpdateDate());
-        return cv;
-    }
-
-    private static UserEntity mapUser(int accountId, int id) {
-        return Injection.provideStores().owners().findUserDboById(accountId, id).blockingGet().get();
-    }
-
-    private static CommunityEntity mapGroup(int accountId, int id) {
-        return Injection.provideStores().owners().findCommunityDboById(accountId, Math.abs(id)).blockingGet().get();
-    }
-
-    private static FavePageEntity mapFaveUserDbo(Cursor cursor, int accountId) {
-        return new FavePageEntity(cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID)))
-                .setDescription(cursor.getString(cursor.getColumnIndex(FavePageColumns.DESCRIPTION)))
-                .setUpdateDate(cursor.getLong(cursor.getColumnIndex(FavePageColumns.UPDATED_TIME)))
-                .setFaveType(cursor.getString(cursor.getColumnIndex(FavePageColumns.FAVE_TYPE)))
-                .setUser(mapUser(accountId, cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID))));
-    }
-
-    private static FavePageEntity mapFaveGroupDbo(Cursor cursor, int accountId) {
-        return new FavePageEntity(cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID)))
-                .setDescription(cursor.getString(cursor.getColumnIndex(FavePageColumns.DESCRIPTION)))
-                .setUpdateDate(cursor.getLong(cursor.getColumnIndex(FavePageColumns.UPDATED_TIME)))
-                .setFaveType(cursor.getString(cursor.getColumnIndex(FavePageColumns.FAVE_TYPE)))
-                .setGroup(mapGroup(accountId, cursor.getInt(cursor.getColumnIndex(FavePageColumns._ID))));
-    }
-
     @Override
     public Completable removePage(int accountId, int ownerId, boolean isUser) {
         return Completable.fromAction(() -> {
@@ -211,7 +216,6 @@ class FaveStorage extends AbsStorage implements IFaveStorage {
             getContentResolver().delete(uri, where, args);
         });
     }
-
 
     @Override
     public Single<List<FavePageEntity>> getFaveUsers(int accountId) {
@@ -489,11 +493,6 @@ class FaveStorage extends AbsStorage implements IFaveStorage {
 
             e.onComplete();
         });
-    }
-
-    private static PhotoEntity mapFavePhoto(Cursor cursor) {
-        String json = cursor.getString(cursor.getColumnIndex(FavePhotosColumns.PHOTO));
-        return GSON.fromJson(json, PhotoEntity.class);
     }
 
     private FaveLinkEntity mapFaveLink(Cursor cursor) {

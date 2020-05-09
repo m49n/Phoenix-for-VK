@@ -33,6 +33,7 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
     private boolean permissionRequestedOnce;
 
     private List<LocalPhoto> mLocalPhotos;
+    private boolean mLoadingNow;
 
     public LocalPhotosPresenter(LocalImageAlbum album, int maxSelectionCount,
                                 @Nullable Bundle savedInstanceState) {
@@ -58,15 +59,13 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
         if (mLoadingNow) return;
 
         changeLoadingState(true);
-        if(mLocalImageAlbum != null) {
+        if (mLocalImageAlbum != null) {
             appendDisposable(Stores.getInstance()
                     .localPhotos()
                     .getPhotos(mLocalImageAlbum.getId())
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(this::onDataLoaded, this::onLoadError));
-        }
-        else
-        {
+        } else {
             appendDisposable(Stores.getInstance()
                     .localPhotos()
                     .getPhotos()
@@ -75,11 +74,11 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
         }
     }
 
-    private void onLoadError(Throwable throwable){
+    private void onLoadError(Throwable throwable) {
         changeLoadingState(false);
     }
 
-    private void onDataLoaded(List<LocalPhoto> data){
+    private void onDataLoaded(List<LocalPhoto> data) {
         changeLoadingState(false);
         mLocalPhotos = data;
         resolveListData();
@@ -95,16 +94,14 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
         resolveEmptyTextVisibility();
     }
 
-    private void resolveEmptyTextVisibility(){
-        if(isGuiReady()) getView().setEmptyTextVisible(Utils.safeIsEmpty(mLocalPhotos));
+    private void resolveEmptyTextVisibility() {
+        if (isGuiReady()) getView().setEmptyTextVisible(Utils.safeIsEmpty(mLocalPhotos));
     }
 
     private void resolveListData() {
         if (isGuiReady())
             getView().displayData(mLocalPhotos);
     }
-
-    private boolean mLoadingNow;
 
     private void changeLoadingState(boolean loading) {
         mLoadingNow = loading;
@@ -174,7 +171,7 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
     }
 
     private void resolveFabVisibility(boolean visible, boolean anim) {
-        if(isGuiReady()){
+        if (isGuiReady()) {
             getView().setFabVisible(visible, anim);
         }
     }
@@ -182,8 +179,9 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
     public void fireRefresh() {
         loadData();
     }
+
     public void fireReadExternalStoregePermissionResolved() {
-        if(AppPerms.hasReadStoragePermision(getApplicationContext())){
+        if (AppPerms.hasReadStoragePermision(getApplicationContext())) {
             loadData();
         }
     }

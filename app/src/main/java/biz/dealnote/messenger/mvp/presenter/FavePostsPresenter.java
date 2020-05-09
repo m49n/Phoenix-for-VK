@@ -32,10 +32,15 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
 
+    private final static int COUNT = 50;
     private final List<Post> posts;
     private final IFaveInteractor faveInteractor;
-
     private final IWallsRepository wallInteractor;
+    private boolean requestNow;
+    private boolean actualInfoReceived;
+    private int nextOffset;
+    private CompositeDisposable cacheCompositeDisposable = new CompositeDisposable();
+    private boolean endOfContent;
 
     public FavePostsPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -51,23 +56,22 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
         loadCachedData();
     }
 
-    public void LoadTool()
-    {
+    public void LoadTool() {
         requestActual(0);
     }
 
     private void onPostUpdate(PostUpdate update) {
         // likes only
-        if(isNull(update.getLikeUpdate())){
+        if (isNull(update.getLikeUpdate())) {
             return;
         }
 
         Pair<Integer, Post> info = Utils.findInfoByPredicate(posts, post -> post.getVkid() == update.getPostId() && post.getOwnerId() == update.getOwnerId());
 
-        if(nonNull(info)){
+        if (nonNull(info)) {
             Post post = info.getSecond();
 
-            if(getAccountId() == update.getAccountId()){
+            if (getAccountId() == update.getAccountId()) {
                 post.setUserLikes(update.getLikeUpdate().isLiked());
             }
 
@@ -75,10 +79,6 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
             callView(view -> view.notifyItemChanged(info.getFirst()));
         }
     }
-
-    private boolean requestNow;
-
-    private boolean actualInfoReceived;
 
     private void setRequestNow(boolean requestNow) {
         this.requestNow = requestNow;
@@ -103,8 +103,6 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
         view.displayData(posts);
     }
 
-    private final static int COUNT = 50;
-
     private void requestActual(int offset) {
         setRequestNow(true);
         final int accountId = super.getAccountId();
@@ -118,8 +116,6 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
         setRequestNow(false);
         showError(getView(), throwable);
     }
-
-    private int nextOffset;
 
     private void onActualDataReceived(int offset, int newOffset, List<Post> data) {
         setRequestNow(false);
@@ -153,8 +149,6 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
         callView(IFavePostsView::notifyDataSetChanged);
     }
 
-    private CompositeDisposable cacheCompositeDisposable = new CompositeDisposable();
-
     @Override
     public void onDestroyed() {
         cacheCompositeDisposable.dispose();
@@ -166,8 +160,6 @@ public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
             requestActual(0);
         }
     }
-
-    private boolean endOfContent;
 
     public void fireScrollToEnd() {
         if (!posts.isEmpty() && actualInfoReceived && !requestNow && !endOfContent) {

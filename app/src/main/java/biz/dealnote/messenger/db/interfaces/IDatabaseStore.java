@@ -12,5 +12,6 @@ import io.reactivex.Single;
  */
 public interface IDatabaseStore {
     Completable storeCountries(int accountId, List<CountryEntity> dbos);
+
     Single<List<CountryEntity>> getCountries(int accountId);
 }

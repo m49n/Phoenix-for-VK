@@ -41,7 +41,12 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
         implements IPollView, PollAnswersAdapter.OnAnswerChangedCallback {
 
-    public static Bundle buildArgs(int aid, Poll poll){
+    private TextView mQuestion;
+    private TextView mVotesCount;
+    private PollAnswersAdapter mAnswersAdapter;
+    private ProgressButton mButton;
+
+    public static Bundle buildArgs(int aid, Poll poll) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Extra.POLL, poll);
         bundle.putInt(Extra.ACCOUNT_ID, aid);
@@ -53,11 +58,6 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
         fragment.setArguments(bundle);
         return fragment;
     }
-
-    private TextView mQuestion;
-    private TextView mVotesCount;
-    private PollAnswersAdapter mAnswersAdapter;
-    private ProgressButton mButton;
 
     @Nullable
     @Override
@@ -86,7 +86,7 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
 
     @Override
     public void displayQuestion(String title) {
-        if(nonNull(mQuestion)){
+        if (nonNull(mQuestion)) {
             mQuestion.setText(title);
         }
     }
@@ -94,7 +94,7 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
     @Override
     public void displayType(boolean anonymous) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(nonNull(actionBar)){
+        if (nonNull(actionBar)) {
             actionBar.setTitle(anonymous ? R.string.anonymous_poll : R.string.open_poll);
         }
     }
@@ -102,7 +102,7 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
     @Override
     public void displayCreationTime(long unixtime) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(nonNull(actionBar)){
+        if (nonNull(actionBar)) {
             String formattedDate = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
                     .format(new Date(unixtime * 1000));
             actionBar.setSubtitle(formattedDate);
@@ -111,28 +111,28 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
 
     @Override
     public void displayVoteCount(int count) {
-        if(nonNull(mVotesCount)){
+        if (nonNull(mVotesCount)) {
             mVotesCount.setText(getString(R.string.votes_count, count));
         }
     }
 
     @Override
     public void displayVotesList(List<Poll.Answer> answers, boolean canCheck, boolean multiply, Set<Integer> checked) {
-        if(nonNull(mAnswersAdapter)){
+        if (nonNull(mAnswersAdapter)) {
             mAnswersAdapter.setData(answers, canCheck, multiply, checked);
         }
     }
 
     @Override
     public void displayLoading(boolean loading) {
-        if(nonNull(mButton)){
+        if (nonNull(mButton)) {
             mButton.changeState(loading);
         }
     }
 
     @Override
     public void setupButton(boolean voted) {
-        if(nonNull(mButton)){
+        if (nonNull(mButton)) {
             mButton.setText(getString(voted ? R.string.remove_vote : R.string.add_vote));
         }
     }

@@ -19,15 +19,14 @@ import io.reactivex.Single;
  */
 public class LogsStorage implements ILogsStorage {
 
+    private static final String[] PROJECTION = {LogColumns._ID, LogColumns.TYPE, LogColumns.DATE, LogColumns.TAG, LogColumns.BODY};
     private final Context context;
 
     public LogsStorage(Context context) {
         this.context = context.getApplicationContext();
     }
 
-    private static final String[] PROJECTION = {LogColumns._ID, LogColumns.TYPE, LogColumns.DATE, LogColumns.TAG, LogColumns.BODY};
-
-    private static LogEvent map(Cursor cursor){
+    private static LogEvent map(Cursor cursor) {
         return new LogEvent(cursor.getInt(cursor.getColumnIndex(LogColumns._ID)))
                 .setType(cursor.getInt(cursor.getColumnIndex(LogColumns.TYPE)))
                 .setDate(cursor.getLong(cursor.getColumnIndex(LogColumns.DATE)))
@@ -35,13 +34,12 @@ public class LogsStorage implements ILogsStorage {
                 .setBody(cursor.getString(cursor.getColumnIndex(LogColumns.BODY)));
     }
 
-    private LogSqliteHelper helper(){
+    private LogSqliteHelper helper() {
         return LogSqliteHelper.getInstance(context);
     }
 
     @Override
-    public void Clear()
-    {
+    public void Clear() {
         helper().Clear();
     }
 
@@ -68,11 +66,11 @@ public class LogsStorage implements ILogsStorage {
     @Override
     public Single<List<LogEvent>> getAll(int type) {
         return Single.fromCallable(() -> {
-            Cursor cursor = helper().getReadableDatabase().query(LogColumns.TABLENAME, PROJECTION, LogColumns.TYPE  + " = ?",
-                            new String[]{String.valueOf(type)}, null, null, LogColumns._ID + " DESC");
+            Cursor cursor = helper().getReadableDatabase().query(LogColumns.TABLENAME, PROJECTION, LogColumns.TYPE + " = ?",
+                    new String[]{String.valueOf(type)}, null, null, LogColumns._ID + " DESC");
 
             List<LogEvent> data = new ArrayList<>(cursor.getCount());
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 data.add(map(cursor));
             }
 

@@ -20,13 +20,22 @@ class UserLongpoll implements ILongpoll {
 
     private static final String TAG = "Longpoll_TAG";
     private static final int DELAY_ON_ERROR = 10 * 1000;
-
+    private static final int V = 3;
+    private static final int MODE =
+            2 + //получать вложения;
+                    8 + // возвращать расширенный набор событий;
+                    //32 + //возвращать pts (это требуется для работы метода messages.getLongPollHistory без ограничения в 256 последних событий);
+                    64 + //в событии с кодом 8 (друг стал онлайн) возвращать дополнительные данные в поле $extra (подробнее в разделе Структура событий);
+                    128; //возвращать с сообщением параметр random_id (random_id может быть передан при отправке сообщения методом messages.send).
     private final int accountId;
+    private final INetworker networker;
     private String key;
     private String server;
     private Long ts;
     private Callback callback;
-    private final INetworker networker;
+    private Disposable mCurrentUpdatesDisposable;
+    private Observable<Long> mDelayedObservable = Observable.interval(DELAY_ON_ERROR, DELAY_ON_ERROR,
+            TimeUnit.MILLISECONDS, Injection.provideMainThreadScheduler());
 
     UserLongpoll(INetworker networker, int accountId, Callback callback) {
         this.accountId = accountId;
@@ -62,8 +71,6 @@ class UserLongpoll implements ILongpoll {
     private boolean isListeningNow() {
         return nonNull(mCurrentUpdatesDisposable) && !mCurrentUpdatesDisposable.isDisposed();
     }
-
-    private Disposable mCurrentUpdatesDisposable;
 
     private void resetUpdatesDisposable() {
         if (nonNull(mCurrentUpdatesDisposable)) {
@@ -110,8 +117,6 @@ class UserLongpoll implements ILongpoll {
                 .subscribe(this::onUpdates, this::onUpdatesGetError));
     }
 
-    private static final int V = 3;
-
     private void setDisposable(Disposable disposable) {
         mCurrentUpdatesDisposable = disposable;
     }
@@ -135,10 +140,10 @@ class UserLongpoll implements ILongpoll {
         }
     }
 
-    private void fixUpdates(VkApiLongpollUpdates updates){
-        if(nonEmpty(updates.add_message_updates)){
-            for(AddMessageUpdate update : updates.add_message_updates){
-                if(update.outbox){
+    private void fixUpdates(VkApiLongpollUpdates updates) {
+        if (nonEmpty(updates.add_message_updates)) {
+            for (AddMessageUpdate update : updates.add_message_updates) {
+                if (update.outbox) {
                     update.from = accountId;
                 }
             }
@@ -150,19 +155,9 @@ class UserLongpoll implements ILongpoll {
         getWithDelay();
     }
 
-    private Observable<Long> mDelayedObservable = Observable.interval(DELAY_ON_ERROR, DELAY_ON_ERROR,
-            TimeUnit.MILLISECONDS, Injection.provideMainThreadScheduler());
-
     private void getWithDelay() {
         setDisposable(mDelayedObservable.subscribe(o -> get()));
     }
-
-    private static final int MODE =
-            2 + //получать вложения;
-                    8 + // возвращать расширенный набор событий;
-                    //32 + //возвращать pts (это требуется для работы метода messages.getLongPollHistory без ограничения в 256 последних событий);
-                    64 + //в событии с кодом 8 (друг стал онлайн) возвращать дополнительные данные в поле $extra (подробнее в разделе Структура событий);
-                    128; //возвращать с сообщением параметр random_id (random_id может быть передан при отправке сообщения методом messages.send).
 
     public interface Callback {
         void onUpdates(int aid, VkApiLongpollUpdates updates);

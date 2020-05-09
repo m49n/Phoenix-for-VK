@@ -5,9 +5,31 @@ import android.os.Parcelable;
 
 public class SectionMenuItem extends AbsMenuItem implements Parcelable {
 
+    public static Creator<SectionMenuItem> CREATOR = new Creator<SectionMenuItem>() {
+        public SectionMenuItem createFromParcel(Parcel source) {
+            return new SectionMenuItem(source);
+        }
+
+        public SectionMenuItem[] newArray(int size) {
+            return new SectionMenuItem[size];
+        }
+    };
     private int section;
     private int title;
     private int count;
+
+    public SectionMenuItem(int type, int section, int title) {
+        super(type);
+        this.section = section;
+        this.title = title;
+    }
+
+    public SectionMenuItem(Parcel in) {
+        super(in);
+        this.section = in.readInt();
+        this.title = in.readInt();
+        this.count = in.readInt();
+    }
 
     public int getSection() {
         return section;
@@ -33,22 +55,6 @@ public class SectionMenuItem extends AbsMenuItem implements Parcelable {
         this.count = count;
     }
 
-    public static Creator<SectionMenuItem> CREATOR = new Creator<SectionMenuItem>() {
-        public SectionMenuItem createFromParcel(Parcel source) {
-            return new SectionMenuItem(source);
-        }
-
-        public SectionMenuItem[] newArray(int size) {
-            return new SectionMenuItem[size];
-        }
-    };
-
-    public SectionMenuItem(int type, int section, int title) {
-        super(type);
-        this.section = section;
-        this.title = title;
-    }
-
     @Override
     public int hashCode() {
         int result = super.hashCode();
@@ -67,13 +73,6 @@ public class SectionMenuItem extends AbsMenuItem implements Parcelable {
         dest.writeInt(section);
         dest.writeInt(title);
         dest.writeInt(count);
-    }
-
-    public SectionMenuItem(Parcel in) {
-        super(in);
-        this.section = in.readInt();
-        this.title = in.readInt();
-        this.count = in.readInt();
     }
 
     @Override

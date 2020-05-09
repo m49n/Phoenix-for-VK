@@ -13,6 +13,17 @@ import biz.dealnote.messenger.api.model.VkApiPrivacy;
  */
 public class SimplePrivacy implements Parcelable {
 
+    public static final Creator<SimplePrivacy> CREATOR = new Creator<SimplePrivacy>() {
+        @Override
+        public SimplePrivacy createFromParcel(Parcel in) {
+            return new SimplePrivacy(in);
+        }
+
+        @Override
+        public SimplePrivacy[] newArray(int size) {
+            return new SimplePrivacy[size];
+        }
+    };
     private final String type;
     private final List<Entry> entries;
 
@@ -25,18 +36,6 @@ public class SimplePrivacy implements Parcelable {
         type = in.readString();
         entries = in.createTypedArrayList(Entry.CREATOR);
     }
-
-    public static final Creator<SimplePrivacy> CREATOR = new Creator<SimplePrivacy>() {
-        @Override
-        public SimplePrivacy createFromParcel(Parcel in) {
-            return new SimplePrivacy(in);
-        }
-
-        @Override
-        public SimplePrivacy[] newArray(int size) {
-            return new SimplePrivacy[size];
-        }
-    };
 
     public String getType() {
         return type;
@@ -61,22 +60,20 @@ public class SimplePrivacy implements Parcelable {
 
         public static final int TYPE_USER = 1;
         public static final int TYPE_FRIENDS_LIST = 2;
+        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
+            @Override
+            public Entry createFromParcel(Parcel in) {
+                return new Entry(in);
+            }
 
+            @Override
+            public Entry[] newArray(int size) {
+                return new Entry[size];
+            }
+        };
         private int type;
         private int id;
         private boolean allowed;
-
-        public int getType() {
-            return type;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public boolean isAllowed() {
-            return allowed;
-        }
 
         public Entry(int type, int id, boolean allowed) {
             this.type = type;
@@ -90,17 +87,17 @@ public class SimplePrivacy implements Parcelable {
             allowed = in.readByte() != 0;
         }
 
-        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
-            @Override
-            public Entry createFromParcel(Parcel in) {
-                return new Entry(in);
-            }
+        public int getType() {
+            return type;
+        }
 
-            @Override
-            public Entry[] newArray(int size) {
-                return new Entry[size];
-            }
-        };
+        public int getId() {
+            return id;
+        }
+
+        public boolean isAllowed() {
+            return allowed;
+        }
 
         @Override
         public int describeContents() {

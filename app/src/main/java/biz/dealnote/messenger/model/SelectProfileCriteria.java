@@ -9,12 +9,6 @@ import android.os.Parcelable;
  */
 public final class SelectProfileCriteria implements Parcelable {
 
-    private boolean friendsOnly;
-
-    public SelectProfileCriteria(Parcel in) {
-        friendsOnly = in.readByte() != 0;
-    }
-
     public static final Creator<SelectProfileCriteria> CREATOR = new Creator<SelectProfileCriteria>() {
         @Override
         public SelectProfileCriteria createFromParcel(Parcel in) {
@@ -26,18 +20,23 @@ public final class SelectProfileCriteria implements Parcelable {
             return new SelectProfileCriteria[size];
         }
     };
+    private boolean friendsOnly;
+
+    public SelectProfileCriteria(Parcel in) {
+        friendsOnly = in.readByte() != 0;
+    }
 
     public SelectProfileCriteria() {
 
     }
 
+    public boolean isFriendsOnly() {
+        return friendsOnly;
+    }
+
     public SelectProfileCriteria setFriendsOnly(boolean friendsOnly) {
         this.friendsOnly = friendsOnly;
         return this;
-    }
-
-    public boolean isFriendsOnly() {
-        return friendsOnly;
     }
 
     @Override

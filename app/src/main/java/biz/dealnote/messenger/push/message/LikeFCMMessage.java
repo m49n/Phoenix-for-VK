@@ -49,25 +49,7 @@ public class LikeFCMMessage {
 // key: group_id, value: likes, class: class java.lang.String
 // key: context, value: {"feedback":true,"item_id":"456239045","owner_id":"280186075","type":"photo"}, class: class java.lang.String
 
-    class LikeContext {
-        @SerializedName("feedback")
-        int feedback;
-
-        @SerializedName("item_id")
-        int item_id;
-
-        @SerializedName("owner_id")
-        int owner_id;
-
-        @SerializedName("type")
-        String type;
-
-        @SerializedName("reply_id")
-        int reply_id;
-    }
-
     private final int accountId;
-
     private long from;
     private String id;
     private String url;
@@ -84,7 +66,6 @@ public class LikeFCMMessage {
     private int owner_id;
     private String like_type;
     private int reply_id;
-
     public LikeFCMMessage(int accountId, RemoteMessage remote) {
         this.accountId = accountId;
         Map<String, String> data = remote.getData();
@@ -113,28 +94,28 @@ public class LikeFCMMessage {
     private void notifyImpl(Context context) {
         Place place = null;
 
-        if("post".equals(like_type)){
+        if ("post".equals(like_type)) {
             place = PlaceFactory.getPostPreviewPlace(accountId, item_id, owner_id, null);
-        } else if("photo".equals(like_type)){
+        } else if ("photo".equals(like_type)) {
             ArrayList<Photo> photos = Utils.singletonArrayList(
                     new Photo().setId(item_id).setOwnerId(owner_id)
             );
 
             place = PlaceFactory.getSimpleGalleryPlace(accountId, photos, 0, true);
-        } else if("video".equals(like_type)){
+        } else if ("video".equals(like_type)) {
             place = PlaceFactory.getVideoPreviewPlace(accountId, owner_id, item_id, null);
-        } else if("post_comment".equals(like_type)){
+        } else if ("post_comment".equals(like_type)) {
             Commented commented = new Commented(item_id, owner_id, CommentedType.POST, null);
             place = PlaceFactory.getCommentsPlace(accountId, commented, reply_id);
-        } else if("photo_comment".equals(like_type)){
+        } else if ("photo_comment".equals(like_type)) {
             Commented commented = new Commented(item_id, owner_id, CommentedType.PHOTO, null);
             place = PlaceFactory.getCommentsPlace(accountId, commented, reply_id);
-        } else if("video_comment".equals(like_type)){
+        } else if ("video_comment".equals(like_type)) {
             Commented commented = new Commented(item_id, owner_id, CommentedType.VIDEO, null);
             place = PlaceFactory.getCommentsPlace(accountId, commented, reply_id);
         }
 
-        if(place == null){
+        if (place == null) {
             return;
         }
 
@@ -190,7 +171,7 @@ public class LikeFCMMessage {
 //        }
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getLikesChannel(context));
         }
 
@@ -226,5 +207,22 @@ public class LikeFCMMessage {
         }
 
         notifyImpl(context);
+    }
+
+    class LikeContext {
+        @SerializedName("feedback")
+        int feedback;
+
+        @SerializedName("item_id")
+        int item_id;
+
+        @SerializedName("owner_id")
+        int owner_id;
+
+        @SerializedName("type")
+        String type;
+
+        @SerializedName("reply_id")
+        int reply_id;
     }
 }

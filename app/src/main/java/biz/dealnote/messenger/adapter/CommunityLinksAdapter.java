@@ -27,6 +27,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class CommunityLinksAdapter extends RecyclerView.Adapter<CommunityLinksAdapter.Holder> {
 
     private List<VKApiCommunity.Link> links;
+    private ActionListener actionListener;
 
     public CommunityLinksAdapter(List<VKApiCommunity.Link> links) {
         this.links = links;
@@ -49,13 +50,13 @@ public class CommunityLinksAdapter extends RecyclerView.Adapter<CommunityLinksAd
         holder.subtitle.setText(link.desc);
 
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onClick(link);
             }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onLongClick(link);
             }
             return true;
@@ -63,7 +64,7 @@ public class CommunityLinksAdapter extends RecyclerView.Adapter<CommunityLinksAd
 
         String photoUrl = link.photo_50;
 
-        if(nonEmpty(photoUrl)){
+        if (nonEmpty(photoUrl)) {
             holder.icon.setVisibility(View.VISIBLE);
             PicassoInstance.with()
                     .load(photoUrl)
@@ -78,15 +79,8 @@ public class CommunityLinksAdapter extends RecyclerView.Adapter<CommunityLinksAd
         }
     }
 
-    private ActionListener actionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
-    }
-
-    public interface ActionListener {
-        void onClick(VKApiCommunity.Link link);
-        void onLongClick(VKApiCommunity.Link link);
     }
 
     @Override
@@ -97,6 +91,12 @@ public class CommunityLinksAdapter extends RecyclerView.Adapter<CommunityLinksAd
     public void setData(List<VKApiCommunity.Link> data) {
         this.links = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onClick(VKApiCommunity.Link link);
+
+        void onLongClick(VKApiCommunity.Link link);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

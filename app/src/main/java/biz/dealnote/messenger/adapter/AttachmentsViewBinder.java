@@ -92,15 +92,13 @@ import static biz.dealnote.messenger.util.Utils.safeLenghtOf;
 public class AttachmentsViewBinder {
 
     private static final int PREFFERED_STICKER_SIZE = 120;
+    private static final byte[] DEFAUL_WAVEFORM = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private static int sHolderIdCounter;
-
     private PhotosViewHelper photosViewHelper;
     private Transformation mAvatarTransformation;
-
     private int mActiveWaveFormColor;
     private int mNoactiveWaveFormColor;
     private SharedHolders<VoiceHolder> mVoiceSharedHolders;
-
     private VoiceActionListener mVoiceActionListener;
     private OnAttachmentsActionCallback mAttachmentsActionCallback;
     private EmojiconTextView.OnHashTagClickListener mOnHashTagClickListener;
@@ -123,15 +121,13 @@ public class AttachmentsViewBinder {
         if (view != null) view.setVisibility(visibility);
     }
 
-    private static final byte[] DEFAUL_WAVEFORM = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    public void setOnHashTagClickListener(EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
-        this.mOnHashTagClickListener = onHashTagClickListener;
-    }
-
     private static int generateHolderId() {
         sHolderIdCounter++;
         return sHolderIdCounter;
+    }
+
+    public void setOnHashTagClickListener(EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
+        this.mOnHashTagClickListener = onHashTagClickListener;
     }
 
     public void displayAttachments(Attachments attachments, AttachmentsHolder containers, boolean postsAsLinks) {
@@ -497,8 +493,7 @@ public class AttachmentsViewBinder {
                         if (imageUrl != null) {
                             ivPhoto.setVisibility(View.VISIBLE);
                             ViewUtils.displayAvatar(ivPhoto, null, imageUrl, Constants.PICASSO_TAG);
-                        }
-                        else
+                        } else
                             ivPhoto.setVisibility(View.GONE);
                         Utils.setColorFilter(ivType.getBackground(), Color.TRANSPARENT);
                         ivType.setImageResource(R.drawable.share_colored);
@@ -526,12 +521,6 @@ public class AttachmentsViewBinder {
 
     }
 
-    public interface VoiceActionListener extends EventListener {
-        void onVoiceHolderBinded(int voiceMessageId, int voiceHolderId);
-
-        void onVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage);
-    }
-
     private void openDocLink(DocLink link) {
         switch (link.getType()) {
             case Types.DOC:
@@ -553,11 +542,15 @@ public class AttachmentsViewBinder {
     }
 
     private void deleteTrack(final int accoutnId, Audio audio) {
-        audioListDisposable.add(mAudioInteractor.delete(accoutnId, audio.getId(), audio.getOwnerId()).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {}, ignore -> {}));
+        audioListDisposable.add(mAudioInteractor.delete(accoutnId, audio.getId(), audio.getOwnerId()).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {
+        }, ignore -> {
+        }));
     }
 
     private void addTrack(int accountId, Audio audio) {
-        audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {}, ignore -> {}));
+        audioListDisposable.add(mAudioInteractor.add(accountId, audio, null, null).compose(RxUtils.applySingleIOToMainSchedulers()).subscribe(t -> {
+        }, ignore -> {
+        }));
     }
 
     private void get_lyrics(Audio audio) {
@@ -569,7 +562,7 @@ public class AttachmentsViewBinder {
     private void onAudioLyricsRecived(String Text, Audio audio) {
         String title = audio.getArtistAndTitle();
 
-        MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(mContext);
+        MaterialAlertDialogBuilder dlgAlert = new MaterialAlertDialogBuilder(mContext);
         dlgAlert.setIcon(R.drawable.dir_song);
         dlgAlert.setMessage(Text);
         dlgAlert.setTitle(title != null ? title : mContext.getString(R.string.get_lyrics));
@@ -621,14 +614,13 @@ public class AttachmentsViewBinder {
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
 
-                if(!audio.isHLS()) {
+                if (!audio.isHLS()) {
                     holder.quality.setVisibility(View.VISIBLE);
-                    if(audio.getIsHq())
+                    if (audio.getIsHq())
                         holder.quality.setImageResource(R.drawable.high_quality);
                     else
                         holder.quality.setImageResource(R.drawable.low_quality);
-                }
-                else
+                } else
                     holder.quality.setVisibility(View.GONE);
 
                 holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
@@ -637,7 +629,7 @@ public class AttachmentsViewBinder {
                 AtomicInteger PlayState = new AtomicInteger(MusicUtils.AudioStatus(audio));
                 holder.play_icon.getViewTreeObserver().addOnPreDrawListener(() -> {
                     Integer PlayStateCurrent = MusicUtils.AudioStatus(audio);
-                    if(PlayStateCurrent != PlayState.get()) {
+                    if (PlayStateCurrent != PlayState.get()) {
                         PlayState.set(PlayStateCurrent);
                         holder.play_icon.setImageResource(PlayStateCurrent == 1 ? R.drawable.voice_state_animation : (PlayStateCurrent == 2 ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
                         Utils.doAnimate(holder.play_icon.getDrawable(), true);
@@ -645,18 +637,15 @@ public class AttachmentsViewBinder {
                     return true;
                 });
 
-                if(Settings.get().other().isShow_audio_cover())
-                {
-                    if(!isNullOrEmptyString(audio.getThumb_image_little()))
-                    {
+                if (Settings.get().other().isShow_audio_cover()) {
+                    if (!isNullOrEmptyString(audio.getThumb_image_little())) {
                         PicassoInstance.with()
                                 .load(audio.getThumb_image_little())
                                 .placeholder(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()))
                                 .transform(TransformCover())
                                 .tag(Constants.PICASSO_TAG)
                                 .into(holder.play_cover);
-                    }
-                    else {
+                    } else {
                         PicassoInstance.with().cancelRequest(holder.play_cover);
                         holder.play_cover.setImageDrawable(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
                     }
@@ -664,27 +653,25 @@ public class AttachmentsViewBinder {
 
                 holder.ibPlay.setOnClickListener(v -> {
                     if (MusicUtils.isNowPlayingOrPreparingOrPaused(audio)) {
-                        if(!Settings.get().other().isUse_stop_audio()) {
-                            if(!MusicUtils.isNowPaused(audio))
+                        if (!Settings.get().other().isUse_stop_audio()) {
+                            if (!MusicUtils.isNowPaused(audio))
                                 holder.play_icon.setImageResource(R.drawable.paused);
                             else {
                                 holder.play_icon.setImageResource(R.drawable.voice_state_animation);
                                 Utils.doAnimate(holder.play_icon.getDrawable(), true);
                             }
                             MusicUtils.playOrPause();
-                        }
-                        else {
+                        } else {
                             holder.play_icon.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
                             MusicUtils.stop();
                         }
-                    }
-                    else {
+                    } else {
                         holder.play_icon.setImageResource(R.drawable.voice_state_animation);
                         Utils.doAnimate(holder.play_icon.getDrawable(), true);
                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                     }
                 });
-                if(audio.getDuration() <= 0)
+                if (audio.getDuration() <= 0)
                     holder.time.setVisibility(View.GONE);
                 else {
                     holder.time.setVisibility(View.VISIBLE);
@@ -732,10 +719,10 @@ public class AttachmentsViewBinder {
                         items.add(new Item(R.id.add_item_audio, new Text(R.string.delete)).setIcon(R.drawable.delete));
                     items.add(new Item(R.id.share_button, new Text(R.string.share)).setIcon(R.drawable.share_variant));
                     items.add(new Item(R.id.save_item_audio, new Text(R.string.save)).setIcon(R.drawable.save));
-                    if(audio.getAlbumId() != 0)
+                    if (audio.getAlbumId() != 0)
                         items.add(new Item(R.id.open_album, new Text(R.string.open_album)).setIcon(R.drawable.audio_album));
                     items.add(new Item(R.id.get_recommendation_by_audio, new Text(R.string.get_recommendation_by_audio)).setIcon(R.drawable.music_mic));
-                    if(audio.getLyricsId() != 0)
+                    if (audio.getLyricsId() != 0)
                         items.add(new Item(R.id.get_lyrics_menu, new Text(R.string.get_lyrics_menu)).setIcon(R.drawable.lyric));
                     items.add(new Item(R.id.bitrate_item_audio, new Text(R.string.get_bitrate)).setIcon(R.drawable.high_quality));
                     items.add(new Item(R.id.search_by_artist, new Text(R.string.search_by_artist)).setIcon(R.drawable.magnify));
@@ -746,8 +733,7 @@ public class AttachmentsViewBinder {
                             .setIcon(R.drawable.dir_song)
                             .setTitle(Utils.firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle())
                             .setAdapter(mAdapter, (dialog, which) -> {
-                                switch(items.get(which).getKey())
-                                {
+                                switch (items.get(which).getKey()) {
                                     case R.id.play_item_audio:
                                         mAttachmentsActionCallback.onAudioPlay(finalG, audios);
                                         PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
@@ -827,41 +813,10 @@ public class AttachmentsViewBinder {
         }
     }
 
-    private static final class CopyHolder {
+    public interface VoiceActionListener extends EventListener {
+        void onVoiceHolderBinded(int voiceMessageId, int voiceHolderId);
 
-        final ViewGroup itemView;
-        final ImageView ivAvatar;
-        final TextView ownerName;
-        final EmojiconTextView bodyView;
-        final View tvShowMore;
-        final View buttonDots;
-        final AttachmentsHolder attachmentsHolder;
-
-        CopyHolder(ViewGroup itemView, OnAttachmentsActionCallback callback) {
-            this.itemView = itemView;
-            this.bodyView = itemView.findViewById(R.id.item_post_copy_text);
-            this.ivAvatar = itemView.findViewById(R.id.item_copy_history_post_avatar);
-            this.tvShowMore = itemView.findViewById(R.id.item_post_copy_show_more);
-            this.ownerName = itemView.findViewById(R.id.item_post_copy_owner_name);
-            this.buttonDots = itemView.findViewById(R.id.item_copy_history_post_dots);
-            this.attachmentsHolder = AttachmentsHolder.forCopyPost(itemView);
-            this.callback = callback;
-
-            this.buttonDots.setOnClickListener(v -> showDotsMenu());
-        }
-
-        final OnAttachmentsActionCallback callback;
-
-        void showDotsMenu() {
-            PopupMenu menu = new PopupMenu(itemView.getContext(), buttonDots);
-            menu.getMenu().add(R.string.open_post).setOnMenuItemClickListener(item -> {
-                Post copy = (Post) buttonDots.getTag();
-                callback.onPostOpen(copy);
-                return true;
-            });
-
-            menu.show();
-        }
+        void onVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage);
     }
 
     public interface OnAttachmentsActionCallback {
@@ -888,6 +843,42 @@ public class AttachmentsViewBinder {
         void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index);
     }
 
+    private static final class CopyHolder {
+
+        final ViewGroup itemView;
+        final ImageView ivAvatar;
+        final TextView ownerName;
+        final EmojiconTextView bodyView;
+        final View tvShowMore;
+        final View buttonDots;
+        final AttachmentsHolder attachmentsHolder;
+        final OnAttachmentsActionCallback callback;
+
+        CopyHolder(ViewGroup itemView, OnAttachmentsActionCallback callback) {
+            this.itemView = itemView;
+            this.bodyView = itemView.findViewById(R.id.item_post_copy_text);
+            this.ivAvatar = itemView.findViewById(R.id.item_copy_history_post_avatar);
+            this.tvShowMore = itemView.findViewById(R.id.item_post_copy_show_more);
+            this.ownerName = itemView.findViewById(R.id.item_post_copy_owner_name);
+            this.buttonDots = itemView.findViewById(R.id.item_copy_history_post_dots);
+            this.attachmentsHolder = AttachmentsHolder.forCopyPost(itemView);
+            this.callback = callback;
+
+            this.buttonDots.setOnClickListener(v -> showDotsMenu());
+        }
+
+        void showDotsMenu() {
+            PopupMenu menu = new PopupMenu(itemView.getContext(), buttonDots);
+            menu.getMenu().add(R.string.open_post).setOnMenuItemClickListener(item -> {
+                Post copy = (Post) buttonDots.getTag();
+                callback.onPostOpen(copy);
+                return true;
+            });
+
+            menu.show();
+        }
+    }
+
     private class AudioHolder {
 
         TextView tvTitle;
@@ -903,7 +894,8 @@ public class AttachmentsViewBinder {
         View Track;
         MaterialCardView selectionView;
         MaterialCardView isSelectedView;
-
+        Animator.AnimatorListener animationAdapter;
+        ObjectAnimator animator;
         AudioHolder(View root) {
             tvTitle = root.findViewById(R.id.dialog_title);
             tvSubtitle = root.findViewById(R.id.dialog_message);
@@ -937,10 +929,7 @@ public class AttachmentsViewBinder {
             };
         }
 
-        Animator.AnimatorListener animationAdapter;
-        ObjectAnimator animator;
-
-        void startSomeAnimation(){
+        void startSomeAnimation() {
             selectionView.setCardBackgroundColor(CurrentTheme.getColorSecondary(mContext));
             selectionView.setAlpha(0.5f);
 
@@ -950,8 +939,8 @@ public class AttachmentsViewBinder {
             animator.start();
         }
 
-        void cancelSelectionAnimation(){
-            if(animator != null){
+        void cancelSelectionAnimation() {
+            if (animator != null) {
                 animator.cancel();
                 animator = null;
             }

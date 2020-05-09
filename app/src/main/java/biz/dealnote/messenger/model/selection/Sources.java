@@ -11,6 +11,17 @@ import java.util.ArrayList;
  */
 public class Sources implements Parcelable {
 
+    public static final Creator<Sources> CREATOR = new Creator<Sources>() {
+        @Override
+        public Sources createFromParcel(Parcel in) {
+            return new Sources(in);
+        }
+
+        @Override
+        public Sources[] newArray(int size) {
+            return new Sources[size];
+        }
+    };
     private final ArrayList<AbsSelectableSource> sources;
 
     public Sources() {
@@ -51,18 +62,6 @@ public class Sources implements Parcelable {
         return sources;
     }
 
-    public static final Creator<Sources> CREATOR = new Creator<Sources>() {
-        @Override
-        public Sources createFromParcel(Parcel in) {
-            return new Sources(in);
-        }
-
-        @Override
-        public Sources[] newArray(int size) {
-            return new Sources[size];
-        }
-    };
-
     public Sources with(AbsSelectableSource source) {
         this.sources.add(source);
         return this;
@@ -73,7 +72,7 @@ public class Sources implements Parcelable {
         return 0;
     }
 
-    public int count(){
+    public int count() {
         return sources.size();
     }
 

@@ -55,15 +55,17 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     private static final int COUNT = 30;
 
     private static final String SAVE_DIALOGS_OWNER_ID = "save-dialogs-owner-id";
-
-    private int dialogsOwnerId;
-
+    private static final Comparator<Dialog> COMPARATOR = (rhs, lhs) -> Integer.compare(lhs.getLastMessageId(), rhs.getLastMessageId());
     private final ArrayList<Dialog> dialogs;
-    private boolean endOfContent;
-
     private final IMessagesRepository messagesInteractor;
     private final ILongpollManager longpollManager;
+    private int dialogsOwnerId;
+    private boolean endOfContent;
     private int offset;
+    private boolean netLoadnigNow;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean cacheNowLoading;
+    private CompositeDisposable cacheLoadingDisposable = new CompositeDisposable();
 
     public DialogsPresenter(int accountId, int initialDialogsOwnerId, int offset, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -97,6 +99,10 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         loadCachedThenActualData();
     }
 
+    private static String getTitleIfEmpty(@NonNull Collection<User> users) {
+        return Utils.join(users, ", ", User::getFirstName);
+    }
+
     @Override
     public void saveState(@NonNull Bundle outState) {
         super.saveState(outState);
@@ -115,8 +121,10 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     private void onDialogsFisrtResponse(List<Dialog> data) {
         netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(t ->{},
-                        t->{}));
+                .subscribe(t -> {
+                        },
+                        t -> {
+                        }));
         setNetLoadnigNow(false);
 
         endOfContent = false;
@@ -125,7 +133,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
         safeNotifyDataSetChanged();
 
-        if(offset > 0) {
+        if (offset > 0) {
             safeScroll(offset);
             offset = 0;
         }
@@ -155,8 +163,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         showError(getView(), cause);
     }
 
-    private boolean netLoadnigNow;
-
     private void setNetLoadnigNow(boolean netLoadnigNow) {
         this.netLoadnigNow = netLoadnigNow;
         resolveRefreshingView();
@@ -175,8 +181,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
         resolveRefreshingView();
     }
-
-    private CompositeDisposable netDisposable = new CompositeDisposable();
 
     private void requestNext() {
         if (netLoadnigNow) {
@@ -198,8 +202,10 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     private void onNextDialogsResponse(List<Dialog> data) {
         netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(t ->{},
-                        t->{}));
+                .subscribe(t -> {
+                        },
+                        t -> {
+                        }));
 
         setNetLoadnigNow(false);
         endOfContent = isEmpty(dialogs);
@@ -231,9 +237,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
             getView().showRefreshing(cacheNowLoading || netLoadnigNow);
         }
     }
-
-    private boolean cacheNowLoading;
-    private CompositeDisposable cacheLoadingDisposable = new CompositeDisposable();
 
     private void loadCachedThenActualData() {
         cacheNowLoading = true;
@@ -322,7 +325,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
                 }
             }
 
-            if(update.getTitle() != null){
+            if (update.getTitle() != null) {
                 dialog.setTitle(update.getTitle().getTitle());
             }
 
@@ -375,8 +378,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
             longpollManager.keepAlive(dialogsOwnerId);
         }
     }
-
-    private static final Comparator<Dialog> COMPARATOR = (rhs, lhs) -> Integer.compare(lhs.getLastMessageId(), rhs.getLastMessageId());
 
     public void fireRefresh() {
         cacheLoadingDisposable.dispose();
@@ -452,10 +453,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         } else if (users.size() > 1) {
             getView().showEnterNewGroupChatTitle(users);
         }
-    }
-
-    private static String getTitleIfEmpty(@NonNull Collection<User> users) {
-        return Utils.join(users, ", ", User::getFirstName);
     }
 
     public void fireRemoveDialogClick(Dialog dialog) {

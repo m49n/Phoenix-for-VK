@@ -53,15 +53,18 @@ import static biz.dealnote.messenger.util.ViewUtils.displayAvatar;
  */
 public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedCommentsAdapter.AbsHolder> {
 
-    private List<NewsfeedComment> data;
+    private static final int VTYPE_POST = 1;
+    private static final int VTYPE_VIDEO = 2;
+    private static final int VTYPE_PHOTO = 3;
+    private static final int VTYPE_TOPIC = 4;
     private final Context context;
     private final AttachmentsViewBinder attachmentsViewBinder;
     private final Transformation transformation;
-
     private final LinkActionAdapter linkActionAdapter;
-
     private final int colorTextSecondary;
     private final int iconColorActive;
+    private List<NewsfeedComment> data;
+    private ActionListener actionListener;
 
     public NewsfeedCommentsAdapter(Context context, List<NewsfeedComment> data,
                                    AttachmentsViewBinder.OnAttachmentsActionCallback callback) {
@@ -77,8 +80,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             // do nothing
         };
     }
-
-    private ActionListener actionListener;
 
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
@@ -103,24 +104,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         throw new UnsupportedOperationException();
     }
 
-    private static final class TopicHolder extends AbsHolder {
-
-        ImageView ownerAvatar;
-        ImageView creatorAvatar;
-        TextView commentsCounter;
-        TextView ownerName;
-        TextView title;
-
-        TopicHolder(View itemView) {
-            super(itemView);
-            ownerAvatar = itemView.findViewById(R.id.owner_avatar);
-            creatorAvatar = itemView.findViewById(R.id.creator_avatar);
-            commentsCounter = itemView.findViewById(R.id.comments_counter);
-            ownerName = itemView.findViewById(R.id.owner_name);
-            title = itemView.findViewById(R.id.title);
-        }
-    }
-
     @Override
     public void onBindViewHolder(@NonNull AbsHolder holder, int position) {
         bindBase(holder, position);
@@ -141,14 +124,14 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         }
     }
 
-    private void bindTopic(TopicHolder holder, int position){
+    private void bindTopic(TopicHolder holder, int position) {
         TopicWithOwner wrapper = (TopicWithOwner) data.get(position).getModel();
         Topic topic = wrapper.getTopic();
         Owner owner = wrapper.getOwner();
 
         ViewUtils.displayAvatar(holder.ownerAvatar, transformation, owner.getMaxSquareAvatar(), Constants.PICASSO_TAG);
 
-        if(nonNull(topic.getCreator())){
+        if (nonNull(topic.getCreator())) {
             holder.creatorAvatar.setVisibility(View.VISIBLE);
             ViewUtils.displayAvatar(holder.creatorAvatar, transformation, topic.getCreator().get100photoOrSmaller(), Constants.PICASSO_TAG);
         } else {
@@ -239,7 +222,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
 
         holder.commentRoot.setVisibility(View.VISIBLE);
         holder.commentRoot.setOnClickListener(v -> {
-            if(nonNull(actionListener)){
+            if (nonNull(actionListener)) {
                 actionListener.onCommentBodyClick(newsfeedComment);
             }
         });
@@ -298,7 +281,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         holder.bottomDivider.setVisibility(WallAdapter.needToShowBottomDivider(post) ? View.VISIBLE : View.GONE);
 
         View.OnClickListener postOpenClickListener = v -> {
-            if(nonNull(actionListener)){
+            if (nonNull(actionListener)) {
                 actionListener.onPostBodyClick(comment);
             }
         };
@@ -326,21 +309,40 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             return VTYPE_PHOTO;
         }
 
-        if(comment.getModel() instanceof TopicWithOwner){
+        if (comment.getModel() instanceof TopicWithOwner) {
             return VTYPE_TOPIC;
         }
 
         throw new IllegalStateException("Unsupported view type");
     }
 
-    private static final int VTYPE_POST = 1;
-    private static final int VTYPE_VIDEO = 2;
-    private static final int VTYPE_PHOTO = 3;
-    private static final int VTYPE_TOPIC = 4;
-
     public void setData(List<NewsfeedComment> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onPostBodyClick(NewsfeedComment comment);
+
+        void onCommentBodyClick(NewsfeedComment comment);
+    }
+
+    private static final class TopicHolder extends AbsHolder {
+
+        ImageView ownerAvatar;
+        ImageView creatorAvatar;
+        TextView commentsCounter;
+        TextView ownerName;
+        TextView title;
+
+        TopicHolder(View itemView) {
+            super(itemView);
+            ownerAvatar = itemView.findViewById(R.id.owner_avatar);
+            creatorAvatar = itemView.findViewById(R.id.creator_avatar);
+            commentsCounter = itemView.findViewById(R.id.comments_counter);
+            ownerName = itemView.findViewById(R.id.owner_name);
+            title = itemView.findViewById(R.id.title);
+        }
     }
 
     static abstract class AbsHolder extends RecyclerView.ViewHolder {
@@ -423,11 +425,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             this.image = itemView.findViewById(R.id.video_image);
             this.duration = itemView.findViewById(R.id.video_lenght);
         }
-    }
-
-    public interface ActionListener {
-        void onPostBodyClick(NewsfeedComment comment);
-        void onCommentBodyClick(NewsfeedComment comment);
     }
 
     private static class PostHolder extends AbsHolder {

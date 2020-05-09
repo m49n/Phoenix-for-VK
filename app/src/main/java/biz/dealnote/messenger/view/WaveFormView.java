@@ -23,6 +23,44 @@ import biz.dealnote.messenger.util.Exestime;
  */
 public class WaveFormView extends View {
 
+    private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG
+            | Paint.DITHER_FLAG
+            | Paint.ANTI_ALIAS_FLAG);
+    private static final Property<WaveFormView, Float> PROGRESS_PROPERTY = new Property<WaveFormView, Float>(Float.class, "displayed-precentage") {
+        @Override
+        public Float get(WaveFormView view) {
+            return view.mDisplayedProgress;
+        }
+
+        @Override
+        public void set(WaveFormView view, Float value) {
+            view.mDisplayedProgress = value;
+            view.invalidate();
+        }
+    };
+
+    static {
+        PAINT.setStyle(Paint.Style.STROKE);
+        PAINT.setStrokeCap(Paint.Cap.ROUND);
+        PAINT.setStrokeJoin(Paint.Join.ROUND);
+    }
+
+    @ColorInt
+    private int mActiveColor;
+
+    @ColorInt
+    private int mNoactiveColor;
+
+    private int mSectionCount = 64;
+
+    private byte[] mWaveForm = new byte[0];
+    private float mMaxValue = 50;
+
+    private float mCurrentActiveProgress;
+
+    private float mDisplayedProgress;
+    private WeakReference<ObjectAnimator> mAnimator = new WeakReference<>(null);
+
     public WaveFormView(Context context) {
         this(context, null);
     }
@@ -30,6 +68,17 @@ public class WaveFormView extends View {
     public WaveFormView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
+    }
+
+    private static byte calculateMaxValue(byte[] values) {
+        byte max = values.length > 0 ? values[0] : 0;
+        for (byte value : values) {
+            if (value > max) {
+                max = value;
+            }
+        }
+
+        return max;
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -52,31 +101,6 @@ public class WaveFormView extends View {
         }
     }
 
-    @ColorInt
-    private int mActiveColor;
-
-    @ColorInt
-    private int mNoactiveColor;
-
-    private int mSectionCount = 64;
-
-    private byte[] mWaveForm = new byte[0];
-    private float mMaxValue = 50;
-
-    private float mCurrentActiveProgress;
-
-    private float mDisplayedProgress;
-
-    private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG
-            | Paint.DITHER_FLAG
-            | Paint.ANTI_ALIAS_FLAG);
-
-    static {
-        PAINT.setStyle(Paint.Style.STROKE);
-        PAINT.setStrokeCap(Paint.Cap.ROUND);
-        PAINT.setStrokeJoin(Paint.Join.ROUND);
-    }
-
     public void setCurrentActiveProgress(float progress) {
         if (mCurrentActiveProgress == progress) {
             return;
@@ -89,31 +113,16 @@ public class WaveFormView extends View {
         invalidate();
     }
 
-    private void releaseAnimation(){
+    private void releaseAnimation() {
         ObjectAnimator animator = mAnimator.get();
 
-        if(animator != null){
+        if (animator != null) {
             animator.cancel();
             mAnimator = new WeakReference<>(null);
         }
     }
 
-    private static final Property<WaveFormView, Float> PROGRESS_PROPERTY = new Property<WaveFormView, Float>(Float.class, "displayed-precentage") {
-        @Override
-        public Float get(WaveFormView view) {
-            return view.mDisplayedProgress;
-        }
-
-        @Override
-        public void set(WaveFormView view, Float value) {
-            view.mDisplayedProgress = value;
-            view.invalidate();
-        }
-    };
-
-    private WeakReference<ObjectAnimator> mAnimator = new WeakReference<>(null);
-
-    public void setCurrentActiveProgressSmoothly(float progress){
+    public void setCurrentActiveProgressSmoothly(float progress) {
         if (mCurrentActiveProgress == progress) {
             return;
         }
@@ -128,8 +137,8 @@ public class WaveFormView extends View {
         animator.start();
     }
 
-    public void setCurrentActiveProgress(float progress, boolean anim){
-        if(anim){
+    public void setCurrentActiveProgress(float progress, boolean anim) {
+        if (anim) {
             setCurrentActiveProgressSmoothly(progress);
         } else {
             setCurrentActiveProgress(progress);
@@ -203,7 +212,7 @@ public class WaveFormView extends View {
     }
 
     private byte getValueAt(byte[] values, float coef) {
-        if (values == null){
+        if (values == null) {
             return 0;
         }
         int index = (int) ((float) values.length * coef);
@@ -216,17 +225,6 @@ public class WaveFormView extends View {
         if (newMaxValue > mMaxValue) {
             mMaxValue = newMaxValue;
         }
-    }
-
-    private static byte calculateMaxValue(byte[] values) {
-        byte max = values.length > 0 ? values[0] : 0;
-        for (byte value : values) {
-            if (value > max) {
-                max = value;
-            }
-        }
-
-        return max;
     }
 
     public void setActiveColor(@ColorInt int activeColor) {

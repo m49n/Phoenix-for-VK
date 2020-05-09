@@ -23,15 +23,6 @@ public abstract class MultyDataAdapter<T, VH extends RecyclerView.ViewHolder> ex
         notifyDataSetChanged();
     }
 
-    public static class ItemInfo<T> {
-
-        public T item;
-
-        public int internalPosition;
-
-        public int sectionTitleRes;
-    }
-
     @Override
     public int getItemCount() {
         int count = 0;
@@ -73,23 +64,23 @@ public abstract class MultyDataAdapter<T, VH extends RecyclerView.ViewHolder> ex
         throw new IllegalArgumentException("Invalid adapter position");
     }
 
-    public void notifyItemRangeInserted(int dataIndex, int internalPosition, int count){
+    public void notifyItemRangeInserted(int dataIndex, int internalPosition, int count) {
         super.notifyItemRangeInserted(getAdapterPosition(dataIndex, internalPosition), count);
     }
 
-    public void notifyItemRemoved(int dataIndex, int internalPosition){
+    public void notifyItemRemoved(int dataIndex, int internalPosition) {
         super.notifyItemRemoved(getAdapterPosition(dataIndex, internalPosition));
     }
 
-    public void notifyItemChanged(int dataIndex, int internalPosition){
+    public void notifyItemChanged(int dataIndex, int internalPosition) {
         super.notifyItemChanged(getAdapterPosition(dataIndex, internalPosition));
     }
 
-    public int getAdapterPosition(int dataIndex, int internalPosition){
+    public int getAdapterPosition(int dataIndex, int internalPosition) {
         int offset = 0;
 
-        for(int i = 0; i < fullData.size(); i++){
-            if(i < dataIndex){
+        for (int i = 0; i < fullData.size(); i++) {
+            if (i < dataIndex) {
                 offset = offset + fullData.get(i).size();
             } else {
                 break;
@@ -125,5 +116,14 @@ public abstract class MultyDataAdapter<T, VH extends RecyclerView.ViewHolder> ex
         }
 
         throw new IllegalArgumentException("Invalid position");
+    }
+
+    public static class ItemInfo<T> {
+
+        public T item;
+
+        public int internalPosition;
+
+        public int sectionTitleRes;
     }
 }

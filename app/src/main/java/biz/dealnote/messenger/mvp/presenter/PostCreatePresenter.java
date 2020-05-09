@@ -68,15 +68,13 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
 
     @EditingPostType
     private final int editingType;
-
-    private Post post;
-    private boolean postPublished;
     private final WallEditorAttrs attrs;
-
     private final IAttachmentsRepository attachmentsRepository;
     private final IWallsRepository walls;
-
+    private Post post;
+    private boolean postPublished;
     private Optional<ArrayList<Uri>> upload;
+    private boolean publishingNow;
 
     public PostCreatePresenter(int accountId, int ownerId, @EditingPostType int editingType,
                                ModelsBundle bundle, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable Bundle savedInstanceState) {
@@ -445,8 +443,6 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
             return isEditorOrHigher();
         }
     }
-
-    private boolean publishingNow;
 
     private void changePublishingNowState(boolean publishing) {
         this.publishingNow = publishing;

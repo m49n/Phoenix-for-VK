@@ -13,10 +13,15 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IChatMembersView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<AppChatUser> users);
+
     void notifyItemRemoved(int position);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
+
     void openUserWall(int accountId, Owner user);
+
     void displayRefreshing(boolean refreshing);
 
     void startSelectUsersActivity(int accountId);

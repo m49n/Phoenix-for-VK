@@ -29,18 +29,14 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.LinkViewHolder> {
 
+    private ActionListener mActionListner;
+
     public LinksAdapter(List<Link> data) {
         super(data);
     }
 
-    private ActionListener mActionListner;
-
     public void setActionListner(ActionListener listner) {
         this.mActionListner = listner;
-    }
-
-    public interface ActionListener extends EventListener {
-        void onLinkClick(int index, @NonNull Link doc);
     }
 
     public String getImageUrl(Link link) {
@@ -71,7 +67,7 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
         holder.ivImage.setBackgroundColor(Color.TRANSPARENT);
 
         holder.itemView.setOnClickListener(v -> {
-            if(nonNull(mActionListner)){
+            if (nonNull(mActionListner)) {
                 mActionListner.onLinkClick(holder.getBindingAdapterPosition(), item);
             }
         });
@@ -85,6 +81,10 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
     @Override
     protected int layoutId(int type) {
         return R.layout.item_document_list;
+    }
+
+    public interface ActionListener extends EventListener {
+        void onLinkClick(int index, @NonNull Link doc);
     }
 
     static class LinkViewHolder extends RecyclerView.ViewHolder {

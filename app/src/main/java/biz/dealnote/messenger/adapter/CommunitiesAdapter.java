@@ -28,7 +28,9 @@ import biz.dealnote.messenger.util.ViewUtils;
  */
 public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesAdapter.Holder> {
 
+    private static final ItemInfo<Community> INFO = new ItemInfo<>();
     private final Transformation transformation;
+    private ActionListener actionListener;
 
     public CommunitiesAdapter(Context context, List<DataWrapper<Community>> dataWrappers, int[] titles) {
         super(dataWrappers, titles);
@@ -40,8 +42,6 @@ public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesA
         return new Holder(LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.item_community, viewGroup, false));
     }
-
-    private static final ItemInfo<Community> INFO = new ItemInfo<>();
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
@@ -57,13 +57,11 @@ public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesA
         holder.subtitle.setText(R.string.community);
 
         holder.contentRoot.setOnClickListener(view -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onCommunityClick(community);
             }
         });
     }
-
-    private ActionListener actionListener;
 
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;

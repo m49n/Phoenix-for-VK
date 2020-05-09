@@ -13,101 +13,86 @@ import biz.dealnote.messenger.model.database.Country;
  */
 public final class UserDetails implements Parcelable {
 
+    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
+        @Override
+        public UserDetails createFromParcel(Parcel in) {
+            return new UserDetails(in);
+        }
+
+        @Override
+        public UserDetails[] newArray(int size) {
+            return new UserDetails[size];
+        }
+    };
     private IdPair photoId;
-
     private Audio statusAudio;
-
     private int friendsCount;
-
     private int onlineFriendsCount;
-
     private int mutualFriendsCount;
-
     private int followersCount;
-
     private int groupsCount;
-
     private int photosCount;
-
     private int audiosCount;
-
     private int videosCount;
-
     private int allWallCount;
-
     private int ownWallCount;
-
     private int postponedWallCount;
-
     private String bdate;
-
     private City city;
-
     private Country country;
-
     private String hometown;
-
     private String phone;
-
     private String homePhone;
-
     private String skype;
-    
     private String instagram;
-    
     private String twitter;
-    
     private String facebook;
-
     private List<Career> careers;
-
     private List<Military> militaries;
-
     private List<University> universities;
-
     private List<School> schools;
-
     private List<Relative> relatives;
-
     private int relation;
-
     private Owner relationPartner;
-
     private String[] languages;
-
     private int political;
-
     private int peopleMain;
-
     private int lifeMain;
-
     private int smoking;
-
     private int alcohol;
-
     private String inspiredBy;
-
     private String religion;
-
     private String site;
-
     private String interests;
-
     private String music;
-
     private String activities;
-
     private String movies;
-
     private String tv;
-
     private String games;
-
     private String quotes;
-
     private String about;
-
     private String books;
+
+    public UserDetails() {
+
+    }
+
+    private UserDetails(Parcel in) {
+        photoId = in.readParcelable(IdPair.class.getClassLoader());
+        statusAudio = in.readParcelable(Audio.class.getClassLoader());
+        friendsCount = in.readInt();
+        onlineFriendsCount = in.readInt();
+        mutualFriendsCount = in.readInt();
+        followersCount = in.readInt();
+        groupsCount = in.readInt();
+        photosCount = in.readInt();
+        audiosCount = in.readInt();
+        videosCount = in.readInt();
+        allWallCount = in.readInt();
+        ownWallCount = in.readInt();
+        postponedWallCount = in.readInt();
+        bdate = in.readString();
+    }
 
     public String getInterests() {
         return interests;
@@ -190,47 +175,12 @@ public final class UserDetails implements Parcelable {
         return this;
     }
 
-    public UserDetails setSite(String site) {
-        this.site = site;
-        return this;
-    }
-
     public String getSite() {
         return site;
     }
 
-    public UserDetails setAlcohol(int alcohol) {
-        this.alcohol = alcohol;
-        return this;
-    }
-
-    public UserDetails setInspiredBy(String inspiredBy) {
-        this.inspiredBy = inspiredBy;
-        return this;
-    }
-
-    public UserDetails setLifeMain(int lifeMain) {
-        this.lifeMain = lifeMain;
-        return this;
-    }
-
-    public UserDetails setPeopleMain(int peopleMain) {
-        this.peopleMain = peopleMain;
-        return this;
-    }
-
-    public UserDetails setPolitical(int political) {
-        this.political = political;
-        return this;
-    }
-
-    public UserDetails setReligion(String religion) {
-        this.religion = religion;
-        return this;
-    }
-
-    public UserDetails setSmoking(int smoking) {
-        this.smoking = smoking;
+    public UserDetails setSite(String site) {
+        this.site = site;
         return this;
     }
 
@@ -238,32 +188,62 @@ public final class UserDetails implements Parcelable {
         return alcohol;
     }
 
+    public UserDetails setAlcohol(int alcohol) {
+        this.alcohol = alcohol;
+        return this;
+    }
+
     public int getLifeMain() {
         return lifeMain;
+    }
+
+    public UserDetails setLifeMain(int lifeMain) {
+        this.lifeMain = lifeMain;
+        return this;
     }
 
     public int getPeopleMain() {
         return peopleMain;
     }
 
+    public UserDetails setPeopleMain(int peopleMain) {
+        this.peopleMain = peopleMain;
+        return this;
+    }
+
     public int getPolitical() {
         return political;
+    }
+
+    public UserDetails setPolitical(int political) {
+        this.political = political;
+        return this;
     }
 
     public int getSmoking() {
         return smoking;
     }
 
+    public UserDetails setSmoking(int smoking) {
+        this.smoking = smoking;
+        return this;
+    }
+
     public String getInspiredBy() {
         return inspiredBy;
+    }
+
+    public UserDetails setInspiredBy(String inspiredBy) {
+        this.inspiredBy = inspiredBy;
+        return this;
     }
 
     public String getReligion() {
         return religion;
     }
 
-    public UserDetails setLanguages(String[] languages) {
-        this.languages = languages;
+    public UserDetails setReligion(String religion) {
+        this.religion = religion;
         return this;
     }
 
@@ -271,13 +251,8 @@ public final class UserDetails implements Parcelable {
         return languages;
     }
 
-    public UserDetails setRelation(int relation) {
-        this.relation = relation;
-        return this;
-    }
-
-    public UserDetails setRelationPartner(Owner relationPartner) {
-        this.relationPartner = relationPartner;
+    public UserDetails setLanguages(String[] languages) {
+        this.languages = languages;
         return this;
     }
 
@@ -285,12 +260,17 @@ public final class UserDetails implements Parcelable {
         return relation;
     }
 
+    public UserDetails setRelation(int relation) {
+        this.relation = relation;
+        return this;
+    }
+
     public Owner getRelationPartner() {
         return relationPartner;
     }
 
-    public UserDetails setRelatives(List<Relative> relatives) {
-        this.relatives = relatives;
+    public UserDetails setRelationPartner(Owner relationPartner) {
+        this.relationPartner = relationPartner;
         return this;
     }
 
@@ -298,44 +278,8 @@ public final class UserDetails implements Parcelable {
         return relatives;
     }
 
-    public static final class Relative {
-
-        private User user;
-
-        private String type;
-
-        private String name;
-
-        public Relative setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Relative setType(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public Relative setUser(User user) {
-            this.user = user;
-            return this;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public String getType() {
-            return type;
-        }
-    }
-
-    public UserDetails setSchools(List<School> schools) {
-        this.schools = schools;
+    public UserDetails setRelatives(List<Relative> relatives) {
+        this.relatives = relatives;
         return this;
     }
 
@@ -343,8 +287,8 @@ public final class UserDetails implements Parcelable {
         return schools;
     }
 
-    public UserDetails setUniversities(List<University> universities) {
-        this.universities = universities;
+    public UserDetails setSchools(List<School> schools) {
+        this.schools = schools;
         return this;
     }
 
@@ -352,8 +296,8 @@ public final class UserDetails implements Parcelable {
         return universities;
     }
 
-    public UserDetails setMilitaries(List<Military> militaries) {
-        this.militaries = militaries;
+    public UserDetails setUniversities(List<University> universities) {
+        this.universities = universities;
         return this;
     }
 
@@ -361,8 +305,8 @@ public final class UserDetails implements Parcelable {
         return militaries;
     }
 
-    public UserDetails setCareers(List<Career> careers) {
-        this.careers = careers;
+    public UserDetails setMilitaries(List<Military> militaries) {
+        this.militaries = militaries;
         return this;
     }
 
@@ -370,8 +314,8 @@ public final class UserDetails implements Parcelable {
         return careers;
     }
 
-    public UserDetails setSkype(String skype) {
-        this.skype = skype;
+    public UserDetails setCareers(List<Career> careers) {
+        this.careers = careers;
         return this;
     }
 
@@ -379,8 +323,8 @@ public final class UserDetails implements Parcelable {
         return skype;
     }
 
-    public UserDetails setInstagram(String instagram) {
-        this.instagram = instagram;
+    public UserDetails setSkype(String skype) {
+        this.skype = skype;
         return this;
     }
 
@@ -388,8 +332,8 @@ public final class UserDetails implements Parcelable {
         return instagram;
     }
 
-    public UserDetails setTwitter(String twitter) {
-        this.twitter = twitter;
+    public UserDetails setInstagram(String instagram) {
+        this.instagram = instagram;
         return this;
     }
 
@@ -397,8 +341,8 @@ public final class UserDetails implements Parcelable {
         return twitter;
     }
 
-    public UserDetails setFacebook(String facebook) {
-        this.facebook = facebook;
+    public UserDetails setTwitter(String twitter) {
+        this.twitter = twitter;
         return this;
     }
 
@@ -406,8 +350,8 @@ public final class UserDetails implements Parcelable {
         return facebook;
     }
 
-    public UserDetails setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
+    public UserDetails setFacebook(String facebook) {
+        this.facebook = facebook;
         return this;
     }
 
@@ -415,8 +359,8 @@ public final class UserDetails implements Parcelable {
         return homePhone;
     }
 
-    public UserDetails setPhone(String phone) {
-        this.phone = phone;
+    public UserDetails setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
         return this;
     }
 
@@ -424,12 +368,8 @@ public final class UserDetails implements Parcelable {
         return phone;
     }
 
-    public UserDetails(){
-
-    }
-
-    public UserDetails setHometown(String hometown) {
-        this.hometown = hometown;
+    public UserDetails setPhone(String phone) {
+        this.phone = phone;
         return this;
     }
 
@@ -437,13 +377,18 @@ public final class UserDetails implements Parcelable {
         return hometown;
     }
 
-    public UserDetails setCountry(Country country) {
-        this.country = country;
+    public UserDetails setHometown(String hometown) {
+        this.hometown = hometown;
         return this;
     }
 
     public Country getCountry() {
         return country;
+    }
+
+    public UserDetails setCountry(Country country) {
+        this.country = country;
+        return this;
     }
 
     public City getCity() {
@@ -454,35 +399,6 @@ public final class UserDetails implements Parcelable {
         this.city = city;
         return this;
     }
-
-    private UserDetails(Parcel in) {
-        photoId = in.readParcelable(IdPair.class.getClassLoader());
-        statusAudio = in.readParcelable(Audio.class.getClassLoader());
-        friendsCount = in.readInt();
-        onlineFriendsCount = in.readInt();
-        mutualFriendsCount = in.readInt();
-        followersCount = in.readInt();
-        groupsCount = in.readInt();
-        photosCount = in.readInt();
-        audiosCount = in.readInt();
-        videosCount = in.readInt();
-        allWallCount = in.readInt();
-        ownWallCount = in.readInt();
-        postponedWallCount = in.readInt();
-        bdate = in.readString();
-    }
-
-    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
-        @Override
-        public UserDetails createFromParcel(Parcel in) {
-            return new UserDetails(in);
-        }
-
-        @Override
-        public UserDetails[] newArray(int size) {
-            return new UserDetails[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -631,5 +547,41 @@ public final class UserDetails implements Parcelable {
     public UserDetails setPostponedWallCount(int postponedWallCount) {
         this.postponedWallCount = postponedWallCount;
         return this;
+    }
+
+    public static final class Relative {
+
+        private User user;
+
+        private String type;
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public Relative setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public Relative setUser(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public Relative setType(String type) {
+            this.type = type;
+            return this;
+        }
     }
 }

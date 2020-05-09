@@ -12,10 +12,13 @@ import io.reactivex.Observable;
  */
 public interface IProxySettings {
     void put(String address, int port);
+
     void put(String address, int port, String username, String pass);
 
     Observable<ProxyConfig> observeAdding();
+
     Observable<ProxyConfig> observeRemoving();
+
     Observable<Optional<ProxyConfig>> observeActive();
 
     List<ProxyConfig> getAll();

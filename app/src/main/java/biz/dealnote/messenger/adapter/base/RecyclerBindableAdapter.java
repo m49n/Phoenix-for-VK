@@ -21,11 +21,6 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     private List<View> headers = new ArrayList<>();
     private List<View> footers = new ArrayList<>();
     private List<T> items;
-
-    public RecyclerBindableAdapter(List<T> items) {
-        this.items = items;
-    }
-
     private RecyclerView.LayoutManager manager;
     private LayoutInflater inflater;
     private GridLayoutManager.SpanSizeLookup spanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
@@ -34,6 +29,9 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
             return getGridSpan(position);
         }
     };
+    public RecyclerBindableAdapter(List<T> items) {
+        this.items = items;
+    }
 
     public int getRealItemCount() {
         return items.size();
@@ -43,14 +41,10 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
         return items.get(position);
     }
 
-    public void setItems(List<T> items) {
-        setItems(items, true);
-    }
-
     public void setItems(List<T> items, boolean notifyDatasetChanged) {
         this.items = items;
 
-        if(notifyDatasetChanged){
+        if (notifyDatasetChanged) {
             notifyDataSetChanged();
         }
     }
@@ -116,6 +110,10 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
 
     public List<T> getItems() {
         return items;
+    }
+
+    public void setItems(List<T> items) {
+        setItems(items, true);
     }
 
     @Override
@@ -309,7 +307,8 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
 
     protected abstract VH viewHolder(View view, int type);
 
-    protected abstract @LayoutRes int layoutId(int type);
+    protected abstract @LayoutRes
+    int layoutId(int type);
 
     public interface SpanItemInterface {
         int getGridSpan();

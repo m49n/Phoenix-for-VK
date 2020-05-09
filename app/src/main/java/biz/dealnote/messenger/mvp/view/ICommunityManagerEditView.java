@@ -14,14 +14,19 @@ public interface ICommunityManagerEditView extends IMvpView, IAccountDependencyV
     void showUserProfile(int accountId, User user);
 
     void checkModerator();
+
     void checkEditor();
+
     void checkAdmin();
 
     void setShowAsContactCheched(boolean cheched);
+
     void setContactInfoVisible(boolean visible);
 
     void displayPosition(String position);
+
     void displayEmail(String email);
+
     void displayPhone(String phone);
 
     void configRadioButtons(boolean isCreator);

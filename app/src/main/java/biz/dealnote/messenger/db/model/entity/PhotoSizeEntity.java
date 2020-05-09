@@ -17,40 +17,6 @@ public class PhotoSizeEntity {
     private Size z;
     private Size w;
 
-    public static final class Size {
-
-        private int w;
-        private int h;
-        private String url;
-
-        public int getH() {
-            return h;
-        }
-
-        public int getW() {
-            return w;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public Size setH(int h) {
-            this.h = h;
-            return this;
-        }
-
-        public Size setUrl(String url) {
-            this.url = url;
-            return this;
-        }
-
-        public Size setW(int w) {
-            this.w = w;
-            return this;
-        }
-    }
-
     public Size getS() {
         return s;
     }
@@ -139,5 +105,39 @@ public class PhotoSizeEntity {
     public PhotoSizeEntity setW(Size w) {
         this.w = w;
         return this;
+    }
+
+    public static final class Size {
+
+        private int w;
+        private int h;
+        private String url;
+
+        public int getH() {
+            return h;
+        }
+
+        public Size setH(int h) {
+            this.h = h;
+            return this;
+        }
+
+        public int getW() {
+            return w;
+        }
+
+        public Size setW(int w) {
+            this.w = w;
+            return this;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public Size setUrl(String url) {
+            this.url = url;
+            return this;
+        }
     }
 }

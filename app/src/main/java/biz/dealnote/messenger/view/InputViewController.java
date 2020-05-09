@@ -53,6 +53,10 @@ public class InputViewController {
     private int mIconColorInactive;
     private int mCurrentMode = Mode.NORMAL;
     private TextView mRecordingDuration;
+    private boolean canEditingSave;
+    private boolean canNormalSend;
+    private boolean canStartRecording;
+    private RecordActionsCallback mRecordActionsCallback;
 
     public InputViewController(@NonNull final Activity activity, @NonNull View rootView, @NonNull OnInputActionCallback callback) {
         this.callback = callback;
@@ -206,7 +210,7 @@ public class InputViewController {
         this.mInputField.removeTextChangedListener(mTextWatcher);
         this.mInputField.setText(text);
         this.mInputField.requestFocus();
-        if(!Utils.isEmpty(text))
+        if (!Utils.isEmpty(text))
             this.mInputField.setSelection(text.length());
         this.mInputField.addTextChangedListener(mTextWatcher);
     }
@@ -315,10 +319,6 @@ public class InputViewController {
         mRecordResumePause.setImageResource(visible ? (isRecording ? R.drawable.pause : R.drawable.play) : R.drawable.pause_disabled);
     }
 
-    private boolean canEditingSave;
-    private boolean canNormalSend;
-    private boolean canStartRecording;
-
     public void switchModeToEditing(boolean canSave) {
         switсhModeTo(Mode.EDITING);
         this.canEditingSave = canSave;
@@ -341,6 +341,15 @@ public class InputViewController {
         switсhModeTo(Mode.DISABLED);
     }
 
+    public void setRecordActionsCallback(RecordActionsCallback recordActionsCallback) {
+        this.mRecordActionsCallback = recordActionsCallback;
+    }
+
+    public void setRecordingDuration(long time) {
+        String str = AppTextUtils.getDurationString((int) (time / 1000));
+        mRecordingDuration.setText(mActivity.getString(R.string.recording_time, str));
+    }
+
     public interface OnInputActionCallback {
         void onInputTextChanged(String s);
 
@@ -349,12 +358,6 @@ public class InputViewController {
         void onAttachClick();
 
         void onSaveClick();
-    }
-
-    private RecordActionsCallback mRecordActionsCallback;
-
-    public void setRecordActionsCallback(RecordActionsCallback recordActionsCallback) {
-        this.mRecordActionsCallback = recordActionsCallback;
     }
 
     public interface RecordActionsCallback {
@@ -374,10 +377,5 @@ public class InputViewController {
         public static final int VOICE_RECORD = 2;
         public static final int EDITING = 3;
         public static final int DISABLED = 4;
-    }
-
-    public void setRecordingDuration(long time) {
-        String str = AppTextUtils.getDurationString((int) (time / 1000));
-        mRecordingDuration.setText(mActivity.getString(R.string.recording_time, str));
     }
 }

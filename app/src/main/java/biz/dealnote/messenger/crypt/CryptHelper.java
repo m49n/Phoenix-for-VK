@@ -42,9 +42,9 @@ public class CryptHelper {
 
         if (Utils.safeIsEmpty(text)) {
             type = MessageType.NORMAL;
-        } else if(isKeyExchangeServiceMessage(text)){
+        } else if (isKeyExchangeServiceMessage(text)) {
             type = MessageType.KEY_EXCHANGE;
-        } else if(isAes(text)){
+        } else if (isAes(text)) {
             type = MessageType.CRYPTED;
         }
 
@@ -55,17 +55,18 @@ public class CryptHelper {
 
     /**
      * Является ли сообщение служебным (для обмена ключами шифрования)
+     *
      * @param text текст сообщения
      * @return true - если сообщение является служебным, использовалось для обмена ключами шифрования
      */
     @SuppressLint("WrongConstant")
-    private static boolean isKeyExchangeServiceMessage(String text){
-        if(isEmpty(text)){
+    private static boolean isKeyExchangeServiceMessage(String text) {
+        if (isEmpty(text)) {
             return false;
         }
 
         try {
-            if(!text.endsWith("}") || !text.startsWith("RSA{")){
+            if (!text.endsWith("}") || !text.startsWith("RSA{")) {
                 return false;
             }
 
@@ -75,15 +76,15 @@ public class CryptHelper {
                     && message.getSessionId() > 0
                     && message.getVersion() > 0
                     && message.getSenderSessionState() > 0;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     // проверяем удовлетворяет ли текст формату AES{$key_location_policy}{$session_id}:{$encrypted_body}
     // (А-аптемезацея)
-    private static boolean isAes(String text){
-        if(isNull(text) || text.length() == 0) {
+    private static boolean isAes(String text) {
+        if (isNull(text) || text.length() == 0) {
             return false;
         }
 
@@ -92,24 +93,24 @@ public class CryptHelper {
         boolean hasDivider = false;
 
         out:
-        for(int i = 0; i < text.length(); i++){
+        for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
 
-            switch (i){
+            switch (i) {
                 case 0:
-                    if(c == 'A'){
+                    if (c == 'A') {
                         yesAes = true;
                     } else {
                         break out;
                     }
                     break;
                 case 1:
-                    if(c != 'E'){
+                    if (c != 'E') {
                         yesAes = false;
                     }
                     break;
                 case 2:
-                    if(c != 'S'){
+                    if (c != 'S') {
                         yesAes = false;
                     }
                     break;
@@ -117,10 +118,10 @@ public class CryptHelper {
                 default:
                     boolean digit = Character.isDigit(c);
 
-                    if(digit){
+                    if (digit) {
                         digitsCount++;
                     } else {
-                        if(c == ':'){
+                        if (c == ':') {
                             hasDivider = true;
                             break out;
                         } else {
@@ -131,7 +132,7 @@ public class CryptHelper {
                     break;
             }
 
-            if(!yesAes){
+            if (!yesAes) {
                 break;
             }
         }
@@ -155,7 +156,7 @@ public class CryptHelper {
     }
 
     public static EncryptedMessage parseEncryptedMessage(String body) throws EncryptedMessageParseException {
-        if(isEmpty(body)){
+        if (isEmpty(body)) {
             return null;
         }
 
@@ -170,7 +171,7 @@ public class CryptHelper {
             String originalBody = body.substring(dividerLocation + 1);
 
             return new EncryptedMessage(sessionId, originalBody, keyLocationPolicy);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new EncryptedMessageParseException();
         }
     }

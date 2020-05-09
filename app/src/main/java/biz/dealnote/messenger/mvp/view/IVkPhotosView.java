@@ -18,7 +18,9 @@ public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorV
     String ACTION_SELECT_PHOTOS = "biz.dealnote.messenger.ACTION_SELECT_PHOTOS";
 
     void displayData(List<SelectablePhotoWrapper> photos, List<Upload> uploads);
+
     void notifyDataSetChanged();
+
     void notifyPhotosAdded(int position, int count);
 
     void displayRefreshing(boolean refreshing);

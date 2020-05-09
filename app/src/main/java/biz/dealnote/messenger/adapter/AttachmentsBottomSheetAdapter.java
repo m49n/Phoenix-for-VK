@@ -92,15 +92,15 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindImageHolder(holder, (Photo) model);
         } else if (model instanceof Upload) {
             bindUploading(holder, (Upload) model);
-        } else if(model instanceof Post){
+        } else if (model instanceof Post) {
             bindPost(holder, (Post) model);
-        } else if(model instanceof Video){
+        } else if (model instanceof Video) {
             bindVideo(holder, (Video) model);
-        } else if(model instanceof FwdMessages){
+        } else if (model instanceof FwdMessages) {
             bindMessages(holder, (FwdMessages) model);
-        } else if(model instanceof Document){
+        } else if (model instanceof Document) {
             bindDoc(holder, (Document) model);
-        } else if(model instanceof Audio){
+        } else if (model instanceof Audio) {
             bindAudio(holder, (Audio) model);
         }
 
@@ -108,7 +108,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
     }
 
     @SuppressWarnings("unused")
-    private void bindMessages(EntryHolder holder, FwdMessages messages){
+    private void bindMessages(EntryHolder holder, FwdMessages messages) {
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
 
@@ -117,8 +117,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         bindImageView(holder, null);
     }
 
-    private void bindImageView(EntryHolder holder, String url){
-        if(isEmpty(url)){
+    private void bindImageView(EntryHolder holder, String url) {
+        if (isEmpty(url)) {
             PicassoInstance.with().cancelRequest(holder.image);
             holder.image.setImageResource(R.drawable.background_gray);
         } else {
@@ -129,8 +129,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
-    private void bindImageAudioView(EntryHolder holder, String url){
-        if(isEmpty(url)){
+    private void bindImageAudioView(EntryHolder holder, String url) {
+        if (isEmpty(url)) {
             PicassoInstance.with().cancelRequest(holder.image);
             holder.image.setImageResource(R.drawable.generic_audio_nowplaying);
         } else {
@@ -149,7 +149,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         bindImageAudioView(holder, audio.getThumb_image_big());
     }
 
-    private void bindVideo(EntryHolder holder, Video video){
+    private void bindVideo(EntryHolder holder, Video video) {
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(video.getTitle());
@@ -157,7 +157,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         bindImageView(holder, video.getImage());
     }
 
-    private void bindDoc(EntryHolder holder, Document doc){
+    private void bindDoc(EntryHolder holder, Document doc) {
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(doc.getTitle());
@@ -167,12 +167,12 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         bindImageView(holder, imgUrl);
     }
 
-    private void bindPost(EntryHolder holder, Post post){
+    private void bindPost(EntryHolder holder, Post post) {
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
 
         String title = post.getTextCopiesInclude();
-        if(isEmpty(title)){
+        if (isEmpty(title)) {
             holder.title.setText(R.string.attachment_wall_post);
         } else {
             holder.title.setText(title);

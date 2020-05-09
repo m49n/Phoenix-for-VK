@@ -27,7 +27,7 @@ public abstract class AbsPostEditPresenter<V extends IBasePostEditView> extends 
     }
 
     public final void fireShowAuthorChecked(boolean checked) {
-        if(addSignature.setValue(checked)){
+        if (addSignature.setValue(checked)) {
             onShowAuthorChecked(checked);
         }
     }
@@ -45,60 +45,60 @@ public abstract class AbsPostEditPresenter<V extends IBasePostEditView> extends 
         view.setFromGroupChecked(fromGroup.get());
     }
 
-    void checkFriendsOnly(boolean checked){
-        if(this.friendsOnly.setValue(checked)){
+    void checkFriendsOnly(boolean checked) {
+        if (this.friendsOnly.setValue(checked)) {
             callView(view -> view.setFriendsOnlyCheched(checked));
         }
     }
 
-    void onShowAuthorChecked(boolean checked){
+    void onShowAuthorChecked(boolean checked) {
 
     }
 
     public final void fireFromGroupChecked(boolean checked) {
-        if(fromGroup.setValue(checked)){
+        if (fromGroup.setValue(checked)) {
             onFromGroupChecked(checked);
         }
     }
 
 
-    void onFromGroupChecked(boolean checked){
+    void onFromGroupChecked(boolean checked) {
 
     }
 
-    void setFriendsOnlyOptionAvailable(boolean available) {
-        if(friendsOnlyOptionAvailable.setValue(available)){
-            callView(view -> view.setFriendsOnlyOptionVisible(available));
-        }
-    }
-
-    void setAddSignatureOptionAvailable(boolean available){
-        if(addSignatureOptionAvailable.setValue(available)){
-            callView(view -> view.setAddSignatureOptionVisible(available));
-        }
-    }
-
-    void setFromGroupOptionAvailable(boolean available){
-        if(fromGroupOptionAvailable.setValue(available)){
+    void setFromGroupOptionAvailable(boolean available) {
+        if (fromGroupOptionAvailable.setValue(available)) {
             callView(view -> view.setFromGroupOptionVisible(available));
         }
     }
 
     public final void fireFriendsOnlyCheched(boolean checked) {
-        if(friendsOnly.setValue(checked)){
+        if (friendsOnly.setValue(checked)) {
             onFriendsOnlyCheched(checked);
         }
     }
 
-    boolean isAddSignatureOptionAvailable(){
+    boolean isAddSignatureOptionAvailable() {
         return addSignatureOptionAvailable.get();
     }
 
-    boolean isFriendsOnlyOptionAvailable(){
+    void setAddSignatureOptionAvailable(boolean available) {
+        if (addSignatureOptionAvailable.setValue(available)) {
+            callView(view -> view.setAddSignatureOptionVisible(available));
+        }
+    }
+
+    boolean isFriendsOnlyOptionAvailable() {
         return friendsOnlyOptionAvailable.get();
     }
 
-    void onFriendsOnlyCheched(boolean checked){
+    void setFriendsOnlyOptionAvailable(boolean available) {
+        if (friendsOnlyOptionAvailable.setValue(available)) {
+            callView(view -> view.setFriendsOnlyOptionVisible(available));
+        }
+    }
+
+    void onFriendsOnlyCheched(boolean checked) {
 
     }
 }

@@ -38,6 +38,11 @@ public class CenteredToolbar extends MaterialToolbar {
     }
 
     @Override
+    public CharSequence getTitle() {
+        return tvTitle.getText().toString();
+    }
+
+    @Override
     public void setTitle(@StringRes int resId) {
         String s = getResources().getString(resId);
         setTitle(s);
@@ -46,6 +51,11 @@ public class CenteredToolbar extends MaterialToolbar {
     @Override
     public void setTitle(CharSequence title) {
         tvTitle.setText(title);
+    }
+
+    @Override
+    public CharSequence getSubtitle() {
+        return tvSubtitle.getText().toString();
     }
 
     @Override
@@ -61,16 +71,6 @@ public class CenteredToolbar extends MaterialToolbar {
         }
         tvSubtitle.setVisibility(VISIBLE);
         tvSubtitle.setText(subtitle);
-    }
-
-    @Override
-    public CharSequence getTitle() {
-        return tvTitle.getText().toString();
-    }
-
-    @Override
-    public CharSequence getSubtitle() {
-        return tvSubtitle.getText().toString();
     }
 
     private void setupTextViews() {

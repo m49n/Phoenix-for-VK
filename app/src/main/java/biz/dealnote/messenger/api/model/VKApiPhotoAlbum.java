@@ -111,7 +111,7 @@ public class VKApiPhotoAlbum implements VKApiAttachment {
         return TYPE_ALBUM;
     }
 
-    public boolean isSystem(){
+    public boolean isSystem() {
         return id < 0;
     }
 }

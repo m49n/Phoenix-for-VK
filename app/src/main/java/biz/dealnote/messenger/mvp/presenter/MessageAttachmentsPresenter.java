@@ -49,16 +49,16 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAttachmentsView> {
 
+    private static final String SAVE_CAMERA_FILE_URI = "save_camera_file_uri";
+    private static final String SAVE_ACCOMPANYING_ENTRIES = "save_accompanying_entries";
     private final int accountId;
     private final int messageOwnerId;
     private final int messageId;
     private final List<AttachmenEntry> entries;
-
     private final IAttachmentsRepository attachmentsRepository;
     private final UploadDestination destination;
-
-    private Uri currentPhotoCameraUri;
     private final IUploadManager uploadManager;
+    private Uri currentPhotoCameraUri;
 
     public MessageAttachmentsPresenter(int accountId, int messageOwnerId, int messageId, @Nullable ModelsBundle bundle, @Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -112,6 +112,15 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
                 .subscribe(this::onUploadProgressUpdates));
 
         loadData();
+    }
+
+    private static List<AttachmenEntry> entities2entries(List<Pair<Integer, AbsModel>> pairs) {
+        List<AttachmenEntry> entries = new ArrayList<>(pairs.size());
+        for (Pair<Integer, AbsModel> pair : pairs) {
+            entries.add(new AttachmenEntry(true, pair.getSecond())
+                    .setOptionalId(pair.getFirst()));
+        }
+        return entries;
     }
 
     private void handleInputModels(ModelsBundle bundle) {
@@ -205,15 +214,6 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         resolveEmptyViewVisibility();
     }
 
-    private static List<AttachmenEntry> entities2entries(List<Pair<Integer, AbsModel>> pairs) {
-        List<AttachmenEntry> entries = new ArrayList<>(pairs.size());
-        for (Pair<Integer, AbsModel> pair : pairs) {
-            entries.add(new AttachmenEntry(true, pair.getSecond())
-                    .setOptionalId(pair.getFirst()));
-        }
-        return entries;
-    }
-
     private void onAttachmentsAdded(List<Pair<Integer, AbsModel>> pairs) {
         onDataReceived(entities2entries(pairs));
     }
@@ -263,7 +263,7 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
     }
 
     public void firePhotosSelected(ArrayList<Photo> photos, ArrayList<LocalPhoto> localPhotos, String file) {
-        if(nonEmpty(file))
+        if (nonEmpty(file))
             doUploadFile(file);
         else if (nonEmpty(photos)) {
             fireAttachmentsSelected(photos);
@@ -360,9 +360,6 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
             safeShowError(getView(), e.getMessage());
         }
     }
-
-    private static final String SAVE_CAMERA_FILE_URI = "save_camera_file_uri";
-    private static final String SAVE_ACCOMPANYING_ENTRIES = "save_accompanying_entries";
 
     @Override
     public void saveState(@NonNull Bundle outState) {

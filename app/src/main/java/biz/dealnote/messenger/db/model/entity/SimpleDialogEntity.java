@@ -26,17 +26,16 @@ public class SimpleDialogEntity {
 
     private int acl;
 
-    public SimpleDialogEntity setAcl(int acl) {
-        this.acl = acl;
-        return this;
+    public SimpleDialogEntity(int peerId) {
+        this.peerId = peerId;
     }
 
     public int getAcl() {
         return acl;
     }
 
-    public SimpleDialogEntity setLastMessageId(int lastMessageId) {
-        this.lastMessageId = lastMessageId;
+    public SimpleDialogEntity setAcl(int acl) {
+        this.acl = acl;
         return this;
     }
 
@@ -44,8 +43,8 @@ public class SimpleDialogEntity {
         return lastMessageId;
     }
 
-    public SimpleDialogEntity setPinned(MessageEntity pinned) {
-        this.pinned = pinned;
+    public SimpleDialogEntity setLastMessageId(int lastMessageId) {
+        this.lastMessageId = lastMessageId;
         return this;
     }
 
@@ -53,8 +52,9 @@ public class SimpleDialogEntity {
         return pinned;
     }
 
-    public SimpleDialogEntity(int peerId) {
-        this.peerId = peerId;
+    public SimpleDialogEntity setPinned(MessageEntity pinned) {
+        this.pinned = pinned;
+        return this;
     }
 
     public int getPeerId() {

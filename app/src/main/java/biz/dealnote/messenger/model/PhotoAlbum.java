@@ -11,30 +11,29 @@ import biz.dealnote.messenger.api.model.Identificable;
  */
 public class PhotoAlbum extends AbsModel implements Parcelable, Identificable, ISomeones {
 
+    public static final Creator<PhotoAlbum> CREATOR = new Creator<PhotoAlbum>() {
+        @Override
+        public PhotoAlbum createFromParcel(Parcel in) {
+            return new PhotoAlbum(in);
+        }
+
+        @Override
+        public PhotoAlbum[] newArray(int size) {
+            return new PhotoAlbum[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private int size;
-
     private String title;
-
     private String description;
-
     private boolean canUpload;
-
     private long updatedTime;
-
     private long createdTime;
-
     private PhotoSizes sizes;
-
     private boolean uploadByAdminsOnly;
-
     private boolean commentsDisabled;
-
     private SimplePrivacy privacyView;
-
     private SimplePrivacy privacyComment;
 
     public PhotoAlbum(int id, int ownerId) {
@@ -76,18 +75,6 @@ public class PhotoAlbum extends AbsModel implements Parcelable, Identificable, I
         dest.writeParcelable(privacyView, flags);
         dest.writeParcelable(privacyComment, flags);
     }
-
-    public static final Creator<PhotoAlbum> CREATOR = new Creator<PhotoAlbum>() {
-        @Override
-        public PhotoAlbum createFromParcel(Parcel in) {
-            return new PhotoAlbum(in);
-        }
-
-        @Override
-        public PhotoAlbum[] newArray(int size) {
-            return new PhotoAlbum[size];
-        }
-    };
 
     public int getId() {
         return id;
@@ -178,21 +165,21 @@ public class PhotoAlbum extends AbsModel implements Parcelable, Identificable, I
         return this;
     }
 
-    public PhotoAlbum setPrivacyComment(SimplePrivacy privacyComment) {
-        this.privacyComment = privacyComment;
-        return this;
-    }
-
     public SimplePrivacy getPrivacyView() {
         return privacyView;
+    }
+
+    public PhotoAlbum setPrivacyView(SimplePrivacy privacyView) {
+        this.privacyView = privacyView;
+        return this;
     }
 
     public SimplePrivacy getPrivacyComment() {
         return privacyComment;
     }
 
-    public PhotoAlbum setPrivacyView(SimplePrivacy privacyView) {
-        this.privacyView = privacyView;
+    public PhotoAlbum setPrivacyComment(SimplePrivacy privacyComment) {
+        this.privacyComment = privacyComment;
         return this;
     }
 

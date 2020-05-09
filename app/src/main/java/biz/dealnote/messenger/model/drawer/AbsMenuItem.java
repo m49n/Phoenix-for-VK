@@ -9,17 +9,6 @@ public class AbsMenuItem implements Parcelable {
     public static final int TYPE_WITHOUT_ICON = 1;
     public static final int TYPE_DIVIDER = 2;
     public static final int TYPE_RECENT_CHAT = 3;
-
-    private boolean selected;
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
     public static Creator<AbsMenuItem> CREATOR = new Creator<AbsMenuItem>() {
         public AbsMenuItem createFromParcel(Parcel source) {
             return new AbsMenuItem(source);
@@ -29,8 +18,25 @@ public class AbsMenuItem implements Parcelable {
             return new AbsMenuItem[size];
         }
     };
-
+    private boolean selected;
     private int type;
+
+    public AbsMenuItem(int type) {
+        this.type = type;
+    }
+
+    public AbsMenuItem(Parcel in) {
+        this.type = in.readInt();
+        this.selected = in.readInt() == 1;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public int getType() {
         return type;
@@ -45,15 +51,6 @@ public class AbsMenuItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(type);
         dest.writeInt(selected ? 1 : 0);
-    }
-
-    public AbsMenuItem(int type) {
-        this.type = type;
-    }
-
-    public AbsMenuItem(Parcel in) {
-        this.type = in.readInt();
-        this.selected = in.readInt() == 1;
     }
 
     @Override

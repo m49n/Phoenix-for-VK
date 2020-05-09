@@ -11,5 +11,6 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IDrawerEditView extends IMvpView {
     void displayData(List<DrawerCategory> data);
+
     void goBackAndApplyChanges();
 }

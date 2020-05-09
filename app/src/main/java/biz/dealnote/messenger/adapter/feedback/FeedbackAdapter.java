@@ -42,6 +42,7 @@ public class FeedbackAdapter extends RecyclerBindableAdapter<Feedback, FeedbackA
 
     private Context mContext;
     private FeedbackViewBinder mFeedbackViewBinder;
+    private ClickListener mClickListener;
 
     public FeedbackAdapter(Activity context, List<Feedback> items, AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback) {
         super(items);
@@ -87,20 +88,14 @@ public class FeedbackAdapter extends RecyclerBindableAdapter<Feedback, FeedbackA
         }
 
         viewHolder.contentRoot.setOnClickListener(v -> {
-            if(mClickListener != null){
+            if (mClickListener != null) {
                 mClickListener.onNotificationClick(item);
             }
         });
     }
 
-    private ClickListener mClickListener;
-
     public void setClickListener(ClickListener clickListener) {
         this.mClickListener = clickListener;
-    }
-
-    public interface ClickListener extends EventListener {
-        void onNotificationClick(Feedback notification);
     }
 
     private void configCommentHolder(Feedback notification, CommentHolder holder) {
@@ -283,6 +278,10 @@ public class FeedbackAdapter extends RecyclerBindableAdapter<Feedback, FeedbackA
         } else if (time >= week) {
             return HEADER_THIS_WEEK;
         } else return HEADER_OLD;
+    }
+
+    public interface ClickListener extends EventListener {
+        void onNotificationClick(Feedback notification);
     }
 
     class FeedbackHolder extends RecyclerView.ViewHolder {

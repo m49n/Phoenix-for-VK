@@ -9,16 +9,6 @@ import android.os.Parcelable;
  */
 public class IntNextFrom extends AbsNextFrom implements Parcelable {
 
-    private int offset;
-
-    public IntNextFrom(int initValue){
-        this.offset = initValue;
-    }
-
-    protected IntNextFrom(Parcel in) {
-        offset = in.readInt();
-    }
-
     public static final Creator<IntNextFrom> CREATOR = new Creator<IntNextFrom>() {
         @Override
         public IntNextFrom createFromParcel(Parcel in) {
@@ -30,6 +20,15 @@ public class IntNextFrom extends AbsNextFrom implements Parcelable {
             return new IntNextFrom[size];
         }
     };
+    private int offset;
+
+    public IntNextFrom(int initValue) {
+        this.offset = initValue;
+    }
+
+    protected IntNextFrom(Parcel in) {
+        offset = in.readInt();
+    }
 
     public int getOffset() {
         return offset;

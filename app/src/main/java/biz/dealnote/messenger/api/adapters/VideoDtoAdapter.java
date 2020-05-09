@@ -37,8 +37,8 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.views = optInt(root, "views");
 
         JsonElement commentJson = root.get("comments");
-        if(nonNull(commentJson)){
-            if(commentJson.isJsonObject()){
+        if (nonNull(commentJson)) {
+            if (commentJson.isJsonObject()) {
                 //for example, newsfeed.getComment
                 dto.comments = context.deserialize(commentJson, CommentsDto.class);
             } else {
@@ -52,7 +52,7 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.access_key = optString(root, "access_key");
         dto.album_id = optInt(root, "album_id");
 
-        if(root.has("likes")){
+        if (root.has("likes")) {
             JsonObject likesRoot = root.getAsJsonObject("likes");
             dto.likes = optInt(likesRoot, "count");
             dto.user_likes = optIntAsBoolean(likesRoot, "user_likes");
@@ -62,15 +62,15 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.can_repost = optIntAsBoolean(root, "can_repost");
         dto.repeat = optIntAsBoolean(root, "repeat");
 
-        if(root.has("privacy_view")){
+        if (root.has("privacy_view")) {
             dto.privacy_view = context.deserialize(root.get("privacy_view"), VkApiPrivacy.class);
         }
 
-        if(root.has("privacy_comment")){
+        if (root.has("privacy_comment")) {
             dto.privacy_comment = context.deserialize(root.get("privacy_comment"), VkApiPrivacy.class);
         }
 
-        if(root.has("files")){
+        if (root.has("files")) {
             JsonObject filesRoot = root.getAsJsonObject("files");
             dto.mp4_240 = optString(filesRoot, "mp4_240");
             dto.mp4_360 = optString(filesRoot, "mp4_360");
@@ -82,29 +82,29 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
             dto.live = optString(filesRoot, "live");
         }
 
-        if(root.has("image")) {
+        if (root.has("image")) {
             JsonArray images = root.getAsJsonArray("image");
-            if(images.size() > 0) {
-                for(int i = 0; i < images.size(); i++) {
-                    if(images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+            if (images.size() > 0) {
+                for (int i = 0; i < images.size(); i++) {
+                    if (images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
                         dto.image = images.get(i).getAsJsonObject().get("url").getAsString();
                         break;
                     }
                 }
-                if(dto.image == null)
+                if (dto.image == null)
                     dto.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
             }
         }
-        if(dto.image == null && root.has("first_frame")) {
+        if (dto.image == null && root.has("first_frame")) {
             JsonArray images = root.getAsJsonArray("first_frame");
-            if(images.size() > 0) {
-                for(int i = 0; i < images.size(); i++) {
-                    if(images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+            if (images.size() > 0) {
+                for (int i = 0; i < images.size(); i++) {
+                    if (images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
                         dto.image = images.get(i).getAsJsonObject().get("url").getAsString();
                         break;
                     }
                 }
-                if(dto.image == null)
+                if (dto.image == null)
                     dto.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
             }
         }

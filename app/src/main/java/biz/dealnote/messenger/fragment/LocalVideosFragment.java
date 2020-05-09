@@ -91,14 +91,14 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
 
     @Override
     public void setEmptyTextVisible(boolean visible) {
-        if(Objects.nonNull(mEmptyTextView)){
+        if (Objects.nonNull(mEmptyTextView)) {
             mEmptyTextView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void displayProgress(boolean loading) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
@@ -115,7 +115,7 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
 
     @Override
     public void updateSelectionAndIndexes() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.updateHoldersSelectionAndIndexes();
         }
     }
@@ -138,7 +138,7 @@ public class LocalVideosFragment extends BaseMvpFragment<LocalVideosPresenter, I
 
     @Override
     public void showError(@StringRes int titleRes, Object... params) {
-        if(isAdded()) showError(getString(titleRes, params));
+        if (isAdded()) showError(getString(titleRes, params));
     }
 
     @Override

@@ -10,11 +10,12 @@
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
         app:elevation="0dp">
-    <biz.dealnote.messenger.view.MySearchView
-        android:id="@+id/searchview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways|snap" />
+
+        <biz.dealnote.messenger.view.MySearchView
+            android:id="@+id/searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

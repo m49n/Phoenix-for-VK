@@ -13,6 +13,17 @@ import androidx.annotation.NonNull;
  */
 public final class WallEditorAttrs implements Parcelable {
 
+    public static final Creator<WallEditorAttrs> CREATOR = new Creator<WallEditorAttrs>() {
+        @Override
+        public WallEditorAttrs createFromParcel(Parcel in) {
+            return new WallEditorAttrs(in);
+        }
+
+        @Override
+        public WallEditorAttrs[] newArray(int size) {
+            return new WallEditorAttrs[size];
+        }
+    };
     private final ParcelableOwnerWrapper owner;
     private final ParcelableOwnerWrapper editor;
 
@@ -25,18 +36,6 @@ public final class WallEditorAttrs implements Parcelable {
         owner = in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader());
         editor = in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader());
     }
-
-    public static final Creator<WallEditorAttrs> CREATOR = new Creator<WallEditorAttrs>() {
-        @Override
-        public WallEditorAttrs createFromParcel(Parcel in) {
-            return new WallEditorAttrs(in);
-        }
-
-        @Override
-        public WallEditorAttrs[] newArray(int size) {
-            return new WallEditorAttrs[size];
-        }
-    };
 
     @NonNull
     public Owner getOwner() {

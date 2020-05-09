@@ -7,25 +7,24 @@ package biz.dealnote.messenger.db.model;
 public class PhotoPatch {
 
     private Like like;
-
-    public PhotoPatch setLike(Like like) {
-        this.like = like;
-        return this;
-    }
-
     private Deletion deletion;
+
+    public Deletion getDeletion() {
+        return deletion;
+    }
 
     public PhotoPatch setDeletion(Deletion deletion) {
         this.deletion = deletion;
         return this;
     }
 
-    public Deletion getDeletion() {
-        return deletion;
-    }
-
     public Like getLike() {
         return like;
+    }
+
+    public PhotoPatch setLike(Like like) {
+        this.like = like;
+        return this;
     }
 
     public static final class Like {

@@ -11,10 +11,19 @@ import androidx.annotation.NonNull;
  */
 public final class Banned implements Parcelable {
 
+    public static final Creator<Banned> CREATOR = new Creator<Banned>() {
+        @Override
+        public Banned createFromParcel(Parcel in) {
+            return new Banned(in);
+        }
+
+        @Override
+        public Banned[] newArray(int size) {
+            return new Banned[size];
+        }
+    };
     private final Owner banned;
-
     private final User admin;
-
     private final Info info;
 
     public Banned(@NonNull Owner banned, @NonNull User admin, @NonNull Info info) {
@@ -29,18 +38,6 @@ public final class Banned implements Parcelable {
         admin = in.readParcelable(User.class.getClassLoader());
         info = in.readParcelable(Info.class.getClassLoader());
     }
-
-    public static final Creator<Banned> CREATOR = new Creator<Banned>() {
-        @Override
-        public Banned createFromParcel(Parcel in) {
-            return new Banned(in);
-        }
-
-        @Override
-        public Banned[] newArray(int size) {
-            return new Banned[size];
-        }
-    };
 
     public Owner getBanned() {
         return banned;
@@ -68,24 +65,6 @@ public final class Banned implements Parcelable {
 
     public static final class Info implements Parcelable {
 
-        private long date;
-
-        private int reason;
-
-        private String comment;
-
-        private long endDate;
-
-        private boolean commentVisible;
-
-        private Info(Parcel in) {
-            date = in.readLong();
-            reason = in.readInt();
-            comment = in.readString();
-            endDate = in.readLong();
-            commentVisible = in.readByte() != 0;
-        }
-
         public static final Creator<Info> CREATOR = new Creator<Info>() {
             @Override
             public Info createFromParcel(Parcel in) {
@@ -97,6 +76,19 @@ public final class Banned implements Parcelable {
                 return new Info[size];
             }
         };
+        private long date;
+        private int reason;
+        private String comment;
+        private long endDate;
+        private boolean commentVisible;
+
+        private Info(Parcel in) {
+            date = in.readLong();
+            reason = in.readInt();
+            comment = in.readString();
+            endDate = in.readLong();
+            commentVisible = in.readByte() != 0;
+        }
 
         public Info() {
 

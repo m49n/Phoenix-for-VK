@@ -23,7 +23,7 @@ public class ChatsInfoAdapter extends AbsAdapter implements JsonDeserializer<Cha
     public ChatsInfoResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         List<VKApiChat> chats;
 
-        if(json.isJsonObject()){
+        if (json.isJsonObject()) {
             chats = Collections.singletonList(context.deserialize(json, VKApiChat.class));
         } else {
             JsonArray array = json.getAsJsonArray();

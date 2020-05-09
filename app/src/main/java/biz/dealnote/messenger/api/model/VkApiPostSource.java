@@ -32,6 +32,10 @@ public class VkApiPostSource {
      * poll — виджет опросов;
      */
     public int data;
+    /**
+     * является опциональным и может содержать внешнюю ссылку на ресурс, с которого была опубликована запись.
+     */
+    public String url;
 
     public static class Type {
 
@@ -41,16 +45,16 @@ public class VkApiPostSource {
         public static final int RSS = 4;
         public static final int SMS = 5;
 
-        public static int parse(String original){
-            if("vk".equals(original)){
+        public static int parse(String original) {
+            if ("vk".equals(original)) {
                 return VK;
-            } else if("widget".equals(original)){
+            } else if ("widget".equals(original)) {
                 return WIDGET;
-            } else if("api".equals(original)){
+            } else if ("api".equals(original)) {
                 return API;
-            } else if("rss".equals(original)){
+            } else if ("rss".equals(original)) {
                 return RSS;
-            } else if("sms".equals(original)){
+            } else if ("sms".equals(original)) {
                 return SMS;
             } else {
                 return 0;
@@ -86,9 +90,4 @@ public class VkApiPostSource {
             }
         }
     }
-
-    /**
-     * является опциональным и может содержать внешнюю ссылку на ресурс, с которого была опубликована запись.
-     */
-    public String url;
 }

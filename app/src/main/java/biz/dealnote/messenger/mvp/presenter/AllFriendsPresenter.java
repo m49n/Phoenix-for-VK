@@ -48,6 +48,12 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
 
     private boolean actualDataReceived;
     private boolean actualDataEndOfContent;
+    private boolean actualDataLoadingNow;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean searchRunNow;
+    private CompositeDisposable seacrhDisposable = new CompositeDisposable();
 
     public AllFriendsPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -63,9 +69,10 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         requestActualData(0);
     }
 
-    private boolean actualDataLoadingNow;
-
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
+    private static boolean allow(User user, String preparedQ) {
+        String full = user.getFullName().toLowerCase();
+        return full.contains(preparedQ);
+    }
 
     private void requestActualData(int offset) {
         this.actualDataLoadingNow = true;
@@ -129,9 +136,6 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
 
         resolveRefreshingView();
     }
-
-    private boolean cacheLoadingNow;
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
 
     private void loadAllCachedData() {
         final int accountId = super.getAccountId();
@@ -212,8 +216,6 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         runNetSeacrh(0, true);
     }
 
-    private boolean searchRunNow;
-
     private void runNetSeacrh(int offset, boolean withDelay) {
         if (trimmedIsEmpty(this.q)) {
             return;
@@ -265,11 +267,6 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         }
     }
 
-    private static boolean allow(User user, String preparedQ) {
-        String full = user.getFullName().toLowerCase();
-        return full.contains(preparedQ);
-    }
-
     private void reFillCache() {
         data.get(SEACRH_CACHE).users.clear();
 
@@ -287,8 +284,6 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
 
         data.get(SEACRH_CACHE).displayCount = count;
     }
-
-    private CompositeDisposable seacrhDisposable = new CompositeDisposable();
 
     private boolean isSeacrhNow() {
         return nonEmpty(q);

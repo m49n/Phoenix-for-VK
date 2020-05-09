@@ -33,7 +33,7 @@ public abstract class Owner extends AbsModel implements Parcelable {
         return ownerType;
     }
 
-    public int getOwnerId(){
+    public int getOwnerId() {
         throw new UnsupportedOperationException();
     }
 
@@ -41,19 +41,19 @@ public abstract class Owner extends AbsModel implements Parcelable {
         throw new UnsupportedOperationException();
     }
 
-    public String getMaxSquareAvatar(){
+    public String getMaxSquareAvatar() {
         throw new UnsupportedOperationException();
     }
 
-    public String getOriginalAvatar(){
+    public String getOriginalAvatar() {
         throw new UnsupportedOperationException();
     }
 
-    public String get100photoOrSmaller(){
+    public String get100photoOrSmaller() {
         throw new UnsupportedOperationException();
     }
 
-    public String getFullName(){
+    public String getFullName() {
         throw new UnsupportedOperationException();
     }
 }

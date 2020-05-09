@@ -55,12 +55,21 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  * phoenix
  */
 public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideosListView>
-        implements IVideosListView, DocsUploadAdapter.ActionListener,  VideosAdapter.VideoOnClickListener {
+        implements IVideosListView, DocsUploadAdapter.ActionListener, VideosAdapter.VideoOnClickListener {
 
     public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
     public static final String EXTRA_ALBUM_TITLE = "album_title";
     private static final int PERM_REQUEST_READ_STORAGE = 17;
     private static final int REQUEST_CODE_FILE = 115;
+    /**
+     * True - если фрагмент находится внутри TabLayout
+     */
+    private boolean inTabsContainer;
+    private VideosAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private DocsUploadAdapter mUploadAdapter;
+    private View mUploadRoot;
+    private TextView mEmpty;
 
     public static Bundle buildArgs(int accoutnId, int ownerId, int albumId, String action, @Nullable String albumTitle) {
         Bundle args = new Bundle();
@@ -75,6 +84,16 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
         return args;
     }
 
+    public static VideosFragment newInstance(int accoutnId, int ownerId, int albumId, String action, @Nullable String albumTitle) {
+        return newInstance(buildArgs(accoutnId, ownerId, albumId, action, albumTitle));
+    }
+
+    public static VideosFragment newInstance(Bundle args) {
+        VideosFragment fragment = new VideosFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public IPresenterFactory<VideosListPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -87,28 +106,6 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
             return new VideosListPresenter(accountId, ownerId, albumId, action, optAlbumTitle, requireActivity(), saveInstanceState);
         };
     }
-
-    public static VideosFragment newInstance(int accoutnId, int ownerId, int albumId, String action, @Nullable String albumTitle) {
-        return newInstance(buildArgs(accoutnId, ownerId, albumId, action, albumTitle));
-    }
-
-    public static VideosFragment newInstance(Bundle args) {
-        VideosFragment fragment = new VideosFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * True - если фрагмент находится внутри TabLayout
-     */
-    private boolean inTabsContainer;
-
-    private VideosAdapter mAdapter;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private DocsUploadAdapter mUploadAdapter;
-    private View mUploadRoot;
-    private TextView mEmpty;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -238,7 +235,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
         FloatingActionButton Add = root.findViewById(R.id.add_button);
 
-        if(Add != null) {
+        if (Add != null) {
             if (getPresenter().getAccountId() != getPresenter().getOwnerId())
                 Add.setVisibility(View.GONE);
             else {
@@ -292,8 +289,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
 
             if (nonEmpty(file)) {
                 getPresenter().fireFileForUploadSelected(file);
-            }
-            else if(nonNull(vid)) {
+            } else if (nonNull(vid)) {
                 getPresenter().fireFileForUploadSelected(vid.getData().getPath());
             }
         }

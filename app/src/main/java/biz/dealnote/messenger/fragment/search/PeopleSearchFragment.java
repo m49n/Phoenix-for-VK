@@ -21,7 +21,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresenter, IPeopleSearchView, User>
         implements PeopleAdapter.ClickListener, IPeopleSearchView {
 
-    public static PeopleSearchFragment newInstance(int accountId, @Nullable PeopleSearchCriteria initialCriteria){
+    public static PeopleSearchFragment newInstance(int accountId, @Nullable PeopleSearchCriteria initialCriteria) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putParcelable(Extra.CRITERIA, initialCriteria);
@@ -58,7 +58,7 @@ public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresente
 
     @Override
     public void onOwnerClick(Owner owner) {
-        getPresenter().fireUserClick((User)owner);
+        getPresenter().fireUserClick((User) owner);
     }
 
     @Override

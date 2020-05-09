@@ -34,11 +34,15 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
     private static final int COUNT_PER_REQUEST = 15;
 
     private final List<Feedback> mData;
+    private final IFeedbackInteractor feedbackInteractor;
     private String mNextFrom;
     private boolean actualDataReceived;
     private boolean mEndOfContent;
-
-    private final IFeedbackInteractor feedbackInteractor;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean netLoadingNow;
+    private String netLoadingStartFrom;
 
     public FeedbackPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -54,7 +58,7 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
     private void resolveLoadMoreFooter() {
         if (!isGuiReady()) return;
 
-        if(isEmpty(this.mData)){
+        if (isEmpty(this.mData)) {
             getView().configLoadMore(LoadMoreState.INVISIBLE);
             return;
         }
@@ -102,7 +106,7 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
 
     private void safelyMarkAsViewed() {
         final int accountId = super.getAccountId();
-        if(Settings.get().accounts().getType(accountId).equals("hacked"))
+        if (Settings.get().accounts().getType(accountId).equals("hacked"))
             return;
 
         appendDisposable(feedbackInteractor.maskAaViewed(accountId)
@@ -147,13 +151,6 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
     private boolean canLoadMore() {
         return nonEmpty(mNextFrom) && !mEndOfContent && !cacheLoadingNow && !netLoadingNow && actualDataReceived;
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheLoadingNow;
-
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-    private boolean netLoadingNow;
-    private String netLoadingStartFrom;
 
     @Override
     public void onGuiCreated(@NonNull IFeedbackView viewHost) {

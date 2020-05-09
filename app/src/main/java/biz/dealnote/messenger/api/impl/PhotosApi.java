@@ -37,6 +37,16 @@ class PhotosApi extends AbsApi implements IPhotosApi {
         super(accountId, provider);
     }
 
+    private static String findAccessKey(Collection<AccessIdPair> data, int id, int ownerId) {
+        for (AccessIdPair pair : data) {
+            if (pair.id == id && pair.ownerId == ownerId) {
+                return pair.accessKey;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public Single<Boolean> deleteAlbum(int albumId, Integer groupId) {
         return provideService(IPhotosService.class, TokenType.USER)
@@ -260,19 +270,8 @@ class PhotosApi extends AbsApi implements IPhotosApi {
     }
 
     @Override
-    public Single<List<VKApiPhotoTags>> getTags(Integer ownerId, Integer photo_id, String access_key)
-    {
+    public Single<List<VKApiPhotoTags>> getTags(Integer ownerId, Integer photo_id, String access_key) {
         return provideService(IPhotosService.class, TokenType.USER)
                 .flatMap(service -> service.getTags(ownerId, photo_id, access_key).map(extractResponseWithErrorHandling()));
-    }
-
-    private static String findAccessKey(Collection<AccessIdPair> data, int id, int ownerId) {
-        for (AccessIdPair pair : data) {
-            if (pair.id == id && pair.ownerId == ownerId) {
-                return pair.accessKey;
-            }
-        }
-
-        return null;
     }
 }

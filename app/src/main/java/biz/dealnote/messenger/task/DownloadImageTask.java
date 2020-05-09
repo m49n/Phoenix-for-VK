@@ -38,17 +38,16 @@ import okhttp3.Response;
 
 public class DownloadImageTask extends AsyncTask<String, Integer, String> {
 
+    private static DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+    protected String file;
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
     private String photourl;
-    protected String file;
     private String ID;
     private String filename;
     private NotificationManagerCompat mNotifyManager;
     private NotificationCompat.Builder mBuilder;
     private boolean UseMediaScanner;
-
-    private static DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
 
     public DownloadImageTask(Context context, String url, String file, String ID, boolean UseMediaScanner) {
         this.mContext = context.getApplicationContext();
@@ -57,30 +56,28 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
         this.ID = ID;
         this.UseMediaScanner = UseMediaScanner;
         this.mNotifyManager = NotificationManagerCompat.from(this.mContext);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             this.mNotifyManager.createNotificationChannel(AppNotificationChannels.getDownloadChannel(this.mContext));
         }
         this.mBuilder = new NotificationCompat.Builder(this.mContext, AppNotificationChannels.DOWNLOAD_CHANNEL_ID);
-        if(new File(file).exists())
-        {
+        if (new File(file).exists()) {
             int lastExt = this.file.lastIndexOf(".");
-            if (lastExt!=-1){
+            if (lastExt != -1) {
                 String ext = this.file.substring(lastExt);
 
                 String file_temp = this.file.substring(0, lastExt);
-                this.file = file_temp + ("."+ DOWNLOAD_DATE_FORMAT.format(new Date())) + ext;
-            }
-            else
-                this.file += ("."+ DOWNLOAD_DATE_FORMAT.format(new Date()));
+                this.file = file_temp + ("." + DOWNLOAD_DATE_FORMAT.format(new Date())) + ext;
+            } else
+                this.file += ("." + DOWNLOAD_DATE_FORMAT.format(new Date()));
         }
 
         this.filename = this.file;
         int lastPath = this.filename.lastIndexOf(File.separator);
-        if (lastPath!=-1){
-            this.filename = this.filename.substring(lastPath+1);
+        if (lastPath != -1) {
+            this.filename = this.filename.substring(lastPath + 1);
         }
 
-        this.mBuilder.setContentTitle( this.mContext.getString(R.string.downloading))
+        this.mBuilder.setContentTitle(this.mContext.getString(R.string.downloading))
                 .setContentText(this.mContext.getString(R.string.downloading) + " " + this.filename)
                 .setSmallIcon(R.drawable.save)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -93,10 +90,10 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... params) {
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-        wl.acquire(10*60*1000L /*10 minutes*/);
+        wl.acquire(10 * 60 * 1000L /*10 minutes*/);
 
         try {
-            if(photourl == null || photourl.isEmpty())
+            if (photourl == null || photourl.isEmpty())
                 throw new Exception(mContext.getString(R.string.null_image_link));
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
@@ -119,7 +116,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             InputStream is = Objects.requireNonNull(response.body()).byteStream();
             BufferedInputStream input = new BufferedInputStream(is);
             OutputStream output = new FileOutputStream(file);
-            byte[] data = new byte[8*1024];
+            byte[] data = new byte[8 * 1024];
             int bufferLength;
             double downloadedSize = 0.0;
 
@@ -136,7 +133,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             output.close();
             input.close();
 
-            if(UseMediaScanner) {
+            if (UseMediaScanner) {
                 mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(file))));
 
                 Intent intent = new Intent(Injection.provideApplicationContext(), MainActivity.class);
@@ -152,19 +149,19 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
                 mBuilder.addAction(actionRead);
             }
             mBuilder.setContentText(mContext.getString(R.string.success) + " " + this.filename)
-                    .setProgress(0,0,false)
+                    .setProgress(0, 0, false)
                     .setAutoCancel(true)
                     .setOngoing(false);
             mNotifyManager.cancel(ID, NotificationHelper.NOTIFICATION_DOWNLOADING);
-            mNotifyManager.notify(ID, NotificationHelper.NOTIFICATION_DOWNLOAD , mBuilder.build());
+            mNotifyManager.notify(ID, NotificationHelper.NOTIFICATION_DOWNLOAD, mBuilder.build());
         } catch (Exception e) {
             mBuilder.setContentText(mContext.getString(R.string.error) + " " + e.getLocalizedMessage() + ". " + this.filename)
                     .setSmallIcon(R.drawable.ic_error_toast_vector)
                     .setAutoCancel(true)
                     .setOngoing(false)
-                    .setProgress(0,0,false);
+                    .setProgress(0, 0, false);
             mNotifyManager.cancel(ID, NotificationHelper.NOTIFICATION_DOWNLOADING);
-            mNotifyManager.notify(ID, NotificationHelper.NOTIFICATION_DOWNLOAD , mBuilder.build());
+            mNotifyManager.notify(ID, NotificationHelper.NOTIFICATION_DOWNLOAD, mBuilder.build());
             return e.getLocalizedMessage();
         } finally {
             wl.release();
@@ -173,7 +170,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
         return null;
     }
 
-    public void doDownload(){
+    public void doDownload() {
         executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

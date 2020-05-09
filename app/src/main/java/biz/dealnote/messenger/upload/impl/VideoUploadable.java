@@ -38,48 +38,6 @@ public class VideoUploadable implements IUploadable<Video> {
         this.storage = storage;
     }
 
-    @Override
-    public Single<UploadResult<Video>> doUpload(@NonNull Upload upload, @Nullable UploadServer initialServer, @Nullable PercentagePublisher listener) {
-        final int accountId = upload.getAccountId();
-        final boolean isPrivate = upload.getDestination().getId() == 0;
-
-        Single<UploadServer> serverSingle = networker.vkDefault(accountId)
-                    .docs()
-                    .getVideoServer(isPrivate ? 1 : 0, findFileName(context, upload.getFileUri()))
-                    .map(s -> s);
-
-        return serverSingle.flatMap(server -> {
-            final InputStream[] is = new InputStream[1];
-
-            try {
-                Uri uri = upload.getFileUri();
-
-                File file = new File(uri.getPath());
-                if(file.isFile()){
-                    is[0] = new FileInputStream(file);
-                } else {
-                    is[0] = context.getContentResolver().openInputStream(uri);
-                }
-
-                if(is[0] == null){
-                    return Single.error(new NotFoundException("Unable to open InputStream, URI: " + uri));
-                }
-
-                final String filename = findFileName(context, uri);
-                return networker.uploads()
-                        .uploadVideoRx(server.getUrl(), filename, is[0], listener)
-                        .doFinally(safelyCloseAction(is[0]))
-                        .flatMap(dto -> {
-                                    UploadResult<Video> result = new UploadResult<>(server, new Video().setId(dto.video_id).setOwnerId(dto.owner_id));
-                                        return Single.just(result);
-                                });
-            } catch (Exception e){
-                safelyClose(is[0]);
-                return Single.error(e);
-            }
-        });
-    }
-
     private static String findFileName(Context context, Uri uri) {
         String fileName = uri.getLastPathSegment();
         try {
@@ -106,5 +64,47 @@ public class VideoUploadable implements IUploadable<Video> {
         }
 
         return fileName;
+    }
+
+    @Override
+    public Single<UploadResult<Video>> doUpload(@NonNull Upload upload, @Nullable UploadServer initialServer, @Nullable PercentagePublisher listener) {
+        final int accountId = upload.getAccountId();
+        final boolean isPrivate = upload.getDestination().getId() == 0;
+
+        Single<UploadServer> serverSingle = networker.vkDefault(accountId)
+                .docs()
+                .getVideoServer(isPrivate ? 1 : 0, findFileName(context, upload.getFileUri()))
+                .map(s -> s);
+
+        return serverSingle.flatMap(server -> {
+            final InputStream[] is = new InputStream[1];
+
+            try {
+                Uri uri = upload.getFileUri();
+
+                File file = new File(uri.getPath());
+                if (file.isFile()) {
+                    is[0] = new FileInputStream(file);
+                } else {
+                    is[0] = context.getContentResolver().openInputStream(uri);
+                }
+
+                if (is[0] == null) {
+                    return Single.error(new NotFoundException("Unable to open InputStream, URI: " + uri));
+                }
+
+                final String filename = findFileName(context, uri);
+                return networker.uploads()
+                        .uploadVideoRx(server.getUrl(), filename, is[0], listener)
+                        .doFinally(safelyCloseAction(is[0]))
+                        .flatMap(dto -> {
+                            UploadResult<Video> result = new UploadResult<>(server, new Video().setId(dto.video_id).setOwnerId(dto.owner_id));
+                            return Single.just(result);
+                        });
+            } catch (Exception e) {
+                safelyClose(is[0]);
+                return Single.error(e);
+            }
+        });
     }
 }

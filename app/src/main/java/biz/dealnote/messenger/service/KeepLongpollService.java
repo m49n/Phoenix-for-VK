@@ -36,6 +36,14 @@ public class KeepLongpollService extends Service {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private ILongpollManager longpollManager;
 
+    public static void start(@NonNull Context context) {
+        context.startService(new Intent(context, KeepLongpollService.class));
+    }
+
+    public static void stop(@NonNull Context context) {
+        context.stopService(new Intent(context, KeepLongpollService.class));
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,14 +63,6 @@ public class KeepLongpollService extends Service {
                 .subscribe(ignored -> sendKeepAlive(), RxUtils.ignore()));
     }
 
-    public static void start(@NonNull Context context) {
-        context.startService(new Intent(context, KeepLongpollService.class));
-    }
-
-    public static void stop(@NonNull Context context) {
-        context.stopService(new Intent(context, KeepLongpollService.class));
-    }
-
     private void sendKeepAlive() {
         int accountId = Settings.get().accounts().getCurrent();
         if (accountId != ISettings.IAccountsSettings.INVALID_ID) {
@@ -78,7 +78,7 @@ public class KeepLongpollService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void cancelNotification(){
+    private void cancelNotification() {
         NotificationManager manager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         if (manager != null) {
             manager.cancel(FOREGROUND_SERVICE);

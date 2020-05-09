@@ -22,7 +22,7 @@ public class PhotosActivity extends NoMainActivity implements PlaceProvider {
         }
     }
 
-    private void attachAlbumsFragment(){
+    private void attachAlbumsFragment() {
         LocalImageAlbumsFragment ignoredFragment = new LocalImageAlbumsFragment();
         ignoredFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager()
@@ -34,7 +34,7 @@ public class PhotosActivity extends NoMainActivity implements PlaceProvider {
 
     @Override
     public void openPlace(Place place) {
-        if(place.type == Place.LOCAL_IMAGE_ALBUM){
+        if (place.type == Place.LOCAL_IMAGE_ALBUM) {
             int maxSelectionCount = getIntent().getIntExtra(EXTRA_MAX_SELECTION_COUNT, 10);
             LocalImageAlbum album = place.getArgs().getParcelable(Extra.ALBUM);
             LocalPhotosFragment localPhotosFragment = LocalPhotosFragment.newInstance(maxSelectionCount, album, false);

@@ -20,15 +20,15 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class ProxyUtil {
 
-    public static InetSocketAddress obtainAddress(@NonNull ProxyConfig config){
-        if(ValidationUtil.isValidIpAddress(config.getAddress())){
+    public static InetSocketAddress obtainAddress(@NonNull ProxyConfig config) {
+        if (ValidationUtil.isValidIpAddress(config.getAddress())) {
             return new InetSocketAddress(config.getAddress(), config.getPort());
         } else {
             return InetSocketAddress.createUnresolved(config.getAddress(), config.getPort());
         }
     }
 
-    public static void applyProxyConfig(OkHttpClient.Builder builder, @Nullable ProxyConfig config){
+    public static void applyProxyConfig(OkHttpClient.Builder builder, @Nullable ProxyConfig config) {
         if (nonNull(config)) {
             final Proxy proxy = new Proxy(Proxy.Type.HTTP, obtainAddress(config));
 

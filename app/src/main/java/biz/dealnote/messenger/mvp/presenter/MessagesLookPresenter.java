@@ -31,11 +31,10 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLookView> {
 
     private static final int COUNT = 40;
-
+    private final IMessagesRepository messagesInteractor;
     private int mPeerId;
     private Integer mFocusMessageId;
-
-    private final IMessagesRepository messagesInteractor;
+    private int loadingState;
 
     public MessagesLookPresenter(int accountId, int peerId, Integer focusTo, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -54,8 +53,6 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
         viewHost.displayMessages(getData(), lastReadId);
         resolveHeaders();
     }
-
-    private int loadingState;
 
     private void initRequest() {
         if (isLoadingNow()) return;
@@ -85,7 +82,7 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
         deleteSentImpl(ids, false);
     }
 
-    private void deleteSentImpl(Collection<Integer> ids, boolean forAll){
+    private void deleteSentImpl(Collection<Integer> ids, boolean forAll) {
         appendDisposable(messagesInteractor.deleteMessages(getAccountId(), mPeerId, ids, forAll)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(RxUtils.dummy(), t -> showError(getView(), t)));
@@ -205,13 +202,6 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
                 .subscribe(() -> onMessageRestoredSuccessfully(id), t -> showError(getView(), getCauseIfRuntime(t))));
     }
 
-    private static class Side {
-        static final int NO_LOADING = 0;
-        static final int INIT = 1;
-        static final int UP = 2;
-        static final int DOWN = 3;
-    }
-
     private void resolveHeaders() {
         if (!isGuiReady()) return;
 
@@ -304,5 +294,12 @@ public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLook
         if (isGuiReady()) {
             getView().notifyMessagesDownAdded(messages.size());
         }
+    }
+
+    private static class Side {
+        static final int NO_LOADING = 0;
+        static final int INIT = 1;
+        static final int UP = 2;
+        static final int DOWN = 3;
     }
 }

@@ -20,11 +20,6 @@ public class VideoAlbumCriteria extends Criteria {
         this.ownerId = ownerId;
     }
 
-    public VideoAlbumCriteria setRange(DatabaseIdRange range) {
-        this.range = range;
-        return this;
-    }
-
     public int getOwnerId() {
         return ownerId;
     }
@@ -35,5 +30,10 @@ public class VideoAlbumCriteria extends Criteria {
 
     public DatabaseIdRange getRange() {
         return range;
+    }
+
+    public VideoAlbumCriteria setRange(DatabaseIdRange range) {
+        this.range = range;
+        return this;
     }
 }

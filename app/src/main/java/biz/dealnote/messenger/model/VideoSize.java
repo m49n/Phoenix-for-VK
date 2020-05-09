@@ -9,6 +9,17 @@ import android.os.Parcelable;
  */
 public class VideoSize implements Parcelable {
 
+    public static final Creator<VideoSize> CREATOR = new Creator<VideoSize>() {
+        @Override
+        public VideoSize createFromParcel(Parcel in) {
+            return new VideoSize(in);
+        }
+
+        @Override
+        public VideoSize[] newArray(int size) {
+            return new VideoSize[size];
+        }
+    };
     private int width;
     private int height;
 
@@ -21,18 +32,6 @@ public class VideoSize implements Parcelable {
         width = in.readInt();
         height = in.readInt();
     }
-
-    public static final Creator<VideoSize> CREATOR = new Creator<VideoSize>() {
-        @Override
-        public VideoSize createFromParcel(Parcel in) {
-            return new VideoSize(in);
-        }
-
-        @Override
-        public VideoSize[] newArray(int size) {
-            return new VideoSize[size];
-        }
-    };
 
     @Override
     public int describeContents() {

@@ -19,6 +19,17 @@ import biz.dealnote.messenger.util.Utils;
  */
 public class SawView extends View {
 
+    private static final Paint FILL_PAINT = new Paint();
+    private static final Path PATH = new Path();
+    private static final int SIDE_DOWN = 1;
+    private static final int SIDE_UP = 2;
+
+    static {
+        FILL_PAINT.setStyle(Paint.Style.FILL);
+        FILL_PAINT.setDither(true);
+        FILL_PAINT.setAntiAlias(true);
+    }
+
     private float mToothPrefWidht;
     private int mBackgroundColor;
 
@@ -38,16 +49,8 @@ public class SawView extends View {
         }
     }
 
-    private int pixelOf(int dp){
+    private int pixelOf(int dp) {
         return (int) Utils.dpToPx(dp, getContext());
-    }
-
-    private static final Paint FILL_PAINT = new Paint();
-
-    static {
-        FILL_PAINT.setStyle(Paint.Style.FILL);
-        FILL_PAINT.setDither(true);
-        FILL_PAINT.setAntiAlias(true);
     }
 
     @Override
@@ -94,9 +97,4 @@ public class SawView extends View {
             side = side == SIDE_DOWN ? SIDE_UP : SIDE_DOWN;
         }
     }
-
-    private static final Path PATH = new Path();
-
-    private static final int SIDE_DOWN = 1;
-    private static final int SIDE_UP = 2;
 }

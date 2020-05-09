@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 public class IconMenuItem extends SectionMenuItem implements Parcelable {
 
-    private int icon;
-
     public static Creator<IconMenuItem> CREATOR = new Creator<IconMenuItem>() {
         public IconMenuItem createFromParcel(Parcel source) {
             return new IconMenuItem(source);
@@ -16,6 +14,17 @@ public class IconMenuItem extends SectionMenuItem implements Parcelable {
             return new IconMenuItem[size];
         }
     };
+    private int icon;
+
+    public IconMenuItem(int section, int icon, int title) {
+        super(TYPE_ICON, section, title);
+        this.icon = icon;
+    }
+
+    public IconMenuItem(Parcel in) {
+        super(in);
+        this.icon = in.readInt();
+    }
 
     public int getIcon() {
         return icon;
@@ -34,15 +43,5 @@ public class IconMenuItem extends SectionMenuItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeInt(icon);
-    }
-
-    public IconMenuItem(int section, int icon, int title) {
-        super(TYPE_ICON, section, title);
-        this.icon = icon;
-    }
-
-    public IconMenuItem(Parcel in) {
-        super(in);
-        this.icon = in.readInt();
     }
 }

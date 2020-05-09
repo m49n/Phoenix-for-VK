@@ -35,20 +35,20 @@ public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         //dto.title = VKStringUtils.unescape(optString(root, "title"));
         dto.body = VKStringUtils.unescape(optString(root, "text"));
 
-        if(root.has("attachments")){
+        if (root.has("attachments")) {
             dto.attachments = context.deserialize(root.get("attachments"), VkApiAttachments.class);
         }
 
-        if(root.has("fwd_messages")){
+        if (root.has("fwd_messages")) {
             JsonArray fwdArray = root.getAsJsonArray("fwd_messages");
             dto.fwd_messages = new ArrayList<>(fwdArray.size());
 
-            for(int i = 0; i < fwdArray.size(); i++){
+            for (int i = 0; i < fwdArray.size(); i++) {
                 dto.fwd_messages.add(deserialize(fwdArray.get(i), VKApiMessage.class, context));
             }
         }
 
-        if(root.has("reply_message")){
+        if (root.has("reply_message")) {
             dto.fwd_messages = new ArrayList<>(1);
             dto.fwd_messages.add(deserialize(root.get("reply_message"), VKApiMessage.class, context));
         }
@@ -60,13 +60,13 @@ public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         dto.conversation_message_id = optInt(root, "conversation_message_id");
 
         JsonObject actionJson = root.getAsJsonObject("action");
-        if(actionJson != null){
+        if (actionJson != null) {
             dto.action = optString(actionJson, "type");
             dto.action_mid = optInt(actionJson, "member_id");
             dto.action_text = optString(actionJson, "text");
             dto.action_email = optString(actionJson, "email");
 
-            if(actionJson.has("photo")){
+            if (actionJson.has("photo")) {
                 JsonObject photoJson = actionJson.getAsJsonObject("photo");
                 dto.action_photo_50 = optString(photoJson, "photo_50");
                 dto.action_photo_100 = optString(photoJson, "photo_100");

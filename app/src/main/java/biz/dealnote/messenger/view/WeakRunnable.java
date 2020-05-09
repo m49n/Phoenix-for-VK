@@ -23,7 +23,7 @@ public class WeakRunnable<T> implements Runnable {
     @Override
     public final void run() {
         T object = reference.get();
-        if(object != null){
+        if (object != null) {
             //run(object);
             action.call(object);
         }

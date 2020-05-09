@@ -12,9 +12,19 @@ public class BaseOption implements Parcelable, Cloneable {
     public static final int SPINNER = 48;
 
     public static final int NO_DEPENDENCY = -1;
+    public static final Creator<BaseOption> CREATOR = new Creator<BaseOption>() {
+        @Override
+        public BaseOption createFromParcel(Parcel in) {
+            return new BaseOption(in);
+        }
 
-    public int optionType;
+        @Override
+        public BaseOption[] newArray(int size) {
+            return new BaseOption[size];
+        }
+    };
     public final int key;
+    public int optionType;
     public boolean active;
     public int title;
     public int parentDependencyKey;
@@ -37,27 +47,15 @@ public class BaseOption implements Parcelable, Cloneable {
         childDependencies = in.createIntArray();
     }
 
-    public static final Creator<BaseOption> CREATOR = new Creator<BaseOption>() {
-        @Override
-        public BaseOption createFromParcel(Parcel in) {
-            return new BaseOption(in);
-        }
-
-        @Override
-        public BaseOption[] newArray(int size) {
-            return new BaseOption[size];
-        }
-    };
-
-    public void setChildDependencies(int ... childs){
+    public void setChildDependencies(int... childs) {
         this.childDependencies = childs;
     }
 
-    public void setDependencyOf(int key){
+    public void setDependencyOf(int key) {
         this.parentDependencyKey = key;
     }
 
-    public void reset(){
+    public void reset() {
         // must be implemented in child class
     }
 

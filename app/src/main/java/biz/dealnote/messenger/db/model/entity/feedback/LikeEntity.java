@@ -17,9 +17,8 @@ public class LikeEntity extends FeedbackEntity {
         super(type);
     }
 
-    public LikeEntity setLiked(Entity liked) {
-        this.liked = new EntityWrapper(liked);
-        return this;
+    public int[] getLikesOwnerIds() {
+        return likesOwnerIds;
     }
 
     public LikeEntity setLikesOwnerIds(int[] likesOwnerIds) {
@@ -27,11 +26,12 @@ public class LikeEntity extends FeedbackEntity {
         return this;
     }
 
-    public int[] getLikesOwnerIds() {
-        return likesOwnerIds;
-    }
-
     public Entity getLiked() {
         return liked.get();
+    }
+
+    public LikeEntity setLiked(Entity liked) {
+        this.liked = new EntityWrapper(liked);
+        return this;
     }
 }

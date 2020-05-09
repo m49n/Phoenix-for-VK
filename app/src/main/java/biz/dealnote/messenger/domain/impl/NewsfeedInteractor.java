@@ -48,9 +48,60 @@ public class NewsfeedInteractor implements INewsfeedInteractor {
         this.ownersRepository = ownersRepository;
     }
 
+    private static Comment oneCommentFrom(Commented commented, CommentsDto dto, IOwnersBundle bundle) {
+        if (nonNull(dto) && nonEmpty(dto.list)) {
+            return Dto2Model.buildComment(commented, dto.list.get(dto.list.size() - 1), bundle);
+        }
+
+        return null;
+    }
+
+    private static NewsfeedComment createFrom(NewsfeedCommentsResponse.Dto dto, IOwnersBundle bundle) {
+        if (dto instanceof NewsfeedCommentsResponse.PhotoDto) {
+            VKApiPhoto photoDto = ((NewsfeedCommentsResponse.PhotoDto) dto).photo;
+            Photo photo = Dto2Model.transform(photoDto);
+            Commented commented = Commented.from(photo);
+
+            Owner photoOwner = bundle.getById(photo.getOwnerId());
+            return new NewsfeedComment(new PhotoWithOwner(photo, photoOwner))
+                    .setComment(oneCommentFrom(commented, photoDto.comments, bundle));
+        }
+
+        if (dto instanceof NewsfeedCommentsResponse.VideoDto) {
+            VKApiVideo videoDto = ((NewsfeedCommentsResponse.VideoDto) dto).video;
+            Video video = Dto2Model.transform(videoDto);
+            Commented commented = Commented.from(video);
+
+            Owner videoOwner = bundle.getById(video.getOwnerId());
+            return new NewsfeedComment(new VideoWithOwner(video, videoOwner))
+                    .setComment(oneCommentFrom(commented, videoDto.comments, bundle));
+        }
+
+        if (dto instanceof NewsfeedCommentsResponse.PostDto) {
+            VKApiPost postDto = ((NewsfeedCommentsResponse.PostDto) dto).post;
+            Post post = Dto2Model.transform(postDto, bundle);
+            Commented commented = Commented.from(post);
+            return new NewsfeedComment(post).setComment(oneCommentFrom(commented, postDto.comments, bundle));
+        }
+
+        if (dto instanceof NewsfeedCommentsResponse.TopicDto) {
+            VKApiTopic topicDto = ((NewsfeedCommentsResponse.TopicDto) dto).topic;
+            Topic topic = Dto2Model.transform(topicDto, bundle);
+
+            if (nonNull(topicDto.comments)) {
+                topic.setCommentsCount(topicDto.comments.count);
+            }
+
+            Commented commented = Commented.from(topic);
+            Owner owner = bundle.getById(topic.getOwnerId());
+            return new NewsfeedComment(new TopicWithOwner(topic, owner)).setComment(oneCommentFrom(commented, topicDto.comments, bundle));
+        }
+
+        return null;
+    }
+
     @Override
-    public Single<Pair<List<NewsfeedComment>, String>> getMentions(int accountId, Integer owner_id, Integer count, Integer offset, Long startTime, Long endTime)
-    {
+    public Single<Pair<List<NewsfeedComment>, String>> getMentions(int accountId, Integer owner_id, Integer count, Integer offset, Long startTime, Long endTime) {
         return networker.vkDefault(accountId)
                 .newsfeed()
                 .getMentions(owner_id, count, offset, startTime, endTime)
@@ -132,57 +183,5 @@ public class NewsfeedInteractor implements INewsfeedInteractor {
                                 return Pair.Companion.create(comments, response.nextFrom);
                             });
                 });
-    }
-
-    private static Comment oneCommentFrom(Commented commented, CommentsDto dto, IOwnersBundle bundle) {
-        if (nonNull(dto) && nonEmpty(dto.list)) {
-            return Dto2Model.buildComment(commented, dto.list.get(dto.list.size() - 1), bundle);
-        }
-
-        return null;
-    }
-
-    private static NewsfeedComment createFrom(NewsfeedCommentsResponse.Dto dto, IOwnersBundle bundle) {
-        if (dto instanceof NewsfeedCommentsResponse.PhotoDto) {
-            VKApiPhoto photoDto = ((NewsfeedCommentsResponse.PhotoDto) dto).photo;
-            Photo photo = Dto2Model.transform(photoDto);
-            Commented commented = Commented.from(photo);
-
-            Owner photoOwner = bundle.getById(photo.getOwnerId());
-            return new NewsfeedComment(new PhotoWithOwner(photo, photoOwner))
-                    .setComment(oneCommentFrom(commented, photoDto.comments, bundle));
-        }
-
-        if (dto instanceof NewsfeedCommentsResponse.VideoDto) {
-            VKApiVideo videoDto = ((NewsfeedCommentsResponse.VideoDto) dto).video;
-            Video video = Dto2Model.transform(videoDto);
-            Commented commented = Commented.from(video);
-
-            Owner videoOwner = bundle.getById(video.getOwnerId());
-            return new NewsfeedComment(new VideoWithOwner(video, videoOwner))
-                    .setComment(oneCommentFrom(commented, videoDto.comments, bundle));
-        }
-
-        if (dto instanceof NewsfeedCommentsResponse.PostDto) {
-            VKApiPost postDto = ((NewsfeedCommentsResponse.PostDto) dto).post;
-            Post post = Dto2Model.transform(postDto, bundle);
-            Commented commented = Commented.from(post);
-            return new NewsfeedComment(post).setComment(oneCommentFrom(commented, postDto.comments, bundle));
-        }
-
-        if (dto instanceof NewsfeedCommentsResponse.TopicDto) {
-            VKApiTopic topicDto = ((NewsfeedCommentsResponse.TopicDto) dto).topic;
-            Topic topic = Dto2Model.transform(topicDto, bundle);
-
-            if(nonNull(topicDto.comments)){
-                topic.setCommentsCount(topicDto.comments.count);
-            }
-
-            Commented commented = Commented.from(topic);
-            Owner owner = bundle.getById(topic.getOwnerId());
-            return new NewsfeedComment(new TopicWithOwner(topic, owner)).setComment(oneCommentFrom(commented, topicDto.comments, bundle));
-        }
-
-        return null;
     }
 }

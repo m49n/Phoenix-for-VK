@@ -39,6 +39,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICreatePollView> implements ICreatePollView {
 
+    private EditText mQuestion;
+    private CheckBox mAnonymous;
+    private CheckBox mMultiply;
+    private ViewGroup mOptionsViewGroup;
+
     public static CreatePollFragment newInstance(Bundle args) {
         CreatePollFragment fragment = new CreatePollFragment();
         fragment.setArguments(args);
@@ -51,11 +56,6 @@ public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICr
         args.putInt(Extra.OWNER_ID, ownerId);
         return args;
     }
-
-    private EditText mQuestion;
-    private CheckBox mAnonymous;
-    private CheckBox mMultiply;
-    private ViewGroup mOptionsViewGroup;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,7 +215,7 @@ public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICr
 
     @Override
     public void sendResultAndGoBack(@NonNull Poll poll) {
-        if(nonNull(getTargetFragment())){
+        if (nonNull(getTargetFragment())) {
             Intent intent = new Intent();
             intent.putExtra(Extra.POLL, poll);
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);

@@ -33,6 +33,15 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
 
     private static final int COUNT_PER_REQUEST = 1000;
     private static final int RUN_SEACRH_DELAY = 1000;
+    private int mAccountId;
+    private int countryId;
+    private IDatabaseInteractor mDatabaseInteractor;
+    private ArrayList<University> mData;
+    private RecyclerView mRecyclerView;
+    private UniversitiesAdapter mAdapter;
+    private String filter;
+    private Handler mHandler = new Handler();
+    private Runnable runSearchRunnable = () -> request(0);
 
     public static SelectUniversityDialog newInstance(int aid, int countryId, Bundle additional) {
         Bundle args = additional == null ? new Bundle() : additional;
@@ -42,16 +51,6 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
         selectCityDialog.setArguments(args);
         return selectCityDialog;
     }
-
-    private int mAccountId;
-    private int countryId;
-    private IDatabaseInteractor mDatabaseInteractor;
-
-    private ArrayList<University> mData;
-    private RecyclerView mRecyclerView;
-    private UniversitiesAdapter mAdapter;
-    private String filter;
-    private Handler mHandler = new Handler();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,10 +84,8 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
         return root;
     }
 
-    private Runnable runSearchRunnable = () -> request(0);
-
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;

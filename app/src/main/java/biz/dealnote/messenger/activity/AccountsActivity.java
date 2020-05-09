@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -11,6 +12,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.AccountsFragment;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Utils;
 
 public class AccountsActivity extends AppCompatActivity {
@@ -40,6 +42,12 @@ public class AccountsActivity extends AppCompatActivity {
                     .replace(R.id.fragment, new AccountsFragment())
                     .commit();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AppPerms.tryInterceptAppPermission(this, requestCode, permissions, grantResults);
     }
 
 }

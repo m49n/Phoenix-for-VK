@@ -14,8 +14,18 @@ import biz.dealnote.messenger.model.ParcelableModelWrapper;
  */
 public final class CommentFeedback extends Feedback implements Parcelable {
 
-    private AbsModel commentOf;
+    public static final Creator<CommentFeedback> CREATOR = new Creator<CommentFeedback>() {
+        @Override
+        public CommentFeedback createFromParcel(Parcel in) {
+            return new CommentFeedback(in);
+        }
 
+        @Override
+        public CommentFeedback[] newArray(int size) {
+            return new CommentFeedback[size];
+        }
+    };
+    private AbsModel commentOf;
     private Comment comment;
 
     public CommentFeedback(@FeedbackType int type) {
@@ -40,25 +50,13 @@ public final class CommentFeedback extends Feedback implements Parcelable {
         return 0;
     }
 
-    public static final Creator<CommentFeedback> CREATOR = new Creator<CommentFeedback>() {
-        @Override
-        public CommentFeedback createFromParcel(Parcel in) {
-            return new CommentFeedback(in);
-        }
-
-        @Override
-        public CommentFeedback[] newArray(int size) {
-            return new CommentFeedback[size];
-        }
-    };
+    public AbsModel getCommentOf() {
+        return commentOf;
+    }
 
     public CommentFeedback setCommentOf(AbsModel commentOf) {
         this.commentOf = commentOf;
         return this;
-    }
-
-    public AbsModel getCommentOf() {
-        return commentOf;
     }
 
     public Comment getComment() {

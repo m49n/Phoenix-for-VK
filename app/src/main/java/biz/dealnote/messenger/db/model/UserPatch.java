@@ -29,13 +29,13 @@ public class UserPatch {
         return online;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public UserPatch setStatus(Status status) {
         this.status = status;
         return this;
-    }
-
-    public Status getStatus() {
-        return status;
     }
 
     public static final class Online {

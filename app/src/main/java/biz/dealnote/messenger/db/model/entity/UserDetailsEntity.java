@@ -187,47 +187,12 @@ public class UserDetailsEntity {
         return this;
     }
 
-    public UserDetailsEntity setSite(String site) {
-        this.site = site;
-        return this;
-    }
-
     public String getSite() {
         return site;
     }
 
-    public UserDetailsEntity setAlcohol(int alcohol) {
-        this.alcohol = alcohol;
-        return this;
-    }
-
-    public UserDetailsEntity setInspiredBy(String inspiredBy) {
-        this.inspiredBy = inspiredBy;
-        return this;
-    }
-
-    public UserDetailsEntity setLifeMain(int lifeMain) {
-        this.lifeMain = lifeMain;
-        return this;
-    }
-
-    public UserDetailsEntity setPeopleMain(int peopleMain) {
-        this.peopleMain = peopleMain;
-        return this;
-    }
-
-    public UserDetailsEntity setPolitical(int political) {
-        this.political = political;
-        return this;
-    }
-
-    public UserDetailsEntity setReligion(String religion) {
-        this.religion = religion;
-        return this;
-    }
-
-    public UserDetailsEntity setSmoking(int smoking) {
-        this.smoking = smoking;
+    public UserDetailsEntity setSite(String site) {
+        this.site = site;
         return this;
     }
 
@@ -235,32 +200,62 @@ public class UserDetailsEntity {
         return alcohol;
     }
 
+    public UserDetailsEntity setAlcohol(int alcohol) {
+        this.alcohol = alcohol;
+        return this;
+    }
+
     public int getLifeMain() {
         return lifeMain;
+    }
+
+    public UserDetailsEntity setLifeMain(int lifeMain) {
+        this.lifeMain = lifeMain;
+        return this;
     }
 
     public int getPeopleMain() {
         return peopleMain;
     }
 
+    public UserDetailsEntity setPeopleMain(int peopleMain) {
+        this.peopleMain = peopleMain;
+        return this;
+    }
+
     public int getPolitical() {
         return political;
+    }
+
+    public UserDetailsEntity setPolitical(int political) {
+        this.political = political;
+        return this;
     }
 
     public int getSmoking() {
         return smoking;
     }
 
+    public UserDetailsEntity setSmoking(int smoking) {
+        this.smoking = smoking;
+        return this;
+    }
+
     public String getInspiredBy() {
         return inspiredBy;
+    }
+
+    public UserDetailsEntity setInspiredBy(String inspiredBy) {
+        this.inspiredBy = inspiredBy;
+        return this;
     }
 
     public String getReligion() {
         return religion;
     }
 
-    public UserDetailsEntity setLanguages(String[] languages) {
-        this.languages = languages;
+    public UserDetailsEntity setReligion(String religion) {
+        this.religion = religion;
         return this;
     }
 
@@ -268,13 +263,8 @@ public class UserDetailsEntity {
         return languages;
     }
 
-    public UserDetailsEntity setRelation(int relation) {
-        this.relation = relation;
-        return this;
-    }
-
-    public UserDetailsEntity setRelationPartnerId(int relationPartnerId) {
-        this.relationPartnerId = relationPartnerId;
+    public UserDetailsEntity setLanguages(String[] languages) {
+        this.languages = languages;
         return this;
     }
 
@@ -282,12 +272,17 @@ public class UserDetailsEntity {
         return relation;
     }
 
+    public UserDetailsEntity setRelation(int relation) {
+        this.relation = relation;
+        return this;
+    }
+
     public int getRelationPartnerId() {
         return relationPartnerId;
     }
 
-    public UserDetailsEntity setRelatives(List<RelativeEntity> relatives) {
-        this.relatives = relatives;
+    public UserDetailsEntity setRelationPartnerId(int relationPartnerId) {
+        this.relationPartnerId = relationPartnerId;
         return this;
     }
 
@@ -295,8 +290,8 @@ public class UserDetailsEntity {
         return relatives;
     }
 
-    public UserDetailsEntity setSchools(List<SchoolEntity> schools) {
-        this.schools = schools;
+    public UserDetailsEntity setRelatives(List<RelativeEntity> relatives) {
+        this.relatives = relatives;
         return this;
     }
 
@@ -304,8 +299,8 @@ public class UserDetailsEntity {
         return schools;
     }
 
-    public UserDetailsEntity setUniversities(List<UniversityEntity> universities) {
-        this.universities = universities;
+    public UserDetailsEntity setSchools(List<SchoolEntity> schools) {
+        this.schools = schools;
         return this;
     }
 
@@ -313,8 +308,8 @@ public class UserDetailsEntity {
         return universities;
     }
 
-    public UserDetailsEntity setMilitaries(List<MilitaryEntity> militaries) {
-        this.militaries = militaries;
+    public UserDetailsEntity setUniversities(List<UniversityEntity> universities) {
+        this.universities = universities;
         return this;
     }
 
@@ -322,8 +317,8 @@ public class UserDetailsEntity {
         return militaries;
     }
 
-    public UserDetailsEntity setCareers(List<CareerEntity> careers) {
-        this.careers = careers;
+    public UserDetailsEntity setMilitaries(List<MilitaryEntity> militaries) {
+        this.militaries = militaries;
         return this;
     }
 
@@ -331,17 +326,17 @@ public class UserDetailsEntity {
         return careers;
     }
 
-    public UserDetailsEntity setSkype(String skype) {
-        this.skype = skype;
+    public UserDetailsEntity setCareers(List<CareerEntity> careers) {
+        this.careers = careers;
         return this;
     }
 
     public String getSkype() {
         return skype;
     }
-    
-    public UserDetailsEntity setTwitter(String twitter){
-        this.twitter = twitter;
+
+    public UserDetailsEntity setSkype(String skype) {
+        this.skype = skype;
         return this;
     }
 
@@ -349,8 +344,8 @@ public class UserDetailsEntity {
         return twitter;
     }
 
-    public UserDetailsEntity setInstagram(String instagram){
-        this.instagram = instagram;
+    public UserDetailsEntity setTwitter(String twitter) {
+        this.twitter = twitter;
         return this;
     }
 
@@ -358,8 +353,8 @@ public class UserDetailsEntity {
         return instagram;
     }
 
-    public UserDetailsEntity setFacebook(String facebook) {
-        this.facebook = facebook;
+    public UserDetailsEntity setInstagram(String instagram) {
+        this.instagram = instagram;
         return this;
     }
 
@@ -367,8 +362,8 @@ public class UserDetailsEntity {
         return facebook;
     }
 
-    public UserDetailsEntity setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
+    public UserDetailsEntity setFacebook(String facebook) {
+        this.facebook = facebook;
         return this;
     }
 
@@ -376,8 +371,8 @@ public class UserDetailsEntity {
         return homePhone;
     }
 
-    public UserDetailsEntity setPhone(String phone) {
-        this.phone = phone;
+    public UserDetailsEntity setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
         return this;
     }
 
@@ -385,8 +380,8 @@ public class UserDetailsEntity {
         return phone;
     }
 
-    public UserDetailsEntity setHomeTown(String homeTown) {
-        this.homeTown = homeTown;
+    public UserDetailsEntity setPhone(String phone) {
+        this.phone = phone;
         return this;
     }
 
@@ -394,8 +389,8 @@ public class UserDetailsEntity {
         return homeTown;
     }
 
-    public UserDetailsEntity setCountry(CountryEntity country) {
-        this.country = country;
+    public UserDetailsEntity setHomeTown(String homeTown) {
+        this.homeTown = homeTown;
         return this;
     }
 
@@ -403,8 +398,8 @@ public class UserDetailsEntity {
         return country;
     }
 
-    public UserDetailsEntity setCity(CityEntity city) {
-        this.city = city;
+    public UserDetailsEntity setCountry(CountryEntity country) {
+        this.country = country;
         return this;
     }
 
@@ -412,13 +407,18 @@ public class UserDetailsEntity {
         return city;
     }
 
-    public UserDetailsEntity setBdate(String bdate) {
-        this.bdate = bdate;
+    public UserDetailsEntity setCity(CityEntity city) {
+        this.city = city;
         return this;
     }
 
     public String getBdate() {
         return bdate;
+    }
+
+    public UserDetailsEntity setBdate(String bdate) {
+        this.bdate = bdate;
+        return this;
     }
 
     public IdPairEntity getPhotoId() {
@@ -546,22 +546,12 @@ public class UserDetailsEntity {
 
         private String name;
 
-        public RelativeEntity setName(String name) {
-            this.name = name;
-            return this;
-        }
-
         public String getName() {
             return name;
         }
 
-        public RelativeEntity setId(int id) {
-            this.id = id;
-            return this;
-        }
-
-        public RelativeEntity setType(String type) {
-            this.type = type;
+        public RelativeEntity setName(String name) {
+            this.name = name;
             return this;
         }
 
@@ -569,8 +559,18 @@ public class UserDetailsEntity {
             return id;
         }
 
+        public RelativeEntity setId(int id) {
+            this.id = id;
+            return this;
+        }
+
         public String getType() {
             return type;
+        }
+
+        public RelativeEntity setType(String type) {
+            this.type = type;
+            return this;
         }
     }
 }

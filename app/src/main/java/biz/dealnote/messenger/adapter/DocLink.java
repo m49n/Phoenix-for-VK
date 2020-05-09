@@ -18,32 +18,34 @@ import biz.dealnote.messenger.util.Objects;
 
 public class DocLink {
 
-    private int type;
+    private static final String URL = "URL";
+    private static final String W = "WIKI";
     public AbsModel attachment;
+    private int type;
 
     public DocLink(AbsModel attachment) {
         this.attachment = attachment;
         this.type = typeOf(attachment);
     }
 
-    private static int typeOf(AbsModel model){
-        if(model instanceof Document){
+    private static int typeOf(AbsModel model) {
+        if (model instanceof Document) {
             return Types.DOC;
         }
 
-        if(model instanceof Post){
+        if (model instanceof Post) {
             return Types.POST;
         }
 
-        if(model instanceof Link){
+        if (model instanceof Link) {
             return Types.LINK;
         }
 
-        if(model instanceof Poll){
+        if (model instanceof Poll) {
             return Types.POLL;
         }
 
-        if(model instanceof WikiPage){
+        if (model instanceof WikiPage) {
             return Types.WIKI_PAGE;
         }
 
@@ -66,10 +68,10 @@ public class DocLink {
             case Types.LINK:
                 Link link = (Link) attachment;
 
-                if(link.getPhoto() == null && link.getPreviewPhoto() != null)
+                if (link.getPhoto() == null && link.getPreviewPhoto() != null)
                     return link.getPreviewPhoto();
 
-                if(Objects.nonNull(link.getPhoto()) && Objects.nonNull(link.getPhoto().getSizes())){
+                if (Objects.nonNull(link.getPhoto()) && Objects.nonNull(link.getPhoto().getSizes())) {
                     PhotoSizes sizes = link.getPhoto().getSizes();
                     return sizes.getUrlForSize(Settings.get().main().getPrefPreviewImageSize(), true);
                 }
@@ -106,9 +108,6 @@ public class DocLink {
         return null;
     }
 
-    private static final String URL = "URL";
-    private static final String W = "WIKI";
-
     public String getExt() {
         switch (type) {
             case Types.DOC:
@@ -139,7 +138,7 @@ public class DocLink {
                 return ((Poll) attachment).getQuestion();
 
             case Types.WIKI_PAGE:
-                return ((WikiPage)attachment).getTitle();
+                return ((WikiPage) attachment).getTitle();
         }
         return null;
     }

@@ -22,11 +22,12 @@ import io.reactivex.subjects.PublishSubject;
  */
 public class CaptchaProvider implements ICaptchaProvider {
 
+    private static final int MAX_WAIT_DELAY = 15 * 60 * 1000;
     private final Context app;
-
     private final Map<String, Entry> entryMap;
-
     private final Scheduler uiScheduler;
+    private final PublishSubject<String> cancelingNotifier;
+    private final PublishSubject<String> waitingNotifier;
 
     public CaptchaProvider(Context app, Scheduler uiScheduler) {
         this.app = app;
@@ -44,7 +45,7 @@ public class CaptchaProvider implements ICaptchaProvider {
         startCapthaActivity(app, sid, captcha);
     }
 
-    private void startCapthaActivity(final Context context, String sid, Captcha captcha){
+    private void startCapthaActivity(final Context context, String sid, Captcha captcha) {
         Completable.complete()
                 .observeOn(uiScheduler)
                 .subscribe(() -> {
@@ -69,12 +70,12 @@ public class CaptchaProvider implements ICaptchaProvider {
     public String lookupCode(String sid) throws OutOfDateException {
         Iterator<Map.Entry<String, Entry>> iterator = entryMap.entrySet().iterator();
 
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<String, Entry> next = iterator.next();
             String lookupsid = next.getKey();
             Entry lookupEntry = next.getValue();
 
-            if(System.currentTimeMillis() - lookupEntry.lastActivityTime > MAX_WAIT_DELAY){
+            if (System.currentTimeMillis() - lookupEntry.lastActivityTime > MAX_WAIT_DELAY) {
                 iterator.remove();
             } else {
                 waitingNotifier.onNext(lookupsid);
@@ -83,17 +84,12 @@ public class CaptchaProvider implements ICaptchaProvider {
 
         Entry entry = entryMap.get(sid);
 
-        if(Objects.isNull(entry)){
+        if (Objects.isNull(entry)) {
             throw new OutOfDateException();
         }
 
         return entry.getCode();
     }
-
-    private static final int MAX_WAIT_DELAY = 15 * 60 * 1000;
-
-    private final PublishSubject<String> cancelingNotifier;
-    private final PublishSubject<String> waitingNotifier;
 
     @Override
     public Observable<String> observeWaiting() {
@@ -103,7 +99,7 @@ public class CaptchaProvider implements ICaptchaProvider {
     @Override
     public void notifyThatCaptchaEntryActive(String sid) {
         Entry entry = entryMap.get(sid);
-        if(Objects.nonNull(entry)){
+        if (Objects.nonNull(entry)) {
             entry.lastActivityTime = System.currentTimeMillis();
         }
     }
@@ -111,7 +107,7 @@ public class CaptchaProvider implements ICaptchaProvider {
     @Override
     public void enterCode(String sid, String code) {
         Entry entry = entryMap.get(sid);
-        if(Objects.nonNull(entry)){
+        if (Objects.nonNull(entry)) {
             entry.code = code;
         }
     }

@@ -99,7 +99,7 @@ public class PrivacyViewFragment extends AccountDependencyDialogFragment impleme
 
         new MaterialAlertDialogBuilder(requireActivity())
                 .setItems(items, (dialog, which) -> {
-                    switch (which){
+                    switch (which) {
                         case 0:
                             mPrivacy.setType(Privacy.Type.ALL);
                             break;

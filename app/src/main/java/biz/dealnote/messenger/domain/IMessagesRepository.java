@@ -64,14 +64,16 @@ public interface IMessagesRepository {
 
     /**
      * Получить все закэшированные сообщения в локальной БД
+     *
      * @param accountId идентификатор аккаунта
-     * @param peerId идентификатор диалога
+     * @param peerId    идентификатор диалога
      * @return полученные сообщения
      */
     Single<List<Message>> getCachedPeerMessages(int accountId, int peerId);
 
     /**
      * Получить все закэшированные диалоги в локальной БД
+     *
      * @param accountId идентификатор аккаунта
      * @return диалоги
      */
@@ -79,20 +81,22 @@ public interface IMessagesRepository {
 
     /**
      * Сохранить в локальную БД сообщения
+     *
      * @param accountId идентификатор аккаунта
-     * @param messages сообщения
+     * @param messages  сообщения
      * @return Completable
      */
     Completable insertMessages(int accountId, List<VKApiMessage> messages);
 
     /**
      * Получить актуальный список сообщений для конкретного диалога
-     * @param accountId идентификатор аккаунта
-     * @param peerId идентификатор диалога
-     * @param count количество сообщений
-     * @param offset сдвиг (может быть как положительным, так и отрицательным)
+     *
+     * @param accountId      идентификатор аккаунта
+     * @param peerId         идентификатор диалога
+     * @param count          количество сообщений
+     * @param offset         сдвиг (может быть как положительным, так и отрицательным)
      * @param startMessageId идентификатор сообщения, после которого необходимо получить (если null - от последнего)
-     * @param cacheData если true - сохранить полученные данные в кэш
+     * @param cacheData      если true - сохранить полученные данные в кэш
      * @return полученные сообщения
      */
     Single<List<Message>> getPeerMessages(int accountId, int peerId, int count, Integer offset, Integer startMessageId, boolean cacheData, boolean rev);
@@ -109,9 +113,10 @@ public interface IMessagesRepository {
 
     /**
      * Поиск диалогов
+     *
      * @param accountId идентификатор аккаунта
-     * @param count количество результатов
-     * @param q строка поиска
+     * @param count     количество результатов
+     * @param q         строка поиска
      * @return список найденных диалогов
      */
     Single<List<Object>> searchDialogs(int accountId, int count, String q);

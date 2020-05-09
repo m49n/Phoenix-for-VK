@@ -92,9 +92,6 @@ public class VKApiAudio implements VKApiAttachment {
      */
     public final static class Genre {
 
-        private Genre() {
-        }
-
         public final static int ROCK = 1;
         public final static int POP = 2;
         public final static int EASY_LISTENING = 4;
@@ -113,6 +110,8 @@ public class VKApiAudio implements VKApiAttachment {
         public final static int SPEECH = 19;
         public final static int ALTERNATIVE = 21;
         public final static int ELECTROPOP_AND_DISCO = 22;
+        private Genre() {
+        }
 
         public static String getTitleByGenre(@NonNull Context context, int genre) {
             switch (genre) {

@@ -22,6 +22,7 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
 
     private Context context;
     private List<PhotoAlbum> data;
+    private ClickListener clickListener;
 
     public VkPhotoAlbumsAdapter(Context context, List<PhotoAlbum> data) {
         this.data = data;
@@ -38,16 +39,14 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         final PhotoAlbum photoAlbum = data.get(position);
 
-        if(photoAlbum.getSizes() != null && !photoAlbum.getSizes().isEmpty())
-        {
+        if (photoAlbum.getSizes() != null && !photoAlbum.getSizes().isEmpty()) {
             String thumb = photoAlbum.getSizes().getUrlForSize(PhotoSize.Y, false);
             PicassoInstance.with()
                     .load(thumb)
                     .tag(Constants.PICASSO_TAG)
                     .placeholder(R.drawable.background_gray)
                     .into(holder.imageView);
-        }
-        else {
+        } else {
             PicassoInstance.with().cancelRequest(holder.imageView);
             holder.imageView.setImageResource(R.drawable.album);
         }
@@ -55,11 +54,11 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
         holder.title.setText(photoAlbum.getTitle());
 
         holder.imageView.setOnClickListener(v -> {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onVkPhotoAlbumClick(photoAlbum);
             }
         });
-        if(photoAlbum.getSize() >= 0)
+        if (photoAlbum.getSize() >= 0)
             holder.counterText.setText(context.getString(R.string.photos_count, photoAlbum.getSize()));
         else
             holder.counterText.setText(R.string.unknown_photos_count);
@@ -69,6 +68,21 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public void setData(List<PhotoAlbum> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public interface ClickListener {
+        void onVkPhotoAlbumClick(@NonNull PhotoAlbum album);
+
+        boolean onVkPhotoAlbumLongClick(@NonNull PhotoAlbum album);
     }
 
     public class Holder extends RecyclerView.ViewHolder {
@@ -83,21 +97,5 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
             title = itemView.findViewById(R.id.item_local_album_name);
             counterText = itemView.findViewById(R.id.counter);
         }
-    }
-
-    private ClickListener clickListener;
-
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onVkPhotoAlbumClick(@NonNull PhotoAlbum album);
-        boolean onVkPhotoAlbumLongClick(@NonNull PhotoAlbum album);
-    }
-
-    public void setData(List<PhotoAlbum> data) {
-        this.data = data;
-        notifyDataSetChanged();
     }
 }

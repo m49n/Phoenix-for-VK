@@ -82,7 +82,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private var conversation: Conversation? = null
 
-    fun getConversation() : Conversation? {
+    fun getConversation(): Conversation? {
         return conversation;
     }
 
@@ -468,7 +468,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
         isLoadingFromDbNow = false
         endOfContent = messages.isEmpty()
-        if(HronoType && startMessageId == null)
+        if (HronoType && startMessageId == null)
             endOfContent = true
 
         setNetLoadingNow(false)
@@ -949,18 +949,17 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun displayUserTextingInToolbar(ownerId: Int) {
-        if(!Settings.get().ui().isDisplay_writing)
+        if (!Settings.get().ui().isDisplay_writing)
             return
 
         view?.displayWriting(ownerId)
         toolbarSubtitleHandler.restoreToolbarWithDelay()
     }
 
-    fun ResolveWritingInfo(context: Context, owner_id: Int)
-    {
+    fun ResolveWritingInfo(context: Context, owner_id: Int) {
         appendDisposable(OwnerInfo.getRx(context, Settings.get().accounts().current, owner_id)
                 .compose(applySingleIOToMainSchedulers())
-                .subscribe({t -> view?.displayWriting(t.owner)}, { run {} }))
+                .subscribe({ t -> view?.displayWriting(t.owner) }, { run {} }))
     }
 
     private fun updateSubtitle() {
@@ -969,17 +968,19 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         val peerType = Peer.getType(peerId)
 
         when (peerType) {
-           Peer.GROUP -> {
+            Peer.GROUP -> {
                 subtitle = null
                 resolveToolbarSubtitle()
             }
 
             Peer.CHAT -> appendDisposable(messagesRepository.getChatUsers(accountId, Peer.toChatId(peerId))
                     .compose(applySingleIOToMainSchedulers())
-                    .subscribe({t -> run {
-                        subtitle = getString(R.string.chat_users_count, t.size)
-                        resolveToolbarSubtitle()
-                    }}, { run {resolveToolbarSubtitle()} }))
+                    .subscribe({ t ->
+                        run {
+                            subtitle = getString(R.string.chat_users_count, t.size)
+                            resolveToolbarSubtitle()
+                        }
+                    }, { run { resolveToolbarSubtitle() } }))
 
 
             Peer.USER -> appendDisposable(Stores.getInstance()
@@ -1195,7 +1196,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
             when (message.status) {
                 MessageStatus.SENT -> {
-                    if(canDeleteForAll(message)){
+                    if (canDeleteForAll(message)) {
                         canDeleteForAll.add(message.id)
                     } else {
                         sent.add(message.id)
@@ -1223,12 +1224,12 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             view?.notifyDataChanged()
         }
 
-        if(canDeleteForAll.isNotEmpty()){
+        if (canDeleteForAll.isNotEmpty()) {
             view?.showDeleteForAllDialog(canDeleteForAll)
         }
     }
 
-    private fun deleteSentImpl(ids: Collection<Int>, forAll: Boolean){
+    private fun deleteSentImpl(ids: Collection<Int>, forAll: Boolean) {
         appendDisposable(messagesRepository.deleteMessages(messagesOwnerId, peerId, ids, forAll)
                 .fromIOToMain()
                 .subscribe(dummy(), Consumer { t -> showError(view, t) }))

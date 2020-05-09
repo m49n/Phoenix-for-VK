@@ -33,7 +33,7 @@ public class LikesInteractor implements ILikesInteractor {
                     List<VKApiOwner> dtos = Utils.listEmptyIfNull(response.owners);
                     List<Owner> owners = new ArrayList<>(dtos.size());
 
-                    for(VKApiOwner dto : dtos){
+                    for (VKApiOwner dto : dtos) {
                         owners.add(Dto2Model.transformOwner(dto));
                     }
 

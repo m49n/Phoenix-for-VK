@@ -31,10 +31,10 @@
             android:id="@+id/vk_photo_item_bottom"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignBottom="@id/imageView"
-            android:layout_alignEnd="@+id/imageView"
-            android:layout_alignParentBottom="false"
             android:layout_alignStart="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@id/imageView"
+            android:layout_alignParentBottom="false"
             android:background="?attr/colorPrimaryDark"
             android:paddingStart="4dp"
             android:paddingEnd="8dp">

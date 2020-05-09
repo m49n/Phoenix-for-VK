@@ -24,17 +24,12 @@ import biz.dealnote.messenger.util.Logger;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
-
+ * <p>
  * Короче, те смайлы, состоящие из emoji_*_0x1f3f(a/b/c/d/e) - нигерские. Официально не поддерживаются андроидом.
  * Смайлы, состоящие из emoji_*_* - обрабатываются отдельно
- *
  */
 public final class EmojiconHandler {
-    private EmojiconHandler() {
-    }
-
     private static final SparseIntArray sEmojisMap = new SparseIntArray(1100);
-    //private static final SparseIntArray sSoftbanksMap = new SparseIntArray(471);
 
     static {
         sEmojisMap.put(0x0023_20e3, R.drawable.emoji_0023_20e3);
@@ -1084,6 +1079,10 @@ public final class EmojiconHandler {
         //http://itpro.cz/juniconv/
         Logger.d("wefwefewf", "codepoint: " + Character.codePointAt("\uD83E\uDD23", 0));
     }
+    //private static final SparseIntArray sSoftbanksMap = new SparseIntArray(471);
+
+    private EmojiconHandler() {
+    }
 
     //private static boolean isSoftBankEmoji(char c) {
     //    return ((c >> 12) == 0xe);
@@ -1099,6 +1098,7 @@ public final class EmojiconHandler {
 
     /**
      * Convert emoji characters of the given Spannable to the according emojicon.
+     *
      * @param context
      * @param text
      * @param emojiSize
@@ -1109,6 +1109,7 @@ public final class EmojiconHandler {
 
     /**
      * Convert emoji characters of the given Spannable to the according emojicon.
+     *
      * @param context
      * @param text
      * @param emojiSize
@@ -1118,7 +1119,7 @@ public final class EmojiconHandler {
     public static void addEmojis(Context context, Spannable text, int emojiSize, int index, int length) {
         int textLength = text.length();
         int textLengthToProcessMax = textLength - index;
-        int textLengthToProcess = length < 0 || length >= textLengthToProcessMax ? textLength : (length+index);
+        int textLengthToProcess = length < 0 || length >= textLengthToProcessMax ? textLength : (length + index);
 
         // remove spans throughout all text
         EmojiconSpan[] oldSpans = text.getSpans(0, textLength, EmojiconSpan.class);
@@ -1194,7 +1195,7 @@ public final class EmojiconHandler {
                                 icon = (followUnicode == 0x1f1f5) ? R.drawable.emoji_1f1ef_1f1f5 : 0;
                                 break;
                             case 0x1f1fa:
-                                switch (followUnicode){
+                                switch (followUnicode) {
                                     case 0x1f1f8:
                                         icon = R.drawable.emoji_1f1fa_1f1f8;
                                         break;
@@ -1219,7 +1220,7 @@ public final class EmojiconHandler {
                                 icon = (followUnicode == 0x1f1e7) ? R.drawable.emoji_1f1ec_1f1e7 : 0;
                                 break;
                             case 0x1f1ea:
-                                switch (followUnicode){
+                                switch (followUnicode) {
                                     case 0x1f1f8:
                                         icon = R.drawable.emoji_1f1ea_1f1f8;
                                         break;

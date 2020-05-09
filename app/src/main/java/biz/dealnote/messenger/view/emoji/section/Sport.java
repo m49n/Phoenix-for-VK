@@ -6,15 +6,15 @@ package biz.dealnote.messenger.view.emoji.section;
 public class Sport {
     public static final Emojicon[] DATA = new Emojicon[]{
 
-            Emojicon.fromChar((char)0x26bd),
+            Emojicon.fromChar((char) 0x26bd),
             Emojicon.fromCodePoint(0x1f3c0),
             Emojicon.fromCodePoint(0x1f3c8),
-            Emojicon.fromChar((char)0x26be),
+            Emojicon.fromChar((char) 0x26be),
             Emojicon.fromCodePoint(0x1f3be),
             Emojicon.fromCodePoint(0x1f3d0),
             Emojicon.fromCodePoint(0x1f3c9),
             Emojicon.fromCodePoint(0x1f3b1),
-            Emojicon.fromChar((char)0x26f3),
+            Emojicon.fromChar((char) 0x26f3),
             Emojicon.fromCodePoint(0x1f3cc),
             Emojicon.fromCodePoint(0x1f3d3),
             Emojicon.fromCodePoint(0x1f3f8),

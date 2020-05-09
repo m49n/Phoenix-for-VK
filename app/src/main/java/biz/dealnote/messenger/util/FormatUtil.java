@@ -16,9 +16,9 @@ import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 public class FormatUtil {
 
     public static Spannable formatCommunityBanInfo(Context context, int adminId, String adminName,
-                                                   long endDate, OwnerLinkSpanFactory.ActionListener adminClickListener){
+                                                   long endDate, OwnerLinkSpanFactory.ActionListener adminClickListener) {
         String endDateString;
-        if(endDate == 0){
+        if (endDate == 0) {
             endDateString = context.getString(R.string.forever).toLowerCase();
         } else {
             Date date = new Date(endDate * 1000);

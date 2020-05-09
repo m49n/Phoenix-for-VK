@@ -17,7 +17,7 @@ public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
     protected int currentStep;
     protected T state;
 
-    public AbsStepsHost(@NonNull T state){
+    public AbsStepsHost(@NonNull T state) {
         this.state = state;
     }
 
@@ -28,7 +28,7 @@ public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
 
     public abstract boolean canMoveNext(int index, @NonNull T state);
 
-    public final boolean canMoveNext(int index){
+    public final boolean canMoveNext(int index) {
         return canMoveNext(index, state);
     }
 
@@ -47,7 +47,7 @@ public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
     }
 
     @NonNull
-    public T getState(){
+    public T getState() {
         return state;
     }
 
@@ -55,12 +55,12 @@ public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
         this.state = state;
     }
 
-    public void saveState(@NonNull Bundle bundle){
+    public void saveState(@NonNull Bundle bundle) {
         bundle.putInt("host_current", currentStep);
         bundle.putParcelable("host_state", state);
     }
 
-    public void restoreState(Bundle saveInstanceState){
+    public void restoreState(Bundle saveInstanceState) {
         currentStep = saveInstanceState.getInt("host_current");
         state = saveInstanceState.getParcelable("host_state");
     }
@@ -79,16 +79,16 @@ public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
             }
         };
 
-        public AbsState(){
-
-        }
-
-        public void reset(){
+        public AbsState() {
 
         }
 
         @SuppressWarnings("unused")
         protected AbsState(Parcel in) {
+        }
+
+        public void reset() {
+
         }
 
         @Override

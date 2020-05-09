@@ -74,30 +74,30 @@ public class CommunityDtoAdapter extends AbsAdapter implements JsonDeserializer<
         dto.photo_200 = optString(root, "photo_200", null);
 
         String type = optString(root, "type", "group");
-        if(TYPE_GROUP.equals(type)) {
+        if (TYPE_GROUP.equals(type)) {
             dto.type = VKApiCommunity.Type.GROUP;
-        } else if(TYPE_PAGE.equals(type)) {
+        } else if (TYPE_PAGE.equals(type)) {
             dto.type = VKApiCommunity.Type.PAGE;
-        } else if(TYPE_EVENT.equals(type)) {
+        } else if (TYPE_EVENT.equals(type)) {
             dto.type = VKApiCommunity.Type.EVENT;
         }
 
-        if(root.has(CITY)){
+        if (root.has(CITY)) {
             dto.city = context.deserialize(root.get(CITY), VKApiCity.class);
         }
 
-        if(root.has(COUNTRY)){
+        if (root.has(COUNTRY)) {
             dto.country = context.deserialize(root.get(COUNTRY), VKApiCountry.class);
         }
 
-        if(root.has(BAN_INFO)){
+        if (root.has(BAN_INFO)) {
             JsonObject banInfo = root.getAsJsonObject(BAN_INFO);
             dto.blacklisted = true;
             dto.ban_end_date = optLong(banInfo, "end_date");
             dto.ban_comment = optString(banInfo, "comment");
         }
 
-        if(root.has(PLACE)){
+        if (root.has(PLACE)) {
             dto.place = context.deserialize(root.get(PLACE), VKApiPlace.class);
         }
 
@@ -105,11 +105,11 @@ public class CommunityDtoAdapter extends AbsAdapter implements JsonDeserializer<
         dto.wiki_page = optString(root, WIKI_PAGE);
         dto.members_count = optInt(root, MEMBERS_COUNT);
 
-        if(root.has(COUNTERS)){
+        if (root.has(COUNTERS)) {
             JsonElement countersJson = root.get(COUNTERS);
 
             // because api bug "counters":[]
-            if(countersJson.isJsonObject()){
+            if (countersJson.isJsonObject()) {
                 dto.counters = context.deserialize(countersJson, VKApiCommunity.Counters.class);
             }
         }
@@ -124,7 +124,7 @@ public class CommunityDtoAdapter extends AbsAdapter implements JsonDeserializer<
         dto.is_favorite = optIntAsBoolean(root, IS_FAVORITE);
         dto.status = VKStringUtils.unescape(optString(root, STATUS));
 
-        if(root.has("status_audio")){
+        if (root.has("status_audio")) {
             dto.status_audio = context.deserialize(root.get("status_audio"), VKApiAudio.class);
         }
 
@@ -138,7 +138,7 @@ public class CommunityDtoAdapter extends AbsAdapter implements JsonDeserializer<
         dto.activity = optString(root, ACTIVITY);
         dto.can_message = optIntAsBoolean(root, "can_message");
 
-        if(root.has("cover")){
+        if (root.has("cover")) {
             dto.cover = context.deserialize(root.get("cover"), VkApiCover.class);
         }
 

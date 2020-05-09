@@ -13,7 +13,7 @@ public class ImageHelper {
     private static final PorterDuffXfermode PORTER_DUFF_XFERMODE = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
 
     public static Bitmap getRoundedBitmap(Bitmap bitmap) {
-        if(bitmap == null){
+        if (bitmap == null) {
             return null;
         }
 
@@ -38,7 +38,7 @@ public class ImageHelper {
     }
 
     public static Bitmap getElipsedBitmap(Bitmap bitmap) {
-        if(bitmap == null){
+        if (bitmap == null) {
             return null;
         }
 
@@ -52,7 +52,7 @@ public class ImageHelper {
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(0xff424242);
-        canvas.drawRoundRect(rectF, (float)bitmap.getWidth() / 2.7f, (float)bitmap.getHeight() / 2.5f, paint);
+        canvas.drawRoundRect(rectF, (float) bitmap.getWidth() / 2.7f, (float) bitmap.getHeight() / 2.5f, paint);
 
         paint.setXfermode(PORTER_DUFF_XFERMODE);
         canvas.drawBitmap(bitmap, rect, rect, paint);
@@ -63,7 +63,7 @@ public class ImageHelper {
     }
 
     public static Bitmap getPolyBitmap(Bitmap bitmap) {
-        if(bitmap == null){
+        if (bitmap == null) {
             return null;
         }
 
@@ -77,7 +77,7 @@ public class ImageHelper {
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(0xff424242);
-        canvas.drawRoundRect(rectF, (float)bitmap.getWidth() / 6.3f, (float)bitmap.getHeight() / 6.3f, paint);
+        canvas.drawRoundRect(rectF, (float) bitmap.getWidth() / 6.3f, (float) bitmap.getHeight() / 6.3f, paint);
 
         paint.setXfermode(PORTER_DUFF_XFERMODE);
         canvas.drawBitmap(bitmap, rect, rect, paint);

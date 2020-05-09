@@ -17,7 +17,7 @@ public interface INotificationsApi {
 
     @CheckResult
     Single<NotificationsResponse> get(Integer count, String startFrom, String filters,
-                                                    Long startTime, Long endTime);
+                                      Long startTime, Long endTime);
 
     @CheckResult
     Single<AnswerVKOfficialList> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime);

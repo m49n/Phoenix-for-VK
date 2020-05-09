@@ -1296,4 +1296,6 @@
     <string name="docs_dir">Документы</string>
     <string name="photo_to_user_dir">Сортировать фото по папкам</string>
     <string name="use_speach_voice">Разговорный динамик для голосовух</string>
+    <string name="import_accounts">Импорт аккаунтов</string>
+    <string name="export_accounts">Экспорт аккаунтов</string>
 </resources>

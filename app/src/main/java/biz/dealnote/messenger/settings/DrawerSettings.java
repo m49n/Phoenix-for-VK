@@ -33,6 +33,20 @@ class DrawerSettings implements ISettings.IDrawerSettings {
         this.publishSubject = PublishSubject.create();
     }
 
+    private static int findCategoryIndex(int[] array, @SwitchableCategory int category) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == category) {
+                return i;
+            }
+        }
+
+        throw new IllegalStateException("Invalid category " + category);
+    }
+
+    private static String keyForCategory(@SwitchableCategory int category) {
+        return "drawer_category_" + category;
+    }
+
     @Override
     public boolean isCategoryEnabled(@SwitchableCategory int category) {
         return PreferenceManager.getDefaultSharedPreferences(app)
@@ -82,14 +96,14 @@ class DrawerSettings implements ISettings.IDrawerSettings {
         for (int i = 0; i < positions.length; i++) {
             int category = positions[i];
             // категория "category" должна быть в положении "i"
-            if(i >= all.length)
+            if (i >= all.length)
                 break;
             if (all[i] != category) {
                 try {
                     int currentCategoryIndex = findCategoryIndex(all, category);
                     all[currentCategoryIndex] = all[i];
                     all[i] = category;
-                } catch (Exception ignored){/*ignore*/}
+                } catch (Exception ignored) {/*ignore*/}
             }
         }
 
@@ -99,19 +113,5 @@ class DrawerSettings implements ISettings.IDrawerSettings {
     @Override
     public Observable<Object> observeChanges() {
         return publishSubject;
-    }
-
-    private static int findCategoryIndex(int[] array, @SwitchableCategory int category) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == category) {
-                return i;
-            }
-        }
-
-        throw new IllegalStateException("Invalid category " + category);
-    }
-
-    private static String keyForCategory(@SwitchableCategory int category) {
-        return "drawer_category_" + category;
     }
 }

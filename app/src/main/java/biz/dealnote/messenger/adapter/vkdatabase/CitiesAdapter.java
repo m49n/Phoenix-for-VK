@@ -19,6 +19,7 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.Holder> {
 
     private Context mContext;
     private List<City> mData;
+    private Listener mListener;
 
     public CitiesAdapter(Context mContext, List<City> mData) {
         this.mContext = mContext;
@@ -43,7 +44,7 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.Holder> {
         holder.area.setVisibility(TextUtils.isEmpty(city.getArea()) ? View.GONE : View.VISIBLE);
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(city);
             }
         });
@@ -52,6 +53,14 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.Holder> {
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(City country);
     }
 
     public class Holder extends RecyclerView.ViewHolder {
@@ -66,15 +75,5 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.Holder> {
             area = itemView.findViewById(R.id.area);
             region = itemView.findViewById(R.id.region);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(City country);
     }
 }

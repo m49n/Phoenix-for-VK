@@ -13,13 +13,9 @@ import io.reactivex.annotations.NonNull;
 public class PostEntity extends Entity {
 
     private static final int NO_STORED = -1;
-
-    private int dbid = NO_STORED;
-
     private final int id;
-
     private final int ownerId;
-
+    private int dbid = NO_STORED;
     private int fromId;
 
     private long date;
@@ -72,6 +68,12 @@ public class PostEntity extends Entity {
 
     private List<PostEntity> copyHierarchy;
 
+    public PostEntity(int id, int ownerId) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.attachments = new AttachmentsEntity(Collections.emptyList());
+    }
+
     public boolean isCanPublish() {
         return canPublish;
     }
@@ -81,53 +83,13 @@ public class PostEntity extends Entity {
         return this;
     }
 
-    public PostEntity setDbid(int dbid) {
-        this.dbid = dbid;
-        return this;
-    }
-
     public int getDbid() {
         return dbid;
     }
 
-    public static final class SourceDbo {
-
-        private final int type;
-
-        private final String platform;
-
-        private final int data;
-
-        private final String url;
-
-        public SourceDbo(int type, String platform, int data, String url) {
-            this.type = type;
-            this.platform = platform;
-            this.data = data;
-            this.url = url;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public int getData() {
-            return data;
-        }
-
-        public String getPlatform() {
-            return platform;
-        }
-    }
-
-    public PostEntity(int id, int ownerId) {
-        this.id = id;
-        this.ownerId = ownerId;
-        this.attachments = new AttachmentsEntity(Collections.emptyList());
+    public PostEntity setDbid(int dbid) {
+        this.dbid = dbid;
+        return this;
     }
 
     public int getId() {
@@ -219,13 +181,13 @@ public class PostEntity extends Entity {
         return this;
     }
 
+    public boolean isUserLikes() {
+        return userLikes;
+    }
+
     public PostEntity setUserLikes(boolean userLikes) {
         this.userLikes = userLikes;
         return this;
-    }
-
-    public boolean isUserLikes() {
-        return userLikes;
     }
 
     public boolean isCanLike() {
@@ -304,11 +266,6 @@ public class PostEntity extends Entity {
         return canPin;
     }
 
-    public PostEntity setPinned(boolean pinned) {
-        this.pinned = pinned;
-        return this;
-    }
-
     public PostEntity setCanPin(boolean canPin) {
         this.canPin = canPin;
         return this;
@@ -316,6 +273,11 @@ public class PostEntity extends Entity {
 
     public boolean isPinned() {
         return pinned;
+    }
+
+    public PostEntity setPinned(boolean pinned) {
+        this.pinned = pinned;
+        return this;
     }
 
     public boolean isDeleted() {
@@ -364,5 +326,39 @@ public class PostEntity extends Entity {
     public PostEntity setCopyHierarchy(List<PostEntity> copyHierarchy) {
         this.copyHierarchy = copyHierarchy;
         return this;
+    }
+
+    public static final class SourceDbo {
+
+        private final int type;
+
+        private final String platform;
+
+        private final int data;
+
+        private final String url;
+
+        public SourceDbo(int type, String platform, int data, String url) {
+            this.type = type;
+            this.platform = platform;
+            this.data = data;
+            this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public int getData() {
+            return data;
+        }
+
+        public String getPlatform() {
+            return platform;
+        }
     }
 }

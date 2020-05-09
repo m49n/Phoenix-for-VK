@@ -18,10 +18,10 @@ import static biz.dealnote.messenger.util.Utils.addFlagIf;
  */
 public class MapUtil {
 
-    static int calculateConversationAcl(VkApiConversation conversation){
+    static int calculateConversationAcl(VkApiConversation conversation) {
         int result = 0;
 
-        if(conversation.settings != null && conversation.settings.acl != null){
+        if (conversation.settings != null && conversation.settings.acl != null) {
             VkApiConversation.Acl acl = conversation.settings.acl;
             result = addFlagIf(result, Conversation.AclFlags.CAN_CHANGE_INFO, acl.can_change_info);
             result = addFlagIf(result, Conversation.AclFlags.CAN_CHANGE_INVITE_LINK, acl.can_change_invite_link);

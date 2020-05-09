@@ -33,6 +33,32 @@ class GroupsApi extends AbsApi implements IGroupsApi {
         super(accountId, provider);
     }
 
+    private static VKApiCommunity createFrom(GroupWallInfoResponse info) {
+        VKApiCommunity community = info.groups.get(0);
+
+        if (isNull(community.counters)) {
+            community.counters = new VKApiCommunity.Counters();
+        }
+
+        if (nonNull(info.allWallCount)) {
+            community.counters.all_wall = info.allWallCount;
+        }
+
+        if (nonNull(info.ownerWallCount)) {
+            community.counters.owner_wall = info.ownerWallCount;
+        }
+
+        if (nonNull(info.suggestsWallCount)) {
+            community.counters.suggest_wall = info.suggestsWallCount;
+        }
+
+        if (nonNull(info.postponedWallCount)) {
+            community.counters.postponed_wall = info.postponedWallCount;
+        }
+
+        return community;
+    }
+
     @Override
     public Completable editManager(int groupId, int userId, String role, Boolean isContact, String contactPosition, String contactPhone, String contactEmail) {
         return provideService(IGroupsService.class, TokenType.USER)
@@ -87,32 +113,6 @@ class GroupsApi extends AbsApi implements IGroupsApi {
 
                     return createFrom(response);
                 });
-    }
-
-    private static VKApiCommunity createFrom(GroupWallInfoResponse info) {
-        VKApiCommunity community = info.groups.get(0);
-
-        if (isNull(community.counters)) {
-            community.counters = new VKApiCommunity.Counters();
-        }
-
-        if (nonNull(info.allWallCount)) {
-            community.counters.all_wall = info.allWallCount;
-        }
-
-        if (nonNull(info.ownerWallCount)) {
-            community.counters.owner_wall = info.ownerWallCount;
-        }
-
-        if (nonNull(info.suggestsWallCount)) {
-            community.counters.suggest_wall = info.suggestsWallCount;
-        }
-
-        if (nonNull(info.postponedWallCount)) {
-            community.counters.postponed_wall = info.postponedWallCount;
-        }
-
-        return community;
     }
 
     @Override

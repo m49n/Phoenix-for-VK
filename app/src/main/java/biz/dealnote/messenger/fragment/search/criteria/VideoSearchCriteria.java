@@ -22,6 +22,17 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
     public static final int KEY_SEARCH_OWN = 8;
     public static final int KEY_DURATION_FROM = 9;
     public static final int KEY_DURATION_TO = 10;
+    public static final Creator<VideoSearchCriteria> CREATOR = new Creator<VideoSearchCriteria>() {
+        @Override
+        public VideoSearchCriteria createFromParcel(Parcel in) {
+            return new VideoSearchCriteria(in);
+        }
+
+        @Override
+        public VideoSearchCriteria[] newArray(int size) {
+            return new VideoSearchCriteria[size];
+        }
+    };
 
     public VideoSearchCriteria(String query) {
         super(query);
@@ -43,7 +54,7 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
 
         appendOption(new SimpleBooleanOption(KEY_SEARCH_OWN, R.string.search_in_my_videos, true));
 
-        appendOption(new SimpleNumberOption(KEY_DURATION_FROM,  R.string.min_duration, true));
+        appendOption(new SimpleNumberOption(KEY_DURATION_FROM, R.string.min_duration, true));
         appendOption(new SimpleNumberOption(KEY_DURATION_TO, R.string.max_duration, true));
     }
 
@@ -60,18 +71,6 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<VideoSearchCriteria> CREATOR = new Creator<VideoSearchCriteria>() {
-        @Override
-        public VideoSearchCriteria createFromParcel(Parcel in) {
-            return new VideoSearchCriteria(in);
-        }
-
-        @Override
-        public VideoSearchCriteria[] newArray(int size) {
-            return new VideoSearchCriteria[size];
-        }
-    };
 
     @Override
     public VideoSearchCriteria clone() throws CloneNotSupportedException {

@@ -56,7 +56,7 @@ public class ReplyFCMMessage {
     //public String lastName;
     //private String type;
 
-    public static ReplyFCMMessage fromRemoteMessage(@NonNull RemoteMessage remote){
+    public static ReplyFCMMessage fromRemoteMessage(@NonNull RemoteMessage remote) {
         ReplyFCMMessage message = new ReplyFCMMessage();
         message.from_id = Integer.parseInt(remote.getData().get("from_id"));
         message.reply_id = Integer.parseInt(remote.getData().get("reply_id"));
@@ -70,7 +70,7 @@ public class ReplyFCMMessage {
         return message;
     }
 
-    public void notify(final Context context, int accountId){
+    public void notify(final Context context, int accountId) {
         if (!Settings.get()
                 .notifications()
                 .isReplyNotifEnabled()) {
@@ -83,11 +83,11 @@ public class ReplyFCMMessage {
                 .subscribe(ownerInfo -> notifyImpl(app, ownerInfo.getOwner(), ownerInfo.getAvatar()), throwable -> {/*ignore*/});
     }
 
-    private void notifyImpl(Context context, @NonNull Owner owner, Bitmap bitmap){
+    private void notifyImpl(Context context, @NonNull Owner owner, Bitmap bitmap) {
         String url = "vk.com/" + place;
         Commented commented = LinkHelper.findCommentedFrom(url);
 
-        if(commented == null){
+        if (commented == null) {
             Logger.e(TAG, "Unknown place: " + place);
             return;
         }
@@ -96,7 +96,7 @@ public class ReplyFCMMessage {
         String targetText = snannedText == null ? null : snannedText.toString();
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getCommentsChannel(context));
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.COMMENTS_CHANNEL_ID)

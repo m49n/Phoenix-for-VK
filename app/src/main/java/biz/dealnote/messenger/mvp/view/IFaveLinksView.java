@@ -12,9 +12,14 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IFaveLinksView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayLinks(List<FaveLink> links);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
+
     void displayRefreshing(boolean refreshing);
+
     void openLink(int accountId, FaveLink link);
+
     void notifyItemRemoved(int index);
 }

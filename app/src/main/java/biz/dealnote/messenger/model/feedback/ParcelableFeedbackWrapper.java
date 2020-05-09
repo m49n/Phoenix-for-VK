@@ -12,7 +12,19 @@ import java.util.List;
  */
 public final class ParcelableFeedbackWrapper implements Parcelable {
 
+    public static final Creator<ParcelableFeedbackWrapper> CREATOR = new Creator<ParcelableFeedbackWrapper>() {
+        @Override
+        public ParcelableFeedbackWrapper createFromParcel(Parcel in) {
+            return new ParcelableFeedbackWrapper(in);
+        }
+
+        @Override
+        public ParcelableFeedbackWrapper[] newArray(int size) {
+            return new ParcelableFeedbackWrapper[size];
+        }
+    };
     private static final List<Class> TYPES = new ArrayList<>();
+
     static {
         TYPES.add(CommentFeedback.class);
         TYPES.add(CopyFeedback.class);
@@ -37,18 +49,6 @@ public final class ParcelableFeedbackWrapper implements Parcelable {
         feedback = in.readParcelable(classLoader);
     }
 
-    public static final Creator<ParcelableFeedbackWrapper> CREATOR = new Creator<ParcelableFeedbackWrapper>() {
-        @Override
-        public ParcelableFeedbackWrapper createFromParcel(Parcel in) {
-            return new ParcelableFeedbackWrapper(in);
-        }
-
-        @Override
-        public ParcelableFeedbackWrapper[] newArray(int size) {
-            return new ParcelableFeedbackWrapper[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -57,7 +57,7 @@ public final class ParcelableFeedbackWrapper implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         int index = TYPES.indexOf(feedback.getClass());
-        if(index == -1){
+        if (index == -1) {
             throw new UnsupportedOperationException("Unsupported class: " + feedback.getClass());
         }
 

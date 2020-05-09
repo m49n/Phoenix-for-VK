@@ -17,9 +17,8 @@ public class MentionCommentEntity extends FeedbackEntity {
         super(type);
     }
 
-    public MentionCommentEntity setCommented(Entity commented) {
-        this.commented = new EntityWrapper(commented);
-        return this;
+    public CommentEntity getWhere() {
+        return where;
     }
 
     public MentionCommentEntity setWhere(CommentEntity where) {
@@ -27,11 +26,12 @@ public class MentionCommentEntity extends FeedbackEntity {
         return this;
     }
 
-    public CommentEntity getWhere() {
-        return where;
-    }
-
     public Entity getCommented() {
         return commented.get();
+    }
+
+    public MentionCommentEntity setCommented(Entity commented) {
+        this.commented = new EntityWrapper(commented);
+        return this;
     }
 }

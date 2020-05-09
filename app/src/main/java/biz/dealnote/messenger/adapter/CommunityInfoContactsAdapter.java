@@ -31,6 +31,7 @@ public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<Community
 
     private List<Manager> users;
     private Transformation transformation;
+    private ActionListener actionListener;
 
     public CommunityInfoContactsAdapter(Context context, List<Manager> users) {
         this.users = users;
@@ -43,14 +44,8 @@ public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<Community
                 .inflate(R.layout.item_community_manager, parent, false));
     }
 
-    private ActionListener actionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
-    }
-
-    public interface ActionListener {
-        void onManagerClick(User manager);
     }
 
     @Override
@@ -63,7 +58,7 @@ public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<Community
         ViewUtils.displayAvatar(holder.avatar, transformation, user.getMaxSquareAvatar(), Constants.PICASSO_TAG);
 
         Integer onlineRes = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        if(Objects.nonNull(onlineRes)){
+        if (Objects.nonNull(onlineRes)) {
             holder.onlineView.setIcon(onlineRes);
             holder.onlineView.setVisibility(View.VISIBLE);
         } else {
@@ -73,14 +68,14 @@ public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<Community
         @StringRes
         Integer roleTextRes;
 
-        if(manager.getContactInfo() != null && manager.getContactInfo().getDescriprion() != null)
+        if (manager.getContactInfo() != null && manager.getContactInfo().getDescriprion() != null)
             holder.role.setText(manager.getContactInfo().getDescriprion());
         else {
             roleTextRes = R.string.role_unknown;
             holder.role.setText(roleTextRes);
         }
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onManagerClick(user);
             }
         });
@@ -95,6 +90,10 @@ public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<Community
     public void setData(List<Manager> data) {
         this.users = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onManagerClick(User manager);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

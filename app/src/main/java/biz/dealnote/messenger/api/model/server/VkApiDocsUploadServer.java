@@ -5,16 +5,6 @@ import android.os.Parcelable;
 
 public class VkApiDocsUploadServer implements UploadServer, Parcelable {
 
-    private String upload_url;
-
-    public VkApiDocsUploadServer() {
-
-    }
-
-    protected VkApiDocsUploadServer(Parcel in) {
-        upload_url = in.readString();
-    }
-
     public static final Creator<VkApiDocsUploadServer> CREATOR = new Creator<VkApiDocsUploadServer>() {
         @Override
         public VkApiDocsUploadServer createFromParcel(Parcel in) {
@@ -26,6 +16,15 @@ public class VkApiDocsUploadServer implements UploadServer, Parcelable {
             return new VkApiDocsUploadServer[size];
         }
     };
+    private String upload_url;
+
+    public VkApiDocsUploadServer() {
+
+    }
+
+    protected VkApiDocsUploadServer(Parcel in) {
+        upload_url = in.readString();
+    }
 
     @Override
     public String getUrl() {

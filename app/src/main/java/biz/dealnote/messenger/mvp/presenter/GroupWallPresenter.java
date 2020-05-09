@@ -39,19 +39,13 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
 
-    private List<PostFilter> filters;
-
     private final ISettings.IAccountsSettings settings;
-
-    private Community community;
-
     private final IFaveInteractor faveInteractor;
-
-    private CommunityDetails details;
-
     private final IOwnersRepository ownersRepository;
-
     private final ICommunitiesInteractor communitiesInteractor;
+    private List<PostFilter> filters;
+    private Community community;
+    private CommunityDetails details;
 
     public GroupWallPresenter(int accountId, int ownerId, @Nullable Community owner, @Nullable Bundle savedInstanceState) {
         super(accountId, ownerId, savedInstanceState);

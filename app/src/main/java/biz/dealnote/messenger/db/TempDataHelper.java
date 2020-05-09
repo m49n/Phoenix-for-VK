@@ -17,10 +17,14 @@ public class TempDataHelper extends SQLiteOpenHelper {
     private static final Object lock = new Object();
     private static volatile TempDataHelper instance;
 
+    private TempDataHelper(Context context) {
+        super(context, "temp_app_data.sqlite", null, 1);
+    }
+
     public static TempDataHelper getInstance(Context context) {
-        if(isNull(instance)){
-            synchronized (lock){
-                if(isNull(instance)){
+        if (isNull(instance)) {
+            synchronized (lock) {
+                if (isNull(instance)) {
                     instance = new TempDataHelper(context.getApplicationContext());
                 }
             }
@@ -28,16 +32,12 @@ public class TempDataHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    private TempDataHelper(Context context) {
-        super(context, "temp_app_data.sqlite", null, 1);
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         createTmpDataTable(db);
     }
 
-    private void createTmpDataTable(SQLiteDatabase db){
+    private void createTmpDataTable(SQLiteDatabase db) {
         String sql = "CREATE TABLE IF NOT EXISTS [" + TempDataColumns.TABLENAME + "] (\n" +
                 "  [" + TempDataColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + TempDataColumns.OWNER_ID + "] INTEGER, " +

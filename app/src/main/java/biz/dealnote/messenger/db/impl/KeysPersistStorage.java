@@ -32,7 +32,7 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
         super(context);
     }
 
-    private AesKeyPair map(Cursor cursor){
+    private AesKeyPair map(Cursor cursor) {
         return new AesKeyPair()
                 .setVersion(cursor.getInt(cursor.getColumnIndex(KeyColumns.VERSION)))
                 .setPeerId(cursor.getInt(cursor.getColumnIndex(KeyColumns.PEER_ID)))
@@ -50,7 +50,7 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
             AesKeyPair alreaadyExist = findKeyPairFor(pair.getAccountId(), pair.getSessionId())
                     .blockingGet();
 
-            if(nonNull(alreaadyExist)){
+            if (nonNull(alreaadyExist)) {
                 e.onError(new DatabaseException("Key pair with the session ID is already in the database"));
                 return;
             }
@@ -79,9 +79,9 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
             Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, KeyColumns._ID);
 
             List<AesKeyPair> pairs = new ArrayList<>(Utils.safeCountOf(cursor));
-            if(nonNull(cursor)){
-                while (cursor.moveToNext()){
-                    if(e.isDisposed()) {
+            if (nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) {
                         break;
                     }
 
@@ -103,9 +103,9 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
                     .query(uri, null, KeyColumns.PEER_ID + " = ?", new String[]{String.valueOf(peerId)}, KeyColumns._ID);
 
             List<AesKeyPair> pairs = new ArrayList<>(Utils.safeCountOf(cursor));
-            if(nonNull(cursor)){
-                while (cursor.moveToNext()){
-                    if(e.isDisposed()) {
+            if (nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) {
                         break;
                     }
 
@@ -127,8 +127,8 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
                             new String[]{String.valueOf(peerId)}, KeyColumns._ID + " DESC LIMIT 1");
 
             AesKeyPair pair = null;
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     pair = map(cursor).setAccountId(accountId);
                 }
 
@@ -148,15 +148,15 @@ class KeysPersistStorage extends AbsStorage implements IKeysStorage {
                             new String[]{String.valueOf(sessionId)}, null);
 
             AesKeyPair pair = null;
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     pair = map(cursor).setAccountId(accountId);
                 }
 
                 cursor.close();
             }
 
-            if(nonNull(pair)){
+            if (nonNull(pair)) {
                 e.onSuccess(pair);
             }
 

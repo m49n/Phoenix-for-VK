@@ -11,8 +11,19 @@ import biz.dealnote.messenger.model.ParcelableModelWrapper;
  * Created by ruslan.kolbasa on 09.12.2016.
  * phoenix
  */
-public final class MentionCommentFeedback extends Feedback implements Parcelable  {
+public final class MentionCommentFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<MentionCommentFeedback> CREATOR = new Creator<MentionCommentFeedback>() {
+        @Override
+        public MentionCommentFeedback createFromParcel(Parcel in) {
+            return new MentionCommentFeedback(in);
+        }
+
+        @Override
+        public MentionCommentFeedback[] newArray(int size) {
+            return new MentionCommentFeedback[size];
+        }
+    };
     private Comment where;
     private AbsModel commentOf;
 
@@ -39,33 +50,21 @@ public final class MentionCommentFeedback extends Feedback implements Parcelable
         return 0;
     }
 
-    public static final Creator<MentionCommentFeedback> CREATOR = new Creator<MentionCommentFeedback>() {
-        @Override
-        public MentionCommentFeedback createFromParcel(Parcel in) {
-            return new MentionCommentFeedback(in);
-        }
-
-        @Override
-        public MentionCommentFeedback[] newArray(int size) {
-            return new MentionCommentFeedback[size];
-        }
-    };
+    public AbsModel getCommentOf() {
+        return commentOf;
+    }
 
     public MentionCommentFeedback setCommentOf(AbsModel commentOf) {
         this.commentOf = commentOf;
         return this;
     }
 
+    public Comment getWhere() {
+        return where;
+    }
+
     public MentionCommentFeedback setWhere(Comment where) {
         this.where = where;
         return this;
-    }
-
-    public AbsModel getCommentOf() {
-        return commentOf;
-    }
-
-    public Comment getWhere() {
-        return where;
     }
 }

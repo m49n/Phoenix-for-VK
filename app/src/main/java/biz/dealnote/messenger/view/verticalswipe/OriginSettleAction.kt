@@ -6,7 +6,7 @@ import androidx.customview.widget.ViewDragHelper
 /**
  * When the gesture is complete, it moves the view to the starting position
  */
-class OriginSettleAction: PostAction {
+class OriginSettleAction : PostAction {
 
     private var originTop: Int = -1
 

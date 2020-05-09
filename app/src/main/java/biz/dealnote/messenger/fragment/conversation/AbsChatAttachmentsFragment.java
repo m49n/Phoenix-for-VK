@@ -76,28 +76,28 @@ public abstract class AbsChatAttachmentsFragment<T, P extends BaseChatAttachment
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
         }
     }
 
     @Override
     public void notifyDatasetChanged() {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void showLoading(boolean loading) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loading);
         }
     }
 
     @Override
     public void setEmptyTextVisible(boolean visible) {
-        if(nonNull(mEmpty)){
+        if (nonNull(mEmpty)) {
             mEmpty.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
@@ -105,7 +105,7 @@ public abstract class AbsChatAttachmentsFragment<T, P extends BaseChatAttachment
     @Override
     public void setToolbarTitle(String title) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(nonNull(actionBar)){
+        if (nonNull(actionBar)) {
             actionBar.setTitle(title);
         }
     }
@@ -113,7 +113,7 @@ public abstract class AbsChatAttachmentsFragment<T, P extends BaseChatAttachment
     @Override
     public void setToolbarSubtitle(String subtitle) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(nonNull(actionBar)){
+        if (nonNull(actionBar)) {
             actionBar.setSubtitle(subtitle);
         }
     }

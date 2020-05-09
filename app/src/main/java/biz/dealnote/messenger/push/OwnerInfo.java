@@ -28,6 +28,17 @@ public class OwnerInfo {
         this.avatar = avatar;
     }
 
+    public static Single<OwnerInfo> getRx(@NonNull Context context, int accountId, int ownerId) {
+        final Context app = context.getApplicationContext();
+        IOwnersRepository interactor = Repository.INSTANCE.getOwners();
+
+        return interactor.getBaseOwnerInfo(accountId, ownerId, IOwnersRepository.MODE_ANY)
+                .flatMap(owner -> Single.fromCallable(() -> NotificationUtils.loadRoundedImage(app, owner.get100photoOrSmaller(), R.drawable.ic_avatar_unknown))
+                        .map(Optional::wrap)
+                        .onErrorReturnItem(Optional.empty())
+                        .map(optional -> new OwnerInfo(owner, optional.get())));
+    }
+
     @NonNull
     public User getUser() {
         return (User) owner;
@@ -45,16 +56,5 @@ public class OwnerInfo {
 
     public Bitmap getAvatar() {
         return avatar;
-    }
-
-    public static Single<OwnerInfo> getRx(@NonNull Context context, int accountId, int ownerId) {
-        final Context app = context.getApplicationContext();
-        IOwnersRepository interactor = Repository.INSTANCE.getOwners();
-
-        return interactor.getBaseOwnerInfo(accountId, ownerId, IOwnersRepository.MODE_ANY)
-                .flatMap(owner -> Single.fromCallable(() -> NotificationUtils.loadRoundedImage(app, owner.get100photoOrSmaller(), R.drawable.ic_avatar_unknown))
-                        .map(Optional::wrap)
-                        .onErrorReturnItem(Optional.empty())
-                        .map(optional -> new OwnerInfo(owner, optional.get())));
     }
 }

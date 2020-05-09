@@ -7,6 +7,17 @@ import biz.dealnote.messenger.api.model.Identificable;
 
 public final class Account implements Parcelable, Identificable {
 
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
     private int id;
     private Owner owner;
 
@@ -21,18 +32,6 @@ public final class Account implements Parcelable, Identificable {
         ParcelableOwnerWrapper wrapper = in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader());
         this.owner = wrapper.get();
     }
-
-    public static final Creator<Account> CREATOR = new Creator<Account>() {
-        @Override
-        public Account createFromParcel(Parcel in) {
-            return new Account(in);
-        }
-
-        @Override
-        public Account[] newArray(int size) {
-            return new Account[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -59,7 +58,7 @@ public final class Account implements Parcelable, Identificable {
         return id;
     }
 
-    public String getDisplayName(){
+    public String getDisplayName() {
         return owner == null ? String.valueOf(id) : owner.getFullName();
     }
 

@@ -19,6 +19,7 @@ import biz.dealnote.messenger.model.UserDetails;
 public interface IUserWallView extends IWallView, IProgressView, ISnackbarView {
 
     void displayWallFilters(List<PostFilter> filters);
+
     void notifyWallFiltersChanged();
 
     void setupPrimaryActionButton(@DrawableRes Integer resourceId);

@@ -11,7 +11,6 @@ public class NotificationColumns implements BaseColumns {
     public static final String DATA = "data";
 
 
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_TYPE = TABLENAME + "." + TYPE;
     public static final String FULL_DATE = TABLENAME + "." + DATE;

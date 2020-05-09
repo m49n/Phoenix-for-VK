@@ -8,9 +8,9 @@ import kotlin.math.min
  *  @param minFraction upward progress factor
  */
 class BelowFractionalClamp(
-    private val maxFraction: Float= 1f,
-    private val minFraction: Float = 1f
-): VerticalClamp {
+        private val maxFraction: Float = 1f,
+        private val minFraction: Float = 1f
+) : VerticalClamp {
 
     init {
         require(maxFraction > 0)

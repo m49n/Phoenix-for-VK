@@ -25,7 +25,7 @@ public class VkPlace {
     private static Pattern PATTERN_WALL = Pattern.compile("wall(-?\\d+)_(\\d+)");
     private static Pattern PATTERN_WALL_COMMENT = Pattern.compile("wall_comment(-?\\d+)_(\\d+)");
 
-    public static VkPlace parse(String object){
+    public static VkPlace parse(String object) {
         Matcher matcher = PATTERN_PHOTO.matcher(object);
         if (matcher.find()) {
             int ownerId = Integer.parseInt(matcher.group(1));
@@ -34,21 +34,21 @@ public class VkPlace {
         }
 
         matcher = PATTERN_PHOTO_COMMENT.matcher(object);
-        if(matcher.find()){
+        if (matcher.find()) {
             int ownerId = Integer.parseInt(matcher.group(1));
             int photoId = Integer.parseInt(matcher.group(2));
             return new PhotoComment(ownerId, photoId);
         }
 
         matcher = PATTERN_WALL.matcher(object);
-        if(matcher.find()){
+        if (matcher.find()) {
             int ownerId = Integer.parseInt(matcher.group(1));
             int postId = Integer.parseInt(matcher.group(2));
             return new WallPost(ownerId, postId);
         }
 
         matcher = PATTERN_WALL_COMMENT.matcher(object);
-        if(matcher.find()){
+        if (matcher.find()) {
             int ownerId = Integer.parseInt(matcher.group(1));
             int postId = Integer.parseInt(matcher.group(2));
             return new WallComment(ownerId, postId);
@@ -62,7 +62,7 @@ public class VkPlace {
         }
 
         matcher = PATTERN_VIDEO_COMMENT.matcher(object);
-        if(matcher.find()){
+        if (matcher.find()) {
             int ownerId = Integer.parseInt(matcher.group(1));
             int videoId = Integer.parseInt(matcher.group(2));
             return new VideoComment(ownerId, videoId);

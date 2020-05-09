@@ -9,6 +9,17 @@ import android.os.Parcelable;
  */
 public final class FriendsCounters implements Parcelable {
 
+    public static final Creator<FriendsCounters> CREATOR = new Creator<FriendsCounters>() {
+        @Override
+        public FriendsCounters createFromParcel(Parcel in) {
+            return new FriendsCounters(in);
+        }
+
+        @Override
+        public FriendsCounters[] newArray(int size) {
+            return new FriendsCounters[size];
+        }
+    };
     private final int all;
     private final int online;
     private final int followers;
@@ -27,18 +38,6 @@ public final class FriendsCounters implements Parcelable {
         followers = in.readInt();
         mutual = in.readInt();
     }
-
-    public static final Creator<FriendsCounters> CREATOR = new Creator<FriendsCounters>() {
-        @Override
-        public FriendsCounters createFromParcel(Parcel in) {
-            return new FriendsCounters(in);
-        }
-
-        @Override
-        public FriendsCounters[] newArray(int size) {
-            return new FriendsCounters[size];
-        }
-    };
 
     public int getAll() {
         return all;

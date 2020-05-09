@@ -20,9 +20,17 @@ public class ReplyCommentEntity extends FeedbackEntity {
         super(type);
     }
 
+    public Entity getCommented() {
+        return commented.get();
+    }
+
     public ReplyCommentEntity setCommented(Entity commented) {
         this.commented = new EntityWrapper(commented);
         return this;
+    }
+
+    public CommentEntity getFeedbackComment() {
+        return feedbackComment;
     }
 
     public ReplyCommentEntity setFeedbackComment(CommentEntity feedbackComment) {
@@ -30,20 +38,12 @@ public class ReplyCommentEntity extends FeedbackEntity {
         return this;
     }
 
+    public CommentEntity getOwnComment() {
+        return ownComment;
+    }
+
     public ReplyCommentEntity setOwnComment(CommentEntity ownComment) {
         this.ownComment = ownComment;
         return this;
-    }
-
-    public Entity getCommented() {
-        return commented.get();
-    }
-
-    public CommentEntity getFeedbackComment() {
-        return feedbackComment;
-    }
-
-    public CommentEntity getOwnComment() {
-        return ownComment;
     }
 }

@@ -236,6 +236,41 @@ public class BubbleDrawable extends Drawable {
         return (int) mRect.height();
     }
 
+    public enum ArrowLocation {
+        LEFT(0x00),
+        RIGHT(0x01),
+        TOP(0x02),
+        BOTTOM(0x03);
+
+        private int mValue;
+
+        ArrowLocation(int value) {
+            this.mValue = value;
+        }
+
+        public static ArrowLocation mapIntToValue(int stateInt) {
+            for (ArrowLocation value : ArrowLocation.values()) {
+                if (stateInt == value.getIntValue()) {
+                    return value;
+                }
+            }
+            return getDefault();
+        }
+
+        public static ArrowLocation getDefault() {
+            return LEFT;
+        }
+
+        public int getIntValue() {
+            return mValue;
+        }
+    }
+
+    public enum BubbleType {
+        COLOR,
+        BITMAP
+    }
+
     public static class Builder {
         public static final float DEFAULT_ARROW_WITH = 25;
         public static final float DEFAULT_ARROW_HEIGHT = 25;
@@ -318,40 +353,5 @@ public class BubbleDrawable extends Drawable {
             }
             return new BubbleDrawable(this);
         }
-    }
-
-    public enum ArrowLocation {
-        LEFT(0x00),
-        RIGHT(0x01),
-        TOP(0x02),
-        BOTTOM(0x03);
-
-        private int mValue;
-
-        ArrowLocation(int value) {
-            this.mValue = value;
-        }
-
-        public static ArrowLocation mapIntToValue(int stateInt) {
-            for (ArrowLocation value : ArrowLocation.values()) {
-                if (stateInt == value.getIntValue()) {
-                    return value;
-                }
-            }
-            return getDefault();
-        }
-
-        public static ArrowLocation getDefault() {
-            return LEFT;
-        }
-
-        public int getIntValue() {
-            return mValue;
-        }
-    }
-
-    public enum BubbleType {
-        COLOR,
-        BITMAP
     }
 }

@@ -10,7 +10,7 @@ public final class VkApiGroupLongpollUpdates {
     @SerializedName("ts")
     public String ts;
 
-    public int getCount(){
+    public int getCount() {
         return 0;
     }
 }

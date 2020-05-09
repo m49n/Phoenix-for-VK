@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class BooleanValue implements Parcelable {
 
-    private boolean value;
-
-    public BooleanValue(boolean initialValue){
-        this.value = initialValue;
-    }
-
-    public BooleanValue(){
-        this(false);
-    }
-
-    private BooleanValue(Parcel in) {
-        value = in.readByte() != 0;
-    }
-
     public static final Creator<BooleanValue> CREATOR = new Creator<BooleanValue>() {
         @Override
         public BooleanValue createFromParcel(Parcel in) {
@@ -34,13 +20,26 @@ public final class BooleanValue implements Parcelable {
             return new BooleanValue[size];
         }
     };
+    private boolean value;
+
+    public BooleanValue(boolean initialValue) {
+        this.value = initialValue;
+    }
+
+    public BooleanValue() {
+        this(false);
+    }
+
+    private BooleanValue(Parcel in) {
+        value = in.readByte() != 0;
+    }
 
     /**
      * @param value new boolean value
      * @return true if value was changed
      */
     public boolean setValue(boolean value) {
-        if(this.value == value){
+        if (this.value == value) {
             return false;
         }
 
@@ -48,7 +47,7 @@ public final class BooleanValue implements Parcelable {
         return true;
     }
 
-    public boolean get(){
+    public boolean get() {
         return value;
     }
 

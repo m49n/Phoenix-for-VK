@@ -66,11 +66,11 @@ public class VKApiComment {
 
     }
 
-    public int getAttachmentsCount(){
+    public int getAttachmentsCount() {
         return attachments == null ? 0 : attachments.size();
     }
 
-    public boolean hasAttachments(){
+    public boolean hasAttachments() {
         return getAttachmentsCount() > 0;
     }
 }

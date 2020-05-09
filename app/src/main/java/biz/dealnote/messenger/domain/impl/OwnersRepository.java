@@ -95,7 +95,12 @@ public class OwnersRepository implements IOwnersRepository {
             CITY, COUNTRY, PLACE, DESCRIPTION, WIKI_PAGE, MEMBERS_COUNT, COUNTERS, START_DATE,
             FINISH_DATE, CAN_POST, CAN_SEE_ALL_POSTS, STATUS, CONTACTS, LINKS, FIXED_POST,
             VERIFIED, BLACKLISTED, SITE, ACTIVITY, "member_status", "can_message", "cover");
-
+    private static final BiFunction<List<User>, List<Community>, IOwnersBundle> TO_BUNDLE_FUNCTION = (users, communities) -> {
+        SparseArrayOwnersBundle bundle = new SparseArrayOwnersBundle(users.size() + communities.size());
+        bundle.putAll(users);
+        bundle.putAll(communities);
+        return bundle;
+    };
     private final INetworker networker;
     private final IOwnersStorage cache;
     private final PublishProcessor<List<UserUpdate>> userUpdatesPublisher = PublishProcessor.create();
@@ -156,15 +161,14 @@ public class OwnersRepository implements IOwnersRepository {
     }
 
     @Override
-    public Single<List<Story>> getStory(int accountId, Integer owner_id)
-    {
+    public Single<List<Story>> getStory(int accountId, Integer owner_id) {
         return networker.vkDefault(accountId)
                 .users()
                 .getStory(owner_id, 1, UserColumns.API_FIELDS)
                 .flatMap(story -> {
                     List<List<VKApiStory>> dtos_multy = listEmptyIfNull(story.items);
-                    List<VKApiStory>dtos = new ArrayList<>();
-                    for(List<VKApiStory> itst : dtos_multy)
+                    List<VKApiStory> dtos = new ArrayList<>();
+                    for (List<VKApiStory> itst : dtos_multy)
                         dtos.addAll(itst);
                     List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
                     VKOwnIds ownIds = new VKOwnIds();
@@ -285,15 +289,15 @@ public class OwnersRepository implements IOwnersRepository {
     public Completable handleOnlineChanges(int accountId, @Nullable List<UserIsOfflineUpdate> offlineUpdates, @Nullable List<UserIsOnlineUpdate> onlineUpdates) {
         List<UserPatch> patches = new ArrayList<>();
 
-        if(nonEmpty(offlineUpdates)){
-            for(UserIsOfflineUpdate update : offlineUpdates){
+        if (nonEmpty(offlineUpdates)) {
+            for (UserIsOfflineUpdate update : offlineUpdates) {
                 long lastSeeenUnixtime = update.getFlags() != 0 ? Unixtime.now() - 15 * 60 : Unixtime.now();
-                patches.add(new UserPatch(update.user_id).setOnlineUpdate(new UserPatch.Online(false,lastSeeenUnixtime, 0)));
+                patches.add(new UserPatch(update.user_id).setOnlineUpdate(new UserPatch.Online(false, lastSeeenUnixtime, 0)));
             }
         }
 
-        if(nonEmpty(onlineUpdates)){
-            for(UserIsOnlineUpdate update : onlineUpdates){
+        if (nonEmpty(onlineUpdates)) {
+            for (UserIsOnlineUpdate update : onlineUpdates) {
                 patches.add(new UserPatch(update.user_id).setOnlineUpdate(new UserPatch.Online(true, Unixtime.now(), update.extra)));
             }
         }
@@ -301,19 +305,19 @@ public class OwnersRepository implements IOwnersRepository {
         return applyPatchesThenPublish(accountId, patches);
     }
 
-    private Completable applyPatchesThenPublish(int accountId, List<UserPatch> patches){
+    private Completable applyPatchesThenPublish(int accountId, List<UserPatch> patches) {
         List<UserUpdate> updates = new ArrayList<>(patches.size());
 
-        for(UserPatch patch : patches){
+        for (UserPatch patch : patches) {
             UserUpdate update = new UserUpdate(accountId, patch.getUserId());
 
-            if(patch.getOnline() != null){
+            if (patch.getOnline() != null) {
                 update.setOnline(new UserUpdate.Online(patch.getOnline().isOnline(),
                         patch.getOnline().getLastSeen(),
                         patch.getOnline().getPlatform()));
             }
 
-            if(patch.getStatus() != null){
+            if (patch.getStatus() != null) {
                 update.setStatus(new UserUpdate.Status(patch.getStatus().getStatus()));
             }
 
@@ -418,34 +422,6 @@ public class OwnersRepository implements IOwnersRepository {
                     return owners;
                 });
     }
-
-    private static final class DividedIds {
-
-        final List<Integer> uids;
-        final List<Integer> gids;
-
-        DividedIds(Collection<Integer> ids) {
-            this.uids = new LinkedList<>();
-            this.gids = new LinkedList<>();
-
-            for (int id : ids) {
-                if (id > 0) {
-                    uids.add(id);
-                } else if (id < 0) {
-                    gids.add(-id);
-                } else {
-                    throw new IllegalArgumentException("Zero owner id!!!");
-                }
-            }
-        }
-    }
-
-    private static final BiFunction<List<User>, List<Community>, IOwnersBundle> TO_BUNDLE_FUNCTION = (users, communities) -> {
-        SparseArrayOwnersBundle bundle = new SparseArrayOwnersBundle(users.size() + communities.size());
-        bundle.putAll(users);
-        bundle.putAll(communities);
-        return bundle;
-    };
 
     @Override
     public Single<IOwnersBundle> findBaseOwnersDataAsBundle(int accountId, Collection<Integer> ids, int mode) {
@@ -578,5 +554,26 @@ public class OwnersRepository implements IOwnersRepository {
         }
 
         throw new IllegalArgumentException("Invalid mode: " + mode);
+    }
+
+    private static final class DividedIds {
+
+        final List<Integer> uids;
+        final List<Integer> gids;
+
+        DividedIds(Collection<Integer> ids) {
+            this.uids = new LinkedList<>();
+            this.gids = new LinkedList<>();
+
+            for (int id : ids) {
+                if (id > 0) {
+                    uids.add(id);
+                } else if (id < 0) {
+                    gids.add(-id);
+                } else {
+                    throw new IllegalArgumentException("Zero owner id!!!");
+                }
+            }
+        }
     }
 }

@@ -15,8 +15,8 @@ public class FullAndNonFullUpdates {
     private List<Integer> nonFull;
 
     @NonNull
-    public List<AddMessageUpdate> prepareFull(){
-        if(Objects.isNull(full)){
+    public List<AddMessageUpdate> prepareFull() {
+        if (Objects.isNull(full)) {
             full = new ArrayList<>(1);
         }
 
@@ -24,8 +24,8 @@ public class FullAndNonFullUpdates {
     }
 
     @NonNull
-    public List<Integer> prepareNonFull(){
-        if(Objects.isNull(nonFull)){
+    public List<Integer> prepareNonFull() {
+        if (Objects.isNull(nonFull)) {
             nonFull = new ArrayList<>(1);
         }
 
@@ -40,11 +40,11 @@ public class FullAndNonFullUpdates {
         return nonFull;
     }
 
-    public boolean hasFullMessages(){
+    public boolean hasFullMessages() {
         return !Utils.safeIsEmpty(full);
     }
 
-    public boolean hasNonFullMessages(){
+    public boolean hasNonFullMessages() {
         return !Utils.safeIsEmpty(nonFull);
     }
 

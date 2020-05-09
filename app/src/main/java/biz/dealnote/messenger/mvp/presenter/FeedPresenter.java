@@ -38,15 +38,18 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
 
+    private final IFeedInteractor feedInteractor;
+    private final IWallsRepository walls;
     private List<News> mFeed;
     private List<FeedSource> mFeedSources;
-
     private String mNextFrom;
     private String mSourceIds;
-
-    private final IFeedInteractor feedInteractor;
-
-    private final IWallsRepository walls;
+    private boolean loadingNow;
+    private String loadingNowNextFrom;
+    private DisposableHolder<Void> loadingHolder = new DisposableHolder<>();
+    private boolean cacheLoadingNow;
+    private DisposableHolder<Void> cacheLoadingHolder = new DisposableHolder<>();
+    private String mTmpFeedScrollOnGuiReady;
 
     public FeedPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -72,6 +75,17 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
                 .restoreFeedScrollState(accountId);
 
         loadCachedFeed(scrollState);
+    }
+
+    private static List<FeedSource> createDefaultFeedSources() {
+        List<FeedSource> data = new ArrayList<>(6);
+        data.add(new FeedSource(null, R.string.news_feed));
+        data.add(new FeedSource("friends", R.string.friends));
+        data.add(new FeedSource("groups", R.string.groups));
+        data.add(new FeedSource("pages", R.string.pages));
+        data.add(new FeedSource("following", R.string.subscriptions));
+        data.add(new FeedSource("recommendation", R.string.recommendation));
+        return data;
     }
 
     private void refreshFeedSources() {
@@ -104,11 +118,6 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
             }
         }
     }
-
-    private boolean loadingNow;
-    private String loadingNowNextFrom;
-
-    private DisposableHolder<Void> loadingHolder = new DisposableHolder<>();
 
     private void requestFeedAtLast(final String startFrom) {
         this.loadingHolder.dispose();
@@ -174,16 +183,12 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
         mTmpFeedScrollOnGuiReady = null;
     }
 
-    private boolean cacheLoadingNow;
-
     private void setCacheLoadingNow(boolean cacheLoadingNow) {
         this.cacheLoadingNow = cacheLoadingNow;
 
         resolveRefreshingView();
         resolveLoadMoreFooterView();
     }
-
-    private DisposableHolder<Void> cacheLoadingHolder = new DisposableHolder<>();
 
     private void loadCachedFeed(@Nullable String thenScrollToState) {
         final int accountId = super.getAccountId();
@@ -202,8 +207,6 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
         cacheLoadingHolder.dispose();
         super.onDestroyed();
     }
-
-    private String mTmpFeedScrollOnGuiReady;
 
     private void onCachedFeedReceived(List<News> data, @Nullable String thenScrollToState) {
         setCacheLoadingNow(false);
@@ -325,17 +328,6 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
                 getView().setupLoadMoreFooter(LoadMoreState.END_OF_LIST);
             }
         }
-    }
-
-    private static List<FeedSource> createDefaultFeedSources() {
-        List<FeedSource> data = new ArrayList<>(6);
-        data.add(new FeedSource(null, R.string.news_feed));
-        data.add(new FeedSource("friends", R.string.friends));
-        data.add(new FeedSource("groups", R.string.groups));
-        data.add(new FeedSource("pages", R.string.pages));
-        data.add(new FeedSource("following", R.string.subscriptions));
-        data.add(new FeedSource("recommendation", R.string.recommendation));
-        return data;
     }
 
     public void fireScrollStateOnPause(String json) {

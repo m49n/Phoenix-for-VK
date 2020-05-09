@@ -40,28 +40,32 @@ import static biz.dealnote.messenger.util.Objects.isNull;
  */
 public class Injection {
 
+    private static final Object UPLOADMANAGERLOCK = new Object();
     private static volatile ICaptchaProvider captchaProvider;
-
     private static IProxySettings proxySettings = new ProxySettingsImpl(provideApplicationContext());
+    private static volatile IPushRegistrationResolver resolver;
+    private static volatile IUploadManager uploadManager;
+    private static volatile IAttachmentsRepository attachmentsRepository;
+    private static INetworker networkerInstance = new Networker(proxySettings);
+    private static volatile IBlacklistRepository blacklistRepository;
+    private static volatile ILogsStorage logsStore;
 
-    public static IProxySettings provideProxySettings(){
+    public static IProxySettings provideProxySettings() {
         return proxySettings;
     }
 
-    public static IGifPlayerFactory provideGifPlayerFactory(){
+    public static IGifPlayerFactory provideGifPlayerFactory() {
         return new AppGifPlayerFactory(proxySettings, provideSettings().other());
     }
 
-    private static volatile IPushRegistrationResolver resolver;
-
-    public static IVoicePlayerFactory provideVoicePlayerFactory(){
+    public static IVoicePlayerFactory provideVoicePlayerFactory() {
         return new VoicePlayerFactory(provideApplicationContext(), provideProxySettings(), provideSettings().other());
     }
 
-    public static IPushRegistrationResolver providePushRegistrationResolver(){
-        if(isNull(resolver)){
-            synchronized (Injection.class){
-                if(isNull(resolver)){
+    public static IPushRegistrationResolver providePushRegistrationResolver() {
+        if (isNull(resolver)) {
+            synchronized (Injection.class) {
+                if (isNull(resolver)) {
                     final Context context = provideApplicationContext();
                     final IDevideIdProvider devideIdProvider = () -> Utils.getDiviceId(context);
                     resolver = new PushRegistrationResolver(devideIdProvider, provideSettings(), provideNetworkInterfaces());
@@ -72,13 +76,10 @@ public class Injection {
         return resolver;
     }
 
-    private static volatile IUploadManager uploadManager;
-    private static final Object UPLOADMANAGERLOCK = new Object();
-
-    public static IUploadManager provideUploadManager(){
-        if(uploadManager == null){
-            synchronized (UPLOADMANAGERLOCK){
-                if(uploadManager == null){
+    public static IUploadManager provideUploadManager() {
+        if (uploadManager == null) {
+            synchronized (UPLOADMANAGERLOCK) {
+                if (uploadManager == null) {
                     uploadManager = new UploadManagerImpl(App.getInstance(), provideNetworkInterfaces(),
                             provideStores(), provideAttachmentsRepository(), Repository.INSTANCE.getWalls());
                 }
@@ -89,9 +90,9 @@ public class Injection {
     }
 
     public static ICaptchaProvider provideCaptchaProvider() {
-        if(isNull(captchaProvider)){
-            synchronized (Injection.class){
-                if(isNull(captchaProvider)){
+        if (isNull(captchaProvider)) {
+            synchronized (Injection.class) {
+                if (isNull(captchaProvider)) {
                     captchaProvider = new CaptchaProvider(provideApplicationContext(), provideMainThreadScheduler());
                 }
             }
@@ -99,12 +100,10 @@ public class Injection {
         return captchaProvider;
     }
 
-    private static volatile IAttachmentsRepository attachmentsRepository;
-
-    public static IAttachmentsRepository provideAttachmentsRepository(){
-        if(isNull(attachmentsRepository)){
-            synchronized (Injection.class){
-                if(isNull(attachmentsRepository)){
+    public static IAttachmentsRepository provideAttachmentsRepository() {
+        if (isNull(attachmentsRepository)) {
+            synchronized (Injection.class) {
+                if (isNull(attachmentsRepository)) {
                     attachmentsRepository = new AttachmentsRepository(provideStores().attachments(), Repository.INSTANCE.getOwners());
                 }
             }
@@ -113,22 +112,18 @@ public class Injection {
         return attachmentsRepository;
     }
 
-    private static INetworker networkerInstance = new Networker(proxySettings);
-
-    public static INetworker provideNetworkInterfaces(){
+    public static INetworker provideNetworkInterfaces() {
         return networkerInstance;
     }
 
-    public static IStorages provideStores(){
+    public static IStorages provideStores() {
         return AppStorages.getInstance(App.getInstance());
     }
 
-    private static volatile IBlacklistRepository blacklistRepository;
-
     public static IBlacklistRepository provideBlacklistRepository() {
-        if(isNull(blacklistRepository)){
-            synchronized (Injection.class){
-                if(isNull(blacklistRepository)){
+        if (isNull(blacklistRepository)) {
+            synchronized (Injection.class) {
+                if (isNull(blacklistRepository)) {
                     blacklistRepository = new BlacklistRepository();
                 }
             }
@@ -136,16 +131,14 @@ public class Injection {
         return blacklistRepository;
     }
 
-    public static ISettings provideSettings(){
+    public static ISettings provideSettings() {
         return SettingsImpl.getInstance(App.getInstance());
     }
 
-    private static volatile ILogsStorage logsStore;
-
-    public static ILogsStorage provideLogsStore(){
-        if(isNull(logsStore)){
-            synchronized (Injection.class){
-                if(isNull(logsStore)){
+    public static ILogsStorage provideLogsStore() {
+        if (isNull(logsStore)) {
+            synchronized (Injection.class) {
+                if (isNull(logsStore)) {
                     logsStore = new LogsStorage(provideApplicationContext());
                 }
             }
@@ -153,7 +146,7 @@ public class Injection {
         return logsStore;
     }
 
-    public static Scheduler provideMainThreadScheduler(){
+    public static Scheduler provideMainThreadScheduler() {
         return AndroidSchedulers.mainThread();
     }
 

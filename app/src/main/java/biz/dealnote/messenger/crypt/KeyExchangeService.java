@@ -59,26 +59,109 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class KeyExchangeService extends Service {
 
+    public static final String ACTION_APPLY_EXHANGE = "ACTION_APPLY_EXHANGE";
+    public static final String ACTION_DECLINE = "ACTION_DECLINE";
     static final String WHAT_SESSION_STATE_CHANGED = "WHAT_SESSION_STATE_CHANGED";
     private static final String TAG = KeyExchangeService.class.getSimpleName();
-
     private static final String EXTRA_KEY_LOCATION_POLICY = "key_location_policy";
-
     private static final String ACTION_PROCESS_MESSAGE = "ACTION_PROCESS_MESSAGE";
-    public static final String ACTION_APPLY_EXHANGE = "ACTION_APPLY_EXHANGE";
     private static final String ACTION_INICIATE_KEY_EXCHANGE = "ACTION_INICIATE_KEY_EXCHANGE";
-    public static final String ACTION_DECLINE = "ACTION_DECLINE";
-
     private static final int NOTIFICATION_KEY_EXCHANGE = 20;
     private static final int NOTIFICATION_KEY_EXCHANGE_REQUEST = 10;
-
+    private static final int WHAT_STOP_SERVICE = 12;
+    private final ISessionIdGenerator mSessionIdGenerator = new FirebaseSessionIdGenerator();
     private LongSparseArray<KeyExchangeSession> mCurrentActiveSessions;
     private LongSparseArray<NotificationCompat.Builder> mCurrentActiveNotifications;
     private Set<Long> mFinishedSessionsIds;
     private NotificationManager mNotificationManager;
     private CompositeDisposable mCompositeSubscription = new CompositeDisposable();
+    private Handler mStopServiceHandler = new Handler(msg -> {
+        if (msg.what == WHAT_STOP_SERVICE) {
+            finishAllByTimeout();
+            stopSelf();
+        }
+        return false;
+    });
 
-    private final ISessionIdGenerator mSessionIdGenerator = new FirebaseSessionIdGenerator();
+    public static boolean intercept(@NonNull Context context, int accountId, VKApiMessage dto) {
+        return intercept(context, accountId, dto.peer_id, dto.id, dto.body, dto.out);
+    }
+
+    public static boolean intercept(@NonNull Context context, int accountId, int peerId, int messageId, String messageBody, boolean out) {
+        @MessageType
+        int type = CryptHelper.analizeMessageBody(messageBody);
+
+        if (type == MessageType.KEY_EXCHANGE) {
+            try {
+                String exchangeMessageBody = messageBody.substring(3); // without RSA on start
+                ExchangeMessage message = new Gson().fromJson(exchangeMessageBody, ExchangeMessage.class);
+                if (!out) {
+                    KeyExchangeService.processMessage(context, accountId, peerId, messageId, message);
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private static void assertSessionState(@NonNull KeyExchangeSession session, @SessionState int requiredState) throws InvalidSessionStateException {
+        if (session.getLocalSessionState() != requiredState) {
+            throw new InvalidSessionStateException("Invalid session state, require: " + requiredState + ", existing: " + session.getLocalSessionState());
+        }
+    }
+
+    private static Single<Integer> sendMessageImpl(int accountId, int peerId, @NonNull ExchangeMessage message) {
+        return Single.just(new Object())
+                .delay(1, TimeUnit.SECONDS)
+                .flatMap(o -> Apis.get()
+                        .vkDefault(accountId)
+                        .messages()
+                        .send((int) Math.random(), peerId, null, message.toString(), null, null, null, null, null));
+    }
+
+    public static void iniciateKeyExchangeSession(@NonNull Context context, int accountId,
+                                                  int peerId, @KeyLocationPolicy int policy) {
+        Intent intent = new Intent(context, KeyExchangeService.class);
+        intent.setAction(ACTION_INICIATE_KEY_EXCHANGE);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(EXTRA_KEY_LOCATION_POLICY, policy);
+        context.startService(intent);
+    }
+
+    public static void processMessage(@NonNull Context context, int accountId, int peerId, int messageId, @NonNull ExchangeMessage message) {
+        Intent intent = new Intent(context, KeyExchangeService.class);
+        intent.setAction(ACTION_PROCESS_MESSAGE);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE_ID, messageId);
+        intent.putExtra(Extra.MESSAGE, message);
+        context.startService(intent);
+    }
+
+    public static Intent createIntentForApply(@NonNull Context context, @NonNull ExchangeMessage message, int accountId, int peerId, int messageId) {
+        Intent apply = new Intent(context, KeyExchangeService.class);
+        apply.setAction(KeyExchangeService.ACTION_APPLY_EXHANGE);
+        apply.putExtra(Extra.ACCOUNT_ID, accountId);
+        apply.putExtra(Extra.PEER_ID, peerId);
+        apply.putExtra(Extra.MESSAGE_ID, messageId);
+        apply.putExtra(Extra.MESSAGE, message);
+        return apply;
+    }
+
+    public static Intent createIntentForDecline(@NonNull Context context, @NonNull ExchangeMessage message, int accountId, int peerId, int messageId) {
+        Intent intent = new Intent(context, KeyExchangeService.class);
+        intent.setAction(KeyExchangeService.ACTION_DECLINE);
+        intent.putExtra(Extra.MESSAGE, message);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE_ID, messageId);
+        return intent;
+    }
 
     @Override
     public void onCreate() {
@@ -122,31 +205,6 @@ public class KeyExchangeService extends Service {
 
         toggleServiceLiveHandler();
         return START_NOT_STICKY;
-    }
-
-    public static boolean intercept(@NonNull Context context, int accountId, VKApiMessage dto) {
-        return intercept(context, accountId, dto.peer_id, dto.id, dto.body, dto.out);
-    }
-
-    public static boolean intercept(@NonNull Context context, int accountId, int peerId, int messageId, String messageBody, boolean out) {
-        @MessageType
-        int type = CryptHelper.analizeMessageBody(messageBody);
-
-        if (type == MessageType.KEY_EXCHANGE) {
-            try {
-                String exchangeMessageBody = messageBody.substring(3); // without RSA on start
-                ExchangeMessage message = new Gson().fromJson(exchangeMessageBody, ExchangeMessage.class);
-                if (!out) {
-                    KeyExchangeService.processMessage(context, accountId, peerId, messageId, message);
-                }
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        return false;
     }
 
     private void declineInputSession(int accounId, int peerId, int messageId, @NonNull ExchangeMessage message) {
@@ -423,7 +481,7 @@ public class KeyExchangeService extends Service {
         finishSession(session, false);
     }
 
-    private void finishSessionByOpponentFail(@NonNull KeyExchangeSession session, @NonNull ExchangeMessage message){
+    private void finishSessionByOpponentFail(@NonNull KeyExchangeSession session, @NonNull ExchangeMessage message) {
         session.setLocalSessionState(SessionState.CLOSED);
 
         mCurrentActiveSessions.remove(session.getId());
@@ -486,16 +544,6 @@ public class KeyExchangeService extends Service {
             }
         }
     }
-
-    private Handler mStopServiceHandler = new Handler(msg -> {
-        if (msg.what == WHAT_STOP_SERVICE) {
-            finishAllByTimeout();
-            stopSelf();
-        }
-        return false;
-    });
-
-    private static final int WHAT_STOP_SERVICE = 12;
 
     private void toggleServiceLiveHandler() {
         mStopServiceHandler.removeMessages(WHAT_STOP_SERVICE);
@@ -659,60 +707,5 @@ public class KeyExchangeService extends Service {
         }
 
         toggleServiceLiveHandler();
-    }
-
-    private static void assertSessionState(@NonNull KeyExchangeSession session, @SessionState int requiredState) throws InvalidSessionStateException {
-        if (session.getLocalSessionState() != requiredState) {
-            throw new InvalidSessionStateException("Invalid session state, require: " + requiredState + ", existing: " + session.getLocalSessionState());
-        }
-    }
-
-    private static Single<Integer> sendMessageImpl(int accountId, int peerId, @NonNull ExchangeMessage message) {
-        return Single.just(new Object())
-                .delay(1, TimeUnit.SECONDS)
-                .flatMap(o -> Apis.get()
-                        .vkDefault(accountId)
-                        .messages()
-                        .send((int)Math.random(), peerId, null, message.toString(), null, null, null, null, null));
-    }
-
-    public static void iniciateKeyExchangeSession(@NonNull Context context, int accountId,
-                                                  int peerId, @KeyLocationPolicy int policy) {
-        Intent intent = new Intent(context, KeyExchangeService.class);
-        intent.setAction(ACTION_INICIATE_KEY_EXCHANGE);
-        intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.PEER_ID, peerId);
-        intent.putExtra(EXTRA_KEY_LOCATION_POLICY, policy);
-        context.startService(intent);
-    }
-
-    public static void processMessage(@NonNull Context context, int accountId, int peerId, int messageId, @NonNull ExchangeMessage message) {
-        Intent intent = new Intent(context, KeyExchangeService.class);
-        intent.setAction(ACTION_PROCESS_MESSAGE);
-        intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.PEER_ID, peerId);
-        intent.putExtra(Extra.MESSAGE_ID, messageId);
-        intent.putExtra(Extra.MESSAGE, message);
-        context.startService(intent);
-    }
-
-    public static Intent createIntentForApply(@NonNull Context context, @NonNull ExchangeMessage message, int accountId, int peerId, int messageId) {
-        Intent apply = new Intent(context, KeyExchangeService.class);
-        apply.setAction(KeyExchangeService.ACTION_APPLY_EXHANGE);
-        apply.putExtra(Extra.ACCOUNT_ID, accountId);
-        apply.putExtra(Extra.PEER_ID, peerId);
-        apply.putExtra(Extra.MESSAGE_ID, messageId);
-        apply.putExtra(Extra.MESSAGE, message);
-        return apply;
-    }
-
-    public static Intent createIntentForDecline(@NonNull Context context, @NonNull ExchangeMessage message, int accountId, int peerId, int messageId) {
-        Intent intent = new Intent(context, KeyExchangeService.class);
-        intent.setAction(KeyExchangeService.ACTION_DECLINE);
-        intent.putExtra(Extra.MESSAGE, message);
-        intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.PEER_ID, peerId);
-        intent.putExtra(Extra.MESSAGE_ID, messageId);
-        return intent;
     }
 }

@@ -17,7 +17,7 @@ import static biz.dealnote.messenger.util.Utils.safelyClose;
  */
 public class PersistentLogger {
 
-    public static void logThrowable(String tag, Throwable throwable){
+    public static void logThrowable(String tag, Throwable throwable) {
         ILogsStorage store = Injection.provideLogsStore();
         Throwable cause = Utils.getCauseIfRuntime(throwable);
 
@@ -26,10 +26,12 @@ public class PersistentLogger {
                         .ignoreElement())
                 .onErrorComplete()
                 .subscribeOn(Schedulers.io())
-                .subscribe(() -> {}, ignore -> {});
+                .subscribe(() -> {
+                }, ignore -> {
+                });
     }
 
-    private static Single<String> getStackTrace(final Throwable throwable){
+    private static Single<String> getStackTrace(final Throwable throwable) {
         return Single.fromCallable(() -> {
             StringWriter sw = null;
             PrintWriter pw = null;

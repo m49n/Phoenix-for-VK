@@ -14,12 +14,15 @@ public interface IUserBannedView extends IAccountDependencyView, IMvpView, IErro
     void displayUserList(List<User> users);
 
     void notifyItemsAdded(int position, int count);
+
     void notifyDataSetChanged();
+
     void notifyItemRemoved(int position);
 
     void displayRefreshing(boolean refreshing);
 
     void startUserSelection(int accountId);
+
     void showSuccessToast();
 
     void scrollToPosition(int position);

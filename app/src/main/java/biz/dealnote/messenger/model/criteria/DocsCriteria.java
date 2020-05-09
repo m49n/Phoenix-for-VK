@@ -17,13 +17,13 @@ public class DocsCriteria extends Criteria {
         this.ownerId = ownerId;
     }
 
+    public Integer getFilter() {
+        return filter;
+    }
+
     public DocsCriteria setFilter(Integer filter) {
         this.filter = filter;
         return this;
-    }
-
-    public Integer getFilter() {
-        return filter;
     }
 
     public int getOwnerId() {

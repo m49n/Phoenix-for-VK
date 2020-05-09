@@ -10,6 +10,32 @@ import java.util.List;
  */
 public class VkApiDoc implements VKApiAttachment {
 
+    @SerializedName("id")
+    public int id;
+    @SerializedName("owner_id")
+    public int ownerId;
+    @SerializedName("title")
+    public String title;
+    @SerializedName("size")
+    public long size;
+    @SerializedName("ext")
+    public String ext;
+    @SerializedName("url")
+    public String url;
+    @SerializedName("date")
+    public long date;
+    @SerializedName("type")
+    public int type;
+    @SerializedName("preview")
+    public Preview preview;
+    @SerializedName("access_key")
+    public String accessKey;
+
+    @Override
+    public String getType() {
+        return VkApiAttachments.TYPE_DOC;
+    }
+
     public static class Entry {
         public final String type;
         public final VkApiDoc doc;
@@ -19,36 +45,6 @@ public class VkApiDoc implements VKApiAttachment {
             this.doc = doc;
         }
     }
-
-    @SerializedName("id")
-    public int id;
-
-    @SerializedName("owner_id")
-    public int ownerId;
-
-    @SerializedName("title")
-    public String title;
-
-    @SerializedName("size")
-    public long size;
-
-    @SerializedName("ext")
-    public String ext;
-
-    @SerializedName("url")
-    public String url;
-
-    @SerializedName("date")
-    public long date;
-
-    @SerializedName("type")
-    public int type;
-
-    @SerializedName("preview")
-    public Preview preview;
-
-    @SerializedName("access_key")
-    public String accessKey;
 
     public static class Preview {
 
@@ -93,10 +89,5 @@ public class VkApiDoc implements VKApiAttachment {
 
         @SerializedName("file_size")
         public long fileSize;
-    }
-
-    @Override
-    public String getType() {
-        return VkApiAttachments.TYPE_DOC;
     }
 }

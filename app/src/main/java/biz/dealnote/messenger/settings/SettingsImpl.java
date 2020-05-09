@@ -21,7 +21,7 @@ public class SettingsImpl implements ISettings {
     private IAccountsSettings accountsSettings;
     private IOtherSettings otherSettings;
 
-    private SettingsImpl(Context app){
+    private SettingsImpl(Context app) {
         this.notificationSettings = new NotificationsPrefs(app);
         this.recentChats = new RecentChatsSettings(app);
         this.drawerSettings = new DrawerSettings(app);
@@ -34,9 +34,9 @@ public class SettingsImpl implements ISettings {
     }
 
     public static SettingsImpl getInstance(Context context) {
-        if(isNull(instance)){
-            synchronized (SettingsImpl.class){
-                if(isNull(instance)){
+        if (isNull(instance)) {
+            synchronized (SettingsImpl.class) {
+                if (isNull(instance)) {
                     instance = new SettingsImpl(context.getApplicationContext());
                 }
             }

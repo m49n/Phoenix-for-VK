@@ -67,26 +67,6 @@ public class CommentFCMMessage {
         return message;
     }
 
-    private static final class PushContext {
-        @SerializedName("feedback")
-        boolean feedback;
-
-        @SerializedName("reply_id")
-        int reply_id;
-
-        @SerializedName("user_id")
-        int user_id;
-
-        @SerializedName("item_id")
-        int item_id;
-
-        @SerializedName("owner_id")
-        int owner_id;
-
-        @SerializedName("type")
-        String type;
-    }
-
     public void notify(Context context, int accountId) {
         if (!Settings.get()
                 .notifications()
@@ -124,7 +104,7 @@ public class CommentFCMMessage {
         }
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getCommentsChannel(context));
         }
 
@@ -156,5 +136,25 @@ public class CommentFCMMessage {
 
         String tag = type + item_id + "_" + owner_id;
         nManager.notify(tag, NotificationHelper.NOTIFICATION_COMMENT_ID, notification);
+    }
+
+    private static final class PushContext {
+        @SerializedName("feedback")
+        boolean feedback;
+
+        @SerializedName("reply_id")
+        int reply_id;
+
+        @SerializedName("user_id")
+        int user_id;
+
+        @SerializedName("item_id")
+        int item_id;
+
+        @SerializedName("owner_id")
+        int owner_id;
+
+        @SerializedName("type")
+        String type;
     }
 }

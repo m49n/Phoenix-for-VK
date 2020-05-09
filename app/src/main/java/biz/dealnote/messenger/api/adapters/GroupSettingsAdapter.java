@@ -26,7 +26,7 @@ public class GroupSettingsAdapter extends AbsAdapter implements JsonDeserializer
         dto.description = optString(root, "description");
         dto.address = optString(root, "address");
 
-        if(root.has("place")){
+        if (root.has("place")) {
             dto.place = context.deserialize(root.get("place"), GroupSettingsDto.Place.class);
         }
 
@@ -47,25 +47,25 @@ public class GroupSettingsAdapter extends AbsAdapter implements JsonDeserializer
         dto.public_date = optString(root, "public_date");
         dto.public_date_label = optString(root, "public_date_label");
 
-        if(root.has("public_category")){
+        if (root.has("public_category")) {
             JsonElement publicCategoryJson = root.get("public_category");
             try {
                 dto.public_category = String.valueOf(publicCategoryJson.getAsInt());
-            } catch (Exception e){
+            } catch (Exception e) {
                 dto.public_category = publicCategoryJson.getAsString();
             }
         }
 
-        if(root.has("public_subcategory")){
+        if (root.has("public_subcategory")) {
             JsonElement publicSubCategoryJson = root.get("public_subcategory");
             try {
                 dto.public_subcategory = String.valueOf(publicSubCategoryJson.getAsInt());
-            } catch (Exception e){
+            } catch (Exception e) {
                 dto.public_subcategory = publicSubCategoryJson.getAsString();
             }
         }
 
-        if(root.has("public_category_list")){
+        if (root.has("public_category_list")) {
             dto.public_category_list = parseArray(root.getAsJsonArray("public_category_list"),
                     GroupSettingsDto.PublicCategory.class, context, Collections.emptyList());
         }
@@ -78,7 +78,7 @@ public class GroupSettingsAdapter extends AbsAdapter implements JsonDeserializer
         dto.website = optString(root, "website");
         dto.age_limits = optInt(root, "age_limits");
 
-        if(root.has("market")){
+        if (root.has("market")) {
             dto.market = context.deserialize(root.get("market"), GroupSettingsDto.Market.class);
         }
 

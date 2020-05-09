@@ -7,14 +7,23 @@ import biz.dealnote.messenger.api.model.Identificable;
 
 public final class AppChatUser implements Parcelable, Identificable {
 
-    private Owner inviter;
+    public static final Creator<AppChatUser> CREATOR = new Creator<AppChatUser>() {
+        @Override
+        public AppChatUser createFromParcel(Parcel in) {
+            return new AppChatUser(in);
+        }
 
+        @Override
+        public AppChatUser[] newArray(int size) {
+            return new AppChatUser[size];
+        }
+    };
     private final Owner member;
 
     private final int invitedBy;
 
     private final String type;
-
+    private Owner inviter;
     private boolean canRemove;
 
     public AppChatUser(Owner member, int invitedBy, String type) {
@@ -45,23 +54,6 @@ public final class AppChatUser implements Parcelable, Identificable {
         return 0;
     }
 
-    public static final Creator<AppChatUser> CREATOR = new Creator<AppChatUser>() {
-        @Override
-        public AppChatUser createFromParcel(Parcel in) {
-            return new AppChatUser(in);
-        }
-
-        @Override
-        public AppChatUser[] newArray(int size) {
-            return new AppChatUser[size];
-        }
-    };
-
-    public AppChatUser setInviter(Owner inviter) {
-        this.inviter = inviter;
-        return this;
-    }
-
     public boolean isCanRemove() {
         return canRemove;
     }
@@ -73,6 +65,11 @@ public final class AppChatUser implements Parcelable, Identificable {
 
     public Owner getInviter() {
         return inviter;
+    }
+
+    public AppChatUser setInviter(Owner inviter) {
+        this.inviter = inviter;
+        return this;
     }
 
     public int getInvitedBy() {

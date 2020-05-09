@@ -54,13 +54,13 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
 
     public static final int SELECT_DIRECTORY = 1;
     public static final int SELECT_FILE = 0;
-
+    private static final String SAVE_DATA = "save_data";
+    private static final String SAVE_PATH = "save_path";
+    private static final String SAVE_SCROLL_STATES = "scroll_states";
     private int currentAction;
     // Stores names of traversed directories
     private ArrayList<String> pathDirsList;
-
     private ArrayList<FileItem> fileList;
-
     private boolean showHiddenFilesAndDirs = true;
     private boolean directoryShownIsEmpty = false;
     private String filterFileExtension;
@@ -69,12 +69,46 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     private TextView empty;
     private ImageView btnSelectCurrentDir;
     private TextView tvCurrentDir;
-
     private FileManagerAdapter mAdapter;
-
     private File path;
     private FilenameFilter filter;
     private DirectoryScrollPositions directoryScrollPositions;
+
+    public static long getFreeSpace(String path) {
+        StatFs stat = new StatFs(path);
+        long availSize = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
+        return availSize;
+    }
+
+    public static String formatBytes(long bytes) {
+        // TODO: add flag to which part is needed (e.g. GB, MB, KB or bytes)
+
+        String retStr = "";
+
+        // One binary gigabyte equals 1,073,741,824 bytes.
+        if (bytes > 1073741824) {// Add GB
+            long gbs = bytes / 1073741824;
+            retStr += (Long.valueOf(gbs)).toString() + "GB ";
+            bytes = bytes - (gbs * 1073741824);
+        }
+
+        // One MB - 1048576 bytes
+        if (bytes > 1048576) {// Add GB
+            long mbs = bytes / 1048576;
+            retStr += (Long.valueOf(mbs)).toString() + "MB ";
+            bytes = bytes - (mbs * 1048576);
+        }
+
+        if (bytes > 1024) {
+            long kbs = bytes / 1024;
+            retStr += (Long.valueOf(kbs)).toString() + "KB";
+            bytes = bytes - (kbs * 1024);
+        } else {
+            retStr += (Long.valueOf(bytes)).toString() + " bytes";
+        }
+
+        return retStr;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,7 +169,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (directoryScrollPositions == null) {
             directoryScrollPositions = new DirectoryScrollPositions();
@@ -156,10 +190,6 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         parseDirectoryPath();
         updateCurrentDirectoryTextView();
     }
-
-    private static final String SAVE_DATA = "save_data";
-    private static final String SAVE_PATH = "save_path";
-    private static final String SAVE_SCROLL_STATES = "scroll_states";
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -187,7 +217,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         if (path.exists() && path.canRead()) {
 
             String[] fList = path.list(filter);
-            if(fList == null)
+            if (fList == null)
                 return;
             directoryShownIsEmpty = false;
 
@@ -217,9 +247,8 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
             } else {
                 ArrayList<FileItem> dirsList = new ArrayList<>();
                 ArrayList<FileItem> flsList = new ArrayList<>();
-                for(FileItem i : fileList)
-                {
-                    if(i.directory)
+                for (FileItem i : fileList) {
+                    if (i.directory)
                         dirsList.add(i);
                     else
                         flsList.add(i);
@@ -278,6 +307,23 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         tvCurrentDir.setText(curDirString);
     }
 
+    /*private void resolveToolbar() {
+        if (!isAdded()) return;
+
+        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.file_explorer);
+            switch (currentAction) {
+                case SELECT_DIRECTORY:
+                    actionBar.setSubtitle(R.string.select_directory);
+                    break;
+                case SELECT_FILE:
+                    actionBar.setSubtitle(R.string.select_file);
+                    break;
+            }
+        }
+    }*/
+
     @Override
     public void onResume() {
         super.onResume();
@@ -295,23 +341,6 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
                     return true;
                 });
     }
-
-    /*private void resolveToolbar() {
-        if (!isAdded()) return;
-
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.file_explorer);
-            switch (currentAction) {
-                case SELECT_DIRECTORY:
-                    actionBar.setSubtitle(R.string.select_directory);
-                    break;
-                case SELECT_FILE:
-                    actionBar.setSubtitle(R.string.select_file);
-                    break;
-            }
-        }
-    }*/
 
     private void loadDirectoryUp() {
         mRecyclerView.stopScroll();
@@ -387,7 +416,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
                 loadFileList();
                 mAdapter.notifyDataSetChanged();
 
-                if(!fileList.isEmpty()){
+                if (!fileList.isEmpty()) {
                     mLinearLayoutManager.scrollToPosition(0);
                 }
 
@@ -406,7 +435,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     public boolean onBackPressed() {
         Logger.d("FileManager", "onBackPressed");
 
-        if(path != null) {
+        if (path != null) {
             boolean root = path.toString().equalsIgnoreCase("/");
             if (!root) {
                 loadDirectoryUp();
@@ -417,62 +446,19 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
         return true;
     }
 
-    private class ItemFileNameComparator implements Comparator<FileItem> {
-        @Override
-        public int compare(FileItem lhs, FileItem rhs) {
-            return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
-        }
-    }
-
-    private class ItemModificationComparator implements Comparator<FileItem> {
-        @Override
-        public int compare(FileItem lhs, FileItem rhs) {
-            if(lhs.Modification == rhs.Modification)
-                return 0;
-            if(lhs.Modification < rhs.Modification)
-                return 1;
-            return -1;
-        }
-    }
-
-    public static long getFreeSpace(String path) {
-        StatFs stat = new StatFs(path);
-        long availSize = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
-        return availSize;
-    }
-
-    public static String formatBytes(long bytes) {
-        // TODO: add flag to which part is needed (e.g. GB, MB, KB or bytes)
-
-        String retStr = "";
-
-        // One binary gigabyte equals 1,073,741,824 bytes.
-        if (bytes > 1073741824) {// Add GB
-            long gbs = bytes / 1073741824;
-            retStr += (Long.valueOf(gbs)).toString() + "GB ";
-            bytes = bytes - (gbs * 1073741824);
-        }
-
-        // One MB - 1048576 bytes
-        if (bytes > 1048576) {// Add GB
-            long mbs = bytes / 1048576;
-            retStr += (Long.valueOf(mbs)).toString() + "MB ";
-            bytes = bytes - (mbs * 1048576);
-        }
-
-        if (bytes > 1024) {
-            long kbs = bytes / 1024;
-            retStr += (Long.valueOf(kbs)).toString() + "KB";
-            bytes = bytes - (kbs * 1024);
-        } else {
-            retStr += (Long.valueOf(bytes)).toString() + " bytes";
-        }
-
-        return retStr;
-    }
-
     private static class DirectoryScrollPositions implements Parcelable {
 
+        public static final Creator<DirectoryScrollPositions> CREATOR = new Creator<DirectoryScrollPositions>() {
+            @Override
+            public DirectoryScrollPositions createFromParcel(Parcel in) {
+                return new DirectoryScrollPositions(in);
+            }
+
+            @Override
+            public DirectoryScrollPositions[] newArray(int size) {
+                return new DirectoryScrollPositions[size];
+            }
+        };
         private Map<String, Parcelable> states;
 
         DirectoryScrollPositions() {
@@ -489,18 +475,6 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
             }
         }
 
-        public static final Creator<DirectoryScrollPositions> CREATOR = new Creator<DirectoryScrollPositions>() {
-            @Override
-            public DirectoryScrollPositions createFromParcel(Parcel in) {
-                return new DirectoryScrollPositions(in);
-            }
-
-            @Override
-            public DirectoryScrollPositions[] newArray(int size) {
-                return new DirectoryScrollPositions[size];
-            }
-        };
-
         @Override
         public int describeContents() {
             return 0;
@@ -516,6 +490,24 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
                 dest.writeString(key);
                 dest.writeParcelable(value, flags);
             }
+        }
+    }
+
+    private class ItemFileNameComparator implements Comparator<FileItem> {
+        @Override
+        public int compare(FileItem lhs, FileItem rhs) {
+            return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
+        }
+    }
+
+    private class ItemModificationComparator implements Comparator<FileItem> {
+        @Override
+        public int compare(FileItem lhs, FileItem rhs) {
+            if (lhs.Modification == rhs.Modification)
+                return 0;
+            if (lhs.Modification < rhs.Modification)
+                return 1;
+            return -1;
         }
     }
 }

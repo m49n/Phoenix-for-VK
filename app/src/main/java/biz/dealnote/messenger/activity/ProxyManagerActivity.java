@@ -20,7 +20,7 @@ public class ProxyManagerActivity extends NoMainActivity implements PlaceProvide
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Objects.isNull(savedInstanceState)){
+        if (Objects.isNull(savedInstanceState)) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(getMainContainerViewId(), ProxyManagerFrgament.newInstance())
@@ -31,7 +31,7 @@ public class ProxyManagerActivity extends NoMainActivity implements PlaceProvide
 
     @Override
     public void openPlace(Place place) {
-        if(place.type == Place.PROXY_ADD){
+        if (place.type == Place.PROXY_ADD) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(getMainContainerViewId(), AddProxyFragment.newInstance())

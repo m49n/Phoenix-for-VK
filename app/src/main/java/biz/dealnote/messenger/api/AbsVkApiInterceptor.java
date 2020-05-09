@@ -32,6 +32,7 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
  */
 abstract class AbsVkApiInterceptor implements Interceptor {
 
+    private static final Random RANDOM = new Random();
     private final String version;
     private final Gson gson;
 
@@ -41,8 +42,6 @@ abstract class AbsVkApiInterceptor implements Interceptor {
     }
 
     protected abstract String getToken();
-
-    private static final Random RANDOM = new Random();
 
     @NotNull
     @Override

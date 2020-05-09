@@ -70,14 +70,14 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void displayBaseCommunityData(Community community, CommunityDetails details) {
-        if(isNull(mHeaderHolder)) return;
+        if (isNull(mHeaderHolder)) return;
 
         mHeaderHolder.tvName.setText(community.getFullName());
 
         String screenName = nonEmpty(community.getScreenName()) ? "@" + community.getScreenName() : null;
         mHeaderHolder.tvScreenName.setText(screenName);
 
-        if(!details.isCanMessage())
+        if (!details.isCanMessage())
             mHeaderHolder.fabMessage.setImageResource(R.drawable.close);
         else
             mHeaderHolder.fabMessage.setImageResource(R.drawable.email);
@@ -140,8 +140,8 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void setupPrimaryButton(@StringRes Integer title) {
-        if(nonNull(mHeaderHolder)){
-            if(nonNull(title)){
+        if (nonNull(mHeaderHolder)) {
+            if (nonNull(title)) {
                 mHeaderHolder.primaryActionButton.setText(title);
                 mHeaderHolder.primaryActionButton.setVisibility(View.VISIBLE);
             } else {
@@ -152,8 +152,8 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void setupSecondaryButton(@StringRes Integer title) {
-        if(nonNull(mHeaderHolder)){
-            if(nonNull(title)){
+        if (nonNull(mHeaderHolder)) {
+            if (nonNull(title)) {
                 mHeaderHolder.secondaryActionButton.setText(title);
                 mHeaderHolder.secondaryActionButton.setVisibility(View.VISIBLE);
             } else {
@@ -186,7 +186,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void displayWallFilters(List<PostFilter> filters) {
-        if(nonNull(mHeaderHolder)){
+        if (nonNull(mHeaderHolder)) {
             mHeaderHolder.mFiltersAdapter.setItems(filters);
         }
     }
@@ -199,17 +199,17 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_community_control){
+        if (item.getItemId() == R.id.action_community_control) {
             getPresenter().fireCommunityControlClick();
             return true;
         }
 
-        if(item.getItemId() == R.id.action_community_messages){
+        if (item.getItemId() == R.id.action_community_messages) {
             getPresenter().fireCommunityMessagesClick();
             return true;
         }
 
-        if(item.getItemId() == R.id.action_add_to_bookmarks){
+        if (item.getItemId() == R.id.action_add_to_bookmarks) {
             getPresenter().fireAddToBookmarksClick();
             return true;
         }
@@ -219,7 +219,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void notifyWallFiltersChanged() {
-        if(nonNull(mHeaderHolder)){
+        if (nonNull(mHeaderHolder)) {
             mHeaderHolder.mFiltersAdapter.notifyDataSetChanged();
         }
     }
@@ -259,7 +259,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
     @Override
     public void displayCounters(int members, int topics, int docs, int photos, int audio, int video) {
-        if(isNull(mHeaderHolder)) return;
+        if (isNull(mHeaderHolder)) return;
 
         setupCounter(mHeaderHolder.bTopics, topics);
         setupCounter(mHeaderHolder.bMembers, members);
@@ -278,6 +278,16 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         menu.findItem(R.id.action_community_control).setVisible(optionMenuView.controlVisible);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_LOGIN_COMMUNITY && resultCode == Activity.RESULT_OK) {
+            ArrayList<Token> tokens = LoginActivity.extractGroupTokens(data);
+            getPresenter().fireGroupTokensReceived(tokens);
+        }
+    }
+
     private static final class OptionMenuView implements IOptionMenuView {
 
         boolean controlVisible;
@@ -285,16 +295,6 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         @Override
         public void setControlVisible(boolean visible) {
             this.controlVisible = visible;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQUEST_LOGIN_COMMUNITY && resultCode == Activity.RESULT_OK){
-            ArrayList<Token> tokens = LoginActivity.extractGroupTokens(data);
-            getPresenter().fireGroupTokensReceived(tokens);
         }
     }
 

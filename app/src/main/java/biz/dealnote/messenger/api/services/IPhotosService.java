@@ -112,7 +112,8 @@ public interface IPhotosService {
      *                           1 - commenting is disabled.
      * @return Returns an instance of photo album
      */
-    @FormUrlEncoded    @POST("photos.createAlbum")
+    @FormUrlEncoded
+    @POST("photos.createAlbum")
     Single<BaseResponse<VKApiPhotoAlbum>> createAlbum(@Field("title") String title,
                                                       @Field("group_id") Integer groupId,
                                                       @Field("description") String description,
@@ -138,7 +139,8 @@ public interface IPhotosService {
      *                           1 - commenting is disabled.
      * @return 1
      */
-    @FormUrlEncoded    @POST("photos.editAlbum")
+    @FormUrlEncoded
+    @POST("photos.editAlbum")
     Single<BaseResponse<Integer>> editAlbum(@Field("album_id") int albumId,
                                             @Field("title") String title,
                                             @Field("description") String description,
@@ -156,7 +158,8 @@ public interface IPhotosService {
      * @param accessKey special access key for private photos
      * @return Returns the created photo ID.
      */
-    @FormUrlEncoded    @POST("photos.copy")
+    @FormUrlEncoded
+    @POST("photos.copy")
     Single<BaseResponse<Integer>> copy(@Field("owner_id") int ownerId,
                                        @Field("photo_id") int photoId,
                                        @Field("access_key") String accessKey);
@@ -173,25 +176,30 @@ public interface IPhotosService {
                                                 @Field("access_key") String accessKey,
                                                 @Field("guid") Integer generatedUniqueId);
 
-    @FormUrlEncoded    @POST("photos.getById")
+    @FormUrlEncoded
+    @POST("photos.getById")
     Single<BaseResponse<List<VKApiPhoto>>> getById(@Field("photos") String photos,
                                                    @Field("extended") Integer extended,
                                                    @Field("photo_sizes") Integer photo_sizes);
 
-    @FormUrlEncoded    @POST("photos.getUploadServer")
+    @FormUrlEncoded
+    @POST("photos.getUploadServer")
     Single<BaseResponse<VkApiUploadServer>> getUploadServer(@Field("album_id") int albumId,
                                                             @Field("group_id") Integer groupId);
 
 
-    @FormUrlEncoded    @POST("photos.saveOwnerPhoto")
+    @FormUrlEncoded
+    @POST("photos.saveOwnerPhoto")
     Single<BaseResponse<UploadOwnerPhotoResponse>> saveOwnerPhoto(@Field("server") String server,
                                                                   @Field("hash") String hash,
                                                                   @Field("photo") String photo);
 
-    @FormUrlEncoded    @POST("photos.getOwnerPhotoUploadServer")
+    @FormUrlEncoded
+    @POST("photos.getOwnerPhotoUploadServer")
     Single<BaseResponse<VkApiOwnerPhotoUploadServer>> getOwnerPhotoUploadServer(@Field("owner_id") Integer ownerId);
 
-    @FormUrlEncoded    @POST("photos.saveWallPhoto")
+    @FormUrlEncoded
+    @POST("photos.saveWallPhoto")
     Single<BaseResponse<List<VKApiPhoto>>> saveWallPhoto(@Field("user_id") Integer userId,
                                                          @Field("group_id") Integer groupId,
                                                          @Field("photo") String photo,
@@ -201,10 +209,12 @@ public interface IPhotosService {
                                                          @Field("longitude") Double longitude,
                                                          @Field("caption") String caption);
 
-    @FormUrlEncoded    @POST("photos.getWallUploadServer")
+    @FormUrlEncoded
+    @POST("photos.getWallUploadServer")
     Single<BaseResponse<VkApiWallUploadServer>> getWallUploadServer(@Field("group_id") Integer groupId);
 
-    @FormUrlEncoded    @POST("photos.save")
+    @FormUrlEncoded
+    @POST("photos.save")
     Single<BaseResponse<List<VKApiPhoto>>> save(@Field("album_id") int albumId,
                                                 @Field("group_id") Integer groupId,
                                                 @Field("server") int server,
@@ -214,7 +224,8 @@ public interface IPhotosService {
                                                 @Field("longitude") Double longitude,
                                                 @Field("caption") String caption);
 
-    @FormUrlEncoded    @POST("photos.get")
+    @FormUrlEncoded
+    @POST("photos.get")
     Single<BaseResponse<Items<VKApiPhoto>>> get(@Field("owner_id") Integer ownerId,
                                                 @Field("album_id") String albumId,
                                                 @Field("photo_ids") String photoIds,
@@ -224,18 +235,20 @@ public interface IPhotosService {
                                                 @Field("offset") Integer offset,
                                                 @Field("count") Integer count);
 
-    @FormUrlEncoded    @POST("photos.getUserPhotos")
+    @FormUrlEncoded
+    @POST("photos.getUserPhotos")
     Single<BaseResponse<Items<VKApiPhoto>>> getUserPhotos(@Field("user_id") Integer ownerId,
-                                                @Field("extended") Integer extended,
-                                                @Field("offset") Integer offset,
-                                                @Field("count") Integer count);
-
-    @FormUrlEncoded    @POST("photos.getAll")
-    Single<BaseResponse<Items<VKApiPhoto>>> getAll(@Field("owner_id") Integer ownerId,
                                                           @Field("extended") Integer extended,
-                                                          @Field("photo_sizes") Integer photo_sizes,
                                                           @Field("offset") Integer offset,
-                                                          @Field("count") Integer count,
+                                                          @Field("count") Integer count);
+
+    @FormUrlEncoded
+    @POST("photos.getAll")
+    Single<BaseResponse<Items<VKApiPhoto>>> getAll(@Field("owner_id") Integer ownerId,
+                                                   @Field("extended") Integer extended,
+                                                   @Field("photo_sizes") Integer photo_sizes,
+                                                   @Field("offset") Integer offset,
+                                                   @Field("count") Integer count,
                                                    @Field("no_service_albums") Integer no_service_albums,
                                                    @Field("need_hidden") Integer need_hidden,
                                                    @Field("skip_hidden") Integer skip_hidden);
@@ -243,12 +256,14 @@ public interface IPhotosService {
     @GET("photos.getMessagesUploadServer")
     Single<BaseResponse<VkApiPhotoMessageServer>> getMessagesUploadServer();
 
-    @FormUrlEncoded    @POST("photos.saveMessagesPhoto")
+    @FormUrlEncoded
+    @POST("photos.saveMessagesPhoto")
     Single<BaseResponse<List<VKApiPhoto>>> saveMessagesPhoto(@Field("server") Integer server,
                                                              @Field("photo") String photo,
                                                              @Field("hash") String hash);
 
-    @FormUrlEncoded    @POST("photos.getAlbums")
+    @FormUrlEncoded
+    @POST("photos.getAlbums")
     Single<BaseResponse<Items<VKApiPhotoAlbum>>> getAlbums(@Field("owner_id") Integer ownerId,
                                                            @Field("album_ids") String albumIds,
                                                            @Field("offset") Integer offset,
@@ -257,9 +272,10 @@ public interface IPhotosService {
                                                            @Field("need_covers") Integer needCovers,
                                                            @Field("photo_sizes") Integer photoSizes);
 
-    @FormUrlEncoded    @POST("photos.getTags")
+    @FormUrlEncoded
+    @POST("photos.getTags")
     Single<BaseResponse<List<VKApiPhotoTags>>> getTags(@Field("owner_id") Integer ownerId,
-                                                        @Field("photo_id") Integer photo_id,
-                                                        @Field("access_key") String access_key);
+                                                       @Field("photo_id") Integer photo_id,
+                                                       @Field("access_key") String access_key);
 
 }

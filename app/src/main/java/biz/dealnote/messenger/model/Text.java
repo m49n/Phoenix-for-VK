@@ -16,9 +16,19 @@ import biz.dealnote.messenger.util.ParcelUtils;
  */
 public final class Text implements Parcelable {
 
+    public static final Creator<Text> CREATOR = new Creator<Text>() {
+        @Override
+        public Text createFromParcel(Parcel in) {
+            return new Text(in);
+        }
+
+        @Override
+        public Text[] newArray(int size) {
+            return new Text[size];
+        }
+    };
     @StringRes
     private Integer res;
-
     private String text;
 
     public Text(Integer res) {
@@ -34,19 +44,7 @@ public final class Text implements Parcelable {
         text = in.readString();
     }
 
-    public static final Creator<Text> CREATOR = new Creator<Text>() {
-        @Override
-        public Text createFromParcel(Parcel in) {
-            return new Text(in);
-        }
-
-        @Override
-        public Text[] newArray(int size) {
-            return new Text[size];
-        }
-    };
-
-    public String getText(@NonNull Context context){
+    public String getText(@NonNull Context context) {
         return Objects.isNull(res) ? text : context.getString(res);
     }
 

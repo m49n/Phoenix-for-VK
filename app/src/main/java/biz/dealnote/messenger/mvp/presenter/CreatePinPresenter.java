@@ -29,10 +29,20 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
     private int[] mCreatedPin;
     private int[] mRepeatedPin;
     private Handler mHandler = new Handler();
+    private Runnable mOnFullyEnteredRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mCurrentStep == STEP_CREATE) {
+                onCreatedPinFullyEntered();
+            } else {
+                onRepeatedPinFullyEntered();
+            }
+        }
+    };
 
-    public CreatePinPresenter(Bundle savedInstanceState){
+    public CreatePinPresenter(Bundle savedInstanceState) {
         super(savedInstanceState);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mCurrentStep = savedInstanceState.getInt(SAVE_STEP);
             mCreatedPin = savedInstanceState.getIntArray(SAVE_CREATED_PIN);
             mRepeatedPin = savedInstanceState.getIntArray(SAVE_REPEATED_PIN);
@@ -45,8 +55,8 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         }
     }
 
-    public boolean fireBackButtonClick(){
-        if(mCurrentStep == STEP_CREATE) {
+    public boolean fireBackButtonClick() {
+        if (mCurrentStep == STEP_CREATE) {
             return true;
         }
 
@@ -57,11 +67,11 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         return false;
     }
 
-    public void fireFingerPrintClick(){
+    public void fireFingerPrintClick() {
         getView().showError(R.string.not_yet_implemented_message);
     }
 
-    public void fireBackspaceClick(){
+    public void fireBackspaceClick() {
         int[] targetPin = mCurrentStep == STEP_CREATE ? mCreatedPin : mRepeatedPin;
         int currentIndex = getNextNoEnteredIndex(targetPin);
         if (currentIndex == -1) {
@@ -73,57 +83,46 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         refreshViewCirclesVisibility();
     }
 
-    private void resolveAllViews(){
+    private void resolveAllViews() {
         refreshViewCirclesVisibility();
         resolveTitles();
     }
 
     @OnGuiCreated
-    private void resolveTitles(){
-        if(mCurrentStep == STEP_CREATE){
+    private void resolveTitles() {
+        if (mCurrentStep == STEP_CREATE) {
             getView().displayTitle(R.string.create_pin_code_title);
         } else {
             getView().displayTitle(R.string.repeat_pin_code_title);
         }
     }
 
-    public void fireDigitClick(int digit){
+    public void fireDigitClick(int digit) {
         int[] targetPin = mCurrentStep == STEP_CREATE ? mCreatedPin : mRepeatedPin;
-        if(isFullyEntered(targetPin)){
+        if (isFullyEntered(targetPin)) {
             return;
         }
 
         appendDigit(targetPin, digit);
         refreshViewCirclesVisibility();
 
-        if(isFullyEntered(targetPin)){
+        if (isFullyEntered(targetPin)) {
             mHandler.removeCallbacks(mOnFullyEnteredRunnable);
             mHandler.postDelayed(mOnFullyEnteredRunnable, LAST_CIRCLE_VISIBILITY_DELAY);
         }
     }
 
-    private void appendDigit(int[] pin, int digit){
+    private void appendDigit(int[] pin, int digit) {
         pin[getNextNoEnteredIndex(pin)] = digit;
     }
 
-    private Runnable mOnFullyEnteredRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if(mCurrentStep == STEP_CREATE){
-                onCreatedPinFullyEntered();
-            } else {
-                onRepeatedPinFullyEntered();
-            }
-        }
-    };
-
-    private void onRepeatedPinFullyEntered(){
-        if(!isPinsMatch()){
+    private void onRepeatedPinFullyEntered() {
+        if (!isPinsMatch()) {
             resetPin(mRepeatedPin);
             resetPin(mCreatedPin);
             mCurrentStep = STEP_CREATE;
 
-            if(isGuiReady()){
+            if (isGuiReady()) {
                 getView().showError(R.string.entered_pin_codes_do_not_match);
                 resolveAllViews();
                 getView().displayErrorAnimation();
@@ -132,24 +131,24 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
             return;
         }
 
-        if(isGuiReady()) {
+        if (isGuiReady()) {
             getView().sendSuccessAndClose(mCreatedPin);
         }
     }
 
-    private void onCreatedPinFullyEntered(){
+    private void onCreatedPinFullyEntered() {
         resetPin(mRepeatedPin);
         mCurrentStep = STEP_REPEAT;
         resolveAllViews();
     }
 
-    public void fireSkipButtonClick(){
+    public void fireSkipButtonClick() {
         getView().sendSkipAndClose();
     }
 
-    private boolean isPinsMatch(){
-        for(int i = 0; i < Constants.PIN_DIGITS_COUNT; i++){
-            if(mCreatedPin[i] == NO_VALUE || mRepeatedPin[i] == NO_VALUE || mCreatedPin[i] != mRepeatedPin[i]){
+    private boolean isPinsMatch() {
+        for (int i = 0; i < Constants.PIN_DIGITS_COUNT; i++) {
+            if (mCreatedPin[i] == NO_VALUE || mRepeatedPin[i] == NO_VALUE || mCreatedPin[i] != mRepeatedPin[i]) {
                 return false;
             }
         }
@@ -178,8 +177,8 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
     }
 
     @OnGuiCreated
-    private void refreshViewCirclesVisibility(){
-        if(mCurrentStep == STEP_CREATE){
+    private void refreshViewCirclesVisibility() {
+        if (mCurrentStep == STEP_CREATE) {
             getView().displayPin(mCreatedPin, NO_VALUE);
         } else {
             getView().displayPin(mRepeatedPin, NO_VALUE);

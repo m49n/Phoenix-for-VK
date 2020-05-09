@@ -28,8 +28,14 @@ import biz.dealnote.messenger.util.RxUtils;
 public class SelectFacultyDialog extends AccountDependencyDialogFragment implements FacultiesAdapter.Listener {
 
     private static final int COUNT_PER_REQUEST = 1000;
+    private int mAccountId;
+    private int universityId;
+    private IDatabaseInteractor mDatabaseInteractor;
+    private ArrayList<Faculty> mData;
+    private RecyclerView mRecyclerView;
+    private FacultiesAdapter mAdapter;
 
-    public static SelectFacultyDialog newInstance(int aid, int universityId, Bundle additional){
+    public static SelectFacultyDialog newInstance(int aid, int universityId, Bundle additional) {
         Bundle args = additional == null ? new Bundle() : additional;
         args.putInt(Extra.UNIVERSITY_ID, universityId);
         args.putInt(Extra.ACCOUNT_ID, aid);
@@ -37,14 +43,6 @@ public class SelectFacultyDialog extends AccountDependencyDialogFragment impleme
         selectCityDialog.setArguments(args);
         return selectCityDialog;
     }
-
-    private int mAccountId;
-    private int universityId;
-    private IDatabaseInteractor mDatabaseInteractor;
-
-    private ArrayList<Faculty> mData;
-    private RecyclerView mRecyclerView;
-    private FacultiesAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,11 +64,11 @@ public class SelectFacultyDialog extends AccountDependencyDialogFragment impleme
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
-        if(mData == null){
+        if (mData == null) {
             mData = new ArrayList<>();
             firstRun = true;
         }
@@ -79,19 +77,19 @@ public class SelectFacultyDialog extends AccountDependencyDialogFragment impleme
         mAdapter.setListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if(firstRun){
+        if (firstRun) {
             request(0);
         }
     }
 
-    private void request(int offset){
+    private void request(int offset) {
         appendDisposable(mDatabaseInteractor.getFaculties(mAccountId, universityId, COUNT_PER_REQUEST, offset)
-        .compose(RxUtils.applySingleIOToMainSchedulers())
-        .subscribe(faculties -> onDataReceived(offset, faculties), t -> {/* TODO: 04.10.2017*/  }));
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(faculties -> onDataReceived(offset, faculties), t -> {/* TODO: 04.10.2017*/ }));
     }
 
-    private void onDataReceived(int offset, List<Faculty> faculties){
-        if(offset == 0){
+    private void onDataReceived(int offset, List<Faculty> faculties) {
+        if (offset == 0) {
             mData.clear();
         }
 

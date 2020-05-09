@@ -30,9 +30,14 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int STATUS_COLOR_OFFLINE = Color.parseColor("#999999");
+    private static final int TYPE_USER = 0;
+    private static final int TYPE_COMMUNITY = 1;
     private Context mContext;
     private List<? extends Owner> mData;
     private Transformation transformation;
+    private ClickListener mClickListener;
+    private LongClickListener longClickListener;
 
     public PeopleAdapter(Context context, List<? extends Owner> data) {
         this.mContext = context;
@@ -42,7 +47,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case TYPE_USER:
                 return new PeopleHolder(LayoutInflater.from(mContext).inflate(R.layout.item_people, parent, false));
             case TYPE_COMMUNITY:
@@ -54,7 +59,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (getItemViewType(position)){
+        switch (getItemViewType(position)) {
             case TYPE_USER:
                 bindUserHolder((PeopleHolder) holder, (User) mData.get(position));
                 break;
@@ -64,7 +69,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private void bindCommunityHolder(CommunityHolder holder, final Community community){
+    private void bindCommunityHolder(CommunityHolder holder, final Community community) {
         holder.tvName.setText(community.getName());
         String status = "@" + community.getScreenName();
         holder.tvStatus.setText(status);
@@ -76,15 +81,13 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .into(holder.ivAvatar);
 
         holder.itemView.setOnClickListener(v -> {
-            if(mClickListener != null){
+            if (mClickListener != null) {
                 mClickListener.onOwnerClick(community);
             }
         });
     }
 
-    private static final int STATUS_COLOR_OFFLINE = Color.parseColor("#999999");
-
-    private void bindUserHolder(PeopleHolder holder, final User user){
+    private void bindUserHolder(PeopleHolder holder, final User user) {
         holder.name.setText(user.getFullName());
 
         holder.subtitle.setText(UserInfoResolveUtil.getUserActivityLine(mContext, user));
@@ -92,7 +95,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         holder.online.setVisibility(user.isOnline() ? View.VISIBLE : View.GONE);
         Integer onlineIcon = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        if(onlineIcon != null){
+        if (onlineIcon != null) {
             holder.online.setImageResource(onlineIcon);
         } else {
             holder.online.setImageDrawable(null);
@@ -102,7 +105,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ViewUtils.displayAvatar(holder.avatar, transformation, avaUrl, Constants.PICASSO_TAG);
 
         holder.itemView.setOnClickListener(v -> {
-            if(mClickListener != null){
+            if (mClickListener != null) {
                 mClickListener.onOwnerClick(user);
             }
         });
@@ -122,37 +125,10 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    private class PeopleHolder extends RecyclerView.ViewHolder {
-
-        TextView name;
-        TextView subtitle;
-        ImageView avatar;
-        ImageView online;
-
-        ViewGroup avatarRoot;
-
-        PeopleHolder(View itemView) {
-            super(itemView);
-            avatarRoot = itemView.findViewById(R.id.avatar_root);
-            name = itemView.findViewById(R.id.item_people_name);
-            subtitle = itemView.findViewById(R.id.item_people_subtitle);
-            avatar = itemView.findViewById(R.id.item_people_avatar);
-            online = itemView.findViewById(R.id.item_people_online);
-            Utils.setColorFilter(online, CurrentTheme.getColorPrimary(mContext));
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         return mData.get(position) instanceof User ? TYPE_USER : TYPE_COMMUNITY;
     }
-
-    private static final int TYPE_USER = 0;
-    private static final int TYPE_COMMUNITY = 1;
-
-    private ClickListener mClickListener;
-
-    private LongClickListener longClickListener;
 
     public PeopleAdapter setLongClickListener(LongClickListener longClickListener) {
         this.longClickListener = longClickListener;
@@ -177,11 +153,31 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private TextView tvStatus;
         private ImageView ivAvatar;
 
-        CommunityHolder(View root){
+        CommunityHolder(View root) {
             super(root);
             tvName = root.findViewById(R.id.item_group_name);
             tvStatus = root.findViewById(R.id.item_group_status);
             ivAvatar = root.findViewById(R.id.item_group_avatar);
+        }
+    }
+
+    private class PeopleHolder extends RecyclerView.ViewHolder {
+
+        TextView name;
+        TextView subtitle;
+        ImageView avatar;
+        ImageView online;
+
+        ViewGroup avatarRoot;
+
+        PeopleHolder(View itemView) {
+            super(itemView);
+            avatarRoot = itemView.findViewById(R.id.avatar_root);
+            name = itemView.findViewById(R.id.item_people_name);
+            subtitle = itemView.findViewById(R.id.item_people_subtitle);
+            avatar = itemView.findViewById(R.id.item_people_avatar);
+            online = itemView.findViewById(R.id.item_people_online);
+            Utils.setColorFilter(online, CurrentTheme.getColorPrimary(mContext));
         }
     }
 }

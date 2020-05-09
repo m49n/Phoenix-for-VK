@@ -15,6 +15,14 @@ public class DividerMenuItem extends AbsMenuItem implements Parcelable {
         }
     };
 
+    public DividerMenuItem() {
+        super(TYPE_DIVIDER);
+    }
+
+    public DividerMenuItem(Parcel in) {
+        super(in);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -23,14 +31,6 @@ public class DividerMenuItem extends AbsMenuItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-    }
-
-    public DividerMenuItem() {
-        super(TYPE_DIVIDER);
-    }
-
-    public DividerMenuItem(Parcel in) {
-        super(in);
     }
 
 }

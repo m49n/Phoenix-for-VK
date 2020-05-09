@@ -23,15 +23,15 @@ class EditedMessage(val message: Message) {
 
     val canSave: Boolean
         get() {
-            if(body.isNullOrBlank()){
-                for(entry in attachments){
-                    if(entry.attachment is Upload) continue
+            if (body.isNullOrBlank()) {
+                for (entry in attachments) {
+                    if (entry.attachment is Upload) continue
 
                     return true
                 }
 
                 return false
-            } else{
+            } else {
                 return true
             }
         }

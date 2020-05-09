@@ -23,6 +23,7 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class SimplePhotoPresenter extends PhotoPagerPresenter {
 
+    private static final String SAVE_DATA_REFRESH_RESULT = "save-data-refresh-result";
     private boolean mDataRefreshSuccessfull;
     private boolean isHistory;
 
@@ -44,7 +45,7 @@ public class SimplePhotoPresenter extends PhotoPagerPresenter {
     }
 
     private void refreshData() {
-        if(isHistory)
+        if (isHistory)
             return;
         final ArrayList<AccessIdPair> ids = new ArrayList<>(getData().size());
         final int accountId = super.getAccountId();
@@ -91,6 +92,4 @@ public class SimplePhotoPresenter extends PhotoPagerPresenter {
         super.saveState(outState);
         outState.putBoolean(SAVE_DATA_REFRESH_RESULT, mDataRefreshSuccessfull);
     }
-
-    private static final String SAVE_DATA_REFRESH_RESULT = "save-data-refresh-result";
 }

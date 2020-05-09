@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -11,99 +11,99 @@
     android:paddingEnd="16dp"
     android:paddingBottom="10dp">
 
-        <RelativeLayout
-            android:id="@+id/item_playlist_avatar_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/relativeLayout"
-            android:layout_alignParentStart="true">
+    <RelativeLayout
+        android:id="@+id/item_playlist_avatar_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/relativeLayout"
+        android:layout_alignParentStart="true">
 
-            <ImageView
-                android:id="@+id/item_thumb"
-                android:layout_width="@dimen/avatar_size_big"
-                android:layout_height="@dimen/avatar_size_big"
-                android:layout_centerInParent="true" />
+        <ImageView
+            android:id="@+id/item_thumb"
+            android:layout_width="@dimen/avatar_size_big"
+            android:layout_height="@dimen/avatar_size_big"
+            android:layout_centerInParent="true" />
 
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/relativeLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/item_playlist_avatar_container"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="?colorPrimary"
-                tools:text="Name" />
-
-            <TextView
-                android:id="@+id/item_artist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="?colorSecondary"
-                tools:text="Artist" />
-
-            <TextView
-                android:id="@+id/item_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="5"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textSize="12sp"
-                tools:text="Description" />
-
-            <TextView
-                android:id="@+id/item_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                tools:text="count" />
-
-            <TextView
-                android:id="@+id/item_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                tools:text="time" />
-
-            <TextView
-                android:id="@+id/item_genre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                tools:text="genre" />
-
-            <TextView
-                android:id="@+id/item_year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                tools:text="year" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_playlist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/plus"
-                app:fabSize="mini"
-                app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
-
-        </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/item_playlist_avatar_container"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?colorPrimary"
+            tools:text="Name" />
+
+        <TextView
+            android:id="@+id/item_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?colorSecondary"
+            tools:text="Artist" />
+
+        <TextView
+            android:id="@+id/item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textSize="12sp"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="count" />
+
+        <TextView
+            android:id="@+id/item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="time" />
+
+        <TextView
+            android:id="@+id/item_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="genre" />
+
+        <TextView
+            android:id="@+id/item_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="year" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_playlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/plus"
+            app:fabSize="mini"
+            app:layout_behavior="biz.dealnote.messenger.view.FABBehavior" />
+
+    </LinearLayout>
+</RelativeLayout>

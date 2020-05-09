@@ -55,7 +55,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
 
     private static final String TAG = VKPhotosFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSION_READ_EXTARNAL_STORAGE = 14;
-
+    private static final int REQUEST_UPLOAD_LOCAL_PHOTO = 121;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BigVkPhotosAdapter mAdapter;
     private TextView mEmptyText;
@@ -141,7 +141,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     }
 
     private void onFabClicked() {
-        if(isSelectionMode()){
+        if (isSelectionMode()) {
             getPresenter().fireSelectionCommitClick();
         } else {
             getPresenter().fireAddPhotosClick();
@@ -191,7 +191,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
 
     @Override
     public void onPhotoClick(BigVkPhotosAdapter.PhotoViewHolder holder, SelectablePhotoWrapper wrapper) {
-        if(isSelectionMode()){
+        if (isSelectionMode()) {
             getPresenter().firePhotoSelectionChanged(wrapper);
             mAdapter.updatePhotoHoldersSelectionAndIndexes();
         } else {
@@ -318,17 +318,15 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
         startLocalPhotosSelectionActibity();
     }
 
-    private static final int REQUEST_UPLOAD_LOCAL_PHOTO = 121;
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(REQUEST_PERMISSION_READ_EXTARNAL_STORAGE == requestCode){
+        if (REQUEST_PERMISSION_READ_EXTARNAL_STORAGE == requestCode) {
             getPresenter().fireReadStoragePermissionChanged();
         }
     }
 
-    private void startLocalPhotosSelectionActibity(){
+    private void startLocalPhotosSelectionActibity() {
         Intent intent = new Intent(requireActivity(), PhotosActivity.class);
         intent.putExtra(PhotosActivity.EXTRA_MAX_SELECTION_COUNT, Integer.MAX_VALUE);
         startActivityForResult(intent, REQUEST_UPLOAD_LOCAL_PHOTO);

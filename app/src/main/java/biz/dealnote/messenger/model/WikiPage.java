@@ -9,26 +9,27 @@ import android.os.Parcelable;
  */
 public class WikiPage extends AbsModel implements Parcelable {
 
+    public static final Creator<WikiPage> CREATOR = new Creator<WikiPage>() {
+        @Override
+        public WikiPage createFromParcel(Parcel in) {
+            return new WikiPage(in);
+        }
+
+        @Override
+        public WikiPage[] newArray(int size) {
+            return new WikiPage[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private int creatorId;
-
     private String title;
-
     private String source;
-
     private long editionTime;
-
     private long creationTime;
-
     private String parent;
-
     private String parent2;
-
     private int views;
-
     private String viewUrl;
 
     public WikiPage(int id, int ownerId) {
@@ -66,18 +67,6 @@ public class WikiPage extends AbsModel implements Parcelable {
         dest.writeInt(views);
         dest.writeString(viewUrl);
     }
-
-    public static final Creator<WikiPage> CREATOR = new Creator<WikiPage>() {
-        @Override
-        public WikiPage createFromParcel(Parcel in) {
-            return new WikiPage(in);
-        }
-
-        @Override
-        public WikiPage[] newArray(int size) {
-            return new WikiPage[size];
-        }
-    };
 
     public int getId() {
         return id;

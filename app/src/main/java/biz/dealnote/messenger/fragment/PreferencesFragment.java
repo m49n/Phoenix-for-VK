@@ -92,6 +92,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         return fragment;
     }
 
+    public static File getDrawerBackgroundFile(Context context, boolean light) {
+        return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
+    }
+
     private void selectLocalImage(int requestCode) {
         if (!AppPerms.hasReadStoragePermision(getActivity())) {
             AppPerms.requestReadExternalStoragePermission(getActivity());
@@ -235,6 +239,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("music_dir")
                 .setOnPreferenceClickListener(preference -> {
+                    if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                        AppPerms.requestReadExternalStoragePermission(getActivity());
+                        return true;
+                    }
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
@@ -243,7 +251,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     properties.offset = new File(Settings.get().other().getMusicDir());
                     properties.extensions = null;
                     properties.show_hidden_files = true;
-                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
                     dialog.setTitle(R.string.music_dir);
                     dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("music_dir", files[0]).apply());
                     dialog.show();
@@ -252,6 +260,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("photo_dir")
                 .setOnPreferenceClickListener(preference -> {
+                    if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                        AppPerms.requestReadExternalStoragePermission(getActivity());
+                        return true;
+                    }
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
@@ -260,7 +272,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     properties.offset = new File(Settings.get().other().getPhotoDir());
                     properties.extensions = null;
                     properties.show_hidden_files = true;
-                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
                     dialog.setTitle(R.string.photo_dir);
                     dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("photo_dir", files[0]).apply());
                     dialog.show();
@@ -269,6 +281,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("video_dir")
                 .setOnPreferenceClickListener(preference -> {
+                    if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                        AppPerms.requestReadExternalStoragePermission(getActivity());
+                        return true;
+                    }
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
@@ -277,7 +293,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     properties.offset = new File(Settings.get().other().getVideoDir());
                     properties.extensions = null;
                     properties.show_hidden_files = true;
-                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
                     dialog.setTitle(R.string.video_dir);
                     dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("video_dir", files[0]).apply());
                     dialog.show();
@@ -286,6 +302,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("docs_dir")
                 .setOnPreferenceClickListener(preference -> {
+                    if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                        AppPerms.requestReadExternalStoragePermission(getActivity());
+                        return true;
+                    }
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
@@ -294,7 +314,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     properties.offset = new File(Settings.get().other().getDocDir());
                     properties.extensions = null;
                     properties.show_hidden_files = true;
-                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(),properties);
+                    FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
                     dialog.setTitle(R.string.docs_dir);
                     dialog.setDialogSelectionListener(files -> PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext()).edit().putString("docs_dir", files[0]).apply());
                     dialog.show();
@@ -355,7 +375,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         CheckBoxPreference keepLongpoll = findPreference("keep_longpoll");
         keepLongpoll.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean keep = (boolean) newValue;
-            if(keep){
+            if (keep) {
                 KeepLongpollService.start(preference.getContext());
             } else {
                 KeepLongpollService.stop(preference.getContext());
@@ -368,10 +388,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(view.findViewById(R.id.toolbar));
-    }
-
-    public static File getDrawerBackgroundFile(Context context, boolean light) {
-        return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
     }
 
     private void onSecurityClick() {

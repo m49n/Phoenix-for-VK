@@ -49,6 +49,12 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
         VkPhotoAlbumsAdapter.ClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ACTION_SELECT_ALBUM = "biz.dealnote.messenger.ACTION_SELECT_ALBUM";
+    private static final int REQUEST_CREATE_ALBUM = 134;
+    private static final int REQUEST_EDIT_ALBUM = 138;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FloatingActionButton mFab;
+    private VkPhotoAlbumsAdapter mAdapter;
+    private TextView mEmptyText;
 
     public static VKPhotoAlbumsFragment newInstance(int accountId, int ownerId, String action, ParcelableOwnerWrapper ownerWrapper, boolean hide_toolbar) {
         Bundle args = new Bundle();
@@ -56,24 +62,19 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putParcelable(Extra.OWNER, ownerWrapper);
         args.putString(Extra.ACTION, action);
-        if(hide_toolbar)
+        if (hide_toolbar)
             args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
         VKPhotoAlbumsFragment fragment = new VKPhotoAlbumsFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FloatingActionButton mFab;
-    private VkPhotoAlbumsAdapter mAdapter;
-    private TextView mEmptyText;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_albums_gallery, container, false);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        if(!hasHideToolbarExtra()){
+        if (!hasHideToolbarExtra()) {
             ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         } else {
             toolbar.setVisibility(View.GONE);
@@ -101,16 +102,13 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
         return view;
     }
 
-    private static final int REQUEST_CREATE_ALBUM = 134;
-    private static final int REQUEST_EDIT_ALBUM = 138;
-
     @Override
     public void onResume() {
         super.onResume();
         Settings.get().ui().notifyPlaceResumed(Place.VK_PHOTO_ALBUMS);
 
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(R.string.photos);
         }
 
@@ -144,7 +142,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
     //    for (int i = 0; i < mData.size(); i++) {
     //        if (mData.get(i).equals(album)) {
     //            mData.set(i, album);
-     //           if (mAdapter != null) mAdapter.notifyItemChanged(i);
+    //           if (mAdapter != null) mAdapter.notifyItemChanged(i);
     //            break;
     //        }
     //    }
@@ -167,7 +165,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     @Override
     public void displayData(@NonNull List<PhotoAlbum> data) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(data);
             resolveEmptyTextVisibility();
         }
@@ -175,20 +173,20 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     @Override
     public void displayLoading(boolean loading) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
 
     private void resolveEmptyTextVisibility() {
-        if(Objects.nonNull(mEmptyText) && Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mEmptyText) && Objects.nonNull(mAdapter)) {
             mEmptyText.setVisibility(mAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyTextVisibility();
         }
@@ -197,7 +195,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
     @Override
     public void setToolbarSubtitle(String subtitle) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(R.string.photos);
         }
     }
@@ -239,7 +237,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     @Override
     public void setCreateAlbumFabVisible(boolean visible) {
-        if(Objects.isNull(mFab)) return;
+        if (Objects.isNull(mFab)) return;
 
         if (mFab.isShown() && !visible) {
             mFab.hide();
@@ -278,7 +276,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     @Override
     public void notifyItemRemoved(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
             resolveEmptyTextVisibility();
         }
@@ -286,7 +284,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
 
     @Override
     public void notifyDataAdded(int position, int size) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, size);
             resolveEmptyTextVisibility();
         }

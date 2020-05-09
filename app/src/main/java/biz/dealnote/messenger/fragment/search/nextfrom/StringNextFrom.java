@@ -9,16 +9,6 @@ import android.os.Parcelable;
  */
 public class StringNextFrom extends AbsNextFrom implements Parcelable {
 
-    private String nextFrom;
-
-    public StringNextFrom(String nextFrom) {
-        this.nextFrom = nextFrom;
-    }
-
-    protected StringNextFrom(Parcel in) {
-        nextFrom = in.readString();
-    }
-
     public static final Creator<StringNextFrom> CREATOR = new Creator<StringNextFrom>() {
         @Override
         public StringNextFrom createFromParcel(Parcel in) {
@@ -30,6 +20,15 @@ public class StringNextFrom extends AbsNextFrom implements Parcelable {
             return new StringNextFrom[size];
         }
     };
+    private String nextFrom;
+
+    public StringNextFrom(String nextFrom) {
+        this.nextFrom = nextFrom;
+    }
+
+    protected StringNextFrom(Parcel in) {
+        nextFrom = in.readString();
+    }
 
     public String getNextFrom() {
         return nextFrom;

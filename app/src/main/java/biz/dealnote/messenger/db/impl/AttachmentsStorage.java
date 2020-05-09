@@ -151,7 +151,7 @@ class AttachmentsStorage extends AbsStorage implements IAttachmentsStorage {
 
             ContentProviderResult[] results = getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
 
-            int [] ids = new int[entities.size()];
+            int[] ids = new int[entities.size()];
 
             for (int i = 0; i < indexes.length; i++) {
                 ContentProviderResult result = results[indexes[i]];
@@ -191,7 +191,7 @@ class AttachmentsStorage extends AbsStorage implements IAttachmentsStorage {
         });
     }
 
-    private Cursor createCursor(int accountId, int attachToType, int attachToDbid){
+    private Cursor createCursor(int accountId, int attachToType, int attachToDbid) {
         Uri uri = uriForType(attachToType, accountId);
         return getContentResolver().query(uri, null,
                 attachToIdColumnFor(attachToType) + " = ?", new String[]{String.valueOf(attachToDbid)}, null);

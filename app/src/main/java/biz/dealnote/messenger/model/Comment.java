@@ -9,69 +9,64 @@ import biz.dealnote.messenger.util.Utils;
 
 public class Comment extends AbsModel implements Parcelable, Identificable {
 
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
+    private final Commented commented;
     /**
      * идентификатор комментария.
      */
     private int id;
-
     /**
      * идентификатор автора комментария.
      */
     private int fromId;
-
     /**
      * дата создания комментария в формате unixtime.
      */
     private long date;
-
     /**
      * текст комментария
      */
     private String text;
-
     /**
      * идентификатор пользователя или сообщества, в ответ которому оставлен текущий комментарий (если применимо).
      */
     private int replyToUser;
-
     /**
      * идентификатор комментария, в ответ на который оставлен текущий (если применимо).
      */
     private int replyToComment;
-
     /**
      * Number of likes on the comment.
      */
     private int likesCount;
-
     /**
      * Information whether the current user liked the comment.
      */
     private boolean userLikes;
-
     /**
      * Whether the current user can like on the comment.
      */
     private boolean canLike;
-
     private boolean canEdit;
-
     /**
      * объект, содержащий информацию о медиавложениях в комментарии
      */
     private Attachments attachments;
-
-    private final Commented commented;
-
     private Owner author;
-
     private int dbid;
-
     private boolean deleted;
-
     //not parcelable
     private boolean animationNow;
-
     private int threads;
 
     public Comment(Commented commented) {
@@ -98,26 +93,13 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         threads = in.readInt();
     }
 
-    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
-        @Override
-        public Comment createFromParcel(Parcel in) {
-            return new Comment(in);
-        }
-
-        @Override
-        public Comment[] newArray(int size) {
-            return new Comment[size];
-        }
-    };
-
     @Override
     public int getId() {
         return id;
     }
 
-    public Comment setThreads(int threads)
-    {
-        this.threads = threads;
+    public Comment setId(int id) {
+        this.id = id;
         return this;
     }
 
@@ -125,8 +107,8 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         return threads;
     }
 
-    public Comment setId(int id) {
-        this.id = id;
+    public Comment setThreads(int threads) {
+        this.threads = threads;
         return this;
     }
 
@@ -242,19 +224,19 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         return this;
     }
 
-    public boolean hasAttachments(){
+    public boolean hasAttachments() {
         return attachments != null && !attachments.isEmpty();
     }
 
-    public boolean hasStickerOnly(){
+    public boolean hasStickerOnly() {
         return attachments != null && !Utils.safeIsEmpty(attachments.getStickers());
     }
 
-    public String getFullAuthorName(){
+    public String getFullAuthorName() {
         return author == null ? null : author.getFullName();
     }
 
-    public String getMaxAuthorAvaUrl(){
+    public String getMaxAuthorAvaUrl() {
         return author == null ? null : author.getMaxSquareAvatar();
     }
 
@@ -263,13 +245,13 @@ public class Comment extends AbsModel implements Parcelable, Identificable {
         return 0;
     }
 
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
     public Comment setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
         return this;
-    }
-
-    public boolean isCanEdit() {
-        return canEdit;
     }
 
     @Override

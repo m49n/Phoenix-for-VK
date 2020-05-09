@@ -27,7 +27,7 @@ public class OwnerEntities {
         return userEntities;
     }
 
-    public int size(){
+    public int size() {
         return userEntities.size() + communityEntities.size();
     }
 }

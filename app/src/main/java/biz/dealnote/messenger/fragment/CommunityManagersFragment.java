@@ -47,6 +47,8 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
         implements ICommunityManagersView {
 
     private static final int REQUEST_SELECT_PROFILES = 19;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CommunityManagersAdapter mAdapter;
 
     public static CommunityManagersFragment newInstance(int accountId, Community groupId) {
         Bundle args = new Bundle();
@@ -56,9 +58,6 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private CommunityManagersAdapter mAdapter;
 
     @Nullable
     @Override
@@ -90,7 +89,7 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
         return root;
     }
 
-    private void showManagerContextMenu(Manager manager){
+    private void showManagerContextMenu(Manager manager) {
         String[] items = {getString(R.string.delete)};
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(manager.getUser().getFullName())
@@ -110,21 +109,21 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void displayRefreshing(boolean loadingNow) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loadingNow);
         }
     }
 
     @Override
     public void displayData(List<Manager> managers) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(managers);
         }
     }
@@ -157,21 +156,21 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
 
     @Override
     public void notifyItemRemoved(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
         }
     }
 
     @Override
     public void notifyItemChanged(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(index);
         }
     }
 
     @Override
     public void notifyItemAdded(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemInserted(index);
         }
     }
@@ -179,7 +178,7 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_SELECT_PROFILES && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_SELECT_PROFILES && resultCode == Activity.RESULT_OK) {
             ArrayList<User> users = data.getParcelableArrayListExtra(Extra.USERS);
             AssertUtils.requireNonNull(users);
             postPrenseterReceive(presenter -> presenter.fireProfilesSelected(users));

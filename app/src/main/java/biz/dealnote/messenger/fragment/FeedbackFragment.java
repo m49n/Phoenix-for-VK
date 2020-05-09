@@ -72,7 +72,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_feedback, container, false);
-        ((AppCompatActivity)requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         mEmptyText = root.findViewById(R.id.fragment_feedback_empty_text);
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
@@ -130,7 +130,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void displayData(List<Feedback> data) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setItems(data);
             resolveEmptyTextVisibility();
         }
@@ -138,25 +138,25 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void showLoading(boolean loading) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
 
     @Override
     public void notifyUpdateCounter() {
-        ((MainActivity)requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
+        ((MainActivity) requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
     }
 
     private void resolveEmptyTextVisibility() {
-        if(nonNull(mEmptyText) && nonNull(mAdapter)){
+        if (nonNull(mEmptyText) && nonNull(mAdapter)) {
             mEmptyText.setVisibility(mAdapter.getRealItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void notifyDataAdding(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
             resolveEmptyTextVisibility();
         }
@@ -164,7 +164,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void notifyDataSetChanged() {
-        if (nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyTextVisibility();
         }
@@ -172,7 +172,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public void configLoadMore(@LoadMoreState int loadmoreState) {
-        if (nonNull(mLoadMoreHelper)){
+        if (nonNull(mLoadMoreHelper)) {
             mLoadMoreHelper.switchToState(loadmoreState);
         }
     }
@@ -184,7 +184,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
 
     @Override
     public IPresenterFactory<FeedbackPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new FeedbackPresenter(requireArguments().getInt(Extra.ACCOUNT_ID),saveInstanceState);
+        return () -> new FeedbackPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
     }
 
     @Override

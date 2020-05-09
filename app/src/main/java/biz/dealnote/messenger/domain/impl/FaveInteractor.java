@@ -91,8 +91,8 @@ public class FaveInteractor implements IFaveInteractor {
 
                     VKOwnIds ids = new VKOwnIds();
                     for (VkApiAttachments.Entry dto : dtos) {
-                        if(dto.attachment instanceof VKApiPost)
-                            ids.append((VKApiPost)dto.attachment);
+                        if (dto.attachment instanceof VKApiPost)
+                            ids.append((VKApiPost) dto.attachment);
                     }
 
                     final OwnerEntities ownerEntities = Dto2Entity.mapOwners(response.profiles, response.groups);
@@ -100,8 +100,8 @@ public class FaveInteractor implements IFaveInteractor {
                     final List<PostEntity> dbos = new ArrayList<>(safeCountOf(response.posts));
                     if (nonNull(response.posts)) {
                         for (VkApiAttachments.Entry dto : response.posts) {
-                            if(dto.attachment instanceof VKApiPost)
-                                dbos.add(Dto2Entity.mapPost((VKApiPost)dto.attachment));
+                            if (dto.attachment instanceof VKApiPost)
+                                dbos.add(Dto2Entity.mapPost((VKApiPost) dto.attachment));
                         }
                     }
 
@@ -206,13 +206,11 @@ public class FaveInteractor implements IFaveInteractor {
 
     @Override
     public Single<List<FavePage>> getCachedPages(int accountId, boolean isUser) {
-        if(isUser) {
+        if (isUser) {
             return cache.fave()
                     .getFaveUsers(accountId)
                     .map(Entity2Model::buildFaveUsersFromDbo);
-        }
-        else
-        {
+        } else {
             return cache.fave()
                     .getFaveGroups(accountId)
                     .map(Entity2Model::buildFaveUsersFromDbo);
@@ -245,13 +243,12 @@ public class FaveInteractor implements IFaveInteractor {
                     List<FavePageEntity> entities = mapAll(dtos, Dto2Entity::mapFavePage, true);
                     List<FavePage> pages = mapAll(dtos, Dto2Model::transformFaveUser, true);
 
-                    if(isUser) {
+                    if (isUser) {
                         return cache.fave()
                                 .storePages(accountId, entities, offset == 0)
                                 .andThen(cache.owners().storeOwnerEntities(accountId, new OwnerEntities(userEntities, communityEntities)))
                                 .andThen(Single.just(EndlessData.create(pages, hasNext)));
-                    }
-                    else {
+                    } else {
                         return cache.fave()
                                 .storeGroups(accountId, entities, offset == 0)
                                 .andThen(cache.owners().storeOwnerEntities(accountId, new OwnerEntities(userEntities, communityEntities)))

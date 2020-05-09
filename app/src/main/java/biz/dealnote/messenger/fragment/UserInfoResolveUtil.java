@@ -282,8 +282,8 @@ public class UserInfoResolveUtil {
     }
 
     *//*
-    * ОСНОВНАЯ ИНФОРМАЦИЯ ПОЛЬЗОВАТЕЛЯ
-    *//*
+     * ОСНОВНАЯ ИНФОРМАЦИЯ ПОЛЬЗОВАТЕЛЯ
+     *//*
     public static void fillMainUserInfo(Context context, View sectionsView, VKApiUser apiUser, OwnerLinkSpanFactory.ActionListener onOwnerClickListener) {
         MainInfoHolder holder = new MainInfoHolder(sectionsView);
 
@@ -351,8 +351,11 @@ public class UserInfoResolveUtil {
         sectionsView.setVisibility(rootVisible ? View.VISIBLE : View.GONE);
     }
 
-    *//**
+    */
+
+    /**
      * Найти текущее место деятельности пользователя (школа, компания или ВУЗ)
+     *
      * @param apiUser пользователь
      * @return место активности
      *//*
@@ -556,8 +559,7 @@ public class UserInfoResolveUtil {
     }
 
     */
-
-    public static String getUserActivityLine(Context context, User user){
+    public static String getUserActivityLine(Context context, User user) {
         return getUserActivityLine(context, user.getLastSeen(), user.isOnline(), user.getSex());
     }
 

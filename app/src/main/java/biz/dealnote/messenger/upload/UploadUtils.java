@@ -18,7 +18,7 @@ import biz.dealnote.messenger.util.IOUtils;
 
 public final class UploadUtils {
 
-    private UploadUtils(){
+    private UploadUtils() {
 
     }
 
@@ -66,7 +66,7 @@ public final class UploadUtils {
     }
 
     public static List<UploadIntent> createIntents(int accountId, UploadDestination destination, List<LocalPhoto> photos, int size,
-                                                   boolean autoCommit){
+                                                   boolean autoCommit) {
         List<UploadIntent> intents = new ArrayList<>(photos.size());
         for (LocalPhoto photo : photos) {
             intents.add(new UploadIntent(accountId, destination)
@@ -79,12 +79,12 @@ public final class UploadUtils {
     }
 
     public static List<UploadIntent> createIntents(int accountId, UploadDestination destination, String file, int size,
-                                                   boolean autoCommit){
+                                                   boolean autoCommit) {
         List<UploadIntent> intents = new ArrayList<>();
         intents.add(new UploadIntent(accountId, destination)
-                    .setSize(size)
-                    .setAutoCommit(autoCommit)
-                    .setFileUri(Uri.parse(file)));
+                .setSize(size)
+                .setAutoCommit(autoCommit)
+                .setFileUri(Uri.parse(file)));
         return intents;
     }
 

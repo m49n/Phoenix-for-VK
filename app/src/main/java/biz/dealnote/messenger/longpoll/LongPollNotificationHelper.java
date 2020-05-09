@@ -40,7 +40,7 @@ public class LongPollNotificationHelper {
         notifyAbountNewMessage(context, message.getAccountId(), messageText, message.getPeerId(), message.getId(), message.getDate());
     }
 
-    private static void notifyAbountNewMessage(Context context, int accountId, String body, int peerId, int messageId, long date){
+    private static void notifyAbountNewMessage(Context context, int accountId, String body, int peerId, int messageId, long date) {
         int mask = Settings.get().notifications().getNotifPref(accountId, peerId);
         if (!hasFlag(mask, ISettings.INotificationSettings.FLAG_SHOW_NOTIF)) {
             return;

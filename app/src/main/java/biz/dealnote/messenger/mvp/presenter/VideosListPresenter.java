@@ -47,34 +47,21 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
     private final int ownerId;
     private final int albumId;
-    private Context context;
-
     private final String action;
-
-    private String albumTitle;
     private final List<Video> data;
-
-    private boolean endOfContent;
-
-    private IntNextFrom intNextFrom;
-
     private final IVideosInteractor interactor;
-
-    private boolean hasActualNetData;
-
     private final IUploadManager uploadManager;
+    private Context context;
+    private String albumTitle;
+    private boolean endOfContent;
+    private IntNextFrom intNextFrom;
+    private boolean hasActualNetData;
     private UploadDestination destination;
     private List<Upload> uploadsData;
-
-    public Integer getOwnerId()
-    {
-        return ownerId;
-    }
-
-    public Integer getAlbumId()
-    {
-        return albumId;
-    }
+    private boolean requestNow;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheNowLoading;
 
     public VideosListPresenter(int accountId, int ownerId, int albumId, String action,
                                @Nullable String albumTitle, Context context, @Nullable Bundle savedInstanceState) {
@@ -122,7 +109,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
         loadAllFromCache();
         request(false);
-        if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)){
+        if (IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
             new MaterialAlertDialogBuilder(context)
                     .setTitle(R.string.confirmation)
                     .setMessage(R.string.do_upload_video)
@@ -130,6 +117,14 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
                     .setNegativeButton(R.string.button_no, null)
                     .show();
         }
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public Integer getAlbumId() {
+        return albumId;
     }
 
     private void onUploadsDataReceived(List<Upload> data) {
@@ -142,21 +137,20 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
 
     private void onUploadResults(Pair<Upload, UploadResult<?>> pair) {
         Video obj = (Video) pair.getSecond().getResult();
-        if(obj.getId() == 0)
+        if (obj.getId() == 0)
             getView().getPhoenixToast().showToastError(R.string.error);
         else {
             getView().getPhoenixToast().showToast(R.string.uploaded);
-            if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
+            if (IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
                 getView().onUploaded(obj);
-            }
-            else
+            } else
                 fireRefresh();
         }
 
     }
 
     private void onProgressUpdates(List<IUploadManager.IProgressUpdate> updates) {
-        for(IUploadManager.IProgressUpdate update : updates){
+        for (IUploadManager.IProgressUpdate update : updates) {
             int index = findIndexById(uploadsData, update.getId());
             if (index != -1) {
                 callView(view -> view.notifyUploadProgressChanged(index, update.getProgress(), true));
@@ -202,10 +196,8 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         }
     }
 
-    private boolean requestNow;
-
-    private void resolveRefreshingView(){
-        if(isGuiResumed()){
+    private void resolveRefreshingView() {
+        if (isGuiResumed()) {
             getView().displayLoading(requestNow);
         }
     }
@@ -221,8 +213,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         resolveRefreshingView();
     }
 
-    public void doUpload()
-    {
+    public void doUpload() {
         if (AppPerms.hasReadStoragePermision(getApplicationContext())) {
             getView().startSelectUploadFileActivity(getAccountId());
         } else {
@@ -240,10 +231,8 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         }
     }
 
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-
-    private void request(boolean more){
-        if(requestNow) return;
+    private void request(boolean more) {
+        if (requestNow) return;
 
         setRequestNow(true);
 
@@ -259,12 +248,12 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
                 }, this::onListGetError));
     }
 
-    private void onListGetError(Throwable throwable){
+    private void onListGetError(Throwable throwable) {
         setRequestNow(false);
         showError(getView(), throwable);
     }
 
-    private void onRequestResposnse(List<Video> videos, IntNextFrom startFrom, IntNextFrom nextFrom){
+    private void onRequestResposnse(List<Video> videos, IntNextFrom startFrom, IntNextFrom nextFrom) {
         this.cacheDisposable.clear();
         this.cacheNowLoading = false;
 
@@ -272,13 +261,13 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         this.intNextFrom = nextFrom;
         this.endOfContent = videos.isEmpty();
 
-        if(startFrom.getOffset() == 0){
+        if (startFrom.getOffset() == 0) {
             data.clear();
             data.addAll(videos);
 
             callView(IVideosListView::notifyDataSetChanged);
         } else {
-            if(nonEmpty(videos)){
+            if (nonEmpty(videos)) {
                 int startSize = data.size();
                 data.addAll(videos);
                 callView(view -> view.notifyDataAdded(startSize, videos.size()));
@@ -304,9 +293,6 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         uploadManager.enqueue(Collections.singletonList(intent));
     }
 
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheNowLoading;
-
     private void loadAllFromCache() {
         this.cacheNowLoading = true;
         final int accountId = super.getAccountId();
@@ -316,7 +302,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
                 .subscribe(this::onCachedDataReceived, Analytics::logUnexpectedError));
     }
 
-    private void onCachedDataReceived(List<Video> videos){
+    private void onCachedDataReceived(List<Video> videos) {
         this.data.clear();
         this.data.addAll(videos);
 
@@ -339,18 +325,18 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         request(false);
     }
 
-    private boolean canLoadMore(){
+    private boolean canLoadMore() {
         return !endOfContent && !requestNow && hasActualNetData && !cacheNowLoading && nonEmpty(data);
     }
 
     public void fireScrollToEnd() {
-        if(canLoadMore()){
+        if (canLoadMore()) {
             request(true);
         }
     }
 
     public void fireVideoClick(Video video) {
-        if(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)){
+        if (IVideosListView.ACTION_SELECT.equalsIgnoreCase(action)) {
             getView().returnSelectionToParent(video);
         } else {
             getView().showVideoPreview(getAccountId(), video);

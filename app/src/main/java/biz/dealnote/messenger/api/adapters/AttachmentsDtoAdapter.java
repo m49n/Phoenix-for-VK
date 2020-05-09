@@ -69,7 +69,7 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VKApiPost.class);
             //} else if (VkApiAttachments.TYPE_POSTED_PHOTO.equals(type)) {
             //    return context.deserialize(o, VKApiPostedPhoto.class);
-        } else if (VkApiAttachments.TYPE_LINK.equals(type) || VkApiAttachments.TYPE_ARTICLE.equals(type) ) {
+        } else if (VkApiAttachments.TYPE_LINK.equals(type) || VkApiAttachments.TYPE_ARTICLE.equals(type)) {
             return context.deserialize(o, VKApiLink.class);
             //} else if (VkApiAttachments.TYPE_NOTE.equals(type)) {
             //    return context.deserialize(o, VKApiNote.class);
@@ -88,16 +88,15 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
         } else if (VKApiAttachment.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
         } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
-            if(o.getAsJsonObject().has("photo"))
+            if (o.getAsJsonObject().has("photo"))
                 return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);
-            else if(o.getAsJsonObject().has("video"))
+            else if (o.getAsJsonObject().has("video"))
                 return context.deserialize(o.getAsJsonObject().get("video"), VKApiVideo.class);
-        }
-        else if(VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)){
+        } else if (VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)) {
             VKApiLink ret = new VKApiLink();
             VKApiAudioPlaylist pl = context.deserialize(o, VKApiAudioPlaylist.class);
             ret.url = "https://vk.com/music/album/" + pl.owner_id + "_" + pl.id;
-            if(pl.access_key != null)
+            if (pl.access_key != null)
                 ret.url += "_" + pl.access_key;
             ret.caption = pl.title;
             ret.description = pl.description;

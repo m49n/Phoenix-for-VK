@@ -12,6 +12,7 @@ import io.reactivex.SingleTransformer;
 public interface IMessagesDecryptor {
     /**
      * Предоставляет RX-трансформер для дешифровки сообщений
+     *
      * @param accountId идентификатор аккаунта
      * @return RX-трансформер
      */

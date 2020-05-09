@@ -17,7 +17,9 @@ import io.reactivex.annotations.Nullable;
  */
 public interface IAudioInteractor {
     Single<Audio> add(int accountId, Audio audio, Integer groupId, Integer albumId);
+
     Completable delete(int accountId, int audioId, int ownerId);
+
     Completable restore(int accountId, int audioId, int ownerId);
 
     Completable sendBroadcast(int accountId, int audioOwnerId, int audioId, @Nullable Collection<Integer> targetIds);

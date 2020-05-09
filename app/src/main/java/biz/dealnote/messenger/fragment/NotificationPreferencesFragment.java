@@ -30,9 +30,19 @@ import biz.dealnote.messenger.util.Logger;
 
 public class NotificationPreferencesFragment extends PreferenceFragmentCompat {
 
-    private static final String TAG = NotificationPreferencesFragment.class.getSimpleName();
-
     public static final int REQUEST_CODE_RINGTONE = 116;
+    private static final String TAG = NotificationPreferencesFragment.class.getSimpleName();
+    private Ringtone current;
+    private int selection;
+
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -56,24 +66,11 @@ public class NotificationPreferencesFragment extends PreferenceFragmentCompat {
         super.finalize();
     }
 
-    private Ringtone current;
-
     private void stopRingtoneIfExist() {
         if (current != null && current.isPlaying()) {
             current.stop();
         }
     }
-
-    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
-        for (Map.Entry<T, E> entry : map.entrySet()) {
-            if (value.equals(entry.getValue())) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    private int selection;
 
     private void showAlertDialog() {
         final Map<String, String> ringrones = getNotifications();

@@ -5,16 +5,25 @@ import android.os.Parcelable;
 
 public class VkApiWallUploadServer implements Parcelable, UploadServer {
 
+    public static final Creator<VkApiWallUploadServer> CREATOR = new Creator<VkApiWallUploadServer>() {
+        @Override
+        public VkApiWallUploadServer createFromParcel(Parcel in) {
+            return new VkApiWallUploadServer(in);
+        }
+
+        @Override
+        public VkApiWallUploadServer[] newArray(int size) {
+            return new VkApiWallUploadServer[size];
+        }
+    };
     /**
      * адрес для загрузки фотографий
      */
     public String upload_url;
-
     /**
      * идентификатор альбома, в который будет загружена фотография
      */
     public int album_id;
-
     /**
      * идентификатор пользователя, от чьего имени будет загружено фото
      */
@@ -29,18 +38,6 @@ public class VkApiWallUploadServer implements Parcelable, UploadServer {
         this.album_id = in.readInt();
         this.user_id = in.readInt();
     }
-
-    public static final Creator<VkApiWallUploadServer> CREATOR = new Creator<VkApiWallUploadServer>() {
-        @Override
-        public VkApiWallUploadServer createFromParcel(Parcel in) {
-            return new VkApiWallUploadServer(in);
-        }
-
-        @Override
-        public VkApiWallUploadServer[] newArray(int size) {
-            return new VkApiWallUploadServer[size];
-        }
-    };
 
     @Override
     public int describeContents() {

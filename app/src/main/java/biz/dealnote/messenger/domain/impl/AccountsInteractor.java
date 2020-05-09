@@ -94,8 +94,8 @@ public class AccountsInteractor implements IAccountsInteractor {
 
             List<Account> accounts = new ArrayList<>(ids.size());
 
-            for(int id : ids){
-                if(emitter.isDisposed()){
+            for (int id : ids) {
+                if (emitter.isDisposed()) {
                     break;
                 }
 

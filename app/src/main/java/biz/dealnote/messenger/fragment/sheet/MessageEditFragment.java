@@ -56,6 +56,9 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
     private static final int REQUEST_PERMISSION_CAMERA = 16;
     private static final int REQUEST_PHOTO_FROM_CAMERA = 15;
     private static final int REQUEST_SELECT_ATTACHMENTS = 14;
+    private AttachmentsBottomSheetAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private View mEmptyView;
 
     public static MessageEditFragment newInstance(int accountId, int messageOwnerId, int messageId, ModelsBundle bundle) {
         Bundle args = new Bundle();
@@ -67,10 +70,6 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
         fragment.setArguments(args);
         return fragment;
     }
-
-    private AttachmentsBottomSheetAdapter mAdapter;
-    private RecyclerView mRecyclerView;
-    private View mEmptyView;
 
     @Override
     public void setupDialog(Dialog dialog, int style) {
@@ -101,13 +100,13 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_ADD_VKPHOTO && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_ADD_VKPHOTO && resultCode == Activity.RESULT_OK) {
             ArrayList<Photo> vkphotos = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             ArrayList<LocalPhoto> localPhotos = data.getParcelableArrayListExtra(Extra.PHOTOS);
             getPresenter().firePhotosSelected(vkphotos, localPhotos);
         }
 
-        if(requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK) {
             ArrayList<AbsModel> attachments = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             getPresenter().fireAttachmentsSelected(attachments);
         }
@@ -129,7 +128,7 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
 
     @Override
     public void displayAttachments(List<AttachmenEntry> entries) {
-        if(nonNull(mRecyclerView)){
+        if (nonNull(mRecyclerView)) {
             this.mAdapter = new AttachmentsBottomSheetAdapter(requireActivity(), entries, this);
             this.mRecyclerView.setAdapter(mAdapter);
         }
@@ -137,7 +136,7 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
 
     @Override
     public void notifyDataAdded(int positionStart, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(positionStart + 1, count);
         }
     }
@@ -154,7 +153,7 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
 
     @Override
     public void notifyEntryRemoved(int index) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index + 1);
         }
     }
@@ -172,21 +171,21 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
 
     @Override
     public void changePercentageSmoothly(int dataPosition, int progress) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.changeUploadProgress(dataPosition, progress, true);
         }
     }
 
     @Override
     public void notifyItemChanged(int index) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(index + 1);
         }
     }
 
     @Override
     public void setEmptyViewVisible(boolean visible) {
-        if(nonNull(mEmptyView)){
+        if (nonNull(mEmptyView)) {
             mEmptyView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
@@ -220,7 +219,7 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_PERMISSION_CAMERA){
+        if (requestCode == REQUEST_PERMISSION_CAMERA) {
             getPresenter().fireCameraPermissionResolved();
         }
     }
@@ -237,21 +236,21 @@ public class MessageEditFragment extends AbsPresenterBottomSheetFragment<Message
 
     @Override
     public void showError(String errorText) {
-        if(isAdded()){
+        if (isAdded()) {
             Utils.showRedTopToast(requireActivity(), errorText);
         }
     }
 
     @Override
     public void showError(int titleTes, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             showError(getString(titleTes, params));
         }
     }
+
     @Override
-    public PhoenixToast getPhoenixToast()
-    {
-        if(isAdded()) {
+    public PhoenixToast getPhoenixToast() {
+        if (isAdded()) {
             return PhoenixToast.CreatePhoenixToast(requireActivity());
         }
         return PhoenixToast.CreatePhoenixToast(null);

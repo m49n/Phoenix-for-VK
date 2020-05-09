@@ -9,14 +9,34 @@ import androidx.annotation.NonNull;
 
 public class LocalPhoto implements Parcelable, Comparable<LocalPhoto>, ISelectable {
 
+    public static final Creator<LocalPhoto> CREATOR = new Creator<LocalPhoto>() {
+
+        @Override
+        public LocalPhoto createFromParcel(Parcel s) {
+            return new LocalPhoto(s);
+        }
+
+        @Override
+        public LocalPhoto[] newArray(int size) {
+            return new LocalPhoto[size];
+        }
+    };
     private long imageId;
     private Uri fullImageUri;
     private boolean selected;
     private int index;
 
-    public LocalPhoto() {}
+    public LocalPhoto() {
+    }
 
-    public static Uri buildUriForPicasso(long id){
+    public LocalPhoto(Parcel in) {
+        this.imageId = in.readLong();
+        this.fullImageUri = Uri.parse(in.readString());
+        this.selected = in.readInt() == 1;
+        this.index = in.readInt();
+    }
+
+    public static Uri buildUriForPicasso(long id) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/images/media/"), id);
     }
 
@@ -33,26 +53,6 @@ public class LocalPhoto implements Parcelable, Comparable<LocalPhoto>, ISelectab
         dest.writeInt(index);
     }
 
-    public LocalPhoto(Parcel in) {
-        this.imageId = in.readLong();
-        this.fullImageUri = Uri.parse(in.readString());
-        this.selected = in.readInt() == 1;
-        this.index = in.readInt();
-    }
-
-    public static final Creator<LocalPhoto> CREATOR = new Creator<LocalPhoto>() {
-
-        @Override
-        public LocalPhoto createFromParcel(Parcel s) {
-            return new LocalPhoto(s);
-        }
-
-        @Override
-        public LocalPhoto[] newArray(int size) {
-            return new LocalPhoto[size];
-        }
-    };
-
     public long getImageId() {
         return imageId;
     }
@@ -68,11 +68,6 @@ public class LocalPhoto implements Parcelable, Comparable<LocalPhoto>, ISelectab
 
     public LocalPhoto setIndex(int index) {
         this.index = index;
-        return this;
-    }
-
-    public LocalPhoto setSelected(boolean selected) {
-        this.selected = selected;
         return this;
     }
 
@@ -93,5 +88,10 @@ public class LocalPhoto implements Parcelable, Comparable<LocalPhoto>, ISelectab
     @Override
     public boolean isSelected() {
         return selected;
+    }
+
+    public LocalPhoto setSelected(boolean selected) {
+        this.selected = selected;
+        return this;
     }
 }

@@ -26,18 +26,17 @@ import biz.dealnote.messenger.util.Utils;
  */
 public class SecuritySettings implements ISettings.ISecuritySettings {
 
+    public static final String KEY_USE_PIN_FOR_SECURITY = "use_pin_for_security";
+    public static final String KEY_CHANGE_PIN = "change_pin";
+    public static final String KEY_DELETE_KEYS = "delete_all_encryption_keys";
     private static final String PREFS_NAME = "security_prefs";
     private static final String KEY_PIN_HASH = "app_pin";
     private static final String KEY_PIN_ENTER_HISTORY = "pin_enter_history";
-    public static final String KEY_USE_PIN_FOR_SECURITY = "use_pin_for_security";
     private static final String KEY_USE_PIN_FOR_ENTRANCE = "use_pin_for_entrance";
-    public static final String KEY_CHANGE_PIN = "change_pin";
-    public static final String KEY_DELETE_KEYS = "delete_all_encryption_keys";
-
     private static final String KEY_ENCRYPTION_POLICY_ACCEPTED = "encryption_policy_accepted";
-
-    private Context mApplication;
+    private static final int PIN_HISTORY_DEPTH = 3;
     private final SharedPreferences mPrefs;
+    private Context mApplication;
     private String mPinHash;
     private List<Long> mPinEnterHistory;
     private boolean mKeyEncryptionPolicyAccepted;
@@ -66,6 +65,18 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         return result;
     }
 
+    private static String encryptionKeyFor(int accountId, int peerId) {
+        return "encryptionkeypolicy" + accountId + "_" + peerId;
+    }
+
+    private static String calculateHash(String value) {
+        try {
+            return AeSimpleSHA1.sha1(value);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException();
+        }
+    }
+
     private String getPinHash() {
         return mPinHash;
     }
@@ -83,8 +94,6 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     public List<Long> getPinEnterHistory() {
         return mPinEnterHistory;
     }
-
-    private static final int PIN_HISTORY_DEPTH = 3;
 
     private void storePinHistory() {
         Set<String> target = new HashSet<>(mPinEnterHistory.size());
@@ -108,10 +117,6 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         }
 
         storePinHistory();
-    }
-
-    private static String encryptionKeyFor(int accountId, int peerId) {
-        return "encryptionkeypolicy" + accountId + "_" + peerId;
     }
 
     public void enableMessageEncryption(int accountId, int peerId, @KeyLocationPolicy int policy) {
@@ -180,17 +185,13 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         return calculateHash(builder.toString());
     }
 
-    private static String calculateHash(String value) {
-        try {
-            return AeSimpleSHA1.sha1(value);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException();
-        }
-    }
-
     public boolean isPinValid(@NonNull int[] values) {
         String hash = calculatePinHash(values);
         return hash.equals(getPinHash());
+    }
+
+    public boolean isKeyEncryptionPolicyAccepted() {
+        return mKeyEncryptionPolicyAccepted;
     }
 
     public void setKeyEncryptionPolicyAccepted(boolean accepted) {
@@ -198,9 +199,5 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         this.mPrefs.edit()
                 .putBoolean(KEY_ENCRYPTION_POLICY_ACCEPTED, accepted)
                 .apply();
-    }
-
-    public boolean isKeyEncryptionPolicyAccepted() {
-        return mKeyEncryptionPolicyAccepted;
     }
 }

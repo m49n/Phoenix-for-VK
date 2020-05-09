@@ -89,9 +89,10 @@ public interface IWallService {
 
     /**
      * Deletes a post from a user wall or community wall.
+     *
      * @param ownerId User ID or community ID. Use a negative value to designate a community ID.
      *                Current user id is used by default
-     * @param postId ID of the post to be deleted
+     * @param postId  ID of the post to be deleted
      * @return 1
      */
     @FormUrlEncoded
@@ -177,6 +178,7 @@ public interface IWallService {
                                                               @Field("attachments") String attachments,
                                                               @Field("sticker_id") Integer stickerId,
                                                               @Field("guid") Integer generatedUniqueId);
+
     //https://vk.com/dev/wall.getComments
     @FormUrlEncoded
     @POST("wall.getComments")
@@ -210,12 +212,12 @@ public interface IWallService {
     @POST("wall.reportComment")
     @FormUrlEncoded
     Single<BaseResponse<Integer>> reportComment(@Field("owner_id") Integer owner_id,
-                                         @Field("comment_id") Integer comment_id,
-                                         @Field("reason") Integer reason);
+                                                @Field("comment_id") Integer comment_id,
+                                                @Field("reason") Integer reason);
 
     @POST("wall.reportPost")
     @FormUrlEncoded
     Single<BaseResponse<Integer>> reportPost(@Field("owner_id") Integer owner_id,
-                                                @Field("post_id") Integer post_id,
-                                                @Field("reason") Integer reason);
+                                             @Field("post_id") Integer post_id,
+                                             @Field("reason") Integer reason);
 }

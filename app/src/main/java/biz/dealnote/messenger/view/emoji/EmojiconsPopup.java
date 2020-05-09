@@ -64,71 +64,11 @@ public class EmojiconsPopup {
     private View emojiContainer;
     private Activity mContext;
     private ViewPager2 emojisPager;
-
-    public interface OnStickerClickedListener {
-        void onStickerClick(Sticker stickerId);
-    }
-
-    public interface OnEmojiconClickedListener {
-        void onEmojiconClicked(Emojicon emojicon);
-    }
-
-    public EmojiconsPopup(View rootView, Activity context) {
-        this.mContext = context;
-        this.rootView = rootView;
-        listenKeyboardSize();
-    }
-
-    private void storeState() {
-        if (Objects.nonNull(emojisPager)) {
-            PreferenceManager.getDefaultSharedPreferences(mContext)
-                    .edit()
-                    .putInt(KEY_PAGE, emojisPager.getCurrentItem())
-                    .apply();
-        }
-    }
-
-    public void setOnSoftKeyboardOpenCloseListener(OnSoftKeyboardOpenCloseListener listener) {
-        this.onSoftKeyboardOpenCloseListener = listener;
-    }
-
-    public void setOnEmojiconClickedListener(OnEmojiconClickedListener listener) {
-        this.onEmojiconClickedListener = listener;
-    }
-
-    public void setOnStickerClickedListener(OnStickerClickedListener onStickerClickedListener) {
-        this.onStickerClickedListener = onStickerClickedListener;
-    }
-
-    public void setOnEmojiconBackspaceClickedListener(OnEmojiconBackspaceClickedListener listener) {
-        this.onEmojiconBackspaceClickedListener = listener;
-    }
-
-    public OnEmojiconClickedListener getOnEmojiconClickedListener() {
-        return onEmojiconClickedListener;
-    }
-
-    public OnStickerClickedListener getOnStickerClickedListener() {
-        return onStickerClickedListener;
-    }
-
-    public OnEmojiconBackspaceClickedListener getOnEmojiconBackspaceClickedListener() {
-        return onEmojiconBackspaceClickedListener;
-    }
-
-    public OnSoftKeyboardOpenCloseListener getOnSoftKeyboardOpenCloseListener() {
-        return onSoftKeyboardOpenCloseListener;
-    }
-
-    public boolean isKeyBoardOpen() {
-        return isOpened;
-    }
-
     private OnGlobalLayoutListener onGlobalLayoutListener = new OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
             Rect r = new Rect();
-            if (rootView == null){
+            if (rootView == null) {
                 return;
             }
             rootView.getWindowVisibleDisplayFrame(r);
@@ -171,6 +111,76 @@ public class EmojiconsPopup {
             }
         }
     };
+
+    public EmojiconsPopup(View rootView, Activity context) {
+        this.mContext = context;
+        this.rootView = rootView;
+        listenKeyboardSize();
+    }
+
+    public static void input(EditText editText, Emojicon emojicon) {
+        if (editText == null || emojicon == null) {
+            return;
+        }
+
+        int start = editText.getSelectionStart();
+        int end = editText.getSelectionEnd();
+        if (start < 0) {
+            editText.append(emojicon.getEmoji());
+        } else {
+            editText.getText().replace(Math.min(start, end), Math.max(start, end), emojicon.getEmoji(), 0, emojicon.getEmoji().length());
+        }
+    }
+
+    public static void backspace(EditText editText) {
+        KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
+        editText.dispatchKeyEvent(event);
+    }
+
+    private void storeState() {
+        if (Objects.nonNull(emojisPager)) {
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .edit()
+                    .putInt(KEY_PAGE, emojisPager.getCurrentItem())
+                    .apply();
+        }
+    }
+
+    public OnEmojiconClickedListener getOnEmojiconClickedListener() {
+        return onEmojiconClickedListener;
+    }
+
+    public void setOnEmojiconClickedListener(OnEmojiconClickedListener listener) {
+        this.onEmojiconClickedListener = listener;
+    }
+
+    public OnStickerClickedListener getOnStickerClickedListener() {
+        return onStickerClickedListener;
+    }
+
+    public void setOnStickerClickedListener(OnStickerClickedListener onStickerClickedListener) {
+        this.onStickerClickedListener = onStickerClickedListener;
+    }
+
+    public OnEmojiconBackspaceClickedListener getOnEmojiconBackspaceClickedListener() {
+        return onEmojiconBackspaceClickedListener;
+    }
+
+    public void setOnEmojiconBackspaceClickedListener(OnEmojiconBackspaceClickedListener listener) {
+        this.onEmojiconBackspaceClickedListener = listener;
+    }
+
+    public OnSoftKeyboardOpenCloseListener getOnSoftKeyboardOpenCloseListener() {
+        return onSoftKeyboardOpenCloseListener;
+    }
+
+    public void setOnSoftKeyboardOpenCloseListener(OnSoftKeyboardOpenCloseListener listener) {
+        this.onSoftKeyboardOpenCloseListener = listener;
+    }
+
+    public boolean isKeyBoardOpen() {
+        return isOpened;
+    }
 
     private void listenKeyboardSize() {
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
@@ -259,10 +269,11 @@ public class EmojiconsPopup {
                         sections.add(new StickerSection(stickerSet));
                         topSectionAdapter.notifyDataSetChanged();
                         mEmojisAdapter.notifyDataSetChanged();
-                        if(Settings.get().ui().isEmojis_recents())
+                        if (Settings.get().ui().isEmojis_recents())
                             emojisPager.setCurrentItem(sections.size() - 1);
                     }
-                }, throwable -> {}));
+                }, throwable -> {
+                }));
         recyclerView.setAdapter(topSectionAdapter);
 
         view.findViewById(R.id.backspase).setOnTouchListener(new RepeatListener(700, 50, v -> {
@@ -306,25 +317,6 @@ public class EmojiconsPopup {
         return drawable;
     }
 
-    public static void input(EditText editText, Emojicon emojicon) {
-        if (editText == null || emojicon == null) {
-            return;
-        }
-
-        int start = editText.getSelectionStart();
-        int end = editText.getSelectionEnd();
-        if (start < 0) {
-            editText.append(emojicon.getEmoji());
-        } else {
-            editText.getText().replace(Math.min(start, end), Math.max(start, end), emojicon.getEmoji(), 0, emojicon.getEmoji().length());
-        }
-    }
-
-    public static void backspace(EditText editText) {
-        KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
-        editText.dispatchKeyEvent(event);
-    }
-
     public void destroy() {
         storeState();
 
@@ -333,8 +325,25 @@ public class EmojiconsPopup {
         audioListDisposable.dispose();
     }
 
-    private final static class Holder extends RecyclerView.ViewHolder
-    {
+    public interface OnStickerClickedListener {
+        void onStickerClick(Sticker stickerId);
+    }
+
+    public interface OnEmojiconClickedListener {
+        void onEmojiconClicked(Emojicon emojicon);
+    }
+
+    public interface OnEmojiconBackspaceClickedListener {
+        void onEmojiconBackspaceClicked(View v);
+    }
+
+    public interface OnSoftKeyboardOpenCloseListener {
+        void onKeyboardOpen();
+
+        void onKeyboardClose();
+    }
+
+    private final static class Holder extends RecyclerView.ViewHolder {
         Holder(View rootView) {
             super(rootView);
         }
@@ -355,8 +364,7 @@ public class EmojiconsPopup {
 
         @Override
         public int getItemViewType(int position) {
-            switch (position)
-            {
+            switch (position) {
                 case 0:
                 case 1:
                 case 2:
@@ -437,12 +445,11 @@ public class EmojiconsPopup {
      */
     public static class RepeatListener implements View.OnTouchListener {
 
-        private Handler handler = new Handler();
-
-        private int initialInterval;
         private final int normalInterval;
         private final OnClickListener clickListener;
-
+        private Handler handler = new Handler();
+        private int initialInterval;
+        private View downView;
         private Runnable handlerRunnable = new Runnable() {
             @Override
             public void run() {
@@ -454,8 +461,6 @@ public class EmojiconsPopup {
                 clickListener.onClick(downView);
             }
         };
-
-        private View downView;
 
         /**
          * @param initialInterval The interval before first click event
@@ -492,15 +497,5 @@ public class EmojiconsPopup {
             }
             return false;
         }
-    }
-
-    public interface OnEmojiconBackspaceClickedListener {
-        void onEmojiconBackspaceClicked(View v);
-    }
-
-    public interface OnSoftKeyboardOpenCloseListener {
-        void onKeyboardOpen();
-
-        void onKeyboardClose();
     }
 }

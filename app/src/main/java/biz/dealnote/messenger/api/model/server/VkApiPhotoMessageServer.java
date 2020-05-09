@@ -10,25 +10,41 @@ import com.google.gson.annotations.SerializedName;
  */
 public class VkApiPhotoMessageServer implements Parcelable, UploadServer {
 
+    public static final Creator<VkApiPhotoMessageServer> CREATOR = new Creator<VkApiPhotoMessageServer>() {
+        @Override
+        public VkApiPhotoMessageServer createFromParcel(Parcel in) {
+            return new VkApiPhotoMessageServer(in);
+        }
+
+        @Override
+        public VkApiPhotoMessageServer[] newArray(int size) {
+            return new VkApiPhotoMessageServer[size];
+        }
+    };
     /**
      * Адрес сервера
      */
     @SerializedName("upload_url")
     public String upload_url;
-
     /**
      * id альбома
      */
     @SerializedName("album_id")
     public int album_id;
-
     /**
      * id текущего пользователя
      */
     @SerializedName("user_id")
     public int user_id;
 
-    public VkApiPhotoMessageServer() {}
+    public VkApiPhotoMessageServer() {
+    }
+
+    public VkApiPhotoMessageServer(Parcel in) {
+        this.upload_url = in.readString();
+        this.album_id = in.readInt();
+        this.user_id = in.readInt();
+    }
 
     @Override
     public int describeContents() {
@@ -41,24 +57,6 @@ public class VkApiPhotoMessageServer implements Parcelable, UploadServer {
         dest.writeInt(album_id);
         dest.writeInt(user_id);
     }
-
-    public VkApiPhotoMessageServer(Parcel in) {
-        this.upload_url = in.readString();
-        this.album_id = in.readInt();
-        this.user_id = in.readInt();
-    }
-
-    public static final Creator<VkApiPhotoMessageServer> CREATOR = new Creator<VkApiPhotoMessageServer>() {
-        @Override
-        public VkApiPhotoMessageServer createFromParcel(Parcel in) {
-            return new VkApiPhotoMessageServer(in);
-        }
-
-        @Override
-        public VkApiPhotoMessageServer[] newArray(int size) {
-            return new VkApiPhotoMessageServer[size];
-        }
-    };
 
     @Override
     public String toString() {

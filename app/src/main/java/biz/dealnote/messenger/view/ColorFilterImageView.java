@@ -16,6 +16,9 @@ import biz.dealnote.messenger.R;
  */
 public class ColorFilterImageView extends AppCompatImageView {
 
+    private int color;
+    private boolean disabledColorFilter;
+
     public ColorFilterImageView(Context context) {
         this(context, null);
     }
@@ -23,14 +26,10 @@ public class ColorFilterImageView extends AppCompatImageView {
     public ColorFilterImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
     public ColorFilterImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
-
-    private int color;
-    private boolean disabledColorFilter;
 
     private void init(Context context, AttributeSet attrs) {
         final TypedArray attrArray = context.obtainStyledAttributes(attrs, R.styleable.ColorFilterImageView);

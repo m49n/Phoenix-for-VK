@@ -31,6 +31,8 @@ import biz.dealnote.messenger.util.AssertUtils;
 
 public class SecurityPreferencesFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
+    private static final int REQUEST_CREATE_PIN = 1786;
+    private static final int REQUEST_CHANGE_PIN = 1787;
     private SwitchPreference mUsePinForSecurityPreference;
 
     @Override
@@ -132,9 +134,6 @@ public class SecurityPreferencesFragment extends PreferenceFragmentCompat implem
                 .build()
                 .apply(requireActivity());
     }
-
-    private static final int REQUEST_CREATE_PIN = 1786;
-    private static final int REQUEST_CHANGE_PIN = 1787;
 
     private void startCreatePinActivity() {
         startActivityForResult(new Intent(requireActivity(), CreatePinActivity.class), REQUEST_CREATE_PIN);

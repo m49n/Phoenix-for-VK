@@ -849,7 +849,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
                 }
                 if (state == State.NONE) {
                     val maxZoomScale = if (doubleTapScale == 0f) maxScale else doubleTapScale
-                    val targetZoom = if (currentZoom == minScale) maxZoomScale else (if(currentZoom < maxScale - 1) maxScale else minScale)
+                    val targetZoom = if (currentZoom == minScale) maxZoomScale else (if (currentZoom < maxScale - 1) maxScale else minScale)
                     val doubleTap = DoubleTapZoom(targetZoom, e.x, e.y, false)
                     compatPostOnAnimation(doubleTap)
                     consumed = true

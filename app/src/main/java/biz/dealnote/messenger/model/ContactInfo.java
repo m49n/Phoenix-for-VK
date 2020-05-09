@@ -18,21 +18,6 @@ public class ContactInfo {
         this.userId = userId;
     }
 
-    public ContactInfo setDescriprion(String descriprion) {
-        this.descriprion = descriprion;
-        return this;
-    }
-
-    public ContactInfo setEmail(String email) {
-        this.email = email;
-        return this;
-    }
-
-    public ContactInfo setPhone(String phone) {
-        this.phone = phone;
-        return this;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -41,11 +26,26 @@ public class ContactInfo {
         return email;
     }
 
+    public ContactInfo setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
     public String getDescriprion() {
         return descriprion;
     }
 
+    public ContactInfo setDescriprion(String descriprion) {
+        this.descriprion = descriprion;
+        return this;
+    }
+
     public String getPhone() {
         return phone;
+    }
+
+    public ContactInfo setPhone(String phone) {
+        this.phone = phone;
+        return this;
     }
 }

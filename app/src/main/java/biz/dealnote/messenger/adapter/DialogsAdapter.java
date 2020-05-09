@@ -42,16 +42,22 @@ import biz.dealnote.messenger.view.OnlineView;
  */
 public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogViewHolder> {
 
+    public static final String PICASSO_TAG = "dialogs.adapter.tag";
+    private static final Date DATE = new Date();
+    private static final int DIV_DISABLE = 0;
+    private static final int DIV_TODAY = 1;
+    private static final int DIV_YESTERDAY = 2;
+    private static final int DIV_THIS_WEEK = 3;
+    private static final int DIV_OLD = 4;
     private static SimpleDateFormat DF_TODAY = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private static SimpleDateFormat DF_OLD = new SimpleDateFormat("dd.MM.yy", Locale.getDefault());
-
     private Context mContext;
     private List<Dialog> mDialogs;
-    private static final Date DATE = new Date();
     private Transformation mTransformation;
     private ForegroundColorSpan mForegroundColorSpan;
     private long mStartOfToday;
     private RecyclerView.AdapterDataObserver mDataObserver;
+    private ClickListener mClickListener;
 
     public DialogsAdapter(Context context, @NonNull List<Dialog> dialogs) {
         this.mContext = context;
@@ -187,11 +193,10 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         DATE.setTime(lastMessageJavaTime);
         holder.tvDate.setText(DF_TODAY.format(DATE));
-        if(lastMessageJavaTime < mStartOfToday) {
+        if (lastMessageJavaTime < mStartOfToday) {
             holder.tvOldDate.setVisibility(View.VISIBLE);
             holder.tvOldDate.setText(DF_OLD.format(DATE));
-        }
-        else {
+        } else {
             holder.tvOldDate.setVisibility(View.GONE);
         }
 
@@ -212,17 +217,9 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         });
     }
 
-    public static final String PICASSO_TAG = "dialogs.adapter.tag";
-
     private int getTextStyle(boolean out, boolean read) {
         return read || out ? Typeface.NORMAL : Typeface.BOLD;
     }
-
-    private static final int DIV_DISABLE = 0;
-    private static final int DIV_TODAY = 1;
-    private static final int DIV_YESTERDAY = 2;
-    private static final int DIV_THIS_WEEK = 3;
-    private static final int DIV_OLD = 4;
 
     private int getDivided(long messageDateJavaTime, Long previousMessageDateJavaTime) {
         int stCurrent = getStatus(messageDateJavaTime);
@@ -254,8 +251,6 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         return DIV_OLD;
     }
 
-    private ClickListener mClickListener;
-
     public DialogsAdapter setClickListener(ClickListener clickListener) {
         this.mClickListener = clickListener;
         return this;
@@ -266,17 +261,17 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return mDialogs.size();
+    }
+
     public interface ClickListener extends EventListener {
         void onDialogClick(Dialog dialog, int offset);
 
         boolean onDialogLongClick(Dialog dialog);
 
         void onAvatarClick(Dialog dialog, int offset);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDialogs.size();
     }
 
     static class DialogViewHolder extends RecyclerView.ViewHolder {

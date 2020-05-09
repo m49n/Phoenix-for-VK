@@ -27,13 +27,12 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachmentsView<T>>
         extends PlaceSupportPresenter<V> {
 
-    private final int peerId;
-
     final List<T> data;
-
+    private final int peerId;
     private String nextFrom;
 
     private boolean endOfContent;
+    private DisposableHolder<Void> loadingHolder = new DisposableHolder<>();
 
     BaseChatAttachmentsPresenter(int peerId, int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -49,8 +48,6 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
         viewHost.displayAttachments(data);
     }
 
-    private DisposableHolder<Void> loadingHolder = new DisposableHolder<>();
-
     @Override
     public void onDestroyed() {
         loadingHolder.dispose();
@@ -64,8 +61,8 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
         resolveLoadingView();
     }
 
-    private void resolveLoadingView(){
-        if(isGuiReady()){
+    private void resolveLoadingView() {
+        if (isGuiReady()) {
             getView().showLoading(loadingHolder.isActive());
         }
     }
@@ -74,7 +71,7 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
         load(null);
     }
 
-    private void load(String startFrom){
+    private void load(String startFrom) {
         loadingHolder.append(requestAttachments(peerId, startFrom)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onDataReceived(startFrom, data),
@@ -82,14 +79,14 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
         resolveLoadingView();
     }
 
-    private void onRequestError(Throwable throwable){
+    private void onRequestError(Throwable throwable) {
         loadingHolder.dispose();
         resolveLoadingView();
 
         safeShowError(getView(), throwable.getMessage());
     }
 
-    private void onDataReceived(String startFrom, Pair<String, List<T>> result){
+    private void onDataReceived(String startFrom, Pair<String, List<T>> result) {
         loadingHolder.dispose();
         resolveLoadingView();
 
@@ -98,19 +95,19 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
 
         List<T> newData = result.getSecond();
 
-        if(nonNull(startFrom)){
+        if (nonNull(startFrom)) {
             int startSize = data.size();
 
             data.addAll(newData);
 
-            if(isGuiReady()){
+            if (isGuiReady()) {
                 getView().notifyDataAdded(startSize, newData.size());
             }
         } else {
             data.clear();
             data.addAll(newData);
 
-            if(isGuiReady()){
+            if (isGuiReady()) {
                 getView().notifyDatasetChanged();
             }
         }
@@ -120,27 +117,27 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
     }
 
     @OnGuiCreated
-    private void resolveEmptyTextVisiblity(){
-        if(isGuiReady()){
+    private void resolveEmptyTextVisiblity() {
+        if (isGuiReady()) {
             getView().setEmptyTextVisible(safeIsEmpty(data));
         }
     }
 
-    void onDataChanged(){
+    void onDataChanged() {
 
     }
 
-    private boolean canLoadMore(){
+    private boolean canLoadMore() {
         return !endOfContent && !loadingHolder.isActive();
     }
 
-    public void fireScrollToEnd(){
-        if(canLoadMore()){
+    public void fireScrollToEnd() {
+        if (canLoadMore()) {
             load(nextFrom);
         }
     }
 
-    public void fireRefresh(){
+    public void fireRefresh() {
         loadingHolder.dispose();
         this.nextFrom = null;
 

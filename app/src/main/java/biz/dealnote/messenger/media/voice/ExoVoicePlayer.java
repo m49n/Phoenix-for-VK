@@ -24,6 +24,7 @@ import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.VoiceMessage;
+import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
@@ -40,18 +41,18 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
     private final Context app;
     private final ProxyConfig proxyConfig;
+    private SimpleExoPlayer exoPlayer;
+    private int status;
+    private AudioEntry playingEntry;
+    private boolean supposedToBePlaying;
+    private IPlayerStatusListener statusListener;
+    private IErrorListener errorListener;
 
     public ExoVoicePlayer(Context context, ProxyConfig config) {
         this.app = context.getApplicationContext();
         this.proxyConfig = config;
         this.status = STATUS_NO_PLAYBACK;
     }
-
-    private SimpleExoPlayer exoPlayer;
-
-    private int status;
-
-    private AudioEntry playingEntry;
 
     @Override
     public boolean toggle(int id, VoiceMessage audio) {
@@ -117,7 +118,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
-        if(Settings.get().other().isUse_speach_voice())
+        if (Settings.get().other().isUse_speach_voice())
             exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build());
         else
             exoPlayer.setAudioAttributes(AudioAttributes.DEFAULT);
@@ -133,12 +134,15 @@ public class ExoVoicePlayer implements IVoicePlayer {
             }
         });
 
+        if (MusicUtils.isPlaying() || MusicUtils.isPreparing())
+            MusicUtils.playOrPause();
+
         exoPlayer.setPlayWhenReady(supposedToBePlaying);
         exoPlayer.prepare(mediaSource);
     }
 
-    private void onExoPlayerException(ExoPlaybackException e){
-        if(nonNull(errorListener)){
+    private void onExoPlayerException(ExoPlaybackException e) {
+        if (nonNull(errorListener)) {
             errorListener.onPlayError(new PrepareException(e));
         }
     }
@@ -146,7 +150,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
     private void onInternalPlayerStateChanged(int state) {
         Logger.d("ExoVoicePlayer", "onInternalPlayerStateChanged, state: " + state);
 
-        switch (state){
+        switch (state) {
             case Player.STATE_READY:
                 setStatus(STATUS_PREPARED);
                 break;
@@ -160,14 +164,12 @@ public class ExoVoicePlayer implements IVoicePlayer {
     private void setSupposedToBePlaying(boolean supposedToBePlaying) {
         this.supposedToBePlaying = supposedToBePlaying;
 
-        if(supposedToBePlaying){
+        if (supposedToBePlaying) {
             ExoUtil.startPlayer(exoPlayer);
         } else {
             ExoUtil.pausePlayer(exoPlayer);
         }
     }
-
-    private boolean supposedToBePlaying;
 
     @Override
     public float getProgress() {
@@ -184,9 +186,6 @@ public class ExoVoicePlayer implements IVoicePlayer {
         long position = exoPlayer.getCurrentPosition();
         return (float) position / (float) duration;
     }
-
-    private IPlayerStatusListener statusListener;
-    private IErrorListener errorListener;
 
     @Override
     public void setCallback(@Nullable IPlayerStatusListener listener) {

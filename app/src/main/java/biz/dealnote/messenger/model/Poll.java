@@ -11,38 +11,33 @@ import java.util.List;
  */
 public class Poll extends AbsModel implements Parcelable {
 
+    public static final Creator<Poll> CREATOR = new Creator<Poll>() {
+        @Override
+        public Poll createFromParcel(Parcel in) {
+            return new Poll(in);
+        }
+
+        @Override
+        public Poll[] newArray(int size) {
+            return new Poll[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private long creationTime;
-
     private String question;
-
     private int voteCount;
-
     private int[] myAnswerIds;
-
     private boolean anonymous;
-
     private List<Answer> answers;
-
     private boolean board;
-
     private boolean closed;
-
     private int authorId;
-
     private boolean canVote;
-
     private boolean canEdit;
-
     private boolean canReport;
-
     private boolean canShare;
-
     private long endDate;
-
     private boolean multiple;
 
     protected Poll(Parcel in) {
@@ -66,6 +61,11 @@ public class Poll extends AbsModel implements Parcelable {
         multiple = in.readByte() != 0;
     }
 
+    public Poll(int id, int ownerId) {
+        this.id = id;
+        this.ownerId = ownerId;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -87,18 +87,6 @@ public class Poll extends AbsModel implements Parcelable {
         dest.writeLong(endDate);
         dest.writeByte((byte) (multiple ? 1 : 0));
     }
-
-    public static final Creator<Poll> CREATOR = new Creator<Poll>() {
-        @Override
-        public Poll createFromParcel(Parcel in) {
-            return new Poll(in);
-        }
-
-        @Override
-        public Poll[] newArray(int size) {
-            return new Poll[size];
-        }
-    };
 
     public boolean isClosed() {
         return closed;
@@ -170,11 +158,6 @@ public class Poll extends AbsModel implements Parcelable {
     public Poll setMultiple(boolean multiple) {
         this.multiple = multiple;
         return this;
-    }
-
-    public Poll(int id, int ownerId) {
-        this.id = id;
-        this.ownerId = ownerId;
     }
 
     public int getId() {
@@ -255,12 +238,20 @@ public class Poll extends AbsModel implements Parcelable {
 
     public static class Answer extends AbsModel implements Parcelable {
 
+        public static final Creator<Answer> CREATOR = new Creator<Answer>() {
+            @Override
+            public Answer createFromParcel(Parcel in) {
+                return new Answer(in);
+            }
+
+            @Override
+            public Answer[] newArray(int size) {
+                return new Answer[size];
+            }
+        };
         private final int id;
-
         private String text;
-
         private int voteCount;
-
         private double rate;
 
         public Answer(int id) {
@@ -283,18 +274,6 @@ public class Poll extends AbsModel implements Parcelable {
             dest.writeInt(voteCount);
             dest.writeDouble(rate);
         }
-
-        public static final Creator<Answer> CREATOR = new Creator<Answer>() {
-            @Override
-            public Answer createFromParcel(Parcel in) {
-                return new Answer(in);
-            }
-
-            @Override
-            public Answer[] newArray(int size) {
-                return new Answer[size];
-            }
-        };
 
         public int getId() {
             return id;

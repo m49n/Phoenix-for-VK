@@ -68,28 +68,30 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     private static final String TAG = CommentsPresenter.class.getSimpleName();
     private static final int COUNT = 20;
-
+    private static final String REPLY_PATTERN = "[post%s|%s], ";
     private final Commented commented;
-
-    private Integer focusToComment;
-
-    private Integer CommentThread;
-
     private final IOwnersRepository ownersRepository;
-
     private final ICommentsInteractor interactor;
-
     private final List<Comment> data;
-
+    private Integer focusToComment;
+    private Integer CommentThread;
     private CommentedState commentedState;
-
     private int authorId;
-
     private Owner author;
-
     private boolean directionDesc;
-
     private Context context;
+    private CompositeDisposable actualLoadingDisposable = new CompositeDisposable();
+    private int loadingState;
+    private int adminLevel;
+    private String draftCommentBody;
+    private int draftCommentAttachmentsCount;
+    private Integer draftCommentId;
+    private Comment replyTo;
+    private DisposableHolder<Void> deepLookingHolder = new DisposableHolder<>();
+    private boolean sendingNow;
+    private Poll topicPoll;
+    private boolean loadingAvailableAuthorsNow;
+    private CompositeDisposable cacheLoadingDisposable = new CompositeDisposable();
 
     public CommentsPresenter(int accountId, Commented commented, Integer focusToComment, Context context, Integer CommentThread, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -132,6 +134,11 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         restoreDraftCommentSync();
         requestInitialData();
         loadAuthorData();
+    }
+
+    private static String buildReplyTextFor(Comment comment) {
+        String name = comment.getFromId() > 0 ? ((User) comment.getAuthor()).getFirstName() : ((Community) comment.getAuthor()).getName();
+        return String.format(REPLY_PATTERN, comment.getId(), name);
     }
 
     private void loadAuthorData() {
@@ -217,10 +224,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
             this.draftCommentId = draft.getId();
         }
     }
-
-    private CompositeDisposable actualLoadingDisposable = new CompositeDisposable();
-
-    private int loadingState;
 
     private void requestInitialData() {
         final int accountId = super.getAccountId();
@@ -308,8 +311,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
         setLoadingState(LoadingState.NO);
     }
-
-    private int adminLevel;
 
     private void updateAdminLevel(int newValue) {
         this.adminLevel = newValue;
@@ -447,11 +448,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         return nonEmpty(data) ? data.get(0) : null;
     }
 
-    private String draftCommentBody;
-    private int draftCommentAttachmentsCount;
-
-    private Integer draftCommentId;
-
     @OnGuiCreated
     private void resolveBodyView() {
         if (isGuiReady()) {
@@ -469,8 +465,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
             getView().setButtonSendAvailable(canSendComment());
         }
     }
-
-    private Comment replyTo;
 
     private Single<Integer> saveSingle() {
         final int accountId = super.getAccountId();
@@ -545,8 +539,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         }
     }
 
-    private DisposableHolder<Void> deepLookingHolder = new DisposableHolder<>();
-
     @Override
     public void onGuiDestroyed() {
         deepLookingHolder.dispose();
@@ -617,7 +609,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
             appendDisposable(interactor.reportComment(getAccountId(), comment.getFromId(), comment.getId(), item)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(p -> {
-                        if(p == 1)
+                        if (p == 1)
                             getView().getPhoenixToast().showToast(R.string.success);
                         else
                             getView().getPhoenixToast().showToast(R.string.error);
@@ -655,7 +647,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
         final int accountId = super.getAccountId();
         final CommentIntent intent = createCommentIntent();
-        if(intent.getReplyToComment() == null && CommentThread != null)
+        if (intent.getReplyToComment() == null && CommentThread != null)
             intent.setReplyToComment(CommentThread);
 
         appendDisposable(interactor.send(accountId, commented, CommentThread, intent)
@@ -666,7 +658,7 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
     private void sendQuickComment(CommentIntent intent) {
         setSendingNow(true);
 
-        if(intent.getReplyToComment() == null && CommentThread != null)
+        if (intent.getReplyToComment() == null && CommentThread != null)
             intent.setReplyToComment(CommentThread);
 
         final int accountId = super.getAccountId();
@@ -745,8 +737,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 .setReplyToComment(replyToComment)
                 .setDraftMessageId(draftCommentId);
     }
-
-    private boolean sendingNow;
 
     private void setSendingNow(boolean sendingNow) {
         this.sendingNow = sendingNow;
@@ -854,8 +844,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         }
     }
 
-    private Poll topicPoll;
-
     @Override
     public void onGuiResumed() {
         super.onGuiResumed();
@@ -913,8 +901,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         getView().banUser(getAccountId(), groupId, user);
     }
 
-    private boolean loadingAvailableAuthorsNow;
-
     private void setLoadingAvailableAuthorsNow(boolean loadingAvailableAuthorsNow) {
         this.loadingAvailableAuthorsNow = loadingAvailableAuthorsNow;
         resolveProgressDialog();
@@ -966,17 +952,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         requestInitialData();
     }
 
-    private static class CommentedState {
-
-        Integer firstCommentId;
-        Integer lastCommentId;
-
-        CommentedState(Integer firstCommentId, Integer lastCommentId) {
-            this.firstCommentId = firstCommentId;
-            this.lastCommentId = lastCommentId;
-        }
-    }
-
     @OnGuiCreated
     private void checkFocusToCommentDone() {
         if (isGuiReady() && nonNull(focusToComment)) {
@@ -1020,15 +995,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         resolveOptionMenu();
         resolveHeaderFooterViews();
     }
-
-    private static final class LoadingState {
-        static final int NO = 0;
-        static final int INITIAL = 1;
-        static final int UP = 2;
-        static final int DOWN = 3;
-    }
-
-    private CompositeDisposable cacheLoadingDisposable = new CompositeDisposable();
 
     private void loadCachedData() {
         final int accountId = super.getAccountId();
@@ -1084,13 +1050,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         }
     }
 
-    private static final String REPLY_PATTERN = "[post%s|%s], ";
-
-    private static String buildReplyTextFor(Comment comment) {
-        String name = comment.getFromId() > 0 ? ((User) comment.getAuthor()).getFirstName() : ((Community) comment.getAuthor()).getName();
-        return String.format(REPLY_PATTERN, comment.getId(), name);
-    }
-
     @Override
     public void onDestroyed() {
         cacheLoadingDisposable.dispose();
@@ -1126,5 +1085,23 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         if (isCommentsAvailableUp()) {
             loadUp();
         }
+    }
+
+    private static class CommentedState {
+
+        Integer firstCommentId;
+        Integer lastCommentId;
+
+        CommentedState(Integer firstCommentId, Integer lastCommentId) {
+            this.firstCommentId = firstCommentId;
+            this.lastCommentId = lastCommentId;
+        }
+    }
+
+    private static final class LoadingState {
+        static final int NO = 0;
+        static final int INITIAL = 1;
+        static final int UP = 2;
+        static final int DOWN = 3;
     }
 }

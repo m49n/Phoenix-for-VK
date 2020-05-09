@@ -17,10 +17,7 @@ public final class NewsColumns implements BaseColumns {
     //public static final int TYPE_CODE_PHOTOS_TAGS = 4;
     //public static final int TYPE_CODE_NOTES = 5;
 
-    private NewsColumns(){}
-
     public static final String TABLENAME = "news";
-
     public static final String TYPE = "type";
     public static final String SOURCE_ID = "source_id";
     public static final String DATE = "date";
@@ -46,9 +43,37 @@ public final class NewsColumns implements BaseColumns {
     public static final String TAG_FRIENDS = "friends_tag";
     public static final String ATTACHMENTS_JSON = "attachments_json";
     public static final String VIEWS = "views";
+    public static final String FULL_ID = TABLENAME + "." + _ID;
     //public static final String HAS_COPY_HISTORY = "has_copy_history";
+    public static final String FULL_TYPE = TABLENAME + "." + TYPE;
+    public static final String FULL_SOURCE_ID = TABLENAME + "." + SOURCE_ID;
+    public static final String FULL_DATE = TABLENAME + "." + DATE;
+    public static final String FULL_POST_ID = TABLENAME + "." + POST_ID;
+    public static final String FULL_POST_TYPE = TABLENAME + "." + POST_TYPE;
+    public static final String FULL_FINAL_POST = TABLENAME + "." + FINAL_POST;
+    public static final String FULL_COPY_OWNER_ID = TABLENAME + "." + COPY_OWNER_ID;
+    public static final String FULL_COPY_POST_ID = TABLENAME + "." + COPY_POST_ID;
+    public static final String FULL_COPY_POST_DATE = TABLENAME + "." + COPY_POST_DATE;
+    public static final String FULL_TEXT = TABLENAME + "." + TEXT;
+    public static final String FULL_CAN_EDIT = TABLENAME + "." + CAN_EDIT;
+    public static final String FULL_CAN_DELETE = TABLENAME + "." + CAN_DELETE;
+    public static final String FULL_COMMENT_COUNT = TABLENAME + "." + COMMENT_COUNT;
+    public static final String FULL_COMMENT_CAN_POST = TABLENAME + "." + COMMENT_CAN_POST;
+    public static final String FULL_LIKE_COUNT = TABLENAME + "." + LIKE_COUNT;
+    public static final String FULL_USER_LIKE = TABLENAME + "." + USER_LIKE;
+    public static final String FULL_CAN_LIKE = TABLENAME + "." + CAN_LIKE;
+    public static final String FULL_CAN_PUBLISH = TABLENAME + "." + CAN_PUBLISH;
+    public static final String FULL_REPOSTS_COUNT = TABLENAME + "." + REPOSTS_COUNT;
+    public static final String FULL_USER_REPOSTED = TABLENAME + "." + USER_REPOSTED;
+    //public static final String FULL_ATTACHMENTS_COUNT = TABLENAME + "." + ATTACHMENTS_MASK;
+    public static final String FULL_GEO_ID = TABLENAME + "." + GEO_ID;
+    public static final String FULL_TAG_FRIENDS = TABLENAME + "." + TAG_FRIENDS;
+    public static final String FULL_ATTACHMENTS_JSON = TABLENAME + "." + ATTACHMENTS_JSON;
+    public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
+    private NewsColumns() {
+    }
 
-    public static ContentValues getCV(VKApiNews p){
+    public static ContentValues getCV(VKApiNews p) {
         ContentValues cv = new ContentValues();
         cv.put(TYPE, p.type);
         cv.put(SOURCE_ID, p.source_id);
@@ -78,32 +103,5 @@ public final class NewsColumns implements BaseColumns {
         //cv.put(HAS_COPY_HISTORY, !Utils.safeIsEmpty(p.copy_history));
         return cv;
     }
-
-    public static final String FULL_ID = TABLENAME + "." + _ID;
-    public static final String FULL_TYPE = TABLENAME + "." + TYPE;
-    public static final String FULL_SOURCE_ID = TABLENAME + "." + SOURCE_ID;
-    public static final String FULL_DATE = TABLENAME + "." + DATE;
-    public static final String FULL_POST_ID = TABLENAME + "." + POST_ID;
-    public static final String FULL_POST_TYPE = TABLENAME + "." + POST_TYPE;
-    public static final String FULL_FINAL_POST = TABLENAME + "." + FINAL_POST;
-    public static final String FULL_COPY_OWNER_ID = TABLENAME + "." + COPY_OWNER_ID;
-    public static final String FULL_COPY_POST_ID = TABLENAME + "." + COPY_POST_ID;
-    public static final String FULL_COPY_POST_DATE = TABLENAME + "." + COPY_POST_DATE;
-    public static final String FULL_TEXT = TABLENAME + "." + TEXT;
-    public static final String FULL_CAN_EDIT = TABLENAME + "." + CAN_EDIT;
-    public static final String FULL_CAN_DELETE = TABLENAME + "." + CAN_DELETE;
-    public static final String FULL_COMMENT_COUNT = TABLENAME + "." + COMMENT_COUNT;
-    public static final String FULL_COMMENT_CAN_POST = TABLENAME + "." + COMMENT_CAN_POST;
-    public static final String FULL_LIKE_COUNT = TABLENAME + "." + LIKE_COUNT;
-    public static final String FULL_USER_LIKE = TABLENAME + "." + USER_LIKE;
-    public static final String FULL_CAN_LIKE = TABLENAME + "." + CAN_LIKE;
-    public static final String FULL_CAN_PUBLISH = TABLENAME + "." + CAN_PUBLISH;
-    public static final String FULL_REPOSTS_COUNT = TABLENAME + "." + REPOSTS_COUNT;
-    public static final String FULL_USER_REPOSTED = TABLENAME + "." + USER_REPOSTED;
-    //public static final String FULL_ATTACHMENTS_COUNT = TABLENAME + "." + ATTACHMENTS_MASK;
-    public static final String FULL_GEO_ID = TABLENAME + "." + GEO_ID;
-    public static final String FULL_TAG_FRIENDS = TABLENAME + "." + TAG_FRIENDS;
-    public static final String FULL_ATTACHMENTS_JSON = TABLENAME + "." + ATTACHMENTS_JSON;
-    public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
     //public static final String FULL_HAS_COPY_HISTORY = TABLENAME + "." + HAS_COPY_HISTORY;
 }

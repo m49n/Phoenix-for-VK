@@ -12,11 +12,11 @@ public class Optional<T> {
         this.value = value;
     }
 
-    public static <T> Optional<T> wrap(T value){
+    public static <T> Optional<T> wrap(T value) {
         return new Optional<>(value);
     }
 
-    public static <T> Optional<T> empty(){
+    public static <T> Optional<T> empty() {
         return new Optional<>(null);
     }
 
@@ -24,11 +24,11 @@ public class Optional<T> {
         return value;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return value == null;
     }
 
-    public boolean nonEmpty(){
+    public boolean nonEmpty() {
         return value != null;
     }
 }

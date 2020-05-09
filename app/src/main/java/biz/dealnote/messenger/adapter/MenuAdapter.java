@@ -29,7 +29,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  * Created by admin on 11.06.2017.
  * phoenix
  */
-public class MenuAdapter extends ArrayAdapter<Item>{
+public class MenuAdapter extends ArrayAdapter<Item> {
 
     public MenuAdapter(@NonNull Context context, @NonNull List<Item> items) {
         super(context, R.layout.item_custom_menu, items);
@@ -40,7 +40,7 @@ public class MenuAdapter extends ArrayAdapter<Item>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view;
 
-        if(nonNull(convertView)){
+        if (nonNull(convertView)) {
             view = convertView;
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_menu, parent, false);
@@ -55,9 +55,9 @@ public class MenuAdapter extends ArrayAdapter<Item>{
         Section section = item.getSection();
 
         boolean headerVisible;
-        if(isNull(section)){
+        if (isNull(section)) {
             headerVisible = false;
-        } else if(position == 0){
+        } else if (position == 0) {
             headerVisible = true;
         } else {
             Item previous = getItem(position - 1);
@@ -68,11 +68,11 @@ public class MenuAdapter extends ArrayAdapter<Item>{
 
         holder.headerRoot.setOnClickListener(v -> {/*dummy*/});
 
-        if(headerVisible){
+        if (headerVisible) {
             holder.headerRoot.setVisibility(View.VISIBLE);
             holder.headerText.setText(section.getTitle().getText(getContext()));
 
-            if(nonNull(section.getIcon())){
+            if (nonNull(section.getIcon())) {
                 holder.headerIcon.setVisibility(View.VISIBLE);
                 holder.headerIcon.setImageResource(section.getIcon());
             } else {
@@ -91,7 +91,7 @@ public class MenuAdapter extends ArrayAdapter<Item>{
 
         boolean dividerVisible;
 
-        if(last){
+        if (last) {
             dividerVisible = false;
         } else {
             Item next = getItem(position + 1);

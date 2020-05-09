@@ -44,6 +44,22 @@ import biz.dealnote.mvp.core.IPresenterFactory;
  */
 public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManagerEditPresenter, ICommunityManagerEditView> implements ICommunityManagerEditView {
 
+    private ImageView mAvatar;
+    private OnlineView mOnlineView;
+    private TextView mName;
+    private TextView mDomain;
+    private RadioButton mButtonModerator;
+    private RadioButton mButtonEditor;
+    private RadioButton mButtonAdmin;
+    private CheckBox mShowAsContact;
+    private View mContactInfoRoot;
+    private EditText mPosition;
+    private EditText mEmail;
+    private EditText mPhone;
+    private RadioGroup mRadioGroupRoles;
+    private RadioGroup mRadioGroupCreator;
+    private boolean mOptionDeleteVisible;
+
     public static CommunityManagerEditFragment newInstance(int accountId, int groupId, ArrayList<User> users) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -69,25 +85,6 @@ public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManag
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
-    private ImageView mAvatar;
-    private OnlineView mOnlineView;
-    private TextView mName;
-    private TextView mDomain;
-
-    private RadioButton mButtonModerator;
-    private RadioButton mButtonEditor;
-    private RadioButton mButtonAdmin;
-
-    private CheckBox mShowAsContact;
-    private View mContactInfoRoot;
-
-    private EditText mPosition;
-    private EditText mEmail;
-    private EditText mPhone;
-
-    private RadioGroup mRadioGroupRoles;
-    private RadioGroup mRadioGroupCreator;
 
     @Nullable
     @Override
@@ -290,8 +287,6 @@ public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManag
     public void goBack() {
         requireActivity().onBackPressed();
     }
-
-    private boolean mOptionDeleteVisible;
 
     @Override
     public void setDeleteOptionVisible(boolean visible) {

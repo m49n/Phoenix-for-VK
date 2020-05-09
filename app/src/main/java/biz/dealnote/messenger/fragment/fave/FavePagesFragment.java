@@ -35,6 +35,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFaveUsersView> implements IFaveUsersView, FavePagesAdapter.ClickListener {
 
+    private TextView mEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FavePagesAdapter mAdapter;
+    private boolean isRequestLast = false;
+
     public static FavePagesFragment newInstance(int accountId, boolean isUser) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -43,11 +48,6 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
         fragment.setArguments(args);
         return fragment;
     }
-
-    private TextView mEmpty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FavePagesAdapter mAdapter;
-    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     @Override
     public void onResume() {
         super.onResume();
-        if(!isRequestLast) {
+        if (!isRequestLast) {
             isRequestLast = true;
             getPresenter().LoadTool();
         }

@@ -163,7 +163,7 @@ class MusicPlaybackService : Service() {
     private fun setUpRemoteControlClient() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(audioFocusRequest != null)
+            if (audioFocusRequest != null)
                 mAudioManager!!.requestAudioFocus(audioFocusRequest);
         } else {
             mAudioManager!!.requestAudioFocus(
@@ -239,7 +239,7 @@ class MusicPlaybackService : Service() {
         mPlayer = null
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(audioFocusRequest != null)
+            if (audioFocusRequest != null)
                 mAudioManager!!.abandonAudioFocusRequest(audioFocusRequest);
         } else {
             mAudioManager!!.abandonAudioFocus(mAudioFocusListener)
@@ -281,7 +281,7 @@ class MusicPlaybackService : Service() {
         if (D) Logger.d(TAG, "Nothing is playing anymore, releasing notification")
         mNotificationHelper!!.killNotification()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(audioFocusRequest != null)
+            if (audioFocusRequest != null)
                 mAudioManager!!.abandonAudioFocusRequest(audioFocusRequest);
         } else {
             mAudioManager!!.abandonAudioFocus(mAudioFocusListener)
@@ -333,7 +333,7 @@ class MusicPlaybackService : Service() {
             val position = intent.getIntExtra(Extra.POSITION, 0)
             val forceShuffle = intent.getIntExtra(Extra.SHUFFLE_MODE, SHUFFLE_NONE)
             shuffleMode = forceShuffle
-            if(apiAudios != null)
+            if (apiAudios != null)
                 open(apiAudios, position)
         }
     }
@@ -546,8 +546,12 @@ class MusicPlaybackService : Service() {
                 if (response.isSuccessful) {
                     try {
                         val obj = JSONObject(response.body!!.string())
-                        if (obj.has("image")) {CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image");}
-                        if (obj.has("album")) {AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album");}
+                        if (obj.has("image")) {
+                            CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image");
+                        }
+                        if (obj.has("album")) {
+                            AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album");
+                        }
                         val uiHandler = Handler(this@MusicPlaybackService.mainLooper)
                         uiHandler.post {
                             fetchCoverAndUpdateMetadata()
@@ -594,9 +598,7 @@ class MusicPlaybackService : Service() {
                 AlbumTitle = audio.album_title
                 fetchCoverAndUpdateMetadata()
                 notifyChange(META_CHANGED)
-            }
-            else
-            {
+            } else {
                 fetchCoverAndUpdateMetadata()
                 notifyChange(META_CHANGED)
             }
@@ -780,7 +782,7 @@ class MusicPlaybackService : Service() {
     @Suppress("DEPRECATION")
     fun play() {
         val status = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(audioFocusRequest != null)
+            if (audioFocusRequest != null)
                 mAudioManager!!.requestAudioFocus(audioFocusRequest);
             else
                 -1
@@ -1020,7 +1022,7 @@ class MusicPlaybackService : Service() {
         var isPaused = false
         val audioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor()
         val compositeDisposable = CompositeDisposable()
-        var First :Boolean = true;
+        var First: Boolean = true;
 
         /**
          * @param remoteUrl The path of the file, or the http/rtsp URL of the stream
@@ -1049,18 +1051,16 @@ class MusicPlaybackService : Service() {
             val userAgent = Constants.USER_AGENT(null)
             val factory = CustomHttpDataSourceFactory(userAgent, proxy)
             val mediaSource: MediaSource
-            mediaSource = if(url.contains("file://"))
-            {
+            mediaSource = if (url.contains("file://")) {
                 ProgressiveMediaSource.Factory(DefaultDataSourceFactory(
                         Injection.provideApplicationContext(), userAgent
                 )).createMediaSource(Uri.parse(url))
-            }
-            else {
+            } else {
                 if (Settings.get().other().isForce_hls) {
                     if (url.contains("index.m3u8")) HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url)) else ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url))
                 } else ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(Audio.getMp3FromM3u8(url)))
             }
-            if(First) {
+            if (First) {
                 First = false;
                 mCurrentMediaPlayer.repeatMode = Player.REPEAT_MODE_OFF
                 mCurrentMediaPlayer.addListener(object : ExoEventAdapter() {
@@ -1081,11 +1081,10 @@ class MusicPlaybackService : Service() {
 
                     override fun onPlayerError(error: ExoPlaybackException) {
                         mService.get()!!.ErrorsCount++
-                        if(mService.get()!!.ErrorsCount > 10) {
+                        if (mService.get()!!.ErrorsCount > 10) {
                             mService.get()!!.ErrorsCount = 0
                             mService.get()!!.stopSelf()
-                        }
-                        else {
+                        } else {
                             val playbackPos = mCurrentMediaPlayer.currentPosition
                             mService.get()!!.playCurrentTrack(false)
                             mCurrentMediaPlayer.seekTo(playbackPos)
@@ -1258,9 +1257,9 @@ class MusicPlaybackService : Service() {
         }
 
         override fun getMiniplayerVisibility(): Boolean {
-            if(mService.get()!!.SuperCloseMiniPlayer || mService.get()!!.OnceCloseMiniPlayer)
+            if (mService.get()!!.SuperCloseMiniPlayer || mService.get()!!.OnceCloseMiniPlayer)
                 return false
-            if(mService.get()!!.isPaused ||mService.get()!!.isPlaying )
+            if (mService.get()!!.isPaused || mService.get()!!.isPlaying)
                 return true
             return false
         }

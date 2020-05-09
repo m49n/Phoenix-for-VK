@@ -18,6 +18,12 @@ import biz.dealnote.messenger.place.PlaceProvider;
 
 public class AttachmentsActivity extends NoMainActivity implements PlaceProvider {
 
+    public static Intent createIntent(Context context, int accountId, int type) {
+        return new Intent(context, AttachmentsActivity.class)
+                .putExtra(Extra.TYPE, type)
+                .putExtra(Extra.ACCOUNT_ID, accountId);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +33,7 @@ public class AttachmentsActivity extends NoMainActivity implements PlaceProvider
             int type = getIntent().getExtras().getInt(Extra.TYPE);
             int accountId = getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
 
-            switch (type){
+            switch (type) {
                 case Types.DOC:
                     fragment = DocsFragment.newInstance(accountId, accountId, DocsListPresenter.ACTION_SELECT);
                     break;
@@ -45,15 +51,9 @@ public class AttachmentsActivity extends NoMainActivity implements PlaceProvider
         }
     }
 
-    public static Intent createIntent(Context context, int accountId, int type){
-        return new Intent(context, AttachmentsActivity.class)
-                .putExtra(Extra.TYPE, type)
-                .putExtra(Extra.ACCOUNT_ID, accountId);
-    }
-
     @Override
     public void openPlace(Place place) {
-        if(place.type == Place.VIDEO_ALBUM){
+        if (place.type == Place.VIDEO_ALBUM) {
             Fragment fragment = VideosFragment.newInstance(place.getArgs());
             getSupportFragmentManager()
                     .beginTransaction()

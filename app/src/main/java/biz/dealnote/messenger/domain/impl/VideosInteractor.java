@@ -46,6 +46,32 @@ public class VideosInteractor implements IVideosInteractor {
         this.cache = cache;
     }
 
+    private static String buildFiltersByCriteria(VideoSearchCriteria criteria) {
+        Boolean youtube = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_YOUTUBE);
+        Boolean vimeo = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_VIMEO);
+        Boolean shortVideos = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_SHORT);
+        Boolean longVideos = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_LONG);
+
+        ArrayList<String> list = new ArrayList<>();
+        if (youtube != null && youtube) {
+            list.add("youtube");
+        }
+
+        if (vimeo != null && vimeo) {
+            list.add("vimeo");
+        }
+
+        if (shortVideos != null && shortVideos) {
+            list.add("short");
+        }
+
+        if (longVideos != null && longVideos) {
+            list.add("long");
+        }
+
+        return list.isEmpty() ? null : join(",", list);
+    }
+
     @Override
     public Single<List<Video>> get(int accountId, int ownerId, int albumId, int count, int offset) {
         return networker.vkDefault(accountId)
@@ -56,7 +82,7 @@ public class VideosInteractor implements IVideosInteractor {
                     List<VideoEntity> dbos = new ArrayList<>(dtos.size());
                     List<Video> videos = new ArrayList<>(dbos.size());
 
-                    for(VKApiVideo dto : dtos){
+                    for (VKApiVideo dto : dtos) {
                         dbos.add(Dto2Entity.mapVideo(dto));
                         videos.add(Dto2Model.transform(dto));
                     }
@@ -74,7 +100,7 @@ public class VideosInteractor implements IVideosInteractor {
                 .findByCriteria(criteria)
                 .map(dbos -> {
                     List<Video> videos = new ArrayList<>(dbos.size());
-                    for(VideoEntity dbo : dbos){
+                    for (VideoEntity dbo : dbos) {
                         videos.add(Entity2Model.buildVideoFromDbo(dbo));
                     }
                     return videos;
@@ -88,14 +114,14 @@ public class VideosInteractor implements IVideosInteractor {
                 .video()
                 .get(null, ids, null, null, null, true)
                 .map(items -> {
-                    if(Utils.nonEmpty(items.getItems())){
+                    if (Utils.nonEmpty(items.getItems())) {
                         return items.getItems().get(0);
                     }
 
                     throw new NotFoundException();
                 })
                 .flatMap(dto -> {
-                    if(cacheData){
+                    if (cacheData) {
                         VideoEntity dbo = Dto2Entity.mapVideo(dto);
 
                         return cache.videos()
@@ -118,7 +144,7 @@ public class VideosInteractor implements IVideosInteractor {
 
     @Override
     public Single<Pair<Integer, Boolean>> likeOrDislike(int accountId, int ownerId, int videoId, String accessKey, boolean like) {
-        if(like){
+        if (like) {
             return networker.vkDefault(accountId)
                     .likes()
                     .add("video", ownerId, videoId, accessKey)
@@ -138,7 +164,7 @@ public class VideosInteractor implements IVideosInteractor {
                 .findByCriteria(criteria)
                 .map(dbos -> {
                     List<VideoAlbum> albums = new ArrayList<>(dbos.size());
-                    for(VideoAlbumEntity dbo : dbos){
+                    for (VideoAlbumEntity dbo : dbos) {
                         albums.add(Entity2Model.buildVideoAlbumFromDbo(dbo));
                     }
                     return albums;
@@ -155,7 +181,7 @@ public class VideosInteractor implements IVideosInteractor {
                     List<VideoAlbumEntity> dbos = new ArrayList<>(dtos.size());
                     List<VideoAlbum> albums = new ArrayList<>(dbos.size());
 
-                    for(VKApiVideoAlbum dto : dtos){
+                    for (VKApiVideoAlbum dto : dtos) {
                         VideoAlbumEntity dbo = Dto2Entity.buildVideoAlbumDbo(dto);
                         dbos.add(dbo);
                         albums.add(Entity2Model.buildVideoAlbumFromDbo(dbo));
@@ -186,37 +212,11 @@ public class VideosInteractor implements IVideosInteractor {
                     List<VKApiVideo> dtos = Utils.listEmptyIfNull(response.items);
 
                     List<Video> videos = new ArrayList<>(dtos.size());
-                    for (VKApiVideo dto : dtos){
+                    for (VKApiVideo dto : dtos) {
                         videos.add(Dto2Model.transform(dto));
                     }
 
                     return videos;
                 });
-    }
-
-    private static String buildFiltersByCriteria(VideoSearchCriteria criteria) {
-        Boolean youtube = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_YOUTUBE);
-        Boolean vimeo = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_VIMEO);
-        Boolean shortVideos = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_SHORT);
-        Boolean longVideos = criteria.extractBoleanValueFromOption(VideoSearchCriteria.KEY_LONG);
-
-        ArrayList<String> list = new ArrayList<>();
-        if (youtube != null && youtube) {
-            list.add("youtube");
-        }
-
-        if (vimeo != null && vimeo) {
-            list.add("vimeo");
-        }
-
-        if (shortVideos != null && shortVideos) {
-            list.add("short");
-        }
-
-        if (longVideos != null && longVideos) {
-            list.add("long");
-        }
-
-        return list.isEmpty() ? null : join(",", list);
     }
 }

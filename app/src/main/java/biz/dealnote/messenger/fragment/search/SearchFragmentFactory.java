@@ -54,9 +54,9 @@ public class SearchFragmentFactory {
                 return WallSearchFragment.newInstance(accountId,
                         criteria instanceof WallSearchCriteria ? (WallSearchCriteria) criteria : null);
 
-                case SearchContentType.DIALOGS:
-                    return DialogsSearchFragment.newInstance(accountId,
-                            criteria instanceof DialogsSearchCriteria ? (DialogsSearchCriteria) criteria : null);
+            case SearchContentType.DIALOGS:
+                return DialogsSearchFragment.newInstance(accountId,
+                        criteria instanceof DialogsSearchCriteria ? (DialogsSearchCriteria) criteria : null);
 
             default:
                 throw new UnsupportedOperationException();

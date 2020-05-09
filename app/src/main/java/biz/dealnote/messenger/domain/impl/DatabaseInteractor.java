@@ -47,7 +47,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                     List<ChairDto> dtos = Utils.listEmptyIfNull(items.getItems());
                     List<Chair> chairs = new ArrayList<>(dtos.size());
 
-                    for(ChairDto dto : dtos){
+                    for (ChairDto dto : dtos) {
                         chairs.add(new Chair(dto.id, dto.title));
                     }
 
@@ -57,7 +57,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
 
     @Override
     public Single<List<Country>> getCountries(int accountId, boolean ignoreCache) {
-        if(ignoreCache){
+        if (ignoreCache) {
             return networker.vkDefault(accountId)
                     .database()
                     .getCountries(true, null, null, 1000)
@@ -66,7 +66,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                         List<CountryEntity> dbos = new ArrayList<>(dtos.size());
                         List<Country> countries = new ArrayList<>(dbos.size());
 
-                        for(VKApiCountry dto : dtos){
+                        for (VKApiCountry dto : dtos) {
                             dbos.add(new CountryEntity(dto.id, dto.title));
                             countries.add(new Country(dto.id, dto.title));
                         }
@@ -78,9 +78,9 @@ public class DatabaseInteractor implements IDatabaseInteractor {
 
         return cache.getCountries(accountId)
                 .flatMap(dbos -> {
-                    if(dbos.size() > 0){
+                    if (dbos.size() > 0) {
                         List<Country> countries = new ArrayList<>(dbos.size());
-                        for(CountryEntity dbo : dbos){
+                        for (CountryEntity dbo : dbos) {
                             countries.add(new Country(dbo.getId(), dbo.getTitle()));
                         }
 
@@ -100,11 +100,11 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                     List<VKApiCity> dtos = Utils.listEmptyIfNull(items.getItems());
                     List<City> cities = new ArrayList<>(dtos.size());
 
-                    for(VKApiCity dto : dtos){
+                    for (VKApiCity dto : dtos) {
                         cities.add(new City(dto.id, dto.title)
-                        .setArea(dto.area)
-                        .setImportant(dto.important)
-                        .setRegion(dto.region));
+                                .setArea(dto.area)
+                                .setImportant(dto.important)
+                                .setRegion(dto.region));
                     }
 
                     return cities;
@@ -120,7 +120,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                     List<FacultyDto> dtos = Utils.listEmptyIfNull(items.getItems());
                     List<Faculty> faculties = new ArrayList<>(dtos.size());
 
-                    for(FacultyDto dto : dtos){
+                    for (FacultyDto dto : dtos) {
                         faculties.add(new Faculty(dto.id, dto.title));
                     }
 
@@ -136,7 +136,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                 .map(dtos -> {
                     List<SchoolClazz> clazzes = new ArrayList<>(dtos.size());
 
-                    for(SchoolClazzDto dto : dtos){
+                    for (SchoolClazzDto dto : dtos) {
                         clazzes.add(new SchoolClazz(dto.id, dto.title));
                     }
 
@@ -153,7 +153,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                     List<SchoolDto> dtos = Utils.listEmptyIfNull(items.getItems());
                     List<School> schools = new ArrayList<>(dtos.size());
 
-                    for(SchoolDto dto : dtos){
+                    for (SchoolDto dto : dtos) {
                         schools.add(new School(dto.id, dto.title));
                     }
 
@@ -170,7 +170,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
                     List<UniversityDto> dtos = Utils.listEmptyIfNull(items.getItems());
                     List<University> universities = new ArrayList<>(dtos.size());
 
-                    for(UniversityDto dto : dtos){
+                    for (UniversityDto dto : dtos) {
                         universities.add(new University(dto.id, dto.title));
                     }
 

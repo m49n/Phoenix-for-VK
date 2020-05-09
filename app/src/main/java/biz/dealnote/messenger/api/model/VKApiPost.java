@@ -153,6 +153,23 @@ public class VKApiPost implements VKApiAttachment, Commentable, Likeable, Copyab
 
     public boolean can_edit;
 
+    @Override
+    public String getType() {
+        return TYPE_POST;
+    }
+
+    public int getAttachmentsCount() {
+        return attachments == null ? 0 : attachments.size();
+    }
+
+    public boolean hasAttachments() {
+        return getAttachmentsCount() > 0;
+    }
+
+    public boolean hasCopyHistory() {
+        return copy_history != null && copy_history.size() > 0;
+    }
+
     public static class Type {
 
         public static final int POST = 1;
@@ -179,22 +196,5 @@ public class VKApiPost implements VKApiAttachment, Commentable, Likeable, Copyab
                     return 0;
             }
         }
-    }
-
-    @Override
-    public String getType() {
-        return TYPE_POST;
-    }
-
-    public int getAttachmentsCount() {
-        return attachments == null ? 0 : attachments.size();
-    }
-
-    public boolean hasAttachments() {
-        return getAttachmentsCount() > 0;
-    }
-
-    public boolean hasCopyHistory() {
-        return copy_history != null && copy_history.size() > 0;
     }
 }

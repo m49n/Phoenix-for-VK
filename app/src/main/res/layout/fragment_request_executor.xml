@@ -84,7 +84,7 @@
 
                     <Button
                         android:id="@+id/button_execute"
-                        style="@style/Widget.AppCompat.Button.Colored"
+                        style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -134,16 +134,6 @@
 
                             android:layout_centerVertical="true"
                             android:orientation="horizontal">
-
-                            <biz.dealnote.messenger.view.ColorFilterImageView
-                                android:id="@+id/button_account"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackgroundBorderless"
-
-                                android:padding="8dp"
-                                android:src="@drawable/account_circle"
-                                app:filter_color="?attr/colorAccent" />
 
                             <biz.dealnote.messenger.view.ColorFilterImageView
                                 android:id="@+id/button_copy"

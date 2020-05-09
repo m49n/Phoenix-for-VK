@@ -19,16 +19,10 @@ public final class ChatConfig implements Parcelable {
             return new ChatConfig[size];
         }
     };
-
-    public ModelsBundle getModels() {
-        return models;
-    }
-
     private ModelsBundle models;
     private boolean closeOnSend;
     private String initialText;
     private ArrayList<Uri> uploadFiles;
-
     public ChatConfig() {
         this.models = new ModelsBundle();
     }
@@ -38,6 +32,10 @@ public final class ChatConfig implements Parcelable {
         this.models = in.readParcelable(ModelsBundle.class.getClassLoader());
         this.initialText = in.readString();
         this.uploadFiles = in.createTypedArrayList(Uri.CREATOR);
+    }
+
+    public ModelsBundle getModels() {
+        return models;
     }
 
     public void setModels(ModelsBundle models) {

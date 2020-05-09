@@ -42,6 +42,7 @@ public interface IUsersApi {
     @CheckResult
     Single<List<VKApiUser>> get(Collection<Integer> userIds, Collection<String> domains,
                                 String fields, String nameCase);
+
     @CheckResult
     Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields);
 

@@ -38,19 +38,9 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
 
     private C resultsForCriteria;
     private boolean endOfContent;
-
-    void LocalSeached(List<T> data, C criteria, N nextFrom) {
-        setLoadingNow(false);
-        this.nextFrom = nextFrom;
-        this.resultsForCriteria = criteria;
-        this.endOfContent = true;
-        this.data.clear();
-        this.data.addAll(data);
-        callView(IBaseSearchView::notifyDataSetChanged);
-        resolveEmptyText();
-    }
-
     private WeakActionHandler<AbsSearchPresenter> actionHandler = new WeakActionHandler<>(this);
+    private CompositeDisposable searchDisposable = new CompositeDisposable();
+    private boolean loadingNow;
 
     AbsSearchPresenter(int accountId, @Nullable C criteria, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -66,12 +56,23 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         this.actionHandler.setAction((what, object) -> object.doSearch());
     }
 
+    void LocalSeached(List<T> data, C criteria, N nextFrom) {
+        setLoadingNow(false);
+        this.nextFrom = nextFrom;
+        this.resultsForCriteria = criteria;
+        this.endOfContent = true;
+        this.data.clear();
+        this.data.addAll(data);
+        callView(IBaseSearchView::notifyDataSetChanged);
+        resolveEmptyText();
+    }
+
     @Override
     public void onGuiCreated(@NonNull V view) {
         super.onGuiCreated(view);
 
         // пробуем искать при первом создании view
-        if(super.getViewCreationCount() == 1){
+        if (super.getViewCreationCount() == 1) {
             doSearch();
         }
     }
@@ -92,11 +93,9 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         outState.putParcelable(SAVE_CRITERIA, criteria);
     }
 
-    private CompositeDisposable searchDisposable = new CompositeDisposable();
-
     @SuppressWarnings("unchecked")
     void doSearch() {
-        if(!canSearch(this.criteria) || isNull(this.nextFrom)){
+        if (!canSearch(this.criteria) || isNull(this.nextFrom)) {
             //setLoadingNow(false);
             return;
         }
@@ -160,8 +159,6 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         }
     }
 
-    private boolean loadingNow;
-
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;
         resolveLoadingView();
@@ -173,8 +170,8 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         resolveLoadingView();
     }
 
-    private void resolveLoadingView(){
-        if(isGuiResumed()){
+    private void resolveLoadingView() {
+        if (isGuiResumed()) {
             getView().showLoading(loadingNow);
         }
     }
@@ -195,7 +192,7 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
 
         actionHandler.removeMessages(MESSAGE);
 
-        if(canSearch(criteria)){
+        if (canSearch(criteria)) {
             actionHandler.sendEmptyMessageDelayed(MESSAGE, SEARCH_DELAY);
         }
     }
@@ -214,17 +211,17 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
     abstract boolean canSearch(C criteria);
 
     public final void fireScrollToEnd() {
-        if(canLoadMore()){
+        if (canLoadMore()) {
             doSearch();
         }
     }
 
-    private boolean canLoadMore(){
+    private boolean canLoadMore() {
         return !endOfContent && !loadingNow && !data.isEmpty() && nonNull(nextFrom);
     }
 
     public void fireRefresh() {
-        if(loadingNow || !canSearch(criteria)){
+        if (loadingNow || !canSearch(criteria)) {
             resolveLoadingView();
             return;
         }

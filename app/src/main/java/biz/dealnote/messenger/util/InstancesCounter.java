@@ -16,9 +16,9 @@ public class InstancesCounter {
         this.map = new HashMap<>();
     }
 
-    public int incrementAndGet(Class<?> c){
+    public int incrementAndGet(Class<?> c) {
         AtomicInteger counter = map.get(c);
-        if(counter == null){
+        if (counter == null) {
             counter = new AtomicInteger();
             map.put(c, counter);
         }
@@ -26,15 +26,15 @@ public class InstancesCounter {
         return counter.incrementAndGet();
     }
 
-    public void fireExists(Class<?> c, int id){
+    public void fireExists(Class<?> c, int id) {
         AtomicInteger counter = map.get(c);
 
-        if(counter == null){
+        if (counter == null) {
             counter = new AtomicInteger();
             map.put(c, counter);
         }
 
-        if(counter.get() < id){
+        if (counter.get() < id) {
             counter.set(id);
         }
     }

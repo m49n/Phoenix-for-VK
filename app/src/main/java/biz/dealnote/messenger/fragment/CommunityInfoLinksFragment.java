@@ -80,21 +80,21 @@ public class CommunityInfoLinksFragment extends BaseMvpFragment<CommunityInfoLin
 
     @Override
     public void displayRefreshing(boolean loadingNow) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loadingNow);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mLinksAdapter)){
+        if (nonNull(mLinksAdapter)) {
             mLinksAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void displayData(List<VKApiCommunity.Link> links) {
-        if(nonNull(mLinksAdapter)){
+        if (nonNull(mLinksAdapter)) {
             mLinksAdapter.setData(links);
         }
     }

@@ -46,15 +46,15 @@ public class VKApiNews {
 
     }
 
-    public int getAttachmentsCount(){
+    public int getAttachmentsCount() {
         return attachments == null ? 0 : attachments.size();
     }
 
-    public boolean hasAttachments(){
+    public boolean hasAttachments() {
         return getAttachmentsCount() > 0;
     }
 
-    public boolean hasCopyHistory(){
+    public boolean hasCopyHistory() {
         return copy_history != null && copy_history.size() > 0;
     }
 }

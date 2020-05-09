@@ -271,7 +271,7 @@ public class MessageEditPresenter extends RxSupportPresenter<IMessageEditView> {
     public void fireAttachmentsSelected(ArrayList<? extends AbsModel> models) {
         int startCount = entries.size();
 
-        for(AbsModel model : models){
+        for (AbsModel model : models) {
             entries.add(new AttachmenEntry(true, model));
         }
 

@@ -31,6 +31,10 @@ class RecentChatsSettings implements ISettings.IRecentChats {
         this.gson = new Gson();
     }
 
+    private static String recentChatKeyFor(int aid) {
+        return "recent" + aid;
+    }
+
     @Override
     public List<RecentChat> get(int acountid) {
         List<RecentChat> recentChats = new ArrayList<>();
@@ -38,12 +42,13 @@ class RecentChatsSettings implements ISettings.IRecentChats {
         Set<String> stringSet = PreferenceManager.getDefaultSharedPreferences(app)
                 .getStringSet(recentChatKeyFor(acountid), null);
 
-        if(!safeIsEmpty(stringSet)){
-            for(String s : stringSet){
+        if (!safeIsEmpty(stringSet)) {
+            for (String s : stringSet) {
                 try {
                     RecentChat recentChat = gson.fromJson(s, RecentChat.class);
                     recentChats.add(recentChat);
-                } catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
             }
         }
 
@@ -54,9 +59,9 @@ class RecentChatsSettings implements ISettings.IRecentChats {
     public void store(int accountid, List<RecentChat> chats) {
         Set<String> target = new LinkedHashSet<>();
         for (AbsMenuItem item : chats) {
-            if(item instanceof RecentChat){
+            if (item instanceof RecentChat) {
 
-                if(((RecentChat) item).getAid() != accountid) continue;
+                if (((RecentChat) item).getAid() != accountid) continue;
 
                 target.add(gson.toJson(item));
             }
@@ -66,9 +71,5 @@ class RecentChatsSettings implements ISettings.IRecentChats {
                 .edit()
                 .putStringSet(recentChatKeyFor(accountid), target)
                 .apply();
-    }
-
-    private static String recentChatKeyFor(int aid) {
-        return "recent" + aid;
     }
 }

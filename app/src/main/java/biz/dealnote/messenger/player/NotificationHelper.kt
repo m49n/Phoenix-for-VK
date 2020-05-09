@@ -33,6 +33,7 @@ import biz.dealnote.messenger.util.Utils
 class NotificationHelper(private val mService: MusicPlaybackService) {
     private val mNotificationManager: NotificationManager?
     private var mNotificationBuilder: NotificationCompat.Builder? = null
+
     @Suppress("DEPRECATION")
     fun buildNotification(context: Context, artistName: String?, trackName: String?,
                           isPlaying: Boolean, cover: Bitmap?, mediaSessionToken: MediaSessionCompat.Token?) {
@@ -62,7 +63,7 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                 .addAction(NotificationCompat.Action(R.drawable.next_notification,
                         context.resources.getString(R.string.next),
                         retreivePlaybackActions(ACTION_NEXT)))
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH;
         else
             mNotificationBuilder?.priority = Notification.PRIORITY_MAX

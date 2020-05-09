@@ -18,6 +18,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class OwnerLinkSpanFactory {
 
+    private static final Comparator<AbsInternalLink> LINK_COMPARATOR = (link1, link2) -> link1.start - link2.start;
     private static Pattern ownerPattern;
     private static Pattern topicCommentPattern;
     private static Pattern linkPattern;
@@ -39,18 +40,18 @@ public class OwnerLinkSpanFactory {
 
         int count = Utils.safeCountOfMultiple(ownerLinks, topicLinks, othersLinks);
 
-        if(count > 0){
+        if (count > 0) {
             List<AbsInternalLink> all = new ArrayList<>(count);
 
-            if(nonEmpty(ownerLinks)){
+            if (nonEmpty(ownerLinks)) {
                 all.addAll(ownerLinks);
             }
 
-            if(nonEmpty(topicLinks)){
+            if (nonEmpty(topicLinks)) {
                 all.addAll(topicLinks);
             }
 
-            if(nonEmpty(othersLinks)){
+            if (nonEmpty(othersLinks)) {
                 all.addAll(othersLinks);
             }
 
@@ -62,16 +63,16 @@ public class OwnerLinkSpanFactory {
                 ClickableSpan clickableSpan = new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
-                        if(listener != null){
-                            if(link instanceof TopicLink){
+                        if (listener != null) {
+                            if (link instanceof TopicLink) {
                                 listener.onTopicLinkClicked((TopicLink) link);
                             }
 
-                            if(link instanceof OwnerLink){
+                            if (link instanceof OwnerLink) {
                                 listener.onOwnerClick(((OwnerLink) link).ownerId);
                             }
 
-                            if(link instanceof OtherLink){
+                            if (link instanceof OtherLink) {
                                 listener.onOtherClick(((OtherLink) link).Link);
                             }
                         }
@@ -87,18 +88,12 @@ public class OwnerLinkSpanFactory {
         return Spannable.Factory.getInstance().newSpannable(input);
     }
 
-    public interface ActionListener {
-        void onTopicLinkClicked(TopicLink link);
-        void onOwnerClick(int ownerId);
-        void onOtherClick(String URL);
-    }
-
     private static List<TopicLink> findTopicLinks(String input) {
         Matcher matcher = topicCommentPattern.matcher(input);
 
         List<TopicLink> links = null;
         while (matcher.find()) {
-            if(links == null){
+            if (links == null) {
                 links = new ArrayList<>(1);
             }
 
@@ -116,8 +111,6 @@ public class OwnerLinkSpanFactory {
 
         return links;
     }
-
-    private static final Comparator<AbsInternalLink> LINK_COMPARATOR = (link1, link2) -> link1.start - link2.start;
 
     private static List<OwnerLink> findOwnersLinks(String input) {
         List<OwnerLink> links = null;
@@ -145,7 +138,7 @@ public class OwnerLinkSpanFactory {
             if (links == null) {
                 links = new ArrayList<>(1);
             }
-            links.add(new OtherLink(matcher.start(), matcher.end(), matcher.group(1),  matcher.group(2)));
+            links.add(new OtherLink(matcher.start(), matcher.end(), matcher.group(1), matcher.group(2)));
         }
 
         return links;
@@ -194,5 +187,13 @@ public class OwnerLinkSpanFactory {
 
     public static String genOwnerLink(int ownerId, String title) {
         return "[" + (ownerId > 0 ? "id" : "club") + Math.abs(ownerId) + "|" + title + "]";
+    }
+
+    public interface ActionListener {
+        void onTopicLinkClicked(TopicLink link);
+
+        void onOwnerClick(int ownerId);
+
+        void onOtherClick(String URL);
     }
 }

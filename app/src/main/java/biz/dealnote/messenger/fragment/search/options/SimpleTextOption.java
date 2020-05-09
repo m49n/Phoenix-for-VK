@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class SimpleTextOption extends BaseOption implements Parcelable {
 
+    public static final Creator<SimpleTextOption> CREATOR = new Creator<SimpleTextOption>() {
+        @Override
+        public SimpleTextOption createFromParcel(Parcel in) {
+            return new SimpleTextOption(in);
+        }
+
+        @Override
+        public SimpleTextOption[] newArray(int size) {
+            return new SimpleTextOption[size];
+        }
+    };
     public String value;
 
     public SimpleTextOption(int key, int title, boolean active) {
@@ -50,16 +61,4 @@ public class SimpleTextOption extends BaseOption implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SimpleTextOption> CREATOR = new Creator<SimpleTextOption>() {
-        @Override
-        public SimpleTextOption createFromParcel(Parcel in) {
-            return new SimpleTextOption(in);
-        }
-
-        @Override
-        public SimpleTextOption[] newArray(int size) {
-            return new SimpleTextOption[size];
-        }
-    };
 }

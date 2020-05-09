@@ -12,22 +12,28 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IWallPostView extends IAttachmentsPlacesView, IAccountDependencyView, IMvpView, IErrorView {
 
-    void displayDefaultToolbaTitle();
-    void displayToolbarTitle(String title);
-
-    void displayToolbatSubtitle(int subtitleType, long datetime);
-
     int SUBTITLE_NORMAL = 1;
     int SUBTITLE_STATUS_UPDATE = 2;
     int SUBTITLE_PHOTO_UPDATE = 3;
 
+    void displayDefaultToolbaTitle();
+
+    void displayToolbarTitle(String title);
+
+    void displayToolbatSubtitle(int subtitleType, long datetime);
+
     void displayPostInfo(Post post);
+
     void displayLoading();
+
     void displayLoadingFail();
 
     void displayLikes(int count, boolean userLikes);
+
     void setCommentButtonVisible(boolean visible);
+
     void displayCommentCount(int count);
+
     void displayReposts(int count, boolean userReposted);
 
     void goToPostEditing(int accountId, @NonNull Post post);
@@ -50,9 +56,13 @@ public interface IWallPostView extends IAttachmentsPlacesView, IAccountDependenc
 
     interface IOptionView {
         void setCanDelete(boolean can);
+
         void setCanRestore(boolean can);
+
         void setCanPin(boolean can);
+
         void setCanUnpin(boolean can);
+
         void setCanEdit(boolean can);
     }
 }

@@ -25,20 +25,20 @@ public class NewsfeedCommentDtoAdapter extends AbsAdapter implements JsonDeseria
     public NewsfeedCommentsResponse.Dto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject root = json.getAsJsonObject();
         String type = "post";
-        if(root.has("type"))
+        if (root.has("type"))
             type = root.get("type").getAsString();
 
         NewsfeedCommentsResponse.Dto dto = null;
-        if("photo".equals(type)){
+        if ("photo".equals(type)) {
             dto = new NewsfeedCommentsResponse.PhotoDto(context.deserialize(root, VKApiPhoto.class));
-        } else if("post".equals(type)){
+        } else if ("post".equals(type)) {
             dto = new NewsfeedCommentsResponse.PostDto(context.deserialize(root, VKApiPost.class));
-        } else if("video".equals(type)){
+        } else if ("video".equals(type)) {
             dto = new NewsfeedCommentsResponse.VideoDto(context.deserialize(root, VKApiVideo.class));
-        } else if("topic".equals(type)){
+        } else if ("topic".equals(type)) {
             VKApiTopic topic = new VKApiTopic();
             topic.id = optInt(root, "post_id");
-            if(root.has("to_id"))
+            if (root.has("to_id"))
                 topic.owner_id = optInt(root, "to_id");
             else
                 topic.owner_id = optInt(root, "source_id");

@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class SimpleBooleanOption extends BaseOption implements Parcelable {
 
+    public static final Creator<SimpleBooleanOption> CREATOR = new Creator<SimpleBooleanOption>() {
+        @Override
+        public SimpleBooleanOption createFromParcel(Parcel in) {
+            return new SimpleBooleanOption(in);
+        }
+
+        @Override
+        public SimpleBooleanOption[] newArray(int size) {
+            return new SimpleBooleanOption[size];
+        }
+    };
     public boolean checked;
 
     public SimpleBooleanOption(int key, int title, boolean active) {
@@ -49,16 +60,4 @@ public class SimpleBooleanOption extends BaseOption implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SimpleBooleanOption> CREATOR = new Creator<SimpleBooleanOption>() {
-        @Override
-        public SimpleBooleanOption createFromParcel(Parcel in) {
-            return new SimpleBooleanOption(in);
-        }
-
-        @Override
-        public SimpleBooleanOption[] newArray(int size) {
-            return new SimpleBooleanOption[size];
-        }
-    };
 }

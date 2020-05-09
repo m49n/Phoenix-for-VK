@@ -15,7 +15,7 @@ abstract class WeakMainLooperHandler<T>(t: T) : Handler(Looper.getMainLooper()) 
         }
     }
 
-    open fun handleMessage(t: T, msg: Message){
+    open fun handleMessage(t: T, msg: Message) {
 
     }
 }

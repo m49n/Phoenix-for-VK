@@ -15,5 +15,6 @@ import io.reactivex.Single;
  */
 public interface IFeedbackStorage extends IStorage {
     Single<int[]> insert(int accountId, List<FeedbackEntity> dbos, OwnerEntities owners, boolean clearBefore);
+
     Single<List<FeedbackEntity>> findByCriteria(@NonNull NotificationsCriteria criteria);
 }

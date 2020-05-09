@@ -57,9 +57,9 @@ public class VKApiSchool implements IUserActivityPoint {
     public int type;
 
     /**
-     *  название типа
+     * название типа
      */
-    public String type_str ;
+    public String type_str;
 
     private String fullName;
 }

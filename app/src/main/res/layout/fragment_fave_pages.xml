@@ -41,10 +41,10 @@
 
     <TextView
         android:id="@+id/empty"
-        android:text="@string/list_is_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center" />
+        android:gravity="center"
+        android:text="@string/list_is_empty" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

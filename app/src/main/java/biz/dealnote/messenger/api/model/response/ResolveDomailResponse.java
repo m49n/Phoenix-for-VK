@@ -9,19 +9,6 @@ public class ResolveDomailResponse implements Parcelable {
 
     public static final String TYPE_USER = "user";
     public static final String TYPE_GROUP = "group";
-
-    public String type;
-    public String object_id;
-
-    public ResolveDomailResponse(){
-
-    }
-
-    protected ResolveDomailResponse(Parcel in) {
-        type = in.readString();
-        object_id = in.readString();
-    }
-
     public static final Creator<ResolveDomailResponse> CREATOR = new Creator<ResolveDomailResponse>() {
         @Override
         public ResolveDomailResponse createFromParcel(Parcel in) {
@@ -33,8 +20,19 @@ public class ResolveDomailResponse implements Parcelable {
             return new ResolveDomailResponse[size];
         }
     };
+    public String type;
+    public String object_id;
 
-    public ResolveDomailResponse parse(JSONObject jsonObject){
+    public ResolveDomailResponse() {
+
+    }
+
+    protected ResolveDomailResponse(Parcel in) {
+        type = in.readString();
+        object_id = in.readString();
+    }
+
+    public ResolveDomailResponse parse(JSONObject jsonObject) {
         this.type = jsonObject.optString("type");
         this.object_id = jsonObject.optString("object_id");
         return this;

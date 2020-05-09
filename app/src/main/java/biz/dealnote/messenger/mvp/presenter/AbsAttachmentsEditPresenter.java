@@ -51,12 +51,11 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
     private static final String SAVE_TIMER = "save_timer";
     private static final String SAVE_BODY = "save_body";
     private static final String SAVE_CURRENT_PHOTO_CAMERA_URI = "save_current_photo_camera_uri";
-
-    private String textBody;
+    final IUploadManager uploadManager;
     private final ArrayList<AttachmenEntry> data;
+    private String textBody;
     private Uri currentPhotoCameraUri;
     private Long timerValue;
-    final IUploadManager uploadManager;
 
     AbsAttachmentsEditPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -69,16 +68,38 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         }
 
         data = new ArrayList<>();
-        if(nonNull(savedInstanceState)){
+        if (nonNull(savedInstanceState)) {
             ArrayList<AttachmenEntry> savedEntries = savedInstanceState.getParcelableArrayList(SAVE_DATA);
-            if(nonEmpty(savedEntries)){
+            if (nonEmpty(savedEntries)) {
                 data.addAll(savedEntries);
             }
         }
     }
 
+    static List<AttachmenEntry> createFrom(List<Upload> objects) {
+        List<AttachmenEntry> data = new ArrayList<>(objects.size());
+        for (Upload object : objects) {
+            data.add(new AttachmenEntry(true, object));
+        }
+
+        return data;
+    }
+
+    static List<AttachmenEntry> createFrom(List<Pair<Integer, AbsModel>> pairs, boolean canDelete) {
+        List<AttachmenEntry> data = new ArrayList<>(pairs.size());
+        for (Pair<Integer, AbsModel> pair : pairs) {
+            data.add(new AttachmenEntry(canDelete, pair.getSecond()).setOptionalId(pair.getFirst()));
+        }
+        return data;
+    }
+
     Long getTimerValue() {
         return timerValue;
+    }
+
+    void setTimerValue(Long timerValue) {
+        this.timerValue = timerValue;
+        resolveTimerInfoView();
     }
 
     ArrayList<AttachmenEntry> getData() {
@@ -86,15 +107,10 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
     }
 
     @OnGuiCreated
-    void resolveTimerInfoView(){
-        if(isGuiReady()){
+    void resolveTimerInfoView() {
+        if (isGuiReady()) {
             getView().setTimerValue(timerValue);
         }
-    }
-
-    void setTimerValue(Long timerValue) {
-        this.timerValue = timerValue;
-        resolveTimerInfoView();
     }
 
     @OnGuiCreated
@@ -113,7 +129,7 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         resolveTextView();
     }
 
-    ArrayList<AttachmenEntry> getNeedParcelSavingEntries(){
+    ArrayList<AttachmenEntry> getNeedParcelSavingEntries() {
         return new ArrayList<>(0);
     }
 
@@ -123,23 +139,23 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         outState.putParcelable(SAVE_CURRENT_PHOTO_CAMERA_URI, currentPhotoCameraUri);
         outState.putParcelableArrayList(SAVE_DATA, getNeedParcelSavingEntries());
         outState.putString(SAVE_BODY, textBody);
-        if(nonNull(timerValue)){
+        if (nonNull(timerValue)) {
             outState.putLong(SAVE_TIMER, timerValue);
         }
     }
 
-    void onUploadProgressUpdate(List<IUploadManager.IProgressUpdate> updates){
-        for(IUploadManager.IProgressUpdate update : updates){
+    void onUploadProgressUpdate(List<IUploadManager.IProgressUpdate> updates) {
+        for (IUploadManager.IProgressUpdate update : updates) {
             Predicate<AttachmenEntry> predicate = entry -> entry.getAttachment() instanceof Upload
                     && ((Upload) entry.getAttachment()).getId() == update.getId();
 
             Pair<Integer, AttachmenEntry> info = findInfoByPredicate(getData(), predicate);
 
-            if(nonNull(info)){
+            if (nonNull(info)) {
                 AttachmenEntry entry = info.getSecond();
 
                 Upload object = (Upload) entry.getAttachment();
-                if(object.getStatus() != Upload.STATUS_UPLOADING) {
+                if (object.getStatus() != Upload.STATUS_UPLOADING) {
                     continue;
                 }
 
@@ -148,66 +164,49 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         }
     }
 
-    void onUploadObjectRemovedFromQueue(int[] ids){
-        for(int id : ids){
+    void onUploadObjectRemovedFromQueue(int[] ids) {
+        for (int id : ids) {
             int index = findUploadIndexById(id);
-            if(index != -1){
+            if (index != -1) {
                 manuallyRemoveElement(index);
             }
         }
     }
 
-    void onUploadQueueUpdates(List<Upload> updates, Predicate<Upload> predicate){
+    void onUploadQueueUpdates(List<Upload> updates, Predicate<Upload> predicate) {
         int startSize = data.size();
         int count = 0;
 
-        for(Upload u : updates){
-            if(predicate.test(u)){
+        for (Upload u : updates) {
+            if (predicate.test(u)) {
                 data.add(new AttachmenEntry(true, u));
                 count++;
             }
         }
 
-        if(count > 0){
+        if (count > 0) {
             safelyNotifyItemsAdded(startSize, count);
         }
     }
 
-    void safelyNotifyItemsAdded(int position, int count){
-        if (isGuiReady()){
+    void safelyNotifyItemsAdded(int position, int count) {
+        if (isGuiReady()) {
             getView().notifyItemRangeInsert(position, count);
         }
     }
 
-    List<AttachmenEntry> combine(List<AttachmenEntry> first, List<AttachmenEntry> second){
+    List<AttachmenEntry> combine(List<AttachmenEntry> first, List<AttachmenEntry> second) {
         List<AttachmenEntry> data = new ArrayList<>(safeCountOfMultiple(first, second));
         data.addAll(first);
         data.addAll(second);
         return data;
     }
 
-    void onUploadStatusUpdate(Upload update){
+    void onUploadStatusUpdate(Upload update) {
         int index = findUploadIndexById(update.getId());
-        if(index != -1){
+        if (index != -1) {
             safeNotifyDataSetChanged();
         }
-    }
-
-    static List<AttachmenEntry> createFrom(List<Upload> objects){
-        List<AttachmenEntry> data = new ArrayList<>(objects.size());
-        for (Upload object : objects) {
-            data.add(new AttachmenEntry(true, object));
-        }
-
-        return data;
-    }
-
-    static List<AttachmenEntry> createFrom(List<Pair<Integer, AbsModel>> pairs, boolean canDelete){
-        List<AttachmenEntry> data = new ArrayList<>(pairs.size());
-        for (Pair<Integer, AbsModel> pair : pairs) {
-            data.add(new AttachmenEntry(canDelete, pair.getSecond()).setOptionalId(pair.getFirst()));
-        }
-        return data;
     }
 
     @Override
@@ -226,8 +225,8 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         onAttachmentRemoveClick(index, attachment);
     }
 
-    void safelyNotifyItemRemoved(int position){
-        if(isGuiReady()){
+    void safelyNotifyItemRemoved(int position) {
+        if (isGuiReady()) {
             getView().notifyItemRemoved(position);
         }
     }
@@ -423,9 +422,9 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         }
     }
 
-    boolean hasUploads(){
-        for(AttachmenEntry entry : data){
-            if(entry.getAttachment() instanceof Upload){
+    boolean hasUploads() {
+        for (AttachmenEntry entry : data) {
+            if (entry.getAttachment() instanceof Upload) {
                 return true;
             }
         }

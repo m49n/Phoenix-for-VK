@@ -24,6 +24,7 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
 
     private Context context;
     private List<VideoAlbum> data;
+    private Listener listener;
 
     public VideoAlbumsNewAdapter(Context context, List<VideoAlbum> data) {
         this.context = context;
@@ -45,7 +46,7 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
 
         holder.ivPhoto.setVisibility(isEmpty(photoUrl) ? View.INVISIBLE : View.VISIBLE);
 
-        if(nonEmpty(photoUrl)){
+        if (nonEmpty(photoUrl)) {
             PicassoInstance.with()
                     .load(photoUrl)
                     .tag(PICASSO_TAG)
@@ -53,7 +54,7 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if(listener != null){
+            if (listener != null) {
                 listener.onClick(item);
             }
         });
@@ -69,26 +70,24 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
         notifyDataSetChanged();
     }
 
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener {
+        void onClick(VideoAlbum album);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPhoto;
         TextView tvCount;
         TextView tvTitle;
 
-        ViewHolder(View root){
+        ViewHolder(View root) {
             super(root);
             ivPhoto = root.findViewById(R.id.item_video_album_image);
             tvCount = root.findViewById(R.id.item_video_album_count);
             tvTitle = root.findViewById(R.id.item_video_album_title);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
-    private Listener listener;
-
-    public interface Listener {
-        void onClick(VideoAlbum album);
     }
 }

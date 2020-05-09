@@ -13,6 +13,10 @@ import biz.dealnote.messenger.util.Objects;
 
 public class ImageSizeAlertDialog {
 
+    private final Activity mActivity;
+    private OnSelectedCallback mOnSelectedCallback;
+    private OnCancelCallback mOnCancelCallback;
+
     private ImageSizeAlertDialog(ImageSizeAlertDialog.Builder builder) {
         this.mActivity = builder.mActivity;
         this.mOnCancelCallback = builder.mOnCancelCallback;
@@ -50,47 +54,6 @@ public class ImageSizeAlertDialog {
         }
     }
 
-    public interface OnSelectedCallback {
-        void onSizeSelected(int size);
-    }
-
-    public interface OnCancelCallback {
-        void onCancel();
-    }
-
-    private final Activity mActivity;
-    private OnSelectedCallback mOnSelectedCallback;
-    private OnCancelCallback mOnCancelCallback;
-
-    public static class Builder {
-
-        private final Activity mActivity;
-        private OnSelectedCallback mOnSelectedCallback;
-        private OnCancelCallback mOnCancelCallback;
-
-        public Builder(Activity activity) {
-            this.mActivity = activity;
-        }
-
-        public Builder setOnSelectedCallback(OnSelectedCallback onSelectedCallback) {
-            this.mOnSelectedCallback = onSelectedCallback;
-            return this;
-        }
-
-        public Builder setOnCancelCallback(OnCancelCallback onCancelCallback) {
-            this.mOnCancelCallback = onCancelCallback;
-            return this;
-        }
-
-        public ImageSizeAlertDialog build() {
-            return new ImageSizeAlertDialog(this);
-        }
-
-        public void show() {
-            build().show();
-        }
-    }
-
     public void show() {
         new MaterialAlertDialogBuilder(mActivity)
                 .setTitle(mActivity.getString(R.string.select_image_size_title))
@@ -120,8 +83,44 @@ public class ImageSizeAlertDialog {
                 })
                 .show();
     }
+    public interface OnSelectedCallback {
+        void onSizeSelected(int size);
+    }
+
+    public interface OnCancelCallback {
+        void onCancel();
+    }
 
     public interface Callback {
         void onSizeSelected(int size);
+    }
+
+    public static class Builder {
+
+        private final Activity mActivity;
+        private OnSelectedCallback mOnSelectedCallback;
+        private OnCancelCallback mOnCancelCallback;
+
+        public Builder(Activity activity) {
+            this.mActivity = activity;
+        }
+
+        public Builder setOnSelectedCallback(OnSelectedCallback onSelectedCallback) {
+            this.mOnSelectedCallback = onSelectedCallback;
+            return this;
+        }
+
+        public Builder setOnCancelCallback(OnCancelCallback onCancelCallback) {
+            this.mOnCancelCallback = onCancelCallback;
+            return this;
+        }
+
+        public ImageSizeAlertDialog build() {
+            return new ImageSizeAlertDialog(this);
+        }
+
+        public void show() {
+            build().show();
+        }
     }
 }

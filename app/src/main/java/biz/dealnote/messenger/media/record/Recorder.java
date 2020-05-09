@@ -26,8 +26,12 @@ public class Recorder {
     private int mStatus;
     private boolean mReleased;
 
-    public Recorder(@NonNull String filePath){
+    public Recorder(@NonNull String filePath) {
         mFilePath = filePath;
+    }
+
+    public static boolean isPauseSupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
 
     public void prepare() throws IOException {
@@ -45,10 +49,10 @@ public class Recorder {
         return mFilePath;
     }
 
-    public void start()  {
+    public void start() {
         assertRecorderNotNull();
 
-        if(mStatus == Status.PAUSED){
+        if (mStatus == Status.PAUSED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mRecorder.resume();
             } else {
@@ -68,19 +72,19 @@ public class Recorder {
     }
 
     public long getCurrentRecordDuration() {
-        if(mCurrentRecordingSectionStartTime != null){
+        if (mCurrentRecordingSectionStartTime != null) {
             return mPreviousSectionsDuration + System.currentTimeMillis() - mCurrentRecordingSectionStartTime;
         } else {
             return mPreviousSectionsDuration;
         }
     }
 
-    public int getStatus(){
+    public int getStatus() {
         return mStatus;
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    public void pause(){
+    public void pause() {
         assertRecorderNotNull();
 
         if (isPauseSupported()) {
@@ -92,26 +96,22 @@ public class Recorder {
         }
     }
 
-    public static boolean isPauseSupported(){
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
-    }
-
-    private void resetCurrentRecordTime(){
-        if (mCurrentRecordingSectionStartTime == null){
+    private void resetCurrentRecordTime() {
+        if (mCurrentRecordingSectionStartTime == null) {
             return;
         }
         mPreviousSectionsDuration = mPreviousSectionsDuration + (System.currentTimeMillis() - mCurrentRecordingSectionStartTime);
         mCurrentRecordingSectionStartTime = null;
     }
 
-    public void stopAndRelease(){
+    public void stopAndRelease() {
         assertRecorderNotNull();
         resetCurrentRecordTime();
 
         try {
             mRecorder.stop();
             mRecorder.release();
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             //TODO show toast
         }
@@ -126,13 +126,13 @@ public class Recorder {
         return mReleased;
     }
 
-    private void assertRecorderNotNull(){
-        if(mRecorder == null){
+    private void assertRecorderNotNull() {
+        if (mRecorder == null) {
             throw new IllegalStateException();
         }
     }
 
-    private void changeStatusTo(int status){
+    private void changeStatusTo(int status) {
         mStatus = status;
     }
 

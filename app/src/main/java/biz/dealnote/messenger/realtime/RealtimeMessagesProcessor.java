@@ -61,9 +61,10 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
     private final Context app;
 
     private final SparseArray<Pair<Integer, Integer>> notificationsInterceptors;
-    private volatile Entry current;
     private final IOwnersRepository ownersRepository;
     private final IMessagesRepository messagesInteractor;
+    private volatile Entry current;
+    private long lastEnryProcessTime;
 
     RealtimeMessagesProcessor() {
         this.app = Injection.provideApplicationContext();
@@ -74,6 +75,58 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
         this.notificationsInterceptors = new SparseArray<>(3);
         this.ownersRepository = Repository.INSTANCE.getOwners();
         this.messagesInteractor = Repository.INSTANCE.getMessages();
+    }
+
+    private static Set<Integer> getChatIds(TmpResult result) {
+        Set<Integer> peersIds = null;
+        for (TmpResult.Msg msg : result.getData()) {
+            VKApiMessage dto = msg.getDto();
+            if (isNull(dto)) {
+                continue;
+            }
+
+            if (Peer.isGroupChat(dto.peer_id)) {
+                if (peersIds == null) {
+                    peersIds = new HashSet<>(1);
+                }
+
+                peersIds.add(dto.peer_id);
+            }
+        }
+
+        return peersIds;
+    }
+
+    private static VKOwnIds getOwnIds(TmpResult result) {
+        VKOwnIds vkOwnIds = new VKOwnIds();
+        for (TmpResult.Msg msg : result.getData()) {
+            if (nonNull(msg.getDto())) {
+                vkOwnIds.append(msg.getDto());
+            }
+        }
+
+        return vkOwnIds;
+    }
+
+    private static Single<TmpResult> init(Single<Entry> single) {
+        return single.map(entry -> {
+            TmpResult result = new TmpResult(entry.getId(), entry.getAccountId(), entry.count());
+            FullAndNonFullUpdates updates = entry.getUpdates();
+
+            if (updates.hasFullMessages()) {
+                for (AddMessageUpdate update : updates.getFullMessages()) {
+                    result.add(update.getMessageId())
+                            .setDto(Dto2Model.transform(entry.getAccountId(), update));
+                }
+            }
+
+            if (updates.hasNonFullMessages()) {
+                for (Integer id : updates.getNonFull()) {
+                    result.add(id);
+                }
+            }
+            return result;
+        });
     }
 
     @Override
@@ -170,6 +223,24 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
         }
     }
 
+    /*private Completable refreshChangedDialogs(TmpResult result) {
+        Set<Integer> peers = new HashSet<>();
+
+        for (TmpResult.Msg msg : result.getData()) {
+            VKApiMessage dto = msg.getDto();
+            if (nonNull(dto)) {
+                peers.add(dto.peer_id);
+            }
+        }
+
+        Completable completable = Completable.complete();
+        for (int peerId : peers) {
+            completable = completable.andThen(messagesInteractor.fixDialogs(result.getAccountId(), peerId));
+        }
+
+        return completable;
+    }*/
+
     private void resetCurrent() {
         synchronized (stateLock) {
             this.current = null;
@@ -264,26 +335,6 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
                 });
     }
 
-    /*private Completable refreshChangedDialogs(TmpResult result) {
-        Set<Integer> peers = new HashSet<>();
-
-        for (TmpResult.Msg msg : result.getData()) {
-            VKApiMessage dto = msg.getDto();
-            if (nonNull(dto)) {
-                peers.add(dto.peer_id);
-            }
-        }
-
-        Completable completable = Completable.complete();
-        for (int peerId : peers) {
-            completable = completable.andThen(messagesInteractor.fixDialogs(result.getAccountId(), peerId));
-        }
-
-        return completable;
-    }*/
-
-    private long lastEnryProcessTime;
-
     private void onResultReceived(long startTime, TmpResult result) {
         this.lastEnryProcessTime = System.currentTimeMillis() - startTime;
 
@@ -341,26 +392,6 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
         return completable;
     }
 
-    private static Set<Integer> getChatIds(TmpResult result) {
-        Set<Integer> peersIds = null;
-        for (TmpResult.Msg msg : result.getData()) {
-            VKApiMessage dto = msg.getDto();
-            if (isNull(dto)) {
-                continue;
-            }
-
-            if (Peer.isGroupChat(dto.peer_id)) {
-                if (peersIds == null) {
-                    peersIds = new HashSet<>(1);
-                }
-
-                peersIds.add(dto.peer_id);
-            }
-        }
-
-        return peersIds;
-    }
-
     private Completable findMissingChatsGetAndStore(int accountId, Collection<Integer> ids) {
         return repositories.dialogs()
                 .getMissingGroupChats(accountId, ids)
@@ -401,37 +432,5 @@ class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
                     result.addAll(integers2);
                     return result;
                 });
-    }
-
-    private static VKOwnIds getOwnIds(TmpResult result) {
-        VKOwnIds vkOwnIds = new VKOwnIds();
-        for (TmpResult.Msg msg : result.getData()) {
-            if (nonNull(msg.getDto())) {
-                vkOwnIds.append(msg.getDto());
-            }
-        }
-
-        return vkOwnIds;
-    }
-
-    private static Single<TmpResult> init(Single<Entry> single) {
-        return single.map(entry -> {
-            TmpResult result = new TmpResult(entry.getId(), entry.getAccountId(), entry.count());
-            FullAndNonFullUpdates updates = entry.getUpdates();
-
-            if (updates.hasFullMessages()) {
-                for (AddMessageUpdate update : updates.getFullMessages()) {
-                    result.add(update.getMessageId())
-                            .setDto(Dto2Model.transform(entry.getAccountId(), update));
-                }
-            }
-
-            if (updates.hasNonFullMessages()) {
-                for (Integer id : updates.getNonFull()) {
-                    result.add(id);
-                }
-            }
-            return result;
-        });
     }
 }

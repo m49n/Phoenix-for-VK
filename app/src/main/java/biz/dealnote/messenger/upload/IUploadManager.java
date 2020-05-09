@@ -32,6 +32,7 @@ public interface IUploadManager {
 
     interface IProgressUpdate {
         int getId();
+
         int getProgress();
     }
 }

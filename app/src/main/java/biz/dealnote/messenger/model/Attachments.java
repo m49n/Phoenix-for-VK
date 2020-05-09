@@ -94,7 +94,7 @@ public class Attachments implements Parcelable, Cloneable {
             return;
         }
 
-        if(model instanceof VoiceMessage){
+        if (model instanceof VoiceMessage) {
             prepareVoiceMessages().add((VoiceMessage) model);
             return;
         }

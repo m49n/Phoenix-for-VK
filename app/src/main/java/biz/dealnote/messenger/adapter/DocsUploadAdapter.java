@@ -27,12 +27,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class DocsUploadAdapter extends RecyclerView.Adapter<DocsUploadAdapter.Holder> {
 
     private static final int ERROR_COLOR = Color.parseColor("#ff0000");
-
-    private List<Upload> data;
-
+    private static int idGenerator;
     private final SharedHolders<Holder> sharedHolders;
 
     private final ActionListener actionListener;
+    private List<Upload> data;
 
     public DocsUploadAdapter(Context context, List<Upload> data, ActionListener actionListener) {
         this.data = data;
@@ -40,13 +39,14 @@ public class DocsUploadAdapter extends RecyclerView.Adapter<DocsUploadAdapter.Ho
         this.sharedHolders = new SharedHolders<>(false);
     }
 
+    private static int generateNextHolderId() {
+        idGenerator++;
+        return idGenerator;
+    }
+
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.doc_upload_entry, parent, false));
-    }
-
-    public interface ActionListener {
-        void onRemoveClick(Upload upload);
     }
 
     @Override
@@ -106,16 +106,13 @@ public class DocsUploadAdapter extends RecyclerView.Adapter<DocsUploadAdapter.Ho
         return data.size();
     }
 
-    private static int idGenerator;
-
-    private static int generateNextHolderId(){
-        idGenerator++;
-        return idGenerator;
-    }
-
     public void setData(List<Upload> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onRemoveClick(Upload upload);
     }
 
     static class Holder extends RecyclerView.ViewHolder implements IdentificableHolder {

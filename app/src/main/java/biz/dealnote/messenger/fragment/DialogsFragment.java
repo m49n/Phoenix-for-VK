@@ -69,6 +69,33 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsView>
         implements IDialogsView, DialogsAdapter.ClickListener {
 
+    private static final int REQUEST_CODE_SELECT_USERS_FOR_CHAT = 114;
+    private RecyclerView mRecyclerView;
+    private DialogsAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Toolbar toolbar;
+
+    private FloatingActionButton mFab;
+    private final RecyclerView.OnScrollListener mFabScrollListener = new RecyclerView.OnScrollListener() {
+        int scrollMinOffset = 0;
+
+        @Override
+        public void onScrolled(RecyclerView view, int dx, int dy) {
+            if (scrollMinOffset == 0) {
+                // one-time-init
+                scrollMinOffset = (int) Utils.dpToPx(2, view.getContext());
+            }
+
+            if (dy > scrollMinOffset && mFab.isShown()) {
+                mFab.hide();
+            }
+
+            if (dy < -scrollMinOffset && !mFab.isShown()) {
+                mFab.show();
+            }
+        }
+    };
+
     public static DialogsFragment newInstance(int accountId, int dialogsOwnerId, @Nullable String subtitle, int Offset) {
         DialogsFragment fragment = new DialogsFragment();
         Bundle args = new Bundle();
@@ -79,13 +106,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         fragment.setArguments(args);
         return fragment;
     }
-
-    private RecyclerView mRecyclerView;
-    private DialogsAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private Toolbar toolbar;
-
-    private FloatingActionButton mFab;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -131,26 +151,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         return root;
     }
 
-    private final RecyclerView.OnScrollListener mFabScrollListener = new RecyclerView.OnScrollListener() {
-        int scrollMinOffset = 0;
-
-        @Override
-        public void onScrolled(RecyclerView view, int dx, int dy) {
-            if (scrollMinOffset == 0) {
-                // one-time-init
-                scrollMinOffset = (int) Utils.dpToPx(2, view.getContext());
-            }
-
-            if (dy > scrollMinOffset && mFab.isShown()) {
-                mFab.hide();
-            }
-
-            if (dy < -scrollMinOffset && !mFab.isShown()) {
-                mFab.show();
-            }
-        }
-    };
-
     @Override
     public void setCreateGroupChatButtonVisible(boolean visible) {
         if (nonNull(mFab) && nonNull(mRecyclerView)) {
@@ -160,16 +160,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             } else {
                 mRecyclerView.removeOnScrollListener(mFabScrollListener);
             }
-        }
-    }
-
-    private static final class OptionView implements IOptionView {
-
-        boolean canSearch;
-
-        @Override
-        public void setCanSearch(boolean can) {
-            this.canSearch = can;
         }
     }
 
@@ -190,34 +180,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         getPresenter().fireDialogClick(dialog, offset);
     }
 
-    private static final class ContextView implements IContextView {
-
-        boolean canDelete;
-        boolean canAddToHomescreen;
-        boolean canConfigNotifications;
-        boolean canAddToShortcuts;
-
-        @Override
-        public void setCanDelete(boolean can) {
-            this.canDelete = can;
-        }
-
-        @Override
-        public void setCanAddToHomescreen(boolean can) {
-            this.canAddToHomescreen = can;
-        }
-
-        @Override
-        public void setCanConfigNotifications(boolean can) {
-            this.canConfigNotifications = can;
-        }
-
-        @Override
-        public void setCanAddToShortcuts(boolean can) {
-            this.canAddToShortcuts = can;
-        }
-    }
-
     @Override
     public boolean onDialogLongClick(final Dialog dialog) {
         List<String> options = new ArrayList<>();
@@ -230,19 +192,19 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         final String notificationSettings = getString(R.string.peer_notification_settings);
         final String addToShortcuts = getString(R.string.add_to_launcer_shortcuts);
 
-        if(contextView.canDelete){
+        if (contextView.canDelete) {
             options.add(delete);
         }
 
-        if(contextView.canAddToHomescreen){
+        if (contextView.canAddToHomescreen) {
             options.add(addToHomeScreen);
         }
 
-        if(contextView.canConfigNotifications){
+        if (contextView.canConfigNotifications) {
             options.add(notificationSettings);
         }
 
-        if(contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1){
+        if (contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             options.add(addToShortcuts);
         }
 
@@ -250,13 +212,13 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                 .setTitle(dialog.getDisplayTitle(requireActivity()))
                 .setItems(options.toArray(new String[options.size()]), (dialogInterface, which) -> {
                     final String selected = options.get(which);
-                    if(selected.equals(delete)){
+                    if (selected.equals(delete)) {
                         getPresenter().fireRemoveDialogClick(dialog);
-                    } else if(selected.equals(addToHomeScreen)){
+                    } else if (selected.equals(addToHomeScreen)) {
                         getPresenter().fireCreateShortcutClick(dialog);
-                    } else if(selected.equals(notificationSettings)){
+                    } else if (selected.equals(notificationSettings)) {
                         getPresenter().fireNotificationsSettingsClick(dialog);
-                    } else if(selected.equals(addToShortcuts)){
+                    } else if (selected.equals(addToShortcuts)) {
                         getPresenter().fireAddToLauncherShortcuts(dialog);
                     }
                 })
@@ -271,28 +233,9 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         getPresenter().fireDialogAvatarClick(dialog, offset);
     }
 
-    private static final int REQUEST_CODE_SELECT_USERS_FOR_CHAT = 114;
-
     private void createGroupChat() {
         SelectProfilesActivity.startFriendsSelection(this, REQUEST_CODE_SELECT_USERS_FOR_CHAT);
     }
-
-    /*
-    @Override
-    public void onDestroyView() {
-        if (nonNull(mAdapter)) {
-            mAdapter.cleanup();
-        }
-
-        if (nonNull(mSwipeRefreshLayout)) {
-            mSwipeRefreshLayout.destroyDrawingCache();
-            mSwipeRefreshLayout.clearAnimation();
-        }
-
-        super.onDestroyView();
-    }
-
-     */
 
     private void resolveToolbarNavigationIcon() {
         if (isNull(toolbar)) return;
@@ -340,6 +283,23 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                 .build()
                 .apply(requireActivity());
     }
+
+    /*
+    @Override
+    public void onDestroyView() {
+        if (nonNull(mAdapter)) {
+            mAdapter.cleanup();
+        }
+
+        if (nonNull(mSwipeRefreshLayout)) {
+            mSwipeRefreshLayout.destroyDrawingCache();
+            mSwipeRefreshLayout.clearAnimation();
+        }
+
+        super.onDestroyView();
+    }
+
+     */
 
     @Override
     public void displayData(List<Dialog> data) {
@@ -426,5 +386,43 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                 requireArguments().getInt(Extra.OFFSET),
                 saveInstanceState
         );
+    }
+
+    private static final class OptionView implements IOptionView {
+
+        boolean canSearch;
+
+        @Override
+        public void setCanSearch(boolean can) {
+            this.canSearch = can;
+        }
+    }
+
+    private static final class ContextView implements IContextView {
+
+        boolean canDelete;
+        boolean canAddToHomescreen;
+        boolean canConfigNotifications;
+        boolean canAddToShortcuts;
+
+        @Override
+        public void setCanDelete(boolean can) {
+            this.canDelete = can;
+        }
+
+        @Override
+        public void setCanAddToHomescreen(boolean can) {
+            this.canAddToHomescreen = can;
+        }
+
+        @Override
+        public void setCanConfigNotifications(boolean can) {
+            this.canConfigNotifications = can;
+        }
+
+        @Override
+        public void setCanAddToShortcuts(boolean can) {
+            this.canAddToShortcuts = can;
+        }
     }
 }

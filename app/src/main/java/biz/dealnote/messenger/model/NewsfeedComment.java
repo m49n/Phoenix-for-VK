@@ -17,11 +17,6 @@ public class NewsfeedComment {
         this.model = model;
     }
 
-    public NewsfeedComment setComment(Comment comment) {
-        this.comment = comment;
-        return this;
-    }
-
     /**
      * @return Photo, Video, Topic or Post
      */
@@ -33,5 +28,10 @@ public class NewsfeedComment {
     @Nullable
     public Comment getComment() {
         return comment;
+    }
+
+    public NewsfeedComment setComment(Comment comment) {
+        this.comment = comment;
+        return this;
     }
 }

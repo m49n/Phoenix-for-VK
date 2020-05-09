@@ -62,7 +62,7 @@ public class AlternativeAspectRatioFrameLayout extends FrameLayout {
                 MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
 
-    public void setAspectRatio(int w, int h){
+    public void setAspectRatio(int w, int h) {
         mAspectRatioWidth = w;
         mAspectRatioHeight = h;
 

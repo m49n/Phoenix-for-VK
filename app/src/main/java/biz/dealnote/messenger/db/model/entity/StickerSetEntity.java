@@ -30,13 +30,13 @@ public class StickerSetEntity {
         return photo70;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public StickerSetEntity setPhoto70(String photo70) {
         this.photo70 = photo70;
         return this;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getPhoto35() {

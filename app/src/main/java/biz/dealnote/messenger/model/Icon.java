@@ -13,29 +13,6 @@ import biz.dealnote.messenger.util.ParcelUtils;
  */
 public final class Icon implements Parcelable {
 
-    @DrawableRes
-    private final Integer res;
-
-    private final String url;
-
-    private Icon(Integer res, String url) {
-        this.res = res;
-        this.url = url;
-    }
-
-    public static Icon fromUrl(String url) {
-        return new Icon(null, url);
-    }
-
-    public static Icon fromResources(@DrawableRes int res) {
-        return new Icon(res, null);
-    }
-
-    private Icon(Parcel in) {
-        res = ParcelUtils.readObjectInteger(in);
-        url = in.readString();
-    }
-
     public static final Creator<Icon> CREATOR = new Creator<Icon>() {
         @Override
         public Icon createFromParcel(Parcel in) {
@@ -47,6 +24,27 @@ public final class Icon implements Parcelable {
             return new Icon[size];
         }
     };
+    @DrawableRes
+    private final Integer res;
+    private final String url;
+
+    private Icon(Integer res, String url) {
+        this.res = res;
+        this.url = url;
+    }
+
+    private Icon(Parcel in) {
+        res = ParcelUtils.readObjectInteger(in);
+        url = in.readString();
+    }
+
+    public static Icon fromUrl(String url) {
+        return new Icon(null, url);
+    }
+
+    public static Icon fromResources(@DrawableRes int res) {
+        return new Icon(res, null);
+    }
 
     public boolean isRemote() {
         return url != null;

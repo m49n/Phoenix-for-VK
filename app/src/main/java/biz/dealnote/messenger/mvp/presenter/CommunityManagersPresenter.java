@@ -41,6 +41,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
     private final List<Manager> data;
 
     private final IGroupSettingsInteractor interactor;
+    private boolean loadingNow;
 
     public CommunityManagersPresenter(int accountId, Community groupId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -58,12 +59,12 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
         requestData();
     }
 
-    private void onManagerActionReceived(Manager manager){
+    private void onManagerActionReceived(Manager manager) {
         int index = Utils.findIndexByPredicate(data, m -> m.getUser().getId() == manager.getUser().getId());
         boolean removing = Utils.isEmpty(manager.getRole());
 
         if (index != -1) {
-            if(removing){
+            if (removing) {
                 data.remove(index);
                 callView(view -> view.notifyItemRemoved(index));
             } else {
@@ -71,7 +72,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
                 callView(view -> view.notifyItemChanged(index));
             }
         } else {
-            if(!removing){
+            if (!removing) {
                 data.add(0, manager);
                 callView(view -> view.notifyItemAdded(0));
             }
@@ -90,7 +91,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
     private void onContactsReceived(List<ContactInfo> contacts) {
         final int accountId = super.getAccountId();
         List<Integer> Ids = new ArrayList<>(contacts.size());
-        for(ContactInfo it : contacts)
+        for (ContactInfo it : contacts)
             Ids.add(it.getUserId());
         appendDisposable(Injection.provideNetworkInterfaces().vkDefault(accountId).users().get(Ids, null, UserColumns.API_FIELDS, null)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
@@ -108,6 +109,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
                     }
                 }, this::onRequestError));
     }
+
     private void requestContacts() {
         final int accountId = super.getAccountId();
         appendDisposable(interactor.getContacts(accountId, groupId.getId())
@@ -119,7 +121,7 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
         final int accountId = super.getAccountId();
 
         setLoadingNow(true);
-        if(groupId.getAdminLevel() < VKApiCommunity.AdminLevel.ADMIN) {
+        if (groupId.getAdminLevel() < VKApiCommunity.AdminLevel.ADMIN) {
             requestContacts();
             return;
         }
@@ -133,8 +135,6 @@ public class CommunityManagersPresenter extends AccountDependencyPresenter<IComm
         super.onGuiCreated(view);
         view.displayData(data);
     }
-
-    private boolean loadingNow;
 
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;

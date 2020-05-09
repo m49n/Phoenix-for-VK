@@ -14,7 +14,9 @@ import io.reactivex.Single;
  */
 public interface IFeedbackInteractor {
     Single<List<Feedback>> getCachedFeedbacks(int accountId);
+
     Single<Pair<List<Feedback>, String>> getActualFeedbacks(int accountId, int count, String startFrom);
+
     Single<AnswerVKOfficialList> getOfficial(int accountId, Integer count, Integer startFrom);
 
     Completable maskAaViewed(int accountId);

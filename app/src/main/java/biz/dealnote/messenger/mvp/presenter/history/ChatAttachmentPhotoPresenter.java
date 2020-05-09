@@ -33,6 +33,8 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
  */
 public class ChatAttachmentPhotoPresenter extends BaseChatAttachmentsPresenter<Photo, IChatAttachmentPhotosView> {
 
+    private DisposableHolder<Void> openGalleryDisposableHolder = new DisposableHolder<>();
+
     public ChatAttachmentPhotoPresenter(int peerId, int accountId, @Nullable Bundle savedInstanceState) {
         super(peerId, accountId, savedInstanceState);
     }
@@ -69,8 +71,6 @@ public class ChatAttachmentPhotoPresenter extends BaseChatAttachmentsPresenter<P
             getView().setToolbarSubtitle(getString(R.string.photos_count, safeCountOf(data)));
         }
     }
-
-    private DisposableHolder<Void> openGalleryDisposableHolder = new DisposableHolder<>();
 
     @Override
     public void onDestroyed() {

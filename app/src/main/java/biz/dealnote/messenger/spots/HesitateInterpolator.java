@@ -8,7 +8,7 @@ import android.view.animation.Interpolator;
  */
 class HesitateInterpolator implements Interpolator {
 
-    private static double POW = 1.0/2.0;
+    private static double POW = 1.0 / 2.0;
 
     @Override
     public float getInterpolation(float input) {

@@ -34,28 +34,53 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
         extends AbsMvpFragment<P, V> implements IMvpView, IAccountDependencyView, IProgressView, IErrorView, IToastView, IToolbarView {
 
     public static final String EXTRA_HIDE_TOOLBAR = "extra_hide_toolbar";
+    private AlertDialog mLoadingProgressDialog;
 
-    protected boolean hasHideToolbarExtra(){
+    protected static void safelySetCheched(CompoundButton button, boolean checked) {
+        if (nonNull(button)) {
+            button.setChecked(checked);
+        }
+    }
+
+    protected static void safelySetText(TextView target, String text) {
+        if (nonNull(target)) {
+            target.setText(text);
+        }
+    }
+
+    protected static void safelySetText(TextView target, @StringRes int text) {
+        if (nonNull(target)) {
+            target.setText(text);
+        }
+    }
+
+    protected static void safelySetVisibleOrGone(View target, boolean visible) {
+        if (nonNull(target)) {
+            target.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    protected boolean hasHideToolbarExtra() {
         return nonNull(getArguments()) && getArguments().getBoolean(EXTRA_HIDE_TOOLBAR);
     }
 
     @Override
     public void showToast(@StringRes int titleTes, boolean isLong, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             Toast.makeText(requireActivity(), getString(titleTes, params), isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void showError(String text) {
-        if(isAdded()){
+        if (isAdded()) {
             Utils.showRedTopToast(requireActivity(), text);
         }
     }
 
     @Override
     public PhoenixToast getPhoenixToast() {
-        if(isAdded()){
+        if (isAdded()) {
             return PhoenixToast.CreatePhoenixToast(requireActivity());
         }
         return PhoenixToast.CreatePhoenixToast(null);
@@ -63,7 +88,7 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
 
     @Override
     public void showError(@StringRes int titleTes, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             showError(getString(titleTes, params));
         }
     }
@@ -88,35 +113,9 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
         // TODO: 18.12.2017
     }
 
-    protected static void safelySetCheched(CompoundButton button, boolean checked){
-        if(nonNull(button)){
-            button.setChecked(checked);
-        }
-    }
-
-    protected static void safelySetText(TextView target, String text){
-        if(nonNull(target)){
-            target.setText(text);
-        }
-    }
-
-    protected static void safelySetText(TextView target, @StringRes int text){
-        if(nonNull(target)){
-            target.setText(text);
-        }
-    }
-
-    protected static void safelySetVisibleOrGone(View target, boolean visible){
-        if(nonNull(target)){
-            target.setVisibility(visible ? View.VISIBLE : View.GONE);
-        }
-    }
-
     protected void styleSwipeRefreshLayoutWithCurrentTheme(@NonNull SwipeRefreshLayout swipeRefreshLayout, boolean needToolbarOffset) {
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), swipeRefreshLayout, needToolbarOffset);
     }
-
-    private AlertDialog mLoadingProgressDialog;
 
     @Override
     public void displayProgressDialog(@StringRes int title, @StringRes int message, boolean cancelable) {

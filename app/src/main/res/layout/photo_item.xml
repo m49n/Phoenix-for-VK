@@ -5,8 +5,8 @@
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="6dp"
     app:cardBackgroundColor="?message_bubble_color"
+    app:cardCornerRadius="6dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -29,10 +29,10 @@
             android:id="@+id/selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/imageView"
             android:layout_alignStart="@+id/imageView"
-            android:layout_alignEnd="@+id/imageView"
             android:layout_alignTop="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@+id/imageView"
             android:background="#60000000"
             android:gravity="center">
 
@@ -40,8 +40,8 @@
                 android:id="@+id/item_photo_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#ffffff"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="#ffffff"
                 tools:text="1" />
 
         </LinearLayout>

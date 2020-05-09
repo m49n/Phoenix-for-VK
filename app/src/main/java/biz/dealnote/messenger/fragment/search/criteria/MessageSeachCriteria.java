@@ -11,6 +11,17 @@ import biz.dealnote.messenger.util.ParcelUtils;
  */
 public final class MessageSeachCriteria extends BaseSearchCriteria implements Parcelable {
 
+    public static final Creator<MessageSeachCriteria> CREATOR = new Creator<MessageSeachCriteria>() {
+        @Override
+        public MessageSeachCriteria createFromParcel(Parcel in) {
+            return new MessageSeachCriteria(in);
+        }
+
+        @Override
+        public MessageSeachCriteria[] newArray(int size) {
+            return new MessageSeachCriteria[size];
+        }
+    };
     private Integer peerId;
 
     public MessageSeachCriteria(String query) {
@@ -25,13 +36,13 @@ public final class MessageSeachCriteria extends BaseSearchCriteria implements Pa
         this.peerId = ParcelUtils.readObjectInteger(in);
     }
 
+    public Integer getPeerId() {
+        return peerId;
+    }
+
     public MessageSeachCriteria setPeerId(Integer peerId) {
         this.peerId = peerId;
         return this;
-    }
-
-    public Integer getPeerId() {
-        return peerId;
     }
 
     @Override
@@ -44,16 +55,4 @@ public final class MessageSeachCriteria extends BaseSearchCriteria implements Pa
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MessageSeachCriteria> CREATOR = new Creator<MessageSeachCriteria>() {
-        @Override
-        public MessageSeachCriteria createFromParcel(Parcel in) {
-            return new MessageSeachCriteria(in);
-        }
-
-        @Override
-        public MessageSeachCriteria[] newArray(int size) {
-            return new MessageSeachCriteria[size];
-        }
-    };
 }

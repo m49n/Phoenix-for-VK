@@ -9,67 +9,51 @@ import android.os.Parcelable;
  */
 public class Video extends AbsModel implements Parcelable {
 
+    public static final Creator<Video> CREATOR = new Creator<Video>() {
+        @Override
+        public Video createFromParcel(Parcel in) {
+            return new Video(in);
+        }
+
+        @Override
+        public Video[] newArray(int size) {
+            return new Video[size];
+        }
+    };
     private int id;
-
     private int ownerId;
-
     private int albumId;
-
     private String title;
-
     private String description;
-
     private String link;
-
     private long date;
-
     private long addingDate;
-
     private int views;
-
     private String player;
-
     private String image;
-
     private String accessKey;
-
     private int commentsCount;
-
     private boolean userLikes;
-
     private int likesCount;
-
     private String mp4link240;
-
     private String mp4link360;
-
     private String mp4link480;
-
     private String mp4link720;
-
     private String mp4link1080;
-
     private String externalLink;
-
     private String platform;
-
     private boolean repeat;
-
     private int duration;
-
     private SimplePrivacy privacyView;
-
     private SimplePrivacy privacyComment;
-
     private boolean canEdit;
-
     private boolean canAdd;
-
     private boolean canComment;
-
     private boolean canRepost;
+    private String hls;
+    private String live;
 
-    public Video(){
+    public Video() {
 
     }
 
@@ -164,9 +148,17 @@ public class Video extends AbsModel implements Parcelable {
         dest.writeByte((byte) (canAdd ? 1 : 0));
     }
 
+    public boolean isCanAdd() {
+        return canAdd;
+    }
+
     public Video setCanAdd(boolean canAdd) {
         this.canAdd = canAdd;
         return this;
+    }
+
+    public boolean isCanEdit() {
+        return canEdit;
     }
 
     public Video setCanEdit(boolean canEdit) {
@@ -174,30 +166,10 @@ public class Video extends AbsModel implements Parcelable {
         return this;
     }
 
-    public boolean isCanAdd() {
-        return canAdd;
-    }
-
-    public boolean isCanEdit() {
-        return canEdit;
-    }
-
     @Override
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Video> CREATOR = new Creator<Video>() {
-        @Override
-        public Video createFromParcel(Parcel in) {
-            return new Video(in);
-        }
-
-        @Override
-        public Video[] newArray(int size) {
-            return new Video[size];
-        }
-    };
 
     public int getId() {
         return id;
@@ -406,13 +378,8 @@ public class Video extends AbsModel implements Parcelable {
         return this;
     }
 
-    private String hls;
-
-    private String live;
-
-    public Video setHls(String hls) {
-        this.hls = hls;
-        return this;
+    public String getLive() {
+        return live;
     }
 
     public Video setLive(String live) {
@@ -420,12 +387,13 @@ public class Video extends AbsModel implements Parcelable {
         return this;
     }
 
-    public String getLive() {
-        return live;
-    }
-
     public String getHls() {
         return hls;
+    }
+
+    public Video setHls(String hls) {
+        this.hls = hls;
+        return this;
     }
 
     public String getPlatform() {
@@ -446,12 +414,12 @@ public class Video extends AbsModel implements Parcelable {
         return this;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public Video setDuration(int duration) {
         this.duration = duration;
         return this;
-    }
-
-    public int getDuration() {
-        return duration;
     }
 }

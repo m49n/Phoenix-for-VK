@@ -2,7 +2,7 @@ package biz.dealnote.messenger.model.criteria;
 
 import biz.dealnote.messenger.db.DatabaseIdRange;
 
-public class PhotoCriteria{
+public class PhotoCriteria {
 
     private final int accountId;
     private Integer ownerId;
@@ -13,21 +13,6 @@ public class PhotoCriteria{
 
     public PhotoCriteria(int accountId) {
         this.accountId = accountId;
-    }
-
-    public PhotoCriteria setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
-        return this;
-    }
-
-    public PhotoCriteria setAlbumId(Integer albumId) {
-        this.albumId = albumId;
-        return this;
-    }
-
-    public PhotoCriteria setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-        return this;
     }
 
     public DatabaseIdRange getRange() {
@@ -47,11 +32,26 @@ public class PhotoCriteria{
         return ownerId;
     }
 
+    public PhotoCriteria setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+        return this;
+    }
+
     public Integer getAlbumId() {
         return albumId;
     }
 
+    public PhotoCriteria setAlbumId(Integer albumId) {
+        this.albumId = albumId;
+        return this;
+    }
+
     public String getOrderBy() {
         return orderBy;
+    }
+
+    public PhotoCriteria setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+        return this;
     }
 }

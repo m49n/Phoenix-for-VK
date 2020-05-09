@@ -1225,6 +1225,12 @@ public class FeedbackViewBinder {
         }
     }
 
+    private void openOwner(int userId) {
+        if (attachmentsActionCallback != null) {
+            attachmentsActionCallback.onOpenOwner(userId);
+        }
+    }
+
     private static class Link {
         private int start;
         private int end;
@@ -1239,12 +1245,6 @@ public class FeedbackViewBinder {
 
         private void end(int end) {
             this.end = end;
-        }
-    }
-
-    private void openOwner(int userId) {
-        if (attachmentsActionCallback != null) {
-            attachmentsActionCallback.onOpenOwner(userId);
         }
     }
 }

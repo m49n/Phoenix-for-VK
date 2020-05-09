@@ -26,6 +26,10 @@ public interface IAttachmentsRepository {
 
     Single<List<Pair<Integer, AbsModel>>> getAttachmentsWithIds(int accountId, @AttachToType int attachToType, int attachToDbid);
 
+    Observable<IAddEvent> observeAdding();
+
+    Observable<IRemoveEvent> observeRemoving();
+
     interface IBaseEvent {
         int getAccountId();
 
@@ -42,8 +46,4 @@ public interface IAttachmentsRepository {
     interface IAddEvent extends IBaseEvent {
         List<Pair<Integer, AbsModel>> getAttachments();
     }
-
-    Observable<IAddEvent> observeAdding();
-
-    Observable<IRemoveEvent> observeRemoving();
 }

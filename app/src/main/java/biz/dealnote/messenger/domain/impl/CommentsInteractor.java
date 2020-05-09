@@ -130,7 +130,7 @@ public class CommentsInteractor implements ICommentsInteractor {
                 .map(bundle -> {
                     List<Comment> data = new ArrayList<>(comments.size());
                     for (VKApiComment dto : comments) {
-                        if(dto.from_id != 0)
+                        if (dto.from_id != 0)
                             data.add(Dto2Model.buildComment(commented, dto, bundle));
                     }
                     Collections.sort(data, (o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
@@ -156,8 +156,7 @@ public class CommentsInteractor implements ICommentsInteractor {
                     for (VKApiComment dto : commentDtos)
                         dbos.add(Dto2Entity.mapComment(commented.getSourceId(), commented.getSourceOwnerId(), commented.getSourceType(), commented.getAccessKey(), dto));
 
-                    if(threadComment != null)
-                    {
+                    if (threadComment != null) {
                         return modelsSingle.map(data -> {
                             CommentsBundle bundle = new CommentsBundle(data)
                                     .setAdminLevel(response.admin_level)
@@ -326,7 +325,7 @@ public class CommentsInteractor implements ICommentsInteractor {
                     }
 
                     return sendComment(accountId, commented, intent, tokens)
-                            .flatMap(id -> getCommentByIdAndStore(accountId, commented, id,  commentThread,true))
+                            .flatMap(id -> getCommentByIdAndStore(accountId, commented, id, commentThread, true))
                             .flatMap(comment -> {
                                 if (isNull(intent.getDraftMessageId())) {
                                     return Single.just(comment);
@@ -498,40 +497,6 @@ public class CommentsInteractor implements ICommentsInteractor {
         throw new UnsupportedOperationException();
     }
 
-    private static final class TempData {
-
-        Set<VKApiUser> profiles = new HashSet<>();
-        Set<VKApiCommunity> groups = new HashSet<>();
-        List<VKApiComment> comments = new ArrayList<>();
-
-        void append(DefaultCommentsResponse response, int continueToCommentId) {
-            if (nonNull(response.groups)) {
-                groups.addAll(response.groups);
-            }
-
-            if (nonNull(response.profiles)) {
-                profiles.addAll(response.profiles);
-            }
-
-            boolean hasTargetComment = false;
-            int additionalCount = 0;
-
-            for (VKApiComment comment : response.items) {
-                if (comment.id == continueToCommentId) {
-                    hasTargetComment = true;
-                } else if (hasTargetComment) {
-                    additionalCount++;
-                }
-
-                comments.add(comment);
-
-                if (additionalCount > 5) {
-                    break;
-                }
-            }
-        }
-    }
-
     private Single<Integer> sendComment(int accountId, @NonNull Commented commented, @NonNull CommentIntent intent, @Nullable List<IAttachmentToken> attachments) {
         IAccountApis apies = networker.vkDefault(accountId);
 
@@ -610,5 +575,39 @@ public class CommentsInteractor implements ICommentsInteractor {
         return networker.vkDefault(accountId)
                 .wall()
                 .reportComment(owner_id, post_id, reason);
+    }
+
+    private static final class TempData {
+
+        Set<VKApiUser> profiles = new HashSet<>();
+        Set<VKApiCommunity> groups = new HashSet<>();
+        List<VKApiComment> comments = new ArrayList<>();
+
+        void append(DefaultCommentsResponse response, int continueToCommentId) {
+            if (nonNull(response.groups)) {
+                groups.addAll(response.groups);
+            }
+
+            if (nonNull(response.profiles)) {
+                profiles.addAll(response.profiles);
+            }
+
+            boolean hasTargetComment = false;
+            int additionalCount = 0;
+
+            for (VKApiComment comment : response.items) {
+                if (comment.id == continueToCommentId) {
+                    hasTargetComment = true;
+                } else if (hasTargetComment) {
+                    additionalCount++;
+                }
+
+                comments.add(comment);
+
+                if (additionalCount > 5) {
+                    break;
+                }
+            }
+        }
     }
 }

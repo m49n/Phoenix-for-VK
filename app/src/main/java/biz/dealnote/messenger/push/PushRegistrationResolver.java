@@ -90,7 +90,7 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
                         return Completable.complete();
                     }
 
-                    if(!settings.accounts().getType(settings.accounts().getCurrent()).equals("vkofficial") || settings.accounts().getType(settings.accounts().getCurrent()).equals("hacked"))
+                    if (!settings.accounts().getType(settings.accounts().getCurrent()).equals("vkofficial") || settings.accounts().getType(settings.accounts().getCurrent()).equals("hacked"))
                         return Completable.never();
 
                     Set<VkPushRegistration> needUnregister = new HashSet<>(0);

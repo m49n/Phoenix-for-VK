@@ -9,6 +9,18 @@ import android.os.Parcelable;
  */
 public class LocalVideosSelectableSource extends AbsSelectableSource implements Parcelable {
 
+    public static final Creator<LocalVideosSelectableSource> CREATOR = new Creator<LocalVideosSelectableSource>() {
+        @Override
+        public LocalVideosSelectableSource createFromParcel(Parcel in) {
+            return new LocalVideosSelectableSource(in);
+        }
+
+        @Override
+        public LocalVideosSelectableSource[] newArray(int size) {
+            return new LocalVideosSelectableSource[size];
+        }
+    };
+
     public LocalVideosSelectableSource() {
         super(Types.VIDEOS);
     }
@@ -21,18 +33,6 @@ public class LocalVideosSelectableSource extends AbsSelectableSource implements 
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
     }
-
-    public static final Creator<LocalVideosSelectableSource> CREATOR = new Creator<LocalVideosSelectableSource>() {
-        @Override
-        public LocalVideosSelectableSource createFromParcel(Parcel in) {
-            return new LocalVideosSelectableSource(in);
-        }
-
-        @Override
-        public LocalVideosSelectableSource[] newArray(int size) {
-            return new LocalVideosSelectableSource[size];
-        }
-    };
 
     @Override
     public int describeContents() {

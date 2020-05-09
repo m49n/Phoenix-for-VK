@@ -28,10 +28,9 @@ import biz.dealnote.messenger.util.ViewUtils;
  */
 public class DialogPreviewAdapter extends RecyclerView.Adapter<DialogPreviewAdapter.DialogPreviewHolder> {
 
+    private final ActionListener actionListener;
     private List<Object> mData;
     private Transformation mTransformation;
-
-    private final ActionListener actionListener;
 
     public DialogPreviewAdapter(Context context, List<Object> items, ActionListener actionListener) {
         this.mData = items;
@@ -79,18 +78,18 @@ public class DialogPreviewAdapter extends RecyclerView.Adapter<DialogPreviewAdap
         ViewUtils.displayAvatar(holder.mAvatar, mTransformation, item.get100photoOrSmaller(), Constants.PICASSO_TAG);
     }
 
-    private void bindGroupChat(DialogPreviewHolder holder, Chat item){
+    private void bindGroupChat(DialogPreviewHolder holder, Chat item) {
         holder.mTitle.setText(item.getTitle());
         ViewUtils.displayAvatar(holder.mAvatar, mTransformation, item.get100orSmallerAvatar(), Constants.PICASSO_TAG, R.drawable.ic_group_chat);
-    }
-
-    public interface ActionListener extends EventListener {
-        void onEntryClick(Object o);
     }
 
     public void setData(List<Object> data) {
         this.mData = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener extends EventListener {
+        void onEntryClick(Object o);
     }
 
     class DialogPreviewHolder extends RecyclerView.ViewHolder {

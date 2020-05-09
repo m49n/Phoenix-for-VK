@@ -34,16 +34,16 @@ public interface IGroupsService {
     @FormUrlEncoded
     @POST("groups.unban")
     Single<BaseResponse<Integer>> unban(@Field("group_id") int groupId,
-                                            @Field("owner_id") int ownerId);
+                                        @Field("owner_id") int ownerId);
 
     @POST("groups.ban")
     @FormUrlEncoded
     Single<BaseResponse<Integer>> ban(@Field("group_id") int groupId,
-                                          @Field("owner_id") int ownerId,
-                                          @Field("end_date") Long endDate,
-                                          @Field("reason") Integer reason,
-                                          @Field("comment") String comment,
-                                          @Field("comment_visible") Integer commentVisible);
+                                      @Field("owner_id") int ownerId,
+                                      @Field("end_date") Long endDate,
+                                      @Field("reason") Integer reason,
+                                      @Field("comment") String comment,
+                                      @Field("comment_visible") Integer commentVisible);
 
     @FormUrlEncoded
     @POST("groups.getSettings")

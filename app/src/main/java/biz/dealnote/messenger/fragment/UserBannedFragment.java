@@ -52,6 +52,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class UserBannedFragment extends BaseMvpFragment<UserBannedPresenter, IUserBannedView> implements IUserBannedView, PeopleAdapter.LongClickListener {
 
     private static final int REQUEST_SELECT = 13;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private PeopleAdapter mPeopleAdapter;
+    private TextView mEmptyText;
 
     public static UserBannedFragment newInstance(int accountId) {
         Bundle args = new Bundle();
@@ -60,12 +64,6 @@ public class UserBannedFragment extends BaseMvpFragment<UserBannedPresenter, IUs
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private RecyclerView mRecyclerView;
-    private PeopleAdapter mPeopleAdapter;
-    private TextView mEmptyText;
 
     @Nullable
     @Override
@@ -190,7 +188,7 @@ public class UserBannedFragment extends BaseMvpFragment<UserBannedPresenter, IUs
 
     @Override
     public void scrollToPosition(int position) {
-        if(nonNull(mRecyclerView)){
+        if (nonNull(mRecyclerView)) {
             mRecyclerView.smoothScrollToPosition(position);
         }
     }

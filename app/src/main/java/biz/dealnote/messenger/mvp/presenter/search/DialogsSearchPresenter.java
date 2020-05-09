@@ -65,15 +65,15 @@ public class DialogsSearchPresenter extends AbsSearchPresenter<IDialogsSearchVie
         final int accountId = super.getAccountId();
         final int messagesOwnerId = super.getAccountId(); // todo Community dialogs seacrh !!!
 
-        if(o instanceof User){
+        if (o instanceof User) {
             User user = (User) o;
             final Peer peer = new Peer(Peer.fromUserId(user.getId())).setTitle(user.getFullName()).setAvaUrl(user.getMaxSquareAvatar());
             getView().openChatWith(accountId, messagesOwnerId, peer);
-        } else if(o instanceof Community){
+        } else if (o instanceof Community) {
             Community group = (Community) o;
             final Peer peer = new Peer(Peer.fromGroupId(group.getId())).setTitle(group.getFullName()).setAvaUrl(group.getMaxSquareAvatar());
             getView().openChatWith(accountId, messagesOwnerId, peer);
-        } else if(o instanceof Chat){
+        } else if (o instanceof Chat) {
             Chat chat = (Chat) o;
             final Peer peer = new Peer(Peer.fromChatId(chat.getId())).setTitle(chat.getTitle()).setAvaUrl(chat.getMaxSquareAvatar());
             getView().openChatWith(accountId, messagesOwnerId, peer);

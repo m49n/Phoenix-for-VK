@@ -19,11 +19,6 @@ public class MessagesCriteria extends Criteria {
         this.peerId = peerId;
     }
 
-    public MessagesCriteria setStartMessageId(Integer startMessageId) {
-        this.startMessageId = startMessageId;
-        return this;
-    }
-
     public int getAccountId() {
         return accountId;
     }
@@ -42,6 +37,11 @@ public class MessagesCriteria extends Criteria {
 
     public Integer getStartMessageId() {
         return startMessageId;
+    }
+
+    public MessagesCriteria setStartMessageId(Integer startMessageId) {
+        this.startMessageId = startMessageId;
+        return this;
     }
 
     @Override

@@ -18,31 +18,10 @@ public class ActivityFeatures {
     private int statusBarColorOption;
     private boolean statusBarInvertIconsOption;
 
-    public ActivityFeatures(@NonNull Builder builder){
+    public ActivityFeatures(@NonNull Builder builder) {
         this.hideMenu = builder.blockNavigationFeature.blockNavigationDrawer;
         this.statusBarColorOption = builder.statusbarColorFeature.statusBarColorOption;
         this.statusBarInvertIconsOption = builder.statusbarColorFeature.statusBarIconInvertedOption;
-    }
-
-    public static class Builder {
-
-        private BlockNavigationFeature blockNavigationFeature;
-        private StatusbarColorFeature statusbarColorFeature;
-
-        public BlockNavigationFeature begin(){
-            return new BlockNavigationFeature(this);
-        }
-
-        public ActivityFeatures build(){
-            return new ActivityFeatures(this);
-        }
-    }
-
-    private static class Feature {
-        Builder builder;
-        Feature(Builder b){
-            this.builder = b;
-        }
     }
 
     public void apply(@NonNull Activity activity) {
@@ -64,6 +43,28 @@ public class ActivityFeatures {
         }
     }
 
+    public static class Builder {
+
+        private BlockNavigationFeature blockNavigationFeature;
+        private StatusbarColorFeature statusbarColorFeature;
+
+        public BlockNavigationFeature begin() {
+            return new BlockNavigationFeature(this);
+        }
+
+        public ActivityFeatures build() {
+            return new ActivityFeatures(this);
+        }
+    }
+
+    private static class Feature {
+        Builder builder;
+
+        Feature(Builder b) {
+            this.builder = b;
+        }
+    }
+
     public static class StatusbarColorFeature extends Feature {
 
         public static final int STATUSBAR_COLOR_COLORED = 1;
@@ -77,13 +78,13 @@ public class ActivityFeatures {
             b.statusbarColorFeature = this;
         }
 
-        public Builder setBarsColored(Context context, boolean colored){
+        public Builder setBarsColored(Context context, boolean colored) {
             this.statusBarColorOption = colored ? STATUSBAR_COLOR_COLORED : STATUSBAR_COLOR_NON_COLORED;
             this.statusBarIconInvertedOption = !Settings.get().ui().isDarkModeEnabled(context);
             return builder;
         }
 
-        public Builder setBarsColored(boolean colored, boolean invertIcons){
+        public Builder setBarsColored(boolean colored, boolean invertIcons) {
             this.statusBarColorOption = colored ? STATUSBAR_COLOR_COLORED : STATUSBAR_COLOR_NON_COLORED;
             this.statusBarIconInvertedOption = invertIcons;
             return builder;

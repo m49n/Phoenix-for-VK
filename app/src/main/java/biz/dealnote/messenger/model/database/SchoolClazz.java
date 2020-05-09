@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class SchoolClazz implements Parcelable {
 
-    private final int id;
-
-    private final String title;
-
-    public SchoolClazz(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    private SchoolClazz(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-    }
-
     public static final Creator<SchoolClazz> CREATOR = new Creator<SchoolClazz>() {
         @Override
         public SchoolClazz createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class SchoolClazz implements Parcelable {
             return new SchoolClazz[size];
         }
     };
+    private final int id;
+    private final String title;
+
+    public SchoolClazz(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    private SchoolClazz(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+    }
 
     public String getTitle() {
         return title;

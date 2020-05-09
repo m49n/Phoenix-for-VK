@@ -11,6 +11,17 @@ import biz.dealnote.messenger.model.Post;
  */
 public final class PostPublishFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<PostPublishFeedback> CREATOR = new Creator<PostPublishFeedback>() {
+        @Override
+        public PostPublishFeedback createFromParcel(Parcel in) {
+            return new PostPublishFeedback(in);
+        }
+
+        @Override
+        public PostPublishFeedback[] newArray(int size) {
+            return new PostPublishFeedback[size];
+        }
+    };
     private Post post;
 
     public PostPublishFeedback(@FeedbackType int type) {
@@ -33,24 +44,12 @@ public final class PostPublishFeedback extends Feedback implements Parcelable {
         return 0;
     }
 
-    public static final Creator<PostPublishFeedback> CREATOR = new Creator<PostPublishFeedback>() {
-        @Override
-        public PostPublishFeedback createFromParcel(Parcel in) {
-            return new PostPublishFeedback(in);
-        }
-
-        @Override
-        public PostPublishFeedback[] newArray(int size) {
-            return new PostPublishFeedback[size];
-        }
-    };
+    public Post getPost() {
+        return post;
+    }
 
     public PostPublishFeedback setPost(Post post) {
         this.post = post;
         return this;
-    }
-
-    public Post getPost() {
-        return post;
     }
 }

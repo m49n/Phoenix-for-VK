@@ -26,8 +26,11 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommunityOptionsView> {
 
+    private static final int REQUEST_CATEGORY = 1;
+    private static final int REQUEST_DAY = 2;
+    private static final int REQUEST_MONTH = 3;
+    private static final int REQUEST_YEAR = 4;
     private final VKApiCommunity community;
-
     private final GroupSettings settings;
 
     public CommunityOptionsPresenter(int accountId, VKApiCommunity community, GroupSettings settings, @Nullable Bundle savedInstanceState) {
@@ -55,40 +58,40 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
     }
 
     @OnGuiCreated
-    private void resolveObsceneWordsEditorVisibility(){
-        if(isGuiReady()){
+    private void resolveObsceneWordsEditorVisibility() {
+        if (isGuiReady()) {
             getView().setObsceneStopWordsVisible(settings.isObsceneStopwordsEnabled());
         }
     }
 
     @OnGuiCreated
-    private void resolvePublicDateView(){
-        if(isGuiReady()){
+    private void resolvePublicDateView() {
+        if (isGuiReady()) {
             getView().setPublicDateVisible(community.type == VKApiCommunity.Type.PAGE);
             getView().dislayPublicDate(settings.getDateCreated());
         }
     }
 
     @OnGuiCreated
-    private void resolveCategoryView(){
-        if(isGuiReady()){
+    private void resolveCategoryView() {
+        if (isGuiReady()) {
             boolean available = community.type == VKApiCommunity.Type.PAGE;
             getView().setCategoryVisible(available);
 
-            if(available){
+            if (available) {
                 getView().displayCategory(nonNull(settings.getCategory()) ? settings.getCategory().getTitle() : null);
             }
         }
     }
 
     @OnGuiCreated
-    private void resolveSubjectView(){
-        if(isGuiReady()){
+    private void resolveSubjectView() {
+        if (isGuiReady()) {
             boolean available = community.type == VKApiCommunity.Type.GROUP;
 
             getView().setSubjectRootVisible(available);
 
-            if(available){
+            if (available) {
                 IdOption category = settings.getCategory();
 
                 getView().displaySubjectValue(0, nonNull(category) ? category.getTitle() : null);
@@ -97,7 +100,7 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
 
                 getView().setSubjectVisible(1, subAvailable);
 
-                if(subAvailable){
+                if (subAvailable) {
                     IdOption sub = settings.getSubcategory();
                     getView().displaySubjectValue(1, nonNull(sub) ? sub.getTitle() : null);
                 }
@@ -133,15 +136,10 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
         }
     }
 
-    private static final int REQUEST_CATEGORY = 1;
-    private static final int REQUEST_DAY = 2;
-    private static final int REQUEST_MONTH = 3;
-    private static final int REQUEST_YEAR = 4;
-
     public void fireDayClick() {
         List<IdOption> options = new ArrayList<>(32);
         options.add(new IdOption(0, getString(R.string.not_selected)));
-        for(int i = 1; i <= 31; i++){
+        for (int i = 1; i <= 31; i++) {
             options.add(new IdOption(i, String.valueOf(i)));
         }
 
@@ -170,7 +168,7 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
     public void fireYearClick() {
         List<IdOption> options = new ArrayList<>();
         options.add(new IdOption(0, getString(R.string.not_selected)));
-        for(int i = Calendar.getInstance().get(Calendar.YEAR); i >= 1800; i--){
+        for (int i = Calendar.getInstance().get(Calendar.YEAR); i >= 1800; i--) {
             options.add(new IdOption(i, String.valueOf(i)));
         }
 

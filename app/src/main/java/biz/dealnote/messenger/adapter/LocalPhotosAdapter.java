@@ -26,6 +26,7 @@ public class LocalPhotosAdapter extends RecyclerView.Adapter<LocalPhotosAdapter.
     private Context context;
     private List<LocalPhoto> data;
     private Set<ViewHolder> holders;
+    private ClickListener clickListener;
 
     public LocalPhotosAdapter(Context context, List<LocalPhoto> data) {
         this.context = context;
@@ -70,7 +71,7 @@ public class LocalPhotosAdapter extends RecyclerView.Adapter<LocalPhotosAdapter.
         for (ViewHolder holder : holders) {
             LocalPhoto photo = (LocalPhoto) holder.itemView.getTag();
 
-            if(photo == null){
+            if (photo == null) {
                 // TODO: 13.12.2017 Photo can bee null !!!! WTF?
                 continue;
             }
@@ -92,15 +93,13 @@ public class LocalPhotosAdapter extends RecyclerView.Adapter<LocalPhotosAdapter.
         this.clickListener = clickListener;
     }
 
-    private ClickListener clickListener;
-
-    public interface ClickListener {
-        void onPhotoClick(ViewHolder holder, LocalPhoto photo);
-    }
-
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public interface ClickListener {
+        void onPhotoClick(ViewHolder holder, LocalPhoto photo);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

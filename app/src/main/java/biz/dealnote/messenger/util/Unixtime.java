@@ -4,11 +4,11 @@ import java.util.Calendar;
 
 public class Unixtime {
 
-    public static long now(){
+    public static long now() {
         return System.currentTimeMillis() / 1000;
     }
 
-    public static long of(int year, int mounth, int day, int hour, int minute){
+    public static long of(int year, int mounth, int day, int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mounth);

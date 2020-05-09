@@ -37,6 +37,25 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPresenter, ICommunityOptionsView>
         implements ICommunityOptionsView {
 
+    private EditText mName;
+    private EditText mDescription;
+    private View mCommunityTypeRoot;
+    private EditText mAddress;
+    private View mCategoryRoot;
+    private MySpinnerView mCategory;
+    private View mSubjectRoot;
+    private MySpinnerView[] mSubjects;
+    private EditText mWebsite;
+    private View mPublicDateRoot;
+    private TextView mDay;
+    private TextView mMonth;
+    private TextView mYear;
+    private View mFeedbackCommentsRoot;
+    private CheckBox mFeedbackComments;
+    private CheckBox mObsceneFilter;
+    private CheckBox mObsceneStopWords;
+    private EditText mObsceneStopWordsEditText;
+
     public static CommunityOptionsFragment newInstance(int accountId, Community community, GroupSettings settings) {
         Bundle args = new Bundle();
         args.putParcelable(Extra.GROUP, community);
@@ -46,31 +65,6 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
         fragment.setArguments(args);
         return fragment;
     }
-
-    private EditText mName;
-    private EditText mDescription;
-    private View mCommunityTypeRoot;
-    private EditText mAddress;
-
-    private View mCategoryRoot;
-    private MySpinnerView mCategory;
-
-    private View mSubjectRoot;
-    private MySpinnerView[] mSubjects;
-
-    private EditText mWebsite;
-
-    private View mPublicDateRoot;
-    private TextView mDay;
-    private TextView mMonth;
-    private TextView mYear;
-
-    private View mFeedbackCommentsRoot;
-    private CheckBox mFeedbackComments;
-
-    private CheckBox mObsceneFilter;
-    private CheckBox mObsceneStopWords;
-    private EditText mObsceneStopWordsEditText;
 
     @Nullable
     @Override
@@ -149,7 +143,7 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
 
     @Override
     public void displayCategory(String categoryText) {
-        if(Objects.nonNull(mCategory)){
+        if (Objects.nonNull(mCategory)) {
             mCategory.setValue(categoryText);
         }
     }
@@ -157,7 +151,7 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
     @Override
     public void showSelectOptionDialog(int requestCode, List<IdOption> data) {
         String[] strings = new String[data.size()];
-        for(int i = 0; i < data.size(); i++){
+        for (int i = 0; i < data.size(); i++) {
             strings[i] = data.get(i).getTitle();
         }
 
@@ -175,14 +169,14 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
 
     @Override
     public void setSubjectVisible(int index, boolean visible) {
-        if(Objects.nonNull(mSubjects)){
+        if (Objects.nonNull(mSubjects)) {
             safelySetVisibleOrGone(mSubjects[index], visible);
         }
     }
 
     @Override
     public void displaySubjectValue(int index, String value) {
-        if(Objects.nonNull(mSubjects)){
+        if (Objects.nonNull(mSubjects)) {
             mSubjects[index].setValue(value);
         }
     }
@@ -199,19 +193,19 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
 
     @Override
     public void dislayPublicDate(Day day) {
-        if(day.getDay() > 0){
+        if (day.getDay() > 0) {
             safelySetText(mDay, String.valueOf(day.getDay()));
         } else {
             safelySetText(mDay, R.string.day);
         }
 
-        if(day.getYear() > 0){
+        if (day.getYear() > 0) {
             safelySetText(mYear, String.valueOf(day.getYear()));
         } else {
             safelySetText(mYear, R.string.year);
         }
 
-        if(day.getMonth() > 0){
+        if (day.getMonth() > 0) {
             safelySetText(mMonth, Month.getMonthTitle(day.getMonth()));
         } else {
             safelySetText(mMonth, R.string.month);

@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class TmpSource implements Parcelable {
 
-    private final int ownerId;
-
-    private final int sourceId;
-
-    public TmpSource(int ownerId, int sourceId) {
-        this.ownerId = ownerId;
-        this.sourceId = sourceId;
-    }
-
-    private TmpSource(Parcel in) {
-        ownerId = in.readInt();
-        sourceId = in.readInt();
-    }
-
     public static final Creator<TmpSource> CREATOR = new Creator<TmpSource>() {
         @Override
         public TmpSource createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class TmpSource implements Parcelable {
             return new TmpSource[size];
         }
     };
+    private final int ownerId;
+    private final int sourceId;
+
+    public TmpSource(int ownerId, int sourceId) {
+        this.ownerId = ownerId;
+        this.sourceId = sourceId;
+    }
+
+    private TmpSource(Parcel in) {
+        ownerId = in.readInt();
+        sourceId = in.readInt();
+    }
 
     public int getOwnerId() {
         return ownerId;

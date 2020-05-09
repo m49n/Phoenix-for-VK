@@ -11,6 +11,10 @@ import biz.dealnote.messenger.util.Optional;
  */
 public interface IVoicePlayer {
 
+    int STATUS_NO_PLAYBACK = 0;
+    int STATUS_PREPARING = 1;
+    int STATUS_PREPARED = 2;
+
     boolean toggle(int id, VoiceMessage audio) throws PrepareException;
 
     float getProgress();
@@ -26,10 +30,6 @@ public interface IVoicePlayer {
     void stop();
 
     void release();
-
-    int STATUS_NO_PLAYBACK = 0;
-    int STATUS_PREPARING = 1;
-    int STATUS_PREPARED = 2;
 
     interface IPlayerStatusListener {
         void onPlayerStatusChange(int status);

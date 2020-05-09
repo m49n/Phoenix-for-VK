@@ -42,9 +42,8 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
 public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
-    private int mAccountId;
-
     private static final int REFRESH_TIME = 1;
+    private int mAccountId;
     private PlaybackStatus mPlaybackStatus;
     private View play;
     private ImageView play_icon;
@@ -102,9 +101,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         lnt.setVisibility(MusicUtils.getMiniPlayerVisibility() ? View.VISIBLE : View.GONE);
         ImageButton mPClosePlay = root.findViewById(R.id.close_player);
         mPClosePlay.setOnClickListener(v -> {
-            MusicUtils.closeMiniPlayer();
-            lnt.setVisibility(View.GONE);
-            }
+                    MusicUtils.closeMiniPlayer();
+                    lnt.setVisibility(View.GONE);
+                }
         );
         play.setOnClickListener(v -> {
             MusicUtils.playOrPause();
@@ -160,8 +159,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     }
 
     @SuppressLint("SetTextI18n")
-    private void updateNowPlayingInfo()
-    {
+    private void updateNowPlayingInfo() {
         lnt.setVisibility(MusicUtils.getMiniPlayerVisibility() ? View.VISIBLE : View.GONE);
         String artist = MusicUtils.getArtistName();
         String trackName = MusicUtils.getTrackName();
@@ -268,6 +266,20 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         mFromTouch = false;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIsPaused = false;
+        mTimeHandler.removeMessages(REFRESH_TIME);
+
+        // Unregister the receiver
+        try {
+            requireActivity().unregisterReceiver(mPlaybackStatus);
+        } catch (final Throwable ignored) {
+            //$FALL-THROUGH$
+        }
+    }
+
     private static final class TimeHandler extends Handler {
 
         private final WeakReference<MiniPlayerFragment> mAudioPlayer;
@@ -289,20 +301,6 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
                 default:
                     break;
             }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mIsPaused = false;
-        mTimeHandler.removeMessages(REFRESH_TIME);
-
-        // Unregister the receiver
-        try {
-            requireActivity().unregisterReceiver(mPlaybackStatus);
-        } catch (final Throwable ignored) {
-            //$FALL-THROUGH$
         }
     }
 

@@ -35,10 +35,11 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     private static final String KEY_CURRENT = "current_account_id";
 
     private final Context app;
-
+    private final PublishProcessor<ISettings.IAccountsSettings> changesPublisher = PublishProcessor.create();
     private SharedPreferences preferences;
     private Map<Integer, String> tokens;
     private Map<Integer, String> types;
+    private PublishProcessor<Integer> currentPublisher = PublishProcessor.create();
 
     @SuppressLint("UseSparseArrays")
     AccountsSettings(Context context) {
@@ -70,9 +71,7 @@ class AccountsSettings implements ISettings.IAccountsSettings {
         return "type" + uid;
     }
 
-    private final PublishProcessor<ISettings.IAccountsSettings> changesPublisher = PublishProcessor.create();
-
-    private void notifyAboutRegisteredChanges(){
+    private void notifyAboutRegisteredChanges() {
         changesPublisher.onNext(this);
     }
 
@@ -80,8 +79,6 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     public Flowable<ISettings.IAccountsSettings> observeRegistered() {
         return changesPublisher.onBackpressureBuffer();
     }
-
-    private PublishProcessor<Integer> currentPublisher = PublishProcessor.create();
 
     @Override
     public Flowable<Integer> observeChanges() {
@@ -103,17 +100,6 @@ class AccountsSettings implements ISettings.IAccountsSettings {
         return ids;
     }
 
-    @Override
-    public void setCurrent(int accountId) {
-        if (getCurrent() == accountId) return;
-
-        PreferenceManager.getDefaultSharedPreferences(app)
-                .edit()
-                .putInt(KEY_CURRENT, accountId)
-                .apply();
-        fireAccountChange();
-    }
-
     private void fireAccountChange() {
         final IPushRegistrationResolver registrationResolver = Injection.providePushRegistrationResolver();
         registrationResolver.resolvePushRegistration()
@@ -126,6 +112,17 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     @Override
     public int getCurrent() {
         return preferences.getInt(KEY_CURRENT, INVALID_ID);
+    }
+
+    @Override
+    public void setCurrent(int accountId) {
+        if (getCurrent() == accountId) return;
+
+        PreferenceManager.getDefaultSharedPreferences(app)
+                .edit()
+                .putInt(KEY_CURRENT, accountId)
+                .apply();
+        fireAccountChange();
     }
 
     @NonNull
@@ -204,9 +201,9 @@ class AccountsSettings implements ISettings.IAccountsSettings {
                 .putString(tokenKeyFor(accountId), accessToken)
                 .apply();
     }
+
     @Override
-    public void storeTokenType(int accountId, String type)
-    {
+    public void storeTokenType(int accountId, String type) {
         types.put(accountId, type);
         preferences.edit()
                 .putString(typeKeyFor(accountId), type)
@@ -230,9 +227,9 @@ class AccountsSettings implements ISettings.IAccountsSettings {
                 .remove(tokenKeyFor(accountId))
                 .apply();
     }
+
     @Override
-    public void removeType(int accountId)
-    {
+    public void removeType(int accountId) {
         types.remove(accountId);
         preferences.edit()
                 .remove(typeKeyFor(accountId))

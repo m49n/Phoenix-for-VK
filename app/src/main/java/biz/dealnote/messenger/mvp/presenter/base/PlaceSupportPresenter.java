@@ -35,43 +35,43 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
         super(accountId, savedInstanceState);
     }
 
-    public void fireLinkClick(@NonNull Link link){
+    public void fireLinkClick(@NonNull Link link) {
         getView().openLink(getAccountId(), link);
     }
 
-    public void fireWikiPageClick(@NonNull WikiPage page){
+    public void fireWikiPageClick(@NonNull WikiPage page) {
         getView().openWikiPage(getAccountId(), page);
     }
 
-    public void firePhotoClick(@NonNull ArrayList<Photo> photos, int index){
+    public void firePhotoClick(@NonNull ArrayList<Photo> photos, int index) {
         getView().openSimplePhotoGallery(getAccountId(), photos, index, true);
     }
 
-    public void firePostClick(@NonNull Post post){
+    public void firePostClick(@NonNull Post post) {
         getView().openPost(getAccountId(), post);
     }
 
-    public void fireDocClick(@NonNull Document document){
+    public void fireDocClick(@NonNull Document document) {
         getView().openDocPreview(getAccountId(), document);
     }
 
-    public void fireOwnerClick(int ownerId){
+    public void fireOwnerClick(int ownerId) {
         getView().openOwnerWall(getAccountId(), ownerId);
     }
 
-    public void fireForwardMessagesClick(@NonNull ArrayList<Message> messages){
+    public void fireForwardMessagesClick(@NonNull ArrayList<Message> messages) {
         getView().openForwardMessages(getAccountId(), messages);
     }
 
-    public void fireAudioPlayClick(int position, @NonNull ArrayList<Audio> apiAudio){
+    public void fireAudioPlayClick(int position, @NonNull ArrayList<Audio> apiAudio) {
         getView().playAudioList(getAccountId(), position, apiAudio);
     }
 
-    public void fireVideoClick(@NonNull Video apiVideo){
+    public void fireVideoClick(@NonNull Video apiVideo) {
         getView().openVideo(getAccountId(), apiVideo);
     }
 
-    public void firePollClick(@NonNull Poll poll){
+    public void firePollClick(@NonNull Poll poll) {
         getView().openPoll(getAccountId(), poll);
     }
 
@@ -87,10 +87,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
         getView().openComments(getAccountId(), Commented.from(post), null);
     }
 
-    public final void fireCopiesLikesClick(String type, int ownerId, int itemId, String filter){
-        if(ILikesInteractor.FILTER_LIKES.equals(filter)){
+    public final void fireCopiesLikesClick(String type, int ownerId, int itemId, String filter) {
+        if (ILikesInteractor.FILTER_LIKES.equals(filter)) {
             getView().goToLikes(getAccountId(), type, ownerId, itemId);
-        } else if(ILikesInteractor.FILTER_COPIES.equals(filter)){
+        } else if (ILikesInteractor.FILTER_COPIES.equals(filter)) {
             getView().goToReposts(getAccountId(), type, ownerId, itemId);
         }
     }

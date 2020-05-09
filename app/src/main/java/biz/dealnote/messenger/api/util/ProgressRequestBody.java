@@ -13,15 +13,10 @@ import okio.BufferedSink;
  */
 public class ProgressRequestBody extends RequestBody {
 
+    private static final int DEFAULT_BUFFER_SIZE = 2048;
     private InputStream stream;
     private UploadCallbacks listener;
     private MediaType mediaType;
-
-    private static final int DEFAULT_BUFFER_SIZE = 2048;
-
-    public interface UploadCallbacks {
-        void onProgressUpdate(int percentage);
-    }
 
     public ProgressRequestBody(final InputStream file, final UploadCallbacks listener, MediaType mediaType) {
         this.stream = file;
@@ -49,7 +44,7 @@ public class ProgressRequestBody extends RequestBody {
         try {
             int read;
             while ((read = stream.read(buffer)) != -1) {
-                if(listener != null){
+                if (listener != null) {
                     listener.onProgressUpdate((int) (100 * uploaded / fileLength));
                 }
 
@@ -65,5 +60,9 @@ public class ProgressRequestBody extends RequestBody {
         } finally {
             stream.close();
         }
+    }
+
+    public interface UploadCallbacks {
+        void onProgressUpdate(int percentage);
     }
 }

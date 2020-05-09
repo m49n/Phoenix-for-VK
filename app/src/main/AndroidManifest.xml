@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="biz.dealnote.messenger">
 
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -16,16 +18,16 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
         android:name=".App"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
         android:theme="@style/App.DayNight"
         tools:targetApi="q">
 
@@ -58,15 +60,15 @@
             android:theme="@style/QuickReply" />
 
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".activity.CaptchaActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/QuickReply" />
+            android:theme="@style/QuickReply"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activity.PostPublishPrepareActivity"
-            android:label="@string/share_to_wall_label"
             android:excludeFromRecents="true"
+            android:label="@string/share_to_wall_label"
             android:theme="@style/QuickReply">
 
             <intent-filter>
@@ -92,7 +94,7 @@
 
         <service
             android:name=".service.QuickReplyService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activity.PhotosActivity"
@@ -113,10 +115,10 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/SplashTheme"
             android:configChanges="keyboardHidden"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
@@ -151,7 +153,7 @@
             android:name=".activity.SelectProfilesActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activity.SendAttachmentsActivity"
@@ -217,34 +219,37 @@
 
         <service
             android:name=".player.MusicPlaybackService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <provider
-            android:authorities="${applicationId}.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.EnterPinActivity"/>
+        <activity android:name=".activity.EnterPinActivity" />
 
-        <activity android:name=".activity.EnterPinActivityPortraitOnly"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.EnterPinActivityPortraitOnly"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.CreatePinActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.CreatePinActivity"
+            android:screenOrientation="portrait" />
 
-        <service android:name=".crypt.KeyExchangeService"/>
+        <service android:name=".crypt.KeyExchangeService" />
 
-        <activity android:name=".activity.DualTabPhotoActivity"
-            android:label="@string/photos"/>
+        <activity
+            android:name=".activity.DualTabPhotoActivity"
+            android:label="@string/photos" />
 
         <service
-            android:exported="false"
-            android:name=".service.KeepLongpollService"/>
+            android:name=".service.KeepLongpollService"
+            android:exported="false" />
 
         <service android:name=".FcmListenerService">
             <intent-filter>

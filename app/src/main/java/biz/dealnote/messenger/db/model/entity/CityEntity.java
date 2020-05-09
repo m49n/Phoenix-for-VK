@@ -20,13 +20,13 @@ public class CityEntity {
         return id;
     }
 
-    public boolean isImportant() {
-        return important;
+    public CityEntity setId(int id) {
+        this.id = id;
+        return this;
     }
 
-    public CityEntity setArea(String area) {
-        this.area = area;
-        return this;
+    public boolean isImportant() {
+        return important;
     }
 
     public CityEntity setImportant(boolean important) {
@@ -34,21 +34,21 @@ public class CityEntity {
         return this;
     }
 
-    public CityEntity setRegion(String region) {
-        this.region = region;
-        return this;
-    }
-
     public String getArea() {
         return area;
+    }
+
+    public CityEntity setArea(String area) {
+        this.area = area;
+        return this;
     }
 
     public String getRegion() {
         return region;
     }
 
-    public CityEntity setId(int id) {
-        this.id = id;
+    public CityEntity setRegion(String region) {
+        this.region = region;
         return this;
     }
 

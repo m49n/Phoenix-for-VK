@@ -24,30 +24,30 @@ public class StickerEntity extends Entity {
         return id;
     }
 
-    public StickerEntity setImages(List<Img> images) {
-        this.images = images;
-        return this;
-    }
-
-    public StickerEntity setImagesWithBackground(List<Img> imagesWithBackground) {
-        this.imagesWithBackground = imagesWithBackground;
-        return this;
-    }
-
     public String getAnimationUrl() {
         return animationUrl;
+    }
+
+    public StickerEntity setAnimationUrl(String animationUrl) {
+        this.animationUrl = animationUrl;
+        return this;
     }
 
     public List<Img> getImages() {
         return images;
     }
 
+    public StickerEntity setImages(List<Img> images) {
+        this.images = images;
+        return this;
+    }
+
     public List<Img> getImagesWithBackground() {
         return imagesWithBackground;
     }
 
-    public StickerEntity setAnimationUrl(String animationUrl) {
-        this.animationUrl = animationUrl;
+    public StickerEntity setImagesWithBackground(List<Img> imagesWithBackground) {
+        this.imagesWithBackground = imagesWithBackground;
         return this;
     }
 

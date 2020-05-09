@@ -19,28 +19,28 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
  */
 public class Dialog implements Identificable, Parcelable {
 
+    public static final Creator<Dialog> CREATOR = new Creator<Dialog>() {
+        @Override
+        public Dialog createFromParcel(Parcel in) {
+            return new Dialog(in);
+        }
+
+        @Override
+        public Dialog[] newArray(int size) {
+            return new Dialog[size];
+        }
+    };
     private int peerId;
-
     private String title;
-
     private int unreadCount;
-
     private String photo50;
-
     private String photo100;
-
     private String photo200;
-
     private Message message;
-
     private Owner interlocutor;
-
     private int lastMessageId;
-
     private int inRead;
-
     private int outRead;
-
     private boolean isGroupChannel;
 
     public Dialog() {
@@ -68,18 +68,6 @@ public class Dialog implements Identificable, Parcelable {
         this.outRead = in.readInt();
         this.isGroupChannel = in.readInt() == 1;
     }
-
-    public static final Creator<Dialog> CREATOR = new Creator<Dialog>() {
-        @Override
-        public Dialog createFromParcel(Parcel in) {
-            return new Dialog(in);
-        }
-
-        @Override
-        public Dialog[] newArray(int size) {
-            return new Dialog[size];
-        }
-    };
 
     public int getPeerId() {
         return peerId;
@@ -240,18 +228,13 @@ public class Dialog implements Identificable, Parcelable {
         return interlocutor == null ? null : interlocutor.getMaxSquareAvatar();
     }
 
+    public int getInRead() {
+        return inRead;
+    }
+
     public Dialog setInRead(int inRead) {
         this.inRead = inRead;
         return this;
-    }
-
-    public Dialog setOutRead(int outRead) {
-        this.outRead = outRead;
-        return this;
-    }
-
-    public int getInRead() {
-        return inRead;
     }
 
     public boolean isLastMessageRead() {
@@ -262,13 +245,18 @@ public class Dialog implements Identificable, Parcelable {
         return outRead;
     }
 
-    public Dialog setGroupChannel(boolean groupChannel) {
-        isGroupChannel = groupChannel;
+    public Dialog setOutRead(int outRead) {
+        this.outRead = outRead;
         return this;
     }
 
     public boolean isGroupChannel() {
         return isGroupChannel;
+    }
+
+    public Dialog setGroupChannel(boolean groupChannel) {
+        isGroupChannel = groupChannel;
+        return this;
     }
 
     @Override

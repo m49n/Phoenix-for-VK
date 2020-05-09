@@ -42,5 +42,5 @@
         android:layout_alignParentTop="false"
         android:layout_centerVertical="true"
         android:checked="true"
-        android:padding="12dp"/>
+        android:padding="12dp" />
 </RelativeLayout>

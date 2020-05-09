@@ -125,6 +125,14 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
         refreshAlbumInfoIfNeed();
     }
 
+    private static List<SelectablePhotoWrapper> wrappersOf(List<Photo> photos) {
+        List<SelectablePhotoWrapper> wrappers = new ArrayList<>(photos.size());
+        for (Photo photo : photos) {
+            wrappers.add(new SelectablePhotoWrapper(photo));
+        }
+        return wrappers;
+    }
+
     @Override
     public void saveState(@NonNull Bundle outState) {
         super.saveState(outState);
@@ -165,14 +173,6 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
     private void onActualOwnerInfoReceived(Owner owner) {
         this.owner = owner;
         resolveButtonAddVisibility(true);
-    }
-
-    private static List<SelectablePhotoWrapper> wrappersOf(List<Photo> photos) {
-        List<SelectablePhotoWrapper> wrappers = new ArrayList<>(photos.size());
-        for (Photo photo : photos) {
-            wrappers.add(new SelectablePhotoWrapper(photo));
-        }
-        return wrappers;
     }
 
     @OnGuiCreated
@@ -270,19 +270,15 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
 
     private void requestActualData(int offset) {
         setRequestNow(true);
-        if(albumId != -9001 && albumId != -9000) {
+        if (albumId != -9001 && albumId != -9000) {
             appendDisposable(interactor.get(getAccountId(), ownerId, albumId, COUNT, offset, true)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
-        }
-        else if(albumId == -9000)
-        {
+        } else if (albumId == -9000) {
             appendDisposable(interactor.getUsersPhoto(getAccountId(), ownerId, 1, offset, COUNT)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));
-        }
-        else if(albumId == -9001)
-        {
+        } else if (albumId == -9001) {
             appendDisposable(interactor.getAll(getAccountId(), ownerId, 1, 1, offset, COUNT)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(photos -> onActualPhotosReceived(offset, photos), this::onActualDataGetError));

@@ -28,7 +28,8 @@ public class LikesListPresenter extends SimpleOwnersPresenter<ISimpleOwnersView>
     private final ILikesInteractor likesInteractor;
 
     private boolean endOfContent;
-
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean loadingNow;
     public LikesListPresenter(int accountId, String type, int ownerId, int itemId, String filter, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.type = type;
@@ -40,9 +41,6 @@ public class LikesListPresenter extends SimpleOwnersPresenter<ISimpleOwnersView>
 
         requestData(0);
     }
-
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-    private boolean loadingNow;
     //private int loadingOffset;
 
     private void requestData(int offset) {

@@ -33,20 +33,41 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class ExoGifPlayer implements IGifPlayer {
 
-    private int status;
-
     private final String url;
-
-    private VideoSize size;
-
-    private SimpleExoPlayer internalPlayer;
-
     private final ProxyConfig proxyConfig;
+    private final List<IVideoSizeChangeListener> videoSizeChangeListeners = new ArrayList<>(1);
+    private final List<IStatusChangeListener> statusChangeListeners = new ArrayList<>(1);
+    private int status;
+    private VideoSize size;
+    private final VideoListener videoListener = new VideoListener() {
+        @Override
+        public void onVideoSizeChanged(int i, int i1, int i2, float v) {
+            size = new VideoSize(i, i1);
+            ExoGifPlayer.this.onVideoSizeChanged();
+        }
+
+        @Override
+        public void onRenderedFirstFrame() {
+
+        }
+    };
+    private SimpleExoPlayer internalPlayer;
+    private boolean supposedToBePlaying;
 
     public ExoGifPlayer(String url, ProxyConfig proxyConfig) {
         this.url = url;
         this.proxyConfig = proxyConfig;
         this.status = IStatus.INIT;
+    }
+
+    private static void pausePlayer(SimpleExoPlayer internalPlayer) {
+        internalPlayer.setPlayWhenReady(false);
+        internalPlayer.getPlaybackState();
+    }
+
+    private static void startPlayer(SimpleExoPlayer internalPlayer) {
+        internalPlayer.setPlayWhenReady(true);
+        internalPlayer.getPlaybackState();
     }
 
     @Override
@@ -56,7 +77,7 @@ public class ExoGifPlayer implements IGifPlayer {
 
     @Override
     public void play() {
-        if(supposedToBePlaying) return;
+        if (supposedToBePlaying) return;
 
         supposedToBePlaying = true;
 
@@ -88,7 +109,7 @@ public class ExoGifPlayer implements IGifPlayer {
         if (nonNull(proxyConfig)) {
             proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
 
-            if(proxyConfig.isAuthEnabled()){
+            if (proxyConfig.isAuthEnabled()) {
                 Authenticator authenticator = new Authenticator() {
                     public PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
@@ -123,52 +144,28 @@ public class ExoGifPlayer implements IGifPlayer {
         internalPlayer.prepare(mediaSource);
     }
 
-    private void onInternalPlayerStateChanged(int state){
-        if(state == Player.STATE_READY){
+    private void onInternalPlayerStateChanged(int state) {
+        if (state == Player.STATE_READY) {
             setStatus(IStatus.PREPARED);
         }
     }
 
-    private final VideoListener videoListener = new VideoListener() {
-        @Override
-        public void onVideoSizeChanged(int i, int i1, int i2, float v) {
-            size = new VideoSize(i, i1);
-            ExoGifPlayer.this.onVideoSizeChanged();
-        }
-
-        @Override
-        public void onRenderedFirstFrame() {
-
-        }
-    };
-
-    private void onVideoSizeChanged(){
-        for(IVideoSizeChangeListener listener : videoSizeChangeListeners){
+    private void onVideoSizeChanged() {
+        for (IVideoSizeChangeListener listener : videoSizeChangeListeners) {
             listener.onVideoSizeChanged(this, this.size);
         }
     }
 
-    private boolean supposedToBePlaying;
-
-    private static void pausePlayer(SimpleExoPlayer internalPlayer){
-        internalPlayer.setPlayWhenReady(false);
-        internalPlayer.getPlaybackState();
-    }
-    private static void startPlayer(SimpleExoPlayer internalPlayer){
-        internalPlayer.setPlayWhenReady(true);
-        internalPlayer.getPlaybackState();
-    }
-
     @Override
     public void pause() {
-        if(!supposedToBePlaying) return;
+        if (!supposedToBePlaying) return;
 
         supposedToBePlaying = false;
 
         if (nonNull(internalPlayer)) {
             try {
                 pausePlayer(this.internalPlayer);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -186,27 +183,24 @@ public class ExoGifPlayer implements IGifPlayer {
         if (nonNull(internalPlayer)) {
             try {
                 internalPlayer.release();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void setStatus(int newStatus){
+    private void setStatus(int newStatus) {
         final int oldStatus = this.status;
 
-        if(this.status == newStatus){
+        if (this.status == newStatus) {
             return;
         }
 
         this.status = newStatus;
-        for(IStatusChangeListener listener : statusChangeListeners){
+        for (IStatusChangeListener listener : statusChangeListeners) {
             listener.onPlayerStatusChange(this, oldStatus, newStatus);
         }
     }
-
-    private final List<IVideoSizeChangeListener> videoSizeChangeListeners = new ArrayList<>(1);
-    private final List<IStatusChangeListener> statusChangeListeners = new ArrayList<>(1);
 
     @Override
     public void addVideoSizeChangeListener(IVideoSizeChangeListener listener) {

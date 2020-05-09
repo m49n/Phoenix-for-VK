@@ -47,15 +47,14 @@ class FaveApi extends AbsApi implements IFaveApi {
         return provideService(IFaveService.class)
                 .flatMap(service -> service.getVideos(offset, count, "video", 1, UserColumns.API_FIELDS)
                         .map(extractResponseWithErrorHandling()).flatMap(t -> {
-                            List<VkApiAttachments.Entry> temp = listEmptyIfNull(t.items);
-                            List<VKApiVideo> videos = new ArrayList<>();
-                            for(VkApiAttachments.Entry i : temp)
-                            {
-                                if(i.attachment instanceof VKApiVideo)
-                                    videos.add((VKApiVideo)i.attachment);
-                            }
-                            return Single.just(videos);
-                        }
+                                    List<VkApiAttachments.Entry> temp = listEmptyIfNull(t.items);
+                                    List<VKApiVideo> videos = new ArrayList<>();
+                                    for (VkApiAttachments.Entry i : temp) {
+                                        if (i.attachment instanceof VKApiVideo)
+                                            videos.add((VKApiVideo) i.attachment);
+                                    }
+                                    return Single.just(videos);
+                                }
                         ));
     }
 

@@ -48,10 +48,10 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
     }
 
     private ArrayList<Audio> listFiles(String query) {
-        if(query == null)
+        if (query == null)
             return new ArrayList<>();
         File dir = new File(Settings.get().other().getMusicDir());
-        if(dir.listFiles() == null || dir.listFiles().length <= 0)
+        if (dir.listFiles() == null || dir.listFiles().length <= 0)
             return new ArrayList<>();
         ArrayList<File> files = new ArrayList<>();
         int id = 0;
@@ -60,7 +60,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
                 files.add(file);
             }
         }
-        if(files.size() <= 0)
+        if (files.size() <= 0)
             return new ArrayList<>();
         Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 
@@ -83,22 +83,20 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
         return audios;
     }
 
-    public void doLoadCache()
-    {
+    public void doLoadCache() {
         LoadFromCache = true;
         getView().ProvideReadCachedAudio();
-        LocalSeached(listFiles(getCriteria().getQuery()), (AudioSearchCriteria)getCriteria().safellyClone(), getNextFrom());
+        LocalSeached(listFiles(getCriteria().getQuery()), (AudioSearchCriteria) getCriteria().safellyClone(), getNextFrom());
     }
 
     @Override
     void onSeacrhError(Throwable throwable) {
         super.onSeacrhError(throwable);
         if (isGuiResumed()) {
-            if(!LoadFromCache) {
+            if (!LoadFromCache) {
                 showError(getView(), Utils.getCauseIfRuntime(throwable));
                 callView(IAudioSearchView::doesLoadCache);
-            }
-            else
+            } else
                 doLoadCache();
         }
     }
@@ -112,7 +110,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
 
     public void playAudio(Context context, int position) {
         MusicPlaybackService.startForPlayList(context, (ArrayList<Audio>) data, position, false);
-        if(!Settings.get().other().isShow_mini_player())
+        if (!Settings.get().other().isShow_mini_player())
             PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(context);
     }
 

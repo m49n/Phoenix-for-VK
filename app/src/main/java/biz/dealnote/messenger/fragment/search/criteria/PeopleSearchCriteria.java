@@ -47,12 +47,17 @@ public final class PeopleSearchCriteria extends BaseSearchCriteria implements Pa
     public static final int KEY_COMPANY = 11;
     public static final int KEY_POSITION = 12;
     public static final int KEY_FROM_LIST = 29;
+    public static final Creator<PeopleSearchCriteria> CREATOR = new Creator<PeopleSearchCriteria>() {
+        @Override
+        public PeopleSearchCriteria createFromParcel(Parcel in) {
+            return new PeopleSearchCriteria(in);
+        }
 
-    public static class FromList {
-        public static final int FRIENDS = 1;
-        public static final int SUBSCRIPTIONS = 2;
-    }
-
+        @Override
+        public PeopleSearchCriteria[] newArray(int size) {
+            return new PeopleSearchCriteria[size];
+        }
+    };
     private Integer groupId;
 
     public PeopleSearchCriteria(String query) {
@@ -190,18 +195,6 @@ public final class PeopleSearchCriteria extends BaseSearchCriteria implements Pa
         return 0;
     }
 
-    public static final Creator<PeopleSearchCriteria> CREATOR = new Creator<PeopleSearchCriteria>() {
-        @Override
-        public PeopleSearchCriteria createFromParcel(Parcel in) {
-            return new PeopleSearchCriteria(in);
-        }
-
-        @Override
-        public PeopleSearchCriteria[] newArray(int size) {
-            return new PeopleSearchCriteria[size];
-        }
-    };
-
     @Override
     public PeopleSearchCriteria clone() throws CloneNotSupportedException {
         return (PeopleSearchCriteria) super.clone();
@@ -214,5 +207,10 @@ public final class PeopleSearchCriteria extends BaseSearchCriteria implements Pa
     public PeopleSearchCriteria setGroupId(Integer groupId) {
         this.groupId = groupId;
         return this;
+    }
+
+    public static class FromList {
+        public static final int FRIENDS = 1;
+        public static final int SUBSCRIPTIONS = 2;
     }
 }

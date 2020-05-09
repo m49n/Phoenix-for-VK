@@ -40,7 +40,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
 
     private ActionListener mActionListener;
 
-    public FeedbackLinkAdapter(Context context, List<Object> objects, @NonNull ActionListener actionListener){
+    public FeedbackLinkAdapter(Context context, List<Object> objects, @NonNull ActionListener actionListener) {
         this.mContext = context;
         this.mActionListener = actionListener;
         this.mData = objects;
@@ -58,7 +58,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
         final Object item = mData.get(position);
 
         String title = null;
-        if(item instanceof User){
+        if (item instanceof User) {
             User user = (User) item;
             title = user.getFullName();
 
@@ -66,13 +66,13 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
             holder.ivImage.setVisibility(View.VISIBLE);
 
             ViewUtils.displayAvatar(holder.ivImage, transformation, user.getMaxSquareAvatar(), null);
-        } else if(item instanceof Post){
+        } else if (item instanceof Post) {
             Post post = (Post) item;
             title = post.getTextCopiesInclude();
             holder.mSubtitle.setText(R.string.open_post);
 
             String imageUrl = post.findFirstImageCopiesInclude(PhotoSize.M, false);
-            if(TextUtils.isEmpty(imageUrl)){
+            if (TextUtils.isEmpty(imageUrl)) {
                 holder.ivImage.setVisibility(View.GONE);
             } else {
                 holder.ivImage.setVisibility(View.VISIBLE);
@@ -80,20 +80,20 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
                         .load(imageUrl)
                         .into(holder.ivImage);
             }
-        } else if(item instanceof Comment){
+        } else if (item instanceof Comment) {
             Comment comment = (Comment) item;
             title = comment.getText();
             holder.mSubtitle.setText(R.string.jump_to_comment);
             String senderAvatar = comment.getMaxAuthorAvaUrl();
             holder.ivImage.setVisibility(TextUtils.isEmpty(senderAvatar) ? View.GONE : View.VISIBLE);
             ViewUtils.displayAvatar(holder.ivImage, transformation, senderAvatar, null);
-        } else if(item instanceof Photo){
+        } else if (item instanceof Photo) {
             Photo photo = (Photo) item;
             title = photo.getText();
             holder.mSubtitle.setText(R.string.show_photo);
             String imgUrl = photo.getUrlForSize(PhotoSize.M, false);
 
-            if(TextUtils.isEmpty(imgUrl)){
+            if (TextUtils.isEmpty(imgUrl)) {
                 holder.ivImage.setVisibility(View.GONE);
             } else {
                 holder.ivImage.setVisibility(View.VISIBLE);
@@ -101,13 +101,13 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
                         .load(imgUrl)
                         .into(holder.ivImage);
             }
-        } else if(item instanceof Video){
+        } else if (item instanceof Video) {
             Video video = (Video) item;
             String imgUrl = video.getImage();
             title = video.getTitle();
             holder.mSubtitle.setText(R.string.show_video);
 
-            if(TextUtils.isEmpty(imgUrl)){
+            if (TextUtils.isEmpty(imgUrl)) {
                 holder.ivImage.setVisibility(View.GONE);
             } else {
                 holder.ivImage.setVisibility(View.VISIBLE);
@@ -115,7 +115,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
                         .load(imgUrl)
                         .into(holder.ivImage);
             }
-        } else if(item instanceof Topic){
+        } else if (item instanceof Topic) {
             Topic topic = (Topic) item;
             title = topic.getTitle();
             holder.mSubtitle.setText(R.string.open_topic);
@@ -128,23 +128,32 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
         holder.mTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
     }
 
-    public interface ActionListener extends EventListener {
-        void onPostClick(@NonNull Post post);
-        void onCommentClick(@NonNull Comment comment);
-        void onTopicClick(@NonNull Topic topic);
-        void onPhotoClick(@NonNull Photo photo);
-        void onVideoClick(@NonNull Video video);
-        void onUserClick(@NonNull User user);
-    }
-
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
+    public interface ActionListener extends EventListener {
+        void onPostClick(@NonNull Post post);
+
+        void onCommentClick(@NonNull Comment comment);
+
+        void onTopicClick(@NonNull Topic topic);
+
+        void onPhotoClick(@NonNull Photo photo);
+
+        void onVideoClick(@NonNull Video video);
+
+        void onUserClick(@NonNull User user);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ViewHolder(View root){
+        private TextView mTitle;
+        private TextView mSubtitle;
+        private ImageView ivImage;
+        private ImageView ivForward;
+        ViewHolder(View root) {
             super(root);
             mTitle = root.findViewById(R.id.item_feedback_link_text);
             mSubtitle = root.findViewById(R.id.item_feedback_link_text2);
@@ -154,31 +163,26 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
 
             root.setOnClickListener(v -> {
                 Object item = mData.get(getBindingAdapterPosition());
-                if(item instanceof User){
+                if (item instanceof User) {
                     User user = (User) item;
                     mActionListener.onUserClick(user);
-                } else if(item instanceof Post){
+                } else if (item instanceof Post) {
                     Post post = (Post) item;
                     mActionListener.onPostClick(post);
-                } else if(item instanceof Comment){
+                } else if (item instanceof Comment) {
                     Comment comment = (Comment) item;
                     mActionListener.onCommentClick(comment);
-                } else if(item instanceof Photo){
+                } else if (item instanceof Photo) {
                     Photo photo = (Photo) item;
                     mActionListener.onPhotoClick(photo);
-                } else if(item instanceof Video){
+                } else if (item instanceof Video) {
                     Video video = (Video) item;
                     mActionListener.onVideoClick(video);
-                } else if(item instanceof Topic){
+                } else if (item instanceof Topic) {
                     Topic topic = (Topic) item;
                     mActionListener.onTopicClick(topic);
                 }
             });
         }
-
-        private TextView mTitle;
-        private TextView mSubtitle;
-        private ImageView ivImage;
-        private ImageView ivForward;
     }
 }

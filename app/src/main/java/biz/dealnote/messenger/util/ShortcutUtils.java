@@ -33,6 +33,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class ShortcutUtils {
 
     private static final String SHURTCUT_ACTION = "com.android.launcher.action.INSTALL_SHORTCUT";
+    private static final int MAX_DYNAMIC_COUNT = 5;
 
     private static int getLauncherIconSize(Context context) {
         return context.getDrawable(R.mipmap.ic_launcher).getIntrinsicWidth();
@@ -63,7 +64,7 @@ public class ShortcutUtils {
 
             //canvas.drawBitmap(avatar, 0, 0, paint);
 
-           // avatar.recycle();
+            // avatar.recycle();
         }
 
         Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
@@ -80,10 +81,10 @@ public class ShortcutUtils {
             Icon icon = Icon.createWithBitmap(bitmap);
 
             ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(context, shortcutId)
-                            .setIcon(icon)
-                            .setShortLabel(title)
-                            .setIntent(shortcutIntent)
-                            .build();
+                    .setIcon(icon)
+                    .setShortLabel(title)
+                    .setIntent(shortcutIntent)
+                    .build();
 
             ShortcutManager manager = context.getSystemService(ShortcutManager.class);
             if (manager != null) {
@@ -142,8 +143,6 @@ public class ShortcutUtils {
                 .get());
     }
 
-    private static final int MAX_DYNAMIC_COUNT = 5;
-
     @TargetApi(Build.VERSION_CODES.N_MR1)
     public static Completable addDynamicShortcut(Context context, int accountId, Peer peer) {
         final Context app = context.getApplicationContext();
@@ -164,7 +163,7 @@ public class ShortcutUtils {
 
                     List<String> mustBeRemoved = new ArrayList<>(1);
 
-                    if(infos.size() >= MAX_DYNAMIC_COUNT){
+                    if (infos.size() >= MAX_DYNAMIC_COUNT) {
                         Collections.sort(infos, (o1, o2) -> Integer.compare(o1.getRank(), o2.getRank()));
 
                         ShortcutInfo infoWhichMustBeRemoved = infos.get(infos.size() - 1);
@@ -188,7 +187,7 @@ public class ShortcutUtils {
                         builder.setIcon(icon);
                     }
 
-                    if(!mustBeRemoved.isEmpty()){
+                    if (!mustBeRemoved.isEmpty()) {
                         manager.removeDynamicShortcuts(mustBeRemoved);
                     }
 

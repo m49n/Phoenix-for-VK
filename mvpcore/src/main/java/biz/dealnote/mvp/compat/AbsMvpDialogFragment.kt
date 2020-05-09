@@ -32,7 +32,7 @@ abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> : androidx.
         delegate.onViewCreated()
     }
 
-    protected fun fireViewCreated(){
+    protected fun fireViewCreated() {
         delegate.onViewCreated()
     }
 

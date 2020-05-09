@@ -5,5 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
-    android:theme="@style/Theme.Toolbar" />
+    android:theme="@style/Theme.Toolbar"
+    app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption" />

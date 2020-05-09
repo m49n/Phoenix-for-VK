@@ -13,6 +13,7 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IAllFriendsView extends IMvpView, IErrorView, IAccountDependencyView {
     void notifyDatasetChanged(boolean grouping);
+
     void setSwipeRefreshEnabled(boolean enabled);
 
     void displayData(List<UsersPart> data, boolean grouping);

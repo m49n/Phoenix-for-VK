@@ -77,6 +77,7 @@ public class UploadManagerImpl implements IUploadManager {
     private volatile Upload current;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private CompositeDisposable otherDisposables = new CompositeDisposable();
+    private boolean needCreateChannel = true;
 
     public UploadManagerImpl(Context context, INetworker networker, IStorages storages, IAttachmentsRepository attachmentsRepository,
                              IWallsRepository walls) {
@@ -162,8 +163,6 @@ public class UploadManagerImpl implements IUploadManager {
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(this::updateNotification));
     }
-
-    private boolean needCreateChannel = true;
 
     private void updateNotification(List<IProgressUpdate> updates) {
         if (nonEmpty(updates)) {

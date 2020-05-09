@@ -35,6 +35,9 @@ public final class AESCrypt {
     public static boolean DEBUG_LOG_ENABLED = false;
 
 
+    private AESCrypt() {
+    }
+
     /**
      * Generates SHA256 hash of the password which is used as key
      *
@@ -52,7 +55,6 @@ public final class AESCrypt {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
         return secretKeySpec;
     }
-
 
     /**
      * Encrypt and encode message using 256-bit AES with key generated from password.
@@ -83,7 +85,6 @@ public final class AESCrypt {
         }
     }
 
-
     /**
      * More flexible AES encrypt that doesn't encode
      *
@@ -104,7 +105,6 @@ public final class AESCrypt {
 
         return cipherText;
     }
-
 
     /**
      * Decrypt and decode ciphertext using 256-bit AES with key generated from password
@@ -140,7 +140,6 @@ public final class AESCrypt {
         }
     }
 
-
     /**
      * More flexible AES decrypt that doesn't encode
      *
@@ -162,7 +161,6 @@ public final class AESCrypt {
         return decryptedBytes;
     }
 
-
     private static void log(String what, byte[] bytes) {
         if (DEBUG_LOG_ENABLED)
             Log.d(TAG, what + "[" + bytes.length + "] [" + bytesToHex(bytes) + "]");
@@ -172,7 +170,6 @@ public final class AESCrypt {
         if (DEBUG_LOG_ENABLED)
             Log.d(TAG, what + "[" + value.length() + "] [" + value + "]");
     }
-
 
     /**
      * Converts byte array to hexidecimal useful for logging and fault findingn
@@ -188,8 +185,5 @@ public final class AESCrypt {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
-    }
-
-    private AESCrypt() {
     }
 }

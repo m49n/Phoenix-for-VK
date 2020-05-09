@@ -12,6 +12,10 @@ public class Emojicon {
 
     }
 
+    public Emojicon(String emoji) {
+        this.emoji = emoji;
+    }
+
     public static Emojicon fromCodePoint(int codePoint) {
         Emojicon emoji = new Emojicon();
         emoji.emoji = newString(codePoint);
@@ -30,8 +34,12 @@ public class Emojicon {
         return emoji;
     }
 
-    public Emojicon(String emoji) {
-        this.emoji = emoji;
+    public static String newString(int codePoint) {
+        if (Character.charCount(codePoint) == 1) {
+            return String.valueOf(codePoint);
+        } else {
+            return new String(Character.toChars(codePoint));
+        }
     }
 
     public String getEmoji() {
@@ -50,13 +58,5 @@ public class Emojicon {
     @Override
     public int hashCode() {
         return emoji.hashCode();
-    }
-
-    public static String newString(int codePoint) {
-        if (Character.charCount(codePoint) == 1) {
-            return String.valueOf(codePoint);
-        } else {
-            return new String(Character.toChars(codePoint));
-        }
     }
 }

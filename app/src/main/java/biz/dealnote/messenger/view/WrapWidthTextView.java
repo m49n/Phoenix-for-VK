@@ -15,6 +15,8 @@ import biz.dealnote.messenger.R;
  */
 public class WrapWidthTextView extends AppCompatTextView {
 
+    private boolean mFixWrapText;
+
     public WrapWidthTextView(Context context) {
         this(context, null);
     }
@@ -23,8 +25,6 @@ public class WrapWidthTextView extends AppCompatTextView {
         super(context, attrs);
         init(context, attrs);
     }
-
-    private boolean mFixWrapText;
 
     private void init(Context context, AttributeSet attributeSet) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attributeSet, R.styleable.WrapWidthTextView, 0, 0);

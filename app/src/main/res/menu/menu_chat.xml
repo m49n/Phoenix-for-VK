@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        app:showAsAction="always"
-        android:title="@string/encryption_status"
         android:id="@+id/crypt_state"
+        android:icon="@drawable/unlock"
+        android:title="@string/encryption_status"
         app:iconTint="?colorOnSurface"
-        android:icon="@drawable/unlock"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_refresh"
@@ -36,11 +36,11 @@
 
     <item
         android:id="@+id/action_key_exchange"
-        android:title="@string/key_exchange"/>
+        android:title="@string/key_exchange" />
 
     <item
         android:id="@+id/messages_search"
-        android:title="@string/search"/>
+        android:title="@string/search" />
 
     <item
         android:id="@+id/change_hrono_history"

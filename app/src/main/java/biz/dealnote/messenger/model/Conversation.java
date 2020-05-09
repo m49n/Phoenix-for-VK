@@ -34,30 +34,16 @@ public class Conversation {
 
     private int acl;
 
-    public Conversation setAcl(int acl) {
-        this.acl = acl;
-        return this;
+    public Conversation(int id) {
+        this.id = id;
     }
 
     public int getAcl() {
         return acl;
     }
 
-    public static final class AclFlags {
-        public static final int CAN_INVITE = 1;
-        public static final int CAN_CHANGE_INFO = 2;
-        public static final int CAN_CHANGE_PIN = 4;
-        public static final int CAN_PROMOTE_USERS = 8;
-        public static final int CAN_SEE_INVITE_LINK = 16;
-        public static final int CAN_CHANGE_INVITE_LINK = 32;
-    }
-
-    public Conversation(int id) {
-        this.id = id;
-    }
-
-    public Conversation setPinned(Message pinned) {
-        this.pinned = pinned;
+    public Conversation setAcl(int acl) {
+        this.acl = acl;
         return this;
     }
 
@@ -65,13 +51,18 @@ public class Conversation {
         return pinned;
     }
 
-    public Conversation setInterlocutor(Owner interlocutor) {
-        this.interlocutor = interlocutor;
+    public Conversation setPinned(Message pinned) {
+        this.pinned = pinned;
         return this;
     }
 
     public Owner getInterlocutor() {
         return interlocutor;
+    }
+
+    public Conversation setInterlocutor(Owner interlocutor) {
+        this.interlocutor = interlocutor;
+        return this;
     }
 
     public int getId() {
@@ -141,11 +132,11 @@ public class Conversation {
         return this;
     }
 
-    public String get100orSmallerAvatar(){
+    public String get100orSmallerAvatar() {
         return firstNonEmptyString(photo100, photo50);
     }
 
-    public String getMaxSquareAvatar(){
+    public String getMaxSquareAvatar() {
         return firstNonEmptyString(photo200, photo100, photo200);
     }
 
@@ -156,5 +147,14 @@ public class Conversation {
     public Conversation setGroupChannel(boolean isGroupChannel) {
         this.isGroupChannel = isGroupChannel;
         return this;
+    }
+
+    public static final class AclFlags {
+        public static final int CAN_INVITE = 1;
+        public static final int CAN_CHANGE_INFO = 2;
+        public static final int CAN_CHANGE_PIN = 4;
+        public static final int CAN_PROMOTE_USERS = 8;
+        public static final int CAN_SEE_INVITE_LINK = 16;
+        public static final int CAN_CHANGE_INVITE_LINK = 32;
     }
 }

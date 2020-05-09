@@ -35,6 +35,12 @@ public class CaptchaActivity extends AppCompatActivity {
 
     private String requestSid;
 
+    public static Intent createIntent(@NonNull Context context, String captchaSid, String captchaImg) {
+        return new Intent(context, CaptchaActivity.class)
+                .putExtra(Extra.CAPTCHA_SID, captchaSid)
+                .putExtra(Extra.CAPTCHA_URL, captchaImg);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(Settings.get().ui().getMainTheme());
@@ -71,16 +77,16 @@ public class CaptchaActivity extends AppCompatActivity {
                 .subscribe(integer -> onRequestCancelled(), ignore()));
     }
 
-    private void cancel(){
+    private void cancel() {
         captchaProvider.cancel(requestSid);
         finish();
     }
 
-    private void onRequestCancelled(){
+    private void onRequestCancelled() {
         finish();
     }
 
-    private void onWaitingRequestRecieved(){
+    private void onWaitingRequestRecieved() {
         captchaProvider.notifyThatCaptchaEntryActive(requestSid);
     }
 
@@ -88,12 +94,6 @@ public class CaptchaActivity extends AppCompatActivity {
     protected void onDestroy() {
         mCompositeDisposable.dispose();
         super.onDestroy();
-    }
-
-    public static Intent createIntent(@NonNull Context context, String captchaSid, String captchaImg){
-        return new Intent(context, CaptchaActivity.class)
-                .putExtra(Extra.CAPTCHA_SID, captchaSid)
-                .putExtra(Extra.CAPTCHA_URL, captchaImg);
     }
 
     private void onOkButtonClick() {

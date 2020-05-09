@@ -76,6 +76,7 @@ public interface IWallApi {
     Single<DefaultCommentsResponse> getComments(int ownerId, int postId, Boolean needLikes,
                                                 Integer startCommentId, Integer offset, Integer count,
                                                 String sort, Boolean extended, String fields);
+
     @CheckResult
     Single<Integer> reportPost(Integer owner_id, Integer post_id, Integer reason);
 

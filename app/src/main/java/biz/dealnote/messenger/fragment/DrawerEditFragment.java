@@ -31,6 +31,8 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDrawerEditView> implements IDrawerEditView {
 
+    private DrawerCategotiesAdapter mAdapter;
+
     public static DrawerEditFragment newInstance() {
         Bundle args = new Bundle();
         DrawerEditFragment fragment = new DrawerEditFragment();
@@ -43,8 +45,6 @@ public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDra
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
-    private DrawerCategotiesAdapter mAdapter;
 
     @Nullable
     @Override
@@ -105,7 +105,7 @@ public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_save){
+        if (item.getItemId() == R.id.action_save) {
             getPresenter().fireSaveClick();
             return true;
         }
@@ -117,7 +117,7 @@ public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDra
     public void onResume() {
         super.onResume();
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(R.string.drawer_edit_title);
             actionBar.setSubtitle(null);
         }
@@ -130,7 +130,7 @@ public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDra
 
     @Override
     public void displayData(List<DrawerCategory> data) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(data);
         }
     }

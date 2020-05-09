@@ -153,8 +153,8 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     public Single<Items<VKApiMessage>> search(String query, Integer peerId, Long date, Integer previewLength, Integer offset, Integer count) {
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service
-                        .search(query, peerId, date, previewLength, offset, count)
-                        .map(extractResponseWithErrorHandling())
+                                .search(query, peerId, date, previewLength, offset, count)
+                                .map(extractResponseWithErrorHandling())
                         /*.map(response -> {
                             fixMessageList(response.getItems());
                             return response;
@@ -204,8 +204,8 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     public Single<DialogsResponse> getDialogs(Integer offset, Integer count, Integer startMessageId, Boolean extended, String fields) {
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service
-                        .getDialogs(offset, count, startMessageId, integerFromBoolean(extended), fields)
-                        .map(extractResponseWithErrorHandling())
+                                .getDialogs(offset, count, startMessageId, integerFromBoolean(extended), fields)
+                                .map(extractResponseWithErrorHandling())
                         /*.map(response -> {
                             if (nonNull(response.dialogs)) {
                                 for (VkApiDialog dialog : response.dialogs) {

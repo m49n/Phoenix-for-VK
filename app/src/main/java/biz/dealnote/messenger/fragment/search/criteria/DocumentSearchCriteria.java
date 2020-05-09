@@ -5,6 +5,18 @@ import android.os.Parcelable;
 
 public final class DocumentSearchCriteria extends BaseSearchCriteria implements Parcelable, Cloneable {
 
+    public static final Creator<DocumentSearchCriteria> CREATOR = new Creator<DocumentSearchCriteria>() {
+        @Override
+        public DocumentSearchCriteria createFromParcel(Parcel in) {
+            return new DocumentSearchCriteria(in);
+        }
+
+        @Override
+        public DocumentSearchCriteria[] newArray(int size) {
+            return new DocumentSearchCriteria[size];
+        }
+    };
+
     public DocumentSearchCriteria(String query) {
         super(query);
     }
@@ -22,18 +34,6 @@ public final class DocumentSearchCriteria extends BaseSearchCriteria implements 
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<DocumentSearchCriteria> CREATOR = new Creator<DocumentSearchCriteria>() {
-        @Override
-        public DocumentSearchCriteria createFromParcel(Parcel in) {
-            return new DocumentSearchCriteria(in);
-        }
-
-        @Override
-        public DocumentSearchCriteria[] newArray(int size) {
-            return new DocumentSearchCriteria[size];
-        }
-    };
 
     @Override
     public DocumentSearchCriteria clone() throws CloneNotSupportedException {

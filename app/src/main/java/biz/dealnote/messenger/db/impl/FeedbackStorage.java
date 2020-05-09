@@ -41,8 +41,65 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
  */
 class FeedbackStorage extends AbsStorage implements IFeedbackStorage {
 
+    private static final int LIKE = 1;
+    private static final int LIKE_COMMENT = 2;
+    private static final int COPY = 3;
+    private static final int MENTION = 4;
+    private static final int MENTION_COMMENT = 5;
+    private static final int WALL_PUBLISH = 6;
+    private static final int NEW_COMMENT = 7;
+    private static final int REPLY_COMMENT = 8;
+    private static final int USERS = 9;
+    private static final Map<Class, Integer> TYPES = new HashMap<>(8);
+
+    static {
+        TYPES.put(LikeEntity.class, LIKE);
+        TYPES.put(LikeCommentEntity.class, LIKE_COMMENT);
+        TYPES.put(CopyEntity.class, COPY);
+        TYPES.put(MentionEntity.class, MENTION);
+        TYPES.put(MentionCommentEntity.class, MENTION_COMMENT);
+        TYPES.put(PostFeedbackEntity.class, WALL_PUBLISH);
+        TYPES.put(NewCommentEntity.class, NEW_COMMENT);
+        TYPES.put(ReplyCommentEntity.class, REPLY_COMMENT);
+        TYPES.put(UsersEntity.class, USERS);
+    }
     FeedbackStorage(@NonNull AppStorages context) {
         super(context);
+    }
+
+    private static int typeForClass(Class<? extends FeedbackEntity> c) {
+        Integer internalType = TYPES.get(c);
+
+        if (isNull(internalType)) {
+            throw new UnsupportedOperationException("Unsupported type: " + c);
+        }
+
+        return internalType;
+    }
+
+    private static Class<? extends FeedbackEntity> classForType(int dbtype) {
+        switch (dbtype) {
+            case LIKE:
+                return LikeEntity.class;
+            case LIKE_COMMENT:
+                return LikeCommentEntity.class;
+            case COPY:
+                return CopyEntity.class;
+            case MENTION:
+                return MentionEntity.class;
+            case MENTION_COMMENT:
+                return MentionCommentEntity.class;
+            case WALL_PUBLISH:
+                return PostFeedbackEntity.class;
+            case NEW_COMMENT:
+                return NewCommentEntity.class;
+            case REPLY_COMMENT:
+                return ReplyCommentEntity.class;
+            case USERS:
+                return UsersEntity.class;
+        }
+
+        throw new UnsupportedOperationException("Unsupported type: " + dbtype);
     }
 
     @Override
@@ -122,65 +179,6 @@ class FeedbackStorage extends AbsStorage implements IFeedbackStorage {
 
             e.onSuccess(dtos);
         });
-    }
-
-    private static final int LIKE = 1;
-    private static final int LIKE_COMMENT = 2;
-    private static final int COPY = 3;
-    private static final int MENTION = 4;
-    private static final int MENTION_COMMENT = 5;
-    private static final int WALL_PUBLISH = 6;
-    private static final int NEW_COMMENT = 7;
-    private static final int REPLY_COMMENT = 8;
-    private static final int USERS = 9;
-
-    private static final Map<Class, Integer> TYPES = new HashMap<>(8);
-
-    static {
-        TYPES.put(LikeEntity.class, LIKE);
-        TYPES.put(LikeCommentEntity.class, LIKE_COMMENT);
-        TYPES.put(CopyEntity.class, COPY);
-        TYPES.put(MentionEntity.class, MENTION);
-        TYPES.put(MentionCommentEntity.class, MENTION_COMMENT);
-        TYPES.put(PostFeedbackEntity.class, WALL_PUBLISH);
-        TYPES.put(NewCommentEntity.class, NEW_COMMENT);
-        TYPES.put(ReplyCommentEntity.class, REPLY_COMMENT);
-        TYPES.put(UsersEntity.class, USERS);
-    }
-
-    private static int typeForClass(Class<? extends FeedbackEntity> c) {
-        Integer internalType = TYPES.get(c);
-
-        if(isNull(internalType)){
-            throw new UnsupportedOperationException("Unsupported type: " + c);
-        }
-
-        return internalType;
-    }
-
-    private static Class<? extends FeedbackEntity> classForType(int dbtype) {
-        switch (dbtype) {
-            case LIKE:
-                return LikeEntity.class;
-            case LIKE_COMMENT:
-                return LikeCommentEntity.class;
-            case COPY:
-                return CopyEntity.class;
-            case MENTION:
-                return MentionEntity.class;
-            case MENTION_COMMENT:
-                return MentionCommentEntity.class;
-            case WALL_PUBLISH:
-                return PostFeedbackEntity.class;
-            case NEW_COMMENT:
-                return NewCommentEntity.class;
-            case REPLY_COMMENT:
-                return ReplyCommentEntity.class;
-            case USERS:
-                return UsersEntity.class;
-        }
-
-        throw new UnsupportedOperationException("Unsupported type: " + dbtype);
     }
 
     private FeedbackEntity mapDto(Cursor cursor) {

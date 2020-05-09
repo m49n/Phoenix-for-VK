@@ -9,14 +9,21 @@ import android.os.Parcelable;
  */
 public final class City implements Parcelable {
 
+    public static final Creator<City> CREATOR = new Creator<City>() {
+        @Override
+        public City createFromParcel(Parcel in) {
+            return new City(in);
+        }
+
+        @Override
+        public City[] newArray(int size) {
+            return new City[size];
+        }
+    };
     private final int id;
-
     private final String title;
-
     private boolean important;
-
     private String area;
-
     private String region;
 
     public City(int id, String title) {
@@ -31,18 +38,6 @@ public final class City implements Parcelable {
         area = in.readString();
         region = in.readString();
     }
-
-    public static final Creator<City> CREATOR = new Creator<City>() {
-        @Override
-        public City createFromParcel(Parcel in) {
-            return new City(in);
-        }
-
-        @Override
-        public City[] newArray(int size) {
-            return new City[size];
-        }
-    };
 
     public int getId() {
         return id;

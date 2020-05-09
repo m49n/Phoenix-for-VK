@@ -135,6 +135,11 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
 
     private final IProxySettings proxyManager;
     private final IVkMethodHttpClientFactory clientFactory;
+    private final Object retrofitCacheLock = new Object();
+    private final Object serviceRetrofitLock = new Object();
+    @SuppressLint("UseSparseArrays")
+    private Map<Integer, RetrofitWrapper> retrofitCache = Collections.synchronizedMap(new HashMap<>(1));
+    private volatile RetrofitWrapper serviceRetrofit;
 
     public VkRetrofitProvider(IProxySettings proxySettings, IVkMethodHttpClientFactory clientFactory) {
         this.proxyManager = proxySettings;
@@ -143,9 +148,9 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
                 .subscribe(optional -> onProxySettingsChanged());
     }
 
-    private void onProxySettingsChanged(){
-        synchronized (retrofitCacheLock){
-            for(Map.Entry<Integer, RetrofitWrapper> entry : retrofitCache.entrySet()){
+    private void onProxySettingsChanged() {
+        synchronized (retrofitCacheLock) {
+            for (Map.Entry<Integer, RetrofitWrapper> entry : retrofitCache.entrySet()) {
                 entry.getValue().cleanup();
             }
 
@@ -153,17 +158,12 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
         }
     }
 
-    @SuppressLint("UseSparseArrays")
-    private Map<Integer, RetrofitWrapper> retrofitCache = Collections.synchronizedMap(new HashMap<>(1));
-
-    private final Object retrofitCacheLock = new Object();
-
     @Override
     public Single<RetrofitWrapper> provideNormalRetrofit(int accountId) {
         return Single.fromCallable(() -> {
             RetrofitWrapper retrofit;
 
-            synchronized (retrofitCacheLock){
+            synchronized (retrofitCacheLock) {
                 retrofit = retrofitCache.get(accountId);
 
                 if (nonNull(retrofit)) {
@@ -186,10 +186,6 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             return createDefaultVkApiRetrofit(client);
         });
     }
-
-    private volatile RetrofitWrapper serviceRetrofit;
-
-    private final Object serviceRetrofitLock = new Object();
 
     @Override
     public Single<RetrofitWrapper> provideServiceRetrofit() {

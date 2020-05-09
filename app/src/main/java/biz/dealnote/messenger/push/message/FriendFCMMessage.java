@@ -66,7 +66,7 @@ public class FriendFCMMessage {
 
     private void notifyImpl(Context context, User user, Bitmap bitmap) {
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getFriendRequestsChannel(context));
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.FRIEND_REQUESTS_CHANNEL_ID)

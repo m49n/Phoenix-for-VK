@@ -20,6 +20,7 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
 
     private Context mContext;
     private List<AbsSection> data;
+    private Listener listener;
 
     public SectionsAdapter(List<AbsSection> data, Context mContext) {
         this.data = data;
@@ -34,7 +35,7 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
     @Override
     public void onBindViewHolder(@NotNull Holder holder, int position) {
         AbsSection section = data.get(position);
-        switch (section.type){
+        switch (section.type) {
             case AbsSection.TYPE_EMOJI:
                 EmojiSection emojiSection = (EmojiSection) section;
 
@@ -47,12 +48,10 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
 
             case AbsSection.TYPE_STICKER:
                 StickerSection stickerSection = (StickerSection) section;
-                if(stickerSection.stickerSet.getPhoto70() != null && stickerSection.stickerSet.getPhoto70().equals("recent"))
-                {
+                if (stickerSection.stickerSet.getPhoto70() != null && stickerSection.stickerSet.getPhoto70().equals("recent")) {
                     holder.icon.setImageResource(R.drawable.pin);
                     holder.icon.getDrawable().setTint(CurrentTheme.getColorPrimary(mContext));
-                }
-                else {
+                } else {
                     PicassoInstance.with()
                             .load(stickerSection.stickerSet.getPhoto70())
                             .placeholder(R.drawable.sticker_pack_with_alpha)
@@ -69,7 +68,7 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
                 break;
         }
 
-        if(section.active){
+        if (section.active) {
             holder.root.setBackgroundResource(R.drawable.circle_back_white);
             holder.root.getBackground().setTint(CurrentTheme.getMessageBackgroundSquare(mContext));
         } else {
@@ -77,7 +76,7 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if(listener != null){
+            if (listener != null) {
                 listener.onClick(holder.getBindingAdapterPosition());
             }
         });
@@ -86,6 +85,14 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener {
+        void onClick(int position);
     }
 
     public class Holder extends RecyclerView.ViewHolder {
@@ -98,15 +105,5 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Holder
             root = itemView.findViewById(R.id.root);
             icon = itemView.findViewById(R.id.icon);
         }
-    }
-
-    private Listener listener;
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
-    public interface Listener {
-        void onClick(int position);
     }
 }

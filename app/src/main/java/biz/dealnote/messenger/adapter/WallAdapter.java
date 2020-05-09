@@ -51,6 +51,7 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
     private ClickListener clickListener;
     private NonPublishedPostActionListener nonPublishedPostActionListener;
     private LinkActionAdapter mLinkActionAdapter;
+    private EmojiconTextView.OnHashTagClickListener mOnHashTagClickListener;
 
     public WallAdapter(Context context, List<Post> items, @NonNull AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback,
                        @NonNull ClickListener adapterListener) {
@@ -65,6 +66,37 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
                 clickListener.onAvatarClick(ownerId);
             }
         };
+    }
+
+    public static boolean needToShowTopDivider(Post post) {
+        if (!TextUtils.isEmpty(post.getText())) {
+            return true;
+        }
+
+        Attachments attachments = post.getAttachments();
+        // если есть копи-хистори и нет вложений фото-видео в главном посте
+        if (nonEmpty(post.getCopyHierarchy()) && (isNull(attachments) || safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos()))) {
+            return true;
+        }
+
+        if (post.getAttachments() == null) {
+            return true;
+        }
+
+        return safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos());
+    }
+
+    public static boolean needToShowBottomDivider(Post post) {
+        if (post.getSignerId() > 0 && nonNull(post.getCreator())) {
+            return true;
+        }
+
+        if (isEmpty(post.getCopyHierarchy())) {
+            return isNull(post.getAttachments()) || !post.getAttachments().isPhotosVideosGifsOnly();
+        }
+
+        Post last = post.getCopyHierarchy().get(post.getCopyHierarchy().size() - 1);
+        return isNull(last.getAttachments()) || !last.getAttachments().isPhotosVideosGifsOnly();
     }
 
     @Override
@@ -198,37 +230,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         });
     }
 
-    public static boolean needToShowTopDivider(Post post) {
-        if (!TextUtils.isEmpty(post.getText())) {
-            return true;
-        }
-
-        Attachments attachments = post.getAttachments();
-        // если есть копи-хистори и нет вложений фото-видео в главном посте
-        if (nonEmpty(post.getCopyHierarchy()) && (isNull(attachments) || safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos()))) {
-            return true;
-        }
-
-        if (post.getAttachments() == null) {
-            return true;
-        }
-
-        return safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos());
-    }
-
-    public static boolean needToShowBottomDivider(Post post) {
-        if (post.getSignerId() > 0 && nonNull(post.getCreator())) {
-            return true;
-        }
-
-        if (isEmpty(post.getCopyHierarchy())) {
-            return isNull(post.getAttachments()) || !post.getAttachments().isPhotosVideosGifsOnly();
-        }
-
-        Post last = post.getCopyHierarchy().get(post.getCopyHierarchy().size() - 1);
-        return isNull(last.getAttachments()) || !last.getAttachments().isPhotosVideosGifsOnly();
-    }
-
     @Override
     protected RecyclerView.ViewHolder viewHolder(View view, int type) {
         switch (type) {
@@ -255,6 +256,21 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         }
 
         throw new IllegalArgumentException();
+    }
+
+    public void setOnHashTagClickListener(EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
+        this.mOnHashTagClickListener = onHashTagClickListener;
+    }
+
+    @Override
+    protected int getItemType(int position) {
+        Post post = getItem(position - getHeadersCount());
+
+        if (post.isDeleted()) {
+            return TYPE_DELETED;
+        }
+
+        return intValueIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST) ? TYPE_SCHEDULED : TYPE_NORMAL;
     }
 
     public interface NonPublishedPostActionListener {
@@ -336,12 +352,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         }
     }
 
-    private EmojiconTextView.OnHashTagClickListener mOnHashTagClickListener;
-
-    public void setOnHashTagClickListener(EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
-        this.mOnHashTagClickListener = onHashTagClickListener;
-    }
-
     private class NormalHolder extends AbsPostHolder {
 
         View pinRoot;
@@ -366,16 +376,5 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
             super(view);
             deleteButton = root.findViewById(R.id.button_delete);
         }
-    }
-
-    @Override
-    protected int getItemType(int position) {
-        Post post = getItem(position - getHeadersCount());
-
-        if (post.isDeleted()) {
-            return TYPE_DELETED;
-        }
-
-        return intValueIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST) ? TYPE_SCHEDULED : TYPE_NORMAL;
     }
 }

@@ -37,24 +37,44 @@ public class FaveTabsFragment extends BaseFragment {
     public static final int TAB_POSTS = 2;
     public static final int TAB_PAGES = 3;
     public static final int TAB_LINKS = 4;
+    private int mAccountId;
 
-    public static Bundle buildArgs(int accountId, int tab){
+    public static Bundle buildArgs(int accountId, int tab) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putInt(Extra.TAB, tab);
         return args;
     }
 
-    private int mAccountId;
-
-    public static FaveTabsFragment newInstance(int accountId, int tab){
+    public static FaveTabsFragment newInstance(int accountId, int tab) {
         return newInstance(buildArgs(accountId, tab));
     }
 
-    public static FaveTabsFragment newInstance(Bundle args){
+    public static FaveTabsFragment newInstance(Bundle args) {
         FaveTabsFragment faveTabsFragment = new FaveTabsFragment();
         faveTabsFragment.setArguments(args);
         return faveTabsFragment;
+    }
+
+    public static int getTabByLinkSection(String linkSection) {
+        if (TextUtils.isEmpty(linkSection)) {
+            return TAB_PHOTOS;
+        }
+
+        switch (linkSection) {
+            case FaveLink.SECTION_PHOTOS:
+                return TAB_PHOTOS;
+            case FaveLink.SECTION_VIDEOS:
+                return TAB_VIDEOS;
+            case FaveLink.SECTION_POSTS:
+                return TAB_POSTS;
+            case FaveLink.SECTION_PAGES:
+                return TAB_PAGES;
+            case FaveLink.SECTION_LINKS:
+                return TAB_LINKS;
+            default:
+                return TAB_UNKNOWN;
+        }
     }
 
     @Override
@@ -87,27 +107,6 @@ public class FaveTabsFragment extends BaseFragment {
         }
     }
 
-    public static int getTabByLinkSection(String linkSection) {
-        if (TextUtils.isEmpty(linkSection)) {
-            return TAB_PHOTOS;
-        }
-
-        switch (linkSection) {
-            case FaveLink.SECTION_PHOTOS:
-                return TAB_PHOTOS;
-            case FaveLink.SECTION_VIDEOS:
-                return TAB_VIDEOS;
-            case FaveLink.SECTION_POSTS:
-                return TAB_POSTS;
-            case FaveLink.SECTION_PAGES:
-                return TAB_PAGES;
-            case FaveLink.SECTION_LINKS:
-                return TAB_LINKS;
-            default:
-                return TAB_UNKNOWN;
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -132,6 +131,32 @@ public class FaveTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
+    private void setupViewPager(ViewPager2 viewPager, @NonNull View view) {
+        List<ITab> tabs = new ArrayList<>();
+        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), true), getString(R.string.pages)));
+        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), false), getString(R.string.groups)));
+        tabs.add(new Tab(() -> FaveLinksFragment.newInstance(getAccountId()), getString(R.string.links)));
+        tabs.add(new Tab(() -> FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts)));
+        tabs.add(new Tab(() -> FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos)));
+        tabs.add(new Tab(() -> FaveVideosFragment.newInstance(getAccountId()), getString(R.string.videos)));
+        Adapter adapter = new Adapter(tabs, this);
+        viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
+            tab.setText(tabs.get(position).getTabTitle());
+        }).attach();
+    }
+
+    private interface ITab {
+        String getTabTitle();
+
+        IFragmentCreator getFragmentCreator();
+    }
+
+    private interface IFragmentCreator {
+        Fragment create();
+    }
+
     private static class Tab implements ITab {
 
         final String title;
@@ -153,15 +178,6 @@ public class FaveTabsFragment extends BaseFragment {
         }
     }
 
-    private interface ITab {
-        String getTabTitle();
-        IFragmentCreator getFragmentCreator();
-    }
-
-    private interface IFragmentCreator {
-        Fragment create();
-    }
-
     static class Adapter extends FragmentStateAdapter {
 
         private final List<ITab> tabs;
@@ -181,21 +197,5 @@ public class FaveTabsFragment extends BaseFragment {
         public int getItemCount() {
             return tabs.size();
         }
-    }
-
-    private void setupViewPager(ViewPager2 viewPager, @NonNull View view) {
-        List<ITab> tabs = new ArrayList<>();
-        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), true), getString(R.string.pages)));
-        tabs.add(new Tab(() -> FavePagesFragment.newInstance(getAccountId(), false), getString(R.string.groups)));
-        tabs.add(new Tab(() -> FaveLinksFragment.newInstance(getAccountId()), getString(R.string.links)));
-        tabs.add(new Tab(() -> FavePostsFragment.newInstance(getAccountId()), getString(R.string.posts)));
-        tabs.add(new Tab(() -> FavePhotosFragment.newInstance(getAccountId()), getString(R.string.photos)));
-        tabs.add(new Tab(() -> FaveVideosFragment.newInstance(getAccountId()), getString(R.string.videos)));
-        Adapter adapter = new Adapter(tabs, this);
-        viewPager.setAdapter(adapter);
-
-        new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
-            tab.setText(tabs.get(position).getTabTitle());
-        }).attach();
     }
 }

@@ -8,7 +8,7 @@ import biz.dealnote.messenger.Injection;
  */
 public class Settings {
 
-    public static ISettings get(){
+    public static ISettings get() {
         return Injection.provideSettings();
     }
 

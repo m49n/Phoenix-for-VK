@@ -27,6 +27,7 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
     private Context context;
     private List<LocalVideo> data;
     private Set<ViewHolder> holders;
+    private ClickListener clickListener;
 
     public LocalVideosAdapter(Context context, List<LocalVideo> data) {
         this.context = context;
@@ -71,7 +72,7 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
         for (ViewHolder holder : holders) {
             LocalVideo video = (LocalVideo) holder.itemView.getTag();
 
-            if(video == null){
+            if (video == null) {
                 // TODO: 13.12.2017 Photo can bee null !!!! WTF?
                 continue;
             }
@@ -95,15 +96,13 @@ public class LocalVideosAdapter extends RecyclerView.Adapter<LocalVideosAdapter.
         this.clickListener = clickListener;
     }
 
-    private ClickListener clickListener;
-
-    public interface ClickListener {
-        void onVideoClick(ViewHolder holder, LocalVideo video);
-    }
-
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public interface ClickListener {
+        void onVideoClick(ViewHolder holder, LocalVideo video);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

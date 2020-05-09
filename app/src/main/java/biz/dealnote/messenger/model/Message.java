@@ -541,13 +541,13 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
         dest.writeLong(updateTime);
     }
 
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
     public Message setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
         return this;
-    }
-
-    public long getUpdateTime() {
-        return updateTime;
     }
 
     public int getAccountId() {
@@ -571,7 +571,7 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
         return nonNull(attachments) && safeCountOf(attachments.getGifts()) > 0;
     }
 
-    public boolean isVoiceMessage(){
+    public boolean isVoiceMessage() {
         return nonNull(attachments) && nonEmpty(attachments.getVoiceMessages());
     }
 

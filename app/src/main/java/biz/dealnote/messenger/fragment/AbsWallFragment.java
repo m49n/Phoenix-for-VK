@@ -153,18 +153,18 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         headerStoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
         mStoryAdapter.setListener((item, pos) -> {
-            if(item.getVideo() != null)
+            if (item.getVideo() != null)
                 openHistoryVideo(Settings.get().accounts().getCurrent(), item.getVideo());
-            else if(item.getPhoto() != null) {
+            else if (item.getPhoto() != null) {
                 ArrayList<Story> photos_story = new ArrayList<>();
                 ArrayList<Photo> tmp = new ArrayList<>();
                 List<Story> st = getPresenter().getStories();
-                for(Story i : st) {
-                    if(i.getPhoto() != null)
+                for (Story i : st) {
+                    if (i.getPhoto() != null)
                         photos_story.add(i);
                 }
-                for(Story i : photos_story) {
-                    if(i.getPhoto() != null)
+                for (Story i : photos_story) {
+                    if (i.getPhoto() != null)
                         tmp.add(i.getPhoto());
                 }
                 int indx = photos_story.indexOf(item);
@@ -220,8 +220,8 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 getPresenter().fireSearchClick();
                 return true;
             case R.id.action_open_url:
-                final ClipboardManager clipBoard= (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
-                if(clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
+                final ClipboardManager clipBoard = (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
+                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
                     String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
                     LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
                 }
@@ -229,7 +229,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             case R.id.action_set_offline:
                 getPresenter().appendDisposable(Injection.provideNetworkInterfaces().vkDefault(getPresenter().getAccountId()).account().setOffline()
                         .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(this::OnSetOffline, t -> OnSetOffline(false)));
+                        .subscribe(this::OnSetOffline, t -> OnSetOffline(false)));
                 return true;
         }
 
@@ -237,7 +237,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     }
 
     private void OnSetOffline(boolean succ) {
-        if(succ)
+        if (succ)
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.succ_offline);
         else
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.err_offline);
@@ -290,8 +290,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     }
 
     @Override
-    public void updateStory(List<Story> stories)
-    {
+    public void updateStory(List<Story> stories) {
         if (nonNull(mStoryAdapter)) {
             mStoryAdapter.setItems(stories);
             mStoryAdapter.notifyDataSetChanged();

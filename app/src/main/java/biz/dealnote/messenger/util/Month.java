@@ -13,8 +13,8 @@ import biz.dealnote.messenger.R;
 public class Month {
 
     @StringRes
-    public static int getMonthTitle(int num){
-        switch (num){
+    public static int getMonthTitle(int num) {
+        switch (num) {
             case Calendar.JANUARY:
                 return R.string.january;
             case Calendar.FEBRUARY:

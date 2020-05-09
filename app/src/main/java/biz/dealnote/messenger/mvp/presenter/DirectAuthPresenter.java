@@ -63,9 +63,9 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
 
         final String code;
 
-        if(requireSmsCode){
+        if (requireSmsCode) {
             code = (nonEmpty(smsCode) ? smsCode.trim() : null);
-        } else if(requireAppCode){
+        } else if (requireAppCode) {
             code = (nonEmpty(appCode) ? appCode.trim() : null);
         } else {
             code = null;
@@ -99,7 +99,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
             if ("2fa_sms".equalsIgnoreCase(type)) {
                 requireSmsCode = true;
                 RedirectUrl = ((NeedValidationException) t).getValidationURL();
-            } else if("2fa_app".equalsIgnoreCase(type)){
+            } else if ("2fa_app".equalsIgnoreCase(type)) {
                 requireAppCode = true;
             }
         } else {
@@ -116,7 +116,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         } else if (requireSmsCode) {
             getView().getPhoenixToast().showToast(R.string.sms_fail);
             callView(IDirectAuthView::moveFocusToSmsCode);
-        } else if(requireAppCode){
+        } else if (requireAppCode) {
             callView(IDirectAuthView::moveFocusToAppCode);
         }
     }
@@ -129,7 +129,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     }
 
     @OnGuiCreated
-    private void resolveAppCodeRootVisibility(){
+    private void resolveAppCodeRootVisibility() {
         if (isGuiReady()) {
             getView().setAppCodeRootVisible(requireAppCode);
         }
@@ -152,9 +152,9 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         String TwFa = "none";
         if (nonEmpty(response.access_token) && response.user_id > 0) {
             String Pass = nonEmpty(pass) ? pass.trim() : "";
-            if(requireSmsCode)
+            if (requireSmsCode)
                 TwFa = "2fa_sms";
-            else if(requireAppCode)
+            else if (requireAppCode)
                 TwFa = "2fa_app";
             final String Passwd = Pass;
             final String TwFafin = TwFa;
@@ -223,15 +223,15 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         resolveButtonLoginState();
     }
 
-    public String GetLogin() { return nonEmpty(username) ? username.trim() : ""; }
+    public String GetLogin() {
+        return nonEmpty(username) ? username.trim() : "";
+    }
 
-    public String GetPassword()
-    {
+    public String GetPassword() {
         return nonEmpty(pass) ? pass.trim() : "";
     }
 
-    public String GetRedirectUrl()
-    {
+    public String GetRedirectUrl() {
         return RedirectUrl;
     }
 }

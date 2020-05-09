@@ -14,7 +14,8 @@ import retrofit2.http.POST;
  */
 public interface IStoreService {
     @FormUrlEncoded
-    @POST("store.getProducts") //extended=1&filters=active&type=stickers&v=5.64" Thanks for Kate Mobile
+    @POST("store.getProducts")
+        //extended=1&filters=active&type=stickers&v=5.64" Thanks for Kate Mobile
     Single<BaseResponse<Items<VKApiStickerSet.Product>>> getProducts(@Field("extended") Integer extended,
                                                                      @Field("filters") String filters,
                                                                      @Field("type") String type);

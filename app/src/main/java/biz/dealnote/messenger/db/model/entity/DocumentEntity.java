@@ -30,67 +30,6 @@ public class DocumentEntity extends Entity {
 
     private VideoPreviewDbo video;
 
-    public static final class VideoPreviewDbo {
-
-        private final String src;
-
-        private final int width;
-
-        private final int height;
-
-        private final long fileSize;
-
-        public VideoPreviewDbo(String src, int width, int height, long fileSize) {
-            this.src = src;
-            this.width = width;
-            this.height = height;
-            this.fileSize = fileSize;
-        }
-
-        public String getSrc() {
-            return src;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public long getFileSize() {
-            return fileSize;
-        }
-    }
-
-    public static final class GraffitiDbo {
-
-        private final String src;
-
-        private final int width;
-
-        private final int height;
-
-        public GraffitiDbo(String src, int width, int height) {
-            this.src = src;
-            this.width = width;
-            this.height = height;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public String getSrc() {
-            return src;
-        }
-    }
-
     public DocumentEntity(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
@@ -192,5 +131,66 @@ public class DocumentEntity extends Entity {
     public DocumentEntity setVideo(VideoPreviewDbo video) {
         this.video = video;
         return this;
+    }
+
+    public static final class VideoPreviewDbo {
+
+        private final String src;
+
+        private final int width;
+
+        private final int height;
+
+        private final long fileSize;
+
+        public VideoPreviewDbo(String src, int width, int height, long fileSize) {
+            this.src = src;
+            this.width = width;
+            this.height = height;
+            this.fileSize = fileSize;
+        }
+
+        public String getSrc() {
+            return src;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public long getFileSize() {
+            return fileSize;
+        }
+    }
+
+    public static final class GraffitiDbo {
+
+        private final String src;
+
+        private final int width;
+
+        private final int height;
+
+        public GraffitiDbo(String src, int width, int height) {
+            this.src = src;
+            this.width = width;
+            this.height = height;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public String getSrc() {
+            return src;
+        }
     }
 }

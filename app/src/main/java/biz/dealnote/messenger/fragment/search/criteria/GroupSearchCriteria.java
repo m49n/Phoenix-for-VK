@@ -21,6 +21,17 @@ public class GroupSearchCriteria extends BaseSearchCriteria implements Parcelabl
     public static final int TYPE_PAGE = 1;
     public static final int TYPE_GROUP = 2;
     public static final int TYPE_EVENT = 3;
+    public static final Creator<GroupSearchCriteria> CREATOR = new Creator<GroupSearchCriteria>() {
+        @Override
+        public GroupSearchCriteria createFromParcel(Parcel in) {
+            return new GroupSearchCriteria(in);
+        }
+
+        @Override
+        public GroupSearchCriteria[] newArray(int size) {
+            return new GroupSearchCriteria[size];
+        }
+    };
 
     public GroupSearchCriteria(String query) {
         super(query, 5);
@@ -67,18 +78,6 @@ public class GroupSearchCriteria extends BaseSearchCriteria implements Parcelabl
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<GroupSearchCriteria> CREATOR = new Creator<GroupSearchCriteria>() {
-        @Override
-        public GroupSearchCriteria createFromParcel(Parcel in) {
-            return new GroupSearchCriteria(in);
-        }
-
-        @Override
-        public GroupSearchCriteria[] newArray(int size) {
-            return new GroupSearchCriteria[size];
-        }
-    };
 
     @Override
     public GroupSearchCriteria clone() throws CloneNotSupportedException {

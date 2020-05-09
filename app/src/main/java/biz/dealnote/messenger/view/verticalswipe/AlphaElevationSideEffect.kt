@@ -6,7 +6,7 @@ import kotlin.math.abs
 /**
  * Changing alpha and elevation of view
  */
-class AlphaElevationSideEffect: SideEffect {
+class AlphaElevationSideEffect : SideEffect {
 
     private var elevation: Float = 0f
 

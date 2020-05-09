@@ -20,13 +20,13 @@ public class LogEventType implements Entry {
 
     private boolean active;
 
-    public int getType() {
-        return type;
-    }
-
     public LogEventType(int type, int title) {
         this.type = type;
         this.title = title;
+    }
+
+    public int getType() {
+        return type;
     }
 
     @Override

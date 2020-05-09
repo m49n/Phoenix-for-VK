@@ -88,55 +88,67 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
     // Message to refresh the time
     private static final int REFRESH_TIME = 1;
-
+    private static final int REQUEST_EQ = 139;
     // Play and pause button
     private PlayPauseButton mPlayPauseButton;
-
     // Repeat button
     private RepeatButton mRepeatButton;
-
     // Shuffle button
     private ShuffleButton mShuffleButton;
-
     // Current time
     private TextView mCurrentTime;
-
     // Total time
     private TextView mTotalTime;
-
     private TextView mGetLyrics;
-
     // Progress
     private SeekBar mProgress;
-
     // VK Additional action
     private CircleCounterButton ivAdd;
     private RepeatingImageButton ivSave;
     private CircleCounterButton ivTranslate;
-
     private TextView tvTitle;
     private TextView tvAlbum;
     private TextView tvSubtitle;
-
     private ImageView ivCover;
-
     private boolean isCaptured = false;
-
     // Broadcast receiver
     private PlaybackStatus mPlaybackStatus;
-
     // Handler used to update the current time
     private TimeHandler mTimeHandler;
-
     private long mPosOverride = -1;
-
     private long mStartSeekPos = 0;
-
     private long mLastSeekEventTime;
-
     private boolean mIsPaused = false;
-
     private boolean mFromTouch = false;
+    private String[] mPlayerProgressStrings;
+    /**
+     * Used to scan backwards through the track
+     */
+    private final RepeatingImageButton.RepeatListener mRewindListener = new RepeatingImageButton.RepeatListener() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onRepeat(final View v, final long howlong, final int repcnt) {
+            scanBackward(repcnt, howlong);
+        }
+    };
+    /**
+     * Used to scan ahead through the track
+     */
+    private final RepeatingImageButton.RepeatListener mFastForwardListener = new RepeatingImageButton.RepeatListener() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onRepeat(final View v, final long howlong, final int repcnt) {
+            scanForward(repcnt, howlong);
+        }
+    };
+    private IAudioInteractor mAudioInteractor;
+
+    private int mAccountId;
+    private CompositeDisposable mBroadcastDisposable = new CompositeDisposable();
 
     public static Bundle buildArgs(int accountId) {
         Bundle bundle = new Bundle();
@@ -153,12 +165,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         fragment.setArguments(args);
         return fragment;
     }
-
-    private String[] mPlayerProgressStrings;
-
-    private IAudioInteractor mAudioInteractor;
-
-    private int mAccountId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -207,9 +213,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             case R.id.copy_track_info:
                 ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 String Artist = MusicUtils.getCurrentAudio().getArtist() != null ? MusicUtils.getCurrentAudio().getArtist() : "";
-                if(MusicUtils.getCurrentAudio().getAlbum_title() != null)
+                if (MusicUtils.getCurrentAudio().getAlbum_title() != null)
                     Artist += " (" + MusicUtils.getCurrentAudio().getAlbum_title() + ")";
-                String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";;
+                String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";
+                ;
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
@@ -263,8 +270,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             public void onPostSettled(int diff) {
                 if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
                     goBack();
-                }
-                else
+                } else
                     isCaptured = false;
             }
         });
@@ -282,7 +288,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mTotalTime = root.findViewById(R.id.audio_player_total_time);
         mProgress = root.findViewById(android.R.id.progress);
 
-        if(!Settings.get().ui().isDisable_swipes()) {
+        if (!Settings.get().ui().isDisable_swipes()) {
             mProgress.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -295,8 +301,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 }
                 return false;
             });
-        }
-        else
+        } else
             ui.setCanSwipe(false);
         tvTitle = root.findViewById(R.id.audio_player_title);
         tvAlbum = root.findViewById(R.id.audio_player_album);
@@ -370,15 +375,15 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         if (audio == null) {
             return;
         }
-        if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
+        if (!AppPerms.hasReadWriteStoragePermision(getContext())) {
             AppPerms.requestReadWriteStoragePermission(requireActivity());
             return;
         }
 
         int ret = DownloadUtil.downloadTrack(getContext(), audio, false);
-        if(ret == 0)
+        if (ret == 0)
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved_audio);
-        else if(ret == 1) {
+        else if (ret == 1) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio);
             new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.error)
@@ -386,11 +391,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                     .setPositiveButton(R.string.button_yes, (dialog, which) -> DownloadUtil.downloadTrack(getContext(), audio, true))
                     .setNegativeButton(R.string.cancel, null)
                     .show();
-        }
-        else
+        } else
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.error_audio);
     }
-
 
     private void onAddButtonClick() {
         Audio audio = MusicUtils.getCurrentAudio();
@@ -455,10 +458,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     private void onAudioLyricsRecived(String Text) {
         String title = null;
-        if(MusicUtils.getCurrentAudio() != null)
+        if (MusicUtils.getCurrentAudio() != null)
             title = MusicUtils.getCurrentAudio().getArtistAndTitle();
 
-        MaterialAlertDialogBuilder dlgAlert  = new MaterialAlertDialogBuilder(requireActivity());
+        MaterialAlertDialogBuilder dlgAlert = new MaterialAlertDialogBuilder(requireActivity());
         dlgAlert.setIcon(R.drawable.dir_song);
         dlgAlert.setMessage(Text);
         dlgAlert.setTitle(title != null ? title : requireContext().getString(R.string.get_lyrics));
@@ -560,6 +563,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 .build()
                 .apply(requireActivity());
     }
+
     /**
      * {@inheritDoc}
      */
@@ -615,19 +619,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
     }
 
-    private boolean ShowSecret1(String query)
-    {
-        return query.contains("landser") || query.contains("卐") || query.contains("русский корпус") || query.contains("русский стяг") || query.contains("чурк")
-                || query.contains("адольф") || query.contains("adolf") || query.contains("рейх") || query.contains("зиг") || query.contains("хайль") || query.contains("скинхед")
-                || query.contains("hitler") || query.contains("sieg heil")  || query.contains("коловрат") || query.contains("вандал") || query.contains("arische");
-    }
-
-    private boolean ShowSecret2(String query)
-    {
-        return query.contains("pahom") || query.contains("epifan") || query.contains("bratishka") || query.contains("пахом")
-                || query.contains("братишка") || query.contains("поехавший") || query.contains("зелёный слоник");
-    }
-
     /**
      * Sets the track name, album name, and album art.
      */
@@ -639,14 +630,13 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             if (MusicUtils.getCurrentAudio() != null && MusicUtils.getCurrentAudio().getLyricsId() != 0) {
                 mGetLyrics.setText(R.string.get_lyrics);
                 mGetLyrics.setVisibility(View.VISIBLE);
-            }
-            else
+            } else
                 mGetLyrics.setVisibility(View.INVISIBLE);
         }
 
         if (tvAlbum != null && MusicUtils.getCurrentAudio() != null) {
             String album = "";
-            if(MusicUtils.getCurrentAudio().getAlbum_title() != null)
+            if (MusicUtils.getCurrentAudio().getAlbum_title() != null)
                 album += (requireContext().getString(R.string.album) + " " + MusicUtils.getCurrentAudio().getAlbum_title());
             tvAlbum.setText(album);
         }
@@ -671,28 +661,14 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         Audio current = MusicUtils.getCurrentAudio();
 
-        if(current != null) {
-            String SC = current.getArtist().toLowerCase();
-            String SC1 = current.getTitle().toLowerCase();
-            if(ShowSecret1(SC) || ShowSecret1(SC1)) {
-                if (isAdded())
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToastSecret(false);
-            }
-            else if(ShowSecret2(SC) || ShowSecret2(SC1)) {
-                if (isAdded())
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToastSecret(true);
-            }
-
+        if (current != null) {
             if (DownloadUtil.TrackIsDownloaded(current)) {
                 ivSave.setImageResource(R.drawable.succ);
-            }
-            else if(Objects.isNullOrEmptyString(current.getUrl())){
+            } else if (Objects.isNullOrEmptyString(current.getUrl())) {
                 ivSave.setImageResource(R.drawable.audio_died);
-            }
-            else
+            } else
                 ivSave.setImageResource(R.drawable.save);
-        }
-        else
+        } else
             ivSave.setImageResource(R.drawable.save);
 
         //handle VK actions
@@ -705,7 +681,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         // Update the current time
         queueNextRefresh(1);
     }
-
 
     private void resolveTotalTime() {
         if (!isAdded() || mTotalTime == null) {
@@ -740,8 +715,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
             mRepeatButton.updateRepeatState();
         }
     }
-
-    private static final int REQUEST_EQ = 139;
 
     private void startEffectsPanel() {
         try {
@@ -784,8 +757,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         int icon = myAudio && !currentAudio.isDeleted() ? R.drawable.delete : R.drawable.plus;
         ivAdd.setIcon(icon);
     }
-
-    private CompositeDisposable mBroadcastDisposable = new CompositeDisposable();
 
     private void broadcastAudio() {
         mBroadcastDisposable.clear();
@@ -990,32 +961,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     }
 
     /**
-     * Used to scan backwards through the track
-     */
-    private final RepeatingImageButton.RepeatListener mRewindListener = new RepeatingImageButton.RepeatListener() {
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onRepeat(final View v, final long howlong, final int repcnt) {
-            scanBackward(repcnt, howlong);
-        }
-    };
-
-    /**
-     * Used to scan ahead through the track
-     */
-    private final RepeatingImageButton.RepeatListener mFastForwardListener = new RepeatingImageButton.RepeatListener() {
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onRepeat(final View v, final long howlong, final int repcnt) {
-            scanForward(repcnt, howlong);
-        }
-    };
-
-    /**
      * Used to update the current time string
      */
     private static final class TimeHandler extends Handler {
@@ -1033,7 +978,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         public void handleMessage(final Message msg) {
             switch (msg.what) {
                 case REFRESH_TIME:
-                    if(mAudioPlayer.get().isCaptured) {
+                    if (mAudioPlayer.get().isCaptured) {
                         mAudioPlayer.get().queueNextRefresh(300);
                         break;
                     }

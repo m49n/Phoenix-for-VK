@@ -18,13 +18,13 @@ public class DateTimePicker {
     private Context context;
     private Callback callback;
 
-    private DateTimePicker(Builder builder){
+    private DateTimePicker(Builder builder) {
         this.time = builder.time;
         this.context = builder.context;
         this.callback = builder.callback;
     }
 
-    private void show(){
+    private void show() {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
 
@@ -40,9 +40,13 @@ public class DateTimePicker {
                 showTime(newYear, newMonth, newDay, hours, minutes), year, month, day).show();
     }
 
-    private void showTime(final int year, final int month, final int day, final int hour, final int minutes){
+    private void showTime(final int year, final int month, final int day, final int hour, final int minutes) {
         new TimePickerDialog(context, (view, newHourOfDay, newMinutes) ->
                 callback.onDateTimeSelected(Unixtime.of(year, month, day, newHourOfDay, newMinutes)), hour, minutes, true).show();
+    }
+
+    public interface Callback {
+        void onDateTimeSelected(long unixtime);
     }
 
     public static class Builder {
@@ -66,12 +70,8 @@ public class DateTimePicker {
             return this;
         }
 
-        public void show(){
+        public void show() {
             new DateTimePicker(this).show();
         }
-    }
-
-    public interface Callback {
-        void onDateTimeSelected(long unixtime);
     }
 }

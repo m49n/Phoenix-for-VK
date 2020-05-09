@@ -51,12 +51,12 @@
                                 android:textColor="?android:textColorSecondary" />
 
                             <EditText
-                                android:hint="@string/phoxy_address_hint"
-                                android:layout_marginTop="8dp"
                                 android:id="@+id/address"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
                                 android:background="@drawable/backgroud_rectangle_border"
+                                android:hint="@string/phoxy_address_hint"
                                 android:inputType="textVisiblePassword"
                                 android:padding="8dp"
                                 android:textSize="14sp" />
@@ -78,12 +78,12 @@
                                 android:textColor="?android:textColorSecondary" />
 
                             <EditText
-                                android:hint="@string/phoxy_port_hint"
-                                android:layout_marginTop="8dp"
                                 android:id="@+id/port"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
                                 android:background="@drawable/backgroud_rectangle_border"
+                                android:hint="@string/phoxy_port_hint"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:textSize="14sp" />
@@ -120,12 +120,12 @@
                                 android:textColor="?android:textColorSecondary" />
 
                             <EditText
-                                android:hint="@string/phoxy_username_hint"
-                                android:layout_marginTop="8dp"
                                 android:id="@+id/username"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
                                 android:background="@drawable/backgroud_rectangle_border"
+                                android:hint="@string/phoxy_username_hint"
                                 android:inputType="textVisiblePassword"
                                 android:padding="8dp"
                                 android:textSize="14sp" />
@@ -147,12 +147,12 @@
                                 android:textColor="?android:textColorSecondary" />
 
                             <EditText
-                                android:hint="@string/phoxy_pass_hint"
-                                android:layout_marginTop="8dp"
                                 android:id="@+id/password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
                                 android:background="@drawable/backgroud_rectangle_border"
+                                android:hint="@string/phoxy_pass_hint"
                                 android:inputType="textPassword"
                                 android:padding="8dp"
                                 android:textSize="14sp" />

@@ -26,6 +26,8 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class DocsAsImagesAdapter extends RecyclerBindableAdapter<Document, DocsAsImagesAdapter.DocViewHolder> {
 
+    private ActionListener mActionListner;
+
     public DocsAsImagesAdapter(List<Document> data) {
         super(data);
     }
@@ -34,15 +36,8 @@ public class DocsAsImagesAdapter extends RecyclerBindableAdapter<Document, DocsA
         super.setItems(data);
     }
 
-    private ActionListener mActionListner;
-
     public void setActionListner(ActionListener listner) {
         this.mActionListner = listner;
-    }
-
-    public interface ActionListener extends EventListener {
-        void onDocClick(int index, @NonNull Document doc);
-        boolean onDocLongClick(int index, @NonNull Document doc);
     }
 
     @Override
@@ -65,7 +60,7 @@ public class DocsAsImagesAdapter extends RecyclerBindableAdapter<Document, DocsA
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if(nonNull(mActionListner)){
+            if (nonNull(mActionListner)) {
                 mActionListner.onDocClick(holder.getBindingAdapterPosition(), item);
             }
         });
@@ -82,6 +77,12 @@ public class DocsAsImagesAdapter extends RecyclerBindableAdapter<Document, DocsA
     @Override
     protected int layoutId(int type) {
         return R.layout.item_doc_as_image;
+    }
+
+    public interface ActionListener extends EventListener {
+        void onDocClick(int index, @NonNull Document doc);
+
+        boolean onDocLongClick(int index, @NonNull Document doc);
     }
 
     static class DocViewHolder extends RecyclerView.ViewHolder {

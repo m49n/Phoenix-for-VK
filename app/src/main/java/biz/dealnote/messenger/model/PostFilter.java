@@ -10,6 +10,17 @@ import biz.dealnote.messenger.adapter.horizontal.Entry;
 
 public class PostFilter implements Entry, Parcelable {
 
+    public static final Creator<PostFilter> CREATOR = new Creator<PostFilter>() {
+        @Override
+        public PostFilter createFromParcel(Parcel in) {
+            return new PostFilter(in);
+        }
+
+        @Override
+        public PostFilter[] newArray(int size) {
+            return new PostFilter[size];
+        }
+    };
     private int mode;
     private String title;
     private boolean active;
@@ -27,18 +38,6 @@ public class PostFilter implements Entry, Parcelable {
         count = in.readInt();
     }
 
-    public static final Creator<PostFilter> CREATOR = new Creator<PostFilter>() {
-        @Override
-        public PostFilter createFromParcel(Parcel in) {
-            return new PostFilter(in);
-        }
-
-        @Override
-        public PostFilter[] newArray(int size) {
-            return new PostFilter[size];
-        }
-    };
-
     public String getTitle() {
         return count > 0 ? title + " " + count : title;
     }
@@ -51,6 +50,10 @@ public class PostFilter implements Entry, Parcelable {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -76,9 +79,5 @@ public class PostFilter implements Entry, Parcelable {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

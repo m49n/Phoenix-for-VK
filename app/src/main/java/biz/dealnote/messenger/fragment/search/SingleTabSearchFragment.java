@@ -29,6 +29,18 @@ import biz.dealnote.messenger.view.MySearchView;
  */
 public class SingleTabSearchFragment extends Fragment implements MySearchView.OnQueryTextListener, MySearchView.OnAdditionalButtonClickListener {
 
+    @SearchContentType
+    private int mContentType;
+    private int mAccountId;
+    private BaseSearchCriteria mInitialCriteria;
+    private boolean attachedChild;
+    private FragmentManager.FragmentLifecycleCallbacks mFragmentLifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+        @Override
+        public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
+            syncChildFragment();
+        }
+    };
+
     public static Bundle buildArgs(int accountId, @SearchContentType int contentType, @Nullable BaseSearchCriteria criteria) {
         Bundle args = new Bundle();
         args.putInt(Extra.TYPE, contentType);
@@ -52,13 +64,6 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         return fragment;
     }
 
-    @SearchContentType
-    private int mContentType;
-
-    private int mAccountId;
-
-    private BaseSearchCriteria mInitialCriteria;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +73,7 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
 
         getChildFragmentManager().registerFragmentLifecycleCallbacks(mFragmentLifecycleCallbacks, false);
 
-        if(Objects.nonNull(savedInstanceState)){
+        if (Objects.nonNull(savedInstanceState)) {
             this.attachedChild = savedInstanceState.getBoolean("attachedChild");
         }
     }
@@ -78,8 +83,6 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         getChildFragmentManager().unregisterFragmentLifecycleCallbacks(mFragmentLifecycleCallbacks);
         super.onDestroy();
     }
-
-    private boolean attachedChild;
 
     private void resolveLeftButton(MySearchView searchView) {
         int count = requireActivity().getSupportFragmentManager().getBackStackEntryCount();
@@ -104,24 +107,17 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
 
         resolveLeftButton(searchView);
 
-        if(!attachedChild){
+        if (!attachedChild) {
             attachChildFragment();
             this.attachedChild = true;
         }
         return root;
     }
 
-    private FragmentManager.FragmentLifecycleCallbacks mFragmentLifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
-        @Override
-        public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
-            syncChildFragment();
-        }
-    };
-
-    private void syncChildFragment(){
+    private void syncChildFragment() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.child_container);
 
-        if(fragment instanceof AbsSearchFragment){
+        if (fragment instanceof AbsSearchFragment) {
             ((AbsSearchFragment) fragment).syncYourCriteriaWithParent();
         }
     }
@@ -136,12 +132,12 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.child_container);
 
         // MVP
-        if(fragment instanceof AbsSearchFragment){
+        if (fragment instanceof AbsSearchFragment) {
             ((AbsSearchFragment) fragment).fireTextQueryEdit(query);
         }
     }
 
-    private void attachChildFragment(){
+    private void attachChildFragment() {
         Fragment fragment = SearchFragmentFactory.create(mContentType, mAccountId, mInitialCriteria);
         getChildFragmentManager()
                 .beginTransaction()
@@ -192,7 +188,7 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
     @Override
     public void onAdditionalButtonClick() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.child_container);
-        if(fragment instanceof AbsSearchFragment){
+        if (fragment instanceof AbsSearchFragment) {
             ((AbsSearchFragment) fragment).openSearchFilter();
         }
     }

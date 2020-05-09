@@ -29,6 +29,20 @@ public class MySearchView extends LinearLayout {
     private ImageView mButtonBack;
     private ImageView mButtonClear;
     private ImageView mButtonAdditional;
+    private OnQueryTextListener mOnQueryChangeListener;
+    private final TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
+
+        /**
+         * Called when the input method default action key is pressed.
+         */
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            Logger.d(TAG, "onEditorAction, actionId: " + actionId + ", event: " + event);
+            onSubmitQuery();
+            return true;
+        }
+    };
+    private OnBackButtonClickListener mOnBackButtonClickListener;
+    private OnAdditionalButtonClickListener mOnAdditionalButtonClickListener;
 
     public MySearchView(Context context) {
         super(context);
@@ -85,25 +99,13 @@ public class MySearchView extends LinearLayout {
         resolveCloseButton();
     }
 
-    public Editable getText(){
+    public Editable getText() {
         return mInput.getText();
     }
 
-    public void clear(){
+    public void clear() {
         mInput.getText().clear();
     }
-
-    private final TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
-
-        /**
-         * Called when the input method default action key is pressed.
-         */
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            Logger.d(TAG, "onEditorAction, actionId: " + actionId + ", event: " + event);
-            onSubmitQuery();
-            return true;
-        }
-    };
 
     private void onSubmitQuery() {
         CharSequence query = mInput.getText();
@@ -117,7 +119,7 @@ public class MySearchView extends LinearLayout {
         }
     }
 
-    public void setRightButtonVisibility(boolean visible){
+    public void setRightButtonVisibility(boolean visible) {
         mButtonAdditional.setVisibility(visible ? VISIBLE : GONE);
     }
 
@@ -149,14 +151,49 @@ public class MySearchView extends LinearLayout {
         mInput.setText(mQuery);
     }
 
-    private OnQueryTextListener mOnQueryChangeListener;
-
     public void setOnQueryTextListener(OnQueryTextListener onQueryChangeListener) {
         this.mOnQueryChangeListener = onQueryChangeListener;
     }
 
     public void setOnBackButtonClickListener(OnBackButtonClickListener onBackButtonClickListener) {
         this.mOnBackButtonClickListener = onBackButtonClickListener;
+    }
+
+    public void setOnAdditionalButtonClickListener(OnAdditionalButtonClickListener onAdditionalButtonClickListener) {
+        this.mOnAdditionalButtonClickListener = onAdditionalButtonClickListener;
+    }
+
+    public void setQuery(String query, boolean quetly) {
+        OnQueryTextListener tmp = mOnQueryChangeListener;
+        if (quetly) {
+            mOnQueryChangeListener = null;
+        }
+
+        setQuery(query);
+
+        if (quetly) {
+            mOnQueryChangeListener = tmp;
+        }
+    }
+
+    public void setQuery(String query) {
+        mInput.setText(query);
+    }
+
+    public void setSelection(int start, int end) {
+        mInput.setSelection(start, end);
+    }
+
+    public void setSelection(int position) {
+        mInput.setSelection(position);
+    }
+
+    public void setLeftIcon(int drawable) {
+        mButtonBack.setImageResource(drawable);
+    }
+
+    public void setLeftIcon(Drawable drawable) {
+        mButtonBack.setImageDrawable(drawable);
     }
 
     /**
@@ -191,47 +228,7 @@ public class MySearchView extends LinearLayout {
         void onBackButtonClick();
     }
 
-    private OnBackButtonClickListener mOnBackButtonClickListener;
-
     public interface OnAdditionalButtonClickListener {
         void onAdditionalButtonClick();
-    }
-
-    private OnAdditionalButtonClickListener mOnAdditionalButtonClickListener;
-
-    public void setOnAdditionalButtonClickListener(OnAdditionalButtonClickListener onAdditionalButtonClickListener) {
-        this.mOnAdditionalButtonClickListener = onAdditionalButtonClickListener;
-    }
-
-    public void setQuery(String query, boolean quetly){
-        OnQueryTextListener tmp = mOnQueryChangeListener;
-        if(quetly) {
-            mOnQueryChangeListener = null;
-        }
-
-        setQuery(query);
-
-        if(quetly){
-            mOnQueryChangeListener = tmp;
-        }
-    }
-
-    public void setQuery(String query) {
-        mInput.setText(query);
-    }
-
-    public void setSelection(int start, int end) {
-        mInput.setSelection(start, end);
-    }
-
-    public void setSelection(int position) {
-        mInput.setSelection(position);
-    }
-
-    public void setLeftIcon(int drawable) {
-        mButtonBack.setImageResource(drawable);
-    }
-    public void setLeftIcon(Drawable drawable) {
-        mButtonBack.setImageDrawable(drawable);
     }
 }

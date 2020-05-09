@@ -16,19 +16,19 @@ public class LogSqliteHelper extends SQLiteOpenHelper {
     private static final int V = 1;
     private static volatile LogSqliteHelper instance;
 
+    private LogSqliteHelper(Context context) {
+        super(context, "logs.sqlite", null, V);
+    }
+
     public static LogSqliteHelper getInstance(Context context) {
-        if(Objects.isNull(instance)){
-            synchronized (LogSqliteHelper.class){
-                if(Objects.isNull(instance)){
+        if (Objects.isNull(instance)) {
+            synchronized (LogSqliteHelper.class) {
+                if (Objects.isNull(instance)) {
                     instance = new LogSqliteHelper(context.getApplicationContext());
                 }
             }
         }
         return instance;
-    }
-
-    private LogSqliteHelper(Context context) {
-        super(context, "logs.sqlite", null, V);
     }
 
     @Override
@@ -49,8 +49,7 @@ public class LogSqliteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void Clear()
-    {
+    public void Clear() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + LogColumns.TABLENAME);
         onCreate(db);

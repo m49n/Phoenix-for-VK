@@ -64,9 +64,8 @@ public class CommentEntity {
         return fromId;
     }
 
-    public CommentEntity setThreads(int threads)
-    {
-        this.threads = threads;
+    public CommentEntity setFromId(int fromId) {
+        this.fromId = fromId;
         return this;
     }
 
@@ -74,8 +73,8 @@ public class CommentEntity {
         return threads;
     }
 
-    public CommentEntity setFromId(int fromId) {
-        this.fromId = fromId;
+    public CommentEntity setThreads(int threads) {
+        this.threads = threads;
         return this;
     }
 

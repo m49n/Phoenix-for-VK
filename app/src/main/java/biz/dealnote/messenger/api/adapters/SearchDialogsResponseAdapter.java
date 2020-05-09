@@ -30,17 +30,17 @@ public class SearchDialogsResponseAdapter extends AbsAdapter implements JsonDese
 
         List<SearchDialogsResponse.AbsChattable> list = new ArrayList<>(array.size());
 
-        for(int i = 0; i < array.size(); i++){
+        for (int i = 0; i < array.size(); i++) {
             JsonObject object = array.get(i).getAsJsonObject();
             String type = object.get("type").getAsString();
 
-            if("profile".equals(type)){
+            if ("profile".equals(type)) {
                 VKApiUser user = context.deserialize(object, VKApiUser.class);
                 list.add(new SearchDialogsResponse.User(user));
-            } else if("group".equals(type) || "page".equals(type) || "event".equals(type)){
+            } else if ("group".equals(type) || "page".equals(type) || "event".equals(type)) {
                 VKApiCommunity community = context.deserialize(object, VKApiCommunity.class);
                 list.add(new SearchDialogsResponse.Community(community));
-            } else if("chat".equals(type)){
+            } else if ("chat".equals(type)) {
                 VKApiChat chat = context.deserialize(object, VKApiChat.class);
                 list.add(new SearchDialogsResponse.Chat(chat));
             }

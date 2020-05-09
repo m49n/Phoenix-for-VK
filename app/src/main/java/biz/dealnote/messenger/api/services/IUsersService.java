@@ -38,10 +38,10 @@ public interface IUsersService {
     @FormUrlEncoded
     @POST("friends.getRequests")
     Single<BaseResponse<Items<VKApiUser>>> getRequests(@Field("offset") Integer offset,
-                                                        @Field("count") Integer count,
-                                                        @Field("extended") Integer extended,
-                                                        @Field("out") Integer out,
-                                                        @Field("fields") String fields);
+                                                       @Field("count") Integer count,
+                                                       @Field("extended") Integer extended,
+                                                       @Field("out") Integer out,
+                                                       @Field("fields") String fields);
 
     //https://vk.com/dev/users.search
     @FormUrlEncoded
@@ -112,8 +112,9 @@ public interface IUsersService {
     @POST("stories.get")
     @FormUrlEncoded
     Single<BaseResponse<StoryResponse>> getStory(@Field("owner_id") Integer owner_id,
-                                                @Field("extended") Integer extended,
-                                                @Field("fields") String fields);
+                                                 @Field("extended") Integer extended,
+                                                 @Field("fields") String fields);
+
     @POST("messages.getRecentStickers")
     Single<BaseResponse<Items<VKApiSticker>>> getRecentStickers();
 

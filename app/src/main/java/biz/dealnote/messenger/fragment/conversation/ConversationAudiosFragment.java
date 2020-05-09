@@ -47,7 +47,7 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
 
     @Override
     public void displayAttachments(List<Audio> data) {
-        ((AudioRecyclerAdapter)getAdapter()).setData(data);
+        ((AudioRecyclerAdapter) getAdapter()).setData(data);
     }
 
     @Override

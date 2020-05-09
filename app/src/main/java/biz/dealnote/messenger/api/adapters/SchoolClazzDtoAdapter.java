@@ -24,9 +24,9 @@ public class SchoolClazzDtoAdapter extends AbsAdapter implements JsonDeserialize
         dto.id = optInt(root, 0);
 
         JsonPrimitive second = root.get(1).getAsJsonPrimitive();
-        if(second.isString()){
+        if (second.isString()) {
             dto.title = second.getAsString();
-        } else if(second.isNumber()){
+        } else if (second.isNumber()) {
             dto.title = String.valueOf(second.getAsNumber());
         }
 

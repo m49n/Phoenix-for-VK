@@ -39,6 +39,18 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
     public static final String ACTION_LOGIN_COMPLETE = "ACTION_LOGIN_COMPLETE";
     public static final String ACTION_LOGIN_VIA_WEB = "ACTION_LOGIN_VIA_WEB";
     public static final String ACTION_VALIDATE_VIA_WEB = "ACTION_VALIDATE_VIA_WEB";
+    private EditText mLogin;
+    private EditText mPassword;
+    private EditText mCaptcha;
+    private EditText mSmsCode;
+    private TextView mValidate;
+    private View mSmsCodeRoot;
+    private View mContentRoot;
+    private View mLoadingRoot;
+    private View mCaptchaRoot;
+    private ImageView mCaptchaImage;
+    private View mEnterAppCodeRoot;
+    private EditText mAppCode;
 
     public static DirectAuthDialog newInstance() {
         Bundle args = new Bundle();
@@ -47,28 +59,10 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         return fragment;
     }
 
-    public DirectAuthDialog targetTo(Fragment fragment, int code){
+    public DirectAuthDialog targetTo(Fragment fragment, int code) {
         setTargetFragment(fragment, code);
         return this;
     }
-
-    private EditText mLogin;
-    private EditText mPassword;
-    private EditText mCaptcha;
-    private EditText mSmsCode;
-
-    private TextView mValidate;
-
-    private View mSmsCodeRoot;
-
-    private View mContentRoot;
-    private View mLoadingRoot;
-
-    private View mCaptchaRoot;
-    private ImageView mCaptchaImage;
-
-    private View mEnterAppCodeRoot;
-    private EditText mAppCode;
 
     @NonNull
     @Override
@@ -86,7 +80,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         });
 
         this.mPassword = view.findViewById(R.id.field_password);
-        this.mPassword.addTextChangedListener(new TextWatcherAdapter(){
+        this.mPassword.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().firePasswordEdit(s);
@@ -95,7 +89,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
         this.mEnterAppCodeRoot = view.findViewById(R.id.field_app_code_root);
         this.mAppCode = view.findViewById(R.id.field_app_code);
-        this.mAppCode.addTextChangedListener(new TextWatcherAdapter(){
+        this.mAppCode.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireAppCodeEdit(s);
@@ -109,7 +103,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
         this.mSmsCodeRoot = view.findViewById(R.id.field_sms_code_root);
         this.mSmsCode = view.findViewById(R.id.field_sms_code);
-        this.mSmsCode.addTextChangedListener(new TextWatcherAdapter(){
+        this.mSmsCode.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireSmsCodeEdit(s);
@@ -120,7 +114,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         this.mLoadingRoot = view.findViewById(R.id.loading_root);
         this.mCaptchaRoot = view.findViewById(R.id.captcha_root);
         this.mCaptcha = view.findViewById(R.id.field_captcha);
-        this.mCaptcha.addTextChangedListener(new TextWatcherAdapter(){
+        this.mCaptcha.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireCaptchaEdit(s);
@@ -130,7 +124,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
         builder.setView(view);
         builder.setPositiveButton(R.string.button_login, null);
-        if(Constants.IS_HAS_LOGIN_WEB)
+        if (Constants.IS_HAS_LOGIN_WEB)
             builder.setNeutralButton(R.string.button_login_via_web, (dialogInterface, i) -> getPresenter().fireLoginViaWebClick());
         builder.setTitle(R.string.login_title);
         builder.setIcon(R.drawable.logo_vk);
@@ -170,53 +164,53 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
     @Override
     public void setSmsRootVisible(boolean visible) {
-        if(Objects.nonNull(mSmsCodeRoot)){
+        if (Objects.nonNull(mSmsCodeRoot)) {
             mSmsCodeRoot.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void setAppCodeRootVisible(boolean visible) {
-        if(Objects.nonNull(mEnterAppCodeRoot)){
+        if (Objects.nonNull(mEnterAppCodeRoot)) {
             mEnterAppCodeRoot.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void moveFocusToSmsCode() {
-        if(Objects.nonNull(mSmsCode)){
+        if (Objects.nonNull(mSmsCode)) {
             mSmsCode.requestFocus();
         }
     }
 
     @Override
     public void moveFocusToAppCode() {
-        if(Objects.nonNull(mSmsCode)){
+        if (Objects.nonNull(mSmsCode)) {
             mAppCode.requestFocus();
         }
     }
 
     @Override
     public void displayLoading(boolean loading) {
-        if(Objects.nonNull(mLoadingRoot)){
+        if (Objects.nonNull(mLoadingRoot)) {
             mLoadingRoot.setVisibility(loading ? View.VISIBLE : View.GONE);
         }
 
-        if(Objects.nonNull(mContentRoot)){
+        if (Objects.nonNull(mContentRoot)) {
             mContentRoot.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
         }
     }
 
     @Override
     public void setCaptchaRootVisible(boolean visible) {
-        if(Objects.nonNull(mCaptchaRoot)){
+        if (Objects.nonNull(mCaptchaRoot)) {
             mCaptchaRoot.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void displayCaptchaImage(String img) {
-        if(Objects.nonNull(mCaptchaImage)){
+        if (Objects.nonNull(mCaptchaImage)) {
             PicassoInstance.with()
                     .load(img)
                     .placeholder(R.drawable.background_gray)
@@ -226,7 +220,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
 
     @Override
     public void moveFocusToCaptcha() {
-        if(Objects.nonNull(mCaptcha)){
+        if (Objects.nonNull(mCaptcha)) {
             mCaptcha.requestFocus();
         }
     }
@@ -239,7 +233,8 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
             im.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
             im.hideSoftInputFromWindow(mCaptcha.getWindowToken(), 0);
             im.hideSoftInputFromWindow(mSmsCode.getWindowToken(), 0);
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -247,11 +242,11 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         returnResultAndDissmiss(new Intent(ACTION_LOGIN_COMPLETE).putExtra(Extra.TOKEN, accessToken).putExtra(Extra.USER_ID, userId).putExtra(Extra.LOGIN, Login).putExtra(Extra.PASSWORD, Password).putExtra(Extra.TWOFA, twoFA), true);
     }
 
-    private void returnResultAndDissmiss(Intent data, boolean Dismiss){
-        if(Objects.nonNull(getTargetFragment())){
+    private void returnResultAndDissmiss(Intent data, boolean Dismiss) {
+        if (Objects.nonNull(getTargetFragment())) {
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         }
-        if(Dismiss)
+        if (Dismiss)
             dismiss();
     }
 

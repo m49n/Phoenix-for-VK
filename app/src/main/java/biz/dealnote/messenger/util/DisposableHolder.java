@@ -14,20 +14,20 @@ public class DisposableHolder<T> {
 
     private T tag;
 
-    public void append(Disposable disposable){
+    public void append(Disposable disposable) {
         append(disposable, null);
     }
 
-    public void append(Disposable disposable, T tag){
+    public void append(Disposable disposable, T tag) {
         dispose();
 
         this.disposable = disposable;
         this.tag = tag;
     }
 
-    public void dispose(){
-        if(nonNull(disposable)){
-            if(!disposable.isDisposed()){
+    public void dispose() {
+        if (nonNull(disposable)) {
+            if (!disposable.isDisposed()) {
                 disposable.dispose();
             }
 
@@ -35,7 +35,7 @@ public class DisposableHolder<T> {
         }
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return nonNull(disposable) && !disposable.isDisposed();
     }
 

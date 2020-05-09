@@ -15,7 +15,9 @@ import io.reactivex.Single;
  */
 public interface IAccountsInteractor {
     Single<BannedPart> getBanned(int accountId, int count, int offset);
+
     Completable banUsers(int accountId, Collection<User> users);
+
     Completable unbanUser(int accountId, int userId);
 
     Completable changeStatus(int accountId, String status);

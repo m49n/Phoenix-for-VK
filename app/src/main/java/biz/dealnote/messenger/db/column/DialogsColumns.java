@@ -8,10 +8,7 @@ import biz.dealnote.messenger.api.model.VKApiMessage;
 
 public final class DialogsColumns implements BaseColumns {
 
-    private DialogsColumns(){}
-
     public static final String TABLENAME = "dialogs";
-
     public static final String UNREAD = "unread";
     public static final String TITLE = "title";
     public static final String IN_READ = "in_read";
@@ -22,17 +19,6 @@ public final class DialogsColumns implements BaseColumns {
     public static final String LAST_MESSAGE_ID = "last_message_id";
     public static final String ACL = "acl";
     public static final String IS_GROUP_CHANNEL = "is_group_channel";
-
-    public static ContentValues getCV(VKApiChat chat){
-        ContentValues cv = new ContentValues();
-        cv.put(_ID, VKApiMessage.CHAT_PEER + chat.id);
-        cv.put(TITLE, chat.title);
-        cv.put(PHOTO_200, chat.photo_200);
-        cv.put(PHOTO_100, chat.photo_100);
-        cv.put(PHOTO_50, chat.photo_50);
-        return cv;
-    }
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_UNREAD = TABLENAME + "." + UNREAD;
     public static final String FULL_TITLE = TABLENAME + "." + TITLE;
@@ -44,7 +30,6 @@ public final class DialogsColumns implements BaseColumns {
     public static final String FULL_LAST_MESSAGE_ID = TABLENAME + "." + LAST_MESSAGE_ID;
     public static final String FULL_ACL = TABLENAME + "." + ACL;
     public static final String FULL_IS_GROUP_CHANNEL = TABLENAME + "." + IS_GROUP_CHANNEL;
-
     public static final String FOREIGN_MESSAGE_FROM_ID = "message_from_id";
     public static final String FOREIGN_MESSAGE_BODY = "message_body";
     public static final String FOREIGN_MESSAGE_DATE = "message_date";
@@ -54,4 +39,16 @@ public final class DialogsColumns implements BaseColumns {
     public static final String FOREIGN_MESSAGE_FWD_COUNT = "message_forward_count";
     public static final String FOREIGN_MESSAGE_ACTION = "message_action";
     public static final String FOREIGN_MESSAGE_ENCRYPTED = "message_encrypted";
+    private DialogsColumns() {
+    }
+
+    public static ContentValues getCV(VKApiChat chat) {
+        ContentValues cv = new ContentValues();
+        cv.put(_ID, VKApiMessage.CHAT_PEER + chat.id);
+        cv.put(TITLE, chat.title);
+        cv.put(PHOTO_200, chat.photo_200);
+        cv.put(PHOTO_100, chat.photo_100);
+        cv.put(PHOTO_50, chat.photo_50);
+        return cv;
+    }
 }

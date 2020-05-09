@@ -175,7 +175,7 @@ public class FeedbackEntity2Model {
     private static ReplyCommentFeedback buildReplyCommentFeedback(ReplyCommentEntity entity, IOwnersBundle owners) {
         Comment ownComment = null;
 
-        if(nonNull(entity.getOwnComment())){
+        if (nonNull(entity.getOwnComment())) {
             ownComment = Entity2Model.buildCommentFromDbo(entity.getOwnComment(), owners);
         }
 

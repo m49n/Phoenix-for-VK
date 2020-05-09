@@ -19,13 +19,12 @@ import static biz.dealnote.messenger.util.Utils.trimmedIsEmpty;
  */
 public class AddProxyPresenter extends RxSupportPresenter<IAddProxyView> {
 
+    private final IProxySettings settings;
     private boolean authEnabled;
     private String address;
     private String port;
     private String userName;
     private String pass;
-
-    private final IProxySettings settings;
 
     public AddProxyPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);

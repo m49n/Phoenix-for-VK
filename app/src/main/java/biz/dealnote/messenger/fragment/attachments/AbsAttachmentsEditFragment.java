@@ -95,6 +95,7 @@ public abstract class AbsAttachmentsEditFragment<P extends AbsAttachmentsEditPre
     private AttchmentsEditorAdapter mAdapter;
 
     private ViewGroup mUnderBodyContainer;
+    private TextView mEmptyText;
 
     @Nullable
     @Override
@@ -157,8 +158,6 @@ public abstract class AbsAttachmentsEditFragment<P extends AbsAttachmentsEditPre
         super.onDestroyView();
         mAdapter.cleanup();
     }
-
-    private TextView mEmptyText;
 
     ViewGroup getUnderBodyContainer() {
         return mUnderBodyContainer;
@@ -423,24 +422,24 @@ public abstract class AbsAttachmentsEditFragment<P extends AbsAttachmentsEditPre
 
     @Override
     public void notifyItemRemoved(int position) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(position + mAdapter.getHeadersCount());
 
-            if(mAdapter.getRealItemCount() == 0){
+            if (mAdapter.getRealItemCount() == 0) {
                 postResolveEmptyTextVisibility();
             }
         }
     }
 
-    private void postResolveEmptyTextVisibility(){
-        if(nonNull(mEmptyText)){
+    private void postResolveEmptyTextVisibility() {
+        if (nonNull(mEmptyText)) {
             final Action<AbsAttachmentsEditFragment> action = AbsAttachmentsEditFragment::resolveEmptyTextVisibility;
             mEmptyText.postDelayed(new WeakRunnable<>(this, action), 1000);
         }
     }
 
-    private void resolveEmptyTextVisibility(){
-        if(nonNull(mEmptyText)){
+    private void resolveEmptyTextVisibility() {
+        if (nonNull(mEmptyText)) {
             mEmptyText.setVisibility(mAdapter.getRealItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }

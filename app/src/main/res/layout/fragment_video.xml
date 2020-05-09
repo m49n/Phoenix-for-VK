@@ -36,9 +36,9 @@
                         android:id="@+id/fragment_video_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_marginTop="12dp"
                         android:textSize="16sp"
                         tools:text="Video" />
 
@@ -59,10 +59,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:scaleType="centerCrop"
+                                app:aspectRatioEnabled="true"
                                 app:aspectRatioH="9"
                                 app:aspectRatioW="16"
-                                app:dominantMeasurement="width"
-                                app:aspectRatioEnabled="true"/>
+                                app:dominantMeasurement="width" />
 
                             <FrameLayout
                                 android:id="@+id/button_play"
@@ -92,10 +92,10 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <biz.dealnote.messenger.view.emoji.EmojiconTextView
-                        android:autoLink="web"
                         android:id="@+id/fragment_video_subtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autoLink="web"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textSize="14sp"
@@ -110,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:paddingBottom="4dp"
-                android:paddingTop="4dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
 
                 <biz.dealnote.messenger.view.CircleCounterButton
                     android:id="@+id/share_button"

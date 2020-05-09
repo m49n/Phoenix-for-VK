@@ -18,7 +18,7 @@ public class PostUpdate {
 
     private LikeUpdate likeUpdate;
 
-    public PostUpdate(int accountId, int postId, int ownerId){
+    public PostUpdate(int accountId, int postId, int ownerId) {
         this.accountId = accountId;
         this.postId = postId;
         this.ownerId = ownerId;
@@ -40,17 +40,17 @@ public class PostUpdate {
         return likeUpdate;
     }
 
-    public PostUpdate withDeletion(boolean deleted){
+    public PostUpdate withDeletion(boolean deleted) {
         this.deleteUpdate = new DeleteUpdate(deleted);
         return this;
     }
 
-    public PostUpdate withPin(boolean pinned){
+    public PostUpdate withPin(boolean pinned) {
         this.pinUpdate = new PinUpdate(pinned);
         return this;
     }
 
-    public PostUpdate withLikes(int count, boolean usesLikes){
+    public PostUpdate withLikes(int count, boolean usesLikes) {
         this.likeUpdate = new LikeUpdate(usesLikes, count);
         return this;
     }

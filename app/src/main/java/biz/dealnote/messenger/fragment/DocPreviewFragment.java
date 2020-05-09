@@ -50,6 +50,20 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class DocPreviewFragment extends BaseFragment implements View.OnClickListener {
 
+    private static final String SAVE_DELETED = "deleted";
+    private int accountId;
+    private View rootView;
+    private int ownerId;
+    private int documentId;
+    private Document document;
+    private ImageView preview;
+    private ImageView ivDocIcon;
+    private TextView tvTitle;
+    private TextView tvSubtitle;
+    private boolean mLoadingNow;
+    private boolean deleted = false;
+    private IDocsInteractor docsInteractor;
+
     public static Bundle buildArgs(int accountId, int docId, int docOwnerId, @Nullable Document document) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -68,17 +82,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         fragment.setArguments(arsg);
         return fragment;
     }
-
-    private int accountId;
-    private View rootView;
-    private int ownerId;
-    private int documentId;
-    private Document document;
-
-    private ImageView preview;
-    private ImageView ivDocIcon;
-    private TextView tvTitle;
-    private TextView tvSubtitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,7 +130,7 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (Objects.isNull(document) && !mLoadingNow) {
@@ -196,8 +199,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         rootView.findViewById(R.id.share_button).setVisibility(deleted ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private boolean mLoadingNow;
-
     private void requestVideoInfo() {
         this.mLoadingNow = true;
         appendDisposable(docsInteractor.findById(accountId, ownerId, documentId)
@@ -243,8 +244,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    private static final String SAVE_DELETED = "deleted";
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -254,7 +253,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
     private void restoreFromInstanceState(Bundle state) {
         this.deleted = state.getBoolean(SAVE_DELETED);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -299,8 +297,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
-
-    private boolean deleted = false;
 
     private void share() {
         String[] items = new String[]{
@@ -358,8 +354,6 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
             return true;
         });
     }
-
-    private IDocsInteractor docsInteractor;
 
     private void doAddYourSelf() {
         IDocsInteractor docsInteractor = InteractorFactory.createDocsInteractor();

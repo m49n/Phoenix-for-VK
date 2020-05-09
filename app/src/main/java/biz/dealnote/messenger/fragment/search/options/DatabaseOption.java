@@ -12,13 +12,22 @@ public class DatabaseOption extends BaseOption implements Parcelable {
     public static final int TYPE_CHAIR = 5;
     public static final int TYPE_SCHOOL = 6;
     public static final int TYPE_SCHOOL_CLASS = 7;
+    public static final Creator<DatabaseOption> CREATOR = new Creator<DatabaseOption>() {
+        @Override
+        public DatabaseOption createFromParcel(Parcel in) {
+            return new DatabaseOption(in);
+        }
 
+        @Override
+        public DatabaseOption[] newArray(int size) {
+            return new DatabaseOption[size];
+        }
+    };
     /**
      * Тип данных, который находится в обьекте value
      * страна, город, университет и т.д.
      */
     public int type;
-
     /**
      * Текущее значение опции
      */
@@ -46,18 +55,6 @@ public class DatabaseOption extends BaseOption implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<DatabaseOption> CREATOR = new Creator<DatabaseOption>() {
-        @Override
-        public DatabaseOption createFromParcel(Parcel in) {
-            return new DatabaseOption(in);
-        }
-
-        @Override
-        public DatabaseOption[] newArray(int size) {
-            return new DatabaseOption[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {
@@ -92,6 +89,17 @@ public class DatabaseOption extends BaseOption implements Parcelable {
 
     public static class Entry implements Parcelable, Cloneable {
 
+        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
+            @Override
+            public Entry createFromParcel(Parcel in) {
+                return new Entry(in);
+            }
+
+            @Override
+            public Entry[] newArray(int size) {
+                return new Entry[size];
+            }
+        };
         public int id;
         public String title;
 
@@ -104,18 +112,6 @@ public class DatabaseOption extends BaseOption implements Parcelable {
             id = in.readInt();
             title = in.readString();
         }
-
-        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
-            @Override
-            public Entry createFromParcel(Parcel in) {
-                return new Entry(in);
-            }
-
-            @Override
-            public Entry[] newArray(int size) {
-                return new Entry[size];
-            }
-        };
 
         @Override
         public boolean equals(Object o) {

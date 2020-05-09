@@ -31,7 +31,7 @@ public class DialogsInteractor implements IDialogsInteractor {
         return repositories.dialogs()
                 .findChatById(accountId, peerId)
                 .flatMap(optional -> {
-                    if(optional.nonEmpty()){
+                    if (optional.nonEmpty()) {
                         return Single.just(optional.get());
                     }
 
@@ -40,7 +40,7 @@ public class DialogsInteractor implements IDialogsInteractor {
                             .messages()
                             .getChat(chatId, null, null, null)
                             .map(chats -> {
-                                if(isEmpty(chats)){
+                                if (isEmpty(chats)) {
                                     throw new NotFoundException();
                                 }
 

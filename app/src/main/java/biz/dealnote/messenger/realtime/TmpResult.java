@@ -109,6 +109,11 @@ public class TmpResult {
         return accountId;
     }
 
+    @Override
+    public String toString() {
+        return "[" + id + "] -> " + data.toString();
+    }
+
     public static class Msg implements Identificable {
 
         private final int id;
@@ -123,17 +128,12 @@ public class TmpResult {
             this.id = id;
         }
 
-        public Msg setDto(VKApiMessage dto) {
-            this.dto = dto;
-            return this;
-        }
-
         public VKApiMessage getDto() {
             return dto;
         }
 
-        public Msg setMessage(Message message) {
-            this.message = message;
+        public Msg setDto(VKApiMessage dto) {
+            this.dto = dto;
             return this;
         }
 
@@ -141,8 +141,8 @@ public class TmpResult {
             return message;
         }
 
-        public Msg setAlreadyExists(boolean alreadyExists) {
-            this.alreadyExists = alreadyExists;
+        public Msg setMessage(Message message) {
+            this.message = message;
             return this;
         }
 
@@ -150,14 +150,14 @@ public class TmpResult {
             return alreadyExists;
         }
 
+        public Msg setAlreadyExists(boolean alreadyExists) {
+            this.alreadyExists = alreadyExists;
+            return this;
+        }
+
         @Override
         public int getId() {
             return id;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "[" + id + "] -> " + data.toString();
     }
 }

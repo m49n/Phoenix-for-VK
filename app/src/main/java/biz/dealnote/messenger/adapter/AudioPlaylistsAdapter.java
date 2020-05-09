@@ -30,6 +30,8 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
 
     private List<VKApiAudioPlaylist> data;
     private Context context;
+    private RecyclerView recyclerView;
+    private ClickListener clickListener;
 
     public AudioPlaylistsAdapter(List<VKApiAudioPlaylist> data, Context context) {
         this.data = data;
@@ -46,31 +48,31 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int position) {
         final VKApiAudioPlaylist playlist = data.get(position);
-        if(!isNullOrEmptyString(playlist.thumb_image))
+        if (!isNullOrEmptyString(playlist.thumb_image))
             ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.thumb_image, Constants.PICASSO_TAG);
         else
             holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.generic_audio_nowplaying)));
         holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
         holder.name.setText(playlist.title);
-        if(isNullOrEmptyString(playlist.description))
+        if (isNullOrEmptyString(playlist.description))
             holder.description.setVisibility(View.GONE);
         else {
             holder.description.setVisibility(View.VISIBLE);
             holder.description.setText(playlist.description);
         }
-        if(isNullOrEmptyString(playlist.artist_name))
+        if (isNullOrEmptyString(playlist.artist_name))
             holder.artist.setVisibility(View.GONE);
         else {
             holder.artist.setVisibility(View.VISIBLE);
             holder.artist.setText(playlist.artist_name);
         }
-        if(playlist.Year == 0)
+        if (playlist.Year == 0)
             holder.year.setVisibility(View.GONE);
         else {
             holder.year.setVisibility(View.VISIBLE);
             holder.year.setText(String.valueOf(playlist.Year));
         }
-        if(isNullOrEmptyString(playlist.genre))
+        if (isNullOrEmptyString(playlist.genre))
             holder.genre.setVisibility(View.GONE);
         else {
             holder.genre.setVisibility(View.VISIBLE);
@@ -106,9 +108,19 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         this.recyclerView = null;
     }
 
-    private RecyclerView recyclerView;
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener  {
+    public interface ClickListener {
+        void onAlbumClick(int index, VKApiAudioPlaylist album);
+
+        void onDelete(int index, VKApiAudioPlaylist album);
+
+        void onAdd(int index, VKApiAudioPlaylist album);
+    }
+
+    public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         ImageView thumb;
         TextView name;
@@ -139,16 +151,14 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
             final int position = recyclerView.getChildAdapterPosition(v);
             final VKApiAudioPlaylist playlist = data.get(position);
 
-            if(Settings.get().accounts().getCurrent() == playlist.owner_id) {
+            if (Settings.get().accounts().getCurrent() == playlist.owner_id) {
                 menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
                     if (clickListener != null) {
                         clickListener.onDelete(position, playlist);
                     }
                     return true;
                 });
-            }
-            else
-            {
+            } else {
                 menu.add(0, v.getId(), 0, R.string.save).setOnMenuItemClickListener(item -> {
                     if (clickListener != null) {
                         clickListener.onAdd(position, playlist);
@@ -157,17 +167,5 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
                 });
             }
         }
-    }
-
-    public interface ClickListener {
-        void onAlbumClick(int index, VKApiAudioPlaylist album);
-        void onDelete(int index, VKApiAudioPlaylist album);
-        void onAdd(int index, VKApiAudioPlaylist album);
-    }
-
-    private ClickListener clickListener;
-
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
     }
 }

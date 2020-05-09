@@ -27,6 +27,8 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
     private List<FavePage> data;
     private Context context;
     private Transformation transformation;
+    private RecyclerView recyclerView;
+    private ClickListener clickListener;
 
     public FavePagesAdapter(List<FavePage> data, Context context) {
         this.data = data;
@@ -76,6 +78,16 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
         this.recyclerView = null;
     }
 
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onPageClick(int index, Owner owner);
+
+        void onDelete(int index, Owner owner);
+    }
+
     public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         ImageView avatar;
@@ -104,19 +116,5 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
                 return true;
             });
         }
-    }
-
-    private RecyclerView recyclerView;
-
-    public interface ClickListener {
-        void onPageClick(int index, Owner owner);
-
-        void onDelete(int index, Owner owner);
-    }
-
-    private ClickListener clickListener;
-
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
     }
 }

@@ -39,11 +39,18 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     private final DataWrapper<Community> own;
     private final DataWrapper<Community> filtered;
     private final DataWrapper<Community> search;
-
+    private final ICommunitiesInteractor communitiesInteractor;
     private boolean actualEndOfContent;
     private boolean netSearchEndOfContent;
-
-    private final ICommunitiesInteractor communitiesInteractor;
+    private CompositeDisposable actualDisposable = new CompositeDisposable();
+    private boolean actualLoadingNow;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    //private int actualLoadingOffset;
+    private boolean cacheLoadingNow;
+    private CompositeDisposable netSeacrhDisposable = new CompositeDisposable();
+    private boolean netSeacrhNow;
+    private String filter;
+    private CompositeDisposable filterDisposable = new CompositeDisposable();
 
     public CommunitiesPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -58,9 +65,56 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         requestActualData(0);
     }
 
-    private CompositeDisposable actualDisposable = new CompositeDisposable();
-    private boolean actualLoadingNow;
-    //private int actualLoadingOffset;
+    private static Single<List<Community>> filter(final List<Community> orig, final String filter) {
+        return Single.create(emitter -> {
+            List<Community> result = new ArrayList<>(5);
+
+            for (Community community : orig) {
+                if (emitter.isDisposed()) {
+                    break;
+                }
+
+                if (isMatchFilter(community, filter)) {
+                    result.add(community);
+                }
+            }
+
+            emitter.onSuccess(result);
+        });
+    }
+
+    private static boolean isMatchFilter(Community community, String filter) {
+        if (trimmedIsEmpty(filter)) {
+            return true;
+        }
+
+        String lower = filter.toLowerCase().trim();
+
+        if (nonEmpty(community.getName())) {
+            String lowername = community.getName().toLowerCase();
+            if (lowername.contains(lower)) {
+                return true;
+            }
+
+            try {
+                if (lowername.contains(Translit.cyr2lat(lower))) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+            }
+
+
+            try {
+                //Caused by java.lang.StringIndexOutOfBoundsException: length=3; index=3
+                if (lowername.contains(Translit.lat2cyr(lower))) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        return nonEmpty(community.getScreenName()) && community.getScreenName().toLowerCase().contains(lower);
+    }
 
     private void requestActualData(int offset) {
         this.actualLoadingNow = true;
@@ -85,6 +139,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
             getView().displayRefreshing(actualLoadingNow || netSeacrhNow);
         }
     }
+    //private int netSearchOffset;
 
     private void onActualDataGetError(Throwable t) {
         this.actualLoadingNow = false;
@@ -120,9 +175,6 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         resolveRefreshing();
     }
 
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheLoadingNow;
-
     private void loadCachedData() {
         this.cacheLoadingNow = true;
 
@@ -131,10 +183,6 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onCachedDataReceived));
     }
-
-    private CompositeDisposable netSeacrhDisposable = new CompositeDisposable();
-    private boolean netSeacrhNow;
-    //private int netSearchOffset;
 
     private boolean isSearchNow() {
         return trimmedNonEmpty(filter);
@@ -147,8 +195,6 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         this.own.get().addAll(communities);
         callView(ICommunitiesView::notifyDataSetChanged);
     }
-
-    private String filter;
 
     public void fireSearchQueryChanged(String query) {
         if (!Objects.safeEquals(filter, query)) {
@@ -211,19 +257,19 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
                 .subscribe(data -> onSearchDataReceived(offset, data), this::onSeacrhError));
     }
 
-    private void onSeacrhError(Throwable t){
+    private void onSeacrhError(Throwable t) {
         this.netSeacrhNow = false;
         resolveRefreshing();
         showError(getView(), getCauseIfRuntime(t));
     }
 
-    private void onSearchDataReceived(int offset, List<Community> communities){
+    private void onSearchDataReceived(int offset, List<Community> communities) {
         this.netSeacrhNow = false;
         this.netSearchEndOfContent = communities.isEmpty();
 
         resolveRefreshing();
 
-        if(offset == 0){
+        if (offset == 0) {
             this.search.replace(communities);
             callView(ICommunitiesView::notifyDataSetChanged);
         } else {
@@ -240,59 +286,6 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         callView(ICommunitiesView::notifyDataSetChanged);
     }
 
-    private CompositeDisposable filterDisposable = new CompositeDisposable();
-
-    private static Single<List<Community>> filter(final List<Community> orig, final String filter) {
-        return Single.create(emitter -> {
-            List<Community> result = new ArrayList<>(5);
-
-            for (Community community : orig) {
-                if (emitter.isDisposed()) {
-                    break;
-                }
-
-                if (isMatchFilter(community, filter)) {
-                    result.add(community);
-                }
-            }
-
-            emitter.onSuccess(result);
-        });
-    }
-
-    private static boolean isMatchFilter(Community community, String filter) {
-        if (trimmedIsEmpty(filter)) {
-            return true;
-        }
-
-        String lower = filter.toLowerCase().trim();
-
-        if (nonEmpty(community.getName())) {
-            String lowername = community.getName().toLowerCase();
-            if (lowername.contains(lower)) {
-                return true;
-            }
-
-            try {
-                if (lowername.contains(Translit.cyr2lat(lower))) {
-                    return true;
-                }
-            } catch (Exception ignored) {
-            }
-
-
-            try {
-                //Caused by java.lang.StringIndexOutOfBoundsException: length=3; index=3
-                if (lowername.contains(Translit.lat2cyr(lower))) {
-                    return true;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-        return nonEmpty(community.getScreenName()) && community.getScreenName().toLowerCase().contains(lower);
-    }
-
     public void fireCommunityClick(Community community) {
         getView().showCommunityWall(getAccountId(), community);
     }
@@ -307,7 +300,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     }
 
     public void fireRefresh() {
-        if(isSearchNow()){
+        if (isSearchNow()) {
             netSeacrhDisposable.clear();
             netSeacrhNow = false;
 
@@ -325,13 +318,13 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     }
 
     public void fireScrollToEnd() {
-        if(isSearchNow()){
-            if(!netSeacrhNow && !netSearchEndOfContent){
+        if (isSearchNow()) {
+            if (!netSeacrhNow && !netSearchEndOfContent) {
                 int offset = search.size();
                 startNetSearch(offset, false);
             }
         } else {
-            if(!actualLoadingNow && !cacheLoadingNow && !actualEndOfContent){
+            if (!actualLoadingNow && !cacheLoadingNow && !actualEndOfContent) {
                 int offset = own.size();
                 requestActualData(offset);
             }

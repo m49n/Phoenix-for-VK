@@ -9,35 +9,9 @@ public class MatrixCalculator {
     private final Libra libra;
     private final int count;
 
-    public interface Libra {
-        float getWeight(int index);
-    }
-
-    public MatrixCalculator(int count, Libra libra){
+    public MatrixCalculator(int count, Libra libra) {
         this.count = count;
         this.libra = libra;
-    }
-
-    private static class Result {
-
-        float minDiff = Float.MAX_VALUE;
-
-        int[][] matrix;
-
-    }
-
-    private void analize(int[][] matrix, Result target){
-        float maxDiff = getMaxDiff(libra, matrix);
-
-        if(maxDiff < target.minDiff || target.matrix == null){
-            target.minDiff = maxDiff;
-            target.matrix = cloneArray(matrix);
-        }
-    }
-
-    public int[][] calculate(int rows) {
-        Result result = checkAllVariants(rows);
-        return result.matrix;
     }
 
     private static float getMaxDiff(Libra libra, int[][] variant) {
@@ -47,7 +21,7 @@ public class MatrixCalculator {
         //    for (int a = 0; a < variant[i].length; a++) {
         //        int v = variant[i][a];
 //
-         //       if (v == -1) {
+        //       if (v == -1) {
         //            realRows[i][a] = 0;
         //        } else {
         //            realRows[i][a] = libra.getWeight(v);
@@ -57,7 +31,7 @@ public class MatrixCalculator {
 
         float[] sums = new float[variant.length];
 
-        for(int i = 0; i < variant.length; i++){
+        for (int i = 0; i < variant.length; i++) {
             sums[i] = getWeightSumm(libra, variant[i]);
         }
 
@@ -81,10 +55,10 @@ public class MatrixCalculator {
         return maxDiff;
     }
 
-    private static float getWeightSumm(Libra libra, int ... positions){
+    private static float getWeightSumm(Libra libra, int... positions) {
         float s = 0;
         for (int position : positions) {
-            if(position == -1){
+            if (position == -1) {
                 continue;
             }
 
@@ -93,15 +67,6 @@ public class MatrixCalculator {
 
         return s;
     }
-
-    /*private static float getSum(float... values) {
-        float s = 0;
-        for (float f : values) {
-            s = s + f;
-        }
-
-        return s;
-    }*/
 
     private static float getAverage(float... values) {
         float sum = 0;
@@ -116,38 +81,6 @@ public class MatrixCalculator {
         }
 
         return sum / (float) nonZeroValuesCount;
-    }
-
-    private Result checkAllVariants(int rowsCount) {
-        Result result = new Result();
-
-        int[][] rows = new int[rowsCount][count];
-
-        for (int i = rowsCount - 1; i >= 0; i--) {
-            int[] array = new int[count];
-
-            for (int a = 0; a < count; a++) {
-                array[a] = -1;
-            }
-
-            rows[i] = array;
-        }
-
-        int forFirst = count - rowsCount;
-
-        for (int i = 0; i < count; i++) {
-            boolean toFirst = i < forFirst + 1;
-            rows[toFirst ? 0 : i - forFirst][toFirst ? i : 0] = i;
-        }
-
-        doShuffle(rows, result);
-        return result;
-    }
-
-    private void doShuffle(int[][] data, Result result) {
-        analize(data, result);
-
-        moveAll(data, 0, result);
     }
 
     /**
@@ -167,20 +100,9 @@ public class MatrixCalculator {
         return target;
     }
 
-    private void moveAll(int[][] data, int startFromIndex, Result result) {
-        while (canMoveToNext(startFromIndex, data)) {
-            move(startFromIndex, data);
-
-            analize(data, result);
-
-            if (startFromIndex + 1 < data.length - 1) {
-                moveAll(cloneArray(data), startFromIndex + 1, result);
-            }
-        }
-    }
-
     /**
      * Можно ли переместить последний елемент субмассива data по индексу row на следующую строку
+     *
      * @param row
      * @param data
      * @return
@@ -220,8 +142,18 @@ public class MatrixCalculator {
         rowArray[moveIndex] = -1;
     }
 
+    /*private static float getSum(float... values) {
+        float s = 0;
+        for (float f : values) {
+            s = s + f;
+        }
+
+        return s;
+    }*/
+
     /**
      * Сдвинуть все значение на 1 вправо, значение первого елемента будет заменено на -1
+     *
      * @param array
      */
     private static void shiftByOneToRight(int[] array) {
@@ -236,6 +168,7 @@ public class MatrixCalculator {
 
     /**
      * Получить индекс последнего елемента, чье значение не равно -1
+     *
      * @param array
      * @return
      */
@@ -247,5 +180,75 @@ public class MatrixCalculator {
         }
 
         return -1;
+    }
+
+    private void analize(int[][] matrix, Result target) {
+        float maxDiff = getMaxDiff(libra, matrix);
+
+        if (maxDiff < target.minDiff || target.matrix == null) {
+            target.minDiff = maxDiff;
+            target.matrix = cloneArray(matrix);
+        }
+    }
+
+    public int[][] calculate(int rows) {
+        Result result = checkAllVariants(rows);
+        return result.matrix;
+    }
+
+    private Result checkAllVariants(int rowsCount) {
+        Result result = new Result();
+
+        int[][] rows = new int[rowsCount][count];
+
+        for (int i = rowsCount - 1; i >= 0; i--) {
+            int[] array = new int[count];
+
+            for (int a = 0; a < count; a++) {
+                array[a] = -1;
+            }
+
+            rows[i] = array;
+        }
+
+        int forFirst = count - rowsCount;
+
+        for (int i = 0; i < count; i++) {
+            boolean toFirst = i < forFirst + 1;
+            rows[toFirst ? 0 : i - forFirst][toFirst ? i : 0] = i;
+        }
+
+        doShuffle(rows, result);
+        return result;
+    }
+
+    private void doShuffle(int[][] data, Result result) {
+        analize(data, result);
+
+        moveAll(data, 0, result);
+    }
+
+    private void moveAll(int[][] data, int startFromIndex, Result result) {
+        while (canMoveToNext(startFromIndex, data)) {
+            move(startFromIndex, data);
+
+            analize(data, result);
+
+            if (startFromIndex + 1 < data.length - 1) {
+                moveAll(cloneArray(data), startFromIndex + 1, result);
+            }
+        }
+    }
+
+    public interface Libra {
+        float getWeight(int index);
+    }
+
+    private static class Result {
+
+        float minDiff = Float.MAX_VALUE;
+
+        int[][] matrix;
+
     }
 }

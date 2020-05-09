@@ -9,16 +9,18 @@ import biz.dealnote.messenger.util.Objects;
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
+    private static final int MIN_DELAY = 100;
+    private static final int VISIBILITY_THRESHOLD = 0; //elements to the end
+    private Long mLastInterceptTime;
+    private int visibleItemCount;
+    private int totalItemCount;
+    private int pastVisibleItems;
+
     public EndlessRecyclerOnScrollListener() {
 
     }
 
-    private static final int MIN_DELAY = 100;
-    private static final int VISIBILITY_THRESHOLD = 0; //elements to the end
-
-    private Long mLastInterceptTime;
-
-    private boolean isAllowScrollIntercept(long minDelay){
+    private boolean isAllowScrollIntercept(long minDelay) {
         return mLastInterceptTime == null || System.currentTimeMillis() - mLastInterceptTime > minDelay;
     }
 
@@ -28,7 +30,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
 
-        if(Objects.isNull(manager)){
+        if (Objects.isNull(manager)) {
             // wtf?
             return;
         }
@@ -62,15 +64,11 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             isFirstElementVisible = ((LinearLayoutManager) manager).findFirstVisibleItemPosition() == 0;
         }
 
-        if(isFirstElementVisible){
+        if (isFirstElementVisible) {
             mLastInterceptTime = System.currentTimeMillis();
             onScrollToFirstElement();
         }
     }
-
-    private int visibleItemCount;
-    private int totalItemCount;
-    private int pastVisibleItems;
 
     private boolean isAtLastElementOfLinearLayoutManager(LinearLayoutManager linearLayoutManager) {
         visibleItemCount = linearLayoutManager.getChildCount();

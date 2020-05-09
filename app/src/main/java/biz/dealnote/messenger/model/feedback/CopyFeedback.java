@@ -17,6 +17,17 @@ import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
  */
 public final class CopyFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<CopyFeedback> CREATOR = new Creator<CopyFeedback>() {
+        @Override
+        public CopyFeedback createFromParcel(Parcel in) {
+            return new CopyFeedback(in);
+        }
+
+        @Override
+        public CopyFeedback[] newArray(int size) {
+            return new CopyFeedback[size];
+        }
+    };
     private AbsModel what;
     private List<Owner> owners;
 
@@ -41,18 +52,6 @@ public final class CopyFeedback extends Feedback implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<CopyFeedback> CREATOR = new Creator<CopyFeedback>() {
-        @Override
-        public CopyFeedback createFromParcel(Parcel in) {
-            return new CopyFeedback(in);
-        }
-
-        @Override
-        public CopyFeedback[] newArray(int size) {
-            return new CopyFeedback[size];
-        }
-    };
 
     public AbsModel getWhat() {
         return what;

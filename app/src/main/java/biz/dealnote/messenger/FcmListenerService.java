@@ -102,22 +102,22 @@ public class FcmListenerService extends FirebaseMessagingService {
                     new LikeFCMMessage(accountId, message).notifyIfNeed(context);
                     break;
 
-            case PushType.REPLY:
-                ReplyFCMMessage.fromRemoteMessage(message).notify(context, accountId);
-                break;
-            case PushType.WALL_PUBLISH:
-                WallPublishFCMMessage.fromRemoteMessage(message).notify(context, accountId);
-                break;
+                case PushType.REPLY:
+                    ReplyFCMMessage.fromRemoteMessage(message).notify(context, accountId);
+                    break;
+                case PushType.WALL_PUBLISH:
+                    WallPublishFCMMessage.fromRemoteMessage(message).notify(context, accountId);
+                    break;
 
-            case PushType.FRIEND_ACCEPTED:
-                FriendAcceptedFCMMessage.fromRemoteMessage(message).notify(context, accountId);
-                break;
-            case PushType.GROUP_INVITE:
-                GroupInviteFCMMessage.fromRemoteMessage(message).notify(context, accountId);
-                break;
-            case PushType.BIRTHDAY:
-                BirthdayFCMMessage.fromRemoteMessage(message).notify(context, accountId);
-                break;
+                case PushType.FRIEND_ACCEPTED:
+                    FriendAcceptedFCMMessage.fromRemoteMessage(message).notify(context, accountId);
+                    break;
+                case PushType.GROUP_INVITE:
+                    GroupInviteFCMMessage.fromRemoteMessage(message).notify(context, accountId);
+                    break;
+                case PushType.BIRTHDAY:
+                    BirthdayFCMMessage.fromRemoteMessage(message).notify(context, accountId);
+                    break;
                 case PushType.SHOW_MESSAGE:
                     NotificationHelper.showSimpleNotification(context, message.getData().get("body"), message.getData().get("title"), null);
                     break;
@@ -125,7 +125,7 @@ public class FcmListenerService extends FirebaseMessagingService {
                     //PersistentLogger.logThrowable("Push issues", new Exception("Unespected Push event, collapse_key: " + pushType + ", dump: " + bundleDump));
                     break;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             PersistentLogger.logThrowable("Push issues", e);
             e.printStackTrace();
         }

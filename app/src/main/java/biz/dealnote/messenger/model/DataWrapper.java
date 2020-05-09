@@ -27,7 +27,7 @@ public class DataWrapper<T> {
         return this;
     }
 
-    public int size(){
+    public int size() {
         return data.size();
     }
 
@@ -35,22 +35,22 @@ public class DataWrapper<T> {
         return data;
     }
 
-    public void clear(){
+    public void clear() {
         this.data.clear();
     }
 
-    public void addAll(List<T> append){
+    public void addAll(List<T> append) {
         this.data.addAll(append);
     }
 
-    public void replace(List<T> data){
+    public void replace(List<T> data) {
         this.data.clear();
         this.data.addAll(data);
         tryTrimToSize();
     }
 
-    private void tryTrimToSize(){
-        if(data instanceof ArrayList){
+    private void tryTrimToSize() {
+        if (data instanceof ArrayList) {
             ((ArrayList) data).trimToSize();
         }
     }

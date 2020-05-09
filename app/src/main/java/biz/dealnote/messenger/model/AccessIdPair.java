@@ -9,10 +9,19 @@ import android.os.Parcelable;
  */
 public class AccessIdPair implements Parcelable {
 
+    public static final Creator<AccessIdPair> CREATOR = new Creator<AccessIdPair>() {
+        @Override
+        public AccessIdPair createFromParcel(Parcel in) {
+            return new AccessIdPair(in);
+        }
+
+        @Override
+        public AccessIdPair[] newArray(int size) {
+            return new AccessIdPair[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private final String accessKey;
 
     public AccessIdPair(int id, int ownerId, String accessKey) {
@@ -26,18 +35,6 @@ public class AccessIdPair implements Parcelable {
         ownerId = in.readInt();
         accessKey = in.readString();
     }
-
-    public static final Creator<AccessIdPair> CREATOR = new Creator<AccessIdPair>() {
-        @Override
-        public AccessIdPair createFromParcel(Parcel in) {
-            return new AccessIdPair(in);
-        }
-
-        @Override
-        public AccessIdPair[] newArray(int size) {
-            return new AccessIdPair[size];
-        }
-    };
 
     public int getId() {
         return id;

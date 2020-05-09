@@ -9,19 +9,25 @@ import android.os.Parcelable;
  */
 public class Link extends AbsModel implements Parcelable {
 
+    public static final Creator<Link> CREATOR = new Creator<Link>() {
+        @Override
+        public Link createFromParcel(Parcel in) {
+            return new Link(in);
+        }
+
+        @Override
+        public Link[] newArray(int size) {
+            return new Link[size];
+        }
+    };
     private String url;
-
     private String title;
-
     private String caption;
-
     private String description;
-
     private Photo photo;
-
     private String preview_photo;
 
-    public Link(){
+    public Link() {
 
     }
 
@@ -45,18 +51,6 @@ public class Link extends AbsModel implements Parcelable {
         dest.writeString(preview_photo);
         dest.writeParcelable(photo, flags);
     }
-
-    public static final Creator<Link> CREATOR = new Creator<Link>() {
-        @Override
-        public Link createFromParcel(Parcel in) {
-            return new Link(in);
-        }
-
-        @Override
-        public Link[] newArray(int size) {
-            return new Link[size];
-        }
-    };
 
     public String getUrl() {
         return url;

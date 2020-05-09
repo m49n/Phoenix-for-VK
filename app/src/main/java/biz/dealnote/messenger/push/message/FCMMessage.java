@@ -24,12 +24,15 @@ public class FCMMessage {
     // {"width":50,"url":"https:\/\/pp.userapi.com\/c837424\/v837424529\/5c2cd\/BB6tk_bcJ3U.jpg","height":50}],
     // sound=1, title=Yevgeni Polkin, to_id=216143660, group_id=msg_280186075, context={"msg_id":828342,"sender_id":280186075}}
 
+    private static final Gson GSON = new Gson();
+    //public int sender_id;
+    //public String photo_200_url;
     //public long from;
     //public String collapse_key;
     //public String image_type;
     //public int from_id;
     //public String body;
-   // public long vk_time;
+    // public long vk_time;
     //public String type;
     //public int badge;
     //public String image;
@@ -38,23 +41,7 @@ public class FCMMessage {
     //public int to_id;
     //public String group_id;
     public int message_id;
-    //public int sender_id;
-    //public String photo_200_url;
-
     public int peerId;
-
-    private static final class MessageContext {
-        @SerializedName("msg_id")
-        int msg_id;
-
-        @SerializedName("sender_id")
-        int sender_id;
-
-        @SerializedName("chat_id")
-        int chat_id;
-    }
-
-    private static final Gson GSON = new Gson();
 
     public static FCMMessage fromRemoteMessage(RemoteMessage remote) {
         FCMMessage message = new FCMMessage();
@@ -103,5 +90,16 @@ public class FCMMessage {
         }
 
         NotificationHelper.notifNewMessage(context, accountId, body, peerId, message_id, vk_time);*/
+    }
+
+    private static final class MessageContext {
+        @SerializedName("msg_id")
+        int msg_id;
+
+        @SerializedName("sender_id")
+        int sender_id;
+
+        @SerializedName("chat_id")
+        int chat_id;
     }
 }

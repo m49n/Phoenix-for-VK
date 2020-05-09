@@ -52,7 +52,7 @@ public class CommentCreateFragment extends AbsAttachmentsEditFragment<CommentCre
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.ready:
                 getPresenter().fireReadyClick();
                 return true;
@@ -100,7 +100,7 @@ public class CommentCreateFragment extends AbsAttachmentsEditFragment<CommentCre
         Intent data = new Intent();
         data.putExtra(Extra.BODY, textBody);
 
-        if(nonNull(getTargetFragment())){
+        if (nonNull(getTargetFragment())) {
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         }
     }

@@ -29,14 +29,11 @@ public class LocalPhotoRequestHandler extends RequestHandler {
         boolean isVideo = data.uri.getPath().contains("videos");
 
         Bitmap bm;
-        if(!isVideo)
-        {
+        if (!isVideo) {
             bm = Stores.getInstance()
                     .localPhotos()
                     .getImageThumbnail(imageId);
-        }
-        else
-        {
+        } else {
             bm = Stores.getInstance()
                     .localPhotos()
                     .getVideoThumbnail(imageId);

@@ -61,9 +61,9 @@ public class DatabaseStorage extends AbsStorage implements IDatabaseStore {
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
             List<CountryEntity> dbos = new ArrayList<>(safeCountOf(cursor));
 
-            if(Objects.nonNull(cursor)){
-                while (cursor.moveToNext()){
-                    if(emitter.isDisposed()){
+            if (Objects.nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (emitter.isDisposed()) {
                         break;
                     }
 

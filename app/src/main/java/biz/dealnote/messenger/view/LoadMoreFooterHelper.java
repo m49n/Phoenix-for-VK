@@ -11,52 +11,35 @@ import biz.dealnote.messenger.model.LoadMoreState;
 
 public class LoadMoreFooterHelper {
 
-    public static LoadMoreFooterHelper createFrom(View view, final Callback callback){
+    public Callback callback;
+    public Holder holder;
+    public int state;
+
+    public static LoadMoreFooterHelper createFrom(View view, final Callback callback) {
         LoadMoreFooterHelper helper = new LoadMoreFooterHelper();
         helper.holder = new Holder(view);
         helper.callback = callback;
         helper.holder.bLoadMore.setOnClickListener(v -> {
-            if(callback != null){
+            if (callback != null) {
                 callback.onLoadMoreClick();
             }
         });
         return helper;
     }
 
-    public Callback callback;
-    public Holder holder;
-    public int state;
-
-    public static class Holder {
-
-        public View root;
-        public View container;
-        public ProgressBar progress;
-        public View bLoadMore;
-        public TextView tvEndOfList;
-
-        public Holder(View root){
-            this.root = root;
-            container = root.findViewById(R.id.footer_load_more_root);
-            progress = root.findViewById(R.id.footer_load_more_progress);
-            bLoadMore = root.findViewById(R.id.footer_load_more_run);
-            tvEndOfList = root.findViewById(R.id.footer_load_more_end_of_list);
-        }
-    }
-
-    public void setEndOfListTextRes(@StringRes int res){
+    public void setEndOfListTextRes(@StringRes int res) {
         holder.tvEndOfList.setText(res);
     }
 
-    public void setEndOfListText(String text){
+    public void setEndOfListText(String text) {
         holder.tvEndOfList.setText(text);
     }
 
-    public void switchToState(@LoadMoreState int state){
+    public void switchToState(@LoadMoreState int state) {
         this.state = state;
         holder.container.setVisibility(state == LoadMoreState.INVISIBLE ? View.GONE : View.VISIBLE);
 
-        switch (state){
+        switch (state) {
             case LoadMoreState.LOADING:
                 holder.tvEndOfList.setVisibility(View.INVISIBLE);
                 holder.bLoadMore.setVisibility(View.INVISIBLE);
@@ -77,5 +60,22 @@ public class LoadMoreFooterHelper {
 
     public interface Callback {
         void onLoadMoreClick();
+    }
+
+    public static class Holder {
+
+        public View root;
+        public View container;
+        public ProgressBar progress;
+        public View bLoadMore;
+        public TextView tvEndOfList;
+
+        public Holder(View root) {
+            this.root = root;
+            container = root.findViewById(R.id.footer_load_more_root);
+            progress = root.findViewById(R.id.footer_load_more_progress);
+            bLoadMore = root.findViewById(R.id.footer_load_more_run);
+            tvEndOfList = root.findViewById(R.id.footer_load_more_end_of_list);
+        }
     }
 }

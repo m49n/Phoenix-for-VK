@@ -30,6 +30,28 @@ class UsersApi extends AbsApi implements IUsersApi {
         super(accountId, provider);
     }
 
+    private static VKApiUser createFrom(UserWallInfoResponse response) {
+        VKApiUser user = response.users.get(0);
+
+        if (isNull(user.counters)) {
+            user.counters = new VKApiUser.Counters();
+        }
+
+        if (nonNull(response.allWallCount)) {
+            user.counters.all_wall = response.allWallCount;
+        }
+
+        if (nonNull(response.ownerWallCount)) {
+            user.counters.owner_wall = response.ownerWallCount;
+        }
+
+        if (nonNull(response.postponedWallCount)) {
+            user.counters.postponed_wall = response.postponedWallCount;
+        }
+
+        return user;
+    }
+
     @Override
     public Single<VKApiUser> getUserWallInfo(int userId, String fields, String nameCase) {
         return provideService(IUsersService.class, TokenType.USER)
@@ -63,28 +85,6 @@ class UsersApi extends AbsApi implements IUsersApi {
 
                             return createFrom(response);
                         }));
-    }
-
-    private static VKApiUser createFrom(UserWallInfoResponse response) {
-        VKApiUser user = response.users.get(0);
-
-        if (isNull(user.counters)) {
-            user.counters = new VKApiUser.Counters();
-        }
-
-        if (nonNull(response.allWallCount)) {
-            user.counters.all_wall = response.allWallCount;
-        }
-
-        if (nonNull(response.ownerWallCount)) {
-            user.counters.owner_wall = response.ownerWallCount;
-        }
-
-        if (nonNull(response.postponedWallCount)) {
-            user.counters.postponed_wall = response.postponedWallCount;
-        }
-
-        return user;
     }
 
     @Override
@@ -122,16 +122,14 @@ class UsersApi extends AbsApi implements IUsersApi {
     }
 
     @Override
-    public Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields)
-    {
+    public Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields) {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service.getStory(owner_id, extended, fields)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
-    public Single<Items<VKApiSticker>> getRecentStickers()
-    {
+    public Single<Items<VKApiSticker>> getRecentStickers() {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service.getRecentStickers()
                         .map(extractResponseWithErrorHandling()));

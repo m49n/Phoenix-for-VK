@@ -24,7 +24,7 @@ public class SharedHolders<T extends IdentificableHolder> {
 
     private boolean mSupportManyHoldersForEntity;
 
-    public SharedHolders(boolean supportManyHoldersForEntity){
+    public SharedHolders(boolean supportManyHoldersForEntity) {
         mHoldersCache = new SparseArray<>(0);
         mSupportManyHoldersForEntity = supportManyHoldersForEntity;
     }
@@ -35,15 +35,15 @@ public class SharedHolders<T extends IdentificableHolder> {
     }
 
     @Nullable
-    public T findOneByEntityId(int entityId){
+    public T findOneByEntityId(int entityId) {
         Set<WeakReference<T>> weakReferences = mHoldersCache.get(entityId);
-        if(Objects.isNull(weakReferences)){
+        if (Objects.isNull(weakReferences)) {
             return null;
         }
 
-        for(WeakReference<T> weakReference : weakReferences){
+        for (WeakReference<T> weakReference : weakReferences) {
             T holder = weakReference.get();
-            if(Objects.nonNull(holder)){
+            if (Objects.nonNull(holder)) {
                 return holder;
             }
         }
@@ -52,17 +52,17 @@ public class SharedHolders<T extends IdentificableHolder> {
     }
 
     @Nullable
-    public T findHolderByHolderId(int holderId){
+    public T findHolderByHolderId(int holderId) {
         for (int i = 0; i < mHoldersCache.size(); i++) {
             int key = mHoldersCache.keyAt(i);
             Set<WeakReference<T>> holders = mHoldersCache.get(key);
-            for(WeakReference<T> reference : holders){
+            for (WeakReference<T> reference : holders) {
                 T holder = reference.get();
-                if(Objects.isNull(holder)){
+                if (Objects.isNull(holder)) {
                     continue;
                 }
 
-                if(holder.getHolderId() == holderId){
+                if (holder.getHolderId() == holderId) {
                     return holder;
                 }
             }
@@ -102,7 +102,7 @@ public class SharedHolders<T extends IdentificableHolder> {
                         //Logger.d(TAG, "THIS holder alredy exist there");
                     }
                 } else {
-                    if(!mSupportManyHoldersForEntity && mustHaveInThisSet){
+                    if (!mSupportManyHoldersForEntity && mustHaveInThisSet) {
                         //Logger.d(TAG, "CACHE not support many holders for entity, remove other holder");
                         iterator.remove();
                     }
@@ -144,7 +144,7 @@ public class SharedHolders<T extends IdentificableHolder> {
         Logger.d(TAG, "DUMP END ##############################");
     }*/
 
-    public void release(){
+    public void release() {
         mHoldersCache.clear();
     }
 }

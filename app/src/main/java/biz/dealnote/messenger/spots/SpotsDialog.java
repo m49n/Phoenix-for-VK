@@ -22,57 +22,12 @@ import biz.dealnote.messenger.R;
  */
 public class SpotsDialog extends AlertDialog {
 
-    public static class Builder {
-
-        private Context context;
-        private String message;
-        private int messageId;
-        private boolean cancelable = true; // default dialog behaviour
-        private OnCancelListener cancelListener;
-
-        public Builder setContext(Context context) {
-            this.context = context;
-            return this;
-        }
-
-        public Builder setMessage(String message) {
-            this.message = message;
-            return this;
-        }
-
-        public Builder setMessage(@StringRes int messageId) {
-            this.messageId = messageId;
-            return this;
-        }
-
-        public Builder setCancelable(boolean cancelable) {
-            this.cancelable = cancelable;
-            return this;
-        }
-
-        public Builder setCancelListener(OnCancelListener cancelListener) {
-            this.cancelListener = cancelListener;
-            return this;
-        }
-
-        public AlertDialog build() {
-            return new SpotsDialog(
-                    context,
-                    messageId != 0 ? context.getString(messageId) : message,
-                    cancelable,
-                    cancelListener
-            );
-        }
-    }
-
     private static final int DELAY = 150;
     private static final int DURATION = 1500;
-
     private int size;
     private AnimatedView[] spots;
     private AnimatorPlayer animator;
     private CharSequence message;
-
     private SpotsDialog(Context context, String message, boolean cancelable, OnCancelListener cancelListener) {
         super(context);
         this.message = message;
@@ -85,8 +40,7 @@ public class SpotsDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         try {
             Objects.requireNonNull(getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-        }
-        catch (NullPointerException ignored) {
+        } catch (NullPointerException ignored) {
         }
         setContentView(R.layout.dmax_spots_dialog);
         setCanceledOnTouchOutside(false);
@@ -118,13 +72,13 @@ public class SpotsDialog extends AlertDialog {
         if (isShowing()) initMessage();
     }
 
-    //~
-
     private void initMessage() {
         if (message != null && message.length() > 0) {
             ((TextView) findViewById(R.id.dmax_spots_title)).setText(message);
         }
     }
+
+    //~
 
     private void initProgress() {
         FrameLayout progress = findViewById(R.id.dmax_spots_progress);
@@ -166,5 +120,48 @@ public class SpotsDialog extends AlertDialog {
             animators[i] = move;
         }
         return animators;
+    }
+
+    public static class Builder {
+
+        private Context context;
+        private String message;
+        private int messageId;
+        private boolean cancelable = true; // default dialog behaviour
+        private OnCancelListener cancelListener;
+
+        public Builder setContext(Context context) {
+            this.context = context;
+            return this;
+        }
+
+        public Builder setMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder setMessage(@StringRes int messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
+        public Builder setCancelable(boolean cancelable) {
+            this.cancelable = cancelable;
+            return this;
+        }
+
+        public Builder setCancelListener(OnCancelListener cancelListener) {
+            this.cancelListener = cancelListener;
+            return this;
+        }
+
+        public AlertDialog build() {
+            return new SpotsDialog(
+                    context,
+                    messageId != 0 ? context.getString(messageId) : message,
+                    cancelable,
+                    cancelListener
+            );
+        }
     }
 }

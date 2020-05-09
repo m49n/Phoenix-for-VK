@@ -13,22 +13,43 @@ import androidx.annotation.NonNull;
  */
 public class LocalVideo implements Parcelable, Comparable<LocalVideo>, ISelectable {
 
+    public static final Creator<LocalVideo> CREATOR = new Creator<LocalVideo>() {
+
+        @Override
+        public LocalVideo createFromParcel(Parcel s) {
+            return new LocalVideo(s);
+        }
+
+        @Override
+        public LocalVideo[] newArray(int size) {
+            return new LocalVideo[size];
+        }
+    };
     private final long id;
     private final Uri data;
-
     private long size;
-
     private boolean selected;
-
     private int duration;
-
     private int index;
-
     private String title;
 
     public LocalVideo(long id, Uri data) {
         this.id = id;
         this.data = data;
+    }
+
+    public LocalVideo(Parcel in) {
+        this.id = in.readLong();
+        this.data = Uri.parse(in.readString());
+        this.selected = in.readInt() == 1;
+        this.index = in.readInt();
+        this.size = in.readLong();
+        this.duration = in.readInt();
+        this.title = in.readString();
+    }
+
+    public static Uri buildUriForPicasso(long id) {
+        return ContentUris.withAppendedId(Uri.parse("content://media/external/videos/media/"), id);
     }
 
     @Override
@@ -45,33 +66,6 @@ public class LocalVideo implements Parcelable, Comparable<LocalVideo>, ISelectab
         dest.writeLong(size);
         dest.writeLong(duration);
         dest.writeString(title);
-    }
-
-    public LocalVideo(Parcel in) {
-        this.id = in.readLong();
-        this.data = Uri.parse(in.readString());
-        this.selected = in.readInt() == 1;
-        this.index = in.readInt();
-        this.size = in.readLong();
-        this.duration = in.readInt();
-        this.title = in.readString();
-    }
-
-    public static final Creator<LocalVideo> CREATOR = new Creator<LocalVideo>() {
-
-        @Override
-        public LocalVideo createFromParcel(Parcel s) {
-            return new LocalVideo(s);
-        }
-
-        @Override
-        public LocalVideo[] newArray(int size) {
-            return new LocalVideo[size];
-        }
-    };
-
-    public static Uri buildUriForPicasso(long id){
-        return ContentUris.withAppendedId(Uri.parse("content://media/external/videos/media/"), id);
     }
 
     public long getId() {
@@ -118,11 +112,6 @@ public class LocalVideo implements Parcelable, Comparable<LocalVideo>, ISelectab
         return this;
     }
 
-    public LocalVideo setSelected(boolean selected) {
-        this.selected = selected;
-        return this;
-    }
-
     @Override
     public int compareTo(@NonNull LocalVideo another) {
         return this.index - another.index;
@@ -131,5 +120,10 @@ public class LocalVideo implements Parcelable, Comparable<LocalVideo>, ISelectab
     @Override
     public boolean isSelected() {
         return selected;
+    }
+
+    public LocalVideo setSelected(boolean selected) {
+        this.selected = selected;
+        return this;
     }
 }

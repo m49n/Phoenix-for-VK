@@ -32,6 +32,7 @@ public class UserBannedPresenter extends AccountDependencyPresenter<IUserBannedV
     private final List<User> users;
 
     private boolean endOfContent;
+    private boolean loadinNow;
 
     public UserBannedPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -58,7 +59,7 @@ public class UserBannedPresenter extends AccountDependencyPresenter<IUserBannedV
 
     private void onUserRemoved(int id) {
         int index = findIndexById(users, id);
-        if(index != -1){
+        if (index != -1) {
             users.remove(index);
 
             callView(view -> view.notifyItemRemoved(index));
@@ -119,8 +120,6 @@ public class UserBannedPresenter extends AccountDependencyPresenter<IUserBannedV
             getView().displayRefreshing(loadinNow);
         }
     }
-
-    private boolean loadinNow;
 
     private void loadNextPart(final int offset) {
         if (loadinNow) return;

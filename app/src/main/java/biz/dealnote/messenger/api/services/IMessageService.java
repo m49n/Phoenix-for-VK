@@ -40,7 +40,7 @@ public interface IMessageService {
     @FormUrlEncoded
     @POST("messages.pin")
     Single<BaseResponse<VKApiMessage>> pin(@Field("peer_id") int peerId,
-                                       @Field("message_id") int messageId);
+                                           @Field("message_id") int messageId);
 
     @FormUrlEncoded
     @POST("messages.unpin")
@@ -50,7 +50,7 @@ public interface IMessageService {
      * Allows the current user to leave a chat or, if the current user started the chat,
      * allows the user to remove another user from the chat.
      *
-     * @param chatId Chat ID
+     * @param chatId   Chat ID
      * @param memberId ID of the member to be removed from the chat
      * @return 1
      */

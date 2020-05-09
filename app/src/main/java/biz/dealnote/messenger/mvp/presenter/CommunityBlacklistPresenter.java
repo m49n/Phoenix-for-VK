@@ -88,11 +88,11 @@ public class CommunityBlacklistPresenter extends AccountDependencyPresenter<ICom
         }
     }
 
-    private void requestDataAtStart(){
+    private void requestDataAtStart() {
         request(new IntNextFrom(0));
     }
 
-    private void request(IntNextFrom startFrom){
+    private void request(IntNextFrom startFrom) {
         if (loadingNow) return;
 
         final int accountId = super.getAccountId();
@@ -121,7 +121,7 @@ public class CommunityBlacklistPresenter extends AccountDependencyPresenter<ICom
         this.endOfContent = users.isEmpty();
         this.moreStartFrom = nextFrom;
 
-        if(startFrom.getOffset() != 0){
+        if (startFrom.getOffset() != 0) {
             int startSize = this.data.size();
             this.data.addAll(users);
             callView(view -> view.notifyItemsAdded(startSize, users.size()));

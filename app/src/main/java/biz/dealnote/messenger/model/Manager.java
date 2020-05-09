@@ -9,12 +9,20 @@ import android.os.Parcelable;
  */
 public final class Manager implements Parcelable {
 
+    public static final Creator<Manager> CREATOR = new Creator<Manager>() {
+        @Override
+        public Manager createFromParcel(Parcel in) {
+            return new Manager(in);
+        }
+
+        @Override
+        public Manager[] newArray(int size) {
+            return new Manager[size];
+        }
+    };
     private final User user;
-
     private final String role;
-
     private boolean displayAsContact;
-
     private ContactInfo contactInfo;
 
     public Manager(User user, String role) {
@@ -28,34 +36,22 @@ public final class Manager implements Parcelable {
         this.role = in.readString();
     }
 
-    public static final Creator<Manager> CREATOR = new Creator<Manager>() {
-        @Override
-        public Manager createFromParcel(Parcel in) {
-            return new Manager(in);
-        }
-
-        @Override
-        public Manager[] newArray(int size) {
-            return new Manager[size];
-        }
-    };
+    public ContactInfo getContactInfo() {
+        return contactInfo;
+    }
 
     public Manager setContactInfo(ContactInfo contactInfo) {
         this.contactInfo = contactInfo;
         return this;
     }
 
+    public boolean isDisplayAsContact() {
+        return displayAsContact;
+    }
+
     public Manager setDisplayAsContact(boolean displayAsContact) {
         this.displayAsContact = displayAsContact;
         return this;
-    }
-
-    public ContactInfo getContactInfo() {
-        return contactInfo;
-    }
-
-    public boolean isDisplayAsContact() {
-        return displayAsContact;
     }
 
     public User getUser() {

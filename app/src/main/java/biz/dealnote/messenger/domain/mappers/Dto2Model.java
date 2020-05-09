@@ -865,8 +865,8 @@ public class Dto2Model {
     public static List<Post> transformAttachmentsPosts(Collection<VkApiAttachments.Entry> dtos, IOwnersBundle bundle) {
         List<Post> posts = new ArrayList<>(safeCountOf(dtos));
         for (VkApiAttachments.Entry dto : dtos) {
-            if(dto.attachment instanceof VKApiPost)
-                posts.add(transform((VKApiPost)dto.attachment, bundle));
+            if (dto.attachment instanceof VKApiPost)
+                posts.add(transform((VKApiPost) dto.attachment, bundle));
         }
         return posts;
     }

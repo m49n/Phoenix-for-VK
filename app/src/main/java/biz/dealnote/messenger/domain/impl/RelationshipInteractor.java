@@ -103,8 +103,7 @@ public class RelationshipInteractor implements IRelationshipInteractor {
     }
 
     @Override
-    public Single<List<User>> getRequests(int accountId, Integer offset, Integer count)
-    {
+    public Single<List<User>> getRequests(int accountId, Integer offset, Integer count) {
         return networker.vkDefault(accountId)
                 .users()
                 .getRequests(offset, count, 1, 1, UserColumns.API_FIELDS)
@@ -144,13 +143,13 @@ public class RelationshipInteractor implements IRelationshipInteractor {
                 .users()
                 .get(Collections.singletonList(userId), null, "counters", null)
                 .map(users -> {
-                    if(users.isEmpty()){
+                    if (users.isEmpty()) {
                         throw new NotFoundException();
                     }
 
                     VKApiUser user = users.get(0);
                     FriendsCounters counters;
-                    if(Objects.nonNull(user.counters)){
+                    if (Objects.nonNull(user.counters)) {
                         counters = new FriendsCounters(user.counters.friends, user.counters.online_friends, user.counters.followers, user.counters.mutual_friends);
                     } else {
                         counters = new FriendsCounters(0, 0, 0, 0);
@@ -173,19 +172,19 @@ public class RelationshipInteractor implements IRelationshipInteractor {
                 .friends()
                 .delete(userId)
                 .map(response -> {
-                    if(response.friend_deleted){
+                    if (response.friend_deleted) {
                         return DeletedCodes.FRIEND_DELETED;
                     }
 
-                    if(response.in_request_deleted){
+                    if (response.in_request_deleted) {
                         return DeletedCodes.IN_REQUEST_DELETED;
                     }
 
-                    if(response.out_request_deleted){
+                    if (response.out_request_deleted) {
                         return DeletedCodes.OUT_REQUEST_DELETED;
                     }
 
-                    if(response.suggestion_deleted){
+                    if (response.suggestion_deleted) {
                         return DeletedCodes.SUGGESTION_DELETED;
                     }
 

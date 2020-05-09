@@ -33,36 +33,36 @@ public class LinkParser {
         CharSequence r12;
         SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(charSequence);
 
-            Matcher matcher = REPLY_URL_PATTERN.matcher(charSequence);
-            SpannableStringBuilder spannableStringBuilder3 = spannableStringBuilder2;
-            int i2 = 0;
-            while (matcher.find()) {
-                LinkSpan linkSpan = new LinkSpan(context, matcher.group(1), true);
-                SpannableStringBuilder replace = spannableStringBuilder3.replace(matcher.start() - i2, matcher.end() - i2, matcher.group(14));
-                replace.setSpan(linkSpan, matcher.start() - i2, (matcher.start() - i2) + matcher.group(14).length(), 0);
-                i2 += matcher.group().length() - matcher.group(14).length();
-                spannableStringBuilder3 = replace;
-            }
-            r12 = spannableStringBuilder3;
-            spannableStringBuilder = spannableStringBuilder3;
+        Matcher matcher = REPLY_URL_PATTERN.matcher(charSequence);
+        SpannableStringBuilder spannableStringBuilder3 = spannableStringBuilder2;
+        int i2 = 0;
+        while (matcher.find()) {
+            LinkSpan linkSpan = new LinkSpan(context, matcher.group(1), true);
+            SpannableStringBuilder replace = spannableStringBuilder3.replace(matcher.start() - i2, matcher.end() - i2, matcher.group(14));
+            replace.setSpan(linkSpan, matcher.start() - i2, (matcher.start() - i2) + matcher.group(14).length(), 0);
+            i2 += matcher.group().length() - matcher.group(14).length();
+            spannableStringBuilder3 = replace;
+        }
+        r12 = spannableStringBuilder3;
+        spannableStringBuilder = spannableStringBuilder3;
 
 
-            Matcher matcher2 = URL_PATTERN.matcher(r12);
-            while (matcher2.find()) {
-                if (!isNumber(matcher2.group(6)) && (matcher2.start() <= 0 || spannableStringBuilder.charAt(matcher2.start() - 1) != '@')) {
-                    spannableStringBuilder.setSpan(new LinkSpan(context, matcher2.group(), true), matcher2.start(), matcher2.end(), 0);
-                }
+        Matcher matcher2 = URL_PATTERN.matcher(r12);
+        while (matcher2.find()) {
+            if (!isNumber(matcher2.group(6)) && (matcher2.start() <= 0 || spannableStringBuilder.charAt(matcher2.start() - 1) != '@')) {
+                spannableStringBuilder.setSpan(new LinkSpan(context, matcher2.group(), true), matcher2.start(), matcher2.end(), 0);
             }
+        }
 
-            Matcher matcher3 = PHONE_NUMBER_PATTERN.matcher(r12);
-            while (matcher3.find()) {
-                spannableStringBuilder.setSpan(new LinkSpan(context, "tel:" + matcher3.group(), false), matcher3.start(), matcher3.end(), 0);
-            }
+        Matcher matcher3 = PHONE_NUMBER_PATTERN.matcher(r12);
+        while (matcher3.find()) {
+            spannableStringBuilder.setSpan(new LinkSpan(context, "tel:" + matcher3.group(), false), matcher3.start(), matcher3.end(), 0);
+        }
         Matcher matcher5 = MENTIONS_PATTERN.matcher(r12);
         SpannableStringBuilder spannableStringBuilder4 = spannableStringBuilder;
         int i3 = 0;
         while (matcher5.find()) {
-            LinkSpan linkSpan2 = new LinkSpan(context,"https://vk.com/" + matcher5.group(1), false);
+            LinkSpan linkSpan2 = new LinkSpan(context, "https://vk.com/" + matcher5.group(1), false);
             SpannableStringBuilder replace2 = spannableStringBuilder4.replace(matcher5.start() - i3, matcher5.end() - i3, matcher5.group(2));
             replace2.setSpan(linkSpan2, matcher5.start() - i3, (matcher5.start() - i3) + matcher5.group(2).length(), 0);
             i3 = (matcher5.group().length() - matcher5.group(2).length()) + i3;

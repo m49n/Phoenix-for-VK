@@ -41,7 +41,7 @@ public class ProgressButton extends FrameLayout {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs){
+    private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ProgressButton);
 
         int layout;
@@ -74,11 +74,11 @@ public class ProgressButton extends FrameLayout {
         resolveViews();
     }
 
-    public void setText(CharSequence charSequence){
+    public void setText(CharSequence charSequence) {
         mTitleTextView.setText(charSequence);
     }
 
-    private void resolveViews(){
+    private void resolveViews() {
         mProgressIcon.setVisibility(mProgressNow ? View.VISIBLE : View.INVISIBLE);
         mTitleRoot.setVisibility(mProgressNow ? View.INVISIBLE : View.VISIBLE);
 
@@ -90,7 +90,7 @@ public class ProgressButton extends FrameLayout {
         }
     }
 
-    public void changeState(boolean progress){
+    public void changeState(boolean progress) {
         this.mProgressNow = progress;
         resolveViews();
     }

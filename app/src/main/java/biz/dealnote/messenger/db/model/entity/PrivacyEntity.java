@@ -17,6 +17,14 @@ public class PrivacyEntity {
         this.entries = entries;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public List<Entry> getEntries() {
+        return entries;
+    }
+
     public static final class Entry {
 
         private final int type;
@@ -42,13 +50,5 @@ public class PrivacyEntity {
         public boolean isAllowed() {
             return allowed;
         }
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public List<Entry> getEntries() {
-        return entries;
     }
 }

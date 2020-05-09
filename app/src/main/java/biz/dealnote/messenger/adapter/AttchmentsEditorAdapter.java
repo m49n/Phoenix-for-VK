@@ -41,9 +41,11 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEntry, AttchmentsEditorAdapter.ViewHolder> {
 
+    private static final int ERROR_COLOR = Color.parseColor("#ff0000");
+    private static int idGenerator;
+    private final SharedHolders<ViewHolder> sharedHolders;
     private Context context;
     private Callback callback;
-    private final SharedHolders<ViewHolder> sharedHolders;
 
     public AttchmentsEditorAdapter(Context context, List<AttachmenEntry> items, Callback callback) {
         super(items);
@@ -52,7 +54,10 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         this.sharedHolders = new SharedHolders<>(false);
     }
 
-    private static final int ERROR_COLOR = Color.parseColor("#ff0000");
+    private static int generateNextHolderId() {
+        idGenerator++;
+        return idGenerator;
+    }
 
     @Override
     protected void onBindItemViewHolder(ViewHolder holder, int position, int type) {
@@ -73,7 +78,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         });
     }
 
-    public void cleanup(){
+    public void cleanup() {
         sharedHolders.release();
     }
 
@@ -87,57 +92,22 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         return R.layout.item_post_attachments;
     }
 
-    private static int idGenerator;
-
-    private static int generateNextHolderId(){
-        idGenerator++;
-        return idGenerator;
-    }
-
-    public void updateEntityProgress(int attachmentId, int progress){
+    public void updateEntityProgress(int attachmentId, int progress) {
         ViewHolder holder = sharedHolders.findOneByEntityId(attachmentId);
 
-        if(nonNull(holder)){
+        if (nonNull(holder)) {
             bindProgress(holder, progress, true);
         }
     }
 
-    private void bindProgress(ViewHolder holder, int progress, boolean smoothly){
+    private void bindProgress(ViewHolder holder, int progress, boolean smoothly) {
         String progressLine = progress + "%";
         holder.tvTitle.setText(progressLine);
 
-        if(smoothly){
+        if (smoothly) {
             holder.pbProgress.changePercentageSmoothly(progress);
         } else {
             holder.pbProgress.changePercentage(progress);
-        }
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
-
-        ImageView photoImageView;
-        TextView tvTitle;
-        View vRemove;
-        CircleRoadProgress pbProgress;
-        View vTint;
-        View vTitleRoot;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-
-            photoImageView = itemView.findViewById(R.id.item_attachment_image);
-            tvTitle = itemView.findViewById(R.id.item_attachment_title);
-            vRemove = itemView.findViewById(R.id.item_attachment_progress_root);
-            pbProgress = itemView.findViewById(R.id.item_attachment_progress);
-            vTint = itemView.findViewById(R.id.item_attachment_tint);
-            vTitleRoot = itemView.findViewById(R.id.item_attachment_title_root);
-
-            itemView.setTag(generateNextHolderId());
-        }
-
-        @Override
-        public int getHolderId() {
-            return (int) itemView.getTag();
         }
     }
 
@@ -179,7 +149,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         }
     }
 
-    private void bindLink(ViewHolder holder, Link link){
+    private void bindLink(ViewHolder holder, Link link) {
         holder.tvTitle.setText(R.string.link);
 
         String photoLink = nonNull(link.getPhoto()) ? link.getPhoto().getUrlForSize(PhotoSize.X, false) : null;
@@ -218,7 +188,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
     }
 
     private void bindAudio(ViewHolder holder, Audio audio) {
-        if(isEmpty(audio.getThumb_image_big())){
+        if (isEmpty(audio.getThumb_image_big())) {
             PicassoInstance.with().cancelRequest(holder.photoImageView);
             holder.photoImageView.setImageResource(R.drawable.generic_audio_nowplaying);
         } else {
@@ -329,5 +299,33 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         void onRemoveClick(int dataposition, @NonNull AttachmenEntry entry);
 
         void onTitleClick(int dataposition, @NonNull AttachmenEntry entry);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
+
+        ImageView photoImageView;
+        TextView tvTitle;
+        View vRemove;
+        CircleRoadProgress pbProgress;
+        View vTint;
+        View vTitleRoot;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+
+            photoImageView = itemView.findViewById(R.id.item_attachment_image);
+            tvTitle = itemView.findViewById(R.id.item_attachment_title);
+            vRemove = itemView.findViewById(R.id.item_attachment_progress_root);
+            pbProgress = itemView.findViewById(R.id.item_attachment_progress);
+            vTint = itemView.findViewById(R.id.item_attachment_tint);
+            vTitleRoot = itemView.findViewById(R.id.item_attachment_title_root);
+
+            itemView.setTag(generateNextHolderId());
+        }
+
+        @Override
+        public int getHolderId() {
+            return (int) itemView.getTag();
+        }
     }
 }

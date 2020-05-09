@@ -32,16 +32,16 @@ public class UploadApi implements IUploadApi {
         this.provider = provider;
     }
 
-    private IUploadService service(){
-        return provider.provideUploadRetrofit().blockingGet().create(IUploadService.class);
-    }
-
-    private static ProgressRequestBody.UploadCallbacks wrapPercentageListener(final PercentagePublisher listener){
+    private static ProgressRequestBody.UploadCallbacks wrapPercentageListener(final PercentagePublisher listener) {
         return percentage -> {
-            if(Objects.nonNull(listener)){
+            if (Objects.nonNull(listener)) {
                 listener.onProgressChanged(percentage);
             }
         };
+    }
+
+    private IUploadService service() {
+        return provider.provideUploadRetrofit().blockingGet().create(IUploadService.class);
     }
 
     @Override
@@ -52,8 +52,7 @@ public class UploadApi implements IUploadApi {
     }
 
     @Override
-    public Single<UploadVideoDto> uploadVideoRx(String server, String filename, @NonNull InputStream video, PercentagePublisher listener)
-    {
+    public Single<UploadVideoDto> uploadVideoRx(String server, String filename, @NonNull InputStream video, PercentagePublisher listener) {
         ProgressRequestBody body = new ProgressRequestBody(video, wrapPercentageListener(listener), MediaType.parse("*/*"));
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", filename, body);
         return service().uploadVideoRx(server, part);

@@ -36,12 +36,38 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
     private AttachmentsViewBinder attachmentsViewBinder;
     private Transformation transformation;
     private ClickListener clickListener;
+    private int nextHolderId;
 
     public FeedAdapter(Activity context, List<News> data, AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback) {
         super(data);
         this.context = context;
         this.attachmentsViewBinder = new AttachmentsViewBinder(context, attachmentsActionCallback);
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
+    }
+
+    private static boolean needToShowTopDivider(News news) {
+        if (!TextUtils.isEmpty(news.getText())) {
+            return true;
+        }
+
+        if (!Utils.safeIsEmpty(news.getCopyHistory()) && (news.getAttachments() == null || safeAllIsEmpty(news.getAttachments().getPhotos(), news.getAttachments().getVideos()))) {
+            return true;
+        }
+
+        if (news.getAttachments() == null) {
+            return true;
+        }
+
+        return safeAllIsEmpty(news.getAttachments().getPhotos(), news.getAttachments().getVideos());
+    }
+
+    private static boolean needToShowBottomDivider(News news) {
+        if (Utils.safeIsEmpty(news.getCopyHistory())) {
+            return news.getAttachments() == null || !news.getAttachments().isPhotosVideosGifsOnly();
+        }
+
+        Post last = news.getCopyHistory().get(news.getCopyHistory().size() - 1);
+        return last.getAttachments() == null || !last.getAttachments().isPhotosVideosGifsOnly();
     }
 
     @Override
@@ -119,65 +145,9 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         return R.layout.item_feed;
     }
 
-    private int nextHolderId;
-
-    private int genereateHolderId(){
+    private int genereateHolderId() {
         nextHolderId++;
         return nextHolderId;
-    }
-
-    class PostHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
-
-        private View cardView;
-
-        View topDivider;
-        TextView tvOwnerName;
-        ImageView ivOwnerAvatar;
-
-        View vTextRoot;
-        TextView tvText;
-        TextView tvShowMore;
-        TextView tvTime;
-
-        View bottomDivider;
-
-        ViewGroup bottomActionsContainer;
-        CircleCounterButton likeButton;
-        CircleCounterButton shareButton;
-        CircleCounterButton commentsButton;
-
-        AttachmentsHolder attachmentsHolder;
-
-        View viewsCounterRoot;
-        TextView viewsCounter;
-
-        PostHolder(View root) {
-            super(root);
-            cardView = root.findViewById(R.id.card_view);
-            cardView.setTag(genereateHolderId());
-
-            topDivider = root.findViewById(R.id.top_divider);
-            ivOwnerAvatar = root.findViewById(R.id.item_post_avatar);
-            tvOwnerName = root.findViewById(R.id.item_post_owner_name);
-            vTextRoot = root.findViewById(R.id.item_text_container);
-            tvText = root.findViewById(R.id.item_post_text);
-            tvShowMore = root.findViewById(R.id.item_post_show_more);
-            tvTime = root.findViewById(R.id.item_post_time);
-            bottomDivider = root.findViewById(R.id.bottom_divider);
-            bottomActionsContainer = root.findViewById(R.id.buttons_bar);
-            likeButton = root.findViewById(R.id.like_button);
-            commentsButton = root.findViewById(R.id.comments_button);
-            shareButton = root.findViewById(R.id.share_button);
-
-            attachmentsHolder = AttachmentsHolder.forPost((ViewGroup) root);
-            this.viewsCounterRoot = itemView.findViewById(R.id.post_views_counter_root);
-            this.viewsCounter = itemView.findViewById(R.id.post_views_counter);
-        }
-
-        @Override
-        public int getHolderId() {
-            return (int) cardView.getTag();
-        }
     }
 
     private void fillCounters(PostHolder holder, final News news) {
@@ -214,29 +184,8 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         holder.shareButton.setOnLongClickListener(v -> clickListener != null && clickListener.onShareLongClick(news));
     }
 
-    private static boolean needToShowTopDivider(News news) {
-        if (!TextUtils.isEmpty(news.getText())) {
-            return true;
-        }
-
-        if (!Utils.safeIsEmpty(news.getCopyHistory()) && (news.getAttachments() == null || safeAllIsEmpty(news.getAttachments().getPhotos(), news.getAttachments().getVideos()))) {
-            return true;
-        }
-
-        if (news.getAttachments() == null) {
-            return true;
-        }
-
-        return safeAllIsEmpty(news.getAttachments().getPhotos(), news.getAttachments().getVideos());
-    }
-
-    private static boolean needToShowBottomDivider(News news) {
-        if (Utils.safeIsEmpty(news.getCopyHistory())) {
-            return news.getAttachments() == null || !news.getAttachments().isPhotosVideosGifsOnly();
-        }
-
-        Post last = news.getCopyHistory().get(news.getCopyHistory().size() - 1);
-        return last.getAttachments() == null || !last.getAttachments().isPhotosVideosGifsOnly();
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     public interface ClickListener {
@@ -255,7 +204,51 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         boolean onShareLongClick(News news);
     }
 
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
+    class PostHolder extends RecyclerView.ViewHolder implements IdentificableHolder {
+
+        View topDivider;
+        TextView tvOwnerName;
+        ImageView ivOwnerAvatar;
+        View vTextRoot;
+        TextView tvText;
+        TextView tvShowMore;
+        TextView tvTime;
+        View bottomDivider;
+        ViewGroup bottomActionsContainer;
+        CircleCounterButton likeButton;
+        CircleCounterButton shareButton;
+        CircleCounterButton commentsButton;
+        AttachmentsHolder attachmentsHolder;
+        View viewsCounterRoot;
+        TextView viewsCounter;
+        private View cardView;
+
+        PostHolder(View root) {
+            super(root);
+            cardView = root.findViewById(R.id.card_view);
+            cardView.setTag(genereateHolderId());
+
+            topDivider = root.findViewById(R.id.top_divider);
+            ivOwnerAvatar = root.findViewById(R.id.item_post_avatar);
+            tvOwnerName = root.findViewById(R.id.item_post_owner_name);
+            vTextRoot = root.findViewById(R.id.item_text_container);
+            tvText = root.findViewById(R.id.item_post_text);
+            tvShowMore = root.findViewById(R.id.item_post_show_more);
+            tvTime = root.findViewById(R.id.item_post_time);
+            bottomDivider = root.findViewById(R.id.bottom_divider);
+            bottomActionsContainer = root.findViewById(R.id.buttons_bar);
+            likeButton = root.findViewById(R.id.like_button);
+            commentsButton = root.findViewById(R.id.comments_button);
+            shareButton = root.findViewById(R.id.share_button);
+
+            attachmentsHolder = AttachmentsHolder.forPost((ViewGroup) root);
+            this.viewsCounterRoot = itemView.findViewById(R.id.post_views_counter_root);
+            this.viewsCounter = itemView.findViewById(R.id.post_views_counter);
+        }
+
+        @Override
+        public int getHolderId() {
+            return (int) cardView.getTag();
+        }
     }
 }

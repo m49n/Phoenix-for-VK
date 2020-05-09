@@ -5,27 +5,6 @@ import android.os.Parcelable;
 
 public class DatabaseIdRange implements Parcelable {
 
-    private final int first;
-    private final int last;
-
-    private DatabaseIdRange(int first, int last){
-        this.first = first;
-        this.last = last;
-    }
-
-    protected DatabaseIdRange(Parcel in) {
-        first = in.readInt();
-        last = in.readInt();
-    }
-
-    public int getFirst() {
-        return first;
-    }
-
-    public int getLast() {
-        return last;
-    }
-
     public static final Creator<DatabaseIdRange> CREATOR = new Creator<DatabaseIdRange>() {
         @Override
         public DatabaseIdRange createFromParcel(Parcel in) {
@@ -37,9 +16,29 @@ public class DatabaseIdRange implements Parcelable {
             return new DatabaseIdRange[size];
         }
     };
+    private final int first;
+    private final int last;
 
-    public static DatabaseIdRange create(int first, int last){
+    private DatabaseIdRange(int first, int last) {
+        this.first = first;
+        this.last = last;
+    }
+
+    protected DatabaseIdRange(Parcel in) {
+        first = in.readInt();
+        last = in.readInt();
+    }
+
+    public static DatabaseIdRange create(int first, int last) {
         return new DatabaseIdRange(first, last);
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public int getLast() {
+        return last;
     }
 
     @Override

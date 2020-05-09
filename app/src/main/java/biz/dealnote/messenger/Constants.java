@@ -27,42 +27,35 @@ public class Constants {
     public static final String DEVICE_COUNTRY_CODE = "ru";
     public static final String KATE_USER_AGENT = String.format(Locale.US, "KateMobileAndroid/60 lite-466 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
     public static final String VKANDROID_USER_AGENT = String.format(Locale.US, "VKAndroidApp/6.2-5112 (Android %s; SDK %d; %s; %s; %s; %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Build.SUPPORTED_ABIS[0], Build.MANUFACTURER + " " + Build.MODEL, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
+    public static final int API_ID = BuildConfig.VK_API_APP_ID;
+    public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;
+    public static final String MAIN_OWNER_FIELDS = UserColumns.API_FIELDS + "," + GroupColumns.API_FIELDS;
+    public static final String SERVICE_TOKEN = BuildConfig.SERVICE_TOKEN;
+    public static final String PHOTOS_PATH = "Pictures/Phoenix";
+    public static final int PIN_DIGITS_COUNT = 4;
+    public static final String PICASSO_TAG = "picasso_tag";
+    public static final boolean IS_DEBUG = BuildConfig.DEBUG;
 
-    public static String SCREEN_RESOLUTION()
-    {
+    public static String SCREEN_RESOLUTION() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowmanager = (WindowManager) Injection.provideApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        if(windowmanager == null || windowmanager.getDefaultDisplay() == null) {
-            return "1080x1920";
+        if (windowmanager == null || windowmanager.getDefaultDisplay() == null) {
+            return "1920x1080";
         }
         windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels + "x" + displayMetrics.widthPixels;
     }
 
-    public static String USER_AGENT(String type)
-    {
-        if(type != null) {
+    public static String USER_AGENT(String type) {
+        if (type != null) {
             if (type.equals("kate"))
                 return KATE_USER_AGENT;
             else if (type.equals("vkofficial") || type.equals("hacked"))
                 return VKANDROID_USER_AGENT;
         }
         String Type = Injection.provideSettings().accounts().getType(Injection.provideSettings().accounts().getCurrent());
-        if((Injection.provideSettings().accounts().getCurrent() != Injection.provideSettings().accounts().INVALID_ID && Type != null && Type.equals("kate")))
+        if ((Injection.provideSettings().accounts().getCurrent() != Injection.provideSettings().accounts().INVALID_ID && Type != null && Type.equals("kate")))
             return KATE_USER_AGENT;
         return VKANDROID_USER_AGENT;
     }
-
-    public static final int API_ID = BuildConfig.VK_API_APP_ID;
-    public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;
-
-    public static final String MAIN_OWNER_FIELDS = UserColumns.API_FIELDS + "," + GroupColumns.API_FIELDS;
-
-    public static final String SERVICE_TOKEN = BuildConfig.SERVICE_TOKEN;
-
-    public static final String PHOTOS_PATH = "Pictures/Phoenix";
-    public static final int PIN_DIGITS_COUNT = 4;
-
-    public static final String PICASSO_TAG = "picasso_tag";
-    public static final boolean IS_DEBUG = BuildConfig.DEBUG;
 }

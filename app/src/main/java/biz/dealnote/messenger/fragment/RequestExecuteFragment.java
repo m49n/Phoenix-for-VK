@@ -30,6 +30,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresenter, IRequestExecuteView> implements IRequestExecuteView {
 
     private static final int REQUEST_PERMISSION_WRITE = 14;
+    private EditText mResposeBody;
 
     public static RequestExecuteFragment newInstance(int accountId) {
         Bundle args = new Bundle();
@@ -38,8 +39,6 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         fragment.setArguments(args);
         return fragment;
     }
-
-    private EditText mResposeBody;
 
     @Nullable
     @Override
@@ -50,7 +49,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         mResposeBody = root.findViewById(R.id.response_body);
 
         EditText methodEditText = root.findViewById(R.id.method);
-        methodEditText.addTextChangedListener(new TextWatcherAdapter(){
+        methodEditText.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireMethodEdit(s);
@@ -58,7 +57,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         });
 
         EditText bodyEditText = root.findViewById(R.id.body);
-        bodyEditText.addTextChangedListener(new TextWatcherAdapter(){
+        bodyEditText.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireBodyEdit(s);
@@ -68,13 +67,12 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         root.findViewById(R.id.button_copy).setOnClickListener(v -> getPresenter().fireCopyClick());
         root.findViewById(R.id.button_save).setOnClickListener(v -> getPresenter().fireSaveClick());
         root.findViewById(R.id.button_execute).setOnClickListener(v -> getPresenter().fireExecuteClick());
-        root.findViewById(R.id.button_account).setOnClickListener(v -> getPresenter().fireAccountClick());
         return root;
     }
 
     @Override
     public IPresenterFactory<RequestExecutePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new RequestExecutePresenter(requireArguments().getInt(Extra.ACCOUNT_ID), requireActivity(), saveInstanceState);
+        return () -> new RequestExecutePresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
     }
 
     @Override
@@ -85,7 +83,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         }
 
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle(R.string.request_executor_title);
             actionBar.setSubtitle(null);
         }
@@ -111,7 +109,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_PERMISSION_WRITE){
+        if (requestCode == REQUEST_PERMISSION_WRITE) {
             getPresenter().fireWritePermissionResolved();
         }
     }

@@ -9,10 +9,7 @@ import biz.dealnote.messenger.api.model.VKApiCareer;
 
 public class UserCareerColumns implements BaseColumns {
 
-    private UserCareerColumns() {}
-
     public static final String TABLENAME = "user_career";
-
     public static final String USER_ID = "user_id";
     public static final String GROUP_ID = "group_id";
     public static final String COMPANY = "company";
@@ -22,8 +19,20 @@ public class UserCareerColumns implements BaseColumns {
     public static final String YEAR_FROM = "year_from";
     public static final String YEAR_UNTIL = "year_until";
     public static final String POSITION = "position";
+    public static final String FULL_ID = TABLENAME + "." + _ID;
+    public static final String FULL_USER_ID = TABLENAME + "." + USER_ID;
+    public static final String FULL_GROUP_ID = TABLENAME + "." + GROUP_ID;
+    public static final String FULL_COMPANY = TABLENAME + "." + COMPANY;
+    public static final String FULL_COUNTRY_ID = TABLENAME + "." + COUNTRY_ID;
+    public static final String FULL_CITY_ID = TABLENAME + "." + CITY_ID;
+    public static final String FULL_CITY_NAME = TABLENAME + "." + CITY_NAME;
+    public static final String FULL_YEAR_FROM = TABLENAME + "." + YEAR_FROM;
+    public static final String FULL_YEAR_UNTIL = TABLENAME + "." + YEAR_UNTIL;
+    public static final String FULL_POSITION = TABLENAME + "." + POSITION;
+    private UserCareerColumns() {
+    }
 
-    public static ContentValues getCV(@NonNull VKApiCareer career, int userId){
+    public static ContentValues getCV(@NonNull VKApiCareer career, int userId) {
         ContentValues cv = new ContentValues();
         cv.put(USER_ID, userId);
         cv.put(GROUP_ID, career.group_id);
@@ -36,15 +45,4 @@ public class UserCareerColumns implements BaseColumns {
         cv.put(POSITION, career.position);
         return cv;
     }
-
-    public static final String FULL_ID = TABLENAME + "." + _ID;
-    public static final String FULL_USER_ID = TABLENAME + "." + USER_ID;
-    public static final String FULL_GROUP_ID = TABLENAME + "." + GROUP_ID;
-    public static final String FULL_COMPANY = TABLENAME + "." + COMPANY;
-    public static final String FULL_COUNTRY_ID = TABLENAME + "." + COUNTRY_ID;
-    public static final String FULL_CITY_ID = TABLENAME + "." + CITY_ID;
-    public static final String FULL_CITY_NAME = TABLENAME + "." + CITY_NAME;
-    public static final String FULL_YEAR_FROM = TABLENAME + "." + YEAR_FROM;
-    public static final String FULL_YEAR_UNTIL = TABLENAME + "." + YEAR_UNTIL;
-    public static final String FULL_POSITION = TABLENAME + "." + POSITION;
 }

@@ -9,6 +9,17 @@ import android.os.Parcelable;
  */
 public final class WallSearchCriteria extends BaseSearchCriteria implements Parcelable {
 
+    public static final Creator<WallSearchCriteria> CREATOR = new Creator<WallSearchCriteria>() {
+        @Override
+        public WallSearchCriteria createFromParcel(Parcel in) {
+            return new WallSearchCriteria(in);
+        }
+
+        @Override
+        public WallSearchCriteria[] newArray(int size) {
+            return new WallSearchCriteria[size];
+        }
+    };
     private final int ownerId;
 
     public WallSearchCriteria(String query, int ownerId) {
@@ -35,16 +46,4 @@ public final class WallSearchCriteria extends BaseSearchCriteria implements Parc
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<WallSearchCriteria> CREATOR = new Creator<WallSearchCriteria>() {
-        @Override
-        public WallSearchCriteria createFromParcel(Parcel in) {
-            return new WallSearchCriteria(in);
-        }
-
-        @Override
-        public WallSearchCriteria[] newArray(int size) {
-            return new WallSearchCriteria[size];
-        }
-    };
 }

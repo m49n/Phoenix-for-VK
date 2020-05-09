@@ -13,6 +13,7 @@ import biz.dealnote.mvp.core.IMvpView;
 public interface IBasicDocumentView extends IMvpView, IAccountDependencyView, IToastView, IErrorView {
 
     void shareDocument(int accountId, @NonNull Document document);
+
     void requestWriteExternalStoragePermission();
 
 }

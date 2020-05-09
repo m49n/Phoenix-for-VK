@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background_lock"
     android:orientation="vertical">
 
     <TextView
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
+        android:padding="8dp"
         android:text="@string/you_have_received_request_for_key_exchange_from"
         android:textColor="?android:textColorSecondary"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <ImageView
-        android:layout_gravity="center_horizontal"
         android:id="@+id/avatar"
-        tools:src="@drawable/ic_avatar_unknown"
         android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:layout_height="48dp"/>
+        tools:src="@drawable/ic_avatar_unknown" />
 
     <TextView
-        android:layout_marginTop="8dp"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        tools:text="Ruslan Kolbasa"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textSize="16sp"/>
+        android:padding="8dp"
+        android:textSize="16sp"
+        tools:text="Ruslan Kolbasa" />
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:layout_gravity="end"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/decline_button"
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_decline"
-            android:textAllCaps="true"/>
+            android:textAllCaps="true" />
 
         <Button
             android:id="@+id/accept_button"

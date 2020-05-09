@@ -50,6 +50,99 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
         this.details = details;
     }
 
+    private static void addPersonalInfo(List<AdvancedItem> items, @DrawableRes int icon, int key, Section section, @StringRes int title, String v) {
+        if (nonEmpty(v)) {
+            items.add(new AdvancedItem(key, new Text(title))
+                    .setIcon(icon)
+                    .setSection(section)
+                    .setSubtitle(new Text(v)));
+        }
+    }
+
+    private static Integer getPolitivalViewRes(int political) {
+        switch (political) {
+            case 1:
+                return R.string.political_views_communist;
+            case 2:
+                return R.string.political_views_socialist;
+            case 3:
+                return R.string.political_views_moderate;
+            case 4:
+                return R.string.political_views_liberal;
+            case 5:
+                return R.string.political_views_conservative;
+            case 6:
+                return R.string.political_views_monarchist;
+            case 7:
+                return R.string.political_views_ultraconservative;
+            case 8:
+                return R.string.political_views_apathetic;
+            case 9:
+                return R.string.political_views_libertian;
+            default:
+                return null;
+        }
+    }
+
+    private static Integer getPeopleMainRes(int peopleMain) {
+        switch (peopleMain) {
+            case 1:
+                return R.string.important_in_others_intellect_and_creativity;
+            case 2:
+                return R.string.important_in_others_kindness_and_honesty;
+            case 3:
+                return R.string.important_in_others_health_and_beauty;
+            case 4:
+                return R.string.important_in_others_wealth_and_power;
+            case 5:
+                return R.string.important_in_others_courage_and_persistance;
+            case 6:
+                return R.string.important_in_others_humor_and_love_for_life;
+            default:
+                return null;
+        }
+    }
+
+    private static Integer getLifeMainRes(int lifeMain) {
+        switch (lifeMain) {
+            case 1:
+                return R.string.personal_priority_family_and_children;
+            case 2:
+                return R.string.personal_priority_career_and_money;
+            case 3:
+                return R.string.personal_priority_entertainment_and_leisure;
+            case 4:
+                return R.string.personal_priority_science_and_research;
+            case 5:
+                return R.string.personal_priority_improving_the_world;
+            case 6:
+                return R.string.personal_priority_personal_development;
+            case 7:
+                return R.string.personal_priority_beauty_and_art;
+            case 8:
+                return R.string.personal_priority_fame_and_influence;
+            default:
+                return null;
+        }
+    }
+
+    private static Integer getAlcoholOrSmokingViewRes(int value) {
+        switch (value) {
+            case 1:
+                return R.string.views_very_negative;
+            case 2:
+                return R.string.views_negative;
+            case 3:
+                return R.string.views_neutral;
+            case 4:
+                return R.string.views_compromisable;
+            case 5:
+                return R.string.views_positive;
+            default:
+                return null;
+        }
+    }
+
     private List<AdvancedItem> createData() {
         List<AdvancedItem> items = new ArrayList<>();
 
@@ -314,15 +407,6 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
         return items;
     }
 
-    private static void addPersonalInfo(List<AdvancedItem> items, @DrawableRes int icon, int key, Section section, @StringRes int title, String v) {
-        if (nonEmpty(v)) {
-            items.add(new AdvancedItem(key, new Text(title))
-                    .setIcon(icon)
-                    .setSection(section)
-                    .setSubtitle(new Text(v)));
-        }
-    }
-
     @StringRes
     private Integer getRelationStringByType(int relation) {
         switch (user.getSex()) {
@@ -390,90 +474,6 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
                 return R.string.relatives_siblings;
             default:
                 return R.string.relatives_others;
-        }
-    }
-
-    private static Integer getPolitivalViewRes(int political) {
-        switch (political) {
-            case 1:
-                return R.string.political_views_communist;
-            case 2:
-                return R.string.political_views_socialist;
-            case 3:
-                return R.string.political_views_moderate;
-            case 4:
-                return R.string.political_views_liberal;
-            case 5:
-                return R.string.political_views_conservative;
-            case 6:
-                return R.string.political_views_monarchist;
-            case 7:
-                return R.string.political_views_ultraconservative;
-            case 8:
-                return R.string.political_views_apathetic;
-            case 9:
-                return R.string.political_views_libertian;
-            default:
-                return null;
-        }
-    }
-
-    private static Integer getPeopleMainRes(int peopleMain) {
-        switch (peopleMain) {
-            case 1:
-                return R.string.important_in_others_intellect_and_creativity;
-            case 2:
-                return R.string.important_in_others_kindness_and_honesty;
-            case 3:
-                return R.string.important_in_others_health_and_beauty;
-            case 4:
-                return R.string.important_in_others_wealth_and_power;
-            case 5:
-                return R.string.important_in_others_courage_and_persistance;
-            case 6:
-                return R.string.important_in_others_humor_and_love_for_life;
-            default:
-                return null;
-        }
-    }
-
-    private static Integer getLifeMainRes(int lifeMain) {
-        switch (lifeMain) {
-            case 1:
-                return R.string.personal_priority_family_and_children;
-            case 2:
-                return R.string.personal_priority_career_and_money;
-            case 3:
-                return R.string.personal_priority_entertainment_and_leisure;
-            case 4:
-                return R.string.personal_priority_science_and_research;
-            case 5:
-                return R.string.personal_priority_improving_the_world;
-            case 6:
-                return R.string.personal_priority_personal_development;
-            case 7:
-                return R.string.personal_priority_beauty_and_art;
-            case 8:
-                return R.string.personal_priority_fame_and_influence;
-            default:
-                return null;
-        }
-    }
-
-    private static Integer getAlcoholOrSmokingViewRes(int value) {
-        switch (value) {
-            case 1:
-                return R.string.views_very_negative;
-            case 2:
-                return R.string.views_negative;
-            case 3:
-                return R.string.views_neutral;
-            case 4:
-                return R.string.views_compromisable;
-            case 5:
-                return R.string.views_positive;
-            default:
-                return null;
         }
     }
 

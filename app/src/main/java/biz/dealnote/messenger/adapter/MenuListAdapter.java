@@ -24,12 +24,12 @@ import biz.dealnote.messenger.util.Utils;
 
 public class MenuListAdapter extends RecyclerBindableAdapter<AbsMenuItem, RecyclerView.ViewHolder> {
 
+    private final ActionListener actionListener;
     private int colorPrimary;
     private int colorSurface;
     private int colorOnPrimary;
     private int colorOnSurface;
     private Transformation transformation;
-    private final ActionListener actionListener;
 
     public MenuListAdapter(@NonNull Context context, @NonNull List<AbsMenuItem> pageItems, @NonNull ActionListener actionListener) {
         super(pageItems);

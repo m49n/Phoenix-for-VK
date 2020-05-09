@@ -66,9 +66,10 @@ public interface IWallsRepository {
 
     /**
      * Получить пост-черновик
-     * @param accountId идентификатор аккаунта
-     * @param ownerId идентификатор владельца стены
-     * @param type тип (черновик или временный пост)
+     *
+     * @param accountId       идентификатор аккаунта
+     * @param ownerId         идентификатор владельца стены
+     * @param type            тип (черновик или временный пост)
      * @param withAttachments если true - загрузить вложения поста
      * @return Single c обьектом поста
      */
@@ -80,16 +81,18 @@ public interface IWallsRepository {
 
     /**
      * Сохранить пост в базу с тем же локальным идентификатором
+     *
      * @param accountId идентификатор аккаунта
-     * @param post пост
+     * @param post      пост
      * @return Single с локальным идентификатором
      */
     Single<Integer> cachePostWithIdSaving(int accountId, Post post);
 
     /**
      * Удалить пост из кеша (используется только для "черновиков"
+     *
      * @param accountId идентификатор аккаунта
-     * @param postDbid локальный идентификатор поста в БД
+     * @param postDbid  локальный идентификатор поста в БД
      * @return Completable
      */
     @CheckResult

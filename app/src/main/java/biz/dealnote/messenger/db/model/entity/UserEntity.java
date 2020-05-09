@@ -175,11 +175,6 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity setFriendStatus(int friendStatus) {
-        this.friendStatus = friendStatus;
-        return this;
-    }
-
     public String getPhotoMax() {
         return photoMax;
     }
@@ -209,5 +204,10 @@ public class UserEntity {
 
     public int getFriendStatus() {
         return friendStatus;
+    }
+
+    public UserEntity setFriendStatus(int friendStatus) {
+        this.friendStatus = friendStatus;
+        return this;
     }
 }

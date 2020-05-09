@@ -40,6 +40,10 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
     private boolean endOfContent;
 
     private String q;
+    private boolean cacheLoadingNow;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean actualDataLoading;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     public FavePagesPresenter(int accountId, boolean isUser, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -51,8 +55,7 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         loadAllCachedData();
     }
 
-    public void LoadTool()
-    {
+    public void LoadTool() {
         loadActualData(0);
     }
 
@@ -68,15 +71,15 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         }
         this.q = query;
         search_pages.clear();
-        for(int i =0; i < pages.size(); i++) {
+        for (int i = 0; i < pages.size(); i++) {
             if (pages.get(i).getOwner().getFullName().toLowerCase().contains(q.toLowerCase()))
                 search_pages.add(pages.get(i));
         }
 
-        if(isSeacrhNow())
-            callView(v-> v.displayData(search_pages));
+        if (isSeacrhNow())
+            callView(v -> v.displayData(search_pages));
         else
-            callView(v-> v.displayData(pages));
+            callView(v -> v.displayData(pages));
     }
 
     @Override
@@ -84,12 +87,6 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
         super.onGuiCreated(view);
         view.displayData(this.pages);
     }
-
-    private boolean cacheLoadingNow;
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-
-    private boolean actualDataLoading;
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     private void loadActualData(int offset) {
         this.actualDataLoading = true;

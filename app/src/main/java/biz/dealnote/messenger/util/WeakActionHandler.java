@@ -12,17 +12,16 @@ import java.lang.ref.WeakReference;
 public class WeakActionHandler<T> extends Handler {
 
     private final WeakReference<T> ref;
+    private Action<T> action;
 
-    public WeakActionHandler(T object){
+    public WeakActionHandler(T object) {
         this.ref = new WeakReference<>(object);
     }
-
-    private Action<T> action;
 
     @Override
     public final void handleMessage(Message msg) {
         T object = ref.get();
-        if(Objects.nonNull(action)){
+        if (Objects.nonNull(action)) {
             action.doAction(msg.what, object);
         }
     }

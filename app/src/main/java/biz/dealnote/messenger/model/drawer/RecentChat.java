@@ -5,6 +5,15 @@ import android.os.Parcelable;
 
 public class RecentChat extends AbsMenuItem implements Parcelable {
 
+    public static Creator<RecentChat> CREATOR = new Creator<RecentChat>() {
+        public RecentChat createFromParcel(Parcel source) {
+            return new RecentChat(source);
+        }
+
+        public RecentChat[] newArray(int size) {
+            return new RecentChat[size];
+        }
+    };
     private int aid;
     private int peerId;
     private String title;
@@ -16,6 +25,14 @@ public class RecentChat extends AbsMenuItem implements Parcelable {
         this.peerId = peerId;
         this.title = title;
         this.iconUrl = iconUrl;
+    }
+
+    public RecentChat(Parcel in) {
+        super(in);
+        this.aid = in.readInt();
+        this.peerId = in.readInt();
+        this.title = in.readString();
+        this.iconUrl = in.readString();
     }
 
     public String getIconUrl() {
@@ -72,22 +89,4 @@ public class RecentChat extends AbsMenuItem implements Parcelable {
         dest.writeString(title);
         dest.writeString(iconUrl);
     }
-
-    public RecentChat(Parcel in) {
-        super(in);
-        this.aid = in.readInt();
-        this.peerId = in.readInt();
-        this.title = in.readString();
-        this.iconUrl = in.readString();
-    }
-
-    public static Creator<RecentChat> CREATOR = new Creator<RecentChat>() {
-        public RecentChat createFromParcel(Parcel source) {
-            return new RecentChat(source);
-        }
-
-        public RecentChat[] newArray(int size) {
-            return new RecentChat[size];
-        }
-    };
 }

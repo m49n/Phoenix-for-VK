@@ -5,7 +5,7 @@ import biz.dealnote.messenger.db.interfaces.IStorages;
 
 public class Stores {
 
-    public static IStorages getInstance(){
+    public static IStorages getInstance() {
         return Injection.provideStores();
     }
 

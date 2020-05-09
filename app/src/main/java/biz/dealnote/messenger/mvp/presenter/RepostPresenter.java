@@ -22,9 +22,8 @@ public class RepostPresenter extends AbsAttachmentsEditPresenter<IRepostView> {
 
     private final Post post;
     private final Integer targetGroupId;
-    private boolean publishingNow;
-
     private final IWallsRepository walls;
+    private boolean publishingNow;
 
     public RepostPresenter(int accountId, Post post, Integer targetGroupId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);

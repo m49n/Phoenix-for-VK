@@ -18,6 +18,8 @@ import biz.dealnote.messenger.R;
  */
 public class KeyboardView extends FrameLayout {
 
+    private OnKeyboardClickListener mOnKeyboardClickListener;
+
     public KeyboardView(Context context) {
         super(context);
         init(context, null);
@@ -86,17 +88,15 @@ public class KeyboardView extends FrameLayout {
         }
     }
 
+    public void setOnKeyboardClickListener(OnKeyboardClickListener onKeyboardClickListener) {
+        this.mOnKeyboardClickListener = onKeyboardClickListener;
+    }
+
     public interface OnKeyboardClickListener {
         void onButtonClick(int number);
 
         void onBackspaceClick();
 
         void onFingerPrintClick();
-    }
-
-    private OnKeyboardClickListener mOnKeyboardClickListener;
-
-    public void setOnKeyboardClickListener(OnKeyboardClickListener onKeyboardClickListener) {
-        this.mOnKeyboardClickListener = onKeyboardClickListener;
     }
 }

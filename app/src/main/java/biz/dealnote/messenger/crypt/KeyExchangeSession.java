@@ -16,27 +16,38 @@ public class KeyExchangeSession {
     private final int accountId;
 
     private final int peerId;
-
-    @SessionState
-    private int localSessionState;
-
-    @SessionState
-    private int oppenentSessionState;
-
-    private PrivateKey myPrivateKey;
-
-    private String myAesKey;
-
-    private String hisAesKey;
-
     @KeyLocationPolicy
     private final int keyLocationPolicy;
+    @SessionState
+    private int localSessionState;
+    @SessionState
+    private int oppenentSessionState;
+    private PrivateKey myPrivateKey;
+    private String myAesKey;
+    private String hisAesKey;
+    private Set<Integer> messageIds = new HashSet<>();
 
     private KeyExchangeSession(long id, int accountId, int peerId, @KeyLocationPolicy int keyLocationPolicy) {
         this.id = id;
         this.accountId = accountId;
         this.peerId = peerId;
         this.keyLocationPolicy = keyLocationPolicy;
+    }
+
+    private static long generateNewId() {
+        return System.currentTimeMillis();
+    }
+
+    public static KeyExchangeSession createOutSession(long id, int accountId, int peerId, @KeyLocationPolicy int keyLocationPolicy) {
+        KeyExchangeSession session = new KeyExchangeSession(id, accountId, peerId, keyLocationPolicy);
+        session.localSessionState = SessionState.INITIATOR_EMPTY;
+        return session;
+    }
+
+    public static KeyExchangeSession createInputSession(long id, int accountId, int peerId, @KeyLocationPolicy int keyLocationPolicy) {
+        KeyExchangeSession session = new KeyExchangeSession(id, accountId, peerId, keyLocationPolicy);
+        session.localSessionState = SessionState.NO_INITIATOR_EMPTY;
+        return session;
     }
 
     public long getId() {
@@ -47,8 +58,6 @@ public class KeyExchangeSession {
     public int getLocalSessionState() {
         return localSessionState;
     }
-
-    private Set<Integer> messageIds = new HashSet<>();
 
     public KeyExchangeSession setLocalSessionState(int localSessionState) {
         this.localSessionState = localSessionState;
@@ -79,35 +88,19 @@ public class KeyExchangeSession {
         this.hisAesKey = hisAesKey;
     }
 
-    private static long generateNewId() {
-        return System.currentTimeMillis();
-    }
-
-    public static KeyExchangeSession createOutSession(long id, int accountId, int peerId, @KeyLocationPolicy int keyLocationPolicy) {
-        KeyExchangeSession session = new KeyExchangeSession(id, accountId, peerId, keyLocationPolicy);
-        session.localSessionState = SessionState.INITIATOR_EMPTY;
-        return session;
-    }
-
-    public static KeyExchangeSession createInputSession(long id, int accountId, int peerId, @KeyLocationPolicy int keyLocationPolicy) {
-        KeyExchangeSession session = new KeyExchangeSession(id, accountId, peerId, keyLocationPolicy);
-        session.localSessionState = SessionState.NO_INITIATOR_EMPTY;
-        return session;
-    }
-
-    public void appendMessageId(int id){
+    public void appendMessageId(int id) {
         messageIds.add(id);
     }
 
-    public boolean isMessageProcessed(int id){
+    public boolean isMessageProcessed(int id) {
         return messageIds.contains(id);
     }
 
-    public int getStartMessageId(){
+    public int getStartMessageId() {
         return Collections.min(messageIds);
     }
 
-    public int getEndMessageId(){
+    public int getEndMessageId() {
         return Collections.max(messageIds);
     }
 

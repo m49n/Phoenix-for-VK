@@ -20,14 +20,17 @@ public class CareerEntity {
 
     private String position;
 
+    public int getCityId() {
+        return cityId;
+    }
+
     public CareerEntity setCityId(int cityId) {
         this.cityId = cityId;
         return this;
     }
 
-    public CareerEntity setCompany(String company) {
-        this.company = company;
-        return this;
+    public int getCountryId() {
+        return countryId;
     }
 
     public CareerEntity setCountryId(int countryId) {
@@ -35,9 +38,17 @@ public class CareerEntity {
         return this;
     }
 
+    public int getFrom() {
+        return from;
+    }
+
     public CareerEntity setFrom(int from) {
         this.from = from;
         return this;
+    }
+
+    public int getGroupId() {
+        return groupId;
     }
 
     public CareerEntity setGroupId(int groupId) {
@@ -45,9 +56,8 @@ public class CareerEntity {
         return this;
     }
 
-    public CareerEntity setPosition(String position) {
-        this.position = position;
-        return this;
+    public int getUntil() {
+        return until;
     }
 
     public CareerEntity setUntil(int until) {
@@ -55,31 +65,21 @@ public class CareerEntity {
         return this;
     }
 
-    public int getCityId() {
-        return cityId;
-    }
-
-    public int getCountryId() {
-        return countryId;
-    }
-
-    public int getFrom() {
-        return from;
-    }
-
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public int getUntil() {
-        return until;
-    }
-
     public String getCompany() {
         return company;
     }
 
+    public CareerEntity setCompany(String company) {
+        this.company = company;
+        return this;
+    }
+
     public String getPosition() {
         return position;
+    }
+
+    public CareerEntity setPosition(String position) {
+        this.position = position;
+        return this;
     }
 }

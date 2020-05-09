@@ -34,7 +34,7 @@ public class ConversationDocsFragment extends AbsChatAttachmentsFragment<Documen
 
     @Override
     public void displayAttachments(List<Document> data) {
-        if(getAdapter() instanceof DocsAdapter){
+        if (getAdapter() instanceof DocsAdapter) {
             ((DocsAdapter) getAdapter()).setItems(data);
         }
     }

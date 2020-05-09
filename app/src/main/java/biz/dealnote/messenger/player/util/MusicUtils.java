@@ -41,17 +41,14 @@ import io.reactivex.subjects.PublishSubject;
 
 public final class MusicUtils {
 
-    public static IAudioPlayerService mService = null;
-
-    public static HashMap<Integer, ArrayList<Audio>> Audios = new HashMap<>();
-
-    private static int sForegroundActivities = 0;
-
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
-
+    private static final PublishSubject<Optional<IAudioPlayerService>> SERVICE_BIND_PUBLISHER = PublishSubject.create();
+    private static final String TAG = MusicUtils.class.getSimpleName();
+    public static IAudioPlayerService mService = null;
+    public static HashMap<Integer, ArrayList<Audio>> Audios = new HashMap<>();
     public static boolean SuperCloseMiniPlayer = false;
-
     public static List<String> CachedAudios = new ArrayList<>();
+    private static int sForegroundActivities = 0;
 
     static {
         mConnectionMap = new WeakHashMap<>();
@@ -60,8 +57,6 @@ public final class MusicUtils {
     /* This class is never initiated */
     private MusicUtils() {
     }
-
-    private static final PublishSubject<Optional<IAudioPlayerService>> SERVICE_BIND_PUBLISHER = PublishSubject.create();
 
     public static ServiceToken bindToServiceWithoutStart(final Activity realActivity, final ServiceConnection callback) {
         final ContextWrapper contextWrapper = new ContextWrapper(realActivity);
@@ -76,18 +71,17 @@ public final class MusicUtils {
     }
 
     public static void PlaceToAudioCache(Context context) {
-        if(!AppPerms.hasReadWriteStoragePermision(context))
+        if (!AppPerms.hasReadWriteStoragePermision(context))
             return;
         File temp = new File(Settings.get().other().getMusicDir());
-        if(!temp.exists())
+        if (!temp.exists())
             return;
         File[] file_list = temp.listFiles();
-        if(file_list == null || file_list.length <= 0)
+        if (file_list == null || file_list.length <= 0)
             return;
         CachedAudios.clear();
-        for(File u : file_list)
-        {
-            if(u.isFile())
+        for (File u : file_list) {
+            if (u.isFile())
                 CachedAudios.add(u.getName());
         }
     }
@@ -113,49 +107,8 @@ public final class MusicUtils {
         }
     }
 
-    public static Observable<Optional<IAudioPlayerService>> observeServiceBinding(){
+    public static Observable<Optional<IAudioPlayerService>> observeServiceBinding() {
         return SERVICE_BIND_PUBLISHER;
-    }
-
-    public static final class ServiceBinder implements ServiceConnection {
-
-        private final ServiceConnection mCallback;
-
-
-        public ServiceBinder(final ServiceConnection callback) {
-            mCallback = callback;
-        }
-
-        @Override
-        public void onServiceConnected(final ComponentName className, final IBinder service) {
-            mService = IAudioPlayerService.Stub.asInterface(service);
-
-            SERVICE_BIND_PUBLISHER.onNext(Optional.wrap(mService));
-
-            if (mCallback != null) {
-                mCallback.onServiceConnected(className, service);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(final ComponentName className) {
-            if (mCallback != null) {
-                mCallback.onServiceDisconnected(className);
-            }
-
-            mService = null;
-
-            SERVICE_BIND_PUBLISHER.onNext(Optional.empty());
-        }
-    }
-
-    public static final class ServiceToken {
-
-        public ContextWrapper mWrappedContext;
-
-        public ServiceToken(final ContextWrapper context) {
-            mWrappedContext = context;
-        }
     }
 
     public static String makeTimeString(final Context context, long secs) {
@@ -248,18 +201,8 @@ public final class MusicUtils {
         }
     }
 
-    public static void setMiniPlayerVisibility(boolean visiable) {
-        SuperCloseMiniPlayer = !visiable;
-        try {
-            if (mService != null) {
-                mService.setMiniPlayerVisibility(visiable);
-            }
-        } catch (final Exception ignored) {
-        }
-    }
-
     public static boolean getMiniPlayerVisibility() {
-        if(!Settings.get().other().isShow_mini_player())
+        if (!Settings.get().other().isShow_mini_player())
             return false;
         try {
             if (mService != null) {
@@ -268,6 +211,16 @@ public final class MusicUtils {
         } catch (final Exception ignored) {
         }
         return false;
+    }
+
+    public static void setMiniPlayerVisibility(boolean visiable) {
+        SuperCloseMiniPlayer = !visiable;
+        try {
+            if (mService != null) {
+                mService.setMiniPlayerVisibility(visiable);
+            }
+        } catch (final Exception ignored) {
+        }
     }
 
     /**
@@ -370,7 +323,7 @@ public final class MusicUtils {
         return 0;
     }
 
-    public static Audio getCurrentAudio(){
+    public static Audio getCurrentAudio() {
         if (mService != null) {
             try {
                 return mService.getCurrentAudio();
@@ -444,7 +397,6 @@ public final class MusicUtils {
 
         return Collections.emptyList();
     }
-
 
     /**
      * Called when one of the lists should refresh or requery.
@@ -521,11 +473,11 @@ public final class MusicUtils {
     }
 
     public static Integer AudioStatus(Audio audio) {
-        if(!audio.equals(getCurrentAudio()))
+        if (!audio.equals(getCurrentAudio()))
             return -1;
-        if(audio.equals(getCurrentAudio()) && (isPaused()))
+        if (audio.equals(getCurrentAudio()) && (isPaused()))
             return 2;
-        if(audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying()))
+        if (audio.equals(getCurrentAudio()) && (isPreparing() || isPlaying()))
             return 1;
         return 0;
     }
@@ -533,8 +485,6 @@ public final class MusicUtils {
     public static boolean isNowPaused(Audio audio) {
         return audio.equals(getCurrentAudio()) && (isPaused());
     }
-
-    private static final String TAG = MusicUtils.class.getSimpleName();
 
     /**
      * Used to build and show a notification when player is sent into the
@@ -558,6 +508,47 @@ public final class MusicUtils {
             intent.setAction(MusicPlaybackService.FOREGROUND_STATE_CHANGED);
             intent.putExtra(MusicPlaybackService.NOW_IN_FOREGROUND, nowInForeground);
             context.startService(intent);
+        }
+    }
+
+    public static final class ServiceBinder implements ServiceConnection {
+
+        private final ServiceConnection mCallback;
+
+
+        public ServiceBinder(final ServiceConnection callback) {
+            mCallback = callback;
+        }
+
+        @Override
+        public void onServiceConnected(final ComponentName className, final IBinder service) {
+            mService = IAudioPlayerService.Stub.asInterface(service);
+
+            SERVICE_BIND_PUBLISHER.onNext(Optional.wrap(mService));
+
+            if (mCallback != null) {
+                mCallback.onServiceConnected(className, service);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(final ComponentName className) {
+            if (mCallback != null) {
+                mCallback.onServiceDisconnected(className);
+            }
+
+            mService = null;
+
+            SERVICE_BIND_PUBLISHER.onNext(Optional.empty());
+        }
+    }
+
+    public static final class ServiceToken {
+
+        public ContextWrapper mWrappedContext;
+
+        public ServiceToken(final ContextWrapper context) {
+            mWrappedContext = context;
         }
     }
 

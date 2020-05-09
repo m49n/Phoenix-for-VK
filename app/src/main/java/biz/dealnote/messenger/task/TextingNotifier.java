@@ -41,7 +41,7 @@ public class TextingNotifier {
                 .subscribe(() -> isRequestNow = false, ignored -> isRequestNow = false);
     }
 
-    public void shutdown(){
+    public void shutdown() {
         disposable.dispose();
     }
 

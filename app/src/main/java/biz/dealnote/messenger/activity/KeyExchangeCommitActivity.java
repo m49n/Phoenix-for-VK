@@ -25,6 +25,16 @@ import biz.dealnote.messenger.util.ViewUtils;
  */
 public class KeyExchangeCommitActivity extends AppCompatActivity {
 
+    public static Intent createIntent(@NonNull Context context, int accountId, int peerId, @NonNull User user, int messageId, @NonNull ExchangeMessage message) {
+        Intent intent = new Intent(context, KeyExchangeCommitActivity.class);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.OWNER, user);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE_ID, messageId);
+        intent.putExtra(Extra.MESSAGE, message);
+        return intent;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
@@ -55,15 +65,5 @@ public class KeyExchangeCommitActivity extends AppCompatActivity {
             startService(KeyExchangeService.createIntentForDecline(KeyExchangeCommitActivity.this, message, accountId, peerId, messageId));
             finish();
         });
-    }
-
-    public static Intent createIntent(@NonNull Context context, int accountId, int peerId, @NonNull User user, int messageId, @NonNull ExchangeMessage message){
-        Intent intent = new Intent(context, KeyExchangeCommitActivity.class);
-        intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.OWNER, user);
-        intent.putExtra(Extra.PEER_ID, peerId);
-        intent.putExtra(Extra.MESSAGE_ID, messageId);
-        intent.putExtra(Extra.MESSAGE, message);
-        return intent;
     }
 }

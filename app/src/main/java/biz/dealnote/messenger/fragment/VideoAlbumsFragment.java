@@ -34,27 +34,27 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, IVideoAlbumsView>
         implements VideoAlbumsNewAdapter.Listener, IVideoAlbumsView {
 
-    public static VideoAlbumsFragment newInstance(Bundle args){
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private VideoAlbumsNewAdapter mAdapter;
+    private TextView mEmpty;
+
+    public static VideoAlbumsFragment newInstance(Bundle args) {
         VideoAlbumsFragment fragment = new VideoAlbumsFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static VideoAlbumsFragment newInstance(int accountId, int ownerId, String action){
+    public static VideoAlbumsFragment newInstance(int accountId, int ownerId, String action) {
         return newInstance(buildArgs(accountId, ownerId, action));
     }
 
-    public static Bundle buildArgs(int aid, int ownerId, String action){
+    public static Bundle buildArgs(int aid, int ownerId, String action) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, aid);
         args.putInt(Extra.OWNER_ID, ownerId);
         args.putString(Extra.ACTION, action);
         return args;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private VideoAlbumsNewAdapter mAdapter;
-    private TextView mEmpty;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
         FloatingActionButton Add = root.findViewById(R.id.add_button);
 
-        if(Add != null) {
+        if (Add != null) {
             Add.setVisibility(View.GONE);
         }
 
@@ -102,7 +102,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
     @Override
     public void displayData(@NonNull List<VideoAlbum> data) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(data);
             resolveEmptyTextVisibility();
         }
@@ -110,7 +110,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
             resolveEmptyTextVisibility();
         }
@@ -118,13 +118,13 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
     @Override
     public void displayLoading(boolean loading) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
 
     private void resolveEmptyTextVisibility() {
-        if(Objects.nonNull(mEmpty) && Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mEmpty) && Objects.nonNull(mAdapter)) {
             mEmpty.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
@@ -136,7 +136,7 @@ public class VideoAlbumsFragment extends BaseMvpFragment<VideoAlbumsPresenter, I
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyTextVisibility();
         }

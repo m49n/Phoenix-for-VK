@@ -79,24 +79,15 @@ public class WallPostFCMMessage {
         return message;
     }
 
-    private static final class PushContext {
-        @SerializedName("item_id")
-        int itemId;
-        @SerializedName("owner_id")
-        int ownerId;
-        @SerializedName("type")
-        String type;
-    }
-
     public void nofify(final Context context, int accountId) {
-        if(accountId == owner_id){
+        if (accountId == owner_id) {
             notifyWallPost(context, accountId);
         } else {
             notifyNewPost(context, accountId);
         }
     }
 
-    private void notifyWallPost(final Context context, int accountId){
+    private void notifyWallPost(final Context context, int accountId) {
         if (!Settings.get()
                 .notifications()
                 .isNewPostOnOwnWallNotifEnabled()) {
@@ -109,7 +100,7 @@ public class WallPostFCMMessage {
                 .subscribe(ownerInfo -> notifyImpl(app, ownerInfo.getOwner(), ownerInfo.getAvatar()), RxUtils.ignore());
     }
 
-    private void notifyNewPost(final Context context, int accountId){
+    private void notifyNewPost(final Context context, int accountId) {
         if (!Settings.get()
                 .notifications()
                 .isNewPostsNotificationEnabled()) {
@@ -121,7 +112,7 @@ public class WallPostFCMMessage {
                 .subscribeOn(NotificationScheduler.INSTANCE)
                 .subscribe(info -> {
                     final NotificationManager manager = (NotificationManager) app.getSystemService(Context.NOTIFICATION_SERVICE);
-                    if (Utils.hasOreo()){
+                    if (Utils.hasOreo()) {
                         manager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(app));
                     }
 
@@ -182,5 +173,14 @@ public class WallPostFCMMessage {
 
         configOtherPushNotification(notification);
         nManager.notify(place, NotificationHelper.NOTIFICATION_WALL_POST_ID, notification);
+    }
+
+    private static final class PushContext {
+        @SerializedName("item_id")
+        int itemId;
+        @SerializedName("owner_id")
+        int ownerId;
+        @SerializedName("type")
+        String type;
     }
 }

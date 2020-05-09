@@ -42,6 +42,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class DualTabPhotosFragment extends BaseFragment implements BackPressCallback {
 
+    private Sources mSources;
+    private Adapter mPagerAdapter;
+    private int mCurrentTab;
+
     public static DualTabPhotosFragment newInstance(Sources sources) {
         Bundle args = new Bundle();
         args.putParcelable(Extra.SOURCES, sources);
@@ -50,8 +54,6 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
         fragment.setArguments(args);
         return fragment;
     }
-
-    private Sources mSources;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,9 +64,6 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             this.mCurrentTab = savedInstanceState.getInt("mCurrentTab");
         }
     }
-
-    private Adapter mPagerAdapter;
-    private int mCurrentTab;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -138,8 +137,8 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
                 case Types.LOCAL_PHOTOS:
                     return getString(R.string.local_photos_tab_title);
 
-                    case Types.LOCAL_GALLERY:
-                        return getString(R.string.local_gallery_tab_title);
+                case Types.LOCAL_GALLERY:
+                    return getString(R.string.local_gallery_tab_title);
 
                 case Types.VIDEOS:
                     return getString(R.string.videos);
@@ -209,7 +208,7 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             return mSources.count();
         }
 
-        public Fragment findFragmentByPosition(int position){
+        public Fragment findFragmentByPosition(int position) {
             WeakReference<Fragment> weak = fragments.get(position);
             return Objects.isNull(weak) ? null : weak.get();
         }

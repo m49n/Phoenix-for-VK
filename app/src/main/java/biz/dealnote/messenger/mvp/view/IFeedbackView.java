@@ -15,10 +15,16 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IFeedbackView extends IAccountDependencyView, IMvpView, IAttachmentsPlacesView, IErrorView {
     void displayData(List<Feedback> data);
+
     void showLoading(boolean loading);
+
     void notifyDataAdding(int position, int count);
+
     void notifyDataSetChanged();
+
     void configLoadMore(@LoadMoreState int loadmoreState);
+
     void showLinksDialog(int accountId, @NonNull Feedback notification);
+
     void notifyUpdateCounter();
 }

@@ -37,6 +37,7 @@ public class CircleCounterButton extends LinearLayout {
 
     private ImageView icon;
     private TextView counter;
+    private ObjectAnimator animator;
 
     public CircleCounterButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -68,7 +69,7 @@ public class CircleCounterButton extends LinearLayout {
         setGravity(Gravity.CENTER);
     }
 
-    private void initViews(){
+    private void initViews() {
         resolveActiveViews();
         resolveCounter();
         icon.setImageDrawable(mIcon);
@@ -88,12 +89,12 @@ public class CircleCounterButton extends LinearLayout {
         mNoactiveBackgroundColor = attrArray.getColor(R.styleable.CircleCounterButton_noactive_background_color, DEF_NOACTIVE_BACKGROUND_COLOR);
     }
 
-    private void resolveCounter(){
+    private void resolveCounter() {
         counter.setVisibility(mAlwaysCounter || mCount > 0 ? VISIBLE : GONE);
         counter.setText(String.valueOf(mCount));
     }
 
-    private void resolveActiveViews(){
+    private void resolveActiveViews() {
         if (mActive) {
             Utils.setColorFilter(icon, mActiveIconColor);
             Utils.setColorFilter(icon.getBackground(), mActiveBackgroundColor);
@@ -103,44 +104,42 @@ public class CircleCounterButton extends LinearLayout {
         }
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return this.mActive;
     }
 
-    public void setActive(boolean active){
+    public void setActive(boolean active) {
         this.mActive = active;
         resolveActiveViews();
     }
 
-    private ObjectAnimator animator;
-
-    public void setCount(int count, boolean animate){
+    public void setCount(int count, boolean animate) {
         this.mCount = count;
 
         counter.setVisibility(mAlwaysCounter || mCount > 0 ? VISIBLE : GONE);
 
-        if(Objects.nonNull(animator)){
+        if (Objects.nonNull(animator)) {
             animator.cancel();
         }
 
         this.animator = ViewUtils.setCountText(counter, count, animate);
     }
 
-    public void setCount(int count){
-        setCount(count, false);
-    }
-
-    public void setIcon(Drawable drawable){
+    public void setIcon(Drawable drawable) {
         this.mIcon = drawable;
         icon.setImageDrawable(mIcon);
     }
 
-    public void setIcon(int res){
+    public void setIcon(int res) {
         this.mIcon = ContextCompat.getDrawable(getContext(), res);
         icon.setImageDrawable(mIcon);
     }
 
-    public int getCount(){
+    public int getCount() {
         return this.mCount;
+    }
+
+    public void setCount(int count) {
+        setCount(count, false);
     }
 }

@@ -30,6 +30,7 @@ public class ChatMembersPresenter extends AccountDependencyPresenter<IChatMember
     private final IMessagesRepository messagesInteractor;
 
     private final List<AppChatUser> users;
+    private boolean refreshing;
 
     public ChatMembersPresenter(int accountId, int chatId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -45,8 +46,6 @@ public class ChatMembersPresenter extends AccountDependencyPresenter<IChatMember
         super.onGuiCreated(view);
         view.displayData(this.users);
     }
-
-    private boolean refreshing;
 
     private void resolveRefreshing() {
         if (isGuiResumed()) {

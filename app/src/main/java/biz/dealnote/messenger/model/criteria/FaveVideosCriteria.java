@@ -16,13 +16,13 @@ public class FaveVideosCriteria extends Criteria {
         this.accountId = accountId;
     }
 
+    public DatabaseIdRange getRange() {
+        return range;
+    }
+
     public FaveVideosCriteria setRange(DatabaseIdRange range) {
         this.range = range;
         return this;
-    }
-
-    public DatabaseIdRange getRange() {
-        return range;
     }
 
     public int getAccountId() {

@@ -41,10 +41,6 @@ public interface IWallStorage extends IStorage {
     @CheckResult
     Single<Optional<PostEntity>> findPostById(int accountId, int ownerId, int vkpostId, boolean includeAttachment);
 
-    interface IClearWallTask {
-        int getOwnerId();
-    }
-
     Single<List<PostEntity>> findDbosByCriteria(@NonNull WallCriteria criteria);
 
     @CheckResult
@@ -52,10 +48,15 @@ public interface IWallStorage extends IStorage {
 
     /**
      * Уведомить хранилище, что пост более не существует
+     *
      * @param accountId
      * @param postVkid
      * @param postOwnerId
      * @return
      */
     Completable invalidatePost(int accountId, int postVkid, int postOwnerId);
+
+    interface IClearWallTask {
+        int getOwnerId();
+    }
 }

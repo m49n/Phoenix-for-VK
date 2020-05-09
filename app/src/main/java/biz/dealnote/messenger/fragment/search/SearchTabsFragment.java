@@ -33,6 +33,8 @@ public class SearchTabsFragment extends Fragment {
     public static final int TAB_MESSAGES = 5;
     public static final int TAB_DOCUMENTS = 6;
     private static final String TAG = SearchTabsFragment.class.getSimpleName();
+    private static final String SAVE_CURRENT_TAB = "save_current_tab";
+    private int mCurrentTab;
 
     public static Bundle buildArgs(int accountId, int tab) {
         Bundle args = new Bundle();
@@ -46,8 +48,6 @@ public class SearchTabsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    private int mCurrentTab;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,8 +102,6 @@ public class SearchTabsFragment extends Fragment {
         }
         return root;
     }
-
-    private static final String SAVE_CURRENT_TAB = "save_current_tab";
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

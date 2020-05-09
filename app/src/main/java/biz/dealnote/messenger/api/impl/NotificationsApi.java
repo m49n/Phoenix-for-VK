@@ -58,6 +58,7 @@ class NotificationsApi extends AbsApi implements INotificationsApi {
                             return response;
                         }));
     }
+
     @Override
     public Single<AnswerVKOfficialList> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime) {
         return provideService(INotificationsService.class, TokenType.USER)

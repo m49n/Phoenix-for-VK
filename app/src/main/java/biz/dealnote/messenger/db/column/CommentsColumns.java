@@ -4,13 +4,9 @@ import android.provider.BaseColumns;
 
 public final class CommentsColumns implements BaseColumns {
 
-    private CommentsColumns(){}
-
     /* Код комментария, который получен не с сервиса, а создан на устройстве и не отправлен */
     public static final int PROCESSING_COMMENT_ID = -1;
-
     public static final String TABLENAME = "comments";
-
     public static final String COMMENT_ID = "comment_id";
     public static final String FROM_ID = "from_id";
     public static final String DATE = "date";
@@ -24,12 +20,10 @@ public final class CommentsColumns implements BaseColumns {
     public static final String CAN_EDIT = "can_edit";
     public static final String ATTACHMENTS_COUNT = "attachment_count";
     public static final String DELETED = "deleted";
-
     public static final String SOURCE_ID = "source_id";
     public static final String SOURCE_OWNER_ID = "source_owner_id";
     public static final String SOURCE_TYPE = "source_type";
     public static final String SOURCE_ACCESS_KEY = "source_access_key";
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_COMMENT_ID = TABLENAME + "." + COMMENT_ID;
     public static final String FULL_FROM_ID = TABLENAME + "." + FROM_ID;
@@ -44,9 +38,10 @@ public final class CommentsColumns implements BaseColumns {
     public static final String FULL_CAN_EDIT = TABLENAME + "." + CAN_EDIT;
     public static final String FULL_ATTACHMENTS_COUNT = TABLENAME + "." + ATTACHMENTS_COUNT;
     public static final String FULL_DELETED = TABLENAME + "." + DELETED;
-
     public static final String FULL_SOURCE_ID = TABLENAME + "." + SOURCE_ID;
     public static final String FULL_SOURCE_OWNER_ID = TABLENAME + "." + SOURCE_OWNER_ID;
     public static final String FULL_SOURCE_TYPE = TABLENAME + "." + SOURCE_TYPE;
     public static final String FULL_SOURCE_ACCESS_KEY = TABLENAME + "." + SOURCE_ACCESS_KEY;
+    private CommentsColumns() {
+    }
 }

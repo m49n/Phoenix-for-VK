@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:paddingStart="4dp"
-            android:paddingEnd="4dip"
             android:paddingTop="4dp"
+            android:paddingEnd="4dip"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_subtitle"
             android:textStyle="bold" />
@@ -30,8 +30,8 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center_horizontal"
             android:paddingStart="4dip"
-            android:paddingEnd="4dp"
             android:paddingTop="4dp"
+            android:paddingEnd="4dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_subtitle"
             android:textStyle="bold" />

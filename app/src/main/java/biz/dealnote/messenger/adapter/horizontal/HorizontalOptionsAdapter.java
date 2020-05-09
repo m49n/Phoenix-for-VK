@@ -16,6 +16,8 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 
 public class HorizontalOptionsAdapter<T extends Entry> extends RecyclerBindableAdapter<T, HorizontalOptionsAdapter.Holder> {
 
+    private Listener<T> listener;
+
     public HorizontalOptionsAdapter(List<T> data) {
         super(data);
     }
@@ -49,6 +51,14 @@ public class HorizontalOptionsAdapter<T extends Entry> extends RecyclerBindableA
         return R.layout.item_chip;
     }
 
+    public void setListener(Listener<T> listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener<T extends Entry> {
+        void onOptionClick(T entry);
+    }
+
     static class Holder extends RecyclerView.ViewHolder {
 
         MaterialCardView background;
@@ -59,15 +69,5 @@ public class HorizontalOptionsAdapter<T extends Entry> extends RecyclerBindableA
             background = itemView.findViewById(R.id.card_view);
             title = itemView.findViewById(R.id.title);
         }
-    }
-
-    private Listener<T> listener;
-
-    public void setListener(Listener<T> listener) {
-        this.listener = listener;
-    }
-
-    public interface Listener<T extends Entry> {
-        void onOptionClick(T entry);
     }
 }

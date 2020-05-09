@@ -16,16 +16,16 @@ public class FavePhotosCriteria extends Criteria {
         this.accountId = accountId;
     }
 
-    public FavePhotosCriteria setRange(DatabaseIdRange range) {
-        this.range = range;
-        return this;
-    }
-
     public int getAccountId() {
         return accountId;
     }
 
     public DatabaseIdRange getRange() {
         return range;
+    }
+
+    public FavePhotosCriteria setRange(DatabaseIdRange range) {
+        this.range = range;
+        return this;
     }
 }

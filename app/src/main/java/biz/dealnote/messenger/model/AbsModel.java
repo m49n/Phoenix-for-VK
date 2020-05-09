@@ -11,7 +11,7 @@ import androidx.annotation.CallSuper;
  */
 public abstract class AbsModel implements Parcelable {
 
-    public AbsModel(){
+    public AbsModel() {
 
     }
 

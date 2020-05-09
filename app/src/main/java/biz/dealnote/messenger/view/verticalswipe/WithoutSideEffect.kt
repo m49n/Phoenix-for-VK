@@ -6,7 +6,7 @@ import android.view.View
  * Does not change any properties of view
  */
 @Suppress("unused")
-class WithoutSideEffect: SideEffect {
+class WithoutSideEffect : SideEffect {
 
     override fun onViewCaptured(child: View) {
         // ignore

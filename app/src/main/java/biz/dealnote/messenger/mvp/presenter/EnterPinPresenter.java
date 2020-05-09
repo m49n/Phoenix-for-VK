@@ -36,11 +36,14 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
     private static final String SAVE_VALUE = "save_value";
     private static final int LAST_CIRCLE_VISIBILITY_DELAY = 200;
     private static final int NO_VALUE = -1;
-
-    private int[] mValues;
+    private static final int MAX_ATTEMPT_DELAY = 3 * 60 * 1000;
     private final IOwnersRepository ownersRepository;
     private final ISettings.ISecuritySettings securitySettings;
+    private int[] mValues;
     private Fragment myContext;
+    private Owner mOwner;
+    private Handler mHandler = new Handler();
+    private Runnable mOnFullyEnteredRunnable = this::onFullyEntered;
 
     public EnterPinPresenter(Fragment Context, @Nullable Bundle savedState) {
         super(savedState);
@@ -59,7 +62,7 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
             loadOwnerInfo();
         }
 
-        if(securitySettings.isEntranceByFingerprintAllowed() && canAuthenticateWithBiometrics()){
+        if (securitySettings.isEntranceByFingerprintAllowed() && canAuthenticateWithBiometrics()) {
             showBiometricPrompt();
         }
     }
@@ -76,19 +79,17 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         }
     }
 
-    private void onOwnerInfoReceived(Owner owner){
+    private void onOwnerInfoReceived(Owner owner) {
         this.mOwner = owner;
         resolveAvatarView();
     }
 
-    private Owner mOwner;
-
     public void onFingerprintClicked() {
-        if(!securitySettings.isEntranceByFingerprintAllowed()){
+        if (!securitySettings.isEntranceByFingerprintAllowed()) {
             getView().getPhoenixToast().showToastError(R.string.error_login_by_fingerprint_not_allowed);
             return;
         }
-        if(canAuthenticateWithBiometrics())
+        if (canAuthenticateWithBiometrics())
             showBiometricPrompt();
         else
             getView().getPhoenixToast().showToastError(R.string.biometric_not_support);
@@ -99,8 +100,8 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         super.onGuiResumed();
     }
 
-    private void onFingerprintRecognizeSuccess(){
-        if(isGuiReady()){
+    private void onFingerprintRecognizeSuccess() {
+        if (isGuiReady()) {
             getView().sendSuccessAndClose();
         }
     }
@@ -112,17 +113,15 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
     @OnGuiCreated
     private void resolveAvatarView() {
-        if(!isGuiReady()) return;
+        if (!isGuiReady()) return;
 
         String avatar = Objects.isNull(mOwner) ? null : mOwner.getMaxSquareAvatar();
-        if(isEmpty(avatar)){
+        if (isEmpty(avatar)) {
             getView().displayDefaultAvatar();
         } else {
             getView().displayAvatarFromUrl(avatar);
         }
     }
-
-    private static final int MAX_ATTEMPT_DELAY = 3 * 60 * 1000;
 
     private long getNextPinAttemptTimeout() {
         List<Long> history = Settings.get()
@@ -154,8 +153,6 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
         refreshViewCirclesVisibility();
     }
-
-    private Handler mHandler = new Handler();
 
     private void onFullyEntered() {
         if (!isFullyEntered()) return;
@@ -208,8 +205,6 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         }
     }
 
-    private Runnable mOnFullyEnteredRunnable = this::onFullyEntered;
-
     private boolean isFullyEntered() {
         for (int value : mValues) {
             if (value == NO_VALUE) {
@@ -251,7 +246,7 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
                 .setTitle(getApplicationContext().getString(R.string.biometric))
                 .setNegativeButtonText(getApplicationContext().getString(R.string.cancel))
                 .build();
-            mBiometricPrompt.authenticate(promptInfo);
+        mBiometricPrompt.authenticate(promptInfo);
     }
 
     private boolean canAuthenticateWithBiometrics() {

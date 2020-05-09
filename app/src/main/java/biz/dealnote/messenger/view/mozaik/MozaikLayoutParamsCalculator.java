@@ -25,8 +25,8 @@ public class MozaikLayoutParamsCalculator {
         this.photoWidth = new SparseIntArray(1);
     }
 
-    private static int getRowNumberForIndex(int[][] array, int index){
-        for(int i = 0; i < array.length; i++){
+    private static int getRowNumberForIndex(int[][] array, int index) {
+        for (int i = 0; i < array.length; i++) {
             int[] inner = array[i];
 
             for (int a : inner) {
@@ -39,10 +39,10 @@ public class MozaikLayoutParamsCalculator {
         throw new IllegalStateException("Value does not exist");
     }
 
-    private static int getColumnNumberForIndex(int[][] array, int index){
-        for(int[] inner : array){
-            for(int i = 0; i < inner.length; i++){
-                if(inner[i] == index){
+    private static int getColumnNumberForIndex(int[][] array, int index) {
+        for (int[] inner : array) {
+            for (int i = 0; i < inner.length; i++) {
+                if (inner[i] == index) {
                     return i;
                 }
             }
@@ -51,7 +51,7 @@ public class MozaikLayoutParamsCalculator {
         throw new IllegalStateException("Value does not exist");
     }
 
-    private float getAspectRatioSumForRow(int row){
+    private float getAspectRatioSumForRow(int row) {
         float sum = 0;
         int[] rowArray = matrix[row];
 

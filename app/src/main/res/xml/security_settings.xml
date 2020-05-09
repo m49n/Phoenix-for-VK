@@ -44,8 +44,8 @@
 
     <Preference
         android:key="delete_all_encryption_keys"
-        android:title="@string/delete_keys"
         android:summary="@string/clear_storage_of_encryption_keys"
+        android:title="@string/delete_keys"
         app:iconSpaceReserved="false" />
 
     <!--<Preference
@@ -65,8 +65,8 @@
 
     <CheckBoxPreference
         android:key="hide_notif_message_body"
-        android:title="@string/hide_notif_message_body_title"
         android:summary="@string/hide_notif_message_body_summary"
+        android:title="@string/hide_notif_message_body_title"
         app:iconSpaceReserved="false" />
 
     <!--<switchpreference

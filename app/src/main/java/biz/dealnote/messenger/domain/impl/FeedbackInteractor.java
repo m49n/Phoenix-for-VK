@@ -53,6 +53,77 @@ public class FeedbackInteractor implements IFeedbackInteractor {
         this.ownersRepository = ownersRepository;
     }
 
+    private static void populateOwnerIds(VKOwnIds ids, FeedbackEntity dbo) {
+        fillCommentOwnerIds(ids, dbo.getReply());
+
+        if (dbo instanceof CopyEntity) {
+            populateOwnerIds(ids, (CopyEntity) dbo);
+        } else if (dbo instanceof LikeCommentEntity) {
+            populateOwnerIds(ids, (LikeCommentEntity) dbo);
+        } else if (dbo instanceof LikeEntity) {
+            populateOwnerIds(ids, (LikeEntity) dbo);
+        } else if (dbo instanceof MentionCommentEntity) {
+            populateOwnerIds(ids, (MentionCommentEntity) dbo);
+        } else if (dbo instanceof MentionEntity) {
+            populateOwnerIds(ids, (MentionEntity) dbo);
+        } else if (dbo instanceof NewCommentEntity) {
+            populateOwnerIds(ids, (NewCommentEntity) dbo);
+        } else if (dbo instanceof PostFeedbackEntity) {
+            populateOwnerIds(ids, (PostFeedbackEntity) dbo);
+        } else if (dbo instanceof ReplyCommentEntity) {
+            populateOwnerIds(ids, (ReplyCommentEntity) dbo);
+        } else if (dbo instanceof UsersEntity) {
+            populateOwnerIds(ids, (UsersEntity) dbo);
+        }
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, UsersEntity dbo) {
+        ids.appendAll(dbo.getOwners());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, ReplyCommentEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
+        Entity2Model.fillOwnerIds(ids, dbo.getFeedbackComment());
+        Entity2Model.fillOwnerIds(ids, dbo.getOwnComment());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, PostFeedbackEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getPost());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, NewCommentEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getComment());
+        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, MentionEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getWhere());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, MentionCommentEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
+        Entity2Model.fillOwnerIds(ids, dbo.getWhere());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, LikeEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getLiked());
+        ids.appendAll(dbo.getLikesOwnerIds());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, LikeCommentEntity dbo) {
+        Entity2Model.fillOwnerIds(ids, dbo.getLiked());
+        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
+        ids.appendAll(dbo.getLikesOwnerIds());
+    }
+
+    private static void populateOwnerIds(VKOwnIds ids, CopyEntity dbo) {
+        for (IdPairEntity i : dbo.getCopies().getPairDbos()) {
+            ids.append(i.getOwnerId());
+        }
+
+        Entity2Model.fillOwnerIds(ids, dbo.getCopied());
+    }
+
     @Override
     public Single<List<Feedback>> getCachedFeedbacks(int accountId) {
         final NotificationsCriteria criteria = new NotificationsCriteria(accountId);
@@ -130,76 +201,5 @@ public class FeedbackInteractor implements IFeedbackInteractor {
                                 return feedbacks;
                             });
                 });
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, FeedbackEntity dbo) {
-        fillCommentOwnerIds(ids, dbo.getReply());
-
-        if (dbo instanceof CopyEntity) {
-            populateOwnerIds(ids, (CopyEntity) dbo);
-        } else if (dbo instanceof LikeCommentEntity) {
-            populateOwnerIds(ids, (LikeCommentEntity) dbo);
-        } else if (dbo instanceof LikeEntity) {
-            populateOwnerIds(ids, (LikeEntity) dbo);
-        } else if (dbo instanceof MentionCommentEntity) {
-            populateOwnerIds(ids, (MentionCommentEntity) dbo);
-        } else if (dbo instanceof MentionEntity) {
-            populateOwnerIds(ids, (MentionEntity) dbo);
-        } else if (dbo instanceof NewCommentEntity) {
-            populateOwnerIds(ids, (NewCommentEntity) dbo);
-        } else if (dbo instanceof PostFeedbackEntity) {
-            populateOwnerIds(ids, (PostFeedbackEntity) dbo);
-        } else if (dbo instanceof ReplyCommentEntity) {
-            populateOwnerIds(ids, (ReplyCommentEntity) dbo);
-        } else if (dbo instanceof UsersEntity) {
-            populateOwnerIds(ids, (UsersEntity) dbo);
-        }
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, UsersEntity dbo) {
-        ids.appendAll(dbo.getOwners());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, ReplyCommentEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
-        Entity2Model.fillOwnerIds(ids, dbo.getFeedbackComment());
-        Entity2Model.fillOwnerIds(ids, dbo.getOwnComment());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, PostFeedbackEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getPost());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, NewCommentEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getComment());
-        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, MentionEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getWhere());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, MentionCommentEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
-        Entity2Model.fillOwnerIds(ids, dbo.getWhere());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, LikeEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getLiked());
-        ids.appendAll(dbo.getLikesOwnerIds());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, LikeCommentEntity dbo) {
-        Entity2Model.fillOwnerIds(ids, dbo.getLiked());
-        Entity2Model.fillOwnerIds(ids, dbo.getCommented());
-        ids.appendAll(dbo.getLikesOwnerIds());
-    }
-
-    private static void populateOwnerIds(VKOwnIds ids, CopyEntity dbo) {
-        for (IdPairEntity i : dbo.getCopies().getPairDbos()) {
-            ids.append(i.getOwnerId());
-        }
-
-        Entity2Model.fillOwnerIds(ids, dbo.getCopied());
     }
 }

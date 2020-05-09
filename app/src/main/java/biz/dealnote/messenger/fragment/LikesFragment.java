@@ -42,7 +42,7 @@ public class LikesFragment extends AbsOwnersListFragment<LikesListPresenter, ISi
     public void onResume() {
         super.onResume();
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle("likes".equals(requireArguments().getString(Extra.FILTER)) ? R.string.like : R.string.shared);
             actionBar.setSubtitle(null);
         }

@@ -17,6 +17,17 @@ import static biz.dealnote.messenger.util.Utils.join;
 
 public class Privacy implements Parcelable, Cloneable {
 
+    public static final Creator<Privacy> CREATOR = new Creator<Privacy>() {
+        @Override
+        public Privacy createFromParcel(Parcel in) {
+            return new Privacy(in);
+        }
+
+        @Override
+        public Privacy[] newArray(int size) {
+            return new Privacy[size];
+        }
+    };
     private String type;
     private ArrayList<User> allowedUsers;
     private ArrayList<User> disallowedUsers;
@@ -35,15 +46,6 @@ public class Privacy implements Parcelable, Cloneable {
         this(Type.ALL);
     }
 
-    public static final class Type {
-        public static final String ALL = "all";
-        public static final String FRIENDS = "friends";
-        public static final String FRIENDS_OF_FRIENDS = "friends_of_friends";
-        public static final String FRIENDS_OF_FRIENDS_ONLY = "friends_of_friends_only";
-        public static final String NOBODY = "nobody";
-        public static final String ONLY_ME = "only_me";
-    }
-
     protected Privacy(Parcel in) {
         this.type = in.readString();
         this.allowedUsers = in.createTypedArrayList(User.CREATOR);
@@ -51,18 +53,6 @@ public class Privacy implements Parcelable, Cloneable {
         this.allowedLists = in.createTypedArrayList(FriendList.CREATOR);
         this.disallowedLists = in.createTypedArrayList(FriendList.CREATOR);
     }
-
-    public static final Creator<Privacy> CREATOR = new Creator<Privacy>() {
-        @Override
-        public Privacy createFromParcel(Parcel in) {
-            return new Privacy(in);
-        }
-
-        @Override
-        public Privacy[] newArray(int size) {
-            return new Privacy[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -135,19 +125,19 @@ public class Privacy implements Parcelable, Cloneable {
         return this;
     }
 
-    public void removeFromAllowed(@NonNull User user){
+    public void removeFromAllowed(@NonNull User user) {
         this.allowedUsers.remove(user);
     }
 
-    public void removeFromAllowed(@NonNull FriendList friendList){
+    public void removeFromAllowed(@NonNull FriendList friendList) {
         this.allowedLists.remove(friendList);
     }
 
-    public void removeFromDisallowed(@NonNull User user){
+    public void removeFromDisallowed(@NonNull User user) {
         this.disallowedUsers.remove(user);
     }
 
-    public void removeFromDisallowed(@NonNull FriendList friendList){
+    public void removeFromDisallowed(@NonNull FriendList friendList) {
         this.disallowedLists.remove(friendList);
     }
 
@@ -177,7 +167,7 @@ public class Privacy implements Parcelable, Cloneable {
         return isEmpty(additional) ? sufix : sufix + " " + and + " " + additional;
     }
 
-    public String createDisallowedString(){
+    public String createDisallowedString() {
         String users = join(", ", disallowedUsers);
         String friendsLists = join(", ", disallowedLists);
         String additional = isEmpty(users) ? friendsLists : (isEmpty(friendsLists) ? users : users + ", " + friendsLists);
@@ -192,5 +182,14 @@ public class Privacy implements Parcelable, Cloneable {
         clone.disallowedUsers = new ArrayList<>(this.disallowedUsers);
         clone.disallowedLists = new ArrayList<>(this.disallowedLists);
         return clone;
+    }
+
+    public static final class Type {
+        public static final String ALL = "all";
+        public static final String FRIENDS = "friends";
+        public static final String FRIENDS_OF_FRIENDS = "friends_of_friends";
+        public static final String FRIENDS_OF_FRIENDS_ONLY = "friends_of_friends_only";
+        public static final String NOBODY = "nobody";
+        public static final String ONLY_ME = "only_me";
     }
 }

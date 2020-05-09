@@ -56,6 +56,11 @@ public abstract class AbsStepHolder<T extends AbsStepsHost> extends RecyclerView
         return itemView;
     }
 
+    private static int generateHolderId() {
+        nextHolderId++;
+        return nextHolderId;
+    }
+
     @Override
     public int getHolderId() {
         return (int) itemView.getTag();
@@ -71,10 +76,5 @@ public abstract class AbsStepHolder<T extends AbsStepsHost> extends RecyclerView
 
     public void setNextButtonAvailable(boolean enable) {
         buttonNext.setEnabled(enable);
-    }
-
-    private static int generateHolderId(){
-        nextHolderId++;
-        return nextHolderId;
     }
 }

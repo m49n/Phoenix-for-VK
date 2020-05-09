@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class FriendList implements Parcelable {
 
-    private final int id;
-
-    private final String name;
-
-    public FriendList(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    private FriendList(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-    }
-
     public static final Creator<FriendList> CREATOR = new Creator<FriendList>() {
         @Override
         public FriendList createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class FriendList implements Parcelable {
             return new FriendList[size];
         }
     };
+    private final int id;
+    private final String name;
+
+    public FriendList(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    private FriendList(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+    }
 
     public int getId() {
         return id;

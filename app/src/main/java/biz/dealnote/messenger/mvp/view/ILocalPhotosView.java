@@ -14,10 +14,16 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface ILocalPhotosView extends IMvpView, IErrorView {
     void displayData(@NonNull List<LocalPhoto> data);
+
     void setEmptyTextVisible(boolean visible);
+
     void displayProgress(boolean loading);
+
     void returnResultToParent(ArrayList<LocalPhoto> photos);
+
     void updateSelectionAndIndexes();
+
     void setFabVisible(boolean visible, boolean anim);
+
     void requestReadExternalStoragePermission();
 }

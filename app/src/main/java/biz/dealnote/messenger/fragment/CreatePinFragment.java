@@ -32,14 +32,18 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
         implements ICreatePinView, KeyboardView.OnKeyboardClickListener, BackPressCallback {
 
     private static final String TAG = CreatePinFragment.class.getSimpleName();
-
-    public static CreatePinFragment newInstance(){
-        return new CreatePinFragment();
-    }
-
+    private static final String EXTRA_PIN_VALUE = "pin_value";
     private TextView mTitle;
     private View mValuesRoot;
     private View[] mValuesCircles;
+
+    public static CreatePinFragment newInstance() {
+        return new CreatePinFragment();
+    }
+
+    public static int[] extractValueFromIntent(Intent intent) {
+        return intent.getIntArrayExtra(EXTRA_PIN_VALUE);
+    }
 
     @Nullable
     @Override
@@ -62,14 +66,14 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
 
     @Override
     public void displayTitle(@StringRes int titleRes) {
-        if(Objects.nonNull(mTitle)){
+        if (Objects.nonNull(mTitle)) {
             mTitle.setText(titleRes);
         }
     }
 
     @Override
     public void displayErrorAnimation() {
-        if(Objects.nonNull(mValuesRoot)){
+        if (Objects.nonNull(mValuesRoot)) {
             Animation animation = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_invalid_pin);
             mValuesRoot.startAnimation(animation);
         }
@@ -77,13 +81,13 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
 
     @Override
     public void displayPin(int[] values, int noValueConstant) {
-        if(Objects.isNull(mValuesCircles)) return;
+        if (Objects.isNull(mValuesCircles)) return;
 
-        if(values.length != mValuesCircles.length){
+        if (values.length != mValuesCircles.length) {
             throw new IllegalStateException("Invalid pin length, view: " + mValuesCircles.length + ", target: " + values.length);
         }
 
-        for(int i = 0; i < mValuesCircles.length; i++){
+        for (int i = 0; i < mValuesCircles.length; i++) {
             boolean visible = values[i] != noValueConstant;
             mValuesCircles[i].setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
@@ -95,18 +99,12 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
         requireActivity().finish();
     }
 
-    private static final String EXTRA_PIN_VALUE = "pin_value";
-
     @Override
     public void sendSuccessAndClose(int[] values) {
         Intent data = new Intent();
         data.putExtra(EXTRA_PIN_VALUE, values);
         requireActivity().setResult(Activity.RESULT_OK, data);
         requireActivity().finish();
-    }
-
-    public static int[] extractValueFromIntent(Intent intent){
-        return intent.getIntArrayExtra(EXTRA_PIN_VALUE);
     }
 
     @Override
@@ -116,17 +114,17 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
 
     @Override
     public void onButtonClick(int number) {
-        if(isPresenterPrepared()) getPresenter().fireDigitClick(number);
+        if (isPresenterPrepared()) getPresenter().fireDigitClick(number);
     }
 
     @Override
     public void onBackspaceClick() {
-        if(isPresenterPrepared()) getPresenter().fireBackspaceClick();
+        if (isPresenterPrepared()) getPresenter().fireBackspaceClick();
     }
 
     @Override
     public void onFingerPrintClick() {
-        if(isPresenterPrepared()) getPresenter().fireFingerPrintClick();
+        if (isPresenterPrepared()) getPresenter().fireFingerPrintClick();
     }
 
     @Override

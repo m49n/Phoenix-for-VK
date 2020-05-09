@@ -61,10 +61,10 @@ public class AppStorages extends ContextWrapper implements IStorages {
         super(base);
     }
 
-    public static AppStorages getInstance(Context baseContext){
-        if(isNull(sStoresInstance)){
-            synchronized (AppStorages.class){
-                if(isNull(sStoresInstance)){
+    public static AppStorages getInstance(Context baseContext) {
+        if (isNull(sStoresInstance)) {
+            synchronized (AppStorages.class) {
+                if (isNull(sStoresInstance)) {
                     sStoresInstance = new AppStorages(baseContext.getApplicationContext());
                 }
             }
@@ -75,9 +75,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public ICommentsStorage comments() {
-        if(isNull(comments)){
-            synchronized (this){
-                if(isNull(comments)){
+        if (isNull(comments)) {
+            synchronized (this) {
+                if (isNull(comments)) {
                     comments = new CommentsStorage(this);
                 }
             }
@@ -88,9 +88,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public IPhotoAlbumsStorage photoAlbums() {
-        if(isNull(photoAlbums)){
-            synchronized (this){
-                if(isNull(photoAlbums)){
+        if (isNull(photoAlbums)) {
+            synchronized (this) {
+                if (isNull(photoAlbums)) {
                     photoAlbums = new PhotoAlbumsStorage(this);
                 }
             }
@@ -101,9 +101,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public ITopicsStore topics() {
-        if(isNull(topics)){
-            synchronized (this){
-                if(isNull(topics)){
+        if (isNull(topics)) {
+            synchronized (this) {
+                if (isNull(topics)) {
                     topics = new TopicsStorage(this);
                 }
             }
@@ -114,9 +114,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public IDocsStorage docs() {
-        if(isNull(docs)){
-            synchronized (this){
-                if(isNull(docs)){
+        if (isNull(docs)) {
+            synchronized (this) {
+                if (isNull(docs)) {
                     docs = new DocsStorage(this);
                 }
             }
@@ -127,9 +127,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public IStickersStorage stickers() {
-        if(isNull(stickers)){
-            synchronized (this){
-                if(isNull(stickers)){
+        if (isNull(stickers)) {
+            synchronized (this) {
+                if (isNull(stickers)) {
                     stickers = new StickersStorage(this);
                 }
             }
@@ -140,9 +140,9 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     @Override
     public IDatabaseStore database() {
-        if(isNull(database)){
-            synchronized (this){
-                if(isNull(database)){
+        if (isNull(database)) {
+            synchronized (this) {
+                if (isNull(database)) {
                     database = new DatabaseStorage(this);
                 }
             }
@@ -155,10 +155,10 @@ public class AppStorages extends ContextWrapper implements IStorages {
         return tempData;
     }
 
-    public IVideoAlbumsStorage videoAlbums(){
-        if(isNull(videoAlbums)){
-            synchronized (this){
-                if(isNull(videoAlbums)){
+    public IVideoAlbumsStorage videoAlbums() {
+        if (isNull(videoAlbums)) {
+            synchronized (this) {
+                if (isNull(videoAlbums)) {
                     videoAlbums = new VideoAlbumsStorage(this);
                 }
             }
@@ -167,10 +167,10 @@ public class AppStorages extends ContextWrapper implements IStorages {
         return videoAlbums;
     }
 
-    public IVideoStorage videos(){
-        if(isNull(video)){
-            synchronized (this){
-                if(isNull(video)){
+    public IVideoStorage videos() {
+        if (isNull(video)) {
+            synchronized (this) {
+                if (isNull(video)) {
                     video = new VideoStorage(this);
                 }
             }
@@ -180,8 +180,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IAttachmentsStorage attachments(){
-        if(attachments == null){
+    public synchronized IAttachmentsStorage attachments() {
+        if (attachments == null) {
             attachments = new AttachmentsStorage(this);
         }
 
@@ -189,16 +189,16 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IKeysStorage keys(@KeyLocationPolicy int policy){
-        switch (policy){
+    public synchronized IKeysStorage keys(@KeyLocationPolicy int policy) {
+        switch (policy) {
             case KeyLocationPolicy.PERSIST:
-                if(isNull(keysPersist)){
+                if (isNull(keysPersist)) {
                     keysPersist = new KeysPersistStorage(this);
                 }
 
                 return keysPersist;
             case KeyLocationPolicy.RAM:
-                if(isNull(keysRam)){
+                if (isNull(keysRam)) {
                     keysRam = new KeysRamStorage();
                 }
 
@@ -209,8 +209,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized ILocalMediaStorage localPhotos(){
-        if(localMedia == null){
+    public synchronized ILocalMediaStorage localPhotos() {
+        if (localMedia == null) {
             localMedia = new LocalMediaStorage(this);
         }
 
@@ -218,8 +218,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IFeedbackStorage notifications(){
-        if(feedback == null){
+    public synchronized IFeedbackStorage notifications() {
+        if (feedback == null) {
             feedback = new FeedbackStorage(this);
         }
 
@@ -227,8 +227,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IDialogsStorage dialogs(){
-        if(dialogs == null){
+    public synchronized IDialogsStorage dialogs() {
+        if (dialogs == null) {
             dialogs = new DialogsStorage(this);
         }
 
@@ -236,8 +236,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IMessagesStorage messages(){
-        if(messages == null){
+    public synchronized IMessagesStorage messages() {
+        if (messages == null) {
             messages = new MessagesStorage(this);
         }
 
@@ -245,8 +245,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IWallStorage wall(){
-        if(wall == null){
+    public synchronized IWallStorage wall() {
+        if (wall == null) {
             wall = new WallStorage(this);
         }
 
@@ -254,8 +254,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IFaveStorage fave(){
-        if(fave == null){
+    public synchronized IFaveStorage fave() {
+        if (fave == null) {
             fave = new FaveStorage(this);
         }
 
@@ -263,8 +263,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IPhotosStorage photos(){
-        if(photos == null){
+    public synchronized IPhotosStorage photos() {
+        if (photos == null) {
             photos = new PhotosStorage(this);
         }
 
@@ -272,8 +272,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IRelativeshipStorage relativeship(){
-        if(relativeship == null){
+    public synchronized IRelativeshipStorage relativeship() {
+        if (relativeship == null) {
             relativeship = new RelativeshipStorage(this);
         }
 
@@ -281,8 +281,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IFeedStorage feed(){
-        if(feed == null){
+    public synchronized IFeedStorage feed() {
+        if (feed == null) {
             feed = new FeedStorage(this);
         }
 
@@ -290,8 +290,8 @@ public class AppStorages extends ContextWrapper implements IStorages {
     }
 
     @NonNull
-    public synchronized IOwnersStorage owners(){
-        if(owners == null){
+    public synchronized IOwnersStorage owners() {
+        if (owners == null) {
             owners = new OwnersStorage(this);
         }
 

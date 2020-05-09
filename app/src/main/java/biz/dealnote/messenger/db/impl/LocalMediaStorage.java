@@ -25,19 +25,26 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
  */
 class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
 
-    LocalMediaStorage(@NonNull AppStorages mRepositoryContext) {
-        super(mRepositoryContext);
-    }
-
     private static final String[] PROJECTION = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
-
-   private static final String[] VIDEO_PROJECTION = {
+    private static final String[] VIDEO_PROJECTION = {
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DATA,
             MediaStore.Video.Media.DURATION,
             MediaStore.Video.Media.SIZE,
             MediaStore.Video.Media.TITLE
     };
+
+    LocalMediaStorage(@NonNull AppStorages mRepositoryContext) {
+        super(mRepositoryContext);
+    }
+
+    private static LocalVideo mapVideo(Cursor cursor) {
+        String data = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
+        return new LocalVideo(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media._ID)), Uri.parse(data))
+                .setDuration(cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media.DURATION)))
+                .setSize(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)))
+                .setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE)));
+    }
 
     @Override
     public Single<List<LocalVideo>> getVideos() {
@@ -61,14 +68,6 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
     public Bitmap getVideoThumbnail(long videoId) {
         return MediaStore.Video.Thumbnails.getThumbnail(getContext().getContentResolver(),
                 videoId, MediaStore.Video.Thumbnails.MINI_KIND, null);
-    }
-
-    private static LocalVideo mapVideo(Cursor cursor) {
-        String data = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
-        return new LocalVideo(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media._ID)), Uri.parse(data))
-                .setDuration(cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media.DURATION)))
-                .setSize(cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)))
-                .setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE)));
     }
 
     @Override
@@ -126,12 +125,9 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
         });
     }
 
-    private boolean hasAlbumById(int albumId, List<LocalImageAlbum> albums)
-    {
-        for(LocalImageAlbum i : albums)
-        {
-            if(i.getId() == albumId)
-            {
+    private boolean hasAlbumById(int albumId, List<LocalImageAlbum> albums) {
+        for (LocalImageAlbum i : albums) {
+            if (i.getId() == albumId) {
                 i.setPhotoCount(i.getPhotoCount() + 1);
                 return true;
             }
@@ -157,7 +153,7 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
                 while (cursor.moveToNext()) {
                     if (e.isDisposed()) break;
 
-                    if(!hasAlbumById(cursor.getInt(1), albums)) {
+                    if (!hasAlbumById(cursor.getInt(1), albums)) {
                         albums.add(new LocalImageAlbum()
                                 .setId(cursor.getInt(1))
                                 .setName(cursor.getString(0))

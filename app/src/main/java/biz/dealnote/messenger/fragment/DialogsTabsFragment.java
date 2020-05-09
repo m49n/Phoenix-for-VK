@@ -70,8 +70,8 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 mCurrentTab = position;
-                    ((InputMethodManager)requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                ((InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
             }
         });
 
@@ -79,13 +79,12 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
     }
 
     @Override
-    public boolean onBackPressed()
-    {
+    public boolean onBackPressed() {
         if (nonNull(adapter)) {
             Fragment fragment = adapter.findFragmentByPosition(mCurrentTab);
 
             boolean ret = !(fragment instanceof BackPressCallback) || ((BackPressCallback) fragment).onBackPressed();
-            if(ret && viewPager.getCurrentItem() > 0) {
+            if (ret && viewPager.getCurrentItem() > 0) {
                 viewPager.setCurrentItem(0, true);
                 return false;
             }
@@ -99,19 +98,18 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
     }
 
     class Adapter extends FragmentStateAdapter {
+        private LongSparseArray<WeakReference<Fragment>> fragments;
+
         public Adapter(@NonNull Fragment fm) {
             super(fm);
             this.fragments = new LongSparseArray<>();
         }
 
-        private LongSparseArray<WeakReference<Fragment>> fragments;
-
         @NonNull
         @Override
         public Fragment createFragment(int position) {
             Fragment ret = null;
-            switch (position)
-            {
+            switch (position) {
                 case 0:
                     ret = DialogsFragment.newInstance(accountId, messagesOwnerId, null, offset);
                     break;
@@ -119,7 +117,7 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
                     ret = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
                     break;
             }
-            if(ret == null)
+            if (ret == null)
                 throw new UnsupportedOperationException();
             fragments.put(position, new WeakReference<>(ret));
             return ret;
@@ -130,7 +128,7 @@ public class DialogsTabsFragment extends BaseFragment implements BackPressCallba
             return 2;
         }
 
-        public Fragment findFragmentByPosition(int position){
+        public Fragment findFragmentByPosition(int position) {
             WeakReference<Fragment> weak = fragments.get(position);
             return Objects.isNull(weak) ? null : weak.get();
         }

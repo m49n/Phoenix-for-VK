@@ -8,5 +8,6 @@ import io.reactivex.Single;
  */
 public interface IOtherVkRetrofitProvider {
     Single<RetrofitWrapper> provideAuthRetrofit();
+
     Single<RetrofitWrapper> provideLongpollRetrofit();
 }

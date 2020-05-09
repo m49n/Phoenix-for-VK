@@ -17,6 +17,7 @@ public class UniversitiesAdapter extends RecyclerView.Adapter<UniversitiesAdapte
 
     private Context mContext;
     private List<University> mData;
+    private Listener mListener;
 
     public UniversitiesAdapter(Context mContext, List<University> mData) {
         this.mContext = mContext;
@@ -34,7 +35,7 @@ public class UniversitiesAdapter extends RecyclerView.Adapter<UniversitiesAdapte
         holder.name.setText(country.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(country);
             }
         });
@@ -45,6 +46,14 @@ public class UniversitiesAdapter extends RecyclerView.Adapter<UniversitiesAdapte
         return mData.size();
     }
 
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(University university);
+    }
+
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -53,15 +62,5 @@ public class UniversitiesAdapter extends RecyclerView.Adapter<UniversitiesAdapte
             super(itemView);
             name = itemView.findViewById(R.id.name);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(University university);
     }
 }

@@ -12,7 +12,19 @@ import java.util.List;
  */
 public final class ParcelableModelWrapper implements Parcelable {
 
+    public static final Creator<ParcelableModelWrapper> CREATOR = new Creator<ParcelableModelWrapper>() {
+        @Override
+        public ParcelableModelWrapper createFromParcel(Parcel in) {
+            return new ParcelableModelWrapper(in);
+        }
+
+        @Override
+        public ParcelableModelWrapper[] newArray(int size) {
+            return new ParcelableModelWrapper[size];
+        }
+    };
     private static final List<Class> TYPES = new ArrayList<>();
+
     static {
         TYPES.add(Photo.class);
         TYPES.add(Post.class);
@@ -29,18 +41,6 @@ public final class ParcelableModelWrapper implements Parcelable {
 
     private final AbsModel model;
 
-    public static ParcelableModelWrapper wrap(AbsModel model){
-        return new ParcelableModelWrapper(model);
-    }
-
-    public static AbsModel readModel(Parcel in){
-        return in.<ParcelableModelWrapper>readParcelable(ParcelableModelWrapper.class.getClassLoader()).get();
-    }
-
-    public static void writeModel(Parcel dest, int flags, AbsModel owner){
-        dest.writeParcelable(new ParcelableModelWrapper(owner), flags);
-    }
-
     private ParcelableModelWrapper(AbsModel model) {
         this.model = model;
     }
@@ -52,17 +52,17 @@ public final class ParcelableModelWrapper implements Parcelable {
         model = in.readParcelable(classLoader);
     }
 
-    public static final Creator<ParcelableModelWrapper> CREATOR = new Creator<ParcelableModelWrapper>() {
-        @Override
-        public ParcelableModelWrapper createFromParcel(Parcel in) {
-            return new ParcelableModelWrapper(in);
-        }
+    public static ParcelableModelWrapper wrap(AbsModel model) {
+        return new ParcelableModelWrapper(model);
+    }
 
-        @Override
-        public ParcelableModelWrapper[] newArray(int size) {
-            return new ParcelableModelWrapper[size];
-        }
-    };
+    public static AbsModel readModel(Parcel in) {
+        return in.<ParcelableModelWrapper>readParcelable(ParcelableModelWrapper.class.getClassLoader()).get();
+    }
+
+    public static void writeModel(Parcel dest, int flags, AbsModel owner) {
+        dest.writeParcelable(new ParcelableModelWrapper(owner), flags);
+    }
 
     @Override
     public int describeContents() {
@@ -72,7 +72,7 @@ public final class ParcelableModelWrapper implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         int index = TYPES.indexOf(model.getClass());
-        if(index == -1){
+        if (index == -1) {
             throw new UnsupportedOperationException("Unsupported class: " + model.getClass());
         }
 

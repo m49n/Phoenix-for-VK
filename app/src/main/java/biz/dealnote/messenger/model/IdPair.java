@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class IdPair implements Parcelable {
 
+    public static final Creator<IdPair> CREATOR = new Creator<IdPair>() {
+        @Override
+        public IdPair createFromParcel(Parcel in) {
+            return new IdPair(in);
+        }
+
+        @Override
+        public IdPair[] newArray(int size) {
+            return new IdPair[size];
+        }
+    };
     public int id;
     public int ownerId;
 
@@ -18,18 +29,6 @@ public class IdPair implements Parcelable {
         ownerId = in.readInt();
     }
 
-    public static final Creator<IdPair> CREATOR = new Creator<IdPair>() {
-        @Override
-        public IdPair createFromParcel(Parcel in) {
-            return new IdPair(in);
-        }
-
-        @Override
-        public IdPair[] newArray(int size) {
-            return new IdPair[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -41,7 +40,7 @@ public class IdPair implements Parcelable {
         dest.writeInt(ownerId);
     }
 
-    public boolean isValid(){
+    public boolean isValid() {
         return id != 0 && ownerId != 0;
     }
 

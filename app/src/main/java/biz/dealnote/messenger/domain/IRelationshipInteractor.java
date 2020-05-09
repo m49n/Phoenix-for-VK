@@ -12,12 +12,22 @@ import io.reactivex.Single;
  * phoenix
  */
 public interface IRelationshipInteractor {
+    int FRIEND_ADD_REQUEST_SENT = 1;
+    int FRIEND_ADD_REQUEST_FROM_USER_APPROVED = 2;
+    int FRIEND_ADD_RESENDING = 4;
+
     Single<List<User>> getCachedFriends(int accountId, int objectId);
+
     Single<List<User>> getCachedFollowers(int accountId, int objectId);
+
     Single<List<User>> getCachedRequests(int accountId);
+
     Single<List<User>> getActualFriendsList(int accountId, int objectId, int count, int offset);
+
     Single<List<User>> getOnlineFriends(int accountId, int objectId, int count, int offset);
+
     Single<List<User>> getFollowers(int accountId, int objectId, int count, int offset);
+
     Single<List<User>> getMutualFriends(int accountId, int objectId, int count, int offset);
 
     Single<List<User>> getRequests(int accountId, Integer offset, Integer count);
@@ -29,10 +39,6 @@ public interface IRelationshipInteractor {
     Single<Integer> addFriend(int accountId, int userId, String optionalText, boolean keepFollow);
 
     Single<Integer> deleteFriends(int accountId, int userId);
-
-    int FRIEND_ADD_REQUEST_SENT = 1;
-    int FRIEND_ADD_REQUEST_FROM_USER_APPROVED = 2;
-    int FRIEND_ADD_RESENDING = 4;
 
     interface DeletedCodes {
         int FRIEND_DELETED = 1;

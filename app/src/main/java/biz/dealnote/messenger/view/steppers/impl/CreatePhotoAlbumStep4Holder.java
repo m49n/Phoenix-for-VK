@@ -16,6 +16,7 @@ public class CreatePhotoAlbumStep4Holder extends AbsStepHolder<CreatePhotoAlbumS
     private View mRootView;
     private TextView mPrivacyCommentAllowed;
     private TextView mPrivacyComemntDisallowed;
+    private ActionListener mActionListener;
 
     public CreatePhotoAlbumStep4Holder(@NonNull ViewGroup parent, @NonNull ActionListener actionListener) {
         super(parent, R.layout.content_create_photo_album_step_4, CreatePhotoAlbumStepsHost.STEP_PRIVACY_VIEW);
@@ -45,6 +46,4 @@ public class CreatePhotoAlbumStep4Holder extends AbsStepHolder<CreatePhotoAlbumS
     public interface ActionListener extends BaseHolderListener {
         void onPrivacyCommentClick();
     }
-
-    private ActionListener mActionListener;
 }

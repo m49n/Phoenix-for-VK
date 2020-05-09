@@ -8,12 +8,7 @@ import biz.dealnote.messenger.model.Peer;
 
 public class AddMessageUpdate extends AbsLongpollEvent {
 
-    public AddMessageUpdate() {
-        super(ACTION_MESSAGE_ADDED);
-    }
-
     public int message_id;
-
     public long timestamp;
     public String subject;
     public String text;
@@ -29,12 +24,15 @@ public class AddMessageUpdate extends AbsLongpollEvent {
     public ArrayList<String> fwds;
     public int peer_id;
     public String random_id;
+    public AddMessageUpdate() {
+        super(ACTION_MESSAGE_ADDED);
+    }
 
     public int getMessageId() {
         return message_id;
     }
 
-    public boolean isOut(){
+    public boolean isOut() {
         return outbox;
     }
 

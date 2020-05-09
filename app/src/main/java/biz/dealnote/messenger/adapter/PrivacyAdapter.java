@@ -33,6 +33,8 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Context mContext;
     private Privacy mPrivacy;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ActionListener mActionListener;
 
     public PrivacyAdapter(Context context, Privacy privacy) {
         this.mContext = context;
@@ -104,7 +106,7 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ClickableSpan span = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-                    if(mActionListener != null){
+                    if (mActionListener != null) {
                         mActionListener.onTypeClick();
                     }
                 }
@@ -117,8 +119,8 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         holder.buttonAdd.setOnClickListener(v -> {
-            if(mActionListener != null){
-                if(position == 0){
+            if (mActionListener != null) {
+                if (position == 0) {
                     mActionListener.onAddToAllowedClick();
                 } else {
                     mActionListener.onAddToDisallowedClick();
@@ -151,8 +153,8 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         holder.title.setText(friendList.getName());
         holder.buttonRemove.setOnClickListener(v -> {
-            if(mActionListener != null){
-                if(allow){
+            if (mActionListener != null) {
+                if (allow) {
                     mActionListener.onAllowedFriendsListRemove(friendList);
                 } else {
                     mActionListener.onDisallowedFriendsListRemove(friendList);
@@ -169,8 +171,8 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .into(holder.avatar);
         holder.title.setText(user.getFullName());
         holder.buttonRemove.setOnClickListener(v -> {
-            if(mActionListener != null){
-                if (allow){
+            if (mActionListener != null) {
+                if (allow) {
                     mActionListener.onAllowedUserRemove(user);
                 } else {
                     mActionListener.onDisallowedUserRemove(user);
@@ -178,8 +180,6 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
-
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -215,6 +215,26 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return TYPE_ENTRY;
     }
 
+    public void setActionListener(ActionListener actionListener) {
+        this.mActionListener = actionListener;
+    }
+
+    public interface ActionListener extends EventListener {
+        void onTypeClick();
+
+        void onAllowedUserRemove(User user);
+
+        void onAllowedFriendsListRemove(FriendList friendList);
+
+        void onDisallowedUserRemove(User user);
+
+        void onDisallowedFriendsListRemove(FriendList friendList);
+
+        void onAddToAllowedClick();
+
+        void onAddToDisallowedClick();
+    }
+
     class TitleViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
@@ -240,21 +260,5 @@ public class PrivacyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.buttonRemove = itemView.findViewById(R.id.button_remove);
             this.title = itemView.findViewById(R.id.name);
         }
-    }
-
-    private ActionListener mActionListener;
-
-    public void setActionListener(ActionListener actionListener){
-        this.mActionListener = actionListener;
-    }
-
-    public interface ActionListener extends EventListener {
-        void onTypeClick();
-        void onAllowedUserRemove(User user);
-        void onAllowedFriendsListRemove(FriendList friendList);
-        void onDisallowedUserRemove(User user);
-        void onDisallowedFriendsListRemove(FriendList friendList);
-        void onAddToAllowedClick();
-        void onAddToDisallowedClick();
     }
 }

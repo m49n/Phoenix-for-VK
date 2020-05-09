@@ -4,10 +4,10 @@
 
     <translate
         android:duration="50"
-        android:interpolator="@android:anim/linear_interpolator"
         android:fromXDelta="0%"
-        android:toXDelta="3%"
+        android:interpolator="@android:anim/linear_interpolator"
         android:repeatCount="4"
-        android:repeatMode="reverse" />
+        android:repeatMode="reverse"
+        android:toXDelta="3%" />
 
 </set>

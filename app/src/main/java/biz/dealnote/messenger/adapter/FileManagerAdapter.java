@@ -28,6 +28,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
 
     private List<FileItem> data;
     private Context mContext;
+    private ClickListener clickListener;
 
     public FileManagerAdapter(Context context, List<FileItem> data) {
         this.data = data;
@@ -43,7 +44,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
     public void onBindViewHolder(Holder holder, int position) {
         final FileItem item = data.get(position);
         holder.icon.setBackgroundResource(item.icon);
-        if(!item.directory) {
+        if (!item.directory) {
             PicassoInstance.with()
                     .load("file://" + item.path)
                     .tag(Constants.PICASSO_TAG)
@@ -70,7 +71,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
         holder.fileDetails.setVisibility(TextUtils.isEmpty(item.details) ? View.GONE : View.VISIBLE);
 
         holder.itemView.setOnClickListener(v -> {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onClick(holder.getBindingAdapterPosition(), item);
             }
         });
@@ -79,6 +80,14 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onClick(int position, FileItem item);
     }
 
     public class Holder extends RecyclerView.ViewHolder {
@@ -93,15 +102,5 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
             fileDetails = itemView.findViewById(R.id.item_file_details);
             icon = itemView.findViewById(R.id.item_file_icon);
         }
-    }
-
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    private ClickListener clickListener;
-
-    public interface ClickListener {
-        void onClick(int position, FileItem item);
     }
 }

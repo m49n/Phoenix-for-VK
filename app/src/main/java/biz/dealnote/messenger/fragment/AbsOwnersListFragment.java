@@ -45,8 +45,8 @@ public abstract class AbsOwnersListFragment<P extends SimpleOwnersPresenter<V>, 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(mHasToolbar ? R.layout.fragment_abs_friends_with_toolbar : R.layout.fragment_abs_friends, container, false);
 
-        if(mHasToolbar){
-            ((AppCompatActivity)requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        if (mHasToolbar) {
+            ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
         }
 
         mRecyclerView = root.findViewById(R.id.list);
@@ -61,7 +61,7 @@ public abstract class AbsOwnersListFragment<P extends SimpleOwnersPresenter<V>, 
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onScrollToLastElement() {
-               getPresenter().fireScrollToEnd();
+                getPresenter().fireScrollToEnd();
             }
         });
 
@@ -74,28 +74,28 @@ public abstract class AbsOwnersListFragment<P extends SimpleOwnersPresenter<V>, 
 
     @Override
     public void displayOwnerList(List<Owner> owners) {
-        if(Objects.nonNull(mOwnersAdapter)){
+        if (Objects.nonNull(mOwnersAdapter)) {
             mOwnersAdapter.setItems(owners);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mOwnersAdapter)){
+        if (Objects.nonNull(mOwnersAdapter)) {
             mOwnersAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(Objects.nonNull(mOwnersAdapter)){
+        if (Objects.nonNull(mOwnersAdapter)) {
             mOwnersAdapter.notifyItemRangeInserted(position, count);
         }
     }
 
     @Override
     public void displayRefreshing(boolean refreshing) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }

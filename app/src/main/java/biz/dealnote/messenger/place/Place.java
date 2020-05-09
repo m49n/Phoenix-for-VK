@@ -84,21 +84,6 @@ public class Place implements Parcelable {
     public static final int SEARCH_BY_AUDIO = 72;
     public static final int MENTIONS = 73;
     public static final int DIALOGS_TUBS_TOUCH = 74;
-
-    public int type;
-    private Bundle args;
-    public Fragment target;
-    public int requestCode;
-
-    public Place(int type) {
-        this.type = type;
-    }
-
-    protected Place(Parcel in) {
-        type = in.readInt();
-        args = in.readBundle(getClass().getClassLoader());
-    }
-
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
         public Place createFromParcel(Parcel in) {
@@ -110,14 +95,27 @@ public class Place implements Parcelable {
             return new Place[size];
         }
     };
+    public int type;
+    public Fragment target;
+    public int requestCode;
+    private Bundle args;
 
-    public void tryOpenWith(@NonNull Context context){
-        if(context instanceof PlaceProvider){
-            ((PlaceProvider)context).openPlace(this);
+    public Place(int type) {
+        this.type = type;
+    }
+
+    protected Place(Parcel in) {
+        type = in.readInt();
+        args = in.readBundle(getClass().getClassLoader());
+    }
+
+    public void tryOpenWith(@NonNull Context context) {
+        if (context instanceof PlaceProvider) {
+            ((PlaceProvider) context).openPlace(this);
         }
     }
 
-    public Place targetTo(Fragment fragment, int requestCode){
+    public Place targetTo(Fragment fragment, int requestCode) {
         this.target = fragment;
         this.requestCode = requestCode;
         return this;
@@ -143,35 +141,35 @@ public class Place implements Parcelable {
         return this;
     }
 
-    public Place withStringExtra(String name, String value){
+    public Place withStringExtra(String name, String value) {
         prepareArguments().putString(name, value);
         return this;
     }
 
-    public Place withParcelableExtra(String name, Parcelable parcelableExtra){
+    public Place withParcelableExtra(String name, Parcelable parcelableExtra) {
         prepareArguments().putParcelable(name, parcelableExtra);
         return this;
     }
 
-    public Place withIntExtra(String name, int value){
+    public Place withIntExtra(String name, int value) {
         prepareArguments().putInt(name, value);
         return this;
     }
 
-    public Bundle prepareArguments(){
-        if(args == null){
+    public Bundle prepareArguments() {
+        if (args == null) {
             args = new Bundle();
         }
 
         return args;
     }
 
-    public boolean hasTargeting(){
+    public boolean hasTargeting() {
         return target != null;
     }
 
-    public void applyTargetingTo(@NonNull Fragment fragment){
-        if(hasTargeting()){
+    public void applyTargetingTo(@NonNull Fragment fragment) {
+        if (hasTargeting()) {
             fragment.setTargetFragment(target, requestCode);
         }
     }

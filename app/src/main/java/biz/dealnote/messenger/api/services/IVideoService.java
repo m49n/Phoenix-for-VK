@@ -66,7 +66,7 @@ public interface IVideoService {
     @FormUrlEncoded
     @POST("video.restoreComment")
     Single<BaseResponse<Integer>> restoreComment(@Field("owner_id") Integer ownerId,
-                                                @Field("comment_id") int commentId);
+                                                 @Field("comment_id") int commentId);
 
     @FormUrlEncoded
     @POST("video.deleteComment")

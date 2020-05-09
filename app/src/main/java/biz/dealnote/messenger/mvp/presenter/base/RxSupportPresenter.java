@@ -31,14 +31,13 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresenter<V> {
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private static InstancesCounter instancesCounter = new InstancesCounter();
-
     private static final String SAVE_INSTANCE_ID = "save_instance_id";
     private static final String SAVE_TEMP_DATA_USAGE = "save_temp_data_usage";
-
+    private static InstancesCounter instancesCounter = new InstancesCounter();
     private final int instanceId;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private boolean tempDataUsage;
+    private int viewCreationCounter;
 
     public RxSupportPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -52,13 +51,15 @@ public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresente
         }
     }
 
-    private boolean tempDataUsage;
+    protected static void safeShowError(IErrorView view, String text) {
+        if (nonNull(view)) {
+            view.showError(text);
+        }
+    }
 
     protected void fireTempDataUsage() {
         this.tempDataUsage = true;
     }
-
-    private int viewCreationCounter;
 
     @Override
     public void onGuiCreated(@NonNull V view) {
@@ -107,7 +108,7 @@ public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresente
 
         throwable = Utils.getCauseIfRuntime(throwable);
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             throwable.printStackTrace();
         }
 
@@ -124,16 +125,9 @@ public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresente
         safeShowToast(view, text, true, params);
     }
 
-
     protected void safeShowToast(IToastView view, @StringRes int text, boolean isLong, Object... params) {
         if (nonNull(view)) {
             view.showToast(text, isLong, params);
-        }
-    }
-
-    protected static void safeShowError(IErrorView view, String text) {
-        if (nonNull(view)) {
-            view.showError(text);
         }
     }
 

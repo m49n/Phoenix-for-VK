@@ -64,6 +64,15 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
         implements IDocListView, DocsAdapter.ActionListener, DocsUploadAdapter.ActionListener, DocsAsImagesAdapter.ActionListener {
 
     private static final int PERM_REQUEST_READ_STORAGE = 17;
+    private static final int REQUEST_CODE_FILE = 115;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerBindableAdapter mDocsAdapter;
+    private DocsUploadAdapter mUploadAdapter;
+    private HorizontalOptionsAdapter<DocFilter> mFiltersAdapter;
+    private View mHeaderView;
+    private RecyclerView mRecyclerView;
+    private View mUploadRoot;
+    private boolean mImagesOnly;
 
     public static Bundle buildArgs(int accountId, int ownerId, String action) {
         Bundle args = new Bundle();
@@ -82,19 +91,6 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
     public static DocsFragment newInstance(int accountId, int ownerId, String action) {
         return newInstance(buildArgs(accountId, ownerId, action));
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerBindableAdapter mDocsAdapter;
-
-    private DocsUploadAdapter mUploadAdapter;
-
-    private HorizontalOptionsAdapter<DocFilter> mFiltersAdapter;
-
-    private View mHeaderView;
-
-    private RecyclerView mRecyclerView;
-
-    private View mUploadRoot;
 
     @Nullable
     @Override
@@ -150,9 +146,6 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
         return root;
     }
 
-
-    private static final int REQUEST_CODE_FILE = 115;
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,9 +155,9 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
 
             ArrayList<LocalPhoto> photos = data.getParcelableArrayListExtra(Extra.PHOTOS);
 
-            if(nonEmpty(file)){
+            if (nonEmpty(file)) {
                 getPresenter().fireFileForUploadSelected(file);
-            } else if(nonEmpty(photos)){
+            } else if (nonEmpty(photos)) {
                 getPresenter().fireLocalPhotosForUploadSelected(photos);
             }
         }
@@ -216,7 +209,7 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
         mRecyclerView.setAdapter(mDocsAdapter);
     }
 
-    private RecyclerBindableAdapter createAdapter(boolean asImages, List<Document> documents){
+    private RecyclerBindableAdapter createAdapter(boolean asImages, List<Document> documents) {
         if (asImages) {
             DocsAsImagesAdapter docsAsImagesAdapter = new DocsAsImagesAdapter(documents);
             docsAsImagesAdapter.setActionListner(this);
@@ -352,8 +345,6 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
             mFiltersAdapter.notifyDataSetChanged();
         }
     }
-
-    private boolean mImagesOnly;
 
     @Override
     public void setAdapterType(boolean imagesOnly) {

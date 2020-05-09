@@ -19,13 +19,13 @@ public class TopicsCriteria extends Criteria {
         this.ownerId = ownerId;
     }
 
+    public DatabaseIdRange getRange() {
+        return range;
+    }
+
     public TopicsCriteria setRange(DatabaseIdRange range) {
         this.range = range;
         return this;
-    }
-
-    public DatabaseIdRange getRange() {
-        return range;
     }
 
     public int getAccountId() {

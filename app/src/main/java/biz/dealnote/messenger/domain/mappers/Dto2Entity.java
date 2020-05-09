@@ -276,23 +276,6 @@ public class Dto2Entity {
         throw new UnsupportedOperationException("Unsupported feedback type: " + feedback.type);
     }
 
-    private static final class CEntity {
-
-        final int id;
-        final int ownerId;
-        final int type;
-        final String accessKey;
-        final Entity entity;
-
-        private CEntity(int id, int ownerId, int type, String accessKey, Entity entity) {
-            this.id = id;
-            this.ownerId = ownerId;
-            this.type = type;
-            this.accessKey = accessKey;
-            this.entity = entity;
-        }
-    }
-
     private static Entity createFromLikeable(Likeable likeable) {
         if (likeable instanceof VKApiPost) {
             return mapPost((VKApiPost) likeable);
@@ -1123,5 +1106,22 @@ public class Dto2Entity {
         }
 
         return sizes;
+    }
+
+    private static final class CEntity {
+
+        final int id;
+        final int ownerId;
+        final int type;
+        final String accessKey;
+        final Entity entity;
+
+        private CEntity(int id, int ownerId, int type, String accessKey, Entity entity) {
+            this.id = id;
+            this.ownerId = ownerId;
+            this.type = type;
+            this.accessKey = accessKey;
+            this.entity = entity;
+        }
     }
 }

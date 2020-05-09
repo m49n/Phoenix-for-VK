@@ -28,11 +28,17 @@ public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvide
     private int mMaxSelectionCount;
     private Sources mSources;
 
+    public static Intent createIntent(Context context, int maxSelectionCount, @NonNull Sources sources) {
+        return new Intent(context, DualTabPhotoActivity.class)
+                .putExtra(Extra.MAX_COUNT, maxSelectionCount)
+                .putExtra(Extra.SOURCES, sources);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(isNull(savedInstanceState)){
+        if (isNull(savedInstanceState)) {
             this.mMaxSelectionCount = getIntent().getIntExtra(Extra.MAX_COUNT, 10);
             this.mSources = getIntent().getParcelableExtra(Extra.SOURCES);
 
@@ -43,12 +49,6 @@ public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvide
         }
     }
 
-    public static Intent createIntent(Context context, int maxSelectionCount, @NonNull Sources sources){
-        return new Intent(context, DualTabPhotoActivity.class)
-                .putExtra(Extra.MAX_COUNT, maxSelectionCount)
-                .putExtra(Extra.SOURCES, sources);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -56,7 +56,7 @@ public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvide
         outState.putParcelable("mSources", mSources);
     }
 
-    private void attachStartFragment(){
+    private void attachStartFragment() {
         DualTabPhotosFragment fragment = DualTabPhotosFragment.newInstance(mSources);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -67,7 +67,7 @@ public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvide
 
     @Override
     public void openPlace(Place place) {
-        switch (place.type){
+        switch (place.type) {
             case Place.VK_PHOTO_ALBUM:
                 int albumId = place.getArgs().getInt(Extra.ALBUM_ID);
                 int accountId = place.getArgs().getInt(Extra.ACCOUNT_ID);

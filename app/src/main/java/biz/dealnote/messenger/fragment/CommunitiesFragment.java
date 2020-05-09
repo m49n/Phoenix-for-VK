@@ -54,6 +54,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, ICommunitiesView>
         implements ICommunitiesView, MySearchView.OnQueryTextListener, CommunitiesAdapter.ActionListener, BackPressCallback, MySearchView.OnBackButtonClickListener {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CommunitiesAdapter mAdapter;
+    private MySearchView mSearchView;
+    private FragmentManager.OnBackStackChangedListener backStackChangedListener = this::resolveLeftButton;
+
     public static CommunitiesFragment newInstance(int accountId, int userId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -62,12 +67,6 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private CommunitiesAdapter mAdapter;
-
-    private MySearchView mSearchView;
 
     @Nullable
     @Override
@@ -116,8 +115,6 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         } catch (Exception ignored) {
         }
     }
-
-    private FragmentManager.OnBackStackChangedListener backStackChangedListener = this::resolveLeftButton;
 
     @Override
     public void onAttach(@NotNull Context context) {

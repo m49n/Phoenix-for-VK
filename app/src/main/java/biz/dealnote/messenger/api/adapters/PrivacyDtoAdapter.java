@@ -28,34 +28,34 @@ public class PrivacyDtoAdapter extends AbsAdapter implements JsonDeserializer<Vk
 
         JsonObject owners = root.getAsJsonObject("owners");
 
-        if(owners != null){
+        if (owners != null) {
             JsonArray allowed = owners.getAsJsonArray("allowed");
-            if(allowed != null){
-                for(int i = 0; i < allowed.size(); i++){
+            if (allowed != null) {
+                for (int i = 0; i < allowed.size(); i++) {
                     privacy.includeOwner(allowed.get(i).getAsInt());
                 }
             }
 
             JsonArray excluded = owners.getAsJsonArray("excluded");
-            if(excluded != null){
-                for(int i = 0; i < excluded.size(); i++){
+            if (excluded != null) {
+                for (int i = 0; i < excluded.size(); i++) {
                     privacy.excludeOwner(excluded.get(i).getAsInt());
                 }
             }
         }
 
         JsonObject lists = root.getAsJsonObject("lists");
-        if(lists != null){
+        if (lists != null) {
             JsonArray allowed = lists.getAsJsonArray("allowed");
-            if(allowed != null){
-                for(int i = 0; i < allowed.size(); i++){
+            if (allowed != null) {
+                for (int i = 0; i < allowed.size(); i++) {
                     privacy.includeFriendsList(allowed.get(i).getAsInt());
                 }
             }
 
             JsonArray excluded = lists.getAsJsonArray("excluded");
-            if(excluded != null){
-                for(int i = 0; i < excluded.size(); i++){
+            if (excluded != null) {
+                for (int i = 0; i < excluded.size(); i++) {
                     privacy.excludeFriendsList(excluded.get(i).getAsInt());
                 }
             }

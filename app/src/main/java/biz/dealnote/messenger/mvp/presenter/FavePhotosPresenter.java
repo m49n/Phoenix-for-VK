@@ -27,12 +27,13 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
 
     private static final String TAG = FavePhotosPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 50;
-
+    private final IFaveInteractor faveInteractor;
     private ArrayList<Photo> mPhotos;
     private boolean mEndOfContent;
-
-    private final IFaveInteractor faveInteractor;
-
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private boolean requestNow;
     public FavePhotosPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
 
@@ -42,8 +43,7 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
         loadAllCachedData();
     }
 
-    public void LoadTool()
-    {
+    public void LoadTool() {
         requestAtLast();
     }
 
@@ -53,11 +53,6 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
             getView().showRefreshing(requestNow);
         }
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-
-    private boolean cacheLoadingNow;
 
     private void loadAllCachedData() {
         final int accountId = super.getAccountId();
@@ -88,8 +83,6 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
         super.onDestroyed();
     }
 
-    private boolean requestNow;
-
     private void setRequestNow(boolean requestNow) {
         this.requestNow = requestNow;
         resolveRefreshingView();
@@ -105,7 +98,7 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
                 .subscribe(photos -> onActualDataReceived(offset, photos), this::onActualDataGetError));
     }
 
-    private void onActualDataGetError(Throwable t){
+    private void onActualDataGetError(Throwable t) {
         setRequestNow(false);
         showError(getView(), getCauseIfRuntime(t));
     }

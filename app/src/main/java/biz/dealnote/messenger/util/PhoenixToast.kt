@@ -19,7 +19,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         return this
     }
 
-    fun setBitmap(Timage: Bitmap?): PhoenixToast  {
+    fun setBitmap(Timage: Bitmap?): PhoenixToast {
         image = Timage
         return this
     }
@@ -28,7 +28,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         if (M_context == null) return
         val t = AnimatedToast(M_context)
         t.duration = duration
-        if(image == null)
+        if (image == null)
             t.set_image(R.mipmap.ic_launcher_round)
         else
             t.set_image(image)
@@ -46,7 +46,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         if (M_context == null) return
         val t = AnimatedToast(M_context)
         t.duration = duration
-        if(image == null)
+        if (image == null)
             t.set_image(R.mipmap.ic_launcher_round)
         else
             t.set_image(image)
@@ -65,7 +65,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         val view = View.inflate(M_context, R.layout.phoenix_toast_info, null)
         val subtitle = view.findViewById<TextView>(R.id.subtitle)
         val imagev = view.findViewById<ImageView>(R.id.icon_toast)
-        if(image != null)
+        if (image != null)
             imagev.setImageBitmap(image)
         subtitle.text = message
         val toast = Toast(M_context)
@@ -85,7 +85,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         val view = View.inflate(M_context, R.layout.toast_error, null)
         val subtitle = view.findViewById<TextView>(R.id.text)
         val imagev = view.findViewById<ImageView>(R.id.icon_toast_error)
-        if(image != null)
+        if (image != null)
             imagev.setImageBitmap(image)
         subtitle.text = message
         val toast = Toast(M_context)
@@ -98,22 +98,6 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
     fun showToastError(@StringRes message: Int, vararg params: Any?) {
         if (M_context == null) return
         showToastError(M_context.resources.getString(message, *params))
-    }
-
-    fun showToastSecret(Id : Boolean) {
-        if (M_context == null) return
-        val t = AnimatedToast(M_context)
-        t.duration = duration
-        if(!Id) {
-            t.set_image(R.drawable.secret)
-            t.setText("Австрийский художник одобряет)")
-        }
-        else {
-            t.set_image(R.drawable.hleb)
-            t.setText("ПОКУШАТЬ ТО ХЛЕБУШКА")
-        }
-        t.setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, 0)
-        t.show()
     }
 
     companion object {

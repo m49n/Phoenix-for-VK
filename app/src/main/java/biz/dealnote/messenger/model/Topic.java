@@ -9,37 +9,53 @@ import android.os.Parcelable;
  */
 public class Topic extends AbsModel implements Parcelable {
 
+    public static final Creator<Topic> CREATOR = new Creator<Topic>() {
+        @Override
+        public Topic createFromParcel(Parcel in) {
+            return new Topic(in);
+        }
+
+        @Override
+        public Topic[] newArray(int size) {
+            return new Topic[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private String title;
-
     private long creationTime;
-
     private int createdByOwnerId;
-
     private long lastUpdateTime;
-
     private int updatedByOwnerId;
-
     private boolean closed;
-
     private boolean fixed;
-
     private int commentsCount;
-
     private String firstCommentBody;
-
     private String lastCommentBody;
-
     private Owner creator;
-
     private Owner updater;
 
     public Topic(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
+    }
+
+    protected Topic(Parcel in) {
+        super(in);
+        id = in.readInt();
+        ownerId = in.readInt();
+        title = in.readString();
+        creationTime = in.readLong();
+        createdByOwnerId = in.readInt();
+        lastUpdateTime = in.readLong();
+        updatedByOwnerId = in.readInt();
+        closed = in.readByte() != 0;
+        fixed = in.readByte() != 0;
+        commentsCount = in.readInt();
+        firstCommentBody = in.readString();
+        lastCommentBody = in.readString();
+        creator = ((ParcelableOwnerWrapper) in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader())).get();
+        updater = ((ParcelableOwnerWrapper) in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader())).get();
     }
 
     public int getId() {
@@ -158,24 +174,6 @@ public class Topic extends AbsModel implements Parcelable {
         return this;
     }
 
-    protected Topic(Parcel in) {
-        super(in);
-        id = in.readInt();
-        ownerId = in.readInt();
-        title = in.readString();
-        creationTime = in.readLong();
-        createdByOwnerId = in.readInt();
-        lastUpdateTime = in.readLong();
-        updatedByOwnerId = in.readInt();
-        closed = in.readByte() != 0;
-        fixed = in.readByte() != 0;
-        commentsCount = in.readInt();
-        firstCommentBody = in.readString();
-        lastCommentBody = in.readString();
-        creator = ((ParcelableOwnerWrapper) in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader())).get();
-        updater = ((ParcelableOwnerWrapper) in.readParcelable(ParcelableOwnerWrapper.class.getClassLoader())).get();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -194,18 +192,6 @@ public class Topic extends AbsModel implements Parcelable {
         dest.writeParcelable(new ParcelableOwnerWrapper(creator), flags);
         dest.writeParcelable(new ParcelableOwnerWrapper(updater), flags);
     }
-
-    public static final Creator<Topic> CREATOR = new Creator<Topic>() {
-        @Override
-        public Topic createFromParcel(Parcel in) {
-            return new Topic(in);
-        }
-
-        @Override
-        public Topic[] newArray(int size) {
-            return new Topic[size];
-        }
-    };
 
     @Override
     public int describeContents() {

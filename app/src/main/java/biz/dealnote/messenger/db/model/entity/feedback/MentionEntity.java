@@ -14,12 +14,12 @@ public class MentionEntity extends FeedbackEntity {
         super(type);
     }
 
+    public Entity getWhere() {
+        return where.get();
+    }
+
     public MentionEntity setWhere(Entity where) {
         this.where = new EntityWrapper(where);
         return this;
-    }
-
-    public Entity getWhere() {
-        return where.get();
     }
 }

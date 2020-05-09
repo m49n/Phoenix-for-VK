@@ -31,10 +31,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapter.MenuItemHolder> {
 
-    private List<AdvancedItem> items;
-
     @LayoutRes
     private final int itemRes;
+    private List<AdvancedItem> items;
+    private ActionListener actionListener;
 
     public RecyclerMenuAdapter(@LayoutRes int itemLayout, @NonNull List<AdvancedItem> items) {
         this.itemRes = itemLayout;
@@ -50,8 +50,6 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
         this.items = items;
         notifyDataSetChanged();
     }
-
-    private ActionListener actionListener;
 
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
@@ -71,12 +69,6 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    public interface ActionListener {
-        void onClick(AdvancedItem item);
-
-        void onLongClick(AdvancedItem item);
     }
 
     private AdvancedItem getItem(int position) {
@@ -176,6 +168,12 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
             PicassoInstance.with().cancelRequest(imageView);
             imageView.setVisibility(View.GONE);
         }
+    }
+
+    public interface ActionListener {
+        void onClick(AdvancedItem item);
+
+        void onLongClick(AdvancedItem item);
     }
 
     static class MenuItemHolder extends RecyclerView.ViewHolder {

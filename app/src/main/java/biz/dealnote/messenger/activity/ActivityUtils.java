@@ -130,30 +130,30 @@ public class ActivityUtils {
         return ((AppCompatActivity) fragment.requireActivity()).getSupportActionBar();
     }
 
-    public static void setToolbarTitle(Fragment fragment, @StringRes int res){
+    public static void setToolbarTitle(Fragment fragment, @StringRes int res) {
         ActionBar actionBar = supportToolbarFor(fragment);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(res);
         }
     }
 
-    public static void setToolbarTitle(Fragment fragment, String title){
+    public static void setToolbarTitle(Fragment fragment, String title) {
         ActionBar actionBar = supportToolbarFor(fragment);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(title);
         }
     }
 
-    public static void setToolbarSubtitle(Fragment fragment, @StringRes int res){
+    public static void setToolbarSubtitle(Fragment fragment, @StringRes int res) {
         ActionBar actionBar = supportToolbarFor(fragment);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setSubtitle(res);
         }
     }
 
-    public static void setToolbarSubtitle(Fragment fragment, String title){
+    public static void setToolbarSubtitle(Fragment fragment, String title) {
         ActionBar actionBar = supportToolbarFor(fragment);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setSubtitle(title);
         }
     }

@@ -29,8 +29,10 @@ import io.reactivex.disposables.Disposable;
 public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
         implements AttachmentsViewBinder.OnAttachmentsActionCallback {
 
+    private static final String ARGUMENT_INVALID_ACCOUNT_CONTEXT = "invalid_account_context";
     private int accountId;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private boolean supportAccountHotSwap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
         super.onDestroy();
     }
 
-    protected void appendDisposable(Disposable disposable){
+    protected void appendDisposable(Disposable disposable) {
         this.mCompositeDisposable.add(disposable);
     }
 
@@ -109,7 +111,7 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onAudioPlay(int position, @NonNull ArrayList<Audio> audios) {
         MusicPlaybackService.startForPlayList(requireActivity(), audios, position, false);
-        if(!Settings.get().other().isShow_mini_player())
+        if (!Settings.get().other().isShow_mini_player())
             PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 
@@ -159,8 +161,6 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
         }
     }
 
-    private static final String ARGUMENT_INVALID_ACCOUNT_CONTEXT = "invalid_account_context";
-
     @Override
     public void onResume() {
         super.onResume();
@@ -168,8 +168,6 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
             getParentFragmentManager().popBackStack();
         }
     }
-
-    private boolean supportAccountHotSwap;
 
     @SuppressWarnings("unused")
     public boolean isSupportAccountHotSwap() {
@@ -180,11 +178,11 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
         this.supportAccountHotSwap = supportAccountHotSwap;
     }
 
-    protected void setInvalidAccountContext(boolean invalidAccountContext) {
-        getArguments().putBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT, invalidAccountContext);
-    }
-
     public boolean isInvalidAccountContext() {
         return getArguments().getBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT);
+    }
+
+    protected void setInvalidAccountContext(boolean invalidAccountContext) {
+        getArguments().putBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT, invalidAccountContext);
     }
 }

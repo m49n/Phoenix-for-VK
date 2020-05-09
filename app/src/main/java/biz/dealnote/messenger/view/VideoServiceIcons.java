@@ -13,7 +13,7 @@ public class VideoServiceIcons {
 
     @DrawableRes
     public static Integer getIconByType(String platfrom) {
-        if(platfrom == null){
+        if (platfrom == null) {
             return null;
         }
 

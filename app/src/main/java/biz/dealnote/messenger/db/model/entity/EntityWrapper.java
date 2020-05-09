@@ -12,11 +12,11 @@ public class EntityWrapper {
         this.entity = entity;
     }
 
-    public Entity get() {
-        return entity;
+    public static EntityWrapper empty() {
+        return new EntityWrapper(null);
     }
 
-    public static EntityWrapper empty(){
-        return new EntityWrapper(null);
+    public Entity get() {
+        return entity;
     }
 }

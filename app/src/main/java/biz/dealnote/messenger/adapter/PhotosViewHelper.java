@@ -32,46 +32,17 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class PhotosViewHelper {
 
+    @PhotoSize
+    private final int mPhotoPreviewSize;
     private Context context;
     private AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback;
     private int mIconColorActive;
-
-    @PhotoSize
-    private final int mPhotoPreviewSize;
 
     PhotosViewHelper(Context context, @NonNull AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback) {
         this.context = context;
         this.attachmentsActionCallback = attachmentsActionCallback;
         this.mIconColorActive = CurrentTheme.getColorPrimary(context);
         this.mPhotoPreviewSize = Settings.get().main().getPrefPreviewImageSize();
-    }
-
-    private static class Holder {
-
-        final ImageView vgPhoto;
-        final ImageView ivPlay;
-        final TextView tvTitle;
-
-        Holder(View itemView) {
-            vgPhoto = itemView.findViewById(R.id.item_video_image);
-            ivPlay = itemView.findViewById(R.id.item_video_play);
-            tvTitle = itemView.findViewById(R.id.item_video_title);
-        }
-    }
-
-    private static class VideoHolder {
-
-        final AspectRatioImageView vgPhoto;
-        final ImageView ivPlay;
-        final TextView tvTitle;
-        final TextView tvDelay;
-
-        VideoHolder(View itemView) {
-            vgPhoto = itemView.findViewById(R.id.item_video_album_image);
-            ivPlay = itemView.findViewById(R.id.item_video_play);
-            tvTitle = itemView.findViewById(R.id.item_video_album_title);
-            tvDelay = itemView.findViewById(R.id.item_video_album_count);
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -218,5 +189,33 @@ public class PhotosViewHelper {
         }
 
         attachmentsActionCallback.onPhotosOpen(models, index);
+    }
+
+    private static class Holder {
+
+        final ImageView vgPhoto;
+        final ImageView ivPlay;
+        final TextView tvTitle;
+
+        Holder(View itemView) {
+            vgPhoto = itemView.findViewById(R.id.item_video_image);
+            ivPlay = itemView.findViewById(R.id.item_video_play);
+            tvTitle = itemView.findViewById(R.id.item_video_title);
+        }
+    }
+
+    private static class VideoHolder {
+
+        final AspectRatioImageView vgPhoto;
+        final ImageView ivPlay;
+        final TextView tvTitle;
+        final TextView tvDelay;
+
+        VideoHolder(View itemView) {
+            vgPhoto = itemView.findViewById(R.id.item_video_album_image);
+            ivPlay = itemView.findViewById(R.id.item_video_play);
+            tvTitle = itemView.findViewById(R.id.item_video_album_title);
+            tvDelay = itemView.findViewById(R.id.item_video_album_count);
+        }
     }
 }

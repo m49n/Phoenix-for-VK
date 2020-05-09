@@ -25,12 +25,9 @@ public class FriendsTabsPresenter extends AccountDependencyPresenter<IFriendsTab
     private static final String SAVE_COUNTERS = "save_counters";
 
     private final int userId;
-
-    private FriendsCounters counters;
-
     private final IRelationshipInteractor relationshipInteractor;
     private final IOwnersRepository ownersRepository;
-
+    private FriendsCounters counters;
     private Owner owner;
 
     public FriendsTabsPresenter(int accountId, int userId, @Nullable FriendsCounters counters, @Nullable Bundle savedInstanceState) {

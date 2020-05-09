@@ -15,14 +15,14 @@ import biz.dealnote.messenger.util.Utils;
  */
 public class EnterPinActivity extends NoMainActivity {
 
-    public static Class getClass(Context context){
+    public static Class getClass(Context context) {
         return Utils.is600dp(context) ? EnterPinActivity.class : EnterPinActivityPortraitOnly.class;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, EnterPinFragment.newInstance())

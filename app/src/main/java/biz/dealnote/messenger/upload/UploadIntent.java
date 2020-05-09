@@ -16,7 +16,9 @@ public class UploadIntent {
     /* Размер изображения (только для изображений)*/
     private int size;
 
-    /** Дополнительные данные */
+    /**
+     * Дополнительные данные
+     */
     private Long fileId;
 
     private boolean autoCommit;
@@ -26,13 +28,13 @@ public class UploadIntent {
         this.destination = destination;
     }
 
+    public boolean isAutoCommit() {
+        return autoCommit;
+    }
+
     public UploadIntent setAutoCommit(boolean autoCommit) {
         this.autoCommit = autoCommit;
         return this;
-    }
-
-    public boolean isAutoCommit() {
-        return autoCommit;
     }
 
     public int getAccountId() {

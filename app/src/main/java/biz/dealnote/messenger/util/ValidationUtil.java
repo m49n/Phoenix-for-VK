@@ -11,7 +11,7 @@ public class ValidationUtil {
     }
 
     public static boolean isValidIpAddress(String ipv4) {
-        if(trimmedIsEmpty(ipv4)){
+        if (trimmedIsEmpty(ipv4)) {
             return false;
         }
 
@@ -19,7 +19,7 @@ public class ValidationUtil {
 
         String[] blocks = ipv4.split("\\.");
 
-        if(blocks.length != 4){
+        if (blocks.length != 4) {
             return false;
         }
 
@@ -30,7 +30,7 @@ public class ValidationUtil {
                 if (num > 255 || num < 0) {
                     return false;
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 return false;
             }
         }

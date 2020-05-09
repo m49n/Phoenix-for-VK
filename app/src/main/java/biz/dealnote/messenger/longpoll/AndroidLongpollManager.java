@@ -28,6 +28,8 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Callback, GroupLongpoll.Callback {
 
+    private final static String TAG = AndroidLongpollManager.class.getSimpleName();
+    private static final Scheduler MONO_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(1));
     private final Context app;
     private final SparseArray<LongpollEntry> map;
     private final INetworker networker;
@@ -35,10 +37,7 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
     private final PublishProcessor<VkApiLongpollUpdates> actionsPublisher;
     private final IRealtimeMessagesProcessor messagesProcessor;
     private final Object lock = new Object();
-
-    private final static String TAG = AndroidLongpollManager.class.getSimpleName();
-
-    private static final Scheduler MONO_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(1));
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     AndroidLongpollManager(Context context, INetworker networker, IRealtimeMessagesProcessor messagesProcessor) {
         this.app = context.getApplicationContext();
@@ -102,8 +101,6 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
         keepAlivePublisher.onNext(entry.getAccountId());
     }
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     @Override
     public void onUpdates(int accountId, @NonNull VkApiLongpollUpdates updates) {
         Logger.d(TAG, "updates, accountId: " + accountId);
@@ -132,9 +129,9 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
 
         final ILongpoll longpoll;
         final SocketHandler handler;
-        boolean released;
         final WeakReference<AndroidLongpollManager> managerReference;
         final int accountId;
+        boolean released;
 
         LongpollEntry(ILongpoll longpoll, AndroidLongpollManager manager) {
             this.longpoll = longpoll;

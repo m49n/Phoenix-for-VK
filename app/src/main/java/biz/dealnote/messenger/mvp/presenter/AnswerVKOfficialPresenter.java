@@ -33,6 +33,8 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
     private boolean actualDataReceived;
 
     private boolean endOfContent;
+    private boolean actualDataLoading;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     public AnswerVKOfficialPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -50,9 +52,6 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
         view.displayData(this.pages);
     }
 
-    private boolean actualDataLoading;
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
-
     private void loadActualData(int offset) {
         this.actualDataLoading = true;
 
@@ -66,7 +65,7 @@ public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswe
 
     private void safelyMarkAsViewed() {
         final int accountId = super.getAccountId();
-        if(Settings.get().accounts().getType(accountId).equals("hacked"))
+        if (Settings.get().accounts().getType(accountId).equals("hacked"))
             return;
 
         appendDisposable(fInteractor.maskAaViewed(accountId)

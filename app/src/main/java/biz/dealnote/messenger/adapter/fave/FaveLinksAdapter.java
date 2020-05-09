@@ -22,6 +22,8 @@ public class FaveLinksAdapter extends RecyclerView.Adapter<FaveLinksAdapter.Hold
 
     private List<FaveLink> data;
     private Context context;
+    private RecyclerView recyclerView;
+    private ClickListener clickListener;
 
     public FaveLinksAdapter(List<FaveLink> data, Context context) {
         this.data = data;
@@ -44,7 +46,7 @@ public class FaveLinksAdapter extends RecyclerView.Adapter<FaveLinksAdapter.Hold
         ViewUtils.displayAvatar(holder.image, null, photo, Constants.PICASSO_TAG);
 
         holder.itemView.setOnClickListener(v -> {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onLinkClick(holder.getBindingAdapterPosition(), link);
             }
         });
@@ -58,6 +60,28 @@ public class FaveLinksAdapter extends RecyclerView.Adapter<FaveLinksAdapter.Hold
     public void setData(List<FaveLink> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onLinkClick(int index, FaveLink link);
+
+        void onLinkDelete(int index, FaveLink link);
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -82,36 +106,11 @@ public class FaveLinksAdapter extends RecyclerView.Adapter<FaveLinksAdapter.Hold
             menu.setHeaderTitle(faveLink.getTitle());
 
             menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
-                if(clickListener != null){
+                if (clickListener != null) {
                     clickListener.onLinkDelete(position, faveLink);
                 }
                 return true;
             });
         }
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        this.recyclerView = null;
-    }
-
-    private RecyclerView recyclerView;
-
-    public interface ClickListener {
-        void onLinkClick(int index, FaveLink link);
-        void onLinkDelete(int index, FaveLink link);
-    }
-
-    private ClickListener clickListener;
-
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
     }
 }

@@ -12,7 +12,7 @@ public class VkApiFriendList {
      */
     public String name;
 
-    public VkApiFriendList(){
+    public VkApiFriendList() {
 
     }
 }

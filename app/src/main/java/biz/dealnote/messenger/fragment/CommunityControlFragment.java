@@ -31,6 +31,10 @@ import biz.dealnote.messenger.model.GroupSettings;
  */
 public class CommunityControlFragment extends Fragment {
 
+    private Community mCommunity;
+    //private GroupSettings mSettings;
+    private int mAccountId;
+
     public static CommunityControlFragment newInstance(int accountId, Community community, GroupSettings settings) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -40,10 +44,6 @@ public class CommunityControlFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    private Community mCommunity;
-    //private GroupSettings mSettings;
-    private int mAccountId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class CommunityControlFragment extends Fragment {
         pager.setOffscreenPageLimit(1);
 
         List<ITab> tabs = new ArrayList<>();
-        if(mCommunity.getAdminLevel() > 0)
+        if (mCommunity.getAdminLevel() > 0)
             tabs.add(new Tab(getString(R.string.community_blacklist_tab_title), () -> CommunityBlacklistFragment.newInstance(mAccountId, mCommunity.getId())));
         tabs.add(new Tab(getString(R.string.community_links_tab_title), () -> CommunityLinksFragment.newInstance(mAccountId, mCommunity.getId())));
         tabs.add(new Tab(mCommunity.getAdminLevel() == 0 ? getString(R.string.community_managers_contacts) : getString(R.string.community_managers_tab_title), () -> CommunityManagersFragment.newInstance(mAccountId, mCommunity)));
@@ -95,6 +95,16 @@ public class CommunityControlFragment extends Fragment {
                 .apply(requireActivity());
     }
 
+    private interface ITab {
+        String getTabTitle();
+
+        IFragmentCreator getFragmentCreator();
+    }
+
+    private interface IFragmentCreator {
+        Fragment create();
+    }
+
     private static class Tab implements ITab {
 
         final String title;
@@ -114,15 +124,6 @@ public class CommunityControlFragment extends Fragment {
         public IFragmentCreator getFragmentCreator() {
             return creator;
         }
-    }
-
-    private interface ITab {
-        String getTabTitle();
-        IFragmentCreator getFragmentCreator();
-    }
-
-    private interface IFragmentCreator {
-        Fragment create();
     }
 
     private static class Adapter extends FragmentStateAdapter {

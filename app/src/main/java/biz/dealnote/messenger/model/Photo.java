@@ -12,41 +12,36 @@ import biz.dealnote.messenger.util.Objects;
  */
 public class Photo extends AbsModel implements Parcelable, Identificable, ISomeones {
 
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
     private int id;
-
     private int ownerId;
-
     private int albumId;
-
     private int width;
-
     private int height;
-
     private PhotoSizes sizes;
-
     private String text;
-
     private long date;
-
     private boolean userLikes;
-
     private boolean canComment;
-
     private int likesCount;
-
     private int repostsCount;
-
     private int commentsCount;
-
     private int tagsCount;
-
     private String accessKey;
-
     private boolean deleted;
-
     private int postId;
 
-    public Photo(){
+    public Photo() {
 
     }
 
@@ -70,18 +65,6 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         postId = in.readInt();
         repostsCount = in.readInt();
     }
-
-    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
-        @Override
-        public Photo createFromParcel(Parcel in) {
-            return new Photo(in);
-        }
-
-        @Override
-        public Photo[] newArray(int size) {
-            return new Photo[size];
-        }
-    };
 
     public int getId() {
         return id;
@@ -209,7 +192,7 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         return this;
     }
 
-    public String getUrlForSize(@PhotoSize int size, boolean excludeNonAspectRatio){
+    public String getUrlForSize(@PhotoSize int size, boolean excludeNonAspectRatio) {
         return Objects.isNull(sizes) ? null : sizes.getUrlForSize(size, excludeNonAspectRatio);
     }
 
@@ -267,7 +250,7 @@ public class Photo extends AbsModel implements Parcelable, Identificable, ISomeo
         parcel.writeInt(repostsCount);
     }
 
-    public String generateWebLink(){
+    public String generateWebLink() {
         return String.format("vk.com/photo%s_%s", ownerId, id);
     }
 

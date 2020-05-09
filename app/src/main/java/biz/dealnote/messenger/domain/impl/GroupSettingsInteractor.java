@@ -54,6 +54,35 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
         this.ownersRepository = ownersRepository;
     }
 
+    private static ContactInfo transform(VKApiCommunity.Contact contact) {
+        return new ContactInfo(contact.user_id)
+                .setDescriprion(contact.desc)
+                .setEmail(contact.email)
+                .setPhone(contact.phone);
+    }
+
+    private static Day parseDateCreated(String text) {
+        if (isEmpty(text)) {
+            return null;
+        }
+
+        String[] parts = text.split("\\.");
+
+        return new Day(
+                parseInt(parts, 0, 0),
+                parseInt(parts, 1, 0),
+                parseInt(parts, 2, 0)
+        );
+    }
+
+    private static int parseInt(String[] parts, int index, int ifNotExists) {
+        if (parts.length <= index) {
+            return ifNotExists;
+        }
+
+        return Integer.parseInt(parts[index]);
+    }
+
     @Override
     public Single<GroupSettings> getGroupSettings(int accountId, int groupId) {
         return networker.vkDefault(accountId)
@@ -136,9 +165,9 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
                                             .setEndDate(banInfo.endDate)
                                             .setReason(banInfo.reason);
 
-                                    if(u.profile != null){
+                                    if (u.profile != null) {
                                         infos.add(new Banned(Dto2Model.transformUser(u.profile), admin, info));
-                                    } else if(u.group != null){
+                                    } else if (u.group != null) {
                                         infos.add(new Banned(Dto2Model.transformCommunity(u.group), admin, info));
                                     }
                                 }
@@ -191,13 +220,6 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
                         }));
     }
 
-    private static ContactInfo transform(VKApiCommunity.Contact contact) {
-        return new ContactInfo(contact.user_id)
-                .setDescriprion(contact.desc)
-                .setEmail(contact.email)
-                .setPhone(contact.phone);
-    }
-
     private IdOption createFromDto(GroupSettingsDto.PublicCategory category) {
         return new IdOption(category.id, category.name, createFromDtos(category.subtypes_list));
     }
@@ -213,28 +235,6 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
         }
 
         return categories;
-    }
-
-    private static Day parseDateCreated(String text) {
-        if (isEmpty(text)) {
-            return null;
-        }
-
-        String[] parts = text.split("\\.");
-
-        return new Day(
-                parseInt(parts, 0, 0),
-                parseInt(parts, 1, 0),
-                parseInt(parts, 2, 0)
-        );
-    }
-
-    private static int parseInt(String[] parts, int index, int ifNotExists) {
-        if (parts.length <= index) {
-            return ifNotExists;
-        }
-
-        return Integer.parseInt(parts[index]);
     }
 
     private GroupSettings createFromDto(GroupSettingsDto dto) {

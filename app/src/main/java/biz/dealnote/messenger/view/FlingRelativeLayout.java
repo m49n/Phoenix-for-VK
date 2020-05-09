@@ -12,7 +12,9 @@ import android.widget.RelativeLayout;
  */
 public class FlingRelativeLayout extends RelativeLayout {
 
+    private static int SINGLE_TOUCH = 1;
     private GestureDetector mGestureDetector;
+    private OnSingleFlingListener mSingleFlingListener;
 
     public FlingRelativeLayout(Context context) {
         super(context);
@@ -23,8 +25,6 @@ public class FlingRelativeLayout extends RelativeLayout {
         super(context, attrs);
         init(context);
     }
-
-    private static int SINGLE_TOUCH = 1;
 
     private void init(Context context) {
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -53,6 +53,10 @@ public class FlingRelativeLayout extends RelativeLayout {
         return handled || super.onTouchEvent(ev);
     }
 
+    public void setOnSingleFlingListener(OnSingleFlingListener onSingleFlingListener) {
+        this.mSingleFlingListener = onSingleFlingListener;
+    }
+
     /**
      * Interface definition for a callback to be invoked when the FlingRelativeLayout is fling with a single
      * touch
@@ -71,11 +75,5 @@ public class FlingRelativeLayout extends RelativeLayout {
          * @param velocityY - distance of user's vertical fling.
          */
         boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
-    }
-
-    private OnSingleFlingListener mSingleFlingListener;
-
-    public void setOnSingleFlingListener(OnSingleFlingListener onSingleFlingListener) {
-        this.mSingleFlingListener = onSingleFlingListener;
     }
 }

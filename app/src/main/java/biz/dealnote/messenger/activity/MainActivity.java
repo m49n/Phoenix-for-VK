@@ -179,17 +179,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
      * Extra with type {@link biz.dealnote.messenger.model.ModelsBundle} only
      */
     public static final String EXTRA_INPUT_ATTACHMENTS = "input_attachments";
-
+    protected static final int DOUBLE_BACK_PRESSED_TIMEOUT = 2000;
     private static final String TAG = "MainActivity_LOG";
-
     private static final int REQUEST_LOGIN = 101;
     private static final int REQUEST_CODE_CLOSE = 102;
     private static final int REQUEST_ENTER_PIN = 103;
-
-    protected static final int DOUBLE_BACK_PRESSED_TIMEOUT = 2000;
-
     protected int mAccountId;
-
+    protected int mLayoutRes = R.layout.activity_main;
+    protected long mLastBackPressedTime;
     /**
      * Атрибуты секции, которая на данный момент находится на главном контейнере экрана
      */
@@ -199,19 +196,46 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private ViewGroup mBottomNavigationContainer;
     private View mMiniPlayer;
     private MusicUtils.ServiceToken mAudioPlayServiceToken;
-
+    private boolean mDestroyed;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = () -> {
         resolveToolbarNavigationIcon();
         keyboardHide();
     };
-
-    protected int mLayoutRes = R.layout.activity_main;
-    private boolean mDestroyed;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     /**
      * First - DrawerItem, second - Clear back stack before adding
      */
     private Pair<AbsMenuItem, Boolean> mTargetPage;
+    private List<Action<MainActivity>> postResumeActions = new ArrayList<>(0);
+
+    private boolean resumed;
+
+    private static String getFileExtension(File file) {
+        String extension = "";
+
+        try {
+            if (file != null && file.exists()) {
+                String name = file.getName();
+                extension = name.substring(name.lastIndexOf(".") + 1);
+            }
+        } catch (Exception e) {
+            extension = "";
+        }
+
+        return extension;
+
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    public static boolean checkPlayServices(Context context) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
+        return resultCode == ConnectionResult.SUCCESS;
+    }
 
     private void postResume(Action<MainActivity> action) {
         if (resumed) {
@@ -220,10 +244,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             postResumeActions.add(action);
         }
     }
-
-    private List<Action<MainActivity>> postResumeActions = new ArrayList<>(0);
-
-    private boolean resumed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -291,16 +311,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
-    public void UpdateNotificationCount(int account)
-    {
+    public void UpdateNotificationCount(int account) {
         mCompositeDisposable.add(new CountersInteractor(Injection.provideNetworkInterfaces()).getApiCounters(account)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::updateNotificationsBagde, t -> removeNotificationsBagde()));
     }
 
-    private void CheckUpdate()
-    {
-        if(!Constants.NEED_CHECK_UPDATE || !Settings.get().other().isAuto_update())
+    private void CheckUpdate() {
+        if (!Constants.NEED_CHECK_UPDATE || !Settings.get().other().isAuto_update())
             return;
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -313,28 +331,30 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 .url("https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/current_version.json").build();
 
         builder.build().newCall(request).enqueue(new Callback() {
-            @Override public void onFailure(Call th, IOException e) {
+            @Override
+            public void onFailure(Call th, IOException e) {
                 e.printStackTrace();
             }
 
-            @Override public void onResponse(Call th, Response response) throws IOException {
+            @Override
+            public void onResponse(Call th, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     try {
                         int APK_VERS = Constants.VERSION_APK;
                         String Chngs = "";
                         JSONObject obj = new JSONObject(response.body().string());
-                        if(obj.has("apk_version"))
+                        if (obj.has("apk_version"))
                             APK_VERS = obj.getInt("apk_version");
-                        if(obj.has("changes"))
+                        if (obj.has("changes"))
                             Chngs = obj.getString("changes");
 
                         String apk_id = "null";
-                        if(obj.has("app_id"))
+                        if (obj.has("app_id"))
                             apk_id = obj.getString("app_id");
 
                         final String Chenges_log = Chngs;
 
-                        if(APK_VERS <= Constants.VERSION_APK && Constants.APK_ID.equals(apk_id))
+                        if (APK_VERS <= Constants.VERSION_APK && Constants.APK_ID.equals(apk_id))
                             return;
 
                         Handler uiHandler = new Handler(MainActivity.this.getMainLooper());
@@ -356,13 +376,16 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                             dlg.show();
                             try {
                                 TextView tv = dlg.findViewById(android.R.id.message);
-                                if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-                            } catch (Exception ignored) {}
+                                if (tv != null)
+                                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            } catch (Exception ignored) {
+                            }
                         });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    };
+                    }
+                    ;
                 }
             }
         });
@@ -450,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     }
 
     private void OnSetOffline(boolean succ) {
-        if(succ)
+        if (succ)
             PhoenixToast.CreatePhoenixToast(this).showToast(R.string.succ_offline);
         else
             PhoenixToast.CreatePhoenixToast(this).showToastError(R.string.err_offline);
@@ -460,22 +483,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         this.mAccountId = newAccountId;
         Accounts.showAccountSwitchedToast(this);
         UpdateNotificationCount(newAccountId);
-    }
-
-    private static String getFileExtension(File file) {
-        String extension = "";
-
-        try {
-            if (file != null && file.exists()) {
-                String name = file.getName();
-                extension = name.substring(name.lastIndexOf(".") + 1);
-            }
-        } catch (Exception e) {
-            extension = "";
-        }
-
-        return extension;
-
     }
 
     @Override
@@ -525,8 +532,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             return true;
         }
 
-        if(ACTION_OPEN_FILE.equals(action))
-        {
+        if (ACTION_OPEN_FILE.equals(action)) {
             Uri data = intent.getData();
             Intent intent_open = new Intent(Intent.ACTION_VIEW);
             intent_open.setDataAndType(data, MimeTypeMap.getSingleton().getMimeTypeFromExtension(getFileExtension(new File(data.toString()))));
@@ -788,6 +794,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
+    /*
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        SwipeTouchListener.getGestureDetector().onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
+    }
+     */
+
     public void keyboardHide() {
         try {
             InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -802,14 +816,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private Fragment getFrontFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.fragment);
     }
-
-    /*
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev){
-        SwipeTouchListener.getGestureDetector().onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
-     */
 
     @Override
     public void onBackPressed() {
@@ -843,8 +849,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             super.onBackPressed();
         }
     }
-
-    protected long mLastBackPressedTime;
 
     private boolean isFragmentWithoutNavigation() {
         return getFrontFragment() instanceof ChatFragment ||
@@ -892,7 +896,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void onChatResume(int accountId, int peerId, String title, String imgUrl) {
-        if(Settings.get().other().isEnable_show_recent_dialogs()) {
+        if (Settings.get().other().isEnable_show_recent_dialogs()) {
             RecentChat recentChat = new RecentChat(accountId, peerId, title, imgUrl);
             getNavigationFragment().appendRecentChat(recentChat);
             getNavigationFragment().refreshNavigationItems();
@@ -965,7 +969,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     @Override
     public void hideMenu(boolean hide) {
         MusicUtils.setMiniPlayerVisibility(!hide);
-        if(hide)
+        if (hide)
             mMiniPlayer.setVisibility(View.GONE);
         if (hide) {
             getNavigationFragment().closeSheet();
@@ -1056,8 +1060,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.DIALOGS_TUBS_TOUCH:
                 Fragment ret = getFrontFragment();
-                if(ret instanceof DialogsTabsFragment) {
-                    ((DialogsTabsFragment)ret).DisableTouch(args.getBoolean(Extra.TYPE));
+                if (ret instanceof DialogsTabsFragment) {
+                    ((DialogsTabsFragment) ret).DisableTouch(args.getBoolean(Extra.TYPE));
                 }
                 break;
 
@@ -1181,8 +1185,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.NOTIFICATIONS:
-                if(Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked"))
-                {
+                if (Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
                     attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
                     break;
                 }
@@ -1376,17 +1379,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    public static boolean checkPlayServices(Context context) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
-        return resultCode == ConnectionResult.SUCCESS;
-    }
-
     private boolean isActivityDestroyed() {
         return mDestroyed;
     }
@@ -1426,8 +1418,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
-    private void removeNotificationsBagde()
-    {
+    private void removeNotificationsBagde() {
         if (mBottomNavigation != null) {
             mBottomNavigation.removeBadge(R.id.menu_feedback);
         }

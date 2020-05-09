@@ -19,6 +19,7 @@ import biz.dealnote.messenger.util.Utils;
 public class ProxiesAdapter extends RecyclerBindableAdapter<ProxyConfig, ProxiesAdapter.Holder> {
 
     private final ActionListener actionListener;
+    private ProxyConfig active;
 
     public ProxiesAdapter(List<ProxyConfig> data, ActionListener actionListener) {
         super(data);
@@ -36,8 +37,8 @@ public class ProxiesAdapter extends RecyclerBindableAdapter<ProxyConfig, Proxies
         holder.username.setText(config.getUser());
 
         StringBuilder pass = new StringBuilder();
-        if(Utils.nonEmpty(config.getPass())){
-            for(int i = 0; i < config.getPass().length(); i++){
+        if (Utils.nonEmpty(config.getPass())) {
+            for (int i = 0; i < config.getPass().length(); i++) {
                 pass.append("*");
             }
         }
@@ -53,23 +54,15 @@ public class ProxiesAdapter extends RecyclerBindableAdapter<ProxyConfig, Proxies
         holder.delete.setVisibility(isActive ? View.GONE : View.VISIBLE);
     }
 
-    private ProxyConfig active;
-
     public void setActive(ProxyConfig active) {
         this.active = active;
         notifyDataSetChanged();
     }
 
-    public void setData(List<ProxyConfig> data, ProxyConfig config){
+    public void setData(List<ProxyConfig> data, ProxyConfig config) {
         super.setItems(data, false);
         this.active = config;
         notifyDataSetChanged();
-    }
-
-    public interface ActionListener {
-        void onDeleteClick(ProxyConfig config);
-        void onSetAtiveClick(ProxyConfig config);
-        void onDisableClick(ProxyConfig config);
     }
 
     @Override
@@ -80,6 +73,14 @@ public class ProxiesAdapter extends RecyclerBindableAdapter<ProxyConfig, Proxies
     @Override
     protected int layoutId(int type) {
         return R.layout.item_proxy;
+    }
+
+    public interface ActionListener {
+        void onDeleteClick(ProxyConfig config);
+
+        void onSetAtiveClick(ProxyConfig config);
+
+        void onDisableClick(ProxyConfig config);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

@@ -34,12 +34,12 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
     private ActionListener mActionListener;
     private int firstLastPadding = 0;
 
-    public TopicsAdapter(Context context, List<Topic> topics, @NonNull ActionListener actionListener){
+    public TopicsAdapter(Context context, List<Topic> topics, @NonNull ActionListener actionListener) {
         super(topics);
         this.mActionListener = actionListener;
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
 
-        if(Utils.is600dp(context)){
+        if (Utils.is600dp(context)) {
             firstLastPadding = (int) Utils.dpToPx(16, context);
         }
     }
@@ -73,7 +73,7 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
 
         String avaUrl = Objects.isNull(item.getCreator()) ? null : item.getCreator().getMaxSquareAvatar();
 
-        if(isEmpty(avaUrl)){
+        if (isEmpty(avaUrl)) {
             PicassoInstance.with()
                     .load(R.drawable.ic_avatar_unknown)
                     .transform(transformation)
@@ -93,10 +93,6 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
         holder.itemView.setOnClickListener(view -> mActionListener.onTopicClick(item));
     }
 
-    public interface ActionListener extends EventListener {
-        void onTopicClick(@NonNull Topic topic);
-    }
-
     @Override
     protected ViewHolder viewHolder(View view, int type) {
         return new ViewHolder(view);
@@ -107,17 +103,20 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
         return R.layout.item_topic;
     }
 
+    public interface ActionListener extends EventListener {
+        void onTopicClick(@NonNull Topic topic);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ViewHolder(View root){
+        private TextView title;
+        private TextView subtitle;
+        private ImageView creator;
+        private ViewHolder(View root) {
             super(root);
             title = root.findViewById(R.id.item_topic_title);
             subtitle = root.findViewById(R.id.item_topic_subtitle);
             creator = root.findViewById(R.id.item_topicstarter_avatar);
         }
-
-        private TextView title;
-        private TextView subtitle;
-        private ImageView creator;
     }
 }

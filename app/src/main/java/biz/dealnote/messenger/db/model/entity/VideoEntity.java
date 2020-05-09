@@ -92,22 +92,22 @@ public class VideoEntity extends Entity {
         return this;
     }
 
+    public String getHls() {
+        return hls;
+    }
+
     public VideoEntity setHls(String hls) {
         this.hls = hls;
         return this;
     }
 
+    public String getLive() {
+        return live;
+    }
+
     public VideoEntity setLive(String live) {
         this.live = live;
         return this;
-    }
-
-    public String getHls() {
-        return hls;
-    }
-
-    public String getLive() {
-        return live;
     }
 
     public String getTitle() {

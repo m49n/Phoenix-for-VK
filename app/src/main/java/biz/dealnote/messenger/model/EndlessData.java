@@ -17,7 +17,7 @@ public class EndlessData<T> {
         this.hasNext = hasNext;
     }
 
-    public static <T> EndlessData<T> create(List<T> data, boolean hasNext){
+    public static <T> EndlessData<T> create(List<T> data, boolean hasNext) {
         return new EndlessData<>(data, hasNext);
     }
 

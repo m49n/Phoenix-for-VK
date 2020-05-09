@@ -25,113 +25,98 @@ import java.util.ArrayList;
 
 /**
  * Application Access Permissions
+ *
  * @see <a href="http://vk.com/dev/permissions">http://vk.com/dev/permissions</a>
  */
 @SuppressWarnings("unused")
 public class VKScopes {
 
-    private VKScopes() {}
-
     /**
      * User allowed to send notifications to him/her.
      */
     public final static String NOTIFY = "notify";
-    
     /**
      * Access to friends.
      */
     public final static String FRIENDS = "friends";
-    
     /**
      * Access to photos.
      */
-    public final static String PHOTOS = "photos";  
-    
+    public final static String PHOTOS = "photos";
     /**
      * Access to audios.
      */
     public final static String AUDIO = "audio";
-    
     /**
      * Access to videos.
      */
-    public final static String VIDEO = "video"; 
-    
+    public final static String VIDEO = "video";
     /**
      * Access to documents.
      */
     public final static String DOCS = "docs";
-    
     /**
      * Access to user notes.
      */
     public final static String NOTES = "notes";
-    
     /**
      * Access to wiki pages.
      */
     public final static String PAGES = "pages";
-    
     /**
      * Access to user status.
      */
     public final static String STATUS = "status";
-    
     /**
      * Access to offers (obsolete methods).
      */
     @Deprecated
     public final static String OFFERS = "offers";
-    
     /**
      * Access to questions (obsolete methods).
      */
     @Deprecated
     public final static String QUESTIONS = "questions";
-    
     /**
      * Access to standard and advanced methods for the wall.
      */
     public final static String WALL = "wall";
-    
     /**
      * Access to user groups.
      */
     public final static String GROUPS = "groups";
-    
     /**
      * Access to advanced methods for messaging.
      */
     public final static String MESSAGES = "messages";
-    
     /**
      * Access to notifications about answers to the user.
      */
     public final static String NOTIFICATIONS = "notifications";
-    
     /**
      * Access to statistics of user groups and applications where he/she is an administrator.
      */
     public final static String STATS = "stats";
-    
     /**
      * Access to advanced methods for <a href="http://vk.com/dev/ads">Ads API</a>.
      */
     public final static String ADS = "ads";
-    
     /**
      * Access to API at any time from a third party server.
      */
-    public final static String OFFLINE = "offline"; 
-    
+    public final static String OFFLINE = "offline";
     /**
      * Possibility to make API requests without HTTPS. <br />
      * <b>Note that this functionality is under testing and can be changed.</b>
      */
     public final static String NOHTTPS = "nohttps";
 
+    private VKScopes() {
+    }
+
     /**
      * Converts integer value of permissions into arraylist of constants
+     *
      * @param permissions integer permissions value
      * @return ArrayList contains string constants of permissions (scope)
      */
@@ -155,5 +140,5 @@ public class VKScopes {
         if ((permissions & 1048576) > 0) result.add(STATS);
         return result;
     }
-    
+
 }

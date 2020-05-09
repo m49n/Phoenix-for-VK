@@ -10,10 +10,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/title"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title_hint" />
+            android:hint="@string/title_hint"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -23,10 +23,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/description"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/description_hint" />
+            android:hint="@string/description_hint"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

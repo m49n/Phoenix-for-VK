@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class Chair implements Parcelable {
 
-    private final int id;
-
-    private final String title;
-
-    public Chair(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    private Chair(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-    }
-
     public static final Creator<Chair> CREATOR = new Creator<Chair>() {
         @Override
         public Chair createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class Chair implements Parcelable {
             return new Chair[size];
         }
     };
+    private final int id;
+    private final String title;
+
+    public Chair(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    private Chair(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+    }
 
     public int getId() {
         return id;

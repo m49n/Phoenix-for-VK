@@ -42,6 +42,13 @@ public class Photo2MessageUploadable implements IUploadable<Photo> {
         this.messagesStorage = messagesStorage;
     }
 
+    private static Completable attachIntoDatabaseRx(IAttachmentsRepository repository, IMessagesStorage storage,
+                                                    int accountId, int messageId, Photo photo) {
+        return repository
+                .attach(accountId, AttachToType.MESSAGE, messageId, Collections.singletonList(photo))
+                .andThen(storage.notifyMessageHasAttachments(accountId, messageId));
+    }
+
     @Override
     public Single<UploadResult<Photo>> doUpload(@NonNull Upload upload,
                                                 @Nullable UploadServer initialServer,
@@ -70,31 +77,24 @@ public class Photo2MessageUploadable implements IUploadable<Photo> {
                                 .photos()
                                 .saveMessagesPhoto(dto.server, dto.photo, dto.hash)
                                 .flatMap(photos -> {
-                                    if(photos.isEmpty()){
+                                    if (photos.isEmpty()) {
                                         return Single.error(new NotFoundException());
                                     }
 
                                     Photo photo = Dto2Model.transform(photos.get(0));
                                     UploadResult<Photo> result = new UploadResult<>(server, photo);
 
-                                    if(upload.isAutoCommit()){
+                                    if (upload.isAutoCommit()) {
                                         return attachIntoDatabaseRx(attachmentsRepository, messagesStorage, accountId, messageId, photo)
                                                 .andThen(Single.just(result));
                                     } else {
                                         return Single.just(result);
                                     }
                                 }));
-            } catch (Exception e){
+            } catch (Exception e) {
                 safelyClose(is[0]);
                 return Single.error(e);
             }
         });
-    }
-
-    private static Completable attachIntoDatabaseRx(IAttachmentsRepository repository, IMessagesStorage storage,
-                                                    int accountId, int messageId, Photo photo){
-        return repository
-                .attach(accountId, AttachToType.MESSAGE, messageId, Collections.singletonList(photo))
-                .andThen(storage.notifyMessageHasAttachments(accountId, messageId));
     }
 }

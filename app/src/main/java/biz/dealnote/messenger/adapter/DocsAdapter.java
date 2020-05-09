@@ -30,19 +30,14 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class DocsAdapter extends RecyclerBindableAdapter<Document, DocsAdapter.DocViewHolder> {
 
+    private ActionListener mActionListner;
+
     public DocsAdapter(List<Document> data) {
         super(data);
     }
 
-    private ActionListener mActionListner;
-
     public void setActionListner(ActionListener listner) {
         this.mActionListner = listner;
-    }
-
-    public interface ActionListener extends EventListener {
-        void onDocClick(int index, @NonNull Document doc);
-        boolean onDocLongClick(int index, @NonNull Document doc);
     }
 
     @Override
@@ -69,7 +64,7 @@ public class DocsAdapter extends RecyclerBindableAdapter<Document, DocsAdapter.D
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if(nonNull(mActionListner)){
+            if (nonNull(mActionListner)) {
                 mActionListner.onDocClick(holder.getBindingAdapterPosition(), item);
             }
         });
@@ -86,6 +81,12 @@ public class DocsAdapter extends RecyclerBindableAdapter<Document, DocsAdapter.D
     @Override
     protected int layoutId(int type) {
         return R.layout.item_document_big;
+    }
+
+    public interface ActionListener extends EventListener {
+        void onDocClick(int index, @NonNull Document doc);
+
+        boolean onDocLongClick(int index, @NonNull Document doc);
     }
 
     static class DocViewHolder extends RecyclerView.ViewHolder {

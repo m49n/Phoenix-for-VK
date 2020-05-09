@@ -17,6 +17,18 @@ import biz.dealnote.messenger.R;
 
 public class AppTextUtils {
 
+    public static final long ONE_DAY_SEC = 24 * 60 * 60;
+    private static final Date DATE = new Date();
+    private static final Calendar CALENDAR = Calendar.getInstance();
+    private static final String K = "K";
+    private static final String KK = "KK";
+    private static final String ZERO = "0";
+    private static final String TWO_ZERO = "00";
+    private static final String POINT = ".";
+    private static final String EMPTY = "";
+    private static SimpleDateFormat SHORT_DATE = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private static SimpleDateFormat FULL_DATE = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+
     public static String safeTrim(String text, @Nullable String ifNull) {
         return text == null ? ifNull : text.trim();
     }
@@ -45,11 +57,6 @@ public class AppTextUtils {
         return newDouble + " Mb";
     }
 
-    private static SimpleDateFormat SHORT_DATE = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    private static SimpleDateFormat FULL_DATE = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
-    private static final Date DATE = new Date();
-    private static final Calendar CALENDAR = Calendar.getInstance();
-
     /**
      * Получение строки с датой и временем сообщений
      *
@@ -63,7 +70,6 @@ public class AppTextUtils {
         CALENDAR.set(CALENDAR.get(Calendar.YEAR), CALENDAR.get(Calendar.MONTH), CALENDAR.get(Calendar.DATE), 0, 0, 0);
         return unixTime * 1000 > CALENDAR.getTimeInMillis() ? SHORT_DATE.format(DATE) : FULL_DATE.format(DATE);
     }
-
 
     /**
      * Получение строки с датой и временем сообщений
@@ -97,8 +103,6 @@ public class AppTextUtils {
         return FULL_DATE.format(DATE);
     }
 
-    public static final long ONE_DAY_SEC = 24 * 60 * 60;
-
     public static String getDurationString(int seconds) {
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
@@ -111,7 +115,7 @@ public class AppTextUtils {
     }
 
     public static String getDurationStringMS(int ms) {
-        return getDurationString((int)(ms / 1000));
+        return getDurationString((int) (ms / 1000));
     }
 
     private static String twoDigitString(int number) {
@@ -125,9 +129,6 @@ public class AppTextUtils {
 
         return String.valueOf(number);
     }
-
-    private static final String K = "K";
-    private static final String KK = "KK";
 
     public static String getCounterWithK(int counter) {
         int num = counter / 1000;
@@ -144,11 +145,6 @@ public class AppTextUtils {
 
         return String.valueOf(counter);
     }
-
-    private static final String ZERO = "0";
-    private static final String TWO_ZERO = "00";
-    private static final String POINT = ".";
-    private static final String EMPTY = "";
 
     public static String getDateWithZeros(String date) {
         if (TextUtils.isEmpty(date) || date.equals(ZERO)) {

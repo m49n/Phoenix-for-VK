@@ -77,7 +77,7 @@ public interface IMessagesApi {
 
     @CheckResult
     Single<AttachmentsHistoryResponse> getHistoryAttachments(int peerId, String mediaType, String startFrom,
-                                                       Integer count, String fields);
+                                                             Integer count, String fields);
 
 
     @CheckResult

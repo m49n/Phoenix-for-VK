@@ -9,18 +9,23 @@ import android.os.Parcelable;
  */
 public class VideoAlbum extends AbsModel implements Parcelable {
 
+    public static final Creator<VideoAlbum> CREATOR = new Creator<VideoAlbum>() {
+        @Override
+        public VideoAlbum createFromParcel(Parcel in) {
+            return new VideoAlbum(in);
+        }
+
+        @Override
+        public VideoAlbum[] newArray(int size) {
+            return new VideoAlbum[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private String title;
-
     private int count;
-
     private long updatedTime;
-
     private String image;
-
     private SimplePrivacy privacy;
 
     public VideoAlbum(int id, int ownerId) {
@@ -51,18 +56,6 @@ public class VideoAlbum extends AbsModel implements Parcelable {
         dest.writeParcelable(privacy, flags);
     }
 
-    public static final Creator<VideoAlbum> CREATOR = new Creator<VideoAlbum>() {
-        @Override
-        public VideoAlbum createFromParcel(Parcel in) {
-            return new VideoAlbum(in);
-        }
-
-        @Override
-        public VideoAlbum[] newArray(int size) {
-            return new VideoAlbum[size];
-        }
-    };
-
     public int getId() {
         return id;
     }
@@ -80,13 +73,13 @@ public class VideoAlbum extends AbsModel implements Parcelable {
         return this;
     }
 
+    public SimplePrivacy getPrivacy() {
+        return privacy;
+    }
+
     public VideoAlbum setPrivacy(SimplePrivacy privacy) {
         this.privacy = privacy;
         return this;
-    }
-
-    public SimplePrivacy getPrivacy() {
-        return privacy;
     }
 
     public int getCount() {

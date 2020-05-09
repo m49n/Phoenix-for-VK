@@ -20,14 +20,17 @@ public class Career {
 
     private String position;
 
+    public int getCityId() {
+        return cityId;
+    }
+
     public Career setCityId(int cityId) {
         this.cityId = cityId;
         return this;
     }
 
-    public Career setCompany(String company) {
-        this.company = company;
-        return this;
+    public int getCountryId() {
+        return countryId;
     }
 
     public Career setCountryId(int countryId) {
@@ -35,9 +38,17 @@ public class Career {
         return this;
     }
 
+    public int getFrom() {
+        return from;
+    }
+
     public Career setFrom(int from) {
         this.from = from;
         return this;
+    }
+
+    public Community getGroup() {
+        return group;
     }
 
     public Career setGroup(Community group) {
@@ -45,9 +56,8 @@ public class Career {
         return this;
     }
 
-    public Career setPosition(String position) {
-        this.position = position;
-        return this;
+    public int getUntil() {
+        return until;
     }
 
     public Career setUntil(int until) {
@@ -55,31 +65,21 @@ public class Career {
         return this;
     }
 
-    public int getCityId() {
-        return cityId;
-    }
-
-    public int getCountryId() {
-        return countryId;
-    }
-
-    public int getFrom() {
-        return from;
-    }
-
-    public Community getGroup() {
-        return group;
-    }
-
-    public int getUntil() {
-        return until;
-    }
-
     public String getCompany() {
         return company;
     }
 
+    public Career setCompany(String company) {
+        this.company = company;
+        return this;
+    }
+
     public String getPosition() {
         return position;
+    }
+
+    public Career setPosition(String position) {
+        this.position = position;
+        return this;
     }
 }

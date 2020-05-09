@@ -78,8 +78,7 @@ public class VideosTabsFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(view.findViewById(R.id.fragment_videos_tabs), viewPager, (tab, position) -> {
-            switch (position)
-            {
+            switch (position) {
                 case 0:
                     tab.setText(R.string.videos_my);
                     break;
@@ -125,32 +124,6 @@ public class VideosTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
-    class Adapter extends FragmentStateAdapter {
-        public Adapter(@NonNull Fragment fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            switch (position)
-            {
-                case 0:
-                    VideosFragment fragment = VideosFragment.newInstance(getAccountId(), ownerId, 0, action, null);
-                    fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
-                    return fragment;
-                case 1:
-                    return VideoAlbumsFragment.newInstance(getAccountId(), ownerId, action);
-            }
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public int getItemCount() {
-            return 2;
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -167,5 +140,30 @@ public class VideosTabsFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_video_main, menu);
+    }
+
+    class Adapter extends FragmentStateAdapter {
+        public Adapter(@NonNull Fragment fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    VideosFragment fragment = VideosFragment.newInstance(getAccountId(), ownerId, 0, action, null);
+                    fragment.requireArguments().putBoolean(VideosFragment.EXTRA_IN_TABS_CONTAINER, true);
+                    return fragment;
+                case 1:
+                    return VideoAlbumsFragment.newInstance(getAccountId(), ownerId, action);
+            }
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
     }
 }

@@ -36,14 +36,13 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>, V extends IBaseSearchView<T>, T>
         extends PlaceSupportMvpFragment<P, V> implements IBaseSearchView<T> {
 
+    public static final String ACTION_QUERY = "action_query";
     private static final int REQUEST_FILTER_EDIT = 19;
     public RecyclerView.Adapter mAdapter;
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private TextView mEmptyText;
 
-    private void onSeachOptionsChanged(){
+    private void onSeachOptionsChanged() {
         getPresenter().fireOptionsChanged();
     }
 
@@ -125,8 +124,6 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
         }
     }
 
-    public static final String ACTION_QUERY = "action_query";
-
     /**
      * Метод будет вызван, когда внутри viewpager this фрагмент будет выбран
      */
@@ -134,7 +131,7 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
         getPresenter().fireSyncCriteriaRequest();
     }
 
-    public void openSearchFilter(){
+    public void openSearchFilter() {
         getPresenter().fireOpenFilterClick();
     }
 
@@ -162,7 +159,7 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_FILTER_EDIT)
+        if (requestCode == REQUEST_FILTER_EDIT)
             onSeachOptionsChanged();
     }
 

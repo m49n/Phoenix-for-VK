@@ -32,6 +32,11 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFaveLinksView> implements IFaveLinksView, FaveLinksAdapter.ClickListener {
 
+    private TextView mEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FaveLinksAdapter mAdapter;
+    private boolean isRequestLast = false;
+
     public static FaveLinksFragment newInstance(int accountId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -39,12 +44,6 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
         fragment.setArguments(args);
         return fragment;
     }
-
-    private TextView mEmpty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FaveLinksAdapter mAdapter;
-
-    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
     }
 
     private void resolveEmptyText() {
-        if(Objects.nonNull(mEmpty) && Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mEmpty) && Objects.nonNull(mAdapter)) {
             mEmpty.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
 
@@ -94,7 +93,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
 
     @Override
     public void notifyItemRemoved(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
             resolveEmptyText();
         }
@@ -107,7 +106,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
 
     @Override
     public void displayLinks(List<FaveLink> links) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(links);
             resolveEmptyText();
         }
@@ -115,7 +114,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyText();
         }
@@ -123,7 +122,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
             resolveEmptyText();
         }
@@ -131,20 +130,20 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
 
     @Override
     public void displayRefreshing(boolean refreshing) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }
 
     @Override
     public IPresenterFactory<FaveLinksPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new FaveLinksPresenter(getArguments().getInt(Extra.ACCOUNT_ID),saveInstanceState);
+        return () -> new FaveLinksPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(!isRequestLast) {
+        if (!isRequestLast) {
             isRequestLast = true;
             getPresenter().LoadTool();
         }

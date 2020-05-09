@@ -63,7 +63,7 @@ public class DrawerEditPresenter extends AbsPresenter<IDrawerEditView> {
         @SwitchableCategory
         int[] items = settings.getCategoriesOrder();
 
-        for(int category : items){
+        for (int category : items) {
             DrawerCategory c = new DrawerCategory(category, getTitleResCategory(category));
             c.setChecked(settings.isCategoryEnabled(category));
             categories.add(c);

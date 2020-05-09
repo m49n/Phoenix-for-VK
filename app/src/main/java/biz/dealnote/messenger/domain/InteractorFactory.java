@@ -28,67 +28,67 @@ import biz.dealnote.messenger.settings.Settings;
  */
 public class InteractorFactory {
 
-    public static INewsfeedInteractor createNewsfeedInteractor(){
+    public static INewsfeedInteractor createNewsfeedInteractor() {
         return new NewsfeedInteractor(Injection.provideNetworkInterfaces(), Repository.INSTANCE.getOwners());
     }
 
-    public static IStickersInteractor createStickersInteractor(){
+    public static IStickersInteractor createStickersInteractor() {
         return new StickersInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores().stickers());
     }
 
-    public static IPollInteractor createPollInteractor(){
+    public static IPollInteractor createPollInteractor() {
         return new PollInteractor(Injection.provideNetworkInterfaces());
     }
 
-    public static IDocsInteractor createDocsInteractor(){
+    public static IDocsInteractor createDocsInteractor() {
         return new DocsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores().docs());
     }
 
-    public static ILikesInteractor createLikesInteractor(){
+    public static ILikesInteractor createLikesInteractor() {
         return new LikesInteractor(Injection.provideNetworkInterfaces());
     }
 
-    public static IFeedbackInteractor createFeedbackInteractor(){
+    public static IFeedbackInteractor createFeedbackInteractor() {
         return new FeedbackInteractor(Injection.provideStores(), Injection.provideNetworkInterfaces(), Repository.INSTANCE.getOwners());
     }
 
-    public static IDatabaseInteractor createDatabaseInteractor(){
+    public static IDatabaseInteractor createDatabaseInteractor() {
         return new DatabaseInteractor(Injection.provideStores().database(), Injection.provideNetworkInterfaces());
     }
 
-    public static ICommunitiesInteractor createCommunitiesInteractor(){
+    public static ICommunitiesInteractor createCommunitiesInteractor() {
         return new CommunitiesInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores());
     }
 
-    public static IBoardInteractor createBoardInteractor(){
+    public static IBoardInteractor createBoardInteractor() {
         return new BoardInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
     }
 
-    public static IUtilsInteractor createUtilsInteractor(){
+    public static IUtilsInteractor createUtilsInteractor() {
         return new UtilsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
     }
 
-    public static IRelationshipInteractor createRelationshipInteractor(){
+    public static IRelationshipInteractor createRelationshipInteractor() {
         return new RelationshipInteractor(Injection.provideStores(), Injection.provideNetworkInterfaces());
     }
 
-    public static IFeedInteractor createFeedInteractor(){
+    public static IFeedInteractor createFeedInteractor() {
         return new FeedInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Settings.get().other(), Repository.INSTANCE.getOwners());
     }
 
-    public static IGroupSettingsInteractor createGroupSettingsInteractor(){
+    public static IGroupSettingsInteractor createGroupSettingsInteractor() {
         return new GroupSettingsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores().owners(), Repository.INSTANCE.getOwners());
     }
 
-    public static IDialogsInteractor createDialogsInteractor(){
+    public static IDialogsInteractor createDialogsInteractor() {
         return new DialogsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores());
     }
 
-    public static IVideosInteractor createVideosInteractor(){
+    public static IVideosInteractor createVideosInteractor() {
         return new VideosInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores());
     }
 
-    public static IAccountsInteractor createAccountInteractor(){
+    public static IAccountsInteractor createAccountInteractor() {
         return new AccountsInteractor(
                 Injection.provideNetworkInterfaces(),
                 Injection.provideSettings().accounts(),
@@ -97,11 +97,11 @@ public class InteractorFactory {
         );
     }
 
-    public static IPhotosInteractor createPhotosInteractor(){
+    public static IPhotosInteractor createPhotosInteractor() {
         return new PhotosInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores());
     }
 
-    public static IFaveInteractor createFaveInteractor(){
+    public static IFaveInteractor createFaveInteractor() {
         return new FaveInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
     }
 

@@ -71,7 +71,7 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         VKApiUser dto = new VKApiUser();
 
         dto.id = optInt(root, "id");
-        if(dto.id == 0)
+        if (dto.id == 0)
             dto.id = optInt(root, "user_id");
         dto.first_name = optString(root, "first_name");
         dto.last_name = optString(root, "last_name");
@@ -83,7 +83,7 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         dto.photo_100 = optString(root, PHOTO_100);
         dto.photo_200 = optString(root, PHOTO_200);
 
-        if(root.has(LAST_SEEN)){
+        if (root.has(LAST_SEEN)) {
             JsonObject lastSeenRoot = root.getAsJsonObject(LAST_SEEN);
             dto.last_seen = optLong(lastSeenRoot, "time");
             dto.platform = optInt(lastSeenRoot, "platform");
@@ -94,11 +94,11 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
 
         dto.bdate = optString(root, BDATE);
 
-        if(root.has(CITY)){
+        if (root.has(CITY)) {
             dto.city = context.deserialize(root.getAsJsonObject(CITY), VKApiCity.class);
         }
 
-        if(root.has(COUNTRY)){
+        if (root.has(COUNTRY)) {
             dto.country = context.deserialize(root.getAsJsonObject(COUNTRY), VKApiCountry.class);
         }
 
@@ -110,11 +110,11 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         // status
         dto.activity = optString(root, ACTIVITY);
 
-        if(root.has("status_audio")){
+        if (root.has("status_audio")) {
             dto.status_audio = context.deserialize(root.getAsJsonObject("status_audio"), VKApiAudio.class);
         }
 
-        if(root.has(PERSONAL)){
+        if (root.has(PERSONAL)) {
             JsonObject personal = root.getAsJsonObject(PERSONAL);
             dto.smoking = optInt(personal, "smoking");
             dto.alcohol = optInt(personal, "alcohol");
@@ -176,7 +176,7 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         // other
         dto.sex = optInt(root, SEX);
 
-        if(root.has(COUNTERS)){
+        if (root.has(COUNTERS)) {
             dto.counters = context.deserialize(root.get(COUNTERS), VKApiUser.Counters.class);
         }
 
@@ -195,11 +195,11 @@ public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         dto.photo_max = optString(root, "photo_max");
         dto.has_mobile = optInt(root, "has_mobile") == 1;
 
-        if(root.has("occupation")){
+        if (root.has("occupation")) {
             dto.occupation = context.deserialize(root.get("occupation"), VKApiUser.Occupation.class);
         }
 
-        if(root.has("relation_partner")){
+        if (root.has("relation_partner")) {
             dto.relation_partner = deserialize(root.get("relation_partner"), VKApiUser.class, context);
         }
 

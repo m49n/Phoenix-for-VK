@@ -38,6 +38,17 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserializer<AbsLongpollEvent> {
 
+    private static ArrayList<String> parseLineWithSeparators(String line, String separator) {
+        if (isNull(line) || line.isEmpty()) {
+            return null;
+        }
+
+        String[] tokens = line.split(separator);
+        ArrayList<String> ids = new ArrayList<>();
+        Collections.addAll(ids, tokens);
+        return ids;
+    }
+
     @Override
     public AbsLongpollEvent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonArray array = json.getAsJsonArray();
@@ -46,8 +57,8 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
     }
 
     @Nullable
-    private AbsLongpollEvent deserialize(int action, JsonArray array){
-        switch (action){
+    private AbsLongpollEvent deserialize(int action, JsonArray array) {
+        switch (action) {
             case AbsLongpollEvent.ACTION_MESSAGE_ADDED:
                 return deserializeAddMessageUpdate(array);
 
@@ -104,7 +115,7 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
                 update.unread_count = optInt(array, 3); // undocumented
                 return update.peer_id != 0 ? update : null;
             }
-            case AbsLongpollEvent.ACTION_SET_OUTPUT_MESSAGES_AS_READ:{
+            case AbsLongpollEvent.ACTION_SET_OUTPUT_MESSAGES_AS_READ: {
                 OutputMessagesSetReadUpdate update = new OutputMessagesSetReadUpdate();
                 update.peer_id = optInt(array, 1);
                 update.local_id = optInt(array, 2);
@@ -116,7 +127,7 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
         return null;
     }
 
-    private AddMessageUpdate deserializeAddMessageUpdate(JsonArray array){
+    private AddMessageUpdate deserializeAddMessageUpdate(JsonArray array) {
         AddMessageUpdate update = new AddMessageUpdate();
 
         int flags = optInt(array, 2);
@@ -131,7 +142,7 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
         update.deleted = hasFlag(flags, VKApiMessage.FLAG_DELETED);
 
         JsonObject extra = (JsonObject) opt(array, 6);
-        if(nonNull(extra)){
+        if (nonNull(extra)) {
             update.from = optInt(extra, "from");
             update.subject = optString(extra, "title");
             update.sourceText = optString(extra, "source_text");
@@ -140,31 +151,20 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
         }
 
         JsonObject attachments = (JsonObject) opt(array, 7);
-        if(nonNull(attachments)){
+        if (nonNull(attachments)) {
             update.hasMedia = attachments.has("attach1_type");
             String fwd = optString(attachments, "fwd");
-            if(nonEmpty(fwd)){
+            if (nonEmpty(fwd)) {
                 update.fwds = parseLineWithSeparators(fwd, ",");
             }
         }
 
         update.random_id = optString(array, 8); // ok
 
-        if(update.from == 0 && !Peer.isGroupChat(update.peer_id) && !update.outbox){
+        if (update.from == 0 && !Peer.isGroupChat(update.peer_id) && !update.outbox) {
             update.from = update.peer_id;
         }
 
         return update.message_id != 0 ? update : null;
-    }
-
-    private static ArrayList<String> parseLineWithSeparators(String line, String separator) {
-        if (isNull(line) || line.isEmpty()) {
-            return null;
-        }
-
-        String[] tokens = line.split(separator);
-        ArrayList<String> ids = new ArrayList<>();
-        Collections.addAll(ids, tokens);
-        return ids;
     }
 }

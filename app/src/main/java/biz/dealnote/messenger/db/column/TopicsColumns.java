@@ -24,8 +24,22 @@ public class TopicsColumns implements BaseColumns {
     public static final String FIRST_COMMENT = "first_comment";
     public static final String LAST_COMMENT = "last_comment";
     public static final String ATTACHED_POLL = "attached_poll";
+    public static final String FULL_ID = TABLENAME + "." + _ID;
+    public static final String FULL_TOPIC_ID = TABLENAME + "." + TOPIC_ID;
+    public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
+    public static final String FULL_TITLE = TABLENAME + "." + TITLE;
+    public static final String FULL_CREATED = TABLENAME + "." + CREATED;
+    public static final String FULL_CREATED_BY = TABLENAME + "." + CREATED_BY;
+    public static final String FULL_UPDATED = TABLENAME + "." + UPDATED;
+    public static final String FULL_UPDATED_BY = TABLENAME + "." + UPDATED_BY;
+    public static final String FULL_IS_CLOSED = TABLENAME + "." + IS_CLOSED;
+    public static final String FULL_IS_FIXED = TABLENAME + "." + IS_FIXED;
+    public static final String FULL_COMMENTS = TABLENAME + "." + COMMENTS;
+    public static final String FULL_FIRST_COMMENT = TABLENAME + "." + FIRST_COMMENT;
+    public static final String FULL_LAST_COMMENT = TABLENAME + "." + LAST_COMMENT;
+    public static final String FULL_ATTACHED_POLL = TABLENAME + "." + ATTACHED_POLL;
 
-    public static ContentValues getCV(VKApiTopic p){
+    public static ContentValues getCV(VKApiTopic p) {
         ContentValues cv = new ContentValues();
         cv.put(TOPIC_ID, p.id);
         cv.put(OWNER_ID, p.owner_id);
@@ -41,19 +55,4 @@ public class TopicsColumns implements BaseColumns {
         cv.put(LAST_COMMENT, p.last_comment);
         return cv;
     }
-
-    public static final String FULL_ID = TABLENAME + "." + _ID;
-    public static final String FULL_TOPIC_ID = TABLENAME + "." + TOPIC_ID;
-    public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
-    public static final String FULL_TITLE = TABLENAME + "." + TITLE;
-    public static final String FULL_CREATED = TABLENAME + "." + CREATED;
-    public static final String FULL_CREATED_BY = TABLENAME + "." + CREATED_BY;
-    public static final String FULL_UPDATED = TABLENAME + "." + UPDATED;
-    public static final String FULL_UPDATED_BY = TABLENAME + "." + UPDATED_BY;
-    public static final String FULL_IS_CLOSED = TABLENAME + "." + IS_CLOSED;
-    public static final String FULL_IS_FIXED = TABLENAME + "." + IS_FIXED;
-    public static final String FULL_COMMENTS = TABLENAME + "." + COMMENTS;
-    public static final String FULL_FIRST_COMMENT = TABLENAME + "." + FIRST_COMMENT;
-    public static final String FULL_LAST_COMMENT = TABLENAME + "." + LAST_COMMENT;
-    public static final String FULL_ATTACHED_POLL = TABLENAME + "." + ATTACHED_POLL;
 }

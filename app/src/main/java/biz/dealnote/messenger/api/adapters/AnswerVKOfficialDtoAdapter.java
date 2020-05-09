@@ -27,43 +27,39 @@ public class AnswerVKOfficialDtoAdapter extends AbsAdapter implements JsonDeseri
         dtolist.items = new ArrayList<>();
         dtolist.fields = new ArrayList<>();
 
-        if(root.has("profiles"))
-        {
+        if (root.has("profiles")) {
             JsonArray temp = root.getAsJsonArray("profiles");
-            for(JsonElement i : temp) {
+            for (JsonElement i : temp) {
                 JsonObject obj = i.getAsJsonObject();
                 int id = obj.get("id").getAsInt();
-                if(obj.has("photo_200")) {
+                if (obj.has("photo_200")) {
                     String url = obj.get("photo_200").getAsString();
                     dtolist.fields.add(new AnswerVKOfficialList.AnswerField(id, url));
-                }
-                else if(obj.has("photo_200_orig")) {
+                } else if (obj.has("photo_200_orig")) {
                     String url = obj.get("photo_200_orig").getAsString();
                     dtolist.fields.add(new AnswerVKOfficialList.AnswerField(id, url));
                 }
             }
         }
-        if(root.has("groups"))
-        {
+        if (root.has("groups")) {
             JsonArray temp = root.getAsJsonArray("groups");
-            for(JsonElement i : temp) {
+            for (JsonElement i : temp) {
                 JsonObject obj = i.getAsJsonObject();
                 int id = (obj.get("id").getAsInt() * -1);
-                if(obj.has("photo_200")) {
+                if (obj.has("photo_200")) {
                     String url = obj.get("photo_200").getAsString();
                     dtolist.fields.add(new AnswerVKOfficialList.AnswerField(id, url));
-                }
-                else if(obj.has("photo_200_orig")) {
+                } else if (obj.has("photo_200_orig")) {
                     String url = obj.get("photo_200_orig").getAsString();
                     dtolist.fields.add(new AnswerVKOfficialList.AnswerField(id, url));
                 }
             }
         }
 
-        if(!root.has("items") || root.getAsJsonArray("items").size() <= 0)
+        if (!root.has("items") || root.getAsJsonArray("items").size() <= 0)
             return dtolist;
 
-        for(JsonElement i : root.getAsJsonArray("items")) {
+        for (JsonElement i : root.getAsJsonArray("items")) {
             JsonObject root_item = i.getAsJsonObject();
             AnswerVKOfficial dto = new AnswerVKOfficial();
             dto.iconType = optString(root_item, "icon_type");

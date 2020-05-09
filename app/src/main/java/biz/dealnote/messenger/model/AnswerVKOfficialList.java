@@ -17,12 +17,11 @@ public class AnswerVKOfficialList {
     }
 
     public static class AnswerField {
+        public int id;
+        public String photo;
         public AnswerField(int id, String photo) {
             this.id = id;
             this.photo = photo;
         }
-
-        public int id;
-        public String photo;
     }
 }

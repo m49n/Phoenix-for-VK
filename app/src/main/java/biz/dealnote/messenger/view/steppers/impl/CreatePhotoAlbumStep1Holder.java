@@ -27,14 +27,14 @@ public class CreatePhotoAlbumStep1Holder extends AbsStepHolder<CreatePhotoAlbumS
         mTitle = contentView.findViewById(R.id.title);
         mDescription = contentView.findViewById(R.id.description);
 
-        mTitle.addTextChangedListener(new TextWatcherAdapter(){
+        mTitle.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mActionListener.onTitleEdited(s);
             }
         });
 
-        mTitle.addTextChangedListener(new TextWatcherAdapter(){
+        mTitle.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mActionListener.onDescriptionEdited(s);
@@ -42,14 +42,15 @@ public class CreatePhotoAlbumStep1Holder extends AbsStepHolder<CreatePhotoAlbumS
         });
     }
 
-    public interface ActionListener extends BaseHolderListener {
-        void onTitleEdited(CharSequence text);
-        void onDescriptionEdited(CharSequence text);
-    }
-
     @Override
     protected void bindViews(CreatePhotoAlbumStepsHost host) {
         mTitle.setText(host.getState().getTitle());
         mDescription.setText(host.getState().getDescription());
+    }
+
+    public interface ActionListener extends BaseHolderListener {
+        void onTitleEdited(CharSequence text);
+
+        void onDescriptionEdited(CharSequence text);
     }
 }

@@ -7,7 +7,7 @@ import kotlin.math.abs
  * Applies the [delegate] only if view moves upwards
  */
 @Suppress("unused")
-class NegativeFactorFilterSideEffect(private val delegate: SideEffect): SideEffect by delegate {
+class NegativeFactorFilterSideEffect(private val delegate: SideEffect) : SideEffect by delegate {
 
     override fun apply(child: View, factor: Float) {
         if (factor < 0) {

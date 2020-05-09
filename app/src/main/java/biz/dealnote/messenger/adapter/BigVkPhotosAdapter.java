@@ -42,17 +42,16 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
 
     private static final int VIEW_TYPE_PHOTO = 0;
     private static final int VIEW_TYPE_UPLOAD = 1;
-
+    private static int holderIdGenerator;
     private final SharedHolders<UploadViewHolder> mUploadViewHolders;
     private final Set<PhotoViewHolder> mPhotoHolders;
-
     private Context mContext;
     private int mColorPrimaryWithAlpha;
     private String mPicassoTag;
     private PhotosActionListener mPhotosActionListener;
     private UploadActionListener mUploadActionListener;
 
-    public BigVkPhotosAdapter(Context context, @NonNull List<Upload> uploads, @NonNull List<SelectablePhotoWrapper> photoWrappers, String picassoTag){
+    public BigVkPhotosAdapter(Context context, @NonNull List<Upload> uploads, @NonNull List<SelectablePhotoWrapper> photoWrappers, String picassoTag) {
         this.mContext = context;
         this.mPhotoHolders = new HashSet<>();
         this.mUploadViewHolders = new SharedHolders<>(false);
@@ -63,9 +62,14 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         super.setData(DATA_TYPE_PHOTO, photoWrappers);
     }
 
+    private static int generateNextHolderId() {
+        holderIdGenerator++;
+        return holderIdGenerator;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case VIEW_TYPE_PHOTO:
                 return new PhotoViewHolder(LayoutInflater.from(mContext).inflate(R.layout.vk_photo_item, parent, false));
             case VIEW_TYPE_UPLOAD:
@@ -77,7 +81,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int adapterPosition) {
-        switch (getItemViewType(adapterPosition)){
+        switch (getItemViewType(adapterPosition)) {
             case VIEW_TYPE_PHOTO:
                 bindPhotoViewHolder((PhotoViewHolder) holder, getItem(adapterPosition));
                 break;
@@ -87,16 +91,16 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         }
     }
 
-    private void removePhotoViewHolderByTag(@NonNull SelectablePhotoWrapper tag){
+    private void removePhotoViewHolderByTag(@NonNull SelectablePhotoWrapper tag) {
         Iterator<PhotoViewHolder> iterator = mPhotoHolders.iterator();
-        while (iterator.hasNext()){
-            if(tag.equals(iterator.next().itemView.getTag())){
+        while (iterator.hasNext()) {
+            if (tag.equals(iterator.next().itemView.getTag())) {
                 iterator.remove();
             }
         }
     }
 
-    private void bindUploadViewHolder(UploadViewHolder holder, final Upload upload){
+    private void bindUploadViewHolder(UploadViewHolder holder, final Upload upload) {
         mUploadViewHolders.put(upload.getId(), holder);
 
         holder.setupProgress(upload.getStatus(), upload.getProgress(), false);
@@ -109,13 +113,13 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
                 .into(holder.image);
 
         holder.progressRoot.setOnClickListener(v -> {
-            if(mUploadActionListener != null){
+            if (mUploadActionListener != null) {
                 mUploadActionListener.onUploadRemoveClicked(upload);
             }
         });
     }
 
-    private void bindPhotoViewHolder(final PhotoViewHolder holder, final SelectablePhotoWrapper photoWrapper){
+    private void bindPhotoViewHolder(final PhotoViewHolder holder, final SelectablePhotoWrapper photoWrapper) {
         removePhotoViewHolderByTag(photoWrapper);
         holder.itemView.setTag(photoWrapper);
         mPhotoHolders.add(holder);
@@ -146,7 +150,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
                 .into(holder.photoImageView);
 
         View.OnClickListener clickListener = v -> {
-            if(mPhotosActionListener != null){
+            if (mPhotosActionListener != null) {
                 mPhotosActionListener.onPhotoClick(holder, photoWrapper);
             }
         };
@@ -160,7 +164,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
     public int getItemViewType(int adapterPosition) {
         int dataType = getDataTypeByAdapterPosition(adapterPosition);
 
-        switch (dataType){
+        switch (dataType) {
             case DATA_TYPE_PHOTO:
                 return VIEW_TYPE_PHOTO;
             case DATA_TYPE_UPLOAD:
@@ -178,19 +182,19 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         this.mUploadActionListener = uploadActionListener;
     }
 
-    public void updatePhotoHoldersSelectionAndIndexes(){
-        for(PhotoViewHolder holder : mPhotoHolders){
+    public void updatePhotoHoldersSelectionAndIndexes() {
+        for (PhotoViewHolder holder : mPhotoHolders) {
             SelectablePhotoWrapper photo = (SelectablePhotoWrapper) holder.itemView.getTag();
             holder.setSelected(photo.isSelected());
             holder.resolveIndexText(photo);
         }
     }
 
-    public void updateUploadHoldersProgress(int uploadId, boolean smoothly, int progress){
+    public void updateUploadHoldersProgress(int uploadId, boolean smoothly, int progress) {
         UploadViewHolder holder = mUploadViewHolders.findOneByEntityId(uploadId);
 
-        if(nonNull(holder)){
-            if(smoothly){
+        if (nonNull(holder)) {
+            if (smoothly) {
                 holder.progress.changePercentageSmoothly(progress);
             } else {
                 holder.progress.changePercentage(progress);
@@ -201,7 +205,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         }
     }
 
-    public void cleanup(){
+    public void cleanup() {
         mPhotoHolders.clear();
         mUploadViewHolders.release();
     }
@@ -233,8 +237,8 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
             this.title = itemView.findViewById(R.id.title);
         }
 
-        void setupProgress(int status, int progressValue, boolean smoothly){
-            if(smoothly && status == Upload.STATUS_UPLOADING){
+        void setupProgress(int status, int progressValue, boolean smoothly) {
+            if (smoothly && status == Upload.STATUS_UPLOADING) {
                 progress.changePercentageSmoothly(progressValue);
             } else {
                 progress.setVisibility(status == Upload.STATUS_UPLOADING ? View.VISIBLE : View.GONE);
@@ -242,8 +246,8 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
             }
         }
 
-        void setupTitle(int status, int progress){
-            switch (status){
+        void setupTitle(int status, int progress) {
+            switch (status) {
                 case Upload.STATUS_QUEUE:
                     title.setText(R.string.in_order);
                     break;
@@ -264,13 +268,6 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         public int getHolderId() {
             return (int) itemView.getTag();
         }
-    }
-
-    private static int holderIdGenerator;
-
-    private static int generateNextHolderId(){
-        holderIdGenerator++;
-        return holderIdGenerator;
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -296,7 +293,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
             tvComment = itemView.findViewById(R.id.vk_photo_item_comment_counter);
         }
 
-        public void setSelected(boolean selected){
+        public void setSelected(boolean selected) {
             index.setVisibility(selected ? View.VISIBLE : View.GONE);
             darkView.setVisibility(selected ? View.VISIBLE : View.GONE);
         }

@@ -48,6 +48,12 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
 
     private boolean actualDataReceived;
     private boolean actualDataEndOfContent;
+    private boolean actualDataLoadingNow;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean searchRunNow;
+    private CompositeDisposable seacrhDisposable = new CompositeDisposable();
 
     public RequestsPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -59,19 +65,20 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
         this.data.add(SEACRH_CACHE, new UsersPart(R.string.results_in_the_cache, new ArrayList<>(), false));
         this.data.add(SEARCH_WEB, new UsersPart(R.string.results_in_a_network, new ArrayList<>(), false));
 
-        if(accountId == userId) {
+        if (accountId == userId) {
             loadAllCachedData();
         }
         requestActualData(0);
     }
 
-    private boolean actualDataLoadingNow;
-
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
+    private static boolean allow(User user, String preparedQ) {
+        String full = user.getFullName().toLowerCase();
+        return full.contains(preparedQ);
+    }
 
     private void requestActualData(int offset) {
         final int accountId = super.getAccountId();
-        if(accountId != userId) {
+        if (accountId != userId) {
             this.cacheLoadingNow = false;
             resolveRefreshingView();
             return;
@@ -135,9 +142,6 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
 
         resolveRefreshingView();
     }
-
-    private boolean cacheLoadingNow;
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
 
     private void loadAllCachedData() {
         final int accountId = super.getAccountId();
@@ -218,8 +222,6 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
         runNetSeacrh(0, true);
     }
 
-    private boolean searchRunNow;
-
     private void runNetSeacrh(int offset, boolean withDelay) {
         if (trimmedIsEmpty(this.q)) {
             return;
@@ -271,11 +273,6 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
         }
     }
 
-    private static boolean allow(User user, String preparedQ) {
-        String full = user.getFullName().toLowerCase();
-        return full.contains(preparedQ);
-    }
-
     private void reFillCache() {
         data.get(SEACRH_CACHE).users.clear();
 
@@ -293,8 +290,6 @@ public class RequestsPresenter extends AccountDependencyPresenter<IAllFriendsVie
 
         data.get(SEACRH_CACHE).displayCount = count;
     }
-
-    private CompositeDisposable seacrhDisposable = new CompositeDisposable();
 
     private boolean isSeacrhNow() {
         return nonEmpty(q);

@@ -35,13 +35,12 @@ import biz.dealnote.messenger.settings.Settings;
 
 public class AudiosTabsFragment extends BaseFragment {
 
-    private int accountId;
-    private int ownerId;
-
     public static final int PLAYLISTS = -3;
     public static final int MY_RECOMENDATIONS = -2;
     public static final int MY_AUDIO = -1;
     public static final int TOP_ALL = 0;
+    private int accountId;
+    private int ownerId;
 
     public static Bundle buildArgs(int accountId, int ownerId) {
         Bundle args = new Bundle();
@@ -84,13 +83,13 @@ public class AudiosTabsFragment extends BaseFragment {
 
         new TabLayoutMediator(view.findViewById(R.id.fragment_audios_tabs), viewPager, (tab, position) -> {
             Integer fid = adapter.mFragments.get(position);
-            if(fid == MY_AUDIO)
+            if (fid == MY_AUDIO)
                 tab.setText(getString(R.string.my_saved));
-            else if(fid == PLAYLISTS)
+            else if (fid == PLAYLISTS)
                 tab.setText(getString(R.string.playlists));
-            else if(fid == MY_RECOMENDATIONS)
+            else if (fid == MY_RECOMENDATIONS)
                 tab.setText(getString(R.string.recommendation));
-            else if(fid == TOP_ALL)
+            else if (fid == TOP_ALL)
                 tab.setText(getString(R.string.top));
             else
                 tab.setText(VKApiAudio.Genre.getTitleByGenre(requireActivity(), fid));
@@ -101,9 +100,8 @@ public class AudiosTabsFragment extends BaseFragment {
         return accountId;
     }
 
-    private Fragment CreateAudiosFragment(int option_menu)
-    {
-        if(option_menu == PLAYLISTS)
+    private Fragment CreateAudiosFragment(int option_menu) {
+        if (option_menu == PLAYLISTS)
             return AudioPlaylistsFragment.newInstance(getAccountId(), ownerId);
         else {
             AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0, null);
@@ -115,9 +113,9 @@ public class AudiosTabsFragment extends BaseFragment {
     private void setupViewPager(ViewPager2 viewPager, Adapter adapter) {
         adapter.addFragment(MY_AUDIO);
         adapter.addFragment(PLAYLISTS);
-        if(ownerId >= 0)
+        if (ownerId >= 0)
             adapter.addFragment(MY_RECOMENDATIONS);
-        if(getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
+        if (getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
             adapter.addFragment(TOP_ALL);
             adapter.addFragment(VKApiAudio.Genre.ETHNIC);
             adapter.addFragment(VKApiAudio.Genre.INSTRUMENTAL);
@@ -162,6 +160,24 @@ public class AudiosTabsFragment extends BaseFragment {
                 .apply(requireActivity());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                AudioSearchCriteria criteria = new AudioSearchCriteria("", false, true);
+                PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.AUDIOS, criteria).tryOpenWith(requireActivity());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_audio_main, menu);
+    }
+
     private class Adapter extends FragmentStateAdapter {
         private final List<Integer> mFragments = new ArrayList<>();
 
@@ -183,23 +199,5 @@ public class AudiosTabsFragment extends BaseFragment {
         public int getItemCount() {
             return mFragments.size();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                AudioSearchCriteria criteria = new AudioSearchCriteria("", false, true);
-                PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.AUDIOS, criteria).tryOpenWith(requireActivity());
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_audio_main, menu);
     }
 }

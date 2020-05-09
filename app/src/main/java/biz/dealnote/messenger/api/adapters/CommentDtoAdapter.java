@@ -25,7 +25,7 @@ public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         dto.id = optInt(root, "id");
         dto.from_id = optInt(root, "from_id");
 
-        if(dto.from_id == 0){
+        if (dto.from_id == 0) {
             dto.from_id = optInt(root, "owner_id");
         }
 
@@ -34,15 +34,15 @@ public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         dto.reply_to_user = optInt(root, "reply_to_user");
         dto.reply_to_comment = optInt(root, "reply_to_comment");
 
-        if(root.has("attachments")){
+        if (root.has("attachments")) {
             dto.attachments = context.deserialize(root.get("attachments"), VkApiAttachments.class);
         }
 
-        if(root.has("thread") && root.get("thread").getAsJsonObject().has("count")){
+        if (root.has("thread") && root.get("thread").getAsJsonObject().has("count")) {
             dto.threads = root.get("thread").getAsJsonObject().get("count").getAsInt();
         }
 
-        if(root.has("likes")){
+        if (root.has("likes")) {
             JsonObject likesRoot = root.getAsJsonObject("likes");
             dto.likes = optInt(likesRoot, "count");
             dto.user_likes = optIntAsBoolean(likesRoot, "user_likes");

@@ -22,6 +22,7 @@ public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends
 
     private final H mHost;
     private SharedHolders<AbsStepHolder<H>> mSharedHolders;
+    private BaseHolderListener mActionListener;
 
     public AbsSteppersVerticalAdapter(@NonNull H host, @NonNull BaseHolderListener actionListener) {
         this.mHost = host;
@@ -35,7 +36,7 @@ public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends
     }
 
     @Nullable
-    private AbsStepHolder<H> findHolderByStepIndex(int step){
+    private AbsStepHolder<H> findHolderByStepIndex(int step) {
         return mSharedHolders.findOneByEntityId(step);
     }
 
@@ -77,9 +78,9 @@ public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends
         holder.itemView.setPadding(0, 0, 0, position == getItemCount() - 1 ? px16dp : 0);
     }
 
-    public void updateNextButtonAvailability(int step){
+    public void updateNextButtonAvailability(int step) {
         AbsStepHolder<H> holder = findHolderByStepIndex(step);
-        if(Objects.nonNull(holder)){
+        if (Objects.nonNull(holder)) {
             holder.setNextButtonAvailable(mHost.canMoveNext(step));
         }
     }
@@ -93,6 +94,4 @@ public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends
     public int getItemViewType(int position) {
         return position;
     }
-
-    private BaseHolderListener mActionListener;
 }

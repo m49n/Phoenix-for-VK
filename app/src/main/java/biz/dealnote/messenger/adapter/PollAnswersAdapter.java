@@ -25,6 +25,7 @@ public class PollAnswersAdapter extends RecyclerBindableAdapter<Poll.Answer, Pol
     private boolean checkable;
     private OnAnswerChangedCallback listener;
     private Context context;
+    private boolean multiple;
 
     public PollAnswersAdapter(Context context, @NonNull List<Poll.Answer> items) {
         super(items);
@@ -63,26 +64,6 @@ public class PollAnswersAdapter extends RecyclerBindableAdapter<Poll.Answer, Pol
         return R.layout.item_poll_answer;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tvCount;
-        CheckBox rbButton;
-        TextView tvTitle;
-        ProgressBar pbRate;
-        View mVotedRoot;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            rbButton = itemView.findViewById(R.id.item_poll_answer_radio);
-            tvCount = itemView.findViewById(R.id.item_poll_answer_count);
-            tvTitle = itemView.findViewById(R.id.item_poll_answer_title);
-            pbRate = itemView.findViewById(R.id.item_poll_answer_progress);
-            mVotedRoot = itemView.findViewById(R.id.voted_root);
-        }
-    }
-
-    private boolean multiple;
-
     private void changeChecked(int id, boolean isChecked) {
         if (checkable) {
             if (isChecked) {
@@ -118,5 +99,23 @@ public class PollAnswersAdapter extends RecyclerBindableAdapter<Poll.Answer, Pol
 
     public interface OnAnswerChangedCallback {
         void onAnswerChanged(Set<Integer> checked);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView tvCount;
+        CheckBox rbButton;
+        TextView tvTitle;
+        ProgressBar pbRate;
+        View mVotedRoot;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            rbButton = itemView.findViewById(R.id.item_poll_answer_radio);
+            tvCount = itemView.findViewById(R.id.item_poll_answer_count);
+            tvTitle = itemView.findViewById(R.id.item_poll_answer_title);
+            pbRate = itemView.findViewById(R.id.item_poll_answer_progress);
+            mVotedRoot = itemView.findViewById(R.id.voted_root);
+        }
     }
 }

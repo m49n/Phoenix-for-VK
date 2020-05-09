@@ -32,10 +32,16 @@ import biz.dealnote.messenger.util.ViewUtils;
 
 public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOfficialAdapter.Holder> {
 
+    private static final int DIV_DISABLE = 0;
+    private static final int DIV_TODAY = 1;
+    private static final int DIV_YESTERDAY = 2;
+    private static final int DIV_THIS_WEEK = 3;
+    private static final int DIV_OLD = 4;
     private AnswerVKOfficialList data;
     private Context context;
     private Transformation transformation;
     private long mStartOfToday;
+    private ClickListener clickListener;
 
     public AnswerVKOfficialAdapter(AnswerVKOfficialList data, Context context) {
         this.data = data;
@@ -50,33 +56,30 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         return new Holder(LayoutInflater.from(context).inflate(R.layout.item_answer_official, parent, false));
     }
 
-    private void LoadIcon(@NonNull final Holder holder, final AnswerVKOfficial Page, boolean isSmall)
-    {
-        if(!isSmall)
-            holder.avatar.setOnClickListener(v -> {});
-        if(Page.iconURL != null) {
-            if(isSmall) {
+    private void LoadIcon(@NonNull final Holder holder, final AnswerVKOfficial Page, boolean isSmall) {
+        if (!isSmall)
+            holder.avatar.setOnClickListener(v -> {
+            });
+        if (Page.iconURL != null) {
+            if (isSmall) {
                 holder.small.setVisibility(View.VISIBLE);
                 ViewUtils.displayAvatar(holder.small, transformation, Page.iconURL, Constants.PICASSO_TAG);
-            }
-            else {
+            } else {
                 holder.small.setVisibility(View.INVISIBLE);
                 ViewUtils.displayAvatar(holder.avatar, transformation, Page.iconURL, Constants.PICASSO_TAG);
             }
-        }
-        else {
+        } else {
             int IconRes = GetIconResByType(Page.iconType);
 
             Drawable tr = AppCompatResources.getDrawable(context, IconRes);
-            if(IconRes == R.drawable.phoenix) {
+            if (IconRes == R.drawable.phoenix) {
                 assert tr != null;
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(context));
             }
-            if(isSmall) {
+            if (isSmall) {
                 holder.small.setVisibility(View.VISIBLE);
                 holder.small.setImageDrawable(tr);
-            }
-            else {
+            } else {
                 holder.small.setVisibility(View.INVISIBLE);
                 holder.avatar.setImageDrawable(tr);
             }
@@ -86,18 +89,6 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
-
-    private ClickListener clickListener;
-
-    public interface ClickListener {
-        void openOwnerWall(int owner_id);
-    }
-
-    private static final int DIV_DISABLE = 0;
-    private static final int DIV_TODAY = 1;
-    private static final int DIV_YESTERDAY = 2;
-    private static final int DIV_THIS_WEEK = 3;
-    private static final int DIV_OLD = 4;
 
     private int getDivided(long messageDateJavaTime, Long previousMessageDateJavaTime) {
         int stCurrent = getStatus(messageDateJavaTime);
@@ -161,12 +152,12 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
 
         holder.small.setVisibility(View.INVISIBLE);
-        if(Page.header != null) {
+        if (Page.header != null) {
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.header));
             holder.name.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
 
             Matcher matcher = LinkParser.MENTIONS_AVATAR_PATTERN.matcher(Page.header);
-            if(matcher.find()) {
+            if (matcher.find()) {
                 String Type = matcher.group(1);
                 int Id = Integer.parseInt(matcher.group(2));
                 if (Type.equals("event") || Type.equals("club") || Type.equals("public"))
@@ -182,34 +173,29 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
                     int finalId = Id;
                     holder.avatar.setOnClickListener(v -> clickListener.openOwnerWall(finalId));
                     LoadIcon(holder, Page, true);
-                }
-                else {
+                } else {
                     PicassoInstance.with().cancelRequest(holder.avatar);
                     LoadIcon(holder, Page, false);
                 }
-            }
-            else {
+            } else {
                 PicassoInstance.with().cancelRequest(holder.avatar);
                 LoadIcon(holder, Page, false);
             }
-        }
-        else {
+        } else {
             holder.name.setText("");
             LoadIcon(holder, Page, false);
         }
-        if(Page.text != null) {
+        if (Page.text != null) {
 
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.text));
             holder.description.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
-        }
-        else
+        } else
             holder.description.setText("");
         holder.time.setText(AppTextUtils.getDateFromUnixTime(context, Page.time));
     }
-    
-    private int GetIconResByType(String IconType)
-    {
-        if(IconType == null)
+
+    private int GetIconResByType(String IconType) {
+        if (IconType == null)
             return R.drawable.phoenix;
         if (IconType.equals("suggested_post_published")) {
             return R.drawable.ic_feedback_suggested_post_published;
@@ -309,7 +295,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
     @Override
     public int getItemCount() {
-        if(data == null || data.items == null)
+        if (data == null || data.items == null)
             return 0;
         return data.items.size();
     }
@@ -327,6 +313,10 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    public interface ClickListener {
+        void openOwnerWall(int owner_id);
     }
 
     public static class Holder extends RecyclerView.ViewHolder {

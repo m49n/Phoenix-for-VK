@@ -14,18 +14,10 @@ public class VKApiUser extends VKApiOwner {
     public static final int SEX_WOMAN = 1;
 
     public static final String CAMERA_50 = "http://vk.com/images/camera_c.gif";
-
-    public static VKApiUser create(int id){
-        VKApiUser user = new VKApiUser();
-        user.id = id;
-        return user;
-    }
-
     public static final int FRIEND_STATUS_IS_NOT_FRIEDND = 0;
     public static final int FRIEND_STATUS_REQUEST_SENT = 1;
     public static final int FRIEND_STATUS_HAS_INPUT_REQUEST = 2;
     public static final int FRIEND_STATUS_IS_FRIEDND = 3;
-
     public static final String ALL_FIELDS = "sex, bdate, city, country, photo_50, photo_100, photo_200_orig," +
             " photo_200, photo_400_orig, photo_max, photo_max_orig, photo_id, online, online_mobile, domain," +
             " has_mobile, contacts, connections, site, education, universities, schools, can_post, can_see_all_posts," +
@@ -36,17 +28,14 @@ public class VKApiUser extends VKApiOwner {
      * First name of user.
      */
     public String first_name;
-
     /**
      * Last name of user.
      */
     public String last_name;
-
     /**
      * Last visit date(in Unix time).
      */
     public long last_seen;
-
     /**
      * Last visit paltform(in Unix time).
      * 1    mobile	Мобильная версия сайта или неопознанное мобильное приложение
@@ -58,39 +47,31 @@ public class VKApiUser extends VKApiOwner {
      * 7	web	    Полная версия сайта или неопознанное приложение
      */
     public int platform;
-
     /**
      * Information whether the user is online.
      */
     public boolean online;
-
     /**
      * If user utilizes a mobile application or site mobile version, it returns online_mobile as additional.
      */
     public boolean online_mobile;
-
     public int online_app;
-
     /**
      * URL of default square photo of the user with 50 pixels in width.
      */
     public String photo_50;
-
     /**
      * URL of default square photo of the user with 100 pixels in width.
      */
     public String photo_100;
-
     /**
      * URL of default square photo of the user with 200 pixels in width.
      */
     public String photo_200;
-
     /**
      * URL of default square photo of the user with max pixels in width.
      */
     public String photo_max_orig;
-
     /**
      * статус пользователя. Возвращается строка,
      * содержащая текст статуса, расположенного в профиле под именем пользователя.
@@ -99,267 +80,216 @@ public class VKApiUser extends VKApiOwner {
      * содержащее информацию о транслируемой композиции.
      */
     public String status;
-
     /**
      * Text of user status.
      */
     public String activity;
-
     /**
      * Audio which broadcasting to status.
      */
     public VKApiAudio status_audio;
-
     /**
      * User's date of birth.  Returned as DD.MM.YYYY or DD.MM (if birth year is hidden).
      */
     public String bdate;
-
     /**
      * City specified on user's page in "Contacts" section.
      */
     public VKApiCity city;
-
     /**
      * Country specified on user's page in "Contacts" section.
      */
     public VKApiCountry country;
-
-
     /**
      * List of user's universities
      */
     public List<VKApiUniversity> universities;
-
     /**
      * List of user's schools
      */
     public List<VKApiSchool> schools;
-
     /**
      * List of user's schools
      */
     public List<VKApiMilitary> militaries;
-
     /**
      * List of user's schools
      */
     public List<VKApiCareer> careers;
-
     /**
      * Views on smoking.
      *
      * @see {@link VKApiUser.Attitude}
      */
     public int smoking;
-
     /**
      * Views on alcohol.
      *
      * @see {@link VKApiUser.Attitude}
      */
     public int alcohol;
-
     /**
      * Views on policy.
      *
      * @see {@link VKApiUser.Political}
      */
     public int political;
-
     /**
      * Life main stuffs.
      *
      * @see {@link VKApiUser.LifeMain}
      */
     public int life_main;
-
     /**
      * People main stuffs.
      *
      * @see {@link VKApiUser.PeopleMain}
      */
     public int people_main;
-
     /**
      * Stuffs that inspire the user.
      */
     public String inspired_by;
-
     /**
      * List of user's languages
      */
     public String[] langs;
-
     /**
      * Religion of user
      */
     public String religion;
-
     /**
      * Name of user's account in Facebook
      */
     public String facebook;
-
     /**
      * ID of user's facebook
      */
     public String facebook_name;
-
     /**
      * Name of user's account in LiveJournal
      */
     public String livejournal;
-
     /**
      * Name of user's account in Skype
      */
     public String skype;
-
     /**
      * URL of user's site
      */
     public String site;
-
     /**
      * Name of user's account in Twitter
      */
     public String twitter;
-
     /**
      * Name of user's account in Instagram
      */
     public String instagram;
-
     /**
      * User's mobile phone number
      */
     public String mobile_phone;
-
     /**
      * User's home phone number
      */
     public String home_phone;
-
     /**
      * Page screen name.
      */
     public String screen_name;
-
     /**
      * Nickname of user.
      */
     public String nickname;
-
     /**
      * User's activities
      */
     public String activities;
-
     /**
      * User's interests
      */
     public String interests;
-
     /**
      * User's favorite movies
      */
     public String movies;
-
     /**
      * User's favorite TV Shows
      */
     public String tv;
-
     /**
      * User's favorite books
      */
     public String books;
-
     /**
      * User's favorite games
      */
     public String games;
-
     /**
      * User's about information
      */
     public String about;
-
     /**
      * User's favorite quotes
      */
     public String quotes;
-
     /**
      * Information whether others can posts on user's wall.
      */
     public boolean can_post;
-
     /**
      * Information whether others' posts on user's wall can be viewed
      */
     public boolean can_see_all_posts;
-
     /**
      * Information whether private messages can be sent to this user.
      */
     public boolean can_write_private_message;
-
     /**
      * Information whether user can comment wall posts.
      */
     public boolean wall_comments;
-
     /**
      * Information whether the user is banned in VK.
      */
     public boolean is_banned;
-
     /**
      * Information whether the user is deleted in VK.
      */
     public boolean is_deleted;
-
     /**
      * Information whether the user's post of wall shows by default.
      */
     public boolean wall_default_owner;
-
     /**
      * Information whether the user has a verified page in VK
      */
     public boolean verified;
-
     /**
      * User sex.
      *
      * @see {@link VKApiUser.Sex}
      */
     public int sex;
-
     /**
      * Set of user's counters.
      */
     public Counters counters;
-
     /**
      * Relationship status.
      *
      * @see {@link VKApiUser.Relation}
      */
     public int relation;
-
     /**
      * List of user's relatives
      */
     public List<Relative> relatives;
-
     /**
      * Information whether the current user has add this user to the blacklist.
      */
     public boolean blacklisted_by_me;
-
     /**
      * короткий адрес страницы.
      * Возвращается строка, содержащая короткий адрес страницы
@@ -367,90 +297,74 @@ public class VKApiUser extends VKApiOwner {
      * Если он не назначен, возвращается "id"+uid, например, id35828305.
      */
     public String domain;
-
     public String home_town;
-
     /**
      * id главной фотографии профиля пользователя в формате user_id+photo_id,
      * например, 6492_192164258. В некоторых случаях (если фотография была установлена очень давно)
      * это поле не возвращается.
      */
     public String photo_id;
-
     /**
      * возвращается 1, если текущий пользователь находится в черном списке у запрашиваемого.
      */
     public boolean blacklisted;
-
     /**
      * url фотографии пользователя, имеющей ширину 200 пикселей.
      * В случае отсутствия у пользователя фотографии возвращается http://vk.com/images/camera_a.gif.
      */
     public String photo_200_orig;
-
     /**
      * url фотографии пользователя, имеющей ширину 400 пикселей.
      * Если у пользователя отсутствует фотография такого размера, ответ не будет содержать этого поля.
      */
     public String photo_400_orig;
-
     /**
      * url квадратной фотографии пользователя с максимальной шириной.
      * Может быть возвращена фотография, имеющая ширину как 200, так и 100 пикселей.
      * В случае отсутствия у пользователя фотографии возвращается http://vk.com/images/camera_b.gif.
      */
     public String photo_max;
-
     /**
      * информация о том, известен ли номер мобильного телефона пользователя.
      * Возвращаемые значения: 1 — известен, 0 — не известен.
      * Рекомендуется использовать перед вызовом метода secure.sendSMSNotification.
      */
     public boolean has_mobile;
-
     /**
      * информация о текущем роде занятия пользователя. Возвращаются
      */
     public Occupation occupation;
-
     /**
      * Если в семейном положении указан другой пользователь,
      * дополнительно возвращается объект relation_partner, содержащий id и имя этого человека.
      */
     public VKApiUser relation_partner;
-
     /**
      * любимая музыка.
      */
     public String music;
-
     /**
      * информация о том, разрешено ли видеть чужие аудиозаписи на стене пользователя.
      * Возвращаемые значения: 1 —разрешено, 0 — не разрешено.
      */
     public boolean can_see_audio;
-
     /**
      * информация о том, будет ли отправлено уведомление пользователю о заявке в друзья.
      * Возвращаемые значения: 1 — уведомление будет отправлено, 0 — уведомление не будет оптравлено.
      */
     public boolean can_send_friend_request;
-
     /**
      * возвращается 1, если пользователь находится в закладках у текущего пользователя.
      */
     public boolean is_favorite;
-
     /**
      * временная зона пользователя. Возвращается только при запросе информации о текущем пользователе.
      */
     public int timezone;
-
     /**
      * девичья фамилия.
      */
     public String maiden_name;
-
     /**
      * 1 – пользователь друг, 2 – пользователь не в друзьях.
      */
@@ -463,13 +377,12 @@ public class VKApiUser extends VKApiOwner {
      * 3 – пользователь является другом;
      */
     public int friend_status;
-
     /**
      * Содержит уровень полномочий руководителя сообщества
      */
     public String role;
 
-        /**
+    /**
      * Creates empty User instance.
      */
     public VKApiUser() {
@@ -481,7 +394,13 @@ public class VKApiUser extends VKApiOwner {
         this.id = id;
     }
 
-        @Override
+    public static VKApiUser create(int id) {
+        VKApiUser user = new VKApiUser();
+        user.id = id;
+        return user;
+    }
+
+    @Override
     public String getMaxSquareAvatar() {
         if (photo_200 != null && photo_200.length() > 0) {
             return photo_200;

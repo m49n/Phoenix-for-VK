@@ -23,11 +23,6 @@ public class CreatePhotoAlbumStep2Holder extends AbsStepHolder<CreatePhotoAlbumS
         mActionListener = actionListener;
     }
 
-    public interface ActionListener extends BaseHolderListener {
-        void onUploadByAdminsOnlyChecked(boolean checked);
-        void onCommentsDisableChecked(boolean checked);
-    }
-
     @Override
     public void initInternalView(View contentView) {
         mUploadByAdminsOnly = contentView.findViewById(R.id.upload_only_admins);
@@ -47,5 +42,11 @@ public class CreatePhotoAlbumStep2Holder extends AbsStepHolder<CreatePhotoAlbumS
 
         mDisableComments.setEnabled(host.isAdditionalOptionsEnable());
         mUploadByAdminsOnly.setEnabled(host.isAdditionalOptionsEnable());
+    }
+
+    public interface ActionListener extends BaseHolderListener {
+        void onUploadByAdminsOnlyChecked(boolean checked);
+
+        void onCommentsDisableChecked(boolean checked);
     }
 }

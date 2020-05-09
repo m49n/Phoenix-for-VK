@@ -2,7 +2,7 @@ package biz.dealnote.messenger.api.model.response;
 
 public class DeleteFriendResponse {
     /**
-     *  удалось успешно удалить друга
+     * удалось успешно удалить друга
      */
     public boolean success;
 

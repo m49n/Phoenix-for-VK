@@ -46,8 +46,18 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class FilterEditFragment extends BottomSheetDialogFragment implements SearchOptionsAdapter.OptionClickListener {
 
+    private static final int REQUEST_CODE_COUTRY = 126;
+    private static final int REQUEST_CODE_CITY = 127;
+    private static final int REQUEST_CODE_UNIVERSITY = 128;
+    private static final int REQUEST_CODE_FACULTY = 129;
+    private static final int REQUEST_CODE_CHAIR = 130;
+    private static final int REQUEST_CODE_SCHOOL = 131;
+    private static final int REQUEST_CODE_SCHOOL_CLASS = 132;
     private ArrayList<BaseOption> mData;
     private SearchOptionsAdapter mAdapter;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private int mAccountId;
+    private TextView mEmptyText;
 
     public static FilterEditFragment newInstance(int accountId, ArrayList<BaseOption> options) {
         Bundle args = new Bundle();
@@ -58,10 +68,6 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         return fragment;
     }
 
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
-
-    private int mAccountId;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +76,8 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         this.mData = getArguments().getParcelableArrayList(Extra.LIST);
     }
 
-    private TextView mEmptyText;
-
-    private void resolveEmptyTextVisibility(){
-        if(Objects.nonNull(mEmptyText)){
+    private void resolveEmptyTextVisibility() {
+        if (Objects.nonNull(mEmptyText)) {
             mEmptyText.setVisibility(Utils.isEmpty(mData) ? View.VISIBLE : View.GONE);
         }
     }
@@ -111,7 +115,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         dialog.setContentView(root);
     }
 
-    private void onSaveClick(){
+    private void onSaveClick() {
         Intent data = new Intent();
         data.putParcelableArrayListExtra(Extra.LIST, mData);
 
@@ -134,14 +138,6 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 .setPositiveButton(R.string.button_cancel, null)
                 .show();
     }
-
-    private static final int REQUEST_CODE_COUTRY = 126;
-    private static final int REQUEST_CODE_CITY = 127;
-    private static final int REQUEST_CODE_UNIVERSITY = 128;
-    private static final int REQUEST_CODE_FACULTY = 129;
-    private static final int REQUEST_CODE_CHAIR = 130;
-    private static final int REQUEST_CODE_SCHOOL = 131;
-    private static final int REQUEST_CODE_SCHOOL_CLASS = 132;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:paddingBottom="@dimen/content_large_margin"
     android:paddingStart="@dimen/content_medium_margin"
+    android:paddingTop="@dimen/content_large_margin"
     android:paddingEnd="@dimen/content_medium_margin"
-    android:paddingTop="@dimen/content_large_margin">
+    android:paddingBottom="@dimen/content_large_margin">
 
     <ImageView
         android:id="@+id/progress_button_progress_icon"
@@ -27,8 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </RelativeLayout>

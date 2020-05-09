@@ -28,10 +28,14 @@ public class VideoAlbumsPresenter extends AccountDependencyPresenter<IVideoAlbum
     private final int ownerId;
     private final String action;
     private final List<VideoAlbum> data;
+    private final IVideosInteractor videosInteractor;
     private boolean endOfContent;
     private boolean actualDataReceived;
-
-    private final IVideosInteractor videosInteractor;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean netLoadingNow;
+    private int netLoadingOffset;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheNowLoading;
 
     public VideoAlbumsPresenter(int accountId, int ownerId, String action, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -51,10 +55,6 @@ public class VideoAlbumsPresenter extends AccountDependencyPresenter<IVideoAlbum
             getView().displayLoading(netLoadingNow);
         }
     }
-
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-    private boolean netLoadingNow;
-    private int netLoadingOffset;
 
     private void requestActualData(int offset) {
         this.netLoadingNow = true;
@@ -95,9 +95,6 @@ public class VideoAlbumsPresenter extends AccountDependencyPresenter<IVideoAlbum
             callView(view -> view.notifyDataAdded(startSize, albums.size()));
         }
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheNowLoading;
 
     private void loadAllDataFromDb() {
         final int accountId = super.getAccountId();

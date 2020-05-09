@@ -36,7 +36,7 @@ public class AspectRatioFrameLayout extends FrameLayout {
         }
     }
 
-    public void setAspectRatio(int w, int h){
+    public void setAspectRatio(int w, int h) {
         this.mProportionHeight = h;
         this.mProportionWidth = w;
         invalidate();

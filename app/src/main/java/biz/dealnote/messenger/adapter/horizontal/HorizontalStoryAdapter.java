@@ -22,15 +22,16 @@ import biz.dealnote.messenger.util.ViewUtils;
 
 public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, HorizontalStoryAdapter.Holder> {
 
+    private Listener listener;
+
     public HorizontalStoryAdapter(List<Story> data) {
         super(data);
     }
 
-    private String getExpH(Long time)
-    {
-        if(time <= 4 && time > 1 || time <= 24 && time > 21)
+    private String getExpH(Long time) {
+        if (time <= 4 && time > 1 || time <= 24 && time > 21)
             return "Часа";
-        else if(time == 1)
+        else if (time == 1)
             return "Час";
         else
             return "Часов";
@@ -66,6 +67,14 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
         return R.layout.item_story;
     }
 
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener {
+        void onOptionClick(Story item, int pos);
+    }
+
     static class Holder extends RecyclerView.ViewHolder {
 
         MaterialCardView background;
@@ -80,15 +89,5 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
             expires = itemView.findViewById(R.id.item_story_expires);
             story_image = itemView.findViewById(R.id.item_story_pic);
         }
-    }
-
-    private Listener listener;
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
-    public interface Listener {
-        void onOptionClick(Story item, int pos);
     }
 }

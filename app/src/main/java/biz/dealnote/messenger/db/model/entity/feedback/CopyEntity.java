@@ -22,17 +22,17 @@ public class CopyEntity extends FeedbackEntity {
         return copies;
     }
 
+    public CopyEntity setCopies(CopiesEntity copies) {
+        this.copies = copies;
+        return this;
+    }
+
     public Entity getCopied() {
         return copied.get();
     }
 
     public CopyEntity setCopied(Entity copied) {
         this.copied = new EntityWrapper(copied);
-        return this;
-    }
-
-    public CopyEntity setCopies(CopiesEntity copies) {
-        this.copies = copies;
         return this;
     }
 }

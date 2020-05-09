@@ -60,6 +60,21 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
     private boolean messageIsRead;
     private IMessagesRepository messagesRepository;
+    private CompositeDisposable mLiveSubscription = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public static Intent forStart(Context context, int accountId, int peerId, String body, int mid, long messageTime, String imgUrl, String title) {
+        Intent intent = new Intent(context, QuickAnswerActivity.class);
+        intent.putExtra(PARAM_BODY, body);
+        intent.putExtra(Extra.ACCOUNT_ID, accountId);
+        intent.putExtra(Extra.MESSAGE_ID, mid);
+        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.TITLE, title);
+        intent.putExtra(PARAM_MESSAGE_SENT_TIME, messageTime);
+        intent.putExtra(Extra.IMAGE, imgUrl);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +167,6 @@ public class QuickAnswerActivity extends AppCompatActivity {
                 .subscribe(o -> finish()));
     }
 
-    private CompositeDisposable mLiveSubscription = new CompositeDisposable();
-
     private void cancelFinishWithDelay() {
         mLiveSubscription.dispose();
     }
@@ -169,19 +182,6 @@ public class QuickAnswerActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
-    }
-
-    public static Intent forStart(Context context, int accountId, int peerId, String body, int mid, long messageTime, String imgUrl, String title) {
-        Intent intent = new Intent(context, QuickAnswerActivity.class);
-        intent.putExtra(PARAM_BODY, body);
-        intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.MESSAGE_ID, mid);
-        intent.putExtra(Extra.PEER_ID, peerId);
-        intent.putExtra(Extra.TITLE, title);
-        intent.putExtra(PARAM_MESSAGE_SENT_TIME, messageTime);
-        intent.putExtra(Extra.IMAGE, imgUrl);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
     }
 
     /**
@@ -227,8 +227,6 @@ public class QuickAnswerActivity extends AppCompatActivity {
         messagesRepository.runSendingQueue();
         finish();
     }
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private void setMessageAsRead() {
         compositeDisposable.add(messagesRepository.markAsRead(accountId, peerId, messageId)

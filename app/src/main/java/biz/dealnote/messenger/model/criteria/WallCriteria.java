@@ -31,13 +31,13 @@ public class WallCriteria extends Criteria {
         return accountId;
     }
 
+    public int getMode() {
+        return mode;
+    }
+
     public WallCriteria setMode(int mode) {
         this.mode = mode;
         return this;
-    }
-
-    public int getMode() {
-        return mode;
     }
 
     public DatabaseIdRange getRange() {

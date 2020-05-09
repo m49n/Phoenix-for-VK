@@ -125,12 +125,12 @@ public class AesKeyPair {
                 '}';
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     public AesKeyPair setVersion(int version) {
         this.version = version;
         return this;
-    }
-
-    public int getVersion() {
-        return version;
     }
 }

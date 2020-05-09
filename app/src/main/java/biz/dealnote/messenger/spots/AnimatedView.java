@@ -23,11 +23,11 @@ class AnimatedView extends View {
         setX(target * xFactor);
     }
 
-    public void setTarget(int target) {
-        this.target = target;
-    }
-
     public int getTarget() {
         return target;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
     }
 }

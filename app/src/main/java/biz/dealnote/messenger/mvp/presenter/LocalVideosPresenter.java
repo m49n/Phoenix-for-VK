@@ -26,6 +26,7 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
     private static final String TAG = LocalVideosPresenter.class.getSimpleName();
 
     private List<LocalVideo> mLocalVideos;
+    private boolean mLoadingNow;
 
     public LocalVideosPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -45,11 +46,11 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
                 .subscribe(this::onDataLoaded, this::onLoadError));
     }
 
-    private void onLoadError(Throwable throwable){
+    private void onLoadError(Throwable throwable) {
         changeLoadingState(false);
     }
 
-    private void onDataLoaded(List<LocalVideo> data){
+    private void onDataLoaded(List<LocalVideo> data) {
         changeLoadingState(false);
         mLocalVideos = data;
         resolveListData();
@@ -65,16 +66,14 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
         resolveEmptyTextVisibility();
     }
 
-    private void resolveEmptyTextVisibility(){
-        if(isGuiReady()) getView().setEmptyTextVisible(Utils.safeIsEmpty(mLocalVideos));
+    private void resolveEmptyTextVisibility() {
+        if (isGuiReady()) getView().setEmptyTextVisible(Utils.safeIsEmpty(mLocalVideos));
     }
 
     private void resolveListData() {
         if (isGuiReady())
             getView().displayData(mLocalVideos);
     }
-
-    private boolean mLoadingNow;
 
     private void changeLoadingState(boolean loading) {
         mLoadingNow = loading;
@@ -113,7 +112,7 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
     }
 
     private void resolveFabVisibility(boolean visible, boolean anim) {
-        if(isGuiReady()){
+        if (isGuiReady()) {
             getView().setFabVisible(visible, anim);
         }
     }

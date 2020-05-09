@@ -67,6 +67,12 @@ public class VkApiPrivacy {
         public int id;
         public boolean allowed;
 
+        public Entry(int type, int id, boolean allowed) {
+            this.type = type;
+            this.id = id;
+            this.allowed = allowed;
+        }
+
         public static Entry excludedOwner(int id) {
             return new Entry(TYPE_OWNER, id, false);
         }
@@ -81,12 +87,6 @@ public class VkApiPrivacy {
 
         public static Entry excludedFriendsList(int id) {
             return new Entry(TYPE_FRIENDS_LIST, id, false);
-        }
-
-        public Entry(int type, int id, boolean allowed) {
-            this.type = type;
-            this.id = id;
-            this.allowed = allowed;
         }
 
         @Override

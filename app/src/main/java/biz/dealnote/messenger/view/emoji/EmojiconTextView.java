@@ -49,6 +49,7 @@ import biz.dealnote.messenger.view.WrapWidthTextView;
  */
 public class EmojiconTextView extends WrapWidthTextView implements ClickableForegroundColorSpan.OnHashTagClickListener {
 
+    private static final Pattern URL_PATTERN = Pattern.compile("((http|https|rstp)://\\S*)");
     private int mEmojiconSize;
     private int mTextStart = 0;
     private int mTextLength = -1;
@@ -56,8 +57,6 @@ public class EmojiconTextView extends WrapWidthTextView implements ClickableFore
     private OnHashTagClickListener mOnHashTagClickListener;
     private boolean mDisplayHashTags;
     private int mHashTagWordColor;
-
-    private static final Pattern URL_PATTERN = Pattern.compile("((http|https|rstp)://\\S*)");
 
     public EmojiconTextView(Context context) {
         this(context, null);

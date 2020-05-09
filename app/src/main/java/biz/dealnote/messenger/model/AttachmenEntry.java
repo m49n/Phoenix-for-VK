@@ -7,13 +7,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AttachmenEntry implements Parcelable {
 
-    private final int id;
-    private int optionalId;
+    public static final Creator<AttachmenEntry> CREATOR = new Creator<AttachmenEntry>() {
+        @Override
+        public AttachmenEntry createFromParcel(Parcel in) {
+            return new AttachmenEntry(in);
+        }
 
+        @Override
+        public AttachmenEntry[] newArray(int size) {
+            return new AttachmenEntry[size];
+        }
+    };
+    private static final AtomicInteger ID_GEN = new AtomicInteger();
+    private final int id;
+    private final AbsModel attachment;
+    private int optionalId;
     private boolean canDelete;
     private boolean accompanying;
-
-    private final AbsModel attachment;
 
     public AttachmenEntry(boolean canDelete, AbsModel attachment) {
         this.canDelete = canDelete;
@@ -21,11 +31,23 @@ public class AttachmenEntry implements Parcelable {
         this.id = ID_GEN.incrementAndGet();
     }
 
+    protected AttachmenEntry(Parcel in) {
+        id = in.readInt();
+        if (id > ID_GEN.intValue()) {
+            ID_GEN.set(id);
+        }
+
+        optionalId = in.readInt();
+        canDelete = in.readByte() != 0;
+        accompanying = in.readByte() != 0;
+
+        ParcelableModelWrapper wrapper = in.readParcelable(ParcelableModelWrapper.class.getClassLoader());
+        attachment = wrapper.get();
+    }
+
     public int getId() {
         return id;
     }
-
-    private static final AtomicInteger ID_GEN = new AtomicInteger();
 
     public AbsModel getAttachment() {
         return attachment;
@@ -57,32 +79,6 @@ public class AttachmenEntry implements Parcelable {
         this.optionalId = optionalId;
         return this;
     }
-
-    protected AttachmenEntry(Parcel in) {
-        id = in.readInt();
-        if(id > ID_GEN.intValue()){
-            ID_GEN.set(id);
-        }
-
-        optionalId = in.readInt();
-        canDelete = in.readByte() != 0;
-        accompanying = in.readByte() != 0;
-
-        ParcelableModelWrapper wrapper = in.readParcelable(ParcelableModelWrapper.class.getClassLoader());
-        attachment = wrapper.get();
-    }
-
-    public static final Creator<AttachmenEntry> CREATOR = new Creator<AttachmenEntry>() {
-        @Override
-        public AttachmenEntry createFromParcel(Parcel in) {
-            return new AttachmenEntry(in);
-        }
-
-        @Override
-        public AttachmenEntry[] newArray(int size) {
-            return new AttachmenEntry[size];
-        }
-    };
 
     @Override
     public int describeContents() {

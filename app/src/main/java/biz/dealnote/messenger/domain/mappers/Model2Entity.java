@@ -94,25 +94,25 @@ public class Model2Entity {
         return entities;
     }
 
-    public static List<Entity> buildDboAttachments(List<? extends AbsModel> models){
+    public static List<Entity> buildDboAttachments(List<? extends AbsModel> models) {
         List<Entity> entities = new ArrayList<>(models.size());
 
-        for(AbsModel model : models){
-            if(model instanceof Audio){
+        for (AbsModel model : models) {
+            if (model instanceof Audio) {
                 entities.add(buildAudioEntity((Audio) model));
-            } else if(model instanceof Sticker){
+            } else if (model instanceof Sticker) {
                 entities.add(buildStickerEntity((Sticker) model));
-            } else if(model instanceof Photo){
+            } else if (model instanceof Photo) {
                 entities.add(buildPhotoEntity((Photo) model));
-            } else if(model instanceof Document){
+            } else if (model instanceof Document) {
                 entities.add(buildDocumentDbo((Document) model));
-            } else if(model instanceof Video){
+            } else if (model instanceof Video) {
                 entities.add(buildVideoDbo((Video) model));
-            } else if(model instanceof Post){
+            } else if (model instanceof Post) {
                 entities.add(buildPostDbo((Post) model));
-            } else if(model instanceof Link){
+            } else if (model instanceof Link) {
                 entities.add(buildLinkDbo((Link) model));
-            } else if(model instanceof Poll){
+            } else if (model instanceof Poll) {
                 entities.add(buildPollDbo((Poll) model));
             } else if (model instanceof WikiPage) {
                 entities.add(buildPageEntity((WikiPage) model));
@@ -149,7 +149,7 @@ public class Model2Entity {
         return new PollEntity.Answer(answer.getId(), answer.getText(), answer.getVoteCount(), answer.getRate());
     }
 
-    public static PollEntity buildPollDbo(Poll poll){
+    public static PollEntity buildPollDbo(Poll poll) {
         return new PollEntity(poll.getId(), poll.getOwnerId())
                 .setAnswers(mapAll(poll.getAnswers(), Model2Entity::mapAnswer, false))
                 .setQuestion(poll.getQuestion())
@@ -168,7 +168,7 @@ public class Model2Entity {
                 .setMultiple(poll.isMultiple());
     }
 
-    public static LinkEntity buildLinkDbo(Link link){
+    public static LinkEntity buildLinkDbo(Link link) {
         return new LinkEntity(link.getUrl())
                 .setPhoto(isNull(link.getPhoto()) ? null : buildPhotoEntity(link.getPhoto()))
                 .setTitle(link.getTitle())
@@ -177,7 +177,7 @@ public class Model2Entity {
                 .setPreviewPhoto(link.getPreviewPhoto());
     }
 
-    public static PostEntity buildPostDbo(Post post){
+    public static PostEntity buildPostDbo(Post post) {
         PostEntity dbo = new PostEntity(post.getVkid(), post.getOwnerId())
                 .setFromId(post.getAuthorId())
                 .setDate(post.getDate())
@@ -205,11 +205,11 @@ public class Model2Entity {
                 .setDbid(post.getDbid());
 
         PostSource source = post.getSource();
-        if(nonNull(source)){
+        if (nonNull(source)) {
             dbo.setSource(new PostEntity.SourceDbo(source.getType(), source.getPlatform(), source.getData(), source.getUrl()));
         }
 
-        if(nonNull(post.getAttachments())){
+        if (nonNull(post.getAttachments())) {
             dbo.setAttachments(buildEntityAttachments(post.getAttachments()));
         } else {
             dbo.setAttachments(Collections.emptyList());
@@ -219,7 +219,7 @@ public class Model2Entity {
         return dbo;
     }
 
-    public static VideoEntity buildVideoDbo(Video video){
+    public static VideoEntity buildVideoDbo(Video video) {
         return new VideoEntity(video.getId(), video.getOwnerId())
                 .setAlbumId(video.getAlbumId())
                 .setTitle(video.getTitle())
@@ -251,11 +251,11 @@ public class Model2Entity {
                 .setCanRepost(video.isCanRepost());
     }
 
-    public static PrivacyEntity mapPrivacy(SimplePrivacy privacy){
+    public static PrivacyEntity mapPrivacy(SimplePrivacy privacy) {
         return new PrivacyEntity(privacy.getType(), mapAll(privacy.getEntries(), orig -> new PrivacyEntity.Entry(orig.getType(), orig.getId(), orig.isAllowed())));
     }
 
-    public static AudioMessageEntity mapAudio(VoiceMessage message){
+    public static AudioMessageEntity mapAudio(VoiceMessage message) {
         return new AudioMessageEntity(message.getId(), message.getOwnerId())
                 .setWaveform(message.getWaveform())
                 .setLinkOgg(message.getLinkOgg())
@@ -264,7 +264,7 @@ public class Model2Entity {
                 .setAccessKey(message.getAccessKey());
     }
 
-    public static DocumentEntity buildDocumentDbo(Document document){
+    public static DocumentEntity buildDocumentDbo(Document document) {
         DocumentEntity dbo = new DocumentEntity(document.getId(), document.getOwnerId())
                 .setTitle(document.getTitle())
                 .setSize(document.getSize())
@@ -274,12 +274,12 @@ public class Model2Entity {
                 .setType(document.getType())
                 .setAccessKey(document.getAccessKey());
 
-        if(nonNull(document.getGraffiti())){
+        if (nonNull(document.getGraffiti())) {
             Document.Graffiti graffiti = document.getGraffiti();
             dbo.setGraffiti(new DocumentEntity.GraffitiDbo(graffiti.getSrc(), graffiti.getWidth(), graffiti.getHeight()));
         }
 
-        if(nonNull(document.getVideoPreview())){
+        if (nonNull(document.getVideoPreview())) {
             Document.VideoPreview video = document.getVideoPreview();
             dbo.setVideo(new DocumentEntity.VideoPreviewDbo(video.getSrc(), video.getWidth(), video.getHeight(), video.getFileSize()));
         }
@@ -293,7 +293,7 @@ public class Model2Entity {
                 .setImagesWithBackground(mapAll(sticker.getImages(), Model2Entity::map));
     }
 
-    public static StickerEntity.Img map(Sticker.Image image){
+    public static StickerEntity.Img map(Sticker.Image image) {
         return new StickerEntity.Img(image.getUrl(), image.getWidth(), image.getHeight());
     }
 

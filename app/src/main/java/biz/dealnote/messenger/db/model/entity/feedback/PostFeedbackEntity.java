@@ -14,12 +14,12 @@ public class PostFeedbackEntity extends FeedbackEntity {
         super(type);
     }
 
+    public PostEntity getPost() {
+        return post;
+    }
+
     public PostFeedbackEntity setPost(PostEntity post) {
         this.post = post;
         return this;
-    }
-
-    public PostEntity getPost() {
-        return post;
     }
 }

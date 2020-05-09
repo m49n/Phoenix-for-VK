@@ -32,10 +32,9 @@ public class CurrentTheme {
     public static Drawable getChatBackground(Activity activity) {
         boolean dark = Settings.get().ui().isDarkModeEnabled(activity);
         File bitmap = getDrawerBackgroundFile(activity, !dark);
-        if(bitmap.exists())
-        {
+        if (bitmap.exists()) {
             Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
-            if(Settings.get().other().isCustom_chat_color())
+            if (Settings.get().other().isCustom_chat_color())
                 Utils.setColorFilter(d, Settings.get().other().getColorChat());
             return d;
         }
@@ -54,12 +53,12 @@ public class CurrentTheme {
                 ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
                 break;
             default: //"0
-                if(Settings.get().other().isCustom_chat_color())
+                if (Settings.get().other().isCustom_chat_color())
                     return new ColorDrawable(Settings.get().other().getColorChat());
                 int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
                 return new ColorDrawable(color);
         }
-        if(Settings.get().other().isCustom_chat_color()) {
+        if (Settings.get().other().isCustom_chat_color()) {
             Drawable r1 = ret.mutate();
             Utils.setColorFilter(r1, Settings.get().other().getColorChat());
             return r1;
@@ -142,8 +141,7 @@ public class CurrentTheme {
         return getColorFromAttrs(R.attr.dialogs_unread_color, context, "#20b0b0b0");
     }
 
-    public static int getMy_messages_bubble_color(Context context)
-    {
+    public static int getMy_messages_bubble_color(Context context) {
         return getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#20b0b0b0");
     }
 

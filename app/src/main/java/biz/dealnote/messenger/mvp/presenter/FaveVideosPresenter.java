@@ -25,10 +25,13 @@ public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosV
 
     private static final String TAG = FaveVideosPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
-
+    private final IFaveInteractor faveInteractor;
     private ArrayList<Video> mVideos;
     private boolean mEndOfContent;
-    private final IFaveInteractor faveInteractor;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private boolean netLoadingNow;
 
     public FaveVideosPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -39,16 +42,9 @@ public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosV
         loadCachedData();
     }
 
-    public void LoadTool()
-    {
+    public void LoadTool() {
         requestAtLast();
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-
-    private boolean cacheLoadingNow;
-    private boolean netLoadingNow;
 
     @OnGuiCreated
     private void resolveRefreshingView() {

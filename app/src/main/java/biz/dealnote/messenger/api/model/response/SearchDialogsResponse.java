@@ -14,8 +14,8 @@ public class SearchDialogsResponse {
 
     private List<AbsChattable> data;
 
-    public abstract static class AbsChattable {
-
+    public List<AbsChattable> getData() {
+        return data;
     }
 
     public SearchDialogsResponse setData(List<AbsChattable> data) {
@@ -23,8 +23,8 @@ public class SearchDialogsResponse {
         return this;
     }
 
-    public List<AbsChattable> getData() {
-        return data;
+    public abstract static class AbsChattable {
+
     }
 
     public static class Chat extends AbsChattable {

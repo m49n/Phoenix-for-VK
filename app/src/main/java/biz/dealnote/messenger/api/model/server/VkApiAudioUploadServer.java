@@ -5,15 +5,6 @@ import android.os.Parcelable;
 
 public class VkApiAudioUploadServer implements Parcelable, UploadServer {
 
-    public String upload_url;
-
-    public VkApiAudioUploadServer() {
-    }
-
-    protected VkApiAudioUploadServer(Parcel in) {
-        upload_url = in.readString();
-    }
-
     public static final Creator<VkApiAudioUploadServer> CREATOR = new Creator<VkApiAudioUploadServer>() {
         @Override
         public VkApiAudioUploadServer createFromParcel(Parcel in) {
@@ -25,6 +16,14 @@ public class VkApiAudioUploadServer implements Parcelable, UploadServer {
             return new VkApiAudioUploadServer[size];
         }
     };
+    public String upload_url;
+
+    public VkApiAudioUploadServer() {
+    }
+
+    protected VkApiAudioUploadServer(Parcel in) {
+        upload_url = in.readString();
+    }
 
     @Override
     public int describeContents() {

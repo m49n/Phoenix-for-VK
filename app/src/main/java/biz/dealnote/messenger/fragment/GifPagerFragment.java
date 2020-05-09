@@ -51,6 +51,8 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     private Toolbar mToolbar;
     private View mButtonsRoot;
     private CircleCounterButton mButtonAddOrDelete;
+    private boolean mFullscreen;
+    private SparseArray<WeakReference<Holder>> mHolderSparseArray = new SparseArray<>();
 
     public static GifPagerFragment newInstance(Bundle args) {
         GifPagerFragment fragment = new GifPagerFragment();
@@ -69,7 +71,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mFullscreen = savedInstanceState.getBoolean("mFullscreen");
         }
     }
@@ -102,7 +104,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         root.findViewById(R.id.button_download).setOnClickListener(v -> getPresenter().fireDownloadButtonClick());
 
 
-
         resolveFullscreenViews();
         return root;
     }
@@ -110,8 +111,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     private void goBack() {
         requireActivity().onBackPressed();
     }
-
-    private boolean mFullscreen;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -155,7 +154,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
             AssertUtils.requireNonNull(documents);
 
             // todo TEMP SOLUTION !!! FIX IT
-            if(documents.size() > 50){
+            if (documents.size() > 50) {
                 requireArguments().remove(Extra.DOCS);
             }
 
@@ -230,7 +229,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     @Override
     public void configHolder(int adapterPosition, boolean progress, int aspectRatioW, int aspectRatioH) {
         Holder holder = findByPosition(adapterPosition);
-        if(Objects.nonNull(holder)){
+        if (Objects.nonNull(holder)) {
             holder.setProgressVisible(progress);
             holder.mAspectRatioLayout.setAspectRatio(aspectRatioW, aspectRatioH);
             holder.mSurfaceView.setVisibility(progress ? View.GONE : View.VISIBLE);
@@ -239,6 +238,11 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
     private void fireHolderCreate(@NonNull Holder holder) {
         getPresenter().fireHolderCreate(holder.getBindingAdapterPosition());
+    }
+
+    public Holder findByPosition(int position) {
+        WeakReference<Holder> weak = mHolderSparseArray.get(position);
+        return Objects.isNull(weak) ? null : weak.get();
     }
 
     private final class Holder extends RecyclerView.ViewHolder implements SurfaceHolder.Callback {
@@ -272,7 +276,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             mSurfaceReady = true;
-            if(isPresenterPrepared()){
+            if (isPresenterPrepared()) {
                 getPresenter().fireSurfaceCreated(getBindingAdapterPosition());
             }
         }
@@ -291,16 +295,9 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
             return mSurfaceReady;
         }
 
-        void setProgressVisible(boolean visible){
+        void setProgressVisible(boolean visible) {
             mProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
-    }
-
-    private SparseArray<WeakReference<Holder>> mHolderSparseArray = new SparseArray<>();
-
-    public Holder findByPosition(int position){
-        WeakReference<Holder> weak = mHolderSparseArray.get(position);
-        return Objects.isNull(weak) ? null : weak.get();
     }
 
     private class Adapter extends RecyclerView.Adapter<Holder> {
@@ -330,15 +327,13 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         }
 
         @Override
-        public void onViewDetachedFromWindow(@NotNull Holder holder)
-        {
+        public void onViewDetachedFromWindow(@NotNull Holder holder) {
             super.onViewDetachedFromWindow(holder);
             mHolderSparseArray.remove(holder.getBindingAdapterPosition());
         }
 
         @Override
-        public void onViewAttachedToWindow(@NotNull Holder holder)
-        {
+        public void onViewAttachedToWindow(@NotNull Holder holder) {
             super.onViewAttachedToWindow(holder);
             mHolderSparseArray.put(holder.getBindingAdapterPosition(), new WeakReference<>(holder));
             fireHolderCreate(holder);

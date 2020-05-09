@@ -68,7 +68,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
         String userAgent = Constants.USER_AGENT(null);
         CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
-        if(!isHLS)
+        if (!isHLS)
             return new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         else
             return new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
@@ -141,7 +141,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        } else if (!actionBar.isShowing() && show){
+        } else if (!actionBar.isShowing() && show) {
             //toolbar_with_elevation.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
             actionBar.show();
             mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);

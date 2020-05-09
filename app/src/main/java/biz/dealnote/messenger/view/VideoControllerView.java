@@ -57,7 +57,9 @@ import biz.dealnote.messenger.R;
  */
 public class VideoControllerView extends FrameLayout {
     private static final String TAG = "VideoControllerView";
-
+    private static final int sDefaultTimeout = 0;
+    private static final int FADE_OUT = 1;
+    private static final int SHOW_PROGRESS = 2;
     private MediaPlayerControl mPlayer;
     private Context mContext;
     private ViewGroup mAnchor;
@@ -66,9 +68,6 @@ public class VideoControllerView extends FrameLayout {
     private TextView mEndTime, mCurrentTime;
     private boolean mShowing;
     private boolean mDragging;
-    private static final int sDefaultTimeout = 0;
-    private static final int FADE_OUT = 1;
-    private static final int SHOW_PROGRESS = 2;
     private boolean mUseFastForward;
     private boolean mFromXml;
     private boolean mListenersSet;
@@ -81,6 +80,97 @@ public class VideoControllerView extends FrameLayout {
     private ImageButton mPrevButton;
     private ImageView mFullscreenButton;
     private Handler mHandler = new MessageHandler(this);
+    private OnClickListener mPauseListener = v -> {
+        doPauseResume();
+        show(sDefaultTimeout);
+    };
+    private OnClickListener mFullscreenListener = v -> {
+        doToggleFullscreen();
+        show(sDefaultTimeout);
+    };
+    // There are two scenarios that can trigger the seekbar listener to trigger:
+    //
+    // The first is the user using the touchpad to adjust the posititon of the
+    // seekbar's thumb. In this case onStartTrackingTouch is called followed by
+    // a number of onProgressChanged notifications, concluded by onStopTrackingTouch.
+    // We're setting the field "mDragging" to true for the duration of the dragging
+    // session to avoid jumps in the position in case of ongoing playback.
+    //
+    // The second scenario involves the user operating the scroll ball, in this
+    // case there WON'T BE onStartTrackingTouch/onStopTrackingTouch notifications,
+    // we will simply apply the updated position without suspending regular updates.
+    private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
+        public void onStartTrackingTouch(SeekBar bar) {
+            show(3600000);
+
+            mDragging = true;
+
+            // By removing these pending progress messages we make sure
+            // that a) we won't update the progress while the user adjusts
+            // the seekbar and b) once the user is done dragging the thumb
+            // we will post one of these messages to the queue again and
+            // this ensures that there will be exactly one message queued up.
+            mHandler.removeMessages(SHOW_PROGRESS);
+        }
+
+        public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+            if (mPlayer == null) {
+                return;
+            }
+
+            if (!fromuser) {
+                // We're not interested in programmatically generated changes to
+                // the progress bar's position.
+                return;
+            }
+
+            long duration = mPlayer.getDuration();
+            long newposition = (duration * progress) / 1000L;
+            mPlayer.seekTo((int) newposition);
+            if (mCurrentTime != null)
+                mCurrentTime.setText(stringForTime((int) newposition));
+        }
+
+        public void onStopTrackingTouch(SeekBar bar) {
+            mDragging = false;
+            setProgress();
+            updatePausePlay();
+            show(sDefaultTimeout);
+
+            // Ensure that progress is properly updated in the future,
+            // the call to show() does not guarantee this because it is a
+            // no-op if we are already showing.
+            mHandler.sendEmptyMessage(SHOW_PROGRESS);
+        }
+    };
+    private OnClickListener mRewListener = new OnClickListener() {
+        public void onClick(View v) {
+            if (mPlayer == null) {
+                return;
+            }
+
+            int pos = mPlayer.getCurrentPosition();
+            pos -= 5000; // milliseconds
+            mPlayer.seekTo(pos);
+            setProgress();
+
+            show(sDefaultTimeout);
+        }
+    };
+    private OnClickListener mFfwdListener = new OnClickListener() {
+        public void onClick(View v) {
+            if (mPlayer == null) {
+                return;
+            }
+
+            int pos = mPlayer.getCurrentPosition();
+            pos += 15000; // milliseconds
+            mPlayer.seekTo(pos);
+            setProgress();
+
+            show(sDefaultTimeout);
+        }
+    };
 
     public VideoControllerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -183,7 +273,7 @@ public class VideoControllerView extends FrameLayout {
             }
         }
 
-        // By default these are hidden. They will be enabled when setPrevNextListeners() is called 
+        // By default these are hidden. They will be enabled when setPrevNextListeners() is called
         mNextButton = v.findViewById(R.id.next);
         if (mNextButton != null && !mFromXml && !mListenersSet) {
             mNextButton.setVisibility(View.GONE);
@@ -304,11 +394,11 @@ public class VideoControllerView extends FrameLayout {
     }
 
     private String stringForTime(int timeMs) {
-        if(timeMs < 0){
+        if (timeMs < 0) {
             return "--:--";
         }
 
-        if(timeMs == 0){
+        if (timeMs == 0) {
             return "00:00";
         }
 
@@ -413,16 +503,6 @@ public class VideoControllerView extends FrameLayout {
         return super.dispatchKeyEvent(event);
     }
 
-    private OnClickListener mPauseListener = v -> {
-        doPauseResume();
-        show(sDefaultTimeout);
-    };
-
-    private OnClickListener mFullscreenListener = v -> {
-        doToggleFullscreen();
-        show(sDefaultTimeout);
-    };
-
     public void updatePausePlay() {
         if (mRoot == null || mPauseButton == null || mPlayer == null) {
             return;
@@ -462,62 +542,6 @@ public class VideoControllerView extends FrameLayout {
         mPlayer.toggleFullScreen();
     }
 
-    // There are two scenarios that can trigger the seekbar listener to trigger:
-    //
-    // The first is the user using the touchpad to adjust the posititon of the
-    // seekbar's thumb. In this case onStartTrackingTouch is called followed by
-    // a number of onProgressChanged notifications, concluded by onStopTrackingTouch.
-    // We're setting the field "mDragging" to true for the duration of the dragging
-    // session to avoid jumps in the position in case of ongoing playback.
-    //
-    // The second scenario involves the user operating the scroll ball, in this
-    // case there WON'T BE onStartTrackingTouch/onStopTrackingTouch notifications,
-    // we will simply apply the updated position without suspending regular updates.
-    private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
-        public void onStartTrackingTouch(SeekBar bar) {
-            show(3600000);
-
-            mDragging = true;
-
-            // By removing these pending progress messages we make sure
-            // that a) we won't update the progress while the user adjusts
-            // the seekbar and b) once the user is done dragging the thumb
-            // we will post one of these messages to the queue again and
-            // this ensures that there will be exactly one message queued up.
-            mHandler.removeMessages(SHOW_PROGRESS);
-        }
-
-        public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
-            if (mPlayer == null) {
-                return;
-            }
-
-            if (!fromuser) {
-                // We're not interested in programmatically generated changes to
-                // the progress bar's position.
-                return;
-            }
-
-            long duration = mPlayer.getDuration();
-            long newposition = (duration * progress) / 1000L;
-            mPlayer.seekTo((int) newposition);
-            if (mCurrentTime != null)
-                mCurrentTime.setText(stringForTime((int) newposition));
-        }
-
-        public void onStopTrackingTouch(SeekBar bar) {
-            mDragging = false;
-            setProgress();
-            updatePausePlay();
-            show(sDefaultTimeout);
-
-            // Ensure that progress is properly updated in the future,
-            // the call to show() does not guarantee this because it is a
-            // no-op if we are already showing.
-            mHandler.sendEmptyMessage(SHOW_PROGRESS);
-        }
-    };
-
     @Override
     public void setEnabled(boolean enabled) {
         if (mPauseButton != null) {
@@ -553,36 +577,6 @@ public class VideoControllerView extends FrameLayout {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClassName(VideoControllerView.class.getName());
     }
-
-    private OnClickListener mRewListener = new OnClickListener() {
-        public void onClick(View v) {
-            if (mPlayer == null) {
-                return;
-            }
-
-            int pos = mPlayer.getCurrentPosition();
-            pos -= 5000; // milliseconds
-            mPlayer.seekTo(pos);
-            setProgress();
-
-            show(sDefaultTimeout);
-        }
-    };
-
-    private OnClickListener mFfwdListener = new OnClickListener() {
-        public void onClick(View v) {
-            if (mPlayer == null) {
-                return;
-            }
-
-            int pos = mPlayer.getCurrentPosition();
-            pos += 15000; // milliseconds
-            mPlayer.seekTo(pos);
-            setProgress();
-
-            show(sDefaultTimeout);
-        }
-    };
 
     private void installPrevNextListeners() {
         if (mNextButton != null) {

@@ -29,12 +29,10 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
     private final int accountId;
 
     private final IDatabaseInteractor databaseInteractor;
-
-    private List<Country> countries;
-
     private final List<Country> filtered;
-
+    private List<Country> countries;
     private String filter;
+    private boolean loadingNow;
 
     public CountriesPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -51,8 +49,6 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
         super.onGuiCreated(viewHost);
         viewHost.displayData(this.filtered);
     }
-
-    private boolean loadingNow;
 
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;
@@ -75,8 +71,8 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
         callView(ICountriesView::notifyDataSetChanged);
     }
 
-    public void fireFilterEdit(CharSequence text){
-        if(Objects.safeEquals(text.toString(), this.filter)){
+    public void fireFilterEdit(CharSequence text) {
+        if (Objects.safeEquals(text.toString(), this.filter)) {
             return;
         }
 
@@ -86,7 +82,7 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
         callView(ICountriesView::notifyDataSetChanged);
     }
 
-    private void reFillFilteredData(){
+    private void reFillFilteredData() {
         filtered.clear();
 
         if (isEmpty(filter)) {
@@ -97,7 +93,7 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
         String lowerFilter = filter.toLowerCase();
 
         for (Country country : countries) {
-            if(country.getTitle().toLowerCase().contains(lowerFilter)){
+            if (country.getTitle().toLowerCase().contains(lowerFilter)) {
                 filtered.add(country);
             }
         }

@@ -29,14 +29,13 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPhotoAlbumView> {
 
+    private final INetworker networker;
+    private final boolean editing;
     private int ownerId;
     private PhotoAlbum album;
     private Context context;
     private PhotoAlbumEditor editor;
     private CreatePhotoAlbumStepsHost stepsHost;
-
-    private final INetworker networker;
-    private final boolean editing;
 
     public EditPhotoAlbumPresenter(int accountId, int ownerId, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -140,17 +139,15 @@ public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPho
         }
     }
 
-    private void goToAlbum(VKApiPhotoAlbum album)
-    {
+    private void goToAlbum(VKApiPhotoAlbum album) {
         PlaceFactory.getVKPhotosAlbumPlace(getAccountId(), album.owner_id, album.id,
                 VKPhotosFragment.ACTION_SHOW_PHOTOS)
                 .withParcelableExtra(Extra.ALBUM, new PhotoAlbum(album.id, album.owner_id))
                 .tryOpenWith(context);
     }
 
-    private void goToEditedAlbum(PhotoAlbum album, Boolean ret)
-    {
-        if(ret == null || !ret)
+    private void goToEditedAlbum(PhotoAlbum album, Boolean ret) {
+        if (ret == null || !ret)
             return;
         PlaceFactory.getVKPhotosAlbumPlace(getAccountId(), album.getOwnerId(), album.getId(),
                 VKPhotosFragment.ACTION_SHOW_PHOTOS)

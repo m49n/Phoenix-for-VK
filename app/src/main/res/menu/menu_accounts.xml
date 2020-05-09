@@ -2,15 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_ok"
+    <item
+        android:id="@+id/action_ok"
         android:title="@string/button_ok"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
-    <item android:id="@+id/action_proxy"
+    <item
+        android:id="@+id/action_proxy"
         android:title="@string/button_proxy"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
-    <item android:id="@+id/privacy_policy"
-          android:title="@string/privacy_policy"/>
+    <item
+        android:id="@+id/privacy_policy"
+        android:title="@string/privacy_policy" />
+
+    <item
+        android:id="@+id/import_accounts"
+        android:title="@string/import_accounts" />
+
+    <item
+        android:id="@+id/export_accounts"
+        android:title="@string/export_accounts" />
 
 </menu>

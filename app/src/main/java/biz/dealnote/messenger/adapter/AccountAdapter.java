@@ -55,7 +55,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
 
         Owner owner = account.getOwner();
 
-        if(Objects.isNull(owner)){
+        if (Objects.isNull(owner)) {
             holder.firstName.setText(String.valueOf(account.getId()));
             ViewUtils.displayAvatar(holder.avatar, transformation, null, Constants.PICASSO_TAG);
         } else {
@@ -63,12 +63,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
             ViewUtils.displayAvatar(holder.avatar, transformation, owner.getMaxSquareAvatar(), Constants.PICASSO_TAG);
         }
 
-        if(account.getId() < 0){
+        if (account.getId() < 0) {
             holder.lastName.setText("club" + Math.abs(account.getId()));
         } else {
             User user = (User) owner;
 
-            if(Objects.nonNull(user) && nonEmpty(user.getDomain())){
+            if (Objects.nonNull(user) && nonEmpty(user.getDomain())) {
                 holder.lastName.setText("@" + user.getDomain());
             } else {
                 holder.lastName.setText("@id" + account.getId());
@@ -88,6 +88,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         return data.size();
     }
 
+    public interface Callback {
+        void onClick(Account account);
+    }
+
     public static class Holder extends RecyclerView.ViewHolder {
 
         TextView firstName;
@@ -102,9 +106,5 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
             avatar = itemView.findViewById(R.id.avatar);
             active = itemView.findViewById(R.id.active);
         }
-    }
-
-    public interface Callback {
-        void onClick(Account account);
     }
 }

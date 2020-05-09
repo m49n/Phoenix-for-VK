@@ -81,21 +81,21 @@ public class CommunityLinksFragment extends BaseMvpFragment<CommunityLinksPresen
 
     @Override
     public void displayRefreshing(boolean loadingNow) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loadingNow);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mLinksAdapter)){
+        if (nonNull(mLinksAdapter)) {
             mLinksAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void displayData(List<VKApiCommunity.Link> links) {
-        if(nonNull(mLinksAdapter)){
+        if (nonNull(mLinksAdapter)) {
             mLinksAdapter.setData(links);
         }
     }
@@ -117,7 +117,7 @@ public class CommunityLinksFragment extends BaseMvpFragment<CommunityLinksPresen
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(link.name)
                 .setItems(items, (dialog, which) -> {
-                    switch (which){
+                    switch (which) {
                         case 0:
                             getPresenter().fireLinkEditClick(link);
                             break;

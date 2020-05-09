@@ -35,8 +35,10 @@ import biz.dealnote.messenger.view.OnlineView;
  */
 public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBannedAdapter.Holder> {
 
-    private List<Banned> data;
     private final Transformation transformation;
+    private List<Banned> data;
+    private OwnerLinkSpanFactory.ActionListener ownerLinkActionListener = new LinkActionAdapter();
+    private ActionListener actionListener;
 
     public CommunityBannedAdapter(Context context, List<Banned> data) {
         this.data = data;
@@ -65,12 +67,12 @@ public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBanned
         ViewUtils.displayAvatar(holder.avatar, transformation, bannedOwner.getMaxSquareAvatar(), Constants.PICASSO_TAG);
 
         Integer onlineViewRes = null;
-        if(bannedOwner instanceof User){
+        if (bannedOwner instanceof User) {
             User user = (User) bannedOwner;
             onlineViewRes = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
         }
 
-        if(Objects.nonNull(onlineViewRes)){
+        if (Objects.nonNull(onlineViewRes)) {
             holder.onlineView.setIcon(onlineViewRes);
             holder.onlineView.setVisibility(View.VISIBLE);
         } else {
@@ -79,7 +81,7 @@ public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBanned
 
         String comment = info.getComment();
 
-        if(Utils.nonEmpty(comment)){
+        if (Utils.nonEmpty(comment)) {
             holder.comment.setVisibility(View.VISIBLE);
 
             String commentText = context.getString(R.string.ban_comment_text, comment);
@@ -95,20 +97,18 @@ public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBanned
         holder.dateAndAdminInfo.setText(spannable, TextView.BufferType.SPANNABLE);
 
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onBannedClick(banned);
             }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onBannedLongClick(banned);
             }
             return true;
         });
     }
-
-    private OwnerLinkSpanFactory.ActionListener ownerLinkActionListener = new LinkActionAdapter();
 
     @Override
     public int getItemCount() {
@@ -120,14 +120,13 @@ public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBanned
         notifyDataSetChanged();
     }
 
-    private ActionListener actionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
     }
 
     public interface ActionListener {
         void onBannedClick(Banned banned);
+
         void onBannedLongClick(Banned banned);
     }
 

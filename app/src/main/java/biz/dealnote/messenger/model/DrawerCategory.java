@@ -7,17 +7,31 @@ import androidx.annotation.StringRes;
 
 public class DrawerCategory implements Parcelable {
 
+    public static Creator<DrawerCategory> CREATOR = new Creator<DrawerCategory>() {
+        public DrawerCategory createFromParcel(Parcel source) {
+            return new DrawerCategory(source);
+        }
+
+        public DrawerCategory[] newArray(int size) {
+            return new DrawerCategory[size];
+        }
+    };
     @StringRes
     private final int title;
-
     @SwitchableCategory
     private final int key;
-
     private boolean checked;
 
     public DrawerCategory(@SwitchableCategory int key, @StringRes int title) {
         this.title = title;
         this.key = key;
+    }
+
+    public DrawerCategory(Parcel in) {
+        this.title = in.readInt();
+        //noinspection ResourceType
+        this.key = in.readInt();
+        this.checked = in.readInt() == 1;
     }
 
     @StringRes
@@ -50,21 +64,4 @@ public class DrawerCategory implements Parcelable {
         dest.writeInt(key);
         dest.writeInt(checked ? 1 : 0);
     }
-
-    public DrawerCategory(Parcel in) {
-        this.title = in.readInt();
-        //noinspection ResourceType
-        this.key = in.readInt();
-        this.checked = in.readInt() == 1;
-    }
-
-    public static Creator<DrawerCategory> CREATOR = new Creator<DrawerCategory>() {
-        public DrawerCategory createFromParcel(Parcel source) {
-            return new DrawerCategory(source);
-        }
-
-        public DrawerCategory[] newArray(int size) {
-            return new DrawerCategory[size];
-        }
-    };
 }

@@ -20,6 +20,7 @@ public interface IFriendsApi {
     @CheckResult
     Single<OnlineFriendsResponse> getOnline(int userId, String order, int count,
                                             int offset, String fields);
+
     @CheckResult
     Single<Items<VKApiUser>> get(Integer userId, String order, Integer listId, Integer count, Integer offset,
                                  String fields, String nameCase);

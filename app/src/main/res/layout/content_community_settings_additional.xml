@@ -116,10 +116,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/backgroud_rectangle_border"
+        android:importantForAutofill="no"
         android:inputType="textUri"
         android:padding="8dp"
-        android:textSize="14sp"
-        android:importantForAutofill="no" />
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/public_date_root"

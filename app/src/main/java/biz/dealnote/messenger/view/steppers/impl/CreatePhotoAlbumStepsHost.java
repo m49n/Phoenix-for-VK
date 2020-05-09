@@ -16,6 +16,8 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
     public static final int STEP_UPLOAD_AND_COMMENTS = 1;
     public static final int STEP_PRIVACY_VIEW = 2;
     public static final int STEP_PRIVACY_COMMENT = 3;
+    private boolean mAdditionalOptionsEnable;
+    private boolean mPrivacySettingsEnable;
 
     public CreatePhotoAlbumStepsHost() {
         super(new PhotoAlbumState());
@@ -28,7 +30,7 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
 
     @Override
     public int getStepTitle(int index) {
-        switch (index){
+        switch (index) {
             case STEP_TITLE_AND_DESCRIPTION:
                 return R.string.enter_main_album_info;
             case STEP_UPLOAD_AND_COMMENTS:
@@ -44,7 +46,7 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
 
     @Override
     public boolean canMoveNext(int index, @NonNull PhotoAlbumState state) {
-        switch (index){
+        switch (index) {
             case STEP_TITLE_AND_DESCRIPTION:
                 return !TextUtils.isEmpty(state.title) && state.getTitle().trim().length() > 1;
             case STEP_UPLOAD_AND_COMMENTS:
@@ -55,9 +57,6 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
                 throw new IllegalStateException("Invalid step index, index: " + index);
         }
     }
-
-    private boolean mAdditionalOptionsEnable;
-    private boolean mPrivacySettingsEnable;
 
     public boolean isPrivacySettingsEnable() {
         return mPrivacySettingsEnable;
@@ -83,11 +82,22 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
 
     @Override
     public int getCancelButtonText(int index) {
-        return index == 0 ?  R.string.button_cancel : R.string.button_back;
+        return index == 0 ? R.string.button_cancel : R.string.button_back;
     }
 
     public static class PhotoAlbumState extends AbsStepsHost.AbsState implements Parcelable {
 
+        public static final Creator<PhotoAlbumState> CREATOR = new Creator<PhotoAlbumState>() {
+            @Override
+            public PhotoAlbumState createFromParcel(Parcel in) {
+                return new PhotoAlbumState(in);
+            }
+
+            @Override
+            public PhotoAlbumState[] newArray(int size) {
+                return new PhotoAlbumState[size];
+            }
+        };
         private String title;
         private String description;
         private Privacy privacyView;
@@ -125,18 +135,6 @@ public class CreatePhotoAlbumStepsHost extends AbsStepsHost<CreatePhotoAlbumStep
         public int describeContents() {
             return 0;
         }
-
-        public static final Creator<PhotoAlbumState> CREATOR = new Creator<PhotoAlbumState>() {
-            @Override
-            public PhotoAlbumState createFromParcel(Parcel in) {
-                return new PhotoAlbumState(in);
-            }
-
-            @Override
-            public PhotoAlbumState[] newArray(int size) {
-                return new PhotoAlbumState[size];
-            }
-        };
 
         public String getTitle() {
             return title;

@@ -35,24 +35,19 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommunityBanEditView> {
 
     private static final String TAG = CommunityBanEditPresenter.class.getSimpleName();
-
+    private static final int BLOCK_FOR_UNCHANGED = -1;
+    private static final int REQUEST_CODE_BLOCK_FOR = 1;
+    private static final int REQUEST_CODE_REASON = 2;
     private final int groupId;
-
     private final Banned banned;
-
     private final ArrayList<Owner> users;
-
-    private int index;
-
-    private BlockFor blockFor;
-
-    private int reason;
-
-    private String comment;
-
-    private boolean showCommentToUser;
-
     private final IGroupSettingsInteractor interactor;
+    private int index;
+    private BlockFor blockFor;
+    private int reason;
+    private String comment;
+    private boolean showCommentToUser;
+    private boolean requestNow;
 
     public CommunityBanEditPresenter(int accountId, int groupId, Banned banned, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -86,16 +81,16 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
     }
 
     @OnGuiCreated
-    private void resolveCommentViews(){
-        if(isGuiReady()){
+    private void resolveCommentViews() {
+        if (isGuiReady()) {
             getView().diplayComment(comment);
             getView().setShowCommentChecked(showCommentToUser);
         }
     }
 
     @OnGuiCreated
-    private void resolveBanStatusView(){
-        if(isGuiReady()){
+    private void resolveBanStatusView() {
+        if (isGuiReady()) {
             if (nonNull(banned)) {
                 getView().displayBanStatus(banned.getAdmin().getId(), banned.getAdmin().getFullName(), banned.getInfo().getEndDate());
             }
@@ -103,8 +98,8 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
     }
 
     @OnGuiCreated
-    private void resolveUserInfoViews(){
-        if(isGuiReady()){
+    private void resolveUserInfoViews() {
+        if (isGuiReady()) {
             getView().displayUserInfo(currentBanned());
         }
     }
@@ -174,8 +169,6 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         }
     }
 
-    private boolean requestNow;
-
     private void setRequestNow(boolean requestNow) {
         this.requestNow = requestNow;
         resolveProgressView();
@@ -206,11 +199,11 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
                 .subscribe(this::onAddBanComplete, throwable -> onAddBanError(getCauseIfRuntime(throwable))));
     }
 
-    private void onAddBanComplete(){
+    private void onAddBanComplete() {
         setRequestNow(false);
         safeShowToast(getView(), R.string.success, false);
 
-        if(index == users.size() - 1){
+        if (index == users.size() - 1) {
             callView(ICommunityBanEditView::goBack);
         } else {
             // switch to next user
@@ -220,7 +213,7 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         }
     }
 
-    private void onAddBanError(Throwable throwable){
+    private void onAddBanError(Throwable throwable) {
         setRequestNow(false);
         throwable.printStackTrace();
         showError(getView(), throwable);
@@ -236,7 +229,7 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
 
     public void fireBlockForClick() {
         List<IdOption> options = new ArrayList<>();
-        if(blockFor.type == BlockFor.CUSTOM){
+        if (blockFor.type == BlockFor.CUSTOM) {
             options.add(new IdOption(BLOCK_FOR_UNCHANGED, formatBlockFor()));
         }
 
@@ -250,14 +243,10 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         getView().displaySelectOptionDialog(REQUEST_CODE_BLOCK_FOR, options);
     }
 
-    private static final int BLOCK_FOR_UNCHANGED = -1;
-    private static final int REQUEST_CODE_BLOCK_FOR = 1;
-    private static final int REQUEST_CODE_REASON = 2;
-
     public void fireOptionSelected(int requestCode, IdOption idOption) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_BLOCK_FOR:
-                if(idOption.getId() != BLOCK_FOR_UNCHANGED){
+                if (idOption.getId() != BLOCK_FOR_UNCHANGED) {
                     blockFor = new BlockFor(idOption.getId());
                     resolveBlockForView();
                 } //else not changed
@@ -270,9 +259,9 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         }
     }
 
-    private String formatBlockFor(){
+    private String formatBlockFor() {
         Date date = blockFor.getUnblockingDate();
-        if(isNull(date)){
+        if (isNull(date)) {
             Logger.wtf(TAG, "formatBlockFor, date-is-null???");
             return "NULL";
         }
@@ -307,6 +296,18 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         static final int DAY = 4;
         static final int HOUR = 5;
         static final int CUSTOM = 6;
+        final int type;
+        final long customDate;
+
+        BlockFor(int type) {
+            this.type = type;
+            this.customDate = 0;
+        }
+
+        BlockFor(long customDate) {
+            this.customDate = customDate;
+            this.type = customDate > 0 ? CUSTOM : FOREVER;
+        }
 
         Date getUnblockingDate() {
             if (type == CUSTOM) {
@@ -336,20 +337,6 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
             }
 
             return calendar.getTime();
-        }
-
-        final int type;
-
-        final long customDate;
-
-        BlockFor(int type) {
-            this.type = type;
-            this.customDate = 0;
-        }
-
-        BlockFor(long customDate) {
-            this.customDate = customDate;
-            this.type = customDate > 0 ? CUSTOM : FOREVER;
         }
     }
 }

@@ -23,8 +23,8 @@ public class AssertUtils {
         return o;
     }
 
-    public static void assertPositive(int value){
-        if(value <= 0){
+    public static void assertPositive(int value) {
+        if (value <= 0) {
             throw new IllegalStateException();
         }
     }

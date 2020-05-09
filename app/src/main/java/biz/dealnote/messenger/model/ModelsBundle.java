@@ -16,40 +16,6 @@ import java.util.List;
  */
 public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
 
-    private final List<ParcelableModelWrapper> wrappers;
-
-    public ModelsBundle(){
-        this.wrappers = new ArrayList<>();
-    }
-
-    public ModelsBundle(int capacity){
-        this.wrappers = new ArrayList<>(capacity);
-    }
-
-    public int size(){
-        return wrappers.size();
-    }
-
-    public void clear(){
-        this.wrappers.clear();
-    }
-
-    public ModelsBundle append(AbsModel model){
-        this.wrappers.add(ParcelableModelWrapper.wrap(model));
-        return this;
-    }
-
-    public ModelsBundle append(Collection<? extends AbsModel> data){
-        for(AbsModel model : data){
-            this.wrappers.add(ParcelableModelWrapper.wrap(model));
-        }
-        return this;
-    }
-
-    private ModelsBundle(Parcel in) {
-        wrappers = in.createTypedArrayList(ParcelableModelWrapper.CREATOR);
-    }
-
     public static final Creator<ModelsBundle> CREATOR = new Creator<ModelsBundle>() {
         @Override
         public ModelsBundle createFromParcel(Parcel in) {
@@ -61,6 +27,39 @@ public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
             return new ModelsBundle[size];
         }
     };
+    private final List<ParcelableModelWrapper> wrappers;
+
+    public ModelsBundle() {
+        this.wrappers = new ArrayList<>();
+    }
+
+    public ModelsBundle(int capacity) {
+        this.wrappers = new ArrayList<>(capacity);
+    }
+
+    private ModelsBundle(Parcel in) {
+        wrappers = in.createTypedArrayList(ParcelableModelWrapper.CREATOR);
+    }
+
+    public int size() {
+        return wrappers.size();
+    }
+
+    public void clear() {
+        this.wrappers.clear();
+    }
+
+    public ModelsBundle append(AbsModel model) {
+        this.wrappers.add(ParcelableModelWrapper.wrap(model));
+        return this;
+    }
+
+    public ModelsBundle append(Collection<? extends AbsModel> data) {
+        for (AbsModel model : data) {
+            this.wrappers.add(ParcelableModelWrapper.wrap(model));
+        }
+        return this;
+    }
 
     @Override
     public int describeContents() {
@@ -70,6 +69,12 @@ public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(wrappers);
+    }
+
+    @NonNull
+    @Override
+    public Iterator<AbsModel> iterator() {
+        return new Iter(wrappers.iterator());
     }
 
     private static class Iter implements Iterator<AbsModel> {
@@ -94,11 +99,5 @@ public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
         public void remove() {
             internal.remove();
         }
-    }
-
-    @NonNull
-    @Override
-    public Iterator<AbsModel> iterator() {
-        return new Iter(wrappers.iterator());
     }
 }

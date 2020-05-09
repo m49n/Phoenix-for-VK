@@ -31,32 +31,7 @@ class PhotosStorage extends AbsStorage implements IPhotosStorage {
         super(base);
     }
 
-    @Override
-    public Completable insertPhotosRx(int accountId, int ownerId, int albumId, @NonNull List<PhotoEntity> photos, boolean clearBeforeInsert) {
-        return Completable.fromAction(() -> {
-            ArrayList<ContentProviderOperation> operations = new ArrayList<>(clearBeforeInsert ? photos.size() + 1 : photos.size());
-            Uri uri = MessengerContentProvider.getPhotosContentUriFor(accountId);
-
-            if(clearBeforeInsert){
-                operations.add(ContentProviderOperation
-                        .newDelete(uri)
-                        .withSelection(PhotosColumns.OWNER_ID + " = ? AND " + PhotosColumns.ALBUM_ID + " = ?"
-                                , new String[]{String.valueOf(ownerId), String.valueOf(albumId)})
-                        .build());
-            }
-
-            for(PhotoEntity dbo : photos){
-                operations.add(ContentProviderOperation
-                        .newInsert(uri)
-                        .withValues(getCV(dbo))
-                        .build());
-            }
-
-            getContext().getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
-        });
-    }
-
-    private static ContentValues getCV(PhotoEntity dbo){
+    private static ContentValues getCV(PhotoEntity dbo) {
         ContentValues cv = new ContentValues();
         cv.put(PhotosColumns.PHOTO_ID, dbo.getId());
         cv.put(PhotosColumns.ALBUM_ID, dbo.getAlbumId());
@@ -66,7 +41,7 @@ class PhotosStorage extends AbsStorage implements IPhotosStorage {
         cv.put(PhotosColumns.TEXT, dbo.getText());
         cv.put(PhotosColumns.DATE, dbo.getDate());
 
-        if(nonNull(dbo.getSizes())){
+        if (nonNull(dbo.getSizes())) {
             cv.put(PhotosColumns.SIZES, GSON.toJson(dbo.getSizes()));
         }
 
@@ -80,58 +55,7 @@ class PhotosStorage extends AbsStorage implements IPhotosStorage {
         return cv;
     }
 
-    @Override
-    public Single<List<PhotoEntity>> findPhotosByCriteriaRx(@NonNull PhotoCriteria criteria) {
-        return Single.create(e -> {
-            String selection = getSelectionForCriteria(criteria);
-
-            String orderBy = criteria.getOrderBy() == null ? PhotosColumns.PHOTO_ID + " DESC" : criteria.getOrderBy();
-
-            Uri uri = MessengerContentProvider.getPhotosContentUriFor(criteria.getAccountId());
-            Cursor cursor = getContext().getContentResolver().query(uri, null, selection, null, orderBy);
-
-            ArrayList<PhotoEntity> photos = new ArrayList<>(safeCountOf(cursor));
-            if (nonNull(cursor)) {
-                while (cursor.moveToNext()) {
-                    if(e.isDisposed()){
-                        break;
-                    }
-
-                    photos.add(mapPhotoDbo(cursor));
-                }
-
-                cursor.close();
-            }
-
-            e.onSuccess(photos);
-        });
-    }
-
-    @Override
-    public Completable applyPatch(int accountId, int ownerId, int photoId, PhotoPatch patch) {
-        return Completable.fromAction(() -> {
-            ContentValues cv = new ContentValues();
-
-            if(nonNull(patch.getLike())){
-                cv.put(PhotosColumns.LIKES, patch.getLike().getCount());
-                cv.put(PhotosColumns.USER_LIKES, patch.getLike().isLiked());
-            }
-
-            if(nonNull(patch.getDeletion())){
-                cv.put(PhotosColumns.DELETED, patch.getDeletion().isDeleted());
-            }
-
-            if(cv.size() > 0){
-                final Uri uri = MessengerContentProvider.getPhotosContentUriFor(accountId);
-                final String where = PhotosColumns.PHOTO_ID + " = ? AND " + PhotosColumns.OWNER_ID + " = ?";
-                final String[] args = {String.valueOf(photoId), String.valueOf(ownerId)};
-
-                getContentResolver().update(uri, cv, where, args);
-            }
-        });
-    }
-
-    private static String getSelectionForCriteria(@NonNull PhotoCriteria criteria){
+    private static String getSelectionForCriteria(@NonNull PhotoCriteria criteria) {
         String selection = "1 = 1";
         if (criteria.getOwnerId() != null) {
             selection = selection + " AND " + PhotosColumns.OWNER_ID + " = " + criteria.getOwnerId();
@@ -150,11 +74,87 @@ class PhotosStorage extends AbsStorage implements IPhotosStorage {
         return selection;
     }
 
+    @Override
+    public Completable insertPhotosRx(int accountId, int ownerId, int albumId, @NonNull List<PhotoEntity> photos, boolean clearBeforeInsert) {
+        return Completable.fromAction(() -> {
+            ArrayList<ContentProviderOperation> operations = new ArrayList<>(clearBeforeInsert ? photos.size() + 1 : photos.size());
+            Uri uri = MessengerContentProvider.getPhotosContentUriFor(accountId);
+
+            if (clearBeforeInsert) {
+                operations.add(ContentProviderOperation
+                        .newDelete(uri)
+                        .withSelection(PhotosColumns.OWNER_ID + " = ? AND " + PhotosColumns.ALBUM_ID + " = ?"
+                                , new String[]{String.valueOf(ownerId), String.valueOf(albumId)})
+                        .build());
+            }
+
+            for (PhotoEntity dbo : photos) {
+                operations.add(ContentProviderOperation
+                        .newInsert(uri)
+                        .withValues(getCV(dbo))
+                        .build());
+            }
+
+            getContext().getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
+        });
+    }
+
+    @Override
+    public Single<List<PhotoEntity>> findPhotosByCriteriaRx(@NonNull PhotoCriteria criteria) {
+        return Single.create(e -> {
+            String selection = getSelectionForCriteria(criteria);
+
+            String orderBy = criteria.getOrderBy() == null ? PhotosColumns.PHOTO_ID + " DESC" : criteria.getOrderBy();
+
+            Uri uri = MessengerContentProvider.getPhotosContentUriFor(criteria.getAccountId());
+            Cursor cursor = getContext().getContentResolver().query(uri, null, selection, null, orderBy);
+
+            ArrayList<PhotoEntity> photos = new ArrayList<>(safeCountOf(cursor));
+            if (nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) {
+                        break;
+                    }
+
+                    photos.add(mapPhotoDbo(cursor));
+                }
+
+                cursor.close();
+            }
+
+            e.onSuccess(photos);
+        });
+    }
+
+    @Override
+    public Completable applyPatch(int accountId, int ownerId, int photoId, PhotoPatch patch) {
+        return Completable.fromAction(() -> {
+            ContentValues cv = new ContentValues();
+
+            if (nonNull(patch.getLike())) {
+                cv.put(PhotosColumns.LIKES, patch.getLike().getCount());
+                cv.put(PhotosColumns.USER_LIKES, patch.getLike().isLiked());
+            }
+
+            if (nonNull(patch.getDeletion())) {
+                cv.put(PhotosColumns.DELETED, patch.getDeletion().isDeleted());
+            }
+
+            if (cv.size() > 0) {
+                final Uri uri = MessengerContentProvider.getPhotosContentUriFor(accountId);
+                final String where = PhotosColumns.PHOTO_ID + " = ? AND " + PhotosColumns.OWNER_ID + " = ?";
+                final String[] args = {String.valueOf(photoId), String.valueOf(ownerId)};
+
+                getContentResolver().update(uri, cv, where, args);
+            }
+        });
+    }
+
     private PhotoEntity mapPhotoDbo(Cursor cursor) {
         PhotoSizeEntity sizes = null;
 
         String sizesJson = cursor.getString(cursor.getColumnIndex(PhotosColumns.SIZES));
-        if(nonEmpty(sizesJson)){
+        if (nonEmpty(sizesJson)) {
             sizes = GSON.fromJson(sizesJson, PhotoSizeEntity.class);
         }
 

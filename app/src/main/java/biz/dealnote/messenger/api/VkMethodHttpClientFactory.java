@@ -44,7 +44,8 @@ public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
                         return chain.proceed(request);
-                    }});
+                    }
+                });
 
         ProxyUtil.applyProxyConfig(builder, config);
         return builder.build();

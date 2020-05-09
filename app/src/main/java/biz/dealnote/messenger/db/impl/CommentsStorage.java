@@ -45,13 +45,32 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
 class CommentsStorage extends AbsStorage implements ICommentsStorage {
 
     private final PublishSubject<CommentUpdate> minorUpdatesPublisher;
+    private final Object mStoreLock = new Object();
 
     CommentsStorage(@NonNull AppStorages base) {
         super(base);
         this.minorUpdatesPublisher = PublishSubject.create();
     }
 
-    private final Object mStoreLock = new Object();
+    public static ContentValues getCV(int sourceId, int sourceOwnerId, int sourceType, CommentEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(CommentsColumns.COMMENT_ID, dbo.getId());
+        cv.put(CommentsColumns.FROM_ID, dbo.getFromId());
+        cv.put(CommentsColumns.DATE, dbo.getDate());
+        cv.put(CommentsColumns.TEXT, dbo.getText());
+        cv.put(CommentsColumns.REPLY_TO_USER, dbo.getReplyToUserId());
+        cv.put(CommentsColumns.REPLY_TO_COMMENT, dbo.getReplyToComment());
+        cv.put(CommentsColumns.THREADS, dbo.getThreads());
+        cv.put(CommentsColumns.LIKES, dbo.getLikesCount());
+        cv.put(CommentsColumns.USER_LIKES, dbo.isUserLikes());
+        cv.put(CommentsColumns.CAN_LIKE, dbo.isCanLike());
+        cv.put(CommentsColumns.ATTACHMENTS_COUNT, dbo.getAttachmentsCount());
+        cv.put(CommentsColumns.SOURCE_ID, sourceId);
+        cv.put(CommentsColumns.SOURCE_OWNER_ID, sourceOwnerId);
+        cv.put(CommentsColumns.SOURCE_TYPE, sourceType);
+        cv.put(CommentsColumns.DELETED, dbo.isDeleted());
+        return cv;
+    }
 
     @Override
     public Single<int[]> insert(int accountId, int sourceId, int sourceOwnerId, int sourceType, List<CommentEntity> dbos, OwnerEntities owners, boolean clearBefore) {
@@ -108,26 +127,6 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
 
             emitter.onSuccess(ids);
         });
-    }
-
-    public static ContentValues getCV(int sourceId, int sourceOwnerId, int sourceType, CommentEntity dbo) {
-        ContentValues cv = new ContentValues();
-        cv.put(CommentsColumns.COMMENT_ID, dbo.getId());
-        cv.put(CommentsColumns.FROM_ID, dbo.getFromId());
-        cv.put(CommentsColumns.DATE, dbo.getDate());
-        cv.put(CommentsColumns.TEXT, dbo.getText());
-        cv.put(CommentsColumns.REPLY_TO_USER, dbo.getReplyToUserId());
-        cv.put(CommentsColumns.REPLY_TO_COMMENT, dbo.getReplyToComment());
-        cv.put(CommentsColumns.THREADS, dbo.getThreads());
-        cv.put(CommentsColumns.LIKES, dbo.getLikesCount());
-        cv.put(CommentsColumns.USER_LIKES, dbo.isUserLikes());
-        cv.put(CommentsColumns.CAN_LIKE, dbo.isCanLike());
-        cv.put(CommentsColumns.ATTACHMENTS_COUNT, dbo.getAttachmentsCount());
-        cv.put(CommentsColumns.SOURCE_ID, sourceId);
-        cv.put(CommentsColumns.SOURCE_OWNER_ID, sourceOwnerId);
-        cv.put(CommentsColumns.SOURCE_TYPE, sourceType);
-        cv.put(CommentsColumns.DELETED, dbo.isDeleted());
-        return cv;
     }
 
     private Cursor createCursorByCriteria(CommentsCriteria criteria) {

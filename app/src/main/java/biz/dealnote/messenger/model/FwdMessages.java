@@ -7,17 +7,6 @@ import java.util.ArrayList;
 
 public class FwdMessages extends AbsModel implements Parcelable {
 
-    public ArrayList<Message> fwds;
-
-    public FwdMessages(ArrayList<Message> fwds) {
-        this.fwds = fwds;
-    }
-
-    protected FwdMessages(Parcel in) {
-        super(in);
-        fwds = in.createTypedArrayList(Message.CREATOR);
-    }
-
     public static final Creator<FwdMessages> CREATOR = new Creator<FwdMessages>() {
         @Override
         public FwdMessages createFromParcel(Parcel in) {
@@ -29,6 +18,16 @@ public class FwdMessages extends AbsModel implements Parcelable {
             return new FwdMessages[size];
         }
     };
+    public ArrayList<Message> fwds;
+
+    public FwdMessages(ArrayList<Message> fwds) {
+        this.fwds = fwds;
+    }
+
+    protected FwdMessages(Parcel in) {
+        super(in);
+        fwds = in.createTypedArrayList(Message.CREATOR);
+    }
 
     @Override
     public int describeContents() {

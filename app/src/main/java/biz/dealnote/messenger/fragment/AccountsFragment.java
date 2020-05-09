@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.developer.filepicker.model.DialogConfigs;
+import com.developer.filepicker.model.DialogProperties;
+import com.developer.filepicker.view.FilePickerDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -35,9 +43,13 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +58,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
+import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
+import biz.dealnote.messenger.activity.EnterPinActivity;
 import biz.dealnote.messenger.activity.LoginActivity;
 import biz.dealnote.messenger.activity.ProxyManagerActivity;
 import biz.dealnote.messenger.adapter.AccountAdapter;
 import biz.dealnote.messenger.api.Auth;
+import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.db.DBHelper;
 import biz.dealnote.messenger.dialog.DirectAuthDialog;
 import biz.dealnote.messenger.domain.IAccountsInteractor;
@@ -63,6 +78,7 @@ import biz.dealnote.messenger.longpoll.LongpollInstance;
 import biz.dealnote.messenger.model.Account;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
@@ -70,15 +86,21 @@ import biz.dealnote.messenger.util.ShortcutUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
+
 public class AccountsFragment extends BaseFragment implements View.OnClickListener, AccountAdapter.Callback {
 
+    private static final int REQUEST_PIN_FOR_SECURITY = 120;
+    private static final String SAVE_DATA = "save_data";
+    private static final int REQUEST_LOGIN = 107;
+    private static final int REQEUST_DIRECT_LOGIN = 108;
     private TextView empty;
     private RecyclerView mRecyclerView;
     private AccountAdapter mAdapter;
     private ArrayList<Account> mData;
-
     private IOwnersRepository mOwnersInteractor;
     private IAccountsInteractor accountsInteractor;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,7 +132,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onViewCreated (@NotNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
@@ -144,15 +166,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private static final String SAVE_DATA = "save_data";
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(SAVE_DATA, mData);
     }
-
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onDestroy() {
@@ -173,9 +191,34 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     resolveEmptyText();
-                    if(isAdded() && Utils.safeIsEmpty(mData))
+                    if (isAdded() && Utils.safeIsEmpty(mData)) {
+                        requireActivity().invalidateOptionsMenu();
                         startDirectLogin();
+                    }
                 }));
+    }
+
+    private void startExportAccounts() {
+        DialogProperties properties = new DialogProperties();
+        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_type = DialogConfigs.DIR_SELECT;
+        properties.root = Environment.getExternalStorageDirectory();
+        properties.error_dir = Environment.getExternalStorageDirectory();
+        properties.offset = Environment.getExternalStorageDirectory();
+        ;
+        properties.extensions = null;
+        properties.show_hidden_files = true;
+        FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
+        dialog.setTitle(R.string.export_accounts);
+        dialog.setDialogSelectionListener(files -> {
+            File file = new File(files[0], "phoenix_accounts_backup.json");
+
+            appendDisposable(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).users().get(Settings.get().accounts().getRegistered(), null, "photo_max_orig,first_name,last_name", null)
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(userInfo ->
+                            SaveAccounts(file, userInfo), throwable -> SaveAccounts(file, null)));
+        });
+        dialog.show();
     }
 
     @Override
@@ -183,6 +226,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+            case REQUEST_PIN_FOR_SECURITY:
+                if (resultCode == Activity.RESULT_OK) {
+                    startExportAccounts();
+                }
+                break;
             case REQUEST_LOGIN:
                 if (resultCode == Activity.RESULT_OK) {
                     int uid = data.getExtras().getInt(Extra.USER_ID);
@@ -198,8 +246,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 if (resultCode == Activity.RESULT_OK) {
                     if (DirectAuthDialog.ACTION_LOGIN_VIA_WEB.equals(data.getAction())) {
                         startLoginViaWeb();
-                    }
-                    else if(DirectAuthDialog.ACTION_VALIDATE_VIA_WEB.equals(data.getAction())) {
+                    } else if (DirectAuthDialog.ACTION_VALIDATE_VIA_WEB.equals(data.getAction())) {
                         String url = data.getStringExtra(Extra.URL);
                         String Login = data.getStringExtra(Extra.LOGIN);
                         String Password = data.getStringExtra(Extra.PASSWORD);
@@ -269,9 +316,6 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 .subscribe(owner -> merge(new Account(uid, owner)), t -> {/*ignored*/}));
     }
 
-    private static final int REQUEST_LOGIN = 107;
-    private static final int REQEUST_DIRECT_LOGIN = 108;
-
     private void startLoginViaWeb() {
         Intent intent = LoginActivity.createIntent(requireActivity(), String.valueOf(Constants.API_ID), Auth.getScope());
         startActivityForResult(intent, REQUEST_LOGIN);
@@ -300,13 +344,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private boolean canRunRootCommands()
-    {
+    private boolean canRunRootCommands() {
         boolean retval = false;
         Process suProcess;
         PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.get_root);
-        try
-        {
+        try {
             suProcess = Runtime.getRuntime().exec("su");
 
             DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
@@ -322,24 +364,18 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             boolean exitSu = false;
             if (null == currUid)
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Can't get root access or denied by user");
-            else if (currUid.contains("uid=0"))
-            {
+            else if (currUid.contains("uid=0")) {
                 retval = true;
                 exitSu = true;
-            }
-            else
-            {
+            } else {
                 exitSu = true;
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected: \" + currUid");
             }
-            if (exitSu)
-            {
+            if (exitSu) {
                 os.writeBytes("exit\n");
                 os.flush();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             retval = false;
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
@@ -347,9 +383,8 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         return retval;
     }
 
-    private void onKate()
-    {
-        if(!canRunRootCommands())
+    private void onKate() {
+        if (!canRunRootCommands())
             return;
         StringBuilder JSDT = new StringBuilder();
         try {
@@ -364,12 +399,11 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 Thread.sleep(10);
 
             String Temp;
-            while (d.ready()){
+            while (d.ready()) {
                 Temp = d.readLine();
-                if(Temp != null) {
+                if (Temp != null) {
                     JSDT.append(d.readLine());
-                }
-                else
+                } else
                     break;
             }
             os.writeBytes("exit\n");
@@ -381,17 +415,16 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             NodeList elements = doc.getElementsByTagName("map").item(0).getChildNodes();
             for (int i = 0; i < elements.getLength(); i++) {
                 NamedNodeMap attributes = elements.item(i).getAttributes();
-                if(attributes == null || attributes.getNamedItem("name") == null)
+                if (attributes == null || attributes.getNamedItem("name") == null)
                     continue;
                 String name = attributes.getNamedItem("name").getNodeValue();
-                if(name.equals("accounts"))
-                {
+                if (name.equals("accounts")) {
                     JSONArray jsonRoot = new JSONArray(elements.item(i).getTextContent());
                     List<Integer> accounts = Settings.get().accounts().getRegistered();
-                    for(int s = 0; s < jsonRoot.length(); s++) {
+                    for (int s = 0; s < jsonRoot.length(); s++) {
                         JSONObject mJsonObject = jsonRoot.getJSONObject(s);
-                        if(accounts != null && accounts.size() > 0) {
-                            if(accounts.contains(mJsonObject.getInt("mid")))
+                        if (accounts != null && accounts.size() > 0) {
+                            if (accounts.contains(mJsonObject.getInt("mid")))
                                 continue;
                         }
                         processNewAccount(mJsonObject.getInt("mid"), mJsonObject.getString("access_token"), "kate", "", "", "kate_app", true, false);
@@ -400,8 +433,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 }
 
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError("Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
     }
@@ -472,6 +504,58 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 .show();
     }
 
+    private VKApiUser getByID(List<VKApiUser> Users, int user_id) {
+        for (VKApiUser i : Users) {
+            if (i.id == user_id)
+                return i;
+        }
+        return null;
+    }
+
+    private void AddUserInfo(final JsonObject temp, List<VKApiUser> Users, int user_id) {
+        if (Users == null) {
+            temp.addProperty("user_name", "error");
+            temp.addProperty("avatar", "error");
+            return;
+        }
+        VKApiUser usr = getByID(Users, user_id);
+        if (usr == null) {
+            temp.addProperty("user_name", "error");
+            temp.addProperty("avatar", "error");
+            return;
+        }
+        temp.addProperty("user_name", firstNonEmptyString(usr.last_name, " ") + " " + firstNonEmptyString(usr.first_name, " "));
+        temp.addProperty("avatar", firstNonEmptyString(usr.photo_max_orig, " "));
+    }
+
+    private void SaveAccounts(File file, List<VKApiUser> Users) {
+        FileOutputStream out = null;
+        try {
+            JsonObject root = new JsonObject();
+            JsonArray arr = new JsonArray();
+            for (int i : Settings.get().accounts().getRegistered()) {
+                final JsonObject temp = new JsonObject();
+
+                AddUserInfo(temp, Users, i);
+                temp.addProperty("user_id", i);
+                temp.addProperty("access_token", Settings.get().accounts().getAccessToken(i));
+                temp.addProperty("type", Settings.get().accounts().getType(i));
+                arr.add(temp);
+            }
+            root.add("phoenix_accounts", arr);
+            byte[] bytes = root.toString().getBytes(StandardCharsets.UTF_8);
+            out = new FileOutputStream(file);
+            out.write(bytes);
+            out.flush();
+            Injection.provideApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.saved_to_param_file_name, file.getAbsolutePath());
+        } catch (Exception e) {
+            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
+        } finally {
+            Utils.safelyClose(out);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_ok) {
@@ -486,6 +570,66 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
 
         if (item.getItemId() == R.id.action_proxy) {
             startProxySettings();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.export_accounts) {
+            if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                AppPerms.requestReadExternalStoragePermission(getActivity());
+                return true;
+            }
+            if (Settings.get().accounts() == null || Settings.get().accounts().getRegistered() == null || Settings.get().accounts().getRegistered().size() <= 0)
+                return true;
+            if (Settings.get().security().isUsePinForSecurity()) {
+                startActivityForResult(new Intent(requireActivity(), EnterPinActivity.class), REQUEST_PIN_FOR_SECURITY);
+            } else
+                startExportAccounts();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.import_accounts) {
+            if (!AppPerms.hasReadStoragePermision(getActivity())) {
+                AppPerms.requestReadExternalStoragePermission(getActivity());
+                return true;
+            }
+            DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.selection_type = DialogConfigs.FILE_SELECT;
+            properties.root = Environment.getExternalStorageDirectory();
+            properties.error_dir = Environment.getExternalStorageDirectory();
+            properties.offset = Environment.getExternalStorageDirectory();
+            ;
+            properties.extensions = new String[]{"json"};
+            properties.show_hidden_files = true;
+            FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
+            dialog.setTitle(R.string.import_accounts);
+            dialog.setDialogSelectionListener(files -> {
+                try {
+                    StringBuilder jbld = new StringBuilder();
+                    final File file = new File(files[0]);
+                    if (file.exists()) {
+                        FileInputStream dataFromServerStream = new FileInputStream(file);
+                        BufferedReader d = new BufferedReader(new InputStreamReader(dataFromServerStream));
+                        while (d.ready())
+                            jbld.append(d.readLine());
+                        d.close();
+                        JsonArray reader = JsonParser.parseString(jbld.toString()).getAsJsonObject().getAsJsonArray("phoenix_accounts");
+                        for (JsonElement i : reader) {
+                            JsonObject elem = i.getAsJsonObject();
+                            int id = elem.get("user_id").getAsInt();
+                            if (Settings.get().accounts().getRegistered().contains(id))
+                                continue;
+                            String token = elem.get("access_token").getAsString();
+                            String Type = elem.get("type").getAsString();
+                            processNewAccount(id, token, Type, "", "", "phoenix_app", true, false);
+                        }
+                    }
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.accounts_restored, file.getAbsolutePath());
+                } catch (Exception e) {
+                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
+                }
+            });
+            dialog.show();
             return true;
         }
 
@@ -505,6 +649,12 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_accounts, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.export_accounts).setVisible(mData.size() > 0);
     }
 
     private void createShortcut(final Account account) {

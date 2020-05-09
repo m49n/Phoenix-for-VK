@@ -45,13 +45,13 @@ public class PhotoEntity extends Entity {
         this.ownerId = ownerId;
     }
 
+    public PhotoSizeEntity getSizes() {
+        return sizes;
+    }
+
     public PhotoEntity setSizes(PhotoSizeEntity sizes) {
         this.sizes = sizes;
         return this;
-    }
-
-    public PhotoSizeEntity getSizes() {
-        return sizes;
     }
 
     public int getId() {
@@ -71,13 +71,13 @@ public class PhotoEntity extends Entity {
         return this;
     }
 
+    public boolean isCanComment() {
+        return canComment;
+    }
+
     public PhotoEntity setCanComment(boolean canComment) {
         this.canComment = canComment;
         return this;
-    }
-
-    public boolean isCanComment() {
-        return canComment;
     }
 
     public int getWidth() {

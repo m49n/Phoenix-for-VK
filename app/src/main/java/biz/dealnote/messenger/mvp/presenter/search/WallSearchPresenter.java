@@ -30,6 +30,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class WallSearchPresenter extends AbsSearchPresenter<IWallSearchView, WallSearchCriteria, Post, IntNextFrom> {
 
+    private static final int COUNT = 30;
     private final IWallsRepository walls;
 
     public WallSearchPresenter(int accountId, @Nullable WallSearchCriteria criteria, @Nullable Bundle savedInstanceState) {
@@ -42,10 +43,10 @@ public class WallSearchPresenter extends AbsSearchPresenter<IWallSearchView, Wal
     }
 
     private void onPostMinorUpdates(PostUpdate update) {
-        for(int i = 0; i < super.data.size(); i++){
+        for (int i = 0; i < super.data.size(); i++) {
             final Post post = super.data.get(i);
 
-            if(post.getVkid() == update.getPostId() && post.getOwnerId() == update.getOwnerId()){
+            if (post.getVkid() == update.getPostId() && post.getOwnerId() == update.getOwnerId()) {
                 if (nonNull(update.getLikeUpdate())) {
                     post.setLikesCount(update.getLikeUpdate().getCount());
                     post.setUserLikes(update.getLikeUpdate().isLiked());
@@ -67,7 +68,7 @@ public class WallSearchPresenter extends AbsSearchPresenter<IWallSearchView, Wal
                     post.setPinned(update.getPinUpdate().isPinned());
                 }
 
-                if(pinStateChanged){
+                if (pinStateChanged) {
                     callView(IBaseSearchView::notifyDataSetChanged);
                 } else {
                     int finalI = i;
@@ -88,8 +89,6 @@ public class WallSearchPresenter extends AbsSearchPresenter<IWallSearchView, Wal
     boolean isAtLast(IntNextFrom startFrom) {
         return startFrom.getOffset() == 0;
     }
-
-    private static final int COUNT = 30;
 
     @Override
     Single<Pair<List<Post>, IntNextFrom>> doSearch(int accountId, WallSearchCriteria criteria, IntNextFrom startFrom) {

@@ -12,8 +12,12 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IFaveVideosView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<Video> videos);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
+
     void showRefreshing(boolean refreshing);
+
     void goToPreview(int accountId, Video video);
 }

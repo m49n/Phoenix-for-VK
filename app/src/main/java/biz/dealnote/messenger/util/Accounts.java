@@ -42,7 +42,7 @@ public class Accounts {
             user = (User) Repository.INSTANCE.getOwners()
                     .getBaseOwnerInfo(aid, aid, IOwnersRepository.MODE_CACHE)
                     .blockingGet();
-        } catch (Exception e){
+        } catch (Exception e) {
             // NotFountException
             return;
         }

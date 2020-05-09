@@ -17,6 +17,7 @@ public class SchoolsAdapter extends RecyclerView.Adapter<SchoolsAdapter.Holder> 
 
     private Context mContext;
     private List<School> mData;
+    private Listener mListener;
 
     public SchoolsAdapter(Context mContext, List<School> mData) {
         this.mContext = mContext;
@@ -34,7 +35,7 @@ public class SchoolsAdapter extends RecyclerView.Adapter<SchoolsAdapter.Holder> 
         holder.name.setText(school.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(school);
             }
         });
@@ -45,6 +46,14 @@ public class SchoolsAdapter extends RecyclerView.Adapter<SchoolsAdapter.Holder> 
         return mData.size();
     }
 
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(School school);
+    }
+
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -53,15 +62,5 @@ public class SchoolsAdapter extends RecyclerView.Adapter<SchoolsAdapter.Holder> 
             super(itemView);
             name = itemView.findViewById(R.id.name);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(School school);
     }
 }

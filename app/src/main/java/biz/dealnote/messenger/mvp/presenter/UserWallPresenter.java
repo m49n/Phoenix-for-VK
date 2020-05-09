@@ -101,10 +101,10 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
     private void onUploadFinished(Pair<Upload, UploadResult<?>> pair) {
         UploadDestination destination = pair.getFirst().getDestination();
-        if(destination.getMethod() == Method.PHOTO_TO_PROFILE && destination.getOwnerId() == ownerId){
+        if (destination.getMethod() == Method.PHOTO_TO_PROFILE && destination.getOwnerId() == ownerId) {
             requestActualFullInfo();
 
-            if(isGuiResumed()){
+            if (isGuiResumed()) {
                 Post post = (Post) pair.getSecond().getResult();
                 getView().showAvatarUploadedMessage(getAccountId(), post);
             }
@@ -321,17 +321,16 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     }
 
     private void openAvatarPhotoAlbum() {
-        appendDisposable(photosInteractor.get(getAccountId(), ownerId, -6,200, 0, true)
+        appendDisposable(photosInteractor.get(getAccountId(), ownerId, -6, 200, 0, true)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::DisplayUserProfileAlbum, tt -> showError(getView(), getCauseIfRuntime(tt))));
     }
 
-    private void DisplayUserProfileAlbum(List<Photo> photos)
-    {
+    private void DisplayUserProfileAlbum(List<Photo> photos) {
         Integer currentAvatarPhotoId = nonNull(details) && nonNull(details.getPhotoId()) ? details.getPhotoId().getId() : null;
         Integer currentAvatarOwner_id = nonNull(details) && nonNull(details.getPhotoId()) ? details.getPhotoId().getOwnerId() : null;
         int sel = 0;
-        if(currentAvatarPhotoId != null && currentAvatarOwner_id != null) {
+        if (currentAvatarPhotoId != null && currentAvatarOwner_id != null) {
             int ut = 0;
             for (Photo i : photos) {
                 if (i.getOwnerId() == currentAvatarOwner_id && i.getId() == currentAvatarPhotoId) {
@@ -542,8 +541,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 .subscribe(this::onBanComplete, this::onBanError));
     }
 
-    public void fireMentions()
-    {
+    public void fireMentions() {
         PlaceFactory.getMentionsPlace(getAccountId(), getOwnerId()).tryOpenWith(context);
     }
 
@@ -557,7 +555,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
             appendDisposable(ownersRepository.report(getAccountId(), getOwnerId(), report, null)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(p -> {
-                        if(p == 1)
+                        if (p == 1)
                             getView().getPhoenixToast().showToast(R.string.success);
                         else
                             getView().getPhoenixToast().showToast(R.string.error);

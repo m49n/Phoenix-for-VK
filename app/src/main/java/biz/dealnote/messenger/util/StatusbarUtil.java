@@ -15,15 +15,15 @@ public class StatusbarUtil {
 
     private static final String STATUS_BAR_SETUP_TAG = "StatusbarTag";
 
-    public static void setCustomStatusbarDarkMode(Activity activity, boolean dark){
+    public static void setCustomStatusbarDarkMode(Activity activity, boolean dark) {
         try {
             //http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/
-            if(setMiuiStatusBarDarkMode(activity, dark)){
+            if (setMiuiStatusBarDarkMode(activity, dark)) {
                 Logger.d(STATUS_BAR_SETUP_TAG, "This is MIUI");
-            } else if(setMeizuStatusBarDarkIcon(activity, dark)){
+            } else if (setMeizuStatusBarDarkIcon(activity, dark)) {
                 Logger.d(STATUS_BAR_SETUP_TAG, "This is FLYME");
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }

@@ -4,10 +4,7 @@ import android.provider.BaseColumns;
 
 public final class PeersColumns implements BaseColumns {
 
-    private PeersColumns(){}
-
     public static final String TABLENAME = "peersnew";
-
     public static final String UNREAD = "unread";
     public static final String TITLE = "title";
     public static final String IN_READ = "in_read";
@@ -19,7 +16,6 @@ public final class PeersColumns implements BaseColumns {
     public static final String LAST_MESSAGE_ID = "last_message_id";
     public static final String ACL = "acl";
     public static final String IS_GROUP_CHANNEL = "is_group_channel";
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_UNREAD = TABLENAME + "." + UNREAD;
     public static final String FULL_TITLE = TABLENAME + "." + TITLE;
@@ -32,4 +28,6 @@ public final class PeersColumns implements BaseColumns {
     public static final String FULL_LAST_MESSAGE_ID = TABLENAME + "." + LAST_MESSAGE_ID;
     public static final String FULL_ACL = TABLENAME + "." + ACL;
     public static final String FULL_IS_GROUP_CHANNEL = TABLENAME + "." + IS_GROUP_CHANNEL;
+    private PeersColumns() {
+    }
 }

@@ -46,24 +46,8 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
     private static final LikeParser LIKE_PARSER = new LikeParser();
     private static final BaseUsersParser USERS_PARSER = new BaseUsersParser();
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public VkApiBaseFeedback deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject root = json.getAsJsonObject();
-
-        String type = optString(root, "type");
-        VkApiBaseFeedback dto = createInstance(type);
-
-        if (Objects.nonNull(dto)) {
-            Parser parser = getParser(type);
-            parser.parse(root, dto, context);
-        }
-
-        return dto;
-    }
-
     private static VkApiBaseFeedback createInstance(String type) {
-        if(type == null)
+        if (type == null)
             return null;
         switch (type) {
             case "follow":
@@ -113,6 +97,22 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public VkApiBaseFeedback deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        JsonObject root = json.getAsJsonObject();
+
+        String type = optString(root, "type");
+        VkApiBaseFeedback dto = createInstance(type);
+
+        if (Objects.nonNull(dto)) {
+            Parser parser = getParser(type);
+            parser.parse(root, dto, context);
+        }
+
+        return dto;
+    }
+
     private Parser<?> getParser(@NonNull String type) {
         switch (type) {
             case "follow":
@@ -147,7 +147,7 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
             case "reply_comment_photo":
             case "reply_comment_video":
             case "reply_topic":
-               return REPLY_COMMENT_PARSER;
+                return REPLY_COMMENT_PARSER;
 
             case "like_video":
             case "like_photo":
@@ -218,7 +218,7 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
             dto.comment = context.deserialize(root.get("feedback"), VKApiComment.class);
 
             Class<? extends Commentable> commentableClass;
-            switch (dto.type){
+            switch (dto.type) {
                 case "comment_post":
                     commentableClass = VKApiPost.class;
                     break;
@@ -242,7 +242,7 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
             super.parse(root, dto, context);
             dto.feedback_comment = context.deserialize(root.get("feedback"), VKApiComment.class);
 
-            if("reply_topic".equals(dto.type)){
+            if ("reply_topic".equals(dto.type)) {
                 dto.own_comment = null;
                 dto.comments_of = context.deserialize(root.get("parent"), VKApiTopic.class);
                 return;
@@ -253,7 +253,7 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
             Class<? extends Commentable> commentableClass;
             String parentCommentableField;
 
-            switch (dto.type){
+            switch (dto.type) {
                 case "reply_comment":
                     commentableClass = VKApiPost.class;
                     parentCommentableField = "post";
@@ -288,7 +288,7 @@ public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<V
             super.parse(root, dto, context);
 
             Class<? extends Likeable> likedClass;
-            switch (dto.type){
+            switch (dto.type) {
                 case "like_photo":
                     likedClass = VKApiPhoto.class;
                     break;

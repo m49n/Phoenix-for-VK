@@ -31,6 +31,8 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
 
     private final IProxySettings proxySettings;
+    private final Object longpollRetrofitLock = new Object();
+    private RetrofitWrapper longpollRetrofitInstance;
 
     public OtherVkRetrofitProvider(IProxySettings proxySettings) {
         this.proxySettings = proxySettings;
@@ -38,9 +40,9 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
                 .subscribe(ignored -> onProxySettingsChanged());
     }
 
-    private void onProxySettingsChanged(){
-        synchronized (longpollRetrofitLock){
-            if(nonNull(longpollRetrofitInstance)){
+    private void onProxySettingsChanged() {
+        synchronized (longpollRetrofitLock) {
+            if (nonNull(longpollRetrofitInstance)) {
                 longpollRetrofitInstance.cleanup();
                 longpollRetrofitInstance = null;
             }
@@ -58,7 +60,8 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
                             return chain.proceed(request);
-                        }});
+                        }
+                    });
 
             ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
             Gson gson = new GsonBuilder().create();
@@ -74,9 +77,6 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
         });
     }
 
-    private final Object longpollRetrofitLock = new Object();
-    private RetrofitWrapper longpollRetrofitInstance;
-
     private Retrofit createLongpollRetrofitInstance() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -85,7 +85,8 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
                         return chain.proceed(request);
-                    }});
+                    }
+                });
 
         ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
 

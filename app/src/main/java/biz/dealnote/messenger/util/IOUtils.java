@@ -9,31 +9,34 @@ import java.io.OutputStream;
 
 public class IOUtils {
 
-    public static void recycleBitmapQuietly(Bitmap bitmap){
-        if(bitmap != null) bitmap.recycle();
+    public static void recycleBitmapQuietly(Bitmap bitmap) {
+        if (bitmap != null) bitmap.recycle();
     }
 
-    public static void closeStreamQuietly(InputStream streamToClose){
-        if(streamToClose == null) return;
+    public static void closeStreamQuietly(InputStream streamToClose) {
+        if (streamToClose == null) return;
 
-        try{
+        try {
             streamToClose.close();
-        } catch (IOException ignored){}
+        } catch (IOException ignored) {
+        }
     }
 
-    public static void closeStreamQuietly(OutputStream streamToClose){
-        if(streamToClose == null) return;
+    public static void closeStreamQuietly(OutputStream streamToClose) {
+        if (streamToClose == null) return;
 
-        try{
+        try {
             streamToClose.close();
-        } catch (IOException ignored){}
+        } catch (IOException ignored) {
+        }
     }
 
-    public static void closeCursorQuietly(Cursor cursor){
-        if(cursor == null) return;
+    public static void closeCursorQuietly(Cursor cursor) {
+        if (cursor == null) return;
 
-        try{
+        try {
             cursor.close();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 }

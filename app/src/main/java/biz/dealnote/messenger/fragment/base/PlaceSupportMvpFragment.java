@@ -157,7 +157,7 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void playAudioList(int accountId, int position, @NonNull ArrayList<Audio> apiAudio) {
         MusicPlaybackService.startForPlayList(requireActivity(), apiAudio, position, false);
-        if(!Settings.get().other().isShow_mini_player())
+        if (!Settings.get().other().isShow_mini_player())
             PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 

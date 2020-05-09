@@ -27,7 +27,14 @@ import biz.dealnote.messenger.util.RxUtils;
 
 public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment implements SchoolClassesAdapter.Listener {
 
-    public static SelectSchoolClassesDialog newInstance(int aid, int countryId, Bundle additional){
+    private int mAccountId;
+    private int countryId;
+    private IDatabaseInteractor mDatabaseInteractor;
+    private ArrayList<SchoolClazz> mData;
+    private RecyclerView mRecyclerView;
+    private SchoolClassesAdapter mAdapter;
+
+    public static SelectSchoolClassesDialog newInstance(int aid, int countryId, Bundle additional) {
         Bundle args = additional == null ? new Bundle() : additional;
         args.putInt(Extra.COUNTRY_ID, countryId);
         args.putInt(Extra.ACCOUNT_ID, aid);
@@ -35,14 +42,6 @@ public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment i
         selectCityDialog.setArguments(args);
         return selectCityDialog;
     }
-
-    private int mAccountId;
-    private int countryId;
-    private IDatabaseInteractor mDatabaseInteractor;
-
-    private ArrayList<SchoolClazz> mData;
-    private RecyclerView mRecyclerView;
-    private SchoolClassesAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,11 +64,11 @@ public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment i
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
-        if(mData == null){
+        if (mData == null) {
             mData = new ArrayList<>();
             firstRun = true;
         }
@@ -78,18 +77,18 @@ public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment i
         mAdapter.setListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if(firstRun){
+        if (firstRun) {
             request();
         }
     }
 
-    private void request(){
+    private void request() {
         appendDisposable(mDatabaseInteractor.getSchoolClasses(mAccountId, countryId)
-        .compose(RxUtils.applySingleIOToMainSchedulers())
-        .subscribe(this::onDataReceived, t -> {/*todo*/}));
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(this::onDataReceived, t -> {/*todo*/}));
     }
 
-    private void onDataReceived(List<SchoolClazz> clazzes){
+    private void onDataReceived(List<SchoolClazz> clazzes) {
         mData.clear();
         mData.addAll(clazzes);
         mAdapter.notifyDataSetChanged();

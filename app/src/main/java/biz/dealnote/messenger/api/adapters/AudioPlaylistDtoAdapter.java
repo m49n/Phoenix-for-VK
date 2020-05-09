@@ -32,43 +32,37 @@ public class AudioPlaylistDtoAdapter extends AbsAdapter implements JsonDeseriali
         album.update_time = optInt(root, "update_time");
         album.Year = optInt(root, "year");
 
-        if(root.has("genres") && root.getAsJsonArray("genres").size() > 0)
-        {
+        if (root.has("genres") && root.getAsJsonArray("genres").size() > 0) {
             StringBuilder build = new StringBuilder();
             JsonArray gnr = root.getAsJsonArray("genres");
             boolean isFirst = true;
-            for(JsonElement i : gnr)
-            {
-                if(isFirst)
+            for (JsonElement i : gnr) {
+                if (isFirst)
                     isFirst = false;
                 else
                     build.append(", ");
                 String val = optString(i.getAsJsonObject(), "name");
-                if(val != null)
+                if (val != null)
                     build.append(val);
             }
             album.genre = build.toString();
         }
-        if(root.has("main_artists") && root.getAsJsonArray("main_artists").size() > 0)
+        if (root.has("main_artists") && root.getAsJsonArray("main_artists").size() > 0)
             album.artist_name = optString(root.getAsJsonArray("main_artists").get(0).getAsJsonObject(), "name");
-        if(root.getAsJsonObject().has("photo"))
-        {
+        if (root.getAsJsonObject().has("photo")) {
             JsonObject thmb = root.getAsJsonObject("photo");
 
-            if(thmb.has("photo_600"))
+            if (thmb.has("photo_600"))
                 album.thumb_image = thmb.get("photo_600").getAsString();
-            else if(thmb.has("photo_300"))
+            else if (thmb.has("photo_300"))
                 album.thumb_image = thmb.get("photo_300").getAsString();
-        }
-        else if(root.getAsJsonObject().has("thumbs"))
-        {
+        } else if (root.getAsJsonObject().has("thumbs")) {
             JsonArray thmb = root.getAsJsonArray("thumbs");
-            if(thmb.size() > 0)
-            {
+            if (thmb.size() > 0) {
                 JsonObject thmbc = thmb.get(0).getAsJsonObject();
-                if(thmbc.has("photo_600"))
+                if (thmbc.has("photo_600"))
                     album.thumb_image = thmbc.get("photo_600").getAsString();
-                else if(thmbc.has("photo_300"))
+                else if (thmbc.has("photo_300"))
                     album.thumb_image = thmbc.get("photo_300").getAsString();
             }
         }

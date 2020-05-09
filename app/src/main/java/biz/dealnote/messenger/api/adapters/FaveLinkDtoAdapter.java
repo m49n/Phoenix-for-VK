@@ -21,7 +21,7 @@ public class FaveLinkDtoAdapter extends AbsAdapter implements JsonDeserializer<F
         JsonObject root = json.getAsJsonObject();
 
         FaveLinkDto link = new FaveLinkDto();
-        if(!root.has("link"))
+        if (!root.has("link"))
             return link;
         root = root.get("link").getAsJsonObject();
         link.id = optString(root, "id");

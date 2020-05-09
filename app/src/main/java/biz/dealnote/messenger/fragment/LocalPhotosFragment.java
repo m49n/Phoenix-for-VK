@@ -53,7 +53,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
         Bundle args = new Bundle();
         args.putInt(EXTRA_MAX_SELECTION_COUNT, maxSelectionItemCount);
         args.putParcelable(Extra.ALBUM, album);
-        if(hide_toolbar)
+        if (hide_toolbar)
             args.putBoolean(BaseMvpFragment.EXTRA_HIDE_TOOLBAR, true);
         LocalPhotosFragment fragment = new LocalPhotosFragment();
         fragment.setArguments(args);
@@ -64,7 +64,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        if(!hasHideToolbarExtra()){
+        if (!hasHideToolbarExtra()) {
             ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         } else {
             toolbar.setVisibility(View.GONE);
@@ -108,14 +108,14 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
 
     @Override
     public void setEmptyTextVisible(boolean visible) {
-        if(Objects.nonNull(mEmptyTextView)){
+        if (Objects.nonNull(mEmptyTextView)) {
             mEmptyTextView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void displayProgress(boolean loading) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
@@ -133,7 +133,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
 
     @Override
     public void updateSelectionAndIndexes() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.updateHoldersSelectionAndIndexes();
         }
     }
@@ -157,7 +157,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQYEST_PERMISSION_READ_EXTERNAL_STORAGE){
+        if (requestCode == REQYEST_PERMISSION_READ_EXTERNAL_STORAGE) {
             getPresenter().fireReadExternalStoregePermissionResolved();
         }
     }
@@ -169,7 +169,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
 
     @Override
     public void showError(@StringRes int titleRes, Object... params) {
-        if(isAdded()) showError(getString(titleRes, params));
+        if (isAdded()) showError(getString(titleRes, params));
     }
 
     @Override

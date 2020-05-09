@@ -11,9 +11,10 @@ import biz.dealnote.messenger.R;
 
 public class ViewPagerTransformers {
 
-    private ViewPagerTransformers() {}
-
     public static ViewPager2.PageTransformer ZOOM_OUT = new ZoomOut();
+
+    private ViewPagerTransformers() {
+    }
 
     private static class ZoomOut implements ViewPager2.PageTransformer {
 
@@ -26,7 +27,7 @@ public class ViewPagerTransformers {
             int pageWidth = view.getWidth();
             int pageHeight = view.getHeight();
             if (position < -1) { // [-Infinity,-1)
-                if(searchView != null)
+                if (searchView != null)
                     searchView.setAlpha(0);
                 view.setAlpha(0);
             } else if (position <= 1) { // [-1,1]
@@ -35,18 +36,17 @@ public class ViewPagerTransformers {
                 float verticalMargin = pageHeight * (1 - scaleFactor) / 2;
                 float horizontalMargin = pageWidth * (1 - scaleFactor) / 2;
                 if (position < 0) {
-                    if(searchView != null)
+                    if (searchView != null)
                         searchView.setTranslationX(horizontalMargin - verticalMargin / 2);
                     view.setTranslationX(horizontalMargin - verticalMargin / 2);
                 } else {
-                    if(searchView != null)
+                    if (searchView != null)
                         searchView.setTranslationX(-horizontalMargin + verticalMargin / 2);
                     view.setTranslationX(-horizontalMargin + verticalMargin / 2);
                 }
                 final float alpha = MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE)
                         * (1 - MIN_ALPHA);
-                if(searchView != null)
-                {
+                if (searchView != null) {
                     searchView.setScaleX(scaleFactor);
                     searchView.setScaleY(scaleFactor);
                     searchView.setAlpha(alpha);
@@ -58,7 +58,7 @@ public class ViewPagerTransformers {
                 view.setAlpha(alpha);
             } else { // (1,+Infinity]
                 // This page is way off-screen to the right.
-                if(searchView != null)
+                if (searchView != null)
                     searchView.setAlpha(0);
                 view.setAlpha(0);
             }

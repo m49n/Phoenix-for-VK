@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class University implements Parcelable {
 
-    private final int id;
-
-    private final String title;
-
-    public University(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    private University(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-    }
-
     public static final Creator<University> CREATOR = new Creator<University>() {
         @Override
         public University createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class University implements Parcelable {
             return new University[size];
         }
     };
+    private final int id;
+    private final String title;
+
+    public University(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    private University(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+    }
 
     public String getTitle() {
         return title;

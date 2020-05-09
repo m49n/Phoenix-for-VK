@@ -5,24 +5,6 @@ import android.os.Parcelable;
 
 public class LocalImageAlbum implements Parcelable {
 
-    private int id;
-    private String name;
-    private long coverImageId;
-    private String coverPath;
-    private int photoCount;
-
-    public LocalImageAlbum(){
-
-    }
-
-    protected LocalImageAlbum(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        coverImageId = in.readLong();
-        coverPath = in.readString();
-        photoCount = in.readInt();
-    }
-
     public static final Creator<LocalImageAlbum> CREATOR = new Creator<LocalImageAlbum>() {
         @Override
         public LocalImageAlbum createFromParcel(Parcel in) {
@@ -34,6 +16,23 @@ public class LocalImageAlbum implements Parcelable {
             return new LocalImageAlbum[size];
         }
     };
+    private int id;
+    private String name;
+    private long coverImageId;
+    private String coverPath;
+    private int photoCount;
+
+    public LocalImageAlbum() {
+
+    }
+
+    protected LocalImageAlbum(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        coverImageId = in.readLong();
+        coverPath = in.readString();
+        photoCount = in.readInt();
+    }
 
     public int getId() {
         return id;

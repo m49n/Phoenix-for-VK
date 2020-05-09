@@ -34,7 +34,7 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
 
         dto.from_id = optInt(root, "from_id");
 
-        if(dto.from_id == 0){
+        if (dto.from_id == 0) {
             // "copy_history": [
             // {
             //     ... this post has been removed ...
@@ -65,12 +65,12 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
 
         dto.friends_only = optIntAsBoolean(root, "friends_only");
 
-        if(root.has("comments")){
+        if (root.has("comments")) {
             JsonObject comments = root.getAsJsonObject("comments");
             dto.comments = context.deserialize(comments, CommentsDto.class);
         }
 
-        if(root.has("likes")){
+        if (root.has("likes")) {
             JsonObject likes = root.getAsJsonObject("likes");
             dto.likes_count = optInt(likes, "count");
             dto.user_likes = optIntAsBoolean(likes, "user_likes");
@@ -78,23 +78,23 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
             dto.can_publish = optIntAsBoolean(likes, "can_publish");
         }
 
-        if(root.has("reposts")){
+        if (root.has("reposts")) {
             JsonObject reposts = root.getAsJsonObject("reposts");
             dto.reposts_count = optInt(reposts, "count");
             dto.user_reposted = optIntAsBoolean(reposts, "user_reposted");
         }
 
-        if(root.has("views")){
+        if (root.has("views")) {
             JsonObject views = root.getAsJsonObject("views");
             dto.views = optInt(views, "count");
         }
 
-        if(root.has("attachments")){
+        if (root.has("attachments")) {
             JsonArray attachments = root.getAsJsonArray("attachments");
             dto.attachments = context.deserialize(attachments, VkApiAttachments.class);
         }
 
-        if(root.has("geo")){
+        if (root.has("geo")) {
             JsonObject geo = root.getAsJsonObject("geo");
             dto.geo = context.deserialize(geo, VKApiPlace.class);
         }
@@ -106,11 +106,11 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
         dto.can_pin = optInt(root, "can_pin") == 1;
         dto.is_pinned = optIntAsBoolean(root, "is_pinned");
 
-        if(root.has("copy_history")){
+        if (root.has("copy_history")) {
             JsonArray copyHistoryArray = root.getAsJsonArray("copy_history");
             dto.copy_history = new ArrayList<>(copyHistoryArray.size());
 
-            for(int i = 0; i < copyHistoryArray.size(); i++){
+            for (int i = 0; i < copyHistoryArray.size(); i++) {
                 JsonObject copy = copyHistoryArray.get(i).getAsJsonObject();
                 dto.copy_history.add(deserialize(copy, VKApiPost.class, context));
             }
@@ -120,7 +120,7 @@ public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApi
             dto.copy_history = new ArrayList<>(0);
         }
 
-        if(root.has("post_source")){
+        if (root.has("post_source")) {
             JsonObject postSource = root.getAsJsonObject("post_source");
             dto.post_source = context.deserialize(postSource, VkApiPostSource.class);
         }

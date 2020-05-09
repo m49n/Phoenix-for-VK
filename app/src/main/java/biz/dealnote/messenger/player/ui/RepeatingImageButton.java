@@ -36,6 +36,15 @@ public class RepeatingImageButton extends AppCompatImageButton implements OnClic
     private long mStartTime;
     private int mRepeatCount;
     private RepeatListener mListener;
+    private final Runnable mRepeater = new Runnable() {
+        @Override
+        public void run() {
+            doRepeat(false);
+            if (isPressed()) {
+                postDelayed(this, sInterval);
+            }
+        }
+    };
 
     public RepeatingImageButton(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -112,16 +121,6 @@ public class RepeatingImageButton extends AppCompatImageButton implements OnClic
         }
         return super.onKeyUp(keyCode, event);
     }
-
-    private final Runnable mRepeater = new Runnable() {
-        @Override
-        public void run() {
-            doRepeat(false);
-            if (isPressed()) {
-                postDelayed(this, sInterval);
-            }
-        }
-    };
 
     /**
      * @param shouldRepeat If True the repeat count stops at -1, false if to add

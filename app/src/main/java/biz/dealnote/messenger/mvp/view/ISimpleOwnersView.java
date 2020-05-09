@@ -12,9 +12,12 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface ISimpleOwnersView extends IMvpView, IErrorView, IAccountDependencyView {
     void displayOwnerList(List<Owner> owners);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
 
     void displayRefreshing(boolean refreshing);
+
     void showOwnerWall(int accoutnId, Owner owner);
 }

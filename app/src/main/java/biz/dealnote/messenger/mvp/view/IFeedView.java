@@ -17,18 +17,25 @@ import biz.dealnote.mvp.core.IMvpView;
 public interface IFeedView extends IAccountDependencyView, IAttachmentsPlacesView, IMvpView, IErrorView {
 
     void displayFeedSources(List<FeedSource> sources);
+
     void notifyFeedSourcesChanged();
 
     void displayFeed(List<News> data, @Nullable String rawScrollState);
+
     void notifyFeedDataChanged();
+
     void notifyDataAdded(int position, int count);
+
     void notifyItemChanged(int position);
 
     void setupLoadMoreFooter(@LoadMoreState int state);
+
     void showRefreshing(boolean refreshing);
+
     void scrollFeedSourcesToPosition(int position);
 
     void goToLikes(int accountId, String type, int ownerId, int id);
+
     void goToReposts(int accountId, String type, int ownerId, int id);
 
     void goToPostComments(int accountId, int postId, int ownerId);

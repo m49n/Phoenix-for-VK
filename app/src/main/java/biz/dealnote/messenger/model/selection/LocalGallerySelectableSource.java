@@ -9,6 +9,18 @@ import android.os.Parcelable;
  */
 public class LocalGallerySelectableSource extends AbsSelectableSource implements Parcelable {
 
+    public static final Creator<LocalGallerySelectableSource> CREATOR = new Creator<LocalGallerySelectableSource>() {
+        @Override
+        public LocalGallerySelectableSource createFromParcel(Parcel in) {
+            return new LocalGallerySelectableSource(in);
+        }
+
+        @Override
+        public LocalGallerySelectableSource[] newArray(int size) {
+            return new LocalGallerySelectableSource[size];
+        }
+    };
+
     public LocalGallerySelectableSource() {
         super(Types.LOCAL_GALLERY);
     }
@@ -21,18 +33,6 @@ public class LocalGallerySelectableSource extends AbsSelectableSource implements
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
     }
-
-    public static final Creator<LocalGallerySelectableSource> CREATOR = new Creator<LocalGallerySelectableSource>() {
-        @Override
-        public LocalGallerySelectableSource createFromParcel(Parcel in) {
-            return new LocalGallerySelectableSource(in);
-        }
-
-        @Override
-        public LocalGallerySelectableSource[] newArray(int size) {
-            return new LocalGallerySelectableSource[size];
-        }
-    };
 
     @Override
     public int describeContents() {

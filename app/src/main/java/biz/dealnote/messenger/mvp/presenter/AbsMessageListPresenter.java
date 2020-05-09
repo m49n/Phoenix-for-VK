@@ -39,6 +39,7 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> extends
         PlaceSupportPresenter<V> implements IVoicePlayer.IPlayerStatusListener {
 
+    protected final LastReadId lastReadId = new LastReadId(0, 0);
     private final ArrayList<Message> mData;
     private IVoicePlayer mVoicePlayer;
     private Lookup mVoiceMessageLookup;
@@ -55,21 +56,19 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
     }
 
     @OnGuiCreated
-    private void syncVoiceLookupState(){
+    private void syncVoiceLookupState() {
         boolean needLookup = mVoicePlayer.isSupposedToPlay() && isGuiReady();
 
-        if(needLookup){
+        if (needLookup) {
             mVoiceMessageLookup.start();
         } else {
             mVoiceMessageLookup.stop();
         }
     }
 
-    protected final LastReadId lastReadId = new LastReadId(0, 0);
-
     @OnGuiCreated
-    public void resolveListView(){
-        if(isGuiReady()) {
+    public void resolveListView() {
+        if (isGuiReady()) {
             getView().displayMessages(mData, lastReadId);
         }
     }
@@ -79,19 +78,19 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         return mData;
     }
 
-    protected int indexOf(int messageId){
+    protected int indexOf(int messageId) {
         return Utils.indexOf(mData, messageId);
     }
 
     @Nullable
-    protected Message findById(int messageId){
+    protected Message findById(int messageId) {
         return Utils.findById(mData, messageId);
     }
 
-    protected boolean clearSelection(){
+    protected boolean clearSelection() {
         boolean hasChanges = false;
-        for(Message message : mData){
-            if(message.isSelected()){
+        for (Message message : mData) {
+            if (message.isSelected()) {
                 message.setSelected(false);
                 hasChanges = true;
             }
@@ -136,16 +135,16 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         }
     }
 
-    protected void onMessageClick(@NonNull Message message){
+    protected void onMessageClick(@NonNull Message message) {
 
     }
 
-    public final void fireActionModeDestroy(){
+    public final void fireActionModeDestroy() {
         onActionModeDestroy();
     }
 
     @CallSuper
-    protected void onActionModeDestroy(){
+    protected void onActionModeDestroy() {
         if (clearSelection()) {
             safeNotifyDataChanged();
         }
@@ -155,15 +154,15 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         onActionModeDeleteClick();
     }
 
-    protected void onActionModeDeleteClick(){
+    protected void onActionModeDeleteClick() {
 
     }
 
-    public final void fireActionModeCopyClick(){
+    public final void fireActionModeCopyClick() {
         onActionModeCopyClick();
     }
 
-    protected void onActionModeCopyClick(){
+    protected void onActionModeCopyClick() {
         List<Message> selected = getSelected(getData(), true);
         if (safeIsEmpty(selected)) return;
 
@@ -182,18 +181,18 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         getView().getPhoenixToast().setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
     }
 
-    public final void fireForwardClick(){
+    public final void fireForwardClick() {
         onActionModeForwardClick();
     }
 
-    protected void onActionModeForwardClick(){
+    protected void onActionModeForwardClick() {
 
     }
 
-    public void fireVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage){
+    public void fireVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage) {
         try {
             boolean messageChanged = mVoicePlayer.toggle(voiceMessageId, voiceMessage);
-            if(messageChanged){
+            if (messageChanged) {
                 resolveVoiceMessagePlayingState();
             } else {
                 boolean paused = !mVoicePlayer.isSupposedToPlay();
@@ -207,11 +206,11 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         syncVoiceLookupState();
     }
 
-    private void resolveVoiceMessagePlayingState(boolean anim){
-        if(isGuiReady()){
+    private void resolveVoiceMessagePlayingState(boolean anim) {
+        if (isGuiReady()) {
             Optional<Integer> optionalVoiceMessageId = mVoicePlayer.getPlayingVoiceId();
 
-            if(optionalVoiceMessageId.isEmpty()){
+            if (optionalVoiceMessageId.isEmpty()) {
                 getView().disableVoicePlaying();
             } else {
                 float progress = mVoicePlayer.getProgress();
@@ -222,7 +221,7 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         }
     }
 
-    private void resolveVoiceMessagePlayingState(){
+    private void resolveVoiceMessagePlayingState() {
         resolveVoiceMessagePlayingState(false);
     }
 

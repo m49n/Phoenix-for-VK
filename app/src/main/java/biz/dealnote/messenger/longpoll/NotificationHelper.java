@@ -31,6 +31,21 @@ import static biz.dealnote.messenger.util.Utils.hasFlag;
 
 public class NotificationHelper {
 
+    public static final int NOTIFICATION_MESSAGE = 62;
+    public static final int NOTIFICATION_WALL_POST_ID = 63;
+    public static final int NOTIFICATION_REPLY_ID = 64;
+    public static final int NOTIFICATION_COMMENT_ID = 65;
+    public static final int NOTIFICATION_WALL_PUBLISH_ID = 66;
+    public static final int NOTIFICATION_FRIEND_ID = 67;
+    public static final int NOTIFICATION_FRIEND_ACCEPTED_ID = 68;
+    public static final int NOTIFICATION_GROUP_INVITE_ID = 69;
+    public static final int NOTIFICATION_NEW_POSTS_ID = 70;
+    public static final int NOTIFICATION_LIKE = 71;
+    public static final int NOTIFICATION_BIRTHDAY = 72;
+    public static final int NOTIFICATION_UPLOAD = 73;
+    public static final int NOTIFICATION_DOWNLOADING = 74;
+    public static final int NOTIFICATION_DOWNLOAD = 75;
+
     /**
      * Отображение уведомления в statusbar о новом сообщении.
      * Этот метод сначала в отдельном потоке получает всю необходимую информацию для отображения
@@ -58,11 +73,11 @@ public class NotificationHelper {
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if(Objects.isNull(nManager)){
+        if (Objects.isNull(nManager)) {
             return;
         }
 
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getChatMessageChannel(context));
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }
@@ -178,25 +193,25 @@ public class NotificationHelper {
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if(Objects.isNull(nManager)){
+        if (Objects.isNull(nManager)) {
             return;
         }
 
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getChatMessageChannel(context));
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }
 
-        if(Type != null)
+        if (Type != null)
             Title += ", Type: " + Type;
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,  AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID)
                 .setSmallIcon(R.drawable.phoenix_round)
                 .setContentText(text)
                 .setContentTitle(Title)
                 .setAutoCancel(true);
 
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
         Notification notification = builder.build();
 
@@ -206,21 +221,6 @@ public class NotificationHelper {
     private static String createPeerTagFor(int aid, int peerId) {
         return aid + "_" + peerId;
     }
-
-    public static final int NOTIFICATION_MESSAGE = 62;
-    public static final int NOTIFICATION_WALL_POST_ID = 63;
-    public static final int NOTIFICATION_REPLY_ID = 64;
-    public static final int NOTIFICATION_COMMENT_ID = 65;
-    public static final int NOTIFICATION_WALL_PUBLISH_ID = 66;
-    public static final int NOTIFICATION_FRIEND_ID = 67;
-    public static final int NOTIFICATION_FRIEND_ACCEPTED_ID = 68;
-    public static final int NOTIFICATION_GROUP_INVITE_ID = 69;
-    public static final int NOTIFICATION_NEW_POSTS_ID = 70;
-    public static final int NOTIFICATION_LIKE = 71;
-    public static final int NOTIFICATION_BIRTHDAY = 72;
-    public static final int NOTIFICATION_UPLOAD = 73;
-    public static final int NOTIFICATION_DOWNLOADING = 74;
-    public static final int NOTIFICATION_DOWNLOAD = 75;
 
     public static Uri findNotificationSound() {
         try {
@@ -244,8 +244,8 @@ public class NotificationHelper {
         //        .getNotifPref(accountId, peerId);
 
         //if (hasFlag(mask, ISettings.INotificationSettings.FLAG_SHOW_NOTIF)) {
-            getService(context).cancel(NotificationHelper.createPeerTagFor(accountId, peerId),
-                    NotificationHelper.NOTIFICATION_MESSAGE);
+        getService(context).cancel(NotificationHelper.createPeerTagFor(accountId, peerId),
+                NotificationHelper.NOTIFICATION_MESSAGE);
         //}
     }
 }

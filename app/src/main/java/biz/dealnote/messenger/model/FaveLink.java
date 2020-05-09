@@ -9,20 +9,36 @@ import android.os.Parcelable;
  */
 public class FaveLink extends AbsModel implements Parcelable {
 
+    public static final Creator<FaveLink> CREATOR = new Creator<FaveLink>() {
+        @Override
+        public FaveLink createFromParcel(Parcel in) {
+            return new FaveLink(in);
+        }
+
+        @Override
+        public FaveLink[] newArray(int size) {
+            return new FaveLink[size];
+        }
+    };
     private final String id;
-
     private String url;
-
     private String title;
-
     private String description;
-
     private String photo50;
-
     private String photo100;
 
     public FaveLink(String id) {
         this.id = id;
+    }
+
+    protected FaveLink(Parcel in) {
+        super(in);
+        id = in.readString();
+        url = in.readString();
+        title = in.readString();
+        description = in.readString();
+        photo50 = in.readString();
+        photo100 = in.readString();
     }
 
     public String getId() {
@@ -74,16 +90,6 @@ public class FaveLink extends AbsModel implements Parcelable {
         return this;
     }
 
-    protected FaveLink(Parcel in) {
-        super(in);
-        id = in.readString();
-        url = in.readString();
-        title = in.readString();
-        description = in.readString();
-        photo50 = in.readString();
-        photo100 = in.readString();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -94,18 +100,6 @@ public class FaveLink extends AbsModel implements Parcelable {
         dest.writeString(photo50);
         dest.writeString(photo100);
     }
-
-    public static final Creator<FaveLink> CREATOR = new Creator<FaveLink>() {
-        @Override
-        public FaveLink createFromParcel(Parcel in) {
-            return new FaveLink(in);
-        }
-
-        @Override
-        public FaveLink[] newArray(int size) {
-            return new FaveLink[size];
-        }
-    };
 
     @Override
     public int describeContents() {

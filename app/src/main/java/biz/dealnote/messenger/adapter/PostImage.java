@@ -18,7 +18,7 @@ public class PostImage {
     private final AbsModel attachment;
     private PostImagePosition position;
 
-    public PostImage(AbsModel model, int type){
+    public PostImage(AbsModel model, int type) {
         this.attachment = model;
         this.type = type;
     }
@@ -31,17 +31,17 @@ public class PostImage {
         return attachment;
     }
 
+    public PostImagePosition getPosition() {
+        return position;
+    }
+
     public PostImage setPosition(PostImagePosition position) {
         this.position = position;
         return this;
     }
 
-    public PostImagePosition getPosition() {
-        return position;
-    }
-
-    public int getWidth(){
-        switch (type){
+    public int getWidth() {
+        switch (type) {
             case TYPE_IMAGE:
                 Photo photo = (Photo) attachment;
                 return photo.getWidth() == 0 ? 100 : photo.getWidth();
@@ -73,8 +73,8 @@ public class PostImage {
         throw new UnsupportedOperationException();
     }
 
-    public int getHeight(){
-        switch (type){
+    public int getHeight() {
+        switch (type) {
             case TYPE_IMAGE:
                 Photo photo = (Photo) attachment;
                 return photo.getHeight() == 0 ? 100 : photo.getHeight();
@@ -89,7 +89,7 @@ public class PostImage {
         }
     }
 
-    public float getAspectRatio(){
+    public float getAspectRatio() {
         return (float) getWidth() / (float) getHeight();
     }
 }

@@ -13,49 +13,67 @@ import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
  */
 public class User extends Owner implements Parcelable, Identificable {
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     private final int id;
-
     private String firstName;
-
     private String lastName;
-
     private boolean online;
-
     private boolean onlineMobile;
-
     private int onlineApp;
-
     private String photo50;
-
     private String photo100;
-
     private String photo200;
-
     private String photoMax;
-
     private long lastSeen;
-
     @UserPlatform
     private int platform;
-
     private String status;
-
     @Sex
     private int sex;
-
     private String domain;
-
     private boolean friend;
-
     private int friendStatus;
-
     private boolean can_write_private_message;
-
     private boolean blacklisted_by_me;
 
     public User(int id) {
         super(OwnerType.USER);
         this.id = id;
+    }
+
+    protected User(Parcel in) {
+        super(in);
+        id = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        online = in.readByte() != 0;
+        onlineMobile = in.readByte() != 0;
+        onlineApp = in.readInt();
+        photo50 = in.readString();
+        photo100 = in.readString();
+        photo200 = in.readString();
+        photoMax = in.readString();
+        lastSeen = in.readLong();
+        //noinspection ResourceType
+        platform = in.readInt();
+        status = in.readString();
+        //noinspection ResourceType
+        sex = in.readInt();
+        domain = in.readString();
+        friend = in.readByte() != 0;
+        friendStatus = in.readInt();
+        can_write_private_message = in.readByte() != 0;
+        blacklisted_by_me = in.readByte() != 0;
     }
 
     @Override
@@ -201,13 +219,13 @@ public class User extends Owner implements Parcelable, Identificable {
         return this;
     }
 
+    public int getFriendStatus() {
+        return friendStatus;
+    }
+
     public User setFriendStatus(int friendStatus) {
         this.friendStatus = friendStatus;
         return this;
-    }
-
-    public int getFriendStatus() {
-        return friendStatus;
     }
 
     public boolean getCanWritePrivateMessage() {
@@ -226,31 +244,6 @@ public class User extends Owner implements Parcelable, Identificable {
     public User setBlacklisted_by_me(boolean blacklisted_by_me) {
         this.blacklisted_by_me = blacklisted_by_me;
         return this;
-    }
-
-    protected User(Parcel in) {
-        super(in);
-        id = in.readInt();
-        firstName = in.readString();
-        lastName = in.readString();
-        online = in.readByte() != 0;
-        onlineMobile = in.readByte() != 0;
-        onlineApp = in.readInt();
-        photo50 = in.readString();
-        photo100 = in.readString();
-        photo200 = in.readString();
-        photoMax = in.readString();
-        lastSeen = in.readLong();
-        //noinspection ResourceType
-        platform = in.readInt();
-        status = in.readString();
-        //noinspection ResourceType
-        sex = in.readInt();
-        domain = in.readString();
-        friend = in.readByte() != 0;
-        friendStatus = in.readInt();
-        can_write_private_message = in.readByte() != 0;
-        blacklisted_by_me = in.readByte() != 0;
     }
 
     @Override
@@ -286,18 +279,6 @@ public class User extends Owner implements Parcelable, Identificable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     public int getId() {
         return id;

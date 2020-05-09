@@ -22,10 +22,10 @@ public class CircleImageButton extends AppCompatImageView {
 
     public CircleImageButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context,attrs);
+        init(context, attrs);
     }
 
-    public void init(Context context, AttributeSet attrs){
+    public void init(Context context, AttributeSet attrs) {
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageButton);
 
         setBackgroundResource(R.drawable.circle_back_white);

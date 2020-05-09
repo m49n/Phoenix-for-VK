@@ -10,12 +10,29 @@ import biz.dealnote.messenger.model.Photo;
 
 public class SelectablePhotoWrapper implements Parcelable, Comparable<SelectablePhotoWrapper>, ISelectable {
 
+    public static final Creator<SelectablePhotoWrapper> CREATOR = new Creator<SelectablePhotoWrapper>() {
+        @Override
+        public SelectablePhotoWrapper createFromParcel(Parcel in) {
+            return new SelectablePhotoWrapper(in);
+        }
+
+        @Override
+        public SelectablePhotoWrapper[] newArray(int size) {
+            return new SelectablePhotoWrapper[size];
+        }
+    };
     private final Photo photo;
     private boolean selected;
     private int index;
 
-    public SelectablePhotoWrapper(@NonNull Photo photo){
+    public SelectablePhotoWrapper(@NonNull Photo photo) {
         this.photo = photo;
+    }
+
+    protected SelectablePhotoWrapper(Parcel in) {
+        photo = in.readParcelable(Photo.class.getClassLoader());
+        selected = in.readByte() != 0;
+        index = in.readInt();
     }
 
     @Override
@@ -40,12 +57,6 @@ public class SelectablePhotoWrapper implements Parcelable, Comparable<Selectable
         return photo;
     }
 
-    protected SelectablePhotoWrapper(Parcel in) {
-        photo = in.readParcelable(Photo.class.getClassLoader());
-        selected = in.readByte() != 0;
-        index = in.readInt();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(photo, flags);
@@ -57,18 +68,6 @@ public class SelectablePhotoWrapper implements Parcelable, Comparable<Selectable
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SelectablePhotoWrapper> CREATOR = new Creator<SelectablePhotoWrapper>() {
-        @Override
-        public SelectablePhotoWrapper createFromParcel(Parcel in) {
-            return new SelectablePhotoWrapper(in);
-        }
-
-        @Override
-        public SelectablePhotoWrapper[] newArray(int size) {
-            return new SelectablePhotoWrapper[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {

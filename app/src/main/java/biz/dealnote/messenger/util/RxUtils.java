@@ -31,15 +31,15 @@ public class RxUtils {
         return DUMMMY_ACTION_0;
     }
 
-    public static <T> Consumer<T> ignore(){
+    public static <T> Consumer<T> ignore() {
         return t -> {
-            if(t instanceof Throwable && BuildConfig.DEBUG){
+            if (t instanceof Throwable && BuildConfig.DEBUG) {
                 ((Throwable) t).printStackTrace();
             }
         };
     }
 
-    public static Action safelyCloseAction(@Nullable Closeable closeable){
+    public static Action safelyCloseAction(@Nullable Closeable closeable) {
         return () -> Utils.safelyClose(closeable);
     }
 

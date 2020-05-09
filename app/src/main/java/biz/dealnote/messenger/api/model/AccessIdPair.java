@@ -18,7 +18,7 @@ public class AccessIdPair {
         this.accessKey = accessKey;
     }
 
-    public static String format(AccessIdPair pair){
+    public static String format(AccessIdPair pair) {
         return pair.ownerId + "_" + pair.id + (pair.accessKey == null ? "" : "_" + pair.accessKey);
 
     }

@@ -15,6 +15,14 @@ public class NoIconMenuItem extends SectionMenuItem implements Parcelable {
         }
     };
 
+    public NoIconMenuItem(int section, int title) {
+        super(TYPE_WITHOUT_ICON, section, title);
+    }
+
+    public NoIconMenuItem(Parcel in) {
+        super(in);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -23,13 +31,5 @@ public class NoIconMenuItem extends SectionMenuItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-    }
-
-    public NoIconMenuItem(int section, int title) {
-        super(TYPE_WITHOUT_ICON, section, title);
-    }
-
-    public NoIconMenuItem(Parcel in) {
-        super(in);
     }
 }

@@ -20,11 +20,14 @@ class GroupLongpoll implements ILongpoll {
     private static final int DELAY_ON_ERROR = 10 * 1000;
 
     private final int groupId;
+    private final INetworker networker;
     private String key;
     private String server;
     private String ts;
     private Callback callback;
-    private final INetworker networker;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private Observable<Long> delayedObservable = Observable.interval(DELAY_ON_ERROR, DELAY_ON_ERROR,
+            TimeUnit.MILLISECONDS, Injection.provideMainThreadScheduler());
 
     GroupLongpoll(INetworker networker, int groupId, Callback callback) {
         this.groupId = groupId;
@@ -55,11 +58,9 @@ class GroupLongpoll implements ILongpoll {
         }
     }
 
-    private boolean isListeningNow(){
+    private boolean isListeningNow() {
         return compositeDisposable.size() > 0;
     }
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private void onServerInfoReceived(GroupLongpollServer info) {
         this.ts = info.ts;
@@ -111,9 +112,6 @@ class GroupLongpoll implements ILongpoll {
         PersistentLogger.logThrowable("Longpoll, UpdatesGet", throwable);
         getWithDelay();
     }
-
-    private Observable<Long> delayedObservable = Observable.interval(DELAY_ON_ERROR, DELAY_ON_ERROR,
-            TimeUnit.MILLISECONDS, Injection.provideMainThreadScheduler());
 
     private void getWithDelay() {
         compositeDisposable.add(delayedObservable.subscribe(o -> get()));

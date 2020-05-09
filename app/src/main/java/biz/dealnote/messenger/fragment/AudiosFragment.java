@@ -57,6 +57,18 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView>
         implements IAudiosView, HorizontalPlaylistAdapter.Listener {
 
+    public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
+    public static final String ACTION_SELECT = "AudiosFragment.ACTION_SELECT";
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private AudioRecyclerAdapter mAudioRecyclerAdapter;
+    private PlaybackStatus mPlaybackStatus;
+    private boolean inTabsContainer;
+    private boolean doAudioLoadTabs;
+    private boolean isSelectMode;
+    private boolean isAlbum;
+    private View headerPlaylist;
+    private HorizontalPlaylistAdapter mPlaylistAdapter;
+
     public static AudiosFragment newInstance(int accountId, int ownerId, int option_menu_id, int isAlbum, String access_key) {
         Bundle args = new Bundle();
         args.putInt(Extra.OWNER_ID, ownerId);
@@ -80,19 +92,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private AudioRecyclerAdapter mAudioRecyclerAdapter;
-    private PlaybackStatus mPlaybackStatus;
-    private boolean inTabsContainer;
-    private boolean doAudioLoadTabs;
-    private boolean isSelectMode;
-    private boolean isAlbum;
-    private View headerPlaylist;
-    private HorizontalPlaylistAdapter mPlaylistAdapter;
-
-    public static final String EXTRA_IN_TABS_CONTAINER = "in_tabs_container";
-    public static final String ACTION_SELECT = "AudiosFragment.ACTION_SELECT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,14 +131,12 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             Goto.setImageResource(R.drawable.check);
         else
             Goto.setImageResource(R.drawable.audio_player);
-        if(!isSelectMode)
-        {
+        if (!isSelectMode) {
             Goto.setOnLongClickListener(v -> {
                 Audio curr = MusicUtils.getCurrentAudio();
                 if (curr != null) {
                     PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
-                }
-                else
+                } else
                     PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
                 return false;
             });

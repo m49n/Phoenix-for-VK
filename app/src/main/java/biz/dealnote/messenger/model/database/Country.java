@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class Country implements Parcelable {
 
-    private final int id;
-
-    private final String title;
-
-    public Country(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    private Country(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-    }
-
     public static final Creator<Country> CREATOR = new Creator<Country>() {
         @Override
         public Country createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class Country implements Parcelable {
             return new Country[size];
         }
     };
+    private final int id;
+    private final String title;
+
+    public Country(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    private Country(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+    }
 
     public String getTitle() {
         return title;

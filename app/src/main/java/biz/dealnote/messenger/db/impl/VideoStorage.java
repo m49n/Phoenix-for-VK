@@ -65,6 +65,46 @@ class VideoStorage extends AbsStorage implements IVideoStorage {
         super(base);
     }
 
+    /* Дело в том, что вк передает в p.owner_id идентификатор оригинального владельца.
+     * Поэтому необходимо отдельно сохранять идентикатор owner-а, у кого в видеозаписях мы нашли видео */
+    public static ContentValues getCV(VideoEntity dbo, int ownerId) {
+        ContentValues cv = new ContentValues();
+        cv.put(VideoColumns.VIDEO_ID, dbo.getId());
+        cv.put(VideoColumns.OWNER_ID, ownerId);
+        cv.put(VideoColumns.ORIGINAL_OWNER_ID, dbo.getOwnerId());
+        cv.put(VideoColumns.ALBUM_ID, dbo.getAlbumId());
+        cv.put(VideoColumns.TITLE, dbo.getTitle());
+        cv.put(VideoColumns.DESCRIPTION, dbo.getDescription());
+        cv.put(VideoColumns.DURATION, dbo.getDuration());
+        cv.put(VideoColumns.LINK, dbo.getLink());
+        cv.put(VideoColumns.DATE, dbo.getDate());
+        cv.put(VideoColumns.ADDING_DATE, dbo.getAddingDate());
+        cv.put(VideoColumns.VIEWS, dbo.getViews());
+        cv.put(VideoColumns.PLAYER, dbo.getPlayer());
+        cv.put(VideoColumns.IMAGE, dbo.getImage());
+        cv.put(VideoColumns.ACCESS_KEY, dbo.getAccessKey());
+        cv.put(VideoColumns.COMMENTS, dbo.getCommentsCount());
+        cv.put(VideoColumns.CAN_COMENT, dbo.isCanComment());
+        cv.put(VideoColumns.CAN_REPOST, dbo.isCanRepost());
+        cv.put(VideoColumns.USER_LIKES, dbo.isUserLikes());
+        cv.put(VideoColumns.REPEAT, dbo.isRepeat());
+        cv.put(VideoColumns.LIKES, dbo.getLikesCount());
+        cv.put(VideoColumns.PRIVACY_VIEW, nonNull(dbo.getPrivacyView()) ? GSON.toJson(dbo.getPrivacyView()) : null);
+        cv.put(VideoColumns.PRIVACY_COMMENT, nonNull(dbo.getPrivacyComment()) ? GSON.toJson(dbo.getPrivacyComment()) : null);
+        cv.put(VideoColumns.MP4_240, dbo.getMp4link240());
+        cv.put(VideoColumns.MP4_360, dbo.getMp4link360());
+        cv.put(VideoColumns.MP4_480, dbo.getMp4link480());
+        cv.put(VideoColumns.MP4_720, dbo.getMp4link720());
+        cv.put(VideoColumns.MP4_1080, dbo.getMp4link1080());
+        cv.put(VideoColumns.EXTERNAL, dbo.getExternalLink());
+        cv.put(VideoColumns.HLS, dbo.getHls());
+        cv.put(VideoColumns.LIVE, dbo.getLive());
+        cv.put(VideoColumns.PLATFORM, dbo.getPlatform());
+        cv.put(VideoColumns.CAN_EDIT, dbo.isCanEdit());
+        cv.put(VideoColumns.CAN_ADD, dbo.isCanAdd());
+        return cv;
+    }
+
     @Override
     public Single<List<VideoEntity>> findByCriteria(@NonNull VideoCriteria criteria) {
         return Single.create(e -> {
@@ -74,10 +114,10 @@ class VideoStorage extends AbsStorage implements IVideoStorage {
             String[] args;
 
             DatabaseIdRange range = criteria.getRange();
-            if(nonNull(range)){
+            if (nonNull(range)) {
                 where = _ID + " >= ? AND " + _ID + " <= ?";
                 args = new String[]{String.valueOf(range.getFirst()), String.valueOf(range.getLast())};
-            } else if(criteria.getAlbumId() == 0){
+            } else if (criteria.getAlbumId() == 0) {
                 where = OWNER_ID + " = ?";
                 args = new String[]{String.valueOf(criteria.getOwnerId())};
             } else {
@@ -139,56 +179,16 @@ class VideoStorage extends AbsStorage implements IVideoStorage {
                 .setCanAdd(cursor.getInt(cursor.getColumnIndex(VideoColumns.CAN_ADD)) == 1);
 
         String privacyViewText = cursor.getString(cursor.getColumnIndex(PRIVACY_VIEW));
-        if(nonEmpty(privacyViewText)){
+        if (nonEmpty(privacyViewText)) {
             video.setPrivacyView(GSON.fromJson(privacyViewText, PrivacyEntity.class));
         }
 
         String privacyCommentText = cursor.getString(cursor.getColumnIndex(PRIVACY_COMMENT));
-        if(nonEmpty(privacyCommentText)){
+        if (nonEmpty(privacyCommentText)) {
             video.setPrivacyComment(GSON.fromJson(privacyCommentText, PrivacyEntity.class));
         }
 
         return video;
-    }
-
-    /* Дело в том, что вк передает в p.owner_id идентификатор оригинального владельца.
-     * Поэтому необходимо отдельно сохранять идентикатор owner-а, у кого в видеозаписях мы нашли видео */
-    public static ContentValues getCV(VideoEntity dbo, int ownerId){
-        ContentValues cv = new ContentValues();
-        cv.put(VideoColumns.VIDEO_ID, dbo.getId());
-        cv.put(VideoColumns.OWNER_ID, ownerId);
-        cv.put(VideoColumns.ORIGINAL_OWNER_ID, dbo.getOwnerId());
-        cv.put(VideoColumns.ALBUM_ID, dbo.getAlbumId());
-        cv.put(VideoColumns.TITLE, dbo.getTitle());
-        cv.put(VideoColumns.DESCRIPTION, dbo.getDescription());
-        cv.put(VideoColumns.DURATION, dbo.getDuration());
-        cv.put(VideoColumns.LINK, dbo.getLink());
-        cv.put(VideoColumns.DATE, dbo.getDate());
-        cv.put(VideoColumns.ADDING_DATE, dbo.getAddingDate());
-        cv.put(VideoColumns.VIEWS, dbo.getViews());
-        cv.put(VideoColumns.PLAYER, dbo.getPlayer());
-        cv.put(VideoColumns.IMAGE, dbo.getImage());
-        cv.put(VideoColumns.ACCESS_KEY, dbo.getAccessKey());
-        cv.put(VideoColumns.COMMENTS, dbo.getCommentsCount());
-        cv.put(VideoColumns.CAN_COMENT, dbo.isCanComment());
-        cv.put(VideoColumns.CAN_REPOST, dbo.isCanRepost());
-        cv.put(VideoColumns.USER_LIKES, dbo.isUserLikes());
-        cv.put(VideoColumns.REPEAT, dbo.isRepeat());
-        cv.put(VideoColumns.LIKES, dbo.getLikesCount());
-        cv.put(VideoColumns.PRIVACY_VIEW, nonNull(dbo.getPrivacyView()) ? GSON.toJson(dbo.getPrivacyView()) : null);
-        cv.put(VideoColumns.PRIVACY_COMMENT, nonNull(dbo.getPrivacyComment()) ? GSON.toJson(dbo.getPrivacyComment()) : null);
-        cv.put(VideoColumns.MP4_240, dbo.getMp4link240());
-        cv.put(VideoColumns.MP4_360, dbo.getMp4link360());
-        cv.put(VideoColumns.MP4_480, dbo.getMp4link480());
-        cv.put(VideoColumns.MP4_720, dbo.getMp4link720());
-        cv.put(VideoColumns.MP4_1080, dbo.getMp4link1080());
-        cv.put(VideoColumns.EXTERNAL, dbo.getExternalLink());
-        cv.put(VideoColumns.HLS, dbo.getHls());
-        cv.put(VideoColumns.LIVE, dbo.getLive());
-        cv.put(VideoColumns.PLATFORM, dbo.getPlatform());
-        cv.put(VideoColumns.CAN_EDIT, dbo.isCanEdit());
-        cv.put(VideoColumns.CAN_ADD, dbo.isCanAdd());
-        return cv;
     }
 
     @Override

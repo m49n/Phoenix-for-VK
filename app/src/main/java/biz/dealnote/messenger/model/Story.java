@@ -8,6 +8,17 @@ import android.os.Parcelable;
  * phoenix
  */
 public class Story extends AbsModel implements Parcelable {
+    public static final Creator<Story> CREATOR = new Creator<Story>() {
+        @Override
+        public Story createFromParcel(Parcel in) {
+            return new Story(in);
+        }
+
+        @Override
+        public Story[] newArray(int size) {
+            return new Story[size];
+        }
+    };
     private int id;
     private int owner_id;
     private long date;
@@ -16,7 +27,7 @@ public class Story extends AbsModel implements Parcelable {
     private Video video;
     private Owner author;
 
-    public Story(){
+    public Story() {
 
     }
 
@@ -42,18 +53,6 @@ public class Story extends AbsModel implements Parcelable {
         dest.writeParcelable(photo, flags);
         ParcelableOwnerWrapper.writeOwner(dest, flags, author);
     }
-
-    public static final Creator<Story> CREATOR = new Creator<Story>() {
-        @Override
-        public Story createFromParcel(Parcel in) {
-            return new Story(in);
-        }
-
-        @Override
-        public Story[] newArray(int size) {
-            return new Story[size];
-        }
-    };
 
     public Photo getPhoto() {
         return photo;

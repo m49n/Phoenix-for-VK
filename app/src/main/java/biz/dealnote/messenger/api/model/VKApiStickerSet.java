@@ -50,6 +50,11 @@ public class VKApiStickerSet implements Identificable {
         return "https://vk.com/images/stickers/" + stickerId + "/" + size + "b.png";
     }
 
+    @Override
+    public int getId() {
+        return product.id;
+    }
+
     public static class Product {
 
         @SerializedName("id")
@@ -72,10 +77,5 @@ public class VKApiStickerSet implements Identificable {
 
         @SerializedName("stickers")
         public List<VKApiSticker> stickers;
-    }
-
-    @Override
-    public int getId() {
-        return product.id;
     }
 }

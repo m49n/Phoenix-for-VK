@@ -43,22 +43,21 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> {
 
-    private static final String SAVE_FILTER = "save_filter";
-
     public static final String ACTION_SELECT = "biz.dealnote.messenger.select.docs";
     public static final String ACTION_SHOW = "biz.dealnote.messenger.show.docs";
-
+    private static final String SAVE_FILTER = "save_filter";
     private final int mOwnerId;
     private final DisposableHolder<Integer> mLoader = new DisposableHolder<>();
     private final List<Document> mDocuments;
     private final String mAction;
-
-    private UploadDestination destination;
-    private List<Upload> uploadsData;
-
     private final List<DocFilter> filters;
     private final IDocsInteractor docsInteractor;
     private final IUploadManager uploadManager;
+    private UploadDestination destination;
+    private List<Upload> uploadsData;
+    private DisposableHolder<Integer> requestHolder = new DisposableHolder<>();
+    private boolean requestNow;
+    private boolean cacheLoadingNow;
 
     public DocsListPresenter(int accountId, int ownerId, @Nullable String action, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -144,7 +143,7 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
     }
 
     private void onProgressUpdates(List<IUploadManager.IProgressUpdate> updates) {
-        for(IUploadManager.IProgressUpdate update : updates){
+        for (IUploadManager.IProgressUpdate update : updates) {
             int index = findIndexById(uploadsData, update.getId());
             if (index != -1) {
                 callView(view -> view.notifyUploadProgressChanged(index, update.getProgress(), true));
@@ -189,11 +188,6 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
             getView().setUploadDataVisible(!uploadsData.isEmpty());
         }
     }
-
-    private DisposableHolder<Integer> requestHolder = new DisposableHolder<>();
-
-    private boolean requestNow;
-    private boolean cacheLoadingNow;
 
     private void setCacheLoadingNow(boolean cacheLoadingNow) {
         this.cacheLoadingNow = cacheLoadingNow;

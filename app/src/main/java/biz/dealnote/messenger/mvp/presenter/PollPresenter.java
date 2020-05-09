@@ -23,10 +23,10 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
  */
 public class PollPresenter extends AccountDependencyPresenter<IPollView> {
 
+    private final IPollInteractor pollInteractor;
     private Poll mPoll;
     private Set<Integer> mTempCheckedId;
-
-    private final IPollInteractor pollInteractor;
+    private boolean loadingNow;
 
     public PollPresenter(int accountId, @NonNull Poll poll, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -37,7 +37,13 @@ public class PollPresenter extends AccountDependencyPresenter<IPollView> {
         refreshPollData();
     }
 
-    private boolean loadingNow;
+    private static Set<Integer> arrayToSet(int[] ids) {
+        Set<Integer> set = new HashSet<>(ids.length);
+        for (int id : ids) {
+            set.add(id);
+        }
+        return set;
+    }
 
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;
@@ -58,14 +64,6 @@ public class PollPresenter extends AccountDependencyPresenter<IPollView> {
     private void onLoadingError(Throwable t) {
         showError(getView(), t);
         setLoadingNow(false);
-    }
-
-    private static Set<Integer> arrayToSet(int[] ids){
-        Set<Integer> set = new HashSet<>(ids.length);
-        for(int id : ids){
-            set.add(id);
-        }
-        return set;
     }
 
     private void onPollInfoUpdated(Poll poll) {
@@ -139,14 +137,14 @@ public class PollPresenter extends AccountDependencyPresenter<IPollView> {
                 .subscribe(this::onPollInfoUpdated, this::onLoadingError));
     }
 
-    private boolean isVoted(){
+    private boolean isVoted() {
         return mPoll.getMyAnswerIds() != null && mPoll.getMyAnswerIds().length > 0;
     }
 
     public void fireButtonClick() {
         if (loadingNow) return;
 
-        if(isVoted()){
+        if (isVoted()) {
             removeVote();
         } else {
             if (mTempCheckedId.isEmpty()) {

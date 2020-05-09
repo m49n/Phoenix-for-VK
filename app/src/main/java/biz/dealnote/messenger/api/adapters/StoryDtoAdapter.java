@@ -28,9 +28,9 @@ public class StoryDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         story.owner_id = optInt(root, "owner_id");
         story.date = optInt(root, "owner_id");
         story.expires_at = optInt(root, "expires_at");
-        if(root.has("photo"))
+        if (root.has("photo"))
             story.photo = context.deserialize(root.get("photo"), VKApiPhoto.class);
-        if(root.has("video"))
+        if (root.has("video"))
             story.video = context.deserialize(root.get("video"), VKApiVideo.class);
         return story;
     }

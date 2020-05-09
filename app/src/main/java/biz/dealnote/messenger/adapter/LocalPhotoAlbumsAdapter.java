@@ -20,14 +20,15 @@ import biz.dealnote.messenger.model.LocalPhoto;
 
 public class LocalPhotoAlbumsAdapter extends RecyclerView.Adapter<LocalPhotoAlbumsAdapter.Holder> {
 
-    private List<LocalImageAlbum> data;
     public static final String PICASSO_TAG = "LocalPhotoAlbumsAdapter.TAG";
+    private List<LocalImageAlbum> data;
+    private ClickListener clickListener;
 
     public LocalPhotoAlbumsAdapter(List<LocalImageAlbum> data) {
         this.data = data;
     }
 
-    public void setData(List<LocalImageAlbum> data){
+    public void setData(List<LocalImageAlbum> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -53,7 +54,7 @@ public class LocalPhotoAlbumsAdapter extends RecyclerView.Adapter<LocalPhotoAlbu
         holder.subtitle.setText(holder.itemView.getContext().getString(R.string.photos_count, album.getPhotoCount()));
 
         holder.itemView.setOnClickListener(v -> {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onClick(album);
             }
         });
@@ -67,8 +68,6 @@ public class LocalPhotoAlbumsAdapter extends RecyclerView.Adapter<LocalPhotoAlbu
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
-
-    private ClickListener clickListener;
 
     public interface ClickListener {
         void onClick(LocalImageAlbum album);

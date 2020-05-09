@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -13,34 +13,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:colorBackground"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:background="?android:colorBackground">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/poll_question"
-                android:paddingBottom="8dp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/poll_question"
                 android:textSize="@dimen/font_size_additional" />
 
             <EditText
-                android:background="?attr/messages_background_color"
+                android:id="@+id/dialog_poll_create_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/dialog_poll_create_question"
                 android:layout_marginTop="4dp"
+                android:background="?attr/messages_background_color"
                 android:padding="8dp"
                 android:textSize="@dimen/font_size_subtitle" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/poll_options"
-                android:padding="8dp"
                 android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:text="@string/poll_options"
                 android:textSize="@dimen/font_size_additional" />
 
             <LinearLayout
@@ -50,123 +50,122 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:background="?attr/messages_background_color"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
-                    android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option" />
+                    android:textSize="@dimen/font_size_subtitle" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
                 <EditText
-                    android:background="?attr/messages_background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/messages_background_color"
+                    android:hint="@string/add_option"
                     android:padding="8dp"
                     android:textSize="@dimen/font_size_subtitle"
-                    android:hint="@string/add_option"
                     android:visibility="gone" />
 
             </LinearLayout>
 
             <CheckBox
+                android:id="@+id/dialog_poll_create_anonymous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/anonymous_poll"
-                android:id="@+id/dialog_poll_create_anonymous"
+                android:layout_marginTop="8dp"
                 android:checked="false"
-                android:layout_marginTop="8dp" />
+                android:text="@string/anonymous_poll" />
 
             <CheckBox
+                android:id="@+id/dialog_poll_create_multiply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/multiply_poll"
-                android:id="@+id/dialog_poll_create_multiply"
+                android:layout_marginTop="8dp"
                 android:checked="false"
-                android:layout_marginTop="8dp" />
+                android:text="@string/multiply_poll" />
 
 
         </LinearLayout>
 
     </ScrollView>
-
 
 
 </LinearLayout>

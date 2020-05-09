@@ -24,6 +24,7 @@ public class MozaikLayout extends RelativeLayout {
     private int prefImageSize;
     private int spacing;
     private MozaikLayoutParamsCalculator layoutParamsCalculator;
+    private MatrixCalculator.Libra libra = index -> photos.get(index).getAspectRatio();
 
     public MozaikLayout(Context context) {
         super(context);
@@ -43,6 +44,13 @@ public class MozaikLayout extends RelativeLayout {
         initDimensions(context, attrs);
     }
 
+    private static int getDisplayHeight(Context context) {
+        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        return outMetrics.heightPixels;
+    }
+
     private void initDimensions(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.MozaikLayout, 0, 0);
 
@@ -60,13 +68,6 @@ public class MozaikLayout extends RelativeLayout {
         int[][] matrix = createMatrix(parentWidth);
 
         layoutParamsCalculator = new MozaikLayoutParamsCalculator(matrix, photos, parentWidth, spacing);
-    }
-
-    private static int getDisplayHeight(Context context) {
-        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-        return outMetrics.heightPixels;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class MozaikLayout extends RelativeLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private int[][] createMatrix(int maxWidth){
+    private int[][] createMatrix(int maxWidth) {
         int prefRowCount = getPreferedRowCount(maxWidth);
 
         //long start = System.currentTimeMillis();
@@ -189,8 +190,6 @@ public class MozaikLayout extends RelativeLayout {
 
         super.onLayout(changed, l, t, r, b);
     }
-
-    private MatrixCalculator.Libra libra = index -> photos.get(index).getAspectRatio();
 
     public void setPhotos(List<PostImage> photos) {
         this.photos = photos;

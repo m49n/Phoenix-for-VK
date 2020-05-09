@@ -17,6 +17,7 @@ public class ChairsAdapter extends RecyclerView.Adapter<ChairsAdapter.Holder> {
 
     private Context mContext;
     private List<Chair> mData;
+    private Listener mListener;
 
     public ChairsAdapter(Context mContext, List<Chair> mData) {
         this.mContext = mContext;
@@ -35,7 +36,7 @@ public class ChairsAdapter extends RecyclerView.Adapter<ChairsAdapter.Holder> {
         holder.name.setText(chair.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(chair);
             }
         });
@@ -46,6 +47,14 @@ public class ChairsAdapter extends RecyclerView.Adapter<ChairsAdapter.Holder> {
         return mData.size();
     }
 
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(Chair chair);
+    }
+
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -54,15 +63,5 @@ public class ChairsAdapter extends RecyclerView.Adapter<ChairsAdapter.Holder> {
             super(itemView);
             name = itemView.findViewById(R.id.name);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(Chair chair);
     }
 }

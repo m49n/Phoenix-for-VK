@@ -8,22 +8,22 @@ import androidx.annotation.Nullable;
  */
 public class Objects {
 
-    private Objects(){
+    private Objects() {
 
     }
 
-    public static boolean nonNull(@Nullable Object o){
+    public static boolean nonNull(@Nullable Object o) {
         return o != null;
     }
 
-    public static boolean isNull(@Nullable Object o){
+    public static boolean isNull(@Nullable Object o) {
         return o == null;
     }
 
-    public static boolean isNullOrEmptyString(@Nullable String o){
-        if(o == null)
+    public static boolean isNullOrEmptyString(@Nullable String o) {
+        if (o == null)
             return true;
-        if(o.length() <= 0)
+        if (o.length() <= 0)
             return true;
         return false;
     }

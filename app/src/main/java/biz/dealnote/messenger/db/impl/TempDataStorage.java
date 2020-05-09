@@ -22,6 +22,8 @@ import io.reactivex.Single;
  */
 public class TempDataStorage implements ITempDataStorage {
 
+    private static final String[] PROJECTION = {
+            TempDataColumns._ID, TempDataColumns.OWNER_ID, TempDataColumns.SOURCE_ID, TempDataColumns.DATA};
     private final Context app;
 
     TempDataStorage(Context context) {
@@ -31,10 +33,6 @@ public class TempDataStorage implements ITempDataStorage {
     private TempDataHelper helper() {
         return TempDataHelper.getInstance(app);
     }
-
-    private static final String[] PROJECTION = {
-            TempDataColumns._ID, TempDataColumns.OWNER_ID, TempDataColumns.SOURCE_ID, TempDataColumns.DATA};
-
 
     @Override
     public <T> Single<List<T>> getData(int ownerId, int sourceId, ISerializeAdapter<T> serializer) {

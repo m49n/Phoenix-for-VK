@@ -31,8 +31,8 @@ public interface IBoardService {
     @FormUrlEncoded
     @POST("board.restoreComment")
     Single<BaseResponse<Integer>> restoreComment(@Field("group_id") int groupId,
-                                                @Field("topic_id") int topicId,
-                                                @Field("comment_id") int commentId);
+                                                 @Field("topic_id") int topicId,
+                                                 @Field("comment_id") int commentId);
 
     //https://vk.com/dev/board.deleteComment
     @FormUrlEncoded
@@ -44,27 +44,27 @@ public interface IBoardService {
     /**
      * Returns a list of topics on a community's discussion board.
      *
-     * @param groupId        ID of the community that owns the discussion board.
-     * @param topicIds       IDs of topics to be returned (100 maximum). By default, all topics are returned.
-     *                       If this parameter is set, the order, offset, and count parameters are ignored.
-     *                       List of comma-separated numbers
-     * @param order          Sort order:
-     *                       1 — by date updated in reverse chronological order.
-     *                       2 — by date created in reverse chronological order.
-     *                       -1 — by date updated in chronological order.
-     *                       -2 — by date created in chronological order.
-     *                       If no sort order is specified, topics are returned in the order specified by the group administrator.
-     *                       Pinned topics are returned first, regardless of the sorting.
-     * @param offset         Offset needed to return a specific subset of topics.
-     * @param count          Number of topics to return.
-     * @param extended       1 — to return information about users who created topics or who posted there last
-     *                       0 — to return no additional fields (default)
-     * @param preview        1 — to return the first comment in each topic;
-     *                       2 — to return the last comment in each topic;
-     *                       0 — to return no comments.
-     *                       By default: 0.
+     * @param groupId       ID of the community that owns the discussion board.
+     * @param topicIds      IDs of topics to be returned (100 maximum). By default, all topics are returned.
+     *                      If this parameter is set, the order, offset, and count parameters are ignored.
+     *                      List of comma-separated numbers
+     * @param order         Sort order:
+     *                      1 — by date updated in reverse chronological order.
+     *                      2 — by date created in reverse chronological order.
+     *                      -1 — by date updated in chronological order.
+     *                      -2 — by date created in chronological order.
+     *                      If no sort order is specified, topics are returned in the order specified by the group administrator.
+     *                      Pinned topics are returned first, regardless of the sorting.
+     * @param offset        Offset needed to return a specific subset of topics.
+     * @param count         Number of topics to return.
+     * @param extended      1 — to return information about users who created topics or who posted there last
+     *                      0 — to return no additional fields (default)
+     * @param preview       1 — to return the first comment in each topic;
+     *                      2 — to return the last comment in each topic;
+     *                      0 — to return no comments.
+     *                      By default: 0.
      * @param previewLength Number of characters after which to truncate the previewed comment.
-     *                       To preview the full comment, specify 0. Default 90
+     *                      To preview the full comment, specify 0. Default 90
      * @return array of objects describing topics.
      */
     @FormUrlEncoded

@@ -30,19 +30,19 @@ public class ChatEntryFetcher {
                             response.icon = info.getAvatar();
                             return response;
                         });
-                case Peer.CHAT:
-                    return Repository.INSTANCE.getMessages()
-                            .getConversation(accountId, peerId, Mode.ANY).singleOrError()
-                            .flatMap(chat -> NotificationUtils.loadRoundedImageRx(app, chat.get100orSmallerAvatar(), R.drawable.ic_group_chat)
-                                    .map(Optional::wrap)
-                                    .onErrorReturnItem(Optional.empty())
-                                    .map(optional -> {
-                                        DialogInfo response = new DialogInfo();
-                                        response.title = chat.getTitle();
-                                        response.img = chat.get100orSmallerAvatar();
-                                        response.icon = optional.get();
-                                        return response;
-                                    }));
+            case Peer.CHAT:
+                return Repository.INSTANCE.getMessages()
+                        .getConversation(accountId, peerId, Mode.ANY).singleOrError()
+                        .flatMap(chat -> NotificationUtils.loadRoundedImageRx(app, chat.get100orSmallerAvatar(), R.drawable.ic_group_chat)
+                                .map(Optional::wrap)
+                                .onErrorReturnItem(Optional.empty())
+                                .map(optional -> {
+                                    DialogInfo response = new DialogInfo();
+                                    response.title = chat.getTitle();
+                                    response.img = chat.get100orSmallerAvatar();
+                                    response.icon = optional.get();
+                                    return response;
+                                }));
         }
 
         throw new UnsupportedOperationException();

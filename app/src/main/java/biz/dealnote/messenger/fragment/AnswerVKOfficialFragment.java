@@ -38,6 +38,10 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPresenter, IAnswerVKOfficialView> implements IAnswerVKOfficialView, AnswerVKOfficialAdapter.ClickListener {
 
+    private TextView mEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private AnswerVKOfficialAdapter mAdapter;
+
     public static AnswerVKOfficialFragment newInstance(int accountId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -46,14 +50,10 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
         return fragment;
     }
 
-    private TextView mEmpty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private AnswerVKOfficialAdapter mAdapter;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_feedback, container, false);
-        ((AppCompatActivity)requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
         mEmpty = root.findViewById(R.id.fragment_feedback_empty_text);
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(requireActivity());
@@ -119,7 +119,7 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
 
     @Override
     public void notifyUpdateCounter() {
-        ((MainActivity)requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
+        ((MainActivity) requireActivity()).UpdateNotificationCount(Settings.get().accounts().getCurrent());
     }
 
     @Override

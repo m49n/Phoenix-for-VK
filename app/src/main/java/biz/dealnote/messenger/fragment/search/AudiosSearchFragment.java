@@ -94,17 +94,15 @@ public class AudiosSearchFragment extends AbsSearchFragment<AudiosSearchPresente
     }
 
     @Override
-    public void ProvideReadCachedAudio()
-    {
+    public void ProvideReadCachedAudio() {
         PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
-        if(!AppPerms.hasReadWriteStoragePermision(getContext())) {
+        if (!AppPerms.hasReadWriteStoragePermision(getContext())) {
             AppPerms.requestReadWriteStoragePermission(requireActivity());
         }
     }
 
     @Override
-    public void doesLoadCache()
-    {
+    public void doesLoadCache() {
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.choose_action)
                 .setNegativeButton(R.string.button_cancel, null)

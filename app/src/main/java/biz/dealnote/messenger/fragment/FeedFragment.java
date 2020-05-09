@@ -67,6 +67,7 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
 
     private HorizontalOptionsAdapter<FeedSource> mFeedSourceAdapter;
     private LinearLayoutManager mHeaderLayoutManager;
+    private Gson mGson = new Gson();
 
     public static Bundle buildArgs(int accountId) {
         Bundle args = new Bundle();
@@ -164,11 +165,6 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
         return root;
     }
 
-    @Override
-    public void onAvatarClick(int ownerId) {
-        super.onOwnerClick(ownerId);
-    }
-
     /*private void resolveEmptyText() {
         if(!isAdded()) return;
         mEmptyText.setVisibility(!nowRequest() && safeIsEmpty(mData) ? View.VISIBLE : View.INVISIBLE);
@@ -200,6 +196,11 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
             requestFeed();
         }
     }*/
+
+    @Override
+    public void onAvatarClick(int ownerId) {
+        super.onOwnerClick(ownerId);
+    }
 
     @Override
     public void onResume() {
@@ -295,8 +296,6 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
             }
         }
     }
-
-    private Gson mGson = new Gson();
 
     private Gson gson() {
         return mGson;

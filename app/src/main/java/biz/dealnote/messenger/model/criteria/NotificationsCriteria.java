@@ -20,13 +20,13 @@ public class NotificationsCriteria extends Criteria {
         return range;
     }
 
-    public int getAccountId() {
-        return accountId;
-    }
-
     public NotificationsCriteria setRange(DatabaseIdRange range) {
         this.range = range;
         return this;
+    }
+
+    public int getAccountId() {
+        return accountId;
     }
 
     @Override

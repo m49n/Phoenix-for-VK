@@ -25,7 +25,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  * phoenix
  */
 public abstract class AbsPostEditFragment<P extends AbsPostEditPresenter<V>, V extends IBasePostEditView>
-        extends AbsAttachmentsEditFragment<P,V> implements IBasePostEditView {
+        extends AbsAttachmentsEditFragment<P, V> implements IBasePostEditView {
 
     private CheckBox mFromGroupCheckBox;
 
@@ -63,63 +63,63 @@ public abstract class AbsPostEditFragment<P extends AbsPostEditPresenter<V>, V e
 
     @Override
     public void setFromGroupChecked(boolean checked) {
-        if(nonNull(mFromGroupCheckBox)){
+        if (nonNull(mFromGroupCheckBox)) {
             mFromGroupCheckBox.setChecked(checked);
         }
     }
 
     @Override
     public void setFriendsOnlyCheched(boolean cheched) {
-        if(nonNull(mFrindsOnlyCheckBox)){
+        if (nonNull(mFrindsOnlyCheckBox)) {
             mFrindsOnlyCheckBox.setChecked(cheched);
         }
     }
 
     @Override
     public void setFriendsOnlyOptionVisible(boolean visible) {
-        if(nonNull(mFrindsOnlyCheckBox)){
+        if (nonNull(mFrindsOnlyCheckBox)) {
             mFrindsOnlyCheckBox.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void setFromGroupOptionVisible(boolean visible) {
-        if(nonNull(mFromGroupCheckBox)){
+        if (nonNull(mFromGroupCheckBox)) {
             mFromGroupCheckBox.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void displaySignerInfo(String fullName, String photo) {
-        if(nonNull(mSignerAvatar)){
+        if (nonNull(mSignerAvatar)) {
             PicassoInstance.with()
                     .load(photo)
                     .transform(new RoundTransformation())
                     .into(mSignerAvatar);
         }
 
-        if(nonNull(mSignerName)){
+        if (nonNull(mSignerName)) {
             mSignerName.setText(fullName);
         }
     }
 
     @Override
     public void setAddSignatureOptionVisible(boolean visible) {
-        if(nonNull(mShowAuthorCheckbox)){
+        if (nonNull(mShowAuthorCheckbox)) {
             mShowAuthorCheckbox.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void setShowAuthorChecked(boolean checked) {
-        if(nonNull(mShowAuthorCheckbox)){
+        if (nonNull(mShowAuthorCheckbox)) {
             mShowAuthorCheckbox.setChecked(checked);
         }
     }
 
     @Override
     public void setSignerInfoVisible(boolean isChecked) {
-        if(nonNull(mSignerRoot)){
+        if (nonNull(mSignerRoot)) {
             mSignerRoot.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         }
     }

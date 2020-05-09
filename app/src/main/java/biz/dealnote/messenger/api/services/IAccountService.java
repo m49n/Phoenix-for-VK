@@ -26,10 +26,11 @@ public interface IAccountService {
     @POST("account.getBanned")
     @FormUrlEncoded
     Single<BaseResponse<AccountsBannedResponce>> getBanned(@Field("count") Integer count,
-                                                                  @Field("offset") Integer offset,
-                                                                  @Field("fields") String fields);
+                                                           @Field("offset") Integer offset,
+                                                           @Field("fields") String fields);
 
     //https://vk.com/dev/account.getCounters
+
     /**
      * @param filter friends — новые заявки в друзья;
      *               friends_suggestions — предлагаемые друзья;

@@ -38,8 +38,8 @@
                 android:background="#90000000"
                 android:gravity="center"
                 android:padding="4dp"
-                android:textColor="@android:color/white"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textColor="@android:color/white"
                 android:textStyle="bold"
                 tools:text="3 videos" />
 

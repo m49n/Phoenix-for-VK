@@ -9,18 +9,23 @@ import android.os.Parcelable;
  */
 public class VoiceMessage extends AbsModel implements Parcelable {
 
+    public static final Creator<VoiceMessage> CREATOR = new Creator<VoiceMessage>() {
+        @Override
+        public VoiceMessage createFromParcel(Parcel in) {
+            return new VoiceMessage(in);
+        }
+
+        @Override
+        public VoiceMessage[] newArray(int size) {
+            return new VoiceMessage[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private int duration;
-
     private byte[] waveform;
-
     private String linkOgg;
-
     private String linkMp3;
-
     private String accessKey;
 
     public VoiceMessage(int id, int ownerId) {
@@ -28,9 +33,15 @@ public class VoiceMessage extends AbsModel implements Parcelable {
         this.ownerId = ownerId;
     }
 
-    public VoiceMessage setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-        return this;
+    protected VoiceMessage(Parcel in) {
+        super(in);
+        id = in.readInt();
+        ownerId = in.readInt();
+        duration = in.readInt();
+        waveform = in.createByteArray();
+        linkOgg = in.readString();
+        linkMp3 = in.readString();
+        accessKey = in.readString();
     }
 
     public int getId() {
@@ -45,28 +56,10 @@ public class VoiceMessage extends AbsModel implements Parcelable {
         return accessKey;
     }
 
-    protected VoiceMessage(Parcel in) {
-        super(in);
-        id = in.readInt();
-        ownerId = in.readInt();
-        duration = in.readInt();
-        waveform = in.createByteArray();
-        linkOgg = in.readString();
-        linkMp3 = in.readString();
-        accessKey = in.readString();
+    public VoiceMessage setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+        return this;
     }
-
-    public static final Creator<VoiceMessage> CREATOR = new Creator<VoiceMessage>() {
-        @Override
-        public VoiceMessage createFromParcel(Parcel in) {
-            return new VoiceMessage(in);
-        }
-
-        @Override
-        public VoiceMessage[] newArray(int size) {
-            return new VoiceMessage[size];
-        }
-    };
 
     public int getDuration() {
         return duration;

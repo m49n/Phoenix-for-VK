@@ -35,6 +35,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFavePhotosView>
         implements SwipeRefreshLayout.OnRefreshListener, IFavePhotosView, FavePhotosAdapter.PhotoSelectionListener {
 
+    private TextView mEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FavePhotosAdapter mAdapter;
+    private boolean isRequestLast = false;
+
     public static FavePhotosFragment newInstance(int accountId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -42,11 +47,6 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
         favePhotosFragment.setArguments(args);
         return favePhotosFragment;
     }
-
-    private TextView mEmpty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FavePhotosAdapter mAdapter;
-    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
 
     @Override
     public void displayData(List<Photo> photos) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setData(photos);
             resolveEmptyTextVisibility();
         }
@@ -98,7 +98,7 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyTextVisibility();
         }
@@ -106,21 +106,21 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
             resolveEmptyTextVisibility();
         }
     }
 
     private void resolveEmptyTextVisibility() {
-        if(nonNull(mEmpty) && nonNull(mAdapter)){
+        if (nonNull(mEmpty) && nonNull(mAdapter)) {
             mEmpty.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void showRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
         }
     }
@@ -139,7 +139,7 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
     @Override
     public void onResume() {
         super.onResume();
-        if(!isRequestLast) {
+        if (!isRequestLast) {
             isRequestLast = true;
             getPresenter().LoadTool();
         }

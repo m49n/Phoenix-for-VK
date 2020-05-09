@@ -48,19 +48,26 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupportPresenter<V> {
 
     private static final int COUNT = 20;
+    private static final Comparator<Post> COMPARATOR = (rhs, lhs) -> {
+        if (rhs.isPinned() == lhs.isPinned()) {
+            return Integer.compare(lhs.getVkid(), rhs.getVkid());
+        }
 
+        return Boolean.compare(lhs.isPinned(), rhs.isPinned());
+    };
     protected final int ownerId;
-
     protected final List<Post> wall;
-
     protected final List<Story> stories;
-
     private final IOwnersRepository ownersRepository;
-
     private final IWallsRepository walls;
-
-    private int wallFilter;
     protected boolean endOfContent;
+    private int wallFilter;
+    private CompositeDisposable cacheCompositeDisposable = new CompositeDisposable();
+    private CompositeDisposable netCompositeDisposable = new CompositeDisposable();
+    private boolean requestNow;
+    private int nowRequestOffset;
+    private int nextOffset;
+    private boolean actualDataReady;
 
     AbsWallPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -74,7 +81,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         loadWallCachedData();
         requestWall(0);
 
-        if(!Settings.get().other().isDisable_history()) {
+        if (!Settings.get().other().isDisable_history()) {
             appendDisposable(ownersRepository.getStory(accountId, accountId == ownerId ? null : ownerId)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(data -> {
@@ -102,6 +109,25 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
                 .filter(pair -> pair.getOwnerId() == ownerId)
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(pair -> onPostInvalid(pair.getId())));
+    }
+
+    private static boolean isMatchFilter(Post post, int filter) {
+        switch (filter) {
+            case WallCriteria.MODE_ALL:
+                return intValueNotIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST);
+
+            case WallCriteria.MODE_OWNER:
+                return post.getAuthorId() == post.getOwnerId()
+                        && intValueNotIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST);
+
+            case WallCriteria.MODE_SCHEDULED:
+                return post.getPostType() == VKApiPost.Type.POSTPONE;
+
+            case WallCriteria.MODE_SUGGEST:
+                return post.getPostType() == VKApiPost.Type.SUGGEST;
+        }
+
+        throw new IllegalArgumentException("Unknown filter");
     }
 
     public List<Story> getStories() {
@@ -156,25 +182,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         }
     }
 
-    private static boolean isMatchFilter(Post post, int filter) {
-        switch (filter) {
-            case WallCriteria.MODE_ALL:
-                return intValueNotIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST);
-
-            case WallCriteria.MODE_OWNER:
-                return post.getAuthorId() == post.getOwnerId()
-                        && intValueNotIn(post.getPostType(), VKApiPost.Type.POSTPONE, VKApiPost.Type.SUGGEST);
-
-            case WallCriteria.MODE_SCHEDULED:
-                return post.getPostType() == VKApiPost.Type.POSTPONE;
-
-            case WallCriteria.MODE_SUGGEST:
-                return post.getPostType() == VKApiPost.Type.SUGGEST;
-        }
-
-        throw new IllegalArgumentException("Unknown filter");
-    }
-
     public int getOwnerId() {
         return ownerId;
     }
@@ -185,9 +192,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         viewHost.displayWallData(wall);
         viewHost.updateStory(stories);
     }
-
-    private CompositeDisposable cacheCompositeDisposable = new CompositeDisposable();
-    private CompositeDisposable netCompositeDisposable = new CompositeDisposable();
 
     private void loadWallCachedData() {
         final int accountId = super.getAccountId();
@@ -229,10 +233,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         }
     }
 
-    private boolean requestNow;
-
-    private int nowRequestOffset;
-
     private void setRequestNow(boolean requestNow) {
         this.requestNow = requestNow;
 
@@ -262,8 +262,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         showError(getView(), getCauseIfRuntime(throwable));
     }
 
-    private int nextOffset;
-
     private void onActualDataReceived(int nextOffset, List<Post> posts, boolean append) {
         this.cacheCompositeDisposable.clear();
 
@@ -285,8 +283,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
 
         setRequestNow(false);
     }
-
-    private boolean actualDataReady;
 
     @OnGuiCreated
     private void resolveLoadMoreFooterView() {
@@ -339,7 +335,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         this.cacheCompositeDisposable.clear();
 
         requestWall(0);
-        if(!Settings.get().other().isDisable_history()) {
+        if (!Settings.get().other().isDisable_history()) {
             appendDisposable(ownersRepository.getStory(getAccountId(), getAccountId() == ownerId ? null : ownerId)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(data -> getView().updateStory(data), t -> {
@@ -349,7 +345,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         onRefresh();
     }
 
-    protected void onRefresh(){
+    protected void onRefresh() {
 
     }
 
@@ -443,14 +439,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
             }
         }
     }
-
-    private static final Comparator<Post> COMPARATOR = (rhs, lhs) -> {
-        if (rhs.isPinned() == lhs.isPinned()) {
-            return Integer.compare(lhs.getVkid(), rhs.getVkid());
-        }
-
-        return Boolean.compare(lhs.isPinned(), rhs.isPinned());
-    };
 
     private int findByVkid(int ownerId, int vkid) {
         return Utils.indexOf(wall, post -> post.getOwnerId() == ownerId && post.getVkid() == vkid);

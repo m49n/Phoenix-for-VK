@@ -14,7 +14,8 @@ public interface IStatusService {
 
     /**
      * Sets a new status for the current user.
-     * @param text Text of the new status.
+     *
+     * @param text    Text of the new status.
      * @param groupId Identifier of a community to set a status in. If left blank the status is set to current user.
      * @return 1
      */

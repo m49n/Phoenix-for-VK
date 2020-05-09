@@ -73,13 +73,11 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
         mData = requireArguments().getParcelableArrayList(Extra.AUDIOS);
     }
 
-    private int getAudioPos(Audio audio)
-    {
-        if(mData != null && !mData.isEmpty()) {
+    private int getAudioPos(Audio audio) {
+        if (mData != null && !mData.isEmpty()) {
             int pos = 0;
-            for(final Audio i : mData)
-            {
-                if(i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
+            for (final Audio i : mData) {
+                if (i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {
                     i.setAnimationNow(true);
                     mAdapter.notifyDataSetChanged();
                     return pos;
@@ -113,22 +111,20 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
             if (curr != null) {
                 int index = getAudioPos(curr);
                 if (index >= 0) {
-                    if(Settings.get().other().isShow_audio_cover())
+                    if (Settings.get().other().isShow_audio_cover())
                         mRecyclerView.scrollToPosition(index);
                     else
                         mRecyclerView.smoothScrollToPosition(index);
-                }
-                else
+                } else
                     PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found);
-            }
-            else
+            } else
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio);
         });
         return root;
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new AudioRecyclerAdapter(requireActivity(), mData, false, false);
@@ -143,7 +139,7 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     @Override
     public void onClick(int position, Audio audio) {
         MusicPlaybackService.startForPlayList(requireActivity(), mData, position, false);
-        if(!Settings.get().other().isShow_mini_player())
+        if (!Settings.get().other().isShow_mini_player())
             PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
     }
 

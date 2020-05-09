@@ -29,10 +29,14 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
 
     private final int ownerId;
     private final List<Topic> topics;
-    private boolean endOfContent;
-
     private final IBoardInteractor boardInteractor;
+    private boolean endOfContent;
     private boolean actualDataReceived;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean netLoadingNow;
+    private int netLoadingNowOffset;
 
     public TopicsPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -44,9 +48,6 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
         loadCachedData();
         requestActualData(0);
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheLoadingNow;
 
     private void loadCachedData() {
         final int accountId = super.getAccountId();
@@ -64,10 +65,6 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
 
         callView(ITopicsView::notifyDataSetChanged);
     }
-
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-    private boolean netLoadingNow;
-    private int netLoadingNowOffset;
 
     private void requestActualData(final int offset) {
         final int accountId = super.getAccountId();
@@ -136,12 +133,12 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
     @OnGuiCreated
     private void resolveLoadMoreFooter() {
         if (isGuiReady()) {
-            if(netLoadingNow && netLoadingNowOffset > 0){
+            if (netLoadingNow && netLoadingNowOffset > 0) {
                 getView().setupLoadMore(LoadMoreState.LOADING);
                 return;
             }
 
-            if(actualDataReceived && !netLoadingNow){
+            if (actualDataReceived && !netLoadingNow) {
                 getView().setupLoadMore(LoadMoreState.CAN_LOAD_MORE);
             }
 

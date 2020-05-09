@@ -7,6 +7,7 @@ package biz.dealnote.messenger.model;
 public class LogEventWrapper {
 
     private final LogEvent event;
+    private boolean expanded;
 
     public LogEventWrapper(LogEvent event) {
         this.event = event;
@@ -16,13 +17,11 @@ public class LogEventWrapper {
         return event;
     }
 
-    private boolean expanded;
+    public boolean isExpanded() {
+        return expanded;
+    }
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
     }
 }

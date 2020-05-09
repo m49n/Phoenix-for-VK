@@ -9,12 +9,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.customview.widget.ViewDragHelper
 import biz.dealnote.messenger.settings.Settings
 
-class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
+class VerticalSwipeBehavior<V : View> : CoordinatorLayout.Behavior<V> {
 
     companion object {
 
         @Suppress("UNCHECKED_CAST")
-        fun <V: View> from(v: V): VerticalSwipeBehavior<V> {
+        fun <V : View> from(v: V): VerticalSwipeBehavior<V> {
             val lp = v.layoutParams
             require(lp is CoordinatorLayout.LayoutParams)
             val behavior = lp.behavior
@@ -39,14 +39,14 @@ class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
     private var dragHelper: ViewDragHelper? = null
     private var interceptingEvents = false
 
-    private val callback = object: ViewDragHelper.Callback() {
+    private val callback = object : ViewDragHelper.Callback() {
 
         private val INVALID_POINTER_ID = -1
         private var currentPointer = INVALID_POINTER_ID
         private var originTop: Int = 0
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-            if(!canSwipe)
+            if (!canSwipe)
                 return false
             return currentPointer == INVALID_POINTER_ID || pointerId == currentPointer
         }
@@ -85,8 +85,7 @@ class VerticalSwipeBehavior<V: View>: CoordinatorLayout.Behavior<V> {
             if (settled) {
                 listener?.onPreSettled(diff)
                 child.postOnAnimation(RecursiveSettle(child, diff))
-            }
-            else
+            } else
                 listener?.onReleased()
             currentPointer = INVALID_POINTER_ID
         }

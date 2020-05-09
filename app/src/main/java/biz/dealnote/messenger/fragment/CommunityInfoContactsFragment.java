@@ -35,6 +35,9 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class CommunityInfoContactsFragment extends BaseMvpFragment<CommunityInfoContactsPresenter, ICommunityInfoContactsView>
         implements ICommunityInfoContactsView {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CommunityInfoContactsAdapter mAdapter;
+
     public static CommunityInfoContactsFragment newInstance(int accountId, Community groupId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -43,9 +46,6 @@ public class CommunityInfoContactsFragment extends BaseMvpFragment<CommunityInfo
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private CommunityInfoContactsAdapter mAdapter;
 
     @Nullable
     @Override
@@ -79,21 +79,21 @@ public class CommunityInfoContactsFragment extends BaseMvpFragment<CommunityInfo
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void displayRefreshing(boolean loadingNow) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loadingNow);
         }
     }
 
     @Override
     public void displayData(List<Manager> managers) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(managers);
         }
     }
@@ -105,21 +105,21 @@ public class CommunityInfoContactsFragment extends BaseMvpFragment<CommunityInfo
 
     @Override
     public void notifyItemRemoved(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
         }
     }
 
     @Override
     public void notifyItemChanged(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(index);
         }
     }
 
     @Override
     public void notifyItemAdded(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemInserted(index);
         }
     }

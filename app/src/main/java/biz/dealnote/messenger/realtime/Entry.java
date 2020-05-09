@@ -23,18 +23,18 @@ public final class Entry {
         this.updates = new FullAndNonFullUpdates();
     }
 
-    public boolean has(int id){
-        if(updates.hasNonFullMessages()){
-            for(Integer nonFullId : updates.getNonFull()){
-                if(id == nonFullId){
+    public boolean has(int id) {
+        if (updates.hasNonFullMessages()) {
+            for (Integer nonFullId : updates.getNonFull()) {
+                if (id == nonFullId) {
                     return true;
                 }
             }
         }
 
-        if(updates.hasFullMessages()){
-            for(AddMessageUpdate update : updates.getFullMessages()){
-                if(update.getMessageId() == id){
+        if (updates.hasFullMessages()) {
+            for (AddMessageUpdate update : updates.getFullMessages()) {
+                if (update.getMessageId() == id) {
                     return true;
                 }
             }
@@ -43,7 +43,7 @@ public final class Entry {
         return false;
     }
 
-    public int count(){
+    public int count() {
         return safeCountOf(updates.getFullMessages()) + safeCountOf(updates.getNonFull());
     }
 
@@ -51,15 +51,15 @@ public final class Entry {
         return ignoreIfExists;
     }
 
-    public void append(AddMessageUpdate update){
-        if(update.isFull()){
+    public void append(AddMessageUpdate update) {
+        if (update.isFull()) {
             updates.prepareFull().add(update);
         } else {
             updates.prepareNonFull().add(update.getMessageId());
         }
     }
 
-    public void append(int messageId){
+    public void append(int messageId) {
         updates.prepareNonFull().add(messageId);
     }
 

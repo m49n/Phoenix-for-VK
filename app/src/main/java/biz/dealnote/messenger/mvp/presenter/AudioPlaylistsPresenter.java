@@ -34,6 +34,8 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
     private int owner_id;
 
     private boolean endOfContent;
+    private boolean actualDataLoading;
+    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     public AudioPlaylistsPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -42,13 +44,11 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         this.fInteractor = InteractorFactory.createAudioInteractor();
     }
 
-    public void LoadAudiosTool()
-    {
+    public void LoadAudiosTool() {
         loadActualData(0);
     }
 
-    public int getOwner_id()
-    {
+    public int getOwner_id() {
         return owner_id;
     }
 
@@ -57,9 +57,6 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         super.onGuiCreated(view);
         view.displayData(this.pages);
     }
-
-    private boolean actualDataLoading;
-    private CompositeDisposable actualDataDisposable = new CompositeDisposable();
 
     private void loadActualData(int offset) {
         this.actualDataLoading = true;
@@ -125,22 +122,22 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         return true;
     }
 
-    public void onDelete(VKApiAudioPlaylist album)
-    {
+    public void onDelete(VKApiAudioPlaylist album) {
         final int accountId = super.getAccountId();
         actualDataDisposable.add(fInteractor.deletePlaylist(accountId, album.id, album.owner_id)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
-                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
+                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());
+                }));
     }
 
-    public void onAdd(VKApiAudioPlaylist album)
-    {
+    public void onAdd(VKApiAudioPlaylist album) {
         final int accountId = super.getAccountId();
         actualDataDisposable.add(fInteractor.followPlaylist(accountId, album.id, album.owner_id, album.access_key)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
-                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());}));
+                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());
+                }));
     }
 
     public void fireRefresh() {

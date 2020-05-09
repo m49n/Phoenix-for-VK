@@ -55,7 +55,10 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 
 public class Utils {
 
-    public static <T> T lastOf(@NonNull List<T> data){
+    private Utils() {
+    }
+
+    public static <T> T lastOf(@NonNull List<T> data) {
         return data.get(data.size() - 1);
     }
 
@@ -226,10 +229,6 @@ public class Utils {
         return data == null || data.size() == 0;
     }
 
-    public interface SimpleFunction<F, S> {
-        S apply(F orig);
-    }
-
     public static <T> String join(T[] tokens, String delimiter, SimpleFunction<T, String> function) {
         if (isNull(tokens)) {
             return null;
@@ -305,7 +304,7 @@ public class Utils {
      *
      * @param tokens an array strings to be joined
      */
-    public static String stringJoin(CharSequence delimiter, String ... tokens) {
+    public static String stringJoin(CharSequence delimiter, String... tokens) {
         StringBuilder sb = new StringBuilder();
 
         boolean firstTime = true;
@@ -514,8 +513,8 @@ public class Utils {
         return (mask & flag) != 0;
     }
 
-    public static int addFlagIf(int mask, int flag, boolean ifTrue){
-        if(ifTrue){
+    public static int addFlagIf(int mask, int flag, boolean ifTrue) {
+        if (ifTrue) {
             return mask + flag;
         }
 
@@ -612,7 +611,7 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
     }
 
-    public static boolean hasOreo(){
+    public static boolean hasOreo() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
@@ -826,9 +825,6 @@ public class Utils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dp, context.getResources().getDisplayMetrics());
     }
 
-    private Utils() {
-    }
-
     public static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -884,8 +880,7 @@ public class Utils {
         activity.startActivity(Intent.createChooser(sharingIntent, activity.getResources().getString(R.string.share_using)));
     }
 
-    public static void setColorFilter(Drawable dr, int Color)
-    {
+    public static void setColorFilter(Drawable dr, int Color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
         } else {
@@ -893,8 +888,7 @@ public class Utils {
         }
     }
 
-    public static void setColorFilter(ImageView dr, int Color)
-    {
+    public static void setColorFilter(ImageView dr, int Color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
         } else {
@@ -902,25 +896,27 @@ public class Utils {
         }
     }
 
-    public static void doAnimate(Drawable dr, boolean Play)
-    {
+    public static void doAnimate(Drawable dr, boolean Play) {
         if (dr instanceof Animatable) {
-            if(Play)
+            if (Play)
                 ((Animatable) dr).start();
             else
                 ((Animatable) dr).stop();
         }
     }
 
-    public static Drawable AnimateDrawable(Context context, @DrawableRes int Res, boolean Play)
-    {
+    public static Drawable AnimateDrawable(Context context, @DrawableRes int Res, boolean Play) {
         Drawable dr = context.getDrawable(Res);
         if (dr instanceof Animatable) {
-            if(Play)
+            if (Play)
                 ((Animatable) dr).start();
             else
                 ((Animatable) dr).stop();
         }
         return dr;
+    }
+
+    public interface SimpleFunction<F, S> {
+        S apply(F orig);
     }
 }

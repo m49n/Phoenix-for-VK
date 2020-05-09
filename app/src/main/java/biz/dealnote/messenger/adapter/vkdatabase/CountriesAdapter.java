@@ -17,6 +17,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Hold
 
     private Context mContext;
     private List<Country> mData;
+    private Listener mListener;
 
     public CountriesAdapter(Context mContext, List<Country> mData) {
         this.mContext = mContext;
@@ -34,7 +35,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Hold
         holder.name.setText(country.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(country);
             }
         });
@@ -50,6 +51,14 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Hold
         notifyDataSetChanged();
     }
 
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(Country country);
+    }
+
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -58,15 +67,5 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Hold
             super(itemView);
             name = itemView.findViewById(R.id.name);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(Country country);
     }
 }

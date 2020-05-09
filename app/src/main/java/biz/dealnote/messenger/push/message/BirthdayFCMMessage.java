@@ -49,6 +49,25 @@ public class BirthdayFCMMessage {
 
     private ArrayList<Integer> uids;
 
+    public static BirthdayFCMMessage fromRemoteMessage(@NonNull RemoteMessage remote) {
+        BirthdayFCMMessage message = new BirthdayFCMMessage();
+
+        String uidsString = remote.getData().get("uids");
+        String[] uidsStringArray = TextUtils.isEmpty(uidsString) ? null : uidsString.split(",");
+
+        if (uidsStringArray != null) {
+            message.uids = new ArrayList<>(uidsStringArray.length);
+            for (String anUidsStringArray : uidsStringArray) {
+                try {
+                    message.uids.add(Integer.parseInt(anUidsStringArray));
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+
+        return message;
+    }
+
     public void notify(Context context, int accountId) {
         if (isEmpty(uids)) {
             return;
@@ -63,14 +82,16 @@ public class BirthdayFCMMessage {
         Repository.INSTANCE.getOwners()
                 .findBaseOwnersDataAsList(accountId, uids, IOwnersRepository.MODE_ANY)
                 .subscribeOn(NotificationScheduler.INSTANCE)
-                .subscribe(owners -> onOwnersDataReceived(context, accountId, owners), t -> {});
+                .subscribe(owners -> onOwnersDataReceived(context, accountId, owners), t -> {
+                });
     }
 
-    private void onOwnersDataReceived(Context context, int accoutnId, List<Owner> owners){
-        for(Owner owner : owners){
+    private void onOwnersDataReceived(Context context, int accoutnId, List<Owner> owners) {
+        for (Owner owner : owners) {
             NotificationUtils.loadRoundedImageRx(context, owner.get100photoOrSmaller(), R.drawable.ic_avatar_unknown)
                     .subscribeOn(NotificationScheduler.INSTANCE)
-                    .subscribe(bitmap -> onUsersDataReceived(context, accoutnId, owner, bitmap), t -> {});
+                    .subscribe(bitmap -> onUsersDataReceived(context, accoutnId, owner, bitmap), t -> {
+                    });
         }
     }
 
@@ -78,11 +99,11 @@ public class BirthdayFCMMessage {
         int ownerId = owner.getOwnerId();
 
         final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(Objects.isNull(manager)) {
+        if (Objects.isNull(manager)) {
             return;
         }
 
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             manager.createNotificationChannel(AppNotificationChannels.getBirthdaysChannel(context));
         }
 
@@ -106,24 +127,5 @@ public class BirthdayFCMMessage {
 
         configOtherPushNotification(notification);
         manager.notify(String.valueOf(ownerId), NotificationHelper.NOTIFICATION_BIRTHDAY, notification);
-    }
-
-    public static BirthdayFCMMessage fromRemoteMessage(@NonNull RemoteMessage remote) {
-        BirthdayFCMMessage message = new BirthdayFCMMessage();
-
-        String uidsString = remote.getData().get("uids");
-        String[] uidsStringArray = TextUtils.isEmpty(uidsString) ? null : uidsString.split(",");
-
-        if (uidsStringArray != null) {
-            message.uids = new ArrayList<>(uidsStringArray.length);
-            for (String anUidsStringArray : uidsStringArray) {
-                try {
-                    message.uids.add(Integer.parseInt(anUidsStringArray));
-                } catch (NumberFormatException ignored) {
-                }
-            }
-        }
-
-        return message;
     }
 }

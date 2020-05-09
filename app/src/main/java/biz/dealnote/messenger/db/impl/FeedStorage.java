@@ -37,11 +37,83 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
 class FeedStorage extends AbsStorage implements IFeedStorage {
 
+    private final Object storeLock = new Object();
+
     FeedStorage(@NonNull AppStorages base) {
         super(base);
     }
 
-    private final Object storeLock = new Object();
+    public static ContentValues getCV(NewsEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(NewsColumns.TYPE, dbo.getType());
+        cv.put(NewsColumns.SOURCE_ID, dbo.getSourceId());
+        cv.put(NewsColumns.DATE, dbo.getDate());
+        cv.put(NewsColumns.POST_ID, dbo.getPostId());
+        cv.put(NewsColumns.POST_TYPE, dbo.getPostType());
+        cv.put(NewsColumns.FINAL_POST, dbo.isFinalPost());
+        cv.put(NewsColumns.COPY_OWNER_ID, dbo.getCopyOwnerId());
+        cv.put(NewsColumns.COPY_POST_ID, dbo.getCopyPostId());
+        cv.put(NewsColumns.COPY_POST_DATE, dbo.getCopyPostDate());
+        cv.put(NewsColumns.TEXT, dbo.getText());
+        cv.put(NewsColumns.CAN_EDIT, dbo.isCanEdit());
+        cv.put(NewsColumns.CAN_DELETE, dbo.isCanDelete());
+        cv.put(NewsColumns.COMMENT_COUNT, dbo.getCommentCount());
+        cv.put(NewsColumns.COMMENT_CAN_POST, dbo.isCanPostComment());
+        cv.put(NewsColumns.LIKE_COUNT, dbo.getLikesCount());
+        cv.put(NewsColumns.USER_LIKE, dbo.isUserLikes());
+        cv.put(NewsColumns.CAN_LIKE, dbo.isCanLike());
+        cv.put(NewsColumns.CAN_PUBLISH, dbo.isCanPublish());
+        cv.put(NewsColumns.REPOSTS_COUNT, dbo.getRepostCount());
+        cv.put(NewsColumns.USER_REPOSTED, dbo.isUserReposted());
+        cv.put(NewsColumns.GEO_ID, dbo.getGeoId());
+        cv.put(NewsColumns.TAG_FRIENDS, nonNull(dbo.getFriendsTags()) ? join(",", dbo.getFriendsTags()) : null);
+        cv.put(NewsColumns.VIEWS, dbo.getViews());
+
+        if (nonEmpty(dbo.getCopyHistory()) || nonEmpty(dbo.getAttachments())) {
+            List<Entity> attachmentsEntities = new ArrayList<>();
+
+            if (nonEmpty(dbo.getAttachments())) {
+                attachmentsEntities.addAll(dbo.getAttachments());
+            }
+
+            if (nonEmpty(dbo.getCopyHistory())) {
+                attachmentsEntities.addAll(dbo.getCopyHistory());
+            }
+
+            if (nonEmpty(attachmentsEntities)) {
+                AttachmentsEntity attachmentsEntity = new AttachmentsEntity(attachmentsEntities);
+                cv.put(NewsColumns.ATTACHMENTS_JSON, GSON.toJson(attachmentsEntity));
+            } else {
+                cv.putNull(NewsColumns.ATTACHMENTS_JSON);
+            }
+        }
+
+        return cv;
+    }
+
+    private static FeedListEntity mapList(Cursor cursor) {
+        int id = cursor.getInt(cursor.getColumnIndex(FeedListsColumns._ID));
+        String title = cursor.getString(cursor.getColumnIndex(FeedListsColumns.TITLE));
+
+        FeedListEntity entity = new FeedListEntity(id).setTitle(title);
+
+        String sources = cursor.getString(cursor.getColumnIndex(FeedListsColumns.SOURCE_IDS));
+
+        int[] sourceIds = null;
+
+        if (nonEmpty(sources)) {
+            String[] ids = sources.split(",");
+
+            sourceIds = new int[ids.length];
+
+            for (int i = 0; i < ids.length; i++) {
+                sourceIds[i] = Integer.parseInt(ids[i]);
+            }
+        }
+
+        return entity.setSourceIds(sourceIds)
+                .setNoReposts(cursor.getInt(cursor.getColumnIndex(FeedListsColumns.NO_REPOSTS)) == 1);
+    }
 
     @Override
     public Single<List<NewsEntity>> findByCriteria(@NonNull FeedCriteria criteria) {
@@ -128,54 +200,6 @@ class FeedStorage extends AbsStorage implements IFeedStorage {
         });
     }
 
-    public static ContentValues getCV(NewsEntity dbo) {
-        ContentValues cv = new ContentValues();
-        cv.put(NewsColumns.TYPE, dbo.getType());
-        cv.put(NewsColumns.SOURCE_ID, dbo.getSourceId());
-        cv.put(NewsColumns.DATE, dbo.getDate());
-        cv.put(NewsColumns.POST_ID, dbo.getPostId());
-        cv.put(NewsColumns.POST_TYPE, dbo.getPostType());
-        cv.put(NewsColumns.FINAL_POST, dbo.isFinalPost());
-        cv.put(NewsColumns.COPY_OWNER_ID, dbo.getCopyOwnerId());
-        cv.put(NewsColumns.COPY_POST_ID, dbo.getCopyPostId());
-        cv.put(NewsColumns.COPY_POST_DATE, dbo.getCopyPostDate());
-        cv.put(NewsColumns.TEXT, dbo.getText());
-        cv.put(NewsColumns.CAN_EDIT, dbo.isCanEdit());
-        cv.put(NewsColumns.CAN_DELETE, dbo.isCanDelete());
-        cv.put(NewsColumns.COMMENT_COUNT, dbo.getCommentCount());
-        cv.put(NewsColumns.COMMENT_CAN_POST, dbo.isCanPostComment());
-        cv.put(NewsColumns.LIKE_COUNT, dbo.getLikesCount());
-        cv.put(NewsColumns.USER_LIKE, dbo.isUserLikes());
-        cv.put(NewsColumns.CAN_LIKE, dbo.isCanLike());
-        cv.put(NewsColumns.CAN_PUBLISH, dbo.isCanPublish());
-        cv.put(NewsColumns.REPOSTS_COUNT, dbo.getRepostCount());
-        cv.put(NewsColumns.USER_REPOSTED, dbo.isUserReposted());
-        cv.put(NewsColumns.GEO_ID, dbo.getGeoId());
-        cv.put(NewsColumns.TAG_FRIENDS, nonNull(dbo.getFriendsTags()) ? join(",", dbo.getFriendsTags()) : null);
-        cv.put(NewsColumns.VIEWS, dbo.getViews());
-
-        if (nonEmpty(dbo.getCopyHistory()) || nonEmpty(dbo.getAttachments())) {
-            List<Entity> attachmentsEntities = new ArrayList<>();
-
-            if (nonEmpty(dbo.getAttachments())) {
-                attachmentsEntities.addAll(dbo.getAttachments());
-            }
-
-            if (nonEmpty(dbo.getCopyHistory())) {
-                attachmentsEntities.addAll(dbo.getCopyHistory());
-            }
-
-            if (nonEmpty(attachmentsEntities)) {
-                AttachmentsEntity attachmentsEntity = new AttachmentsEntity(attachmentsEntities);
-                cv.put(NewsColumns.ATTACHMENTS_JSON, GSON.toJson(attachmentsEntity));
-            } else {
-                cv.putNull(NewsColumns.ATTACHMENTS_JSON);
-            }
-        }
-
-        return cv;
-    }
-
     @Override
     public Completable storeLists(int accountid, @NonNull List<FeedListEntity> entities) {
         return Completable.create(e -> {
@@ -217,30 +241,6 @@ class FeedStorage extends AbsStorage implements IFeedStorage {
 
             e.onSuccess(data);
         });
-    }
-
-    private static FeedListEntity mapList(Cursor cursor) {
-        int id = cursor.getInt(cursor.getColumnIndex(FeedListsColumns._ID));
-        String title = cursor.getString(cursor.getColumnIndex(FeedListsColumns.TITLE));
-
-        FeedListEntity entity = new FeedListEntity(id).setTitle(title);
-
-        String sources = cursor.getString(cursor.getColumnIndex(FeedListsColumns.SOURCE_IDS));
-
-        int[] sourceIds = null;
-
-        if (nonEmpty(sources)) {
-            String[] ids = sources.split(",");
-
-            sourceIds = new int[ids.length];
-
-            for (int i = 0; i < ids.length; i++) {
-                sourceIds[i] = Integer.parseInt(ids[i]);
-            }
-        }
-
-        return entity.setSourceIds(sourceIds)
-                .setNoReposts(cursor.getInt(cursor.getColumnIndex(FeedListsColumns.NO_REPOSTS)) == 1);
     }
 
     /*private void fillAttachmentsOperations(int accountId, @NonNull VKApiAttachment attachment, @NonNull List<ContentProviderOperation> target,

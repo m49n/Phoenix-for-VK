@@ -41,6 +41,10 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     public static final int TAB_FOLLOWERS = 2;
     public static final int TAB_REQUESTS = 3;
     public static final int TAB_MUTUAL = 4;
+    private CharSequence[] titles;
+    private Adapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
 
     public static Bundle buildArgs(int accountId, int userId, int tab, FriendsCounters counters) {
         Bundle args = new Bundle();
@@ -60,12 +64,6 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     public static FriendsTabsFragment newInstance(int accountId, int userId, int tab, FriendsCounters counters) {
         return newInstance(buildArgs(accountId, userId, tab, counters));
     }
-
-    private CharSequence[] titles;
-    private Adapter adapter;
-    private TabLayout tabLayout;
-
-    private ViewPager2 viewPager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

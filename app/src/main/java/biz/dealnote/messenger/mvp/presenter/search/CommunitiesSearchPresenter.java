@@ -32,6 +32,22 @@ public class CommunitiesSearchPresenter extends AbsSearchPresenter<ICommunitiesS
         this.communitiesInteractor = InteractorFactory.createCommunitiesInteractor();
     }
 
+    private static String extractTypeFromCriteria(GroupSearchCriteria criteria) {
+        SpinnerOption option = criteria.findOptionByKey(GroupSearchCriteria.KEY_TYPE);
+        if (option != null && option.value != null) {
+            switch (option.value.id) {
+                case GroupSearchCriteria.TYPE_PAGE:
+                    return "page";
+                case GroupSearchCriteria.TYPE_GROUP:
+                    return "group";
+                case GroupSearchCriteria.TYPE_EVENT:
+                    return "event";
+            }
+        }
+
+        return null;
+    }
+
     @Override
     IntNextFrom getInitialNextFrom() {
         return new IntNextFrom(0);
@@ -58,22 +74,6 @@ public class CommunitiesSearchPresenter extends AbsSearchPresenter<ICommunitiesS
 
         return communitiesInteractor.search(accountId, criteria.getQuery(), type, countryId, cityId, future, sort, 50, offset)
                 .map(communities -> Pair.Companion.create(communities, nextFrom));
-    }
-
-    private static String extractTypeFromCriteria(GroupSearchCriteria criteria) {
-        SpinnerOption option = criteria.findOptionByKey(GroupSearchCriteria.KEY_TYPE);
-        if (option != null && option.value != null) {
-            switch (option.value.id) {
-                case GroupSearchCriteria.TYPE_PAGE:
-                    return "page";
-                case GroupSearchCriteria.TYPE_GROUP:
-                    return "group";
-                case GroupSearchCriteria.TYPE_EVENT:
-                    return "event";
-            }
-        }
-
-        return null;
     }
 
     @Override

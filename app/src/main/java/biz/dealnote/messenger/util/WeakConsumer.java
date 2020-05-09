@@ -19,7 +19,7 @@ public class WeakConsumer<T> implements Consumer<T> {
     @Override
     public void accept(T t) throws Exception {
         Consumer<T> orig = ref.get();
-        if(orig != null){
+        if (orig != null) {
             orig.accept(t);
         }
     }

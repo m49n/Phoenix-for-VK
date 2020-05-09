@@ -47,6 +47,7 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
 
     private ArrayList<Uri> streams;
     private int accountId;
+    private boolean loading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,8 +120,6 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
 
         adapter.setItems(items);
     }
-
-    private boolean loading;
 
     private void setLoading(boolean loading) {
         this.loading = loading;

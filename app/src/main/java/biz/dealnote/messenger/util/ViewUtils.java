@@ -26,10 +26,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class ViewUtils {
 
-    public interface ICountFormatter {
-        String format(int count);
-    }
-
     private static final ICountFormatter DEFAULT_COUNT_FORMATTER = String::valueOf;
 
     public static ObjectAnimator setCountText(TextView view, int count, boolean animate) {
@@ -72,11 +68,11 @@ public class ViewUtils {
             return null;
         }
 
-        if(app == 5961172){
+        if (app == 5961172) {
             return R.drawable.ic_olivka;
         }
 
-        if(app == 2685278){
+        if (app == 2685278) {
             return R.drawable.ic_kate_mobile;
         }
 
@@ -168,5 +164,9 @@ public class ViewUtils {
     public static void keyboardHide(Context context) {
         InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(((Activity) context).getWindow().getDecorView().getRootView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public interface ICountFormatter {
+        String format(int count);
     }
 }

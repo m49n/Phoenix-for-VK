@@ -32,6 +32,8 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
     private final List<LogEventWrapper> events;
 
     private final ILogsStorage store;
+    private boolean loadingNow;
+    private DisposableHolder<Integer> disposableHolder = new DisposableHolder<>();
 
     public LogsPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
@@ -43,14 +45,18 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         loadAll();
     }
 
+    private static List<LogEventType> createTypes() {
+        List<LogEventType> types = new ArrayList<>();
+        types.add(new LogEventType(LogEvent.Type.ERROR, R.string.log_type_error).setActive(true));
+        return types;
+    }
+
     @OnGuiCreated
-    private void resolveEmptyTextVisibility(){
-        if(isGuiReady()){
+    private void resolveEmptyTextVisibility() {
+        if (isGuiReady()) {
             getView().setEmptyTextVisible(events.isEmpty());
         }
     }
-
-    private boolean loadingNow;
 
     private void setLoading(boolean loading) {
         this.loadingNow = loading;
@@ -70,14 +76,13 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         resolveRefreshingView();
     }
 
-    private void resolveRefreshingView(){
-        if(isGuiResumed()){
+    private void resolveRefreshingView() {
+        if (isGuiResumed()) {
             getView().showRefreshing(loadingNow);
         }
     }
 
-    public void fireClear()
-    {
+    public void fireClear() {
         store.Clear();
         loadAll();
     }
@@ -101,7 +106,7 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
 
         this.events.clear();
 
-        for(LogEvent event : events){
+        for (LogEvent event : events) {
             this.events.add(new LogEventWrapper(event));
         }
 
@@ -126,20 +131,12 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         super.onDestroyed();
     }
 
-    private DisposableHolder<Integer> disposableHolder = new DisposableHolder<>();
-
-    private static List<LogEventType> createTypes() {
-        List<LogEventType> types = new ArrayList<>();
-        types.add(new LogEventType(LogEvent.Type.ERROR, R.string.log_type_error).setActive(true));
-        return types;
-    }
-
     public void fireTypeClick(LogEventType entry) {
-        if(getSelectedType() == entry.getType()){
+        if (getSelectedType() == entry.getType()) {
             return;
         }
 
-        for(LogEventType t : types){
+        for (LogEventType t : types) {
             t.setActive(t.getType() == entry.getType());
         }
 

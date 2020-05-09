@@ -9,19 +9,13 @@ import java.util.List;
 public class VKApiOwner {
 
     /**
-     * User or group ID.
-     */
-    public int id;
-
-    /**
      * User or group
      */
     public final int owner_type;
-
-    public static class Type {
-        public static final int USER = 1;
-        public static final int COMMUNITY = 2;
-    }
+    /**
+     * User or group ID.
+     */
+    public int id;
 
     /**
      * Creates an owner with empty ID.
@@ -30,13 +24,13 @@ public class VKApiOwner {
         this.owner_type = owner_type;
     }
 
-    public static List<VKApiOwner> createListFrom(List<? extends VKApiOwner> first, List<? extends VKApiOwner> second){
+    public static List<VKApiOwner> createListFrom(List<? extends VKApiOwner> first, List<? extends VKApiOwner> second) {
         List<VKApiOwner> data = new ArrayList<>();
-        if(first != null){
+        if (first != null) {
             data.addAll(first);
         }
 
-        if(second != null){
+        if (second != null) {
             data.addAll(second);
         }
 
@@ -54,5 +48,10 @@ public class VKApiOwner {
 
     public String getMaxSquareAvatar() {
         throw new IllegalStateException("Do implement the method in child classes");
+    }
+
+    public static class Type {
+        public static final int USER = 1;
+        public static final int COMMUNITY = 2;
     }
 }

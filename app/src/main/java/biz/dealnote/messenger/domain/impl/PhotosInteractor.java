@@ -54,7 +54,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                     List<Photo> photos = new ArrayList<>(dtos.size());
                     List<PhotoEntity> dbos = new ArrayList<>(dtos.size());
 
-                    for(VKApiPhoto dto : dtos){
+                    for (VKApiPhoto dto : dtos) {
                         photos.add(Dto2Model.transform(dto));
                         dbos.add(Dto2Entity.mapPhoto(dto));
                     }
@@ -75,7 +75,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                     List<Photo> photos = new ArrayList<>(dtos.size());
                     List<PhotoEntity> dbos = new ArrayList<>(dtos.size());
 
-                    for(VKApiPhoto dto : dtos){
+                    for (VKApiPhoto dto : dtos) {
                         photos.add(Dto2Model.transform(dto));
                         dbos.add(Dto2Entity.mapPhoto(dto));
                     }
@@ -94,7 +94,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                     List<Photo> photos = new ArrayList<>(dtos.size());
                     List<PhotoEntity> dbos = new ArrayList<>(dtos.size());
 
-                    for(VKApiPhoto dto : dtos){
+                    for (VKApiPhoto dto : dtos) {
                         photos.add(Dto2Model.transform(dto));
                         dbos.add(Dto2Entity.mapPhoto(dto));
                     }
@@ -123,7 +123,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                 .getAlbums(ownerId, Collections.singletonList(albumId), null, null, true, true)
                 .map(items -> Utils.listEmptyIfNull(items.getItems()))
                 .map(dtos -> {
-                    if(dtos.isEmpty()){
+                    if (dtos.isEmpty()) {
                         throw new NotFoundException();
                     }
 
@@ -141,11 +141,10 @@ public class PhotosInteractor implements IPhotosInteractor {
     }
 
     @Override
-    public Single<List<VKApiPhotoTags>> getTags(int accountId, Integer ownerId, Integer photo_id, String access_key)
-    {
+    public Single<List<VKApiPhotoTags>> getTags(int accountId, Integer ownerId, Integer photo_id, String access_key) {
         return networker.vkDefault(accountId)
                 .photos().getTags(ownerId, photo_id, access_key)
-                .map(items-> items);
+                .map(items -> items);
     }
 
     @Override
@@ -171,7 +170,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                     usersPh.owner_id = ownerId;
                     usersPh.size = -1;
 
-                    if(ownerId >= 0) {
+                    if (ownerId >= 0) {
                         for (VKApiPhotoAlbum dto : dtos) {
                             if (dto.id == -9000) {
                                 usersPh = dto;
@@ -180,7 +179,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                         }
                     }
 
-                    if(offset == 0) {
+                    if (offset == 0) {
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(Allph));
                         albums.add(Dto2Model.transform(Allph));
 
@@ -188,13 +187,12 @@ public class PhotosInteractor implements IPhotosInteractor {
                         albums.add(Dto2Model.transform(usersPh));
                     }
 
-                    for(VKApiPhotoAlbum dto : dtos){
+                    for (VKApiPhotoAlbum dto : dtos) {
                         if (dto.id == -9000)
                             continue;
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(dto));
                         albums.add(Dto2Model.transform(dto));
                     }
-
 
 
                     return cache.photoAlbums()
@@ -207,7 +205,7 @@ public class PhotosInteractor implements IPhotosInteractor {
     public Single<Integer> like(int accountId, int ownerId, int photoId, boolean add, String accessKey) {
         Single<Integer> single;
 
-        if(add){
+        if (add) {
             single = networker.vkDefault(accountId)
                     .likes()
                     .add("photo", ownerId, photoId, accessKey);
@@ -269,7 +267,7 @@ public class PhotosInteractor implements IPhotosInteractor {
     public Single<List<Photo>> getPhotosByIds(int accountId, Collection<AccessIdPair> ids) {
         List<biz.dealnote.messenger.api.model.AccessIdPair> dtoPairs = new ArrayList<>(ids.size());
 
-        for(AccessIdPair pair : ids){
+        for (AccessIdPair pair : ids) {
             dtoPairs.add(new biz.dealnote.messenger.api.model.AccessIdPair(pair.getId(),
                     pair.getOwnerId(), pair.getAccessKey()));
         }

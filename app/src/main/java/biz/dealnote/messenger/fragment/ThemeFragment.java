@@ -26,7 +26,9 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.mvp.compat.AbsMvpFragment;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> implements IThemeView,  ThemeAdapter.ClickListener {
+public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> implements IThemeView, ThemeAdapter.ClickListener {
+
+    private ThemeAdapter mAdapter;
 
     public static ThemeFragment newInstance() {
         Bundle args = new Bundle();
@@ -34,8 +36,6 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
         fragment.setArguments(args);
         return fragment;
     }
-
-    private ThemeAdapter mAdapter;
 
     @Nullable
     @Override
@@ -59,7 +59,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
     public void onResume() {
         super.onResume();
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(Objects.nonNull(actionBar)){
+        if (Objects.nonNull(actionBar)) {
             actionBar.setTitle(R.string.theme_edit_title);
             actionBar.setSubtitle(null);
         }
@@ -72,7 +72,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
 
     @Override
     public void displayData(List<ThemeValue> data) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(data);
         }
     }

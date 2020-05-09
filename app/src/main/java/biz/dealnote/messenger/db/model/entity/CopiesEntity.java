@@ -14,21 +14,21 @@ public class CopiesEntity {
 
     private List<IdPairEntity> pairDbos;
 
+    public int getCount() {
+        return count;
+    }
+
     public CopiesEntity setCount(int count) {
         this.count = count;
         return this;
     }
 
+    public List<IdPairEntity> getPairDbos() {
+        return pairDbos;
+    }
+
     public CopiesEntity setPairDbos(List<IdPairEntity> pairDbos) {
         this.pairDbos = pairDbos;
         return this;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public List<IdPairEntity> getPairDbos() {
-        return pairDbos;
     }
 }

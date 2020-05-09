@@ -27,6 +27,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class CommunityInfoLinksAdapter extends RecyclerView.Adapter<CommunityInfoLinksAdapter.Holder> {
 
     private List<VKApiCommunity.Link> links;
+    private ActionListener actionListener;
 
     public CommunityInfoLinksAdapter(List<VKApiCommunity.Link> links) {
         this.links = links;
@@ -49,14 +50,14 @@ public class CommunityInfoLinksAdapter extends RecyclerView.Adapter<CommunityInf
         holder.subtitle.setText(link.desc);
 
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onClick(link);
             }
         });
 
         String photoUrl = link.photo_100;
 
-        if(nonEmpty(photoUrl)){
+        if (nonEmpty(photoUrl)) {
             holder.icon.setVisibility(View.VISIBLE);
             PicassoInstance.with()
                     .load(photoUrl)
@@ -69,14 +70,8 @@ public class CommunityInfoLinksAdapter extends RecyclerView.Adapter<CommunityInf
         }
     }
 
-    private ActionListener actionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
-    }
-
-    public interface ActionListener {
-        void onClick(VKApiCommunity.Link link);
     }
 
     @Override
@@ -87,6 +82,10 @@ public class CommunityInfoLinksAdapter extends RecyclerView.Adapter<CommunityInf
     public void setData(List<VKApiCommunity.Link> data) {
         this.links = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onClick(VKApiCommunity.Link link);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

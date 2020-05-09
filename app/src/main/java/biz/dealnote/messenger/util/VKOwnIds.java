@@ -36,7 +36,16 @@ public class VKOwnIds {
         this.gids = new HashSet<>();
     }
 
-    public VKOwnIds append(UserArray userArray){
+    public static VKOwnIds fromPosts(@NonNull Collection<VKApiPost> posts) {
+        VKOwnIds ids = new VKOwnIds();
+        for (VKApiPost post : posts) {
+            ids.append(post);
+        }
+
+        return ids;
+    }
+
+    public VKOwnIds append(UserArray userArray) {
         for (int id : userArray.ids) {
             append(id);
         }
@@ -44,7 +53,7 @@ public class VKOwnIds {
         return this;
     }
 
-    public VKOwnIds appendStory(VKApiStory story){
+    public VKOwnIds appendStory(VKApiStory story) {
         append(story.owner_id);
         return this;
     }
@@ -54,22 +63,22 @@ public class VKOwnIds {
         return this;
     }
 
-    public VKOwnIds append(@NonNull VKApiTopic topic){
+    public VKOwnIds append(@NonNull VKApiTopic topic) {
         append(topic.created_by);
         append(topic.updated_by);
         return this;
     }
 
-    public VKOwnIds append(@NonNull Copies copies){
+    public VKOwnIds append(@NonNull Copies copies) {
         for (Copies.IdPair pair : copies.pairs) {
             append(pair.owner_id);
         }
         return this;
     }
 
-    public VKOwnIds append(CommentsDto commentsDto){
-        if(nonNull(commentsDto) && Utils.nonEmpty(commentsDto.list)){
-            for(VKApiComment comment : commentsDto.list){
+    public VKOwnIds append(CommentsDto commentsDto) {
+        if (nonNull(commentsDto) && Utils.nonEmpty(commentsDto.list)) {
+            for (VKApiComment comment : commentsDto.list) {
                 append(comment);
             }
         }
@@ -101,15 +110,6 @@ public class VKOwnIds {
         }
 
         return this;
-    }
-
-    public static VKOwnIds fromPosts(@NonNull Collection<VKApiPost> posts) {
-        VKOwnIds ids = new VKOwnIds();
-        for (VKApiPost post : posts) {
-            ids.append(post);
-        }
-
-        return ids;
     }
 
     @NonNull
@@ -213,13 +213,13 @@ public class VKOwnIds {
         append(news.source_id);
         append(news.copy_owner_id);
 
-        if(news.hasCopyHistory()){
-            for(VKApiPost post : news.copy_history){
+        if (news.hasCopyHistory()) {
+            for (VKApiPost post : news.copy_history) {
                 append(post);
             }
         }
 
-        if(news.hasAttachments()){
+        if (news.hasAttachments()) {
             append(news.attachments);
         }
 
@@ -252,9 +252,9 @@ public class VKOwnIds {
         }
     }
 
-    public void appendAll(int[] ownerIds){
-        if(ownerIds != null){
-            for(int id : ownerIds){
+    public void appendAll(int[] ownerIds) {
+        if (ownerIds != null) {
+            for (int id : ownerIds) {
                 append(id);
             }
         }
@@ -280,7 +280,7 @@ public class VKOwnIds {
         return !constainsUids() && !constainsGids();
     }
 
-    public boolean nonEmpty(){
+    public boolean nonEmpty() {
         return constainsGids() || constainsUids();
     }
 

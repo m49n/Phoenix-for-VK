@@ -11,8 +11,11 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface ICommunitiesView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(DataWrapper<Community> own, DataWrapper<Community> filtered, DataWrapper<Community> seacrh);
+
     void notifyDataSetChanged();
+
     void notifyOwnDataAdded(int position, int count);
+
     void displayRefreshing(boolean refreshing);
 
     void showCommunityWall(int accountId, Community community);

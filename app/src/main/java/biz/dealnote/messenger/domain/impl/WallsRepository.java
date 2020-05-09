@@ -67,6 +67,42 @@ public class WallsRepository implements IWallsRepository {
         this.ownersRepository = ownersRepository;
     }
 
+    private static PostPatch update2patch(PostUpdate data) {
+        PostPatch patch = new PostPatch();
+        if (nonNull(data.getDeleteUpdate())) {
+            patch.withDeletion(data.getDeleteUpdate().isDeleted());
+        }
+
+        if (nonNull(data.getLikeUpdate())) {
+            patch.withLikes(data.getLikeUpdate().getCount(), data.getLikeUpdate().isLiked());
+        }
+
+        if (nonNull(data.getPinUpdate())) {
+            patch.withPin(data.getPinUpdate().isPinned());
+        }
+
+        return patch;
+    }
+
+    private static String convertToApiFilter(int filter) {
+        switch (filter) {
+            case WallCriteria.MODE_ALL:
+                return "all";
+            case WallCriteria.MODE_OWNER:
+                return "owner";
+            case WallCriteria.MODE_SCHEDULED:
+                return "postponed";
+            case WallCriteria.MODE_SUGGEST:
+                return "suggests";
+            default:
+                throw new IllegalArgumentException("Invalid wall filter");
+        }
+    }
+
+    private static Collection<IdPair> singlePair(int postId, int postOwnerId) {
+        return Collections.singletonList(new IdPair(postId, postOwnerId));
+    }
+
     @Override
     public Completable editPost(int accountId, int ownerId, int postId, Boolean friendsOnly,
                                 String message, List<AbsModel> attachments, String services,
@@ -150,23 +186,6 @@ public class WallsRepository implements IWallsRepository {
             final PostUpdate update = new PostUpdate(accountId, postId, ownerId).withLikes(count, add);
             return applyPatch(update).andThen(Single.just(count));
         });
-    }
-
-    private static PostPatch update2patch(PostUpdate data) {
-        PostPatch patch = new PostPatch();
-        if (nonNull(data.getDeleteUpdate())) {
-            patch.withDeletion(data.getDeleteUpdate().isDeleted());
-        }
-
-        if (nonNull(data.getLikeUpdate())) {
-            patch.withLikes(data.getLikeUpdate().getCount(), data.getLikeUpdate().isLiked());
-        }
-
-        if (nonNull(data.getPinUpdate())) {
-            patch.withPin(data.getPinUpdate().isPinned());
-        }
-
-        return patch;
     }
 
     @Override
@@ -283,7 +302,7 @@ public class WallsRepository implements IWallsRepository {
                 .wall()
                 .getById(Collections.singleton(id), true, 5, Constants.MAIN_OWNER_FIELDS)
                 .flatMap(response -> {
-                    if(isEmpty(response.posts)){
+                    if (isEmpty(response.posts)) {
                         throw new NotFoundException();
                     }
 
@@ -373,21 +392,6 @@ public class WallsRepository implements IWallsRepository {
         return storages.wall().deletePost(accountId, postDbid);
     }
 
-    private static String convertToApiFilter(int filter) {
-        switch (filter) {
-            case WallCriteria.MODE_ALL:
-                return "all";
-            case WallCriteria.MODE_OWNER:
-                return "owner";
-            case WallCriteria.MODE_SCHEDULED:
-                return "postponed";
-            case WallCriteria.MODE_SUGGEST:
-                return "suggests";
-            default:
-                throw new IllegalArgumentException("Invalid wall filter");
-        }
-    }
-
     private Single<Post> getAndStorePost(int accountId, int ownerId, int postId) {
         IWallStorage cache = storages.wall();
 
@@ -413,10 +417,6 @@ public class WallsRepository implements IWallsRepository {
                     majorUpdatesPublisher.onNext(post);
                     return post;
                 });
-    }
-
-    private static Collection<IdPair> singlePair(int postId, int postOwnerId) {
-        return Collections.singletonList(new IdPair(postId, postOwnerId));
     }
 
     @Override

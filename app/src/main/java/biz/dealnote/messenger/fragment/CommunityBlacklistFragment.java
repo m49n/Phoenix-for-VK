@@ -47,6 +47,8 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
         implements ICommunityBlacklistView, CommunityBannedAdapter.ActionListener {
 
     private static final int REQUEST_SELECT_PROFILES = 17;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CommunityBannedAdapter mAdapter;
 
     public static CommunityBlacklistFragment newInstance(int accountId, int groupdId) {
         Bundle args = new Bundle();
@@ -56,9 +58,6 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private CommunityBannedAdapter mAdapter;
 
     @Nullable
     @Override
@@ -98,28 +97,28 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
 
     @Override
     public void displayRefreshing(boolean loadingNow) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(loadingNow);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void diplayData(List<Banned> data) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setData(data);
         }
     }
 
     @Override
     public void notifyItemRemoved(int index) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
         }
     }
@@ -132,7 +131,7 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_SELECT_PROFILES && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_SELECT_PROFILES && resultCode == Activity.RESULT_OK) {
             ArrayList<User> users = data.getParcelableArrayListExtra(Extra.USERS);
             AssertUtils.requireNonNull(users);
             postPrenseterReceive(presenter -> presenter.fireAddToBanUsersSelected(users));
@@ -158,7 +157,7 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
 
     @Override
     public void notifyItemsAdded(int position, int size) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, size);
         }
     }

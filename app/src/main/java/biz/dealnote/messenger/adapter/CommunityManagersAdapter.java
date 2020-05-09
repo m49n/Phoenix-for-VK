@@ -31,8 +31,18 @@ import biz.dealnote.messenger.view.OnlineView;
  */
 public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityManagersAdapter.Holder> {
 
+    private static final Map<String, Integer> roleTextResources = new HashMap<>(4);
+
+    static {
+        roleTextResources.put("moderator", R.string.role_moderator);
+        roleTextResources.put("editor", R.string.role_editor);
+        roleTextResources.put("administrator", R.string.role_administrator);
+        roleTextResources.put("creator", R.string.role_creator);
+    }
+
     private List<Manager> users;
     private Transformation transformation;
+    private ActionListener actionListener;
 
     public CommunityManagersAdapter(Context context, List<Manager> users) {
         this.users = users;
@@ -45,23 +55,8 @@ public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityMana
                 .inflate(R.layout.item_community_manager, parent, false));
     }
 
-    private static final Map<String, Integer> roleTextResources = new HashMap<>(4);
-    static {
-        roleTextResources.put("moderator", R.string.role_moderator);
-        roleTextResources.put("editor", R.string.role_editor);
-        roleTextResources.put("administrator", R.string.role_administrator);
-        roleTextResources.put("creator", R.string.role_creator);
-    }
-
-    private ActionListener actionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
-    }
-
-    public interface ActionListener {
-        void onManagerClick(Manager manager);
-        void onManagerLongClick(Manager manager);
     }
 
     @Override
@@ -74,7 +69,7 @@ public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityMana
         ViewUtils.displayAvatar(holder.avatar, transformation, user.getMaxSquareAvatar(), Constants.PICASSO_TAG);
 
         Integer onlineRes = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        if(Objects.nonNull(onlineRes)){
+        if (Objects.nonNull(onlineRes)) {
             holder.onlineView.setIcon(onlineRes);
             holder.onlineView.setVisibility(View.VISIBLE);
         } else {
@@ -84,28 +79,27 @@ public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityMana
         @StringRes
         Integer roleTextRes = roleTextResources.get(manager.getRole());
 
-        if(Objects.isNull(roleTextRes)){
-            if(manager.getContactInfo() != null && manager.getContactInfo().getDescriprion() != null)
+        if (Objects.isNull(roleTextRes)) {
+            if (manager.getContactInfo() != null && manager.getContactInfo().getDescriprion() != null)
                 holder.role.setText(manager.getContactInfo().getDescriprion());
             else {
                 roleTextRes = R.string.role_unknown;
                 holder.role.setText(roleTextRes);
             }
-        }
-        else
+        } else
             holder.role.setText(roleTextRes);
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onManagerClick(manager);
             }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if("creator".equalsIgnoreCase(manager.getRole())){
+            if ("creator".equalsIgnoreCase(manager.getRole())) {
                 return false;
             }
 
-            if(Objects.nonNull(actionListener)){
+            if (Objects.nonNull(actionListener)) {
                 actionListener.onManagerLongClick(manager);
             }
             return true;
@@ -120,6 +114,12 @@ public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityMana
     public void setData(List<Manager> data) {
         this.users = data;
         notifyDataSetChanged();
+    }
+
+    public interface ActionListener {
+        void onManagerClick(Manager manager);
+
+        void onManagerLongClick(Manager manager);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

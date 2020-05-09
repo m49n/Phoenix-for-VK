@@ -37,25 +37,25 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsView>
         implements MessagesAdapter.OnMessageActionListener, IFwdsView, AttachmentsViewBinder.VoiceActionListener {
 
-    public static Bundle buildArgs(int accountId, ArrayList<Message> messages){
+    private MessagesAdapter mAdapter;
+
+    public static Bundle buildArgs(int accountId, ArrayList<Message> messages) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putParcelableArrayList(Extra.MESSAGES, messages);
         return args;
     }
 
-    public static FwdsFragment newInstance(Bundle args){
+    public static FwdsFragment newInstance(Bundle args) {
         FwdsFragment fwdsFragment = new FwdsFragment();
         fwdsFragment.setArguments(args);
         return fwdsFragment;
     }
 
-    private MessagesAdapter mAdapter;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_fwds, container, false);
-        ((AppCompatActivity)requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
@@ -75,7 +75,7 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
         }
 
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setSubtitle(null);
             actionBar.setTitle(R.string.title_mssages);
         }
@@ -111,7 +111,7 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
 
     @Override
     public void displayMessages(@NonNull List<Message> messages, @NonNull LastReadId lastReadId) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.setItems(messages, lastReadId);
         }
     }
@@ -123,7 +123,7 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
 
     @Override
     public void notifyDataChanged() {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
         }
     }

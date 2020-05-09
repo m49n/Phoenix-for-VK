@@ -79,20 +79,16 @@ public class CustomHttpDataSource implements HttpDataSource {
     private final Predicate<String> contentTypePredicate;
     private final RequestProperties defaultRequestProperties;
     private final RequestProperties requestProperties;
+    private final Proxy proxy;
     private TransferListener listener;
-
     private DataSpec dataSpec;
     private HttpURLConnection connection;
     private InputStream inputStream;
     private boolean opened;
-
     private long bytesToSkip;
     private long bytesToRead;
-
     private long bytesSkipped;
     private long bytesRead;
-
-    private final Proxy proxy;
 
     /**
      * @param userAgent            The User-Agent string that should be used.
@@ -165,6 +161,123 @@ public class CustomHttpDataSource implements HttpDataSource {
         this.proxy = proxy;
     }
 
+    /**
+     * Handles a redirect.
+     *
+     * @param originalUrl The original URL.
+     * @param location    The Location header in the response.
+     * @return The next URL.
+     * @throws IOException If redirection isn't possible.
+     */
+    private static URL handleRedirect(URL originalUrl, String location) throws IOException {
+        if (location == null) {
+            throw new ProtocolException("Null location redirect");
+        }
+        // Form the new url.
+        URL url = new URL(originalUrl, location);
+        // Check that the protocol of the new url is supported.
+        String protocol = url.getProtocol();
+        if (!"https".equals(protocol) && !"http".equals(protocol)) {
+            throw new ProtocolException("Unsupported protocol redirect: " + protocol);
+        }
+        // Currently this method is only called if allowCrossProtocolRedirects is true, and so the code
+        // below isn't required. If we ever decide to handle redirects ourselves when cross-protocol
+        // redirects are disabled, we'll need to uncomment this block of code.
+        // if (!allowCrossProtocolRedirects && !protocol.equals(originalUrl.getProtocol())) {
+        //   throw new ProtocolException("Disallowed cross-protocol redirect ("
+        //       + originalUrl.getProtocol() + " to " + protocol + ")");
+        // }
+        return url;
+    }
+
+    /**
+     * Attempts to extract the length of the content from the response headers of an open connection.
+     *
+     * @param connection The open connection.
+     * @return The extracted length, or {@link C#LENGTH_UNSET}.
+     */
+    private static long getContentLength(HttpURLConnection connection) {
+        long contentLength = C.LENGTH_UNSET;
+        String contentLengthHeader = connection.getHeaderField("Content-Length");
+        if (!TextUtils.isEmpty(contentLengthHeader)) {
+            try {
+                contentLength = Long.parseLong(contentLengthHeader);
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Unexpected Content-Length [" + contentLengthHeader + "]");
+            }
+        }
+        String contentRangeHeader = connection.getHeaderField("Content-Range");
+        if (!TextUtils.isEmpty(contentRangeHeader)) {
+            Matcher matcher = CONTENT_RANGE_HEADER.matcher(contentRangeHeader);
+            if (matcher.find()) {
+                try {
+                    long contentLengthFromRange =
+                            Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1)) + 1;
+                    if (contentLength < 0) {
+                        // Some proxy servers strip the Content-Length header. Fall back to the length
+                        // calculated here in this case.
+                        contentLength = contentLengthFromRange;
+                    } else if (contentLength != contentLengthFromRange) {
+                        // If there is a discrepancy between the Content-Length and Content-Range headers,
+                        // assume the one with the larger value is correct. We have seen cases where carrier
+                        // change one of them to reduce the size of a request, but it is unlikely anybody would
+                        // increase it.
+                        Log.w(TAG, "Inconsistent headers [" + contentLengthHeader + "] [" + contentRangeHeader
+                                + "]");
+                        contentLength = Math.max(contentLength, contentLengthFromRange);
+                    }
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "Unexpected Content-Range [" + contentRangeHeader + "]");
+                }
+            }
+        }
+        return contentLength;
+    }
+
+    /**
+     * On platform API levels 19 and 20, okhttp's implementation of {@link InputStream#close} can
+     * block for a long time if the stream has a lot of data remaining. Call this method before
+     * closing the input stream to make a best effort to cause the input stream to encounter an
+     * unexpected end of input, working around this issue. On other platform API levels, the method
+     * does nothing.
+     *
+     * @param connection     The connection whose {@link InputStream} should be terminated.
+     * @param bytesRemaining The number of bytes remaining to be read from the input stream if its
+     *                       length is known. {@link C#LENGTH_UNSET} otherwise.
+     */
+    private static void maybeTerminateInputStream(HttpURLConnection connection, long bytesRemaining) {
+        if (Util.SDK_INT != 19 && Util.SDK_INT != 20) {
+            return;
+        }
+
+        try {
+            InputStream inputStream = connection.getInputStream();
+            if (bytesRemaining == C.LENGTH_UNSET) {
+                // If the input stream has already ended, do nothing. The socket may be re-used.
+                if (inputStream.read() == -1) {
+                    return;
+                }
+            } else if (bytesRemaining <= MAX_BYTES_TO_DRAIN) {
+                // There isn't much data left. Prefer to allow it to drain, which may allow the socket to be
+                // re-used.
+                return;
+            }
+            String className = inputStream.getClass().getName();
+            if (className.equals("com.android.okhttp.internal.http.HttpTransport$ChunkedInputStream")
+                    || className.equals(
+                    "com.android.okhttp.internal.http.HttpTransport$FixedLengthInputStream")) {
+                Class<?> superclass = inputStream.getClass().getSuperclass();
+                Method unexpectedEndOfInput = superclass.getDeclaredMethod("unexpectedEndOfInput");
+                unexpectedEndOfInput.setAccessible(true);
+                unexpectedEndOfInput.invoke(inputStream);
+            }
+        } catch (Exception e) {
+            // If an IOException then the connection didn't ever have an input stream, or it was closed
+            // already. If another type of exception then something went wrong, most likely the device
+            // isn't using okhttp.
+        }
+    }
+
     @Override
     public Uri getUri() {
         return connection == null ? null : Uri.parse(connection.getURL().toString());
@@ -192,9 +305,9 @@ public class CustomHttpDataSource implements HttpDataSource {
     public void clearAllRequestProperties() {
         requestProperties.clear();
     }
+
     @Override
-    public int getResponseCode()
-    {
+    public int getResponseCode() {
         try {
             return connection.getResponseCode();
         } catch (IOException e) {
@@ -418,7 +531,7 @@ public class CustomHttpDataSource implements HttpDataSource {
     private HttpURLConnection makeConnection(URL url, byte[] postBody, long position,
                                              long length, boolean allowGzip, boolean followRedirects) throws IOException {
         HttpURLConnection connection;
-        if(proxy == null){
+        if (proxy == null) {
             connection = (HttpURLConnection) url.openConnection();
         } else {
             connection = (HttpURLConnection) url.openConnection(proxy);
@@ -462,79 +575,6 @@ public class CustomHttpDataSource implements HttpDataSource {
             connection.connect();
         }
         return connection;
-    }
-
-    /**
-     * Handles a redirect.
-     *
-     * @param originalUrl The original URL.
-     * @param location    The Location header in the response.
-     * @return The next URL.
-     * @throws IOException If redirection isn't possible.
-     */
-    private static URL handleRedirect(URL originalUrl, String location) throws IOException {
-        if (location == null) {
-            throw new ProtocolException("Null location redirect");
-        }
-        // Form the new url.
-        URL url = new URL(originalUrl, location);
-        // Check that the protocol of the new url is supported.
-        String protocol = url.getProtocol();
-        if (!"https".equals(protocol) && !"http".equals(protocol)) {
-            throw new ProtocolException("Unsupported protocol redirect: " + protocol);
-        }
-        // Currently this method is only called if allowCrossProtocolRedirects is true, and so the code
-        // below isn't required. If we ever decide to handle redirects ourselves when cross-protocol
-        // redirects are disabled, we'll need to uncomment this block of code.
-        // if (!allowCrossProtocolRedirects && !protocol.equals(originalUrl.getProtocol())) {
-        //   throw new ProtocolException("Disallowed cross-protocol redirect ("
-        //       + originalUrl.getProtocol() + " to " + protocol + ")");
-        // }
-        return url;
-    }
-
-    /**
-     * Attempts to extract the length of the content from the response headers of an open connection.
-     *
-     * @param connection The open connection.
-     * @return The extracted length, or {@link C#LENGTH_UNSET}.
-     */
-    private static long getContentLength(HttpURLConnection connection) {
-        long contentLength = C.LENGTH_UNSET;
-        String contentLengthHeader = connection.getHeaderField("Content-Length");
-        if (!TextUtils.isEmpty(contentLengthHeader)) {
-            try {
-                contentLength = Long.parseLong(contentLengthHeader);
-            } catch (NumberFormatException e) {
-                Log.e(TAG, "Unexpected Content-Length [" + contentLengthHeader + "]");
-            }
-        }
-        String contentRangeHeader = connection.getHeaderField("Content-Range");
-        if (!TextUtils.isEmpty(contentRangeHeader)) {
-            Matcher matcher = CONTENT_RANGE_HEADER.matcher(contentRangeHeader);
-            if (matcher.find()) {
-                try {
-                    long contentLengthFromRange =
-                            Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1)) + 1;
-                    if (contentLength < 0) {
-                        // Some proxy servers strip the Content-Length header. Fall back to the length
-                        // calculated here in this case.
-                        contentLength = contentLengthFromRange;
-                    } else if (contentLength != contentLengthFromRange) {
-                        // If there is a discrepancy between the Content-Length and Content-Range headers,
-                        // assume the one with the larger value is correct. We have seen cases where carrier
-                        // change one of them to reduce the size of a request, but it is unlikely anybody would
-                        // increase it.
-                        Log.w(TAG, "Inconsistent headers [" + contentLengthHeader + "] [" + contentRangeHeader
-                                + "]");
-                        contentLength = Math.max(contentLength, contentLengthFromRange);
-                    }
-                } catch (NumberFormatException e) {
-                    Log.e(TAG, "Unexpected Content-Range [" + contentRangeHeader + "]");
-                }
-            }
-        }
-        return contentLength;
     }
 
     /**
@@ -616,51 +656,6 @@ public class CustomHttpDataSource implements HttpDataSource {
         }
         return read;
     }
-
-    /**
-     * On platform API levels 19 and 20, okhttp's implementation of {@link InputStream#close} can
-     * block for a long time if the stream has a lot of data remaining. Call this method before
-     * closing the input stream to make a best effort to cause the input stream to encounter an
-     * unexpected end of input, working around this issue. On other platform API levels, the method
-     * does nothing.
-     *
-     * @param connection     The connection whose {@link InputStream} should be terminated.
-     * @param bytesRemaining The number of bytes remaining to be read from the input stream if its
-     *                       length is known. {@link C#LENGTH_UNSET} otherwise.
-     */
-    private static void maybeTerminateInputStream(HttpURLConnection connection, long bytesRemaining) {
-        if (Util.SDK_INT != 19 && Util.SDK_INT != 20) {
-            return;
-        }
-
-        try {
-            InputStream inputStream = connection.getInputStream();
-            if (bytesRemaining == C.LENGTH_UNSET) {
-                // If the input stream has already ended, do nothing. The socket may be re-used.
-                if (inputStream.read() == -1) {
-                    return;
-                }
-            } else if (bytesRemaining <= MAX_BYTES_TO_DRAIN) {
-                // There isn't much data left. Prefer to allow it to drain, which may allow the socket to be
-                // re-used.
-                return;
-            }
-            String className = inputStream.getClass().getName();
-            if (className.equals("com.android.okhttp.internal.http.HttpTransport$ChunkedInputStream")
-                    || className.equals(
-                    "com.android.okhttp.internal.http.HttpTransport$FixedLengthInputStream")) {
-                Class<?> superclass = inputStream.getClass().getSuperclass();
-                Method unexpectedEndOfInput = superclass.getDeclaredMethod("unexpectedEndOfInput");
-                unexpectedEndOfInput.setAccessible(true);
-                unexpectedEndOfInput.invoke(inputStream);
-            }
-        } catch (Exception e) {
-            // If an IOException then the connection didn't ever have an input stream, or it was closed
-            // already. If another type of exception then something went wrong, most likely the device
-            // isn't using okhttp.
-        }
-    }
-
 
     /**
      * Closes the current connection quietly, if there is one.

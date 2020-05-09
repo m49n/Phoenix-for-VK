@@ -37,19 +37,19 @@ public class PhotoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer
         album.can_upload = optInt(root, "can_upload") == 1;
         album.thumb_src = optString(root, "thumb_src");
 
-        if(root.has("privacy_view")){
+        if (root.has("privacy_view")) {
             album.privacy_view = context.deserialize(root.get("privacy_view"), VkApiPrivacy.class);
         }
 
-        if(root.has("privacy_comment")){
+        if (root.has("privacy_comment")) {
             album.privacy_comment = context.deserialize(root.get("privacy_comment"), VkApiPrivacy.class);
         }
 
-        if(root.has("sizes")){
+        if (root.has("sizes")) {
             JsonArray sizesArray = root.getAsJsonArray("sizes");
             album.photo = new ArrayList<>(sizesArray.size());
 
-            for(int i = 0; i < sizesArray.size(); i++){
+            for (int i = 0; i < sizesArray.size(); i++) {
                 album.photo.add(context.deserialize(sizesArray.get(i).getAsJsonObject(), PhotoSizeDto.class));
             }
         } else {

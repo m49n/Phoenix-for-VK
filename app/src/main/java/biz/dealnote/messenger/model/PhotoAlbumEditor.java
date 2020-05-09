@@ -9,38 +9,6 @@ import android.os.Parcelable;
  */
 public class PhotoAlbumEditor implements Parcelable {
 
-    private String title;
-
-    private String description;
-
-    private Privacy privacyView;
-
-    private Privacy privacyComment;
-
-    private boolean commentsDisabled;
-
-    private boolean uploadByAdminsOnly;
-
-    private PhotoAlbumEditor(){
-
-    }
-
-    public static PhotoAlbumEditor create(){
-        PhotoAlbumEditor editor = new PhotoAlbumEditor();
-        editor.setPrivacyComment(new Privacy());
-        editor.setPrivacyView(new Privacy());
-        return editor;
-    }
-
-    protected PhotoAlbumEditor(Parcel in) {
-        title = in.readString();
-        description = in.readString();
-        privacyView = in.readParcelable(Privacy.class.getClassLoader());
-        privacyComment = in.readParcelable(Privacy.class.getClassLoader());
-        commentsDisabled = in.readByte() != 0;
-        uploadByAdminsOnly = in.readByte() != 0;
-    }
-
     public static final Creator<PhotoAlbumEditor> CREATOR = new Creator<PhotoAlbumEditor>() {
         @Override
         public PhotoAlbumEditor createFromParcel(Parcel in) {
@@ -52,6 +20,32 @@ public class PhotoAlbumEditor implements Parcelable {
             return new PhotoAlbumEditor[size];
         }
     };
+    private String title;
+    private String description;
+    private Privacy privacyView;
+    private Privacy privacyComment;
+    private boolean commentsDisabled;
+    private boolean uploadByAdminsOnly;
+
+    private PhotoAlbumEditor() {
+
+    }
+
+    protected PhotoAlbumEditor(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        privacyView = in.readParcelable(Privacy.class.getClassLoader());
+        privacyComment = in.readParcelable(Privacy.class.getClassLoader());
+        commentsDisabled = in.readByte() != 0;
+        uploadByAdminsOnly = in.readByte() != 0;
+    }
+
+    public static PhotoAlbumEditor create() {
+        PhotoAlbumEditor editor = new PhotoAlbumEditor();
+        editor.setPrivacyComment(new Privacy());
+        editor.setPrivacyView(new Privacy());
+        return editor;
+    }
 
     public String getTitle() {
         return title;

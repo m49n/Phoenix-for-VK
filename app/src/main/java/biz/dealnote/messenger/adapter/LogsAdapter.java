@@ -22,14 +22,13 @@ import static biz.dealnote.messenger.util.Utils.safeLenghtOf;
  */
 public class LogsAdapter extends RecyclerBindableAdapter<LogEventWrapper, LogsAdapter.Holder> {
 
+    private static final int MAX_BODY_LENGHT = 400;
     private final ActionListener actionListener;
 
     public LogsAdapter(List<LogEventWrapper> data, ActionListener actionListener) {
         super(data);
         this.actionListener = actionListener;
     }
-
-    private static final int MAX_BODY_LENGHT = 400;
 
     @Override
     protected void onBindItemViewHolder(Holder holder, int position, int type) {
@@ -45,7 +44,7 @@ public class LogsAdapter extends RecyclerBindableAdapter<LogEventWrapper, LogsAd
         holder.buttonShare.setOnClickListener(v -> actionListener.onShareClick(wrapper));
 
         holder.bodyRoot.setOnClickListener(v -> {
-            if(!canReduce(event.getBody())){
+            if (!canReduce(event.getBody())) {
                 return;
             }
 
@@ -57,16 +56,16 @@ public class LogsAdapter extends RecyclerBindableAdapter<LogEventWrapper, LogsAd
         setupBodyRoot(holder, wrapper);
     }
 
-    private boolean canReduce(String body){
+    private boolean canReduce(String body) {
         return safeLenghtOf(body) > MAX_BODY_LENGHT;
     }
 
-    private void setupBodyRoot(Holder holder, LogEventWrapper wrapper){
+    private void setupBodyRoot(Holder holder, LogEventWrapper wrapper) {
         String body = wrapper.getEvent().getBody();
 
         boolean canReduce = canReduce(body);
 
-        if(!canReduce || wrapper.isExpanded()){
+        if (!canReduce || wrapper.isExpanded()) {
             holder.buttonExpand.setVisibility(View.GONE);
             holder.body.setText(body);
         } else {

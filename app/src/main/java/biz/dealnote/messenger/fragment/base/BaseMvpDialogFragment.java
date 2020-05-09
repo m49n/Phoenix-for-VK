@@ -22,21 +22,21 @@ public abstract class BaseMvpDialogFragment<P extends AbsPresenter<V>, V extends
 
     @Override
     public void showToast(@StringRes int titleTes, boolean isLong, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             Toast.makeText(requireActivity(), getString(titleTes), isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void showError(String text) {
-        if(isAdded()){
+        if (isAdded()) {
             Utils.showRedTopToast(requireActivity(), text);
         }
     }
 
     @Override
     public void showError(@StringRes int titleTes, Object... params) {
-        if(isAdded()){
+        if (isAdded()) {
             showError(getString(titleTes, params));
         }
     }
@@ -50,10 +50,10 @@ public abstract class BaseMvpDialogFragment<P extends AbsPresenter<V>, V extends
     public void displayAccountSupported() {
         // TODO: 18.12.2017
     }
+
     @Override
-    public PhoenixToast getPhoenixToast()
-    {
-        if(isAdded()) {
+    public PhoenixToast getPhoenixToast() {
+        if (isAdded()) {
             return PhoenixToast.CreatePhoenixToast(requireActivity());
         }
         return PhoenixToast.CreatePhoenixToast(null);

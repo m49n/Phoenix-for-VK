@@ -16,5 +16,6 @@ import io.reactivex.Single;
  */
 public interface IUtilsInteractor {
     Single<Map<Integer, Privacy>> createFullPrivacies(int accountId, @NonNull Map<Integer, SimplePrivacy> orig);
+
     Single<Optional<Owner>> resolveDomain(final int accountId, String domain);
 }

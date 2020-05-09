@@ -7,18 +7,32 @@ import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
 public class Chat extends AbsModel implements Parcelable {
 
+    public static Parcelable.Creator<Chat> CREATOR = new Parcelable.Creator<Chat>() {
+        public Chat createFromParcel(Parcel source) {
+            return new Chat(source);
+        }
+
+        public Chat[] newArray(int size) {
+            return new Chat[size];
+        }
+    };
     private final int id;
-
     private String title;
-
     private String photo50;
-
     private String photo100;
-
     private String photo200;
 
     public Chat(int id) {
         this.id = id;
+    }
+
+    public Chat(Parcel in) {
+        super(in);
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.photo50 = in.readString();
+        this.photo100 = in.readString();
+        this.photo200 = in.readString();
     }
 
     public int getId() {
@@ -76,30 +90,11 @@ public class Chat extends AbsModel implements Parcelable {
         dest.writeString(photo200);
     }
 
-    public Chat(Parcel in) {
-        super(in);
-        this.id = in.readInt();
-        this.title = in.readString();
-        this.photo50 = in.readString();
-        this.photo100 = in.readString();
-        this.photo200 = in.readString();
-    }
-
-    public static Parcelable.Creator<Chat> CREATOR = new Parcelable.Creator<Chat>() {
-        public Chat createFromParcel(Parcel source) {
-            return new Chat(source);
-        }
-
-        public Chat[] newArray(int size) {
-            return new Chat[size];
-        }
-    };
-
-    public String get100orSmallerAvatar(){
+    public String get100orSmallerAvatar() {
         return firstNonEmptyString(photo100, photo50);
     }
 
-    public String getMaxSquareAvatar(){
+    public String getMaxSquareAvatar() {
         return firstNonEmptyString(photo200, photo100, photo200);
     }
 }

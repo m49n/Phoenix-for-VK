@@ -24,6 +24,12 @@ public abstract class Feedback implements Parcelable {
         this.type = type;
     }
 
+    protected Feedback(Parcel in) {
+        type = in.readInt();
+        date = in.readLong();
+        reply = in.readParcelable(Comment.class.getClassLoader());
+    }
+
     public final int getType() {
         return type;
     }
@@ -44,12 +50,6 @@ public abstract class Feedback implements Parcelable {
     public final Feedback setReply(Comment reply) {
         this.reply = reply;
         return this;
-    }
-
-    protected Feedback(Parcel in) {
-        type = in.readInt();
-        date = in.readLong();
-        reply = in.readParcelable(Comment.class.getClassLoader());
     }
 
     @Override

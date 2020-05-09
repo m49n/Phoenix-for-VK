@@ -29,6 +29,8 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class UploadRetrofitProvider implements IUploadRetrofitProvider {
 
     private final IProxySettings proxySettings;
+    private final Object uploadRetrofitLock = new Object();
+    private volatile RetrofitWrapper uploadRetrofitInstance;
 
     public UploadRetrofitProvider(IProxySettings proxySettings) {
         this.proxySettings = proxySettings;
@@ -36,17 +38,14 @@ public class UploadRetrofitProvider implements IUploadRetrofitProvider {
                 .subscribe(ignored -> onProxySettingsChanged());
     }
 
-    private void onProxySettingsChanged(){
-        synchronized (uploadRetrofitLock){
-            if(nonNull(uploadRetrofitInstance)){
+    private void onProxySettingsChanged() {
+        synchronized (uploadRetrofitLock) {
+            if (nonNull(uploadRetrofitInstance)) {
                 uploadRetrofitInstance.cleanup();
                 uploadRetrofitInstance = null;
             }
         }
     }
-
-    private final Object uploadRetrofitLock = new Object();
-    private volatile RetrofitWrapper uploadRetrofitInstance;
 
     @Override
     public Single<RetrofitWrapper> provideUploadRetrofit() {
@@ -78,11 +77,12 @@ public class UploadRetrofitProvider implements IUploadRetrofitProvider {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS).addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
-                return chain.proceed(request);
-            }});
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
+                    }
+                });
 
         Gson gson = new GsonBuilder()
                 .create();

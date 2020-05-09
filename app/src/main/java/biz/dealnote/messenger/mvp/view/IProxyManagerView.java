@@ -13,8 +13,10 @@ public interface IProxyManagerView extends IMvpView, IErrorView {
     void displayData(List<ProxyConfig> configs, ProxyConfig active);
 
     void notifyItemAdded(int position);
+
     void notifyItemRemoved(int position);
 
     void setActiveAndNotifyDataSetChanged(ProxyConfig config);
+
     void goToAddingScreen();
 }

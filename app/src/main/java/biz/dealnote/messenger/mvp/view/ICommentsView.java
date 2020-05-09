@@ -62,12 +62,6 @@ public interface ICommentsView extends IAccountDependencyView, IAttachmentsPlace
 
     void showCommentSentToast();
 
-    interface ICommentContextView {
-        void setCanEdit(boolean can);
-        void setCanDelete(boolean can);
-        void setCanBan(boolean can);
-    }
-
     void setupOptionMenu(boolean topicPollAvailable, boolean gotoSourceAvailable, @StringRes Integer gotoSourceText);
 
     void setEpmtyTextVisible(boolean visible);
@@ -79,4 +73,12 @@ public interface ICommentsView extends IAccountDependencyView, IAttachmentsPlace
     void dismissDeepLookingCommentProgress();
 
     void setCanSendSelectAuthor(boolean can);
+
+    interface ICommentContextView {
+        void setCanEdit(boolean can);
+
+        void setCanDelete(boolean can);
+
+        void setCanBan(boolean can);
+    }
 }

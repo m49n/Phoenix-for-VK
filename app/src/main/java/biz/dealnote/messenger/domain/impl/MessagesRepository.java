@@ -164,6 +164,9 @@ public class MessagesRepository implements IMessagesRepository {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final Scheduler senderScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
+    private final InternalHandler handler = new InternalHandler(this);
+    private boolean nowSending;
+    private List<Integer> registeredAccounts;
 
     public MessagesRepository(ISettings.IAccountsSettings accountsSettings, INetworker networker,
                               IOwnersRepository ownersRepository, IStorages storages, IUploadManager uploadManager) {
@@ -183,6 +186,32 @@ public class MessagesRepository implements IMessagesRepository {
                 .subscribe(ignored -> onAccountsChanged(), ignore()));
     }
 
+    private static Conversation entity2Model(int accountId, SimpleDialogEntity entity, IOwnersBundle owners) {
+        return new Conversation(entity.getPeerId())
+                .setInRead(entity.getInRead())
+                .setOutRead(entity.getOutRead())
+                .setPhoto50(entity.getPhoto50())
+                .setPhoto100(entity.getPhoto100())
+                .setPhoto200(entity.getPhoto200())
+                .setUnreadCount(entity.getUnreadCount())
+                .setTitle(entity.getTitle())
+                .setInterlocutor(Peer.isGroup(entity.getPeerId()) || Peer.isUser(entity.getPeerId()) ? owners.getById(entity.getPeerId()) : null)
+                .setPinned(isNull(entity.getPinned()) ? null : Entity2Model.message(accountId, entity.getPinned(), owners))
+                .setAcl(entity.getAcl())
+                .setGroupChannel(entity.isGroupChannel());
+    }
+
+    private static MessageUpdate patch2Update(int accountId, MessagePatch patch) {
+        MessageUpdate update = new MessageUpdate(accountId, patch.getMessageId());
+        if (patch.getDeletion() != null) {
+            update.setDeleteUpdate(new MessageUpdate.DeleteUpdate(patch.getDeletion().getDeleted(), patch.getDeletion().getDeletedForAll()));
+        }
+        if (patch.getImportant() != null) {
+            update.setImportantUpdate(new MessageUpdate.ImportantUpdate(patch.getImportant().getImportant()));
+        }
+        return update;
+    }
+
     @Override
     public Flowable<Throwable> observeMessagesSendErrors() {
         return sendErrorsPublisher.onBackpressureBuffer();
@@ -196,10 +225,6 @@ public class MessagesRepository implements IMessagesRepository {
     private void onAccountsChanged() {
         registeredAccounts = accountsSettings.getRegistered();
     }
-
-    private final InternalHandler handler = new InternalHandler(this);
-
-    private boolean nowSending;
 
     @Override
     public void runSendingQueue() {
@@ -218,8 +243,6 @@ public class MessagesRepository implements IMessagesRepository {
         nowSending = true;
         sendMessage(registeredAccounts());
     }
-
-    private List<Integer> registeredAccounts;
 
     private List<Integer> registeredAccounts() {
         if (registeredAccounts == null) {
@@ -252,28 +275,6 @@ public class MessagesRepository implements IMessagesRepository {
                 .subscribeOn(senderScheduler)
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(this::onMessageSent, this::onMessageSendError));
-    }
-
-    private static final class InternalHandler extends WeakMainLooperHandler<MessagesRepository> {
-
-        static final int SEND = 1;
-
-        InternalHandler(MessagesRepository repository) {
-            super(repository);
-        }
-
-        void runSend() {
-            sendEmptyMessage(SEND);
-        }
-
-        @Override
-        public void handleMessage(@NonNull MessagesRepository repository, @NonNull android.os.Message msg) {
-            switch (msg.what) {
-                case SEND:
-                    repository.send();
-                    break;
-            }
-        }
     }
 
     private void onUpdloadSuccess(Upload upload) {
@@ -354,7 +355,7 @@ public class MessagesRepository implements IMessagesRepository {
         return Completable.fromAction(() -> {
             List<WriteText> list = new ArrayList<>();
             for (WriteTextInDialogUpdate update : updates) {
-                if(update.chat_id != -1)
+                if (update.chat_id != -1)
                     list.add(new WriteText(accountId, update.user_id, VKApiMessage.CHAT_PEER + update.chat_id));
                 else
                     list.add(new WriteText(accountId, update.user_id, update.user_id));
@@ -379,7 +380,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(outgoing)) {
             for (OutputMessagesSetReadUpdate update : outgoing) {
 
-                if(Settings.get().other().isInfo_reading() && update.peer_id < VKApiMessage.CHAT_PEER) {
+                if (Settings.get().other().isInfo_reading() && update.peer_id < VKApiMessage.CHAT_PEER) {
                     compositeDisposable.add(OwnerInfo.getRx(Injection.provideApplicationContext(), Settings.get().accounts().getCurrent(), update.peer_id)
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
@@ -419,21 +420,6 @@ public class MessagesRepository implements IMessagesRepository {
     @Override
     public Flowable<PeerDeleting> observePeerDeleting() {
         return peerDeletingPublisher.onBackpressureBuffer();
-    }
-
-    private static Conversation entity2Model(int accountId, SimpleDialogEntity entity, IOwnersBundle owners) {
-        return new Conversation(entity.getPeerId())
-                .setInRead(entity.getInRead())
-                .setOutRead(entity.getOutRead())
-                .setPhoto50(entity.getPhoto50())
-                .setPhoto100(entity.getPhoto100())
-                .setPhoto200(entity.getPhoto200())
-                .setUnreadCount(entity.getUnreadCount())
-                .setTitle(entity.getTitle())
-                .setInterlocutor(Peer.isGroup(entity.getPeerId()) || Peer.isUser(entity.getPeerId()) ? owners.getById(entity.getPeerId()) : null)
-                .setPinned(isNull(entity.getPinned()) ? null : Entity2Model.message(accountId, entity.getPinned(), owners))
-                .setAcl(entity.getAcl())
-                .setGroupChannel(entity.isGroupChannel());
     }
 
     @Override
@@ -705,7 +691,7 @@ public class MessagesRepository implements IMessagesRepository {
                 update.setUnread(new PeerUpdate.Unread(p.getUnread().getCount()));
             }
 
-            if(p.getTitle() != null){
+            if (p.getTitle() != null) {
                 update.setTitle(new PeerUpdate.Title(p.getTitle().getTitle()));
             }
 
@@ -719,7 +705,7 @@ public class MessagesRepository implements IMessagesRepository {
     @Override
     public Single<List<Message>> getPeerMessages(int accountId, int peerId, int count, Integer offset,
                                                  Integer startMessageId, boolean cacheData, boolean rev) {
-        if(rev)
+        if (rev)
             count = 200;
         return networker.vkDefault(accountId)
                 .messages()
@@ -1146,17 +1132,6 @@ public class MessagesRepository implements IMessagesRepository {
                 });
     }
 
-    private static MessageUpdate patch2Update(int accountId, MessagePatch patch) {
-        MessageUpdate update = new MessageUpdate(accountId, patch.getMessageId());
-        if (patch.getDeletion() != null) {
-            update.setDeleteUpdate(new MessageUpdate.DeleteUpdate(patch.getDeletion().getDeleted(), patch.getDeletion().getDeletedForAll()));
-        }
-        if (patch.getImportant() != null) {
-            update.setImportantUpdate(new MessageUpdate.ImportantUpdate(patch.getImportant().getImportant()));
-        }
-        return update;
-    }
-
     private Completable applyMessagesPatchesAndPublish(int accountId, List<MessagePatch> patches) {
         List<MessageUpdate> updates = new ArrayList<>(patches.size());
         Set<PeerId> requireInvalidate = new HashSet<>(0);
@@ -1184,33 +1159,6 @@ public class MessagesRepository implements IMessagesRepository {
                 .applyPatches(accountId, patches)
                 .andThen(afterApply)
                 .doOnComplete(() -> messageUpdatesPublisher.onNext(updates));
-    }
-
-    private static final class PeerId {
-
-        final int accountId;
-        final int peerId;
-
-        PeerId(int accountId, int peerId) {
-            this.accountId = accountId;
-            this.peerId = peerId;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            PeerId peerId1 = (PeerId) o;
-            if (accountId != peerId1.accountId) return false;
-            return peerId == peerId1.peerId;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = accountId;
-            result = 31 * result + peerId;
-            return result;
-        }
     }
 
     private Completable invalidatePeerLastMessage(int accountId, int peerId) {
@@ -1435,5 +1383,54 @@ public class MessagesRepository implements IMessagesRepository {
 
                     return uploadingNow ? MessageStatus.WAITING_FOR_UPLOAD : MessageStatus.QUEUE;
                 });
+    }
+
+    private static final class InternalHandler extends WeakMainLooperHandler<MessagesRepository> {
+
+        static final int SEND = 1;
+
+        InternalHandler(MessagesRepository repository) {
+            super(repository);
+        }
+
+        void runSend() {
+            sendEmptyMessage(SEND);
+        }
+
+        @Override
+        public void handleMessage(@NonNull MessagesRepository repository, @NonNull android.os.Message msg) {
+            switch (msg.what) {
+                case SEND:
+                    repository.send();
+                    break;
+            }
+        }
+    }
+
+    private static final class PeerId {
+
+        final int accountId;
+        final int peerId;
+
+        PeerId(int accountId, int peerId) {
+            this.accountId = accountId;
+            this.peerId = peerId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PeerId peerId1 = (PeerId) o;
+            if (accountId != peerId1.accountId) return false;
+            return peerId == peerId1.peerId;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = accountId;
+            result = 31 * result + peerId;
+            return result;
+        }
     }
 }

@@ -15,6 +15,17 @@ import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
  */
 public final class UsersFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<UsersFeedback> CREATOR = new Creator<UsersFeedback>() {
+        @Override
+        public UsersFeedback createFromParcel(Parcel in) {
+            return new UsersFeedback(in);
+        }
+
+        @Override
+        public UsersFeedback[] newArray(int size) {
+            return new UsersFeedback[size];
+        }
+    };
     private List<Owner> owners;
 
     public UsersFeedback(@FeedbackType int type) {
@@ -37,24 +48,12 @@ public final class UsersFeedback extends Feedback implements Parcelable {
         return 0;
     }
 
-    public static final Creator<UsersFeedback> CREATOR = new Creator<UsersFeedback>() {
-        @Override
-        public UsersFeedback createFromParcel(Parcel in) {
-            return new UsersFeedback(in);
-        }
-
-        @Override
-        public UsersFeedback[] newArray(int size) {
-            return new UsersFeedback[size];
-        }
-    };
+    public List<Owner> getOwners() {
+        return owners;
+    }
 
     public UsersFeedback setOwners(List<Owner> owners) {
         this.owners = owners;
         return this;
-    }
-
-    public List<Owner> getOwners() {
-        return owners;
     }
 }

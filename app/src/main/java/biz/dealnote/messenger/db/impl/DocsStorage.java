@@ -35,6 +35,38 @@ class DocsStorage extends AbsStorage implements IDocsStorage {
         super(base);
     }
 
+    private static DocumentEntity map(Cursor cursor) {
+        final int id = cursor.getInt(cursor.getColumnIndex(DocColumns.DOC_ID));
+        final int ownerId = cursor.getInt(cursor.getColumnIndex(DocColumns.OWNER_ID));
+
+        DocumentEntity document = new DocumentEntity(id, ownerId)
+                .setTitle(cursor.getString(cursor.getColumnIndex(DocColumns.TITLE)))
+                .setSize(cursor.getLong(cursor.getColumnIndex(DocColumns.SIZE)))
+                .setExt(cursor.getString(cursor.getColumnIndex(DocColumns.EXT)))
+                .setUrl(cursor.getString(cursor.getColumnIndex(DocColumns.URL)))
+                .setType(cursor.getInt(cursor.getColumnIndex(DocColumns.TYPE)))
+                .setDate(cursor.getLong(cursor.getColumnIndex(DocColumns.DATE)))
+                .setAccessKey(cursor.getString(cursor.getColumnIndex(DocColumns.ACCESS_KEY)));
+
+        String photoJson = cursor.getString(cursor.getColumnIndex(DocColumns.PHOTO));
+        String graffitiJson = cursor.getString(cursor.getColumnIndex(DocColumns.GRAFFITI));
+        String videoJson = cursor.getString(cursor.getColumnIndex(DocColumns.VIDEO));
+
+        if (nonEmpty(photoJson)) {
+            document.setPhoto(GSON.fromJson(photoJson, PhotoSizeEntity.class));
+        }
+
+        if (nonEmpty(graffitiJson)) {
+            document.setGraffiti(GSON.fromJson(graffitiJson, DocumentEntity.GraffitiDbo.class));
+        }
+
+        if (nonEmpty(videoJson)) {
+            document.setVideo(GSON.fromJson(videoJson, DocumentEntity.VideoPreviewDbo.class));
+        }
+
+        return document;
+    }
+
     @Override
     public Single<List<DocumentEntity>> get(@NonNull DocsCriteria criteria) {
         return Single.create(e -> {
@@ -58,9 +90,9 @@ class DocsStorage extends AbsStorage implements IDocsStorage {
             Cursor cursor = getContentResolver().query(uri, null, where, args, null);
             List<DocumentEntity> data = new ArrayList<>(safeCountOf(cursor));
 
-            if(nonNull(cursor)){
-                while (cursor.moveToNext()){
-                    if(e.isDisposed()) {
+            if (nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) {
                         break;
                     }
 
@@ -126,37 +158,5 @@ class DocsStorage extends AbsStorage implements IDocsStorage {
             final String[] args = {String.valueOf(docId), String.valueOf(ownerId)};
             getContentResolver().delete(uri, where, args);
         });
-    }
-
-    private static DocumentEntity map(Cursor cursor) {
-        final int id = cursor.getInt(cursor.getColumnIndex(DocColumns.DOC_ID));
-        final int ownerId = cursor.getInt(cursor.getColumnIndex(DocColumns.OWNER_ID));
-
-        DocumentEntity document = new DocumentEntity(id, ownerId)
-                .setTitle(cursor.getString(cursor.getColumnIndex(DocColumns.TITLE)))
-                .setSize(cursor.getLong(cursor.getColumnIndex(DocColumns.SIZE)))
-                .setExt(cursor.getString(cursor.getColumnIndex(DocColumns.EXT)))
-                .setUrl(cursor.getString(cursor.getColumnIndex(DocColumns.URL)))
-                .setType(cursor.getInt(cursor.getColumnIndex(DocColumns.TYPE)))
-                .setDate(cursor.getLong(cursor.getColumnIndex(DocColumns.DATE)))
-                .setAccessKey(cursor.getString(cursor.getColumnIndex(DocColumns.ACCESS_KEY)));
-
-        String photoJson = cursor.getString(cursor.getColumnIndex(DocColumns.PHOTO));
-        String graffitiJson = cursor.getString(cursor.getColumnIndex(DocColumns.GRAFFITI));
-        String videoJson = cursor.getString(cursor.getColumnIndex(DocColumns.VIDEO));
-
-        if(nonEmpty(photoJson)){
-            document.setPhoto(GSON.fromJson(photoJson, PhotoSizeEntity.class));
-        }
-
-        if(nonEmpty(graffitiJson)){
-            document.setGraffiti(GSON.fromJson(graffitiJson, DocumentEntity.GraffitiDbo.class));
-        }
-
-        if(nonEmpty(videoJson)){
-            document.setVideo(GSON.fromJson(videoJson, DocumentEntity.VideoPreviewDbo.class));
-        }
-
-        return document;
     }
 }

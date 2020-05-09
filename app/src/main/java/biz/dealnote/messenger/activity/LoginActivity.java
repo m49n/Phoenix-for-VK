@@ -33,10 +33,69 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class LoginActivity extends Activity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
-
+    private static final String EXTRA_CLIENT_ID = "client_id";
+    private static final String EXTRA_SCOPE = "scope";
+    private static final String EXTRA_VALIDATE = "validate";
+    private static final String EXTRA_LOGIN = "login";
+    private static final String EXTRA_PASSWORD = "password";
+    private static final String EXTRA_TWO_FA = "twofa";
+    private static final String EXTRA_GROUP_IDS = "group_ids";
     String TLogin;
     String TPassword;
     String TwoFA;
+
+    public static Intent createIntent(Context context, String clientId, String scope) {
+        return new Intent(context, LoginActivity.class)
+                .putExtra(EXTRA_CLIENT_ID, clientId)
+                .putExtra(EXTRA_SCOPE, scope);
+    }
+
+    public static Intent createIntent(Context context, String validate_url, String Login, String Password, String TwoFa) {
+        return new Intent(context, LoginActivity.class)
+                .putExtra(EXTRA_VALIDATE, validate_url).putExtra(EXTRA_LOGIN, Login).putExtra(EXTRA_PASSWORD, Password).putExtra(EXTRA_TWO_FA, TwoFa);
+    }
+
+    public static Intent createIntent(Context context, String clientId, String scope, Collection<Integer> groupIds) {
+        String ids = Utils.join(groupIds, ",", Object::toString);
+        return new Intent(context, LoginActivity.class)
+                .putExtra(EXTRA_CLIENT_ID, clientId)
+                .putExtra(EXTRA_SCOPE, scope)
+                .putExtra(EXTRA_GROUP_IDS, ids);
+    }
+
+    private static String tryExtractAccessToken(String url) {
+        return VKStringUtils.extractPattern(url, "access_token=(.*?)&");
+    }
+
+    private static ArrayList<Token> tryExtractAccessTokens(String url) throws Exception {
+        Pattern p = Pattern.compile("access_token_(\\d*)=(.*?)&");
+
+        ArrayList<Token> tokens = new ArrayList<>();
+
+        Matcher matcher = p.matcher(url);
+        while (matcher.find()) {
+            String groupid = matcher.group(1);
+            String token = matcher.group(2);
+
+            if (nonEmpty(groupid) && nonEmpty(token)) {
+                tokens.add(new Token(-Integer.parseInt(groupid), token));
+            }
+        }
+
+        if (tokens.isEmpty()) {
+            throw new Exception("Failed to parse redirect url " + url);
+        }
+
+        return tokens;
+    }
+
+    private static String tryExtractUserId(String url) {
+        return VKStringUtils.extractPattern(url, "user_id=(\\d*)");
+    }
+
+    public static ArrayList<Token> extractGroupTokens(Intent data) {
+        return data.getParcelableArrayListExtra("group_tokens");
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -56,7 +115,7 @@ public class LoginActivity extends Activity {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookies(aBoolean -> Log.d(TAG, "Cookie removed: " + aBoolean));
 
-        if(getIntent().getStringExtra(EXTRA_VALIDATE) == null) {
+        if (getIntent().getStringExtra(EXTRA_VALIDATE) == null) {
             String clientId = getIntent().getStringExtra(EXTRA_CLIENT_ID);
             String scope = getIntent().getStringExtra(EXTRA_SCOPE);
             String groupIds = getIntent().getStringExtra(EXTRA_GROUP_IDS);
@@ -64,81 +123,15 @@ public class LoginActivity extends Activity {
             try {
                 String url = Auth.getUrl(clientId, scope, groupIds);
                 webview.loadUrl(url);
-            }
-            catch (UnsupportedEncodingException e) {
+            } catch (UnsupportedEncodingException e) {
                 PhoenixToast.CreatePhoenixToast(this).showToastError(e.getLocalizedMessage());
             }
-        }
-        else {
+        } else {
             TLogin = getIntent().getStringExtra(EXTRA_LOGIN);
             TPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
             TwoFA = getIntent().getStringExtra(EXTRA_TWO_FA);
             webview.loadUrl(getIntent().getStringExtra(EXTRA_VALIDATE));
         }
-    }
-
-    private static final String EXTRA_CLIENT_ID = "client_id";
-    private static final String EXTRA_SCOPE = "scope";
-    private static final String EXTRA_VALIDATE = "validate";
-    private static final String EXTRA_LOGIN = "login";
-    private static final String EXTRA_PASSWORD = "password";
-    private static final String EXTRA_TWO_FA = "twofa";
-    private static final String EXTRA_GROUP_IDS = "group_ids";
-
-    public static Intent createIntent(Context context, String clientId, String scope){
-        return new Intent(context, LoginActivity.class)
-                .putExtra(EXTRA_CLIENT_ID, clientId)
-                .putExtra(EXTRA_SCOPE, scope);
-    }
-
-    public static Intent createIntent(Context context, String validate_url, String Login, String Password, String TwoFa){
-        return new Intent(context, LoginActivity.class)
-                .putExtra(EXTRA_VALIDATE, validate_url).putExtra(EXTRA_LOGIN, Login).putExtra(EXTRA_PASSWORD, Password).putExtra(EXTRA_TWO_FA, TwoFa);
-    }
-
-    public static Intent createIntent(Context context, String clientId, String scope, Collection<Integer> groupIds){
-        String ids = Utils.join(groupIds, ",", Object::toString);
-        return new Intent(context, LoginActivity.class)
-                .putExtra(EXTRA_CLIENT_ID, clientId)
-                .putExtra(EXTRA_SCOPE, scope)
-                .putExtra(EXTRA_GROUP_IDS, ids);
-    }
-
-    private class VkontakteWebViewClient extends WebViewClient {
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            parseUrl(url);
-        }
-    }
-
-    private static String tryExtractAccessToken(String url){
-        return VKStringUtils.extractPattern(url, "access_token=(.*?)&");
-    }
-
-    private static ArrayList<Token> tryExtractAccessTokens(String url) throws Exception {
-        Pattern p = Pattern.compile("access_token_(\\d*)=(.*?)&");
-
-        ArrayList<Token> tokens = new ArrayList<>();
-
-        Matcher matcher = p.matcher(url);
-        while (matcher.find()){
-            String groupid = matcher.group(1);
-            String token = matcher.group(2);
-
-            if(nonEmpty(groupid) && nonEmpty(token)){
-                tokens.add(new Token(-Integer.parseInt(groupid), token));
-            }
-        }
-
-        if(tokens.isEmpty()){
-            throw new Exception("Failed to parse redirect url " + url);
-        }
-
-        return tokens;
-    }
-
-    private static String tryExtractUserId(String url){
-        return VKStringUtils.extractPattern(url, "user_id=(\\d*)");
     }
 
     private void parseUrl(String url) {
@@ -156,7 +149,7 @@ public class LoginActivity extends Activity {
                     try {
                         ArrayList<Token> tokens = tryExtractAccessTokens(url);
                         intent.putParcelableArrayListExtra("group_tokens", tokens);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         String accessToken = tryExtractAccessToken(url);
                         String userId = tryExtractUserId(url);
 
@@ -177,7 +170,10 @@ public class LoginActivity extends Activity {
         }
     }
 
-    public static ArrayList<Token> extractGroupTokens(Intent data){
-        return data.getParcelableArrayListExtra("group_tokens");
+    private class VkontakteWebViewClient extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            parseUrl(url);
+        }
     }
 }

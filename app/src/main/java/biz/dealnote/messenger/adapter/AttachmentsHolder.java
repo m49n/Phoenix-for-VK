@@ -16,7 +16,7 @@ public class AttachmentsHolder {
     private ViewGroup vgPosts;
     private ViewGroup vgFriends;
 
-    public static AttachmentsHolder forCopyPost(ViewGroup container){
+    public static AttachmentsHolder forCopyPost(ViewGroup container) {
         AttachmentsHolder containers = new AttachmentsHolder();
         containers.setVgStickers(container.findViewById(R.id.copy_history_stickers_attachments)).
                 setVgPhotos(container.findViewById(R.id.copy_history_photo_attachments)).
@@ -26,7 +26,7 @@ public class AttachmentsHolder {
         return containers;
     }
 
-    public static AttachmentsHolder forPost(ViewGroup container){
+    public static AttachmentsHolder forPost(ViewGroup container) {
         AttachmentsHolder containers = new AttachmentsHolder();
         containers.setVgStickers(container.findViewById(R.id.post_stickers_attachments)).
                 setVgPosts(container.findViewById(R.id.post_posts_attachments)).
@@ -38,7 +38,7 @@ public class AttachmentsHolder {
         return containers;
     }
 
-    public static AttachmentsHolder forComment(ViewGroup container){
+    public static AttachmentsHolder forComment(ViewGroup container) {
         AttachmentsHolder containers = new AttachmentsHolder();
         containers.setVgStickers(container.findViewById(R.id.comments_stickers_attachments)).
                 setVgPhotos(container.findViewById(R.id.comments_photo_attachments)).
@@ -48,7 +48,7 @@ public class AttachmentsHolder {
         return containers;
     }
 
-    public static AttachmentsHolder forFeedback(View container){
+    public static AttachmentsHolder forFeedback(View container) {
         AttachmentsHolder containers = new AttachmentsHolder();
         containers.setVgStickers(container.findViewById(R.id.feedback_stickers_attachments)).
                 setVgPhotos(container.findViewById(R.id.feedback_photo_attachments)).
@@ -112,20 +112,20 @@ public class AttachmentsHolder {
         return this;
     }
 
+    public ViewGroup getVoiceMessageRoot() {
+        return mVoiceMessageRoot;
+    }
+
     public AttachmentsHolder setVoiceMessageRoot(ViewGroup voiceMessageRoot) {
         this.mVoiceMessageRoot = voiceMessageRoot;
         return this;
     }
 
-    public ViewGroup getVoiceMessageRoot() {
-        return mVoiceMessageRoot;
-    }
-
-    public ViewGroup getVgFriends(){
+    public ViewGroup getVgFriends() {
         return vgFriends;
     }
 
-    public AttachmentsHolder setVgFriends(ViewGroup vgFriends){
+    public AttachmentsHolder setVgFriends(ViewGroup vgFriends) {
         this.vgFriends = vgFriends;
         return this;
     }

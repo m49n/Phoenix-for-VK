@@ -48,13 +48,13 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
 
     private final int postId;
     private final int ownerId;
+    private final IWallsRepository wallInteractor;
+    private final IOwnersRepository ownersRepository;
     private Context context;
     private Post post;
     private Owner owner;
-
-    private final IWallsRepository wallInteractor;
-    private final IOwnersRepository ownersRepository;
     private IFaveInteractor faveInteractor;
+    private boolean loadingPostNow;
 
     public WallPostPresenter(int accountId, int postId, int ownerId, @Nullable Post post,
                              @Nullable Owner owner, Context context, @Nullable Bundle savedInstanceState) {
@@ -141,15 +141,13 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         this.owner = owner;
     }
 
-    private boolean loadingPostNow;
-
     private void setLoadingPostNow(boolean loadingPostNow) {
         this.loadingPostNow = loadingPostNow;
         resolveContentRootView();
     }
 
     private void loadActualPostInfo() {
-        if(loadingPostNow){
+        if (loadingPostNow) {
             return;
         }
 
@@ -288,8 +286,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         }
     }
 
-    public void fireAddBookmark()
-    {
+    public void fireAddBookmark() {
         appendDisposable(faveInteractor.addPost(getAccountId(), ownerId, postId, null)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(this::onVideoAddedToBookmarks, t -> showError(getView(), getCauseIfRuntime(t))));
@@ -319,10 +316,10 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
                 .subscribe(() -> onDeleteOrRestoreComplete(delete), t -> showError(getView(), getCauseIfRuntime(t))));
     }
 
-    private void onDeleteOrRestoreComplete(boolean deleted){
+    private void onDeleteOrRestoreComplete(boolean deleted) {
         callView(view -> view.displayDeleteOrRestoreComplete(deleted));
     }
-    
+
     public void firePinClick() {
         pinOrUnpin(true);
     }
@@ -338,11 +335,11 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(() -> onPinOrUnpinComplete(pin), t -> showError(getView(), getCauseIfRuntime(t))));
     }
-    
-    private void onPinOrUnpinComplete(boolean pinned){
+
+    private void onPinOrUnpinComplete(boolean pinned) {
         callView(view -> view.displayPinComplete(pinned));
     }
-    
+
     public void fireRefresh() {
         loadActualPostInfo();
     }
@@ -360,7 +357,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
             appendDisposable(wallInteractor.reportPost(getAccountId(), ownerId, postId, item)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(p -> {
-                        if(p == 1)
+                        if (p == 1)
                             getView().getPhoenixToast().showToast(R.string.success);
                         else
                             getView().getPhoenixToast().showToast(R.string.error);

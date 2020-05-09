@@ -7,13 +7,19 @@ import androidx.annotation.NonNull;
 
 public class Commented implements Parcelable {
 
+    public static final Creator<Commented> CREATOR = new Creator<Commented>() {
+        public Commented createFromParcel(Parcel source) {
+            return new Commented(source);
+        }
+
+        public Commented[] newArray(int size) {
+            return new Commented[size];
+        }
+    };
     private final int sourceId;
-
     private final int sourceOwnerId;
-
     @CommentedType
     private final int sourceType;
-
     private String accessKey;
 
     public Commented(int sourceId, int sourceOwnerId, @CommentedType int sourceType, String accessKey) {
@@ -23,9 +29,26 @@ public class Commented implements Parcelable {
         this.accessKey = accessKey;
     }
 
-    public Commented setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-        return this;
+    public Commented(Parcel in) {
+        this.sourceId = in.readInt();
+        this.sourceOwnerId = in.readInt();
+        //noinspection ResourceType
+        this.sourceType = in.readInt();
+        this.accessKey = in.readString();
+    }
+
+    public static Commented from(@NonNull AbsModel model) {
+        if (model instanceof Post) {
+            return new Commented(((Post) model).getVkid(), ((Post) model).getOwnerId(), CommentedType.POST, null);
+        } else if (model instanceof Photo) {
+            return new Commented(((Photo) model).getId(), ((Photo) model).getOwnerId(), CommentedType.PHOTO, ((Photo) model).getAccessKey());
+        } else if (model instanceof Video) {
+            return new Commented(((Video) model).getId(), ((Video) model).getOwnerId(), CommentedType.VIDEO, ((Video) model).getAccessKey());
+        } else if (model instanceof Topic) {
+            return new Commented(((Topic) model).getId(), ((Topic) model).getOwnerId(), CommentedType.TOPIC, null);
+        } else {
+            throw new IllegalArgumentException("Invalid model, class: " + model.getClass());
+        }
     }
 
     @CommentedType
@@ -45,6 +68,11 @@ public class Commented implements Parcelable {
         return accessKey;
     }
 
+    public Commented setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,8 +88,8 @@ public class Commented implements Parcelable {
      * Тип комментируемого обьекта
      * Используется в процедуре http://vk.com/dev/execute.getComments
      */
-    public String getTypeForStoredProcedure(){
-        switch (sourceType){
+    public String getTypeForStoredProcedure() {
+        switch (sourceType) {
             case CommentedType.POST:
                 return "post";
             case CommentedType.PHOTO:
@@ -72,20 +100,6 @@ public class Commented implements Parcelable {
                 return "topic";
             default:
                 throw new IllegalArgumentException("Unknown source type: " + sourceType);
-        }
-    }
-
-    public static Commented from(@NonNull AbsModel model){
-        if(model instanceof Post){
-            return new Commented(((Post) model).getVkid(), ((Post) model).getOwnerId(), CommentedType.POST, null);
-        } else if(model instanceof Photo){
-            return new Commented(((Photo) model).getId(), ((Photo) model).getOwnerId(), CommentedType.PHOTO, ((Photo) model).getAccessKey());
-        } else if(model instanceof Video){
-            return new Commented(((Video) model).getId(), ((Video) model).getOwnerId(), CommentedType.VIDEO, ((Video) model).getAccessKey());
-        } else if(model instanceof Topic){
-            return new Commented(((Topic) model).getId(), ((Topic) model).getOwnerId(), CommentedType.TOPIC, null);
-        } else {
-            throw new IllegalArgumentException("Invalid model, class: " + model.getClass());
         }
     }
 
@@ -119,22 +133,4 @@ public class Commented implements Parcelable {
         dest.writeInt(sourceType);
         dest.writeString(accessKey);
     }
-
-    public Commented(Parcel in) {
-        this.sourceId = in.readInt();
-        this.sourceOwnerId = in.readInt();
-        //noinspection ResourceType
-        this.sourceType = in.readInt();
-        this.accessKey = in.readString();
-    }
-
-    public static final Creator<Commented> CREATOR = new Creator<Commented>() {
-        public Commented createFromParcel(Parcel source) {
-            return new Commented(source);
-        }
-
-        public Commented[] newArray(int size) {
-            return new Commented[size];
-        }
-    };
 }

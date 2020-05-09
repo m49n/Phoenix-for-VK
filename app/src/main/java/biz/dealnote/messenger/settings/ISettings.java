@@ -125,9 +125,9 @@ public interface ISettings {
 
         List<Integer> getRegistered();
 
-        void setCurrent(int accountId);
-
         int getCurrent();
+
+        void setCurrent(int accountId);
 
         void remove(int accountId);
 
@@ -285,9 +285,9 @@ public interface ISettings {
         @StyleRes
         int getMainTheme();
 
-        String getMainThemeKey();
-
         void setMainTheme(String key);
+
+        String getMainThemeKey();
 
         @AvatarStyle
         int getAvatarStyle();

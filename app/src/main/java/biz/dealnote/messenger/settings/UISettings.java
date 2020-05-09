@@ -41,16 +41,9 @@ class UISettings implements ISettings.IUISettings {
     }
 
     @Override
-    public void setMainTheme(String key)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        preferences.edit().putString("app_theme", key).apply();
-    }
-
-    @Override
     public String getMainThemeKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-       return preferences.getString("app_theme", "ice");
+        return preferences.getString("app_theme", "ice");
     }
 
     @Override
@@ -58,8 +51,8 @@ class UISettings implements ISettings.IUISettings {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
         String theme = preferences.getString("app_theme", "ice");
         boolean Amoled = Settings.get().main().isAmoledTheme();
-        if(theme == null)
-            return Amoled ? R.style.App_DayNight_Ice_Amoled :  R.style.App_DayNight_Ice;
+        if (theme == null)
+            return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
         switch (theme) {
             case "fire":
                 return Amoled ? R.style.App_DayNight_Fire_Amoled : R.style.App_DayNight_Fire;
@@ -95,6 +88,12 @@ class UISettings implements ISettings.IUISettings {
             default:
                 return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
         }
+    }
+
+    @Override
+    public void setMainTheme(String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        preferences.edit().putString("app_theme", key).apply();
     }
 
     @Override

@@ -57,6 +57,8 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
 class MessagesStorage extends AbsStorage implements IMessagesStorage {
 
     private static final String ORDER_BY = MessageColumns.FULL_STATUS + ", " + MessageColumns.FULL_ID;
+    private static final Type EXTRAS_TYPE = new TypeToken<HashMap<Integer, String>>() {
+    }.getType();
 
     MessagesStorage(@NonNull AppStorages base) {
         super(base);
@@ -126,6 +128,52 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
         }
 
         return index;
+    }
+
+    private static MessageEntity baseMapDbo(Cursor cursor) {
+        @MessageStatus
+        int status = cursor.getInt(cursor.getColumnIndex(MessageColumns.STATUS));
+
+        @ChatAction
+        int action = cursor.getInt(cursor.getColumnIndex(MessageColumns.ACTION));
+
+        final int id = cursor.getInt(cursor.getColumnIndex(MessageColumns._ID));
+        final int peerId = cursor.getInt(cursor.getColumnIndex(MessageColumns.PEER_ID));
+        final int fromId = cursor.getInt(cursor.getColumnIndex(MessageColumns.FROM_ID));
+
+        HashMap<Integer, String> extras = null;
+
+        String extrasText = cursor.getString(cursor.getColumnIndex(MessageColumns.EXTRAS));
+        if (nonEmpty(extrasText)) {
+            extras = GSON.fromJson(extrasText, EXTRAS_TYPE);
+        }
+
+        return new MessageEntity(id, peerId, fromId)
+                .setEncrypted(cursor.getInt(cursor.getColumnIndex(MessageColumns.ENCRYPTED)) == 1)
+                .setStatus(status)
+                .setAction(action)
+                .setExtras(extras)
+                .setBody(cursor.getString(cursor.getColumnIndex(MessageColumns.BODY)))
+                //.setRead(cursor.getInt(cursor.getColumnIndex(MessageColumns.READ_STATE)) == 1)
+                .setOut(cursor.getInt(cursor.getColumnIndex(MessageColumns.OUT)) == 1)
+                .setStatus(status)
+                .setDate(cursor.getLong(cursor.getColumnIndex(MessageColumns.DATE)))
+                .setHasAttachmens(cursor.getInt(cursor.getColumnIndex(MessageColumns.HAS_ATTACHMENTS)) == 1)
+                .setForwardCount(cursor.getInt(cursor.getColumnIndex(MessageColumns.FORWARD_COUNT)))
+                .setDeleted(cursor.getInt(cursor.getColumnIndex(MessageColumns.DELETED)) == 1)
+                .setDeletedForAll(cursor.getInt(cursor.getColumnIndex(MessageColumns.DELETED_FOR_ALL)) == 1)
+                //.setTitle(cursor.getString(cursor.getColumnIndex(MessageColumns.TITLE)))
+                .setOriginalId(cursor.getInt(cursor.getColumnIndex(MessageColumns.ORIGINAL_ID)))
+                .setImportant(cursor.getInt(cursor.getColumnIndex(MessageColumns.IMPORTANT)) == 1)
+                .setAction(action)
+                .setActionMemberId(cursor.getInt(cursor.getColumnIndex(MessageColumns.ACTION_MID)))
+                .setActionEmail(cursor.getString(cursor.getColumnIndex(MessageColumns.ACTION_EMAIL)))
+                .setActionText(cursor.getString(cursor.getColumnIndex(MessageColumns.ACTION_TEXT)))
+                .setPhoto50(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_50)))
+                .setPhoto100(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_100)))
+                .setPhoto200(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_200)))
+                .setRandomId(cursor.getInt(cursor.getColumnIndex(MessageColumns.RANDOM_ID)))
+                .setUpdateTime(cursor.getLong(cursor.getColumnIndex(MessageColumns.UPDATE_TIME)));
     }
 
     @Override
@@ -393,55 +441,6 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
         return dbo;
     }
 
-    private static final Type EXTRAS_TYPE = new TypeToken<HashMap<Integer, String>>() {
-    }.getType();
-
-    private static MessageEntity baseMapDbo(Cursor cursor) {
-        @MessageStatus
-        int status = cursor.getInt(cursor.getColumnIndex(MessageColumns.STATUS));
-
-        @ChatAction
-        int action = cursor.getInt(cursor.getColumnIndex(MessageColumns.ACTION));
-
-        final int id = cursor.getInt(cursor.getColumnIndex(MessageColumns._ID));
-        final int peerId = cursor.getInt(cursor.getColumnIndex(MessageColumns.PEER_ID));
-        final int fromId = cursor.getInt(cursor.getColumnIndex(MessageColumns.FROM_ID));
-
-        HashMap<Integer, String> extras = null;
-
-        String extrasText = cursor.getString(cursor.getColumnIndex(MessageColumns.EXTRAS));
-        if (nonEmpty(extrasText)) {
-            extras = GSON.fromJson(extrasText, EXTRAS_TYPE);
-        }
-
-        return new MessageEntity(id, peerId, fromId)
-                .setEncrypted(cursor.getInt(cursor.getColumnIndex(MessageColumns.ENCRYPTED)) == 1)
-                .setStatus(status)
-                .setAction(action)
-                .setExtras(extras)
-                .setBody(cursor.getString(cursor.getColumnIndex(MessageColumns.BODY)))
-                //.setRead(cursor.getInt(cursor.getColumnIndex(MessageColumns.READ_STATE)) == 1)
-                .setOut(cursor.getInt(cursor.getColumnIndex(MessageColumns.OUT)) == 1)
-                .setStatus(status)
-                .setDate(cursor.getLong(cursor.getColumnIndex(MessageColumns.DATE)))
-                .setHasAttachmens(cursor.getInt(cursor.getColumnIndex(MessageColumns.HAS_ATTACHMENTS)) == 1)
-                .setForwardCount(cursor.getInt(cursor.getColumnIndex(MessageColumns.FORWARD_COUNT)))
-                .setDeleted(cursor.getInt(cursor.getColumnIndex(MessageColumns.DELETED)) == 1)
-                .setDeletedForAll(cursor.getInt(cursor.getColumnIndex(MessageColumns.DELETED_FOR_ALL)) == 1)
-                //.setTitle(cursor.getString(cursor.getColumnIndex(MessageColumns.TITLE)))
-                .setOriginalId(cursor.getInt(cursor.getColumnIndex(MessageColumns.ORIGINAL_ID)))
-                .setImportant(cursor.getInt(cursor.getColumnIndex(MessageColumns.IMPORTANT)) == 1)
-                .setAction(action)
-                .setActionMemberId(cursor.getInt(cursor.getColumnIndex(MessageColumns.ACTION_MID)))
-                .setActionEmail(cursor.getString(cursor.getColumnIndex(MessageColumns.ACTION_EMAIL)))
-                .setActionText(cursor.getString(cursor.getColumnIndex(MessageColumns.ACTION_TEXT)))
-                .setPhoto50(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_50)))
-                .setPhoto100(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_100)))
-                .setPhoto200(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_200)))
-                .setRandomId(cursor.getInt(cursor.getColumnIndex(MessageColumns.RANDOM_ID)))
-                .setUpdateTime(cursor.getLong(cursor.getColumnIndex(MessageColumns.UPDATE_TIME)));
-    }
-
     @Override
     public Maybe<DraftMessage> findDraftMessage(int accountId, int peerId) {
         return Maybe.create(e -> {
@@ -514,19 +513,19 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
             Uri uri = MessengerContentProvider.getMessageContentUriFor(accountId);
 
             ArrayList<ContentProviderOperation> operations = new ArrayList<>(patches.size());
-            for(MessagePatch patch : patches){
+            for (MessagePatch patch : patches) {
                 ContentValues cv = new ContentValues();
 
-                if(patch.getDeletion() != null){
+                if (patch.getDeletion() != null) {
                     cv.put(MessageColumns.DELETED, patch.getDeletion().getDeleted());
                     cv.put(MessageColumns.DELETED_FOR_ALL, patch.getDeletion().getDeletedForAll());
                 }
 
-                if(patch.getImportant() != null){
+                if (patch.getImportant() != null) {
                     cv.put(MessageColumns.IMPORTANT, patch.getImportant().getImportant());
                 }
 
-                if(cv.size() == 0) continue;
+                if (cv.size() == 0) continue;
 
                 operations.add(ContentProviderOperation.newUpdate(uri)
                         .withValues(cv)

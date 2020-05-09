@@ -22,7 +22,7 @@ public abstract class CloseOnFlingListener implements FlingRelativeLayout.OnSing
     private final int maxXPx;
     private final int minYPx;
 
-    public CloseOnFlingListener(@NonNull Context context){
+    public CloseOnFlingListener(@NonNull Context context) {
         maxXPx = (int) dpToPx(MAX_X_DP, context);
         minYPx = (int) dpToPx(MIN_Y_DP, context);
     }

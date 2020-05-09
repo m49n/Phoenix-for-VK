@@ -23,6 +23,9 @@ import biz.dealnote.messenger.util.Objects;
  */
 public abstract class NoMainActivity extends AppCompatActivity {
 
+    private Toolbar mToolbar;
+    private FragmentManager.OnBackStackChangedListener mBackStackListener = this::resolveToolbarNavigationIcon;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(Settings.get().ui().getMainTheme());
@@ -42,10 +45,6 @@ public abstract class NoMainActivity extends AppCompatActivity {
     protected int getMainContainerViewId() {
         return R.id.fragment;
     }
-
-    private FragmentManager.OnBackStackChangedListener mBackStackListener = this::resolveToolbarNavigationIcon;
-
-    private Toolbar mToolbar;
 
     @Override
     public void setSupportActionBar(@Nullable Toolbar toolbar) {

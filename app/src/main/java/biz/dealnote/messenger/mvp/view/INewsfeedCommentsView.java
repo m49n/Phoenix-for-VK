@@ -12,7 +12,10 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface INewsfeedCommentsView extends IAccountDependencyView, IAttachmentsPlacesView, IMvpView, IErrorView {
     void displayData(List<NewsfeedComment> data);
+
     void notifyDataAdded(int position, int count);
+
     void notifyDataSetChanged();
+
     void showLoading(boolean loading);
 }

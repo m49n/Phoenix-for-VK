@@ -13,12 +13,12 @@ public class UsersEntity extends FeedbackEntity {
         super(type);
     }
 
+    public int[] getOwners() {
+        return ids;
+    }
+
     public UsersEntity setOwners(int[] ids) {
         this.ids = ids;
         return this;
-    }
-
-    public int[] getOwners() {
-        return ids;
     }
 }

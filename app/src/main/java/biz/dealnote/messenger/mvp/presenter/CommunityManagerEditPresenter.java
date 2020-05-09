@@ -34,20 +34,16 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
     private final List<User> users;
 
     private final int groupId;
-
+    private final IGroupSettingsInteractor interactor;
+    private final boolean creator;
     private int currentUserIndex;
     private int adminLevel;
     private boolean showAsContact;
-
     private String position;
     private String email;
     private String phone;
-
     private boolean adding;
-
-    private final IGroupSettingsInteractor interactor;
-
-    private final boolean creator;
+    private boolean savingNow;
 
     public CommunityManagerEditPresenter(int accountId, int groupId, Manager manager, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -78,10 +74,6 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         }
     }
 
-    private boolean isCreator() {
-        return creator;
-    }
-
     public CommunityManagerEditPresenter(int accountId, int groupId, List<User> users, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
 
@@ -96,6 +88,34 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         if (nonNull(savedInstanceState)) {
             restoreState(savedInstanceState);
         }
+    }
+
+    private static int convertRoleToAdminLevel(String role) {
+        if ("moderator".equalsIgnoreCase(role)) {
+            return VKApiCommunity.AdminLevel.MODERATOR;
+        } else if ("editor".equalsIgnoreCase(role)) {
+            return VKApiCommunity.AdminLevel.EDITOR;
+        } else if ("administrator".equalsIgnoreCase(role)) {
+            return VKApiCommunity.AdminLevel.ADMIN;
+        } else
+            return 0;
+    }
+
+    private static String convertAdminLevelToRole(int adminLevel) {
+        switch (adminLevel) {
+            case VKApiCommunity.AdminLevel.MODERATOR:
+                return "moderator";
+            case VKApiCommunity.AdminLevel.EDITOR:
+                return "editor";
+            case VKApiCommunity.AdminLevel.ADMIN:
+                return "administrator";
+        }
+
+        throw new IllegalArgumentException("Invalid adminLevel");
+    }
+
+    private boolean isCreator() {
+        return creator;
     }
 
     @Override
@@ -114,31 +134,6 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         phone = state.getString("phone");
     }
 
-    private static int convertRoleToAdminLevel(String role) {
-        if ("moderator".equalsIgnoreCase(role)) {
-            return VKApiCommunity.AdminLevel.MODERATOR;
-        } else if ("editor".equalsIgnoreCase(role)) {
-            return VKApiCommunity.AdminLevel.EDITOR;
-        } else if ("administrator".equalsIgnoreCase(role)) {
-            return VKApiCommunity.AdminLevel.ADMIN;
-        }
-        else
-            return 0;
-    }
-
-    private static String convertAdminLevelToRole(int adminLevel) {
-        switch (adminLevel) {
-            case VKApiCommunity.AdminLevel.MODERATOR:
-                return "moderator";
-            case VKApiCommunity.AdminLevel.EDITOR:
-                return "editor";
-            case VKApiCommunity.AdminLevel.ADMIN:
-                return "administrator";
-        }
-
-        throw new IllegalArgumentException("Invalid adminLevel");
-    }
-
     @NonNull
     private User getCurrentUser() {
         return users.get(currentUserIndex);
@@ -149,8 +144,8 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
     }
 
     @OnGuiCreated
-    private void resolveRadioButtonsCheckState(){
-        if(isGuiReady() && !isCreator()){
+    private void resolveRadioButtonsCheckState() {
+        if (isGuiReady() && !isCreator()) {
             switch (adminLevel) {
                 case VKApiCommunity.AdminLevel.MODERATOR:
                     getView().checkModerator();
@@ -178,8 +173,6 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
             getView().configRadioButtons(isCreator());
         }
     }
-
-    private boolean savingNow;
 
     private void setSavingNow(boolean savingNow) {
         this.savingNow = savingNow;
@@ -217,7 +210,7 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
     }
 
     public void fireDeleteClick() {
-        if(isCreator()){
+        if (isCreator()) {
             return;
         }
 

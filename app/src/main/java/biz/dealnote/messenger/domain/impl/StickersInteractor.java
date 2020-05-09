@@ -50,8 +50,7 @@ public class StickersInteractor implements IStickersInteractor {
     }
 
     @Override
-    public Single<List<StickerSet>> getRecentStickers(int accountId)
-    {
+    public Single<List<StickerSet>> getRecentStickers(int accountId) {
         return networker.vkDefault(accountId).users().getRecentStickers().flatMap(t -> {
             List<Sticker> list = Dto2Model.transformStickers(listEmptyIfNull(t.items));
             List<StickerSet> ret = new ArrayList<>();

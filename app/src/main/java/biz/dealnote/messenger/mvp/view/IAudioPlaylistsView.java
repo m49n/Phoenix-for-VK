@@ -12,7 +12,9 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IAudioPlaylistsView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<VKApiAudioPlaylist> pages);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
 
     void showRefreshing(boolean refreshing);

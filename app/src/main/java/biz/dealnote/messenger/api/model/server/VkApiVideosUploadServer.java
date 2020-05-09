@@ -5,16 +5,6 @@ import android.os.Parcelable;
 
 public class VkApiVideosUploadServer implements UploadServer, Parcelable {
 
-    private String upload_url;
-
-    public VkApiVideosUploadServer() {
-
-    }
-
-    protected VkApiVideosUploadServer(Parcel in) {
-        upload_url = in.readString();
-    }
-
     public static final Creator<VkApiVideosUploadServer> CREATOR = new Creator<VkApiVideosUploadServer>() {
         @Override
         public VkApiVideosUploadServer createFromParcel(Parcel in) {
@@ -26,6 +16,15 @@ public class VkApiVideosUploadServer implements UploadServer, Parcelable {
             return new VkApiVideosUploadServer[size];
         }
     };
+    private String upload_url;
+
+    public VkApiVideosUploadServer() {
+
+    }
+
+    protected VkApiVideosUploadServer(Parcel in) {
+        upload_url = in.readString();
+    }
 
     @Override
     public String getUrl() {

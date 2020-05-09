@@ -4,8 +4,6 @@ import android.provider.BaseColumns;
 
 public final class PhotosColumns implements BaseColumns {
 
-    private PhotosColumns(){}
-
     public static final String TABLENAME = "photos";
     //Columns
     public static final String PHOTO_ID = "photo_id";
@@ -23,7 +21,6 @@ public final class PhotosColumns implements BaseColumns {
     public static final String TAGS = "tags";
     public static final String ACCESS_KEY = "access_key";
     public static final String DELETED = "deleted";
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_PHOTO_ID = TABLENAME + "." + PHOTO_ID;
     public static final String FULL_ALBUM_ID = TABLENAME + "." + ALBUM_ID;
@@ -40,4 +37,6 @@ public final class PhotosColumns implements BaseColumns {
     public static final String FULL_TAGS = TABLENAME + "." + TAGS;
     public static final String FULL_ACCESS_KEY = TABLENAME + "." + ACCESS_KEY;
     public static final String FULL_DELETED = TABLENAME + "." + DELETED;
+    private PhotosColumns() {
+    }
 }

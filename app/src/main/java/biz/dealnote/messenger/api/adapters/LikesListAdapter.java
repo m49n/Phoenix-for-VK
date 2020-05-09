@@ -28,22 +28,22 @@ public class LikesListAdapter extends AbsAdapter implements JsonDeserializer<Lik
 
         response.count = optInt(root, "count");
 
-        if(root.has("items")){
+        if (root.has("items")) {
             JsonArray itemsArray = root.getAsJsonArray("items");
             response.owners = new ArrayList<>(itemsArray.size());
 
-            for(int i = 0; i < itemsArray.size(); i++){
+            for (int i = 0; i < itemsArray.size(); i++) {
                 JsonObject itemRoot = itemsArray.get(i).getAsJsonObject();
                 String type = optString(itemRoot, "type");
 
                 VKApiOwner owner = null;
                 if ("profile".equals(type)) {
                     owner = context.deserialize(itemRoot, VKApiUser.class);
-                } else if("group".equals(type) || "page".equals(type)){
+                } else if ("group".equals(type) || "page".equals(type)) {
                     owner = context.deserialize(itemRoot, VKApiCommunity.class);
                 }
 
-                if(owner != null){
+                if (owner != null) {
                     response.owners.add(owner);
                 }
             }

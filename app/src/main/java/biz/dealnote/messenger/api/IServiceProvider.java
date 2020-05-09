@@ -7,5 +7,5 @@ import io.reactivex.Single;
  * phoenix
  */
 public interface IServiceProvider {
-    <T> Single<T> provideService(int accountId, Class<T> serviceClass, int ... tokenTypes);
+    <T> Single<T> provideService(int accountId, Class<T> serviceClass, int... tokenTypes);
 }

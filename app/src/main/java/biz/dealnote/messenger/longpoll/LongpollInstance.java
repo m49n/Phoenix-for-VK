@@ -9,9 +9,9 @@ public class LongpollInstance {
     private static volatile ILongpollManager longpollManager;
 
     public static ILongpollManager get() {
-        if(longpollManager == null){
-            synchronized (LongpollInstance.class){
-                if(longpollManager == null){
+        if (longpollManager == null) {
+            synchronized (LongpollInstance.class) {
+                if (longpollManager == null) {
                     longpollManager = new AndroidLongpollManager(App.getInstance(), Injection.provideNetworkInterfaces(), Processors.realtimeMessages());
                 }
             }

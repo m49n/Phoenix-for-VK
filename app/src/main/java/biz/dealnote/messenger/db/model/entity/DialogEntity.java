@@ -32,26 +32,16 @@ public class DialogEntity extends Entity {
 
     private boolean isGroupChannel;
 
-    public DialogEntity setAcl(int acl) {
-        this.acl = acl;
-        return this;
+    public DialogEntity(int peerId) {
+        this.peerId = peerId;
     }
 
     public int getAcl() {
         return acl;
     }
 
-    public DialogEntity(int peerId) {
-        this.peerId = peerId;
-    }
-
-    public DialogEntity setInRead(int inRead) {
-        this.inRead = inRead;
-        return this;
-    }
-
-    public DialogEntity setPinned(MessageEntity pinned) {
-        this.pinned = pinned;
+    public DialogEntity setAcl(int acl) {
+        this.acl = acl;
         return this;
     }
 
@@ -59,8 +49,18 @@ public class DialogEntity extends Entity {
         return pinned;
     }
 
+    public DialogEntity setPinned(MessageEntity pinned) {
+        this.pinned = pinned;
+        return this;
+    }
+
     public int getInRead() {
         return inRead;
+    }
+
+    public DialogEntity setInRead(int inRead) {
+        this.inRead = inRead;
+        return this;
     }
 
     public int getOutRead() {
@@ -103,7 +103,7 @@ public class DialogEntity extends Entity {
         return this;
     }
 
-    public SimpleDialogEntity simplify(){
+    public SimpleDialogEntity simplify() {
         return new SimpleDialogEntity(peerId)
                 .setTitle(title)
                 .setPhoto200(photo200)

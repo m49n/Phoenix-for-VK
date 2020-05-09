@@ -34,6 +34,8 @@ import biz.dealnote.messenger.util.Utils;
 
 public class FeedbackLinkDialog extends DialogFragment implements FeedbackLinkAdapter.ActionListener {
 
+    private Feedback mFeedback;
+
     public static FeedbackLinkDialog newInstance(int accountId, Feedback feedback) {
         Bundle bundle = new Bundle();
         bundle.putInt(Extra.ACCOUNT_ID, accountId);
@@ -43,21 +45,28 @@ public class FeedbackLinkDialog extends DialogFragment implements FeedbackLinkAd
         return feedbackLinkDialog;
     }
 
-    private Feedback mFeedback;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ParcelableFeedbackWrapper wrapper = getArguments().getParcelable("feedback");
-        mFeedback = wrapper.get();
-    }
-
     private static void fillClassFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
 
         if (type.getSuperclass() != null) {
             fillClassFields(fields, type.getSuperclass());
         }
+    }
+
+    private static boolean isSupport(Object o) {
+        return o instanceof User ||
+                o instanceof Post ||
+                o instanceof Photo ||
+                o instanceof Comment ||
+                o instanceof Video ||
+                o instanceof Topic;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ParcelableFeedbackWrapper wrapper = getArguments().getParcelable("feedback");
+        mFeedback = wrapper.get();
     }
 
     private List<Object> getAllModels(Feedback notification) {
@@ -90,15 +99,6 @@ public class FeedbackLinkDialog extends DialogFragment implements FeedbackLinkAd
         }
 
         return models;
-    }
-
-    private static boolean isSupport(Object o) {
-        return o instanceof User ||
-                o instanceof Post ||
-                o instanceof Photo ||
-                o instanceof Comment ||
-                o instanceof Video ||
-                o instanceof Topic;
     }
 
     @NonNull

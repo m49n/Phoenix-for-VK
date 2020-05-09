@@ -15,7 +15,7 @@ public class FaveLink extends AbsLink {
         this.section = section;
     }
 
-    public FaveLink(){
+    public FaveLink() {
         this(null);
     }
 

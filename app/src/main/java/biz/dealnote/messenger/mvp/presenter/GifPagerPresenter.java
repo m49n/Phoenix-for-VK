@@ -31,7 +31,7 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> implements IGifPlayer.IStatusChangeListener, IGifPlayer.IVideoSizeChangeListener {
 
     private static final String SAVE_PAGER_INDEX = "save_pager_index";
-
+    private static final VideoSize DEF_SIZE = new VideoSize(1, 1);
     private IGifPlayer mGifPlayer;
     private ArrayList<Document> mDocuments;
     private int mCurrentIndex;
@@ -153,7 +153,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
     }
 
     public void firePageSelected(int position) {
-        if(mCurrentIndex == position){
+        if (mCurrentIndex == position) {
             return;
         }
 
@@ -171,13 +171,11 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
         }
     }
 
-    private static final VideoSize DEF_SIZE = new VideoSize(1, 1);
-
     public void fireHolderCreate(int adapterPosition) {
         boolean isProgress = adapterPosition == mCurrentIndex && mGifPlayer.getPlayerStatus() == IGifPlayer.IStatus.PREPARING;
 
         VideoSize size = mGifPlayer.getVideoSize();
-        if(Objects.isNull(size)){
+        if (Objects.isNull(size)) {
             size = DEF_SIZE;
         }
 
@@ -189,7 +187,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
     }
 
     public void fireDownloadButtonClick() {
-        if(!AppPerms.hasWriteStoragePermision(App.getInstance())){
+        if (!AppPerms.hasWriteStoragePermision(App.getInstance())) {
             getView().requestWriteExternalStoragePermission();
             return;
         }
@@ -199,7 +197,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
 
     @Override
     public void onWritePermissionResolved() {
-        if(AppPerms.hasWriteStoragePermision(App.getInstance())){
+        if (AppPerms.hasWriteStoragePermision(App.getInstance())) {
             downloadImpl();
         }
     }
@@ -207,7 +205,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
     @Override
     public void onGuiPaused() {
         super.onGuiPaused();
-        if(Objects.nonNull(mGifPlayer)){
+        if (Objects.nonNull(mGifPlayer)) {
             mGifPlayer.pause();
         }
     }
@@ -216,7 +214,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
     public void onGuiResumed() {
         super.onGuiResumed();
 
-        if(Objects.nonNull(mGifPlayer)){
+        if (Objects.nonNull(mGifPlayer)) {
             try {
                 mGifPlayer.play();
             } catch (PlayerPrepareException e) {
@@ -227,13 +225,13 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
 
     @Override
     public void onDestroyed() {
-        if(Objects.nonNull(mGifPlayer)){
+        if (Objects.nonNull(mGifPlayer)) {
             mGifPlayer.release();
         }
         super.onDestroyed();
     }
 
-    private void downloadImpl(){
+    private void downloadImpl() {
         Document document = mDocuments.get(mCurrentIndex);
 
         DownloadManager.Request req = new DownloadManager.Request(Uri.parse(document.getUrl()));
@@ -246,7 +244,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
 
     @Override
     public void onPlayerStatusChange(@NonNull IGifPlayer player, int previousStatus, int currentStatus) {
-        if(mGifPlayer == player){
+        if (mGifPlayer == player) {
             resolvePreparingProgress();
             resolvePlayerDisplay();
         }

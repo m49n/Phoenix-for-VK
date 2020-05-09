@@ -56,42 +56,9 @@ import biz.dealnote.messenger.util.Utils;
 
 public class MessengerContentProvider extends ContentProvider {
 
-    private static Map<String, String> sUsersProjectionMap;
-    private static Map<String, String> sMessagesProjectionMap;
-    private static Map<String, String> sAttachmentsProjectionMap;
-    private static Map<String, String> sPhotosProjectionMap;
-    private static Map<String, String> sDialogsProjectionMap;
-    private static Map<String, String> sPeersProjectionMap;
-    private static Map<String, String> sDocsProjectionMap;
-    private static Map<String, String> sVideosProjectionMap;
-    private static Map<String, String> sPostsProjectionMap;
-    private static Map<String, String> sPostsAttachmentsProjectionMap;
-    private static Map<String, String> sGroupsProjectionMap;
-    private static Map<String, String> sGroupsDetProjectionMap;
-    private static Map<String, String> sRelativeshipProjectionMap;
-    private static Map<String, String> sCommentsProjectionMap;
-    private static Map<String, String> sCommentsAttachmentsProjectionMap;
-    private static Map<String, String> sPhotoAlbumsProjectionMap;
-    private static Map<String, String> sNewsProjectionMap;
-    private static Map<String, String> sVideoAlbumsProjectionMap;
-    private static Map<String, String> sTopicsProjectionMap;
-    private static Map<String, String> sNoticationsProjectionMap;
-    private static Map<String, String> sUserDetProjectionMap;
-    private static Map<String, String> sFavePhotosProjectionMap;
-    private static Map<String, String> sFaveVideosProjectionMap;
-    private static Map<String, String> sFaveUsersProjectionMap;
-    private static Map<String, String> sFaveGroupsProjectionMap;
-    static final int URI_FAVE_GROUPS = 67;
-    private static Map<String, String> sFaveLinksProjectionMap;
-    private static Map<String, String> sFavePostsProjectionMap;
-    private static Map<String, String> sCountriesProjectionMap;
-    private static Map<String, String> sFeedListsProjectionMap;
-    private static Map<String, String> sFriendListsProjectionMap;
-    private static Map<String, String> sKeysProjectionMap;
-
     // Uri authority
     public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".providers.Messages";
-
+    static final int URI_FAVE_GROUPS = 67;
     static final int URI_USERS = 1;
     static final int URI_USERS_ID = 2;
     static final int URI_MESSAGES = 3;
@@ -135,7 +102,6 @@ public class MessengerContentProvider extends ContentProvider {
     static final int URI_FRIEND_LISTS = 64;
     static final int URI_KEYS = 65;
     static final int URI_PEERS = 66;
-
     // path
     static final String USER_PATH = "users";
     static final String MESSAGES_PATH = "messages";
@@ -168,97 +134,117 @@ public class MessengerContentProvider extends ContentProvider {
     static final String FEED_LISTS_PATH = "feed_lists";
     static final String FRIEND_LISTS_PATH = "friends_lists";
     static final String KEYS_PATH = "keys";
-
-    // описание и создание UriMatcher
-    private static final UriMatcher sUriMatcher;
-
-    // Общий Uri
-    private static final Uri USER_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + USER_PATH);
     // Типы данных
     static final String USER_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + USER_PATH;
     static final String USER_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + USER_PATH;
-
-    private static final Uri MESSAGE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + MESSAGES_PATH);
     static final String MESSAGE_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + MESSAGES_PATH;
     static final String MESSAGE_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + MESSAGES_PATH;
-
-    private static final Uri ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + ATTACHMENTS_PATH);
     static final String ATTACHMENTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + ATTACHMENTS_PATH;
     static final String ATTACHMENTS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + ATTACHMENTS_PATH;
-
-    private static final Uri PHOTOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PHOTOS_PATH);
     static final String PHOTOS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + PHOTOS_PATH;
     static final String PHOTOS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + PHOTOS_PATH;
-
-    private static final Uri DIALOGS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DIALOGS_PATH);
     static final String DIALOGS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + DIALOGS_PATH;
-
-    private static final Uri PEERS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PEERS_PATH);
     static final String PEERS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + PEERS_PATH;
-
-    private static final Uri DOCS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DOCS_PATH);
     static final String DOCS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + DOCS_PATH;
     static final String DOCS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + DOCS_PATH;
-
-    private static final Uri VIDEOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + VIDEOS_PATH);
     static final String VIDEOS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + VIDEOS_PATH;
     static final String VIDEOS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + VIDEOS_PATH;
-
-    private static final Uri POSTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + POSTS_PATH);
     static final String POSTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + POSTS_PATH;
     static final String POSTS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + POSTS_PATH;
-
-    private static final Uri POSTS_ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + POSTS_ATTACHMENTS_PATH);
     static final String POSTS_ATTACHMENTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + POSTS_ATTACHMENTS_PATH;
     static final String POSTS_ATTACHMENTS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + POSTS_ATTACHMENTS_PATH;
-
-    private static final Uri GROUPS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + GROUPS_PATH);
     static final String GROUPS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + GROUPS_PATH;
     static final String GROUPS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + GROUPS_PATH;
-
-    private static final Uri RELATIVESHIP_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + RELATIVESHIP_PATH);
     static final String RELATIVESHIP_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + RELATIVESHIP_PATH;
-
-    private static final Uri COMMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
     static final String COMMENTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + COMMENTS_PATH;
     static final String COMMENTS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + COMMENTS_PATH;
-
-    private static final Uri COMMENTS_ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_ATTACHMENTS_PATH);
     static final String COMMENTS_ATTACHMENTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + COMMENTS_ATTACHMENTS_PATH;
     static final String COMMENTS_ATTACHMENTS_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + COMMENTS_ATTACHMENTS_PATH;
-
-    private static final Uri PHOTO_ALBUMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PHOTO_ALBUMS_PATH);
     static final String PHOTO_ALBUMS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + PHOTO_ALBUMS_PATH;
-
-    private static final Uri NEWS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + NEWS_PATH);
     static final String NEWS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + NEWS_PATH;
-
-    private static final Uri GROUPS_DET_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + GROUPS_DET_PATH);
     static final String GROUPS_DET_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + GROUPS_DET_PATH;
     static final String GROUPS_DET_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + GROUPS_DET_PATH;
-
-    private static final Uri VIDEO_ALBUMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + VIDEO_ALBUMS_PATH);
     static final String VIDEO_ALBUMS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + VIDEO_ALBUMS_PATH;
-
-    private static final Uri TOPICS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TOPICS_PATH);
     static final String TOPICS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + TOPICS_PATH;
-
-    private static final Uri NOTIFICATIONS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + NOTIFICATIONS_PATH);
     static final String NOTIFICATIONS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + NOTIFICATIONS_PATH;
-
-    private static final Uri USER_DET_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + USER_DET_PATH);
     static final String USER_DET_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + USER_DET_PATH;
     static final String USER_DET_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + USER_DET_PATH;
-
-    private static final Uri FAVE_PHOTOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_PHOTOS_PATH);
     static final String FAVE_PHOTOS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_PHOTOS_PATH;
-
-    private static final Uri FAVE_VIDEOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_VIDEOS_PATH);
     static final String FAVE_VIDEOS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_VIDEOS_PATH;
     static final String FAVE_PAGES_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_PAGES_PATH;
     static final String FAVE_GROUPS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_GROUPS_PATH;
+    static final String FAVE_LINKS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_LINKS_PATH;
+    static final String FAVE_POSTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_POSTS_PATH;
+    static final String COUNTRIES_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + COUNTRIES_PATH;
+    static final String FEED_LISTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FEED_LISTS_PATH;
+    static final String FRIEND_LISTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FRIEND_LISTS_PATH;
+    static final String KEYS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + KEYS_PATH;
+    // описание и создание UriMatcher
+    private static final UriMatcher sUriMatcher;
+    // Общий Uri
+    private static final Uri USER_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + USER_PATH);
+    private static final Uri MESSAGE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + MESSAGES_PATH);
+    private static final Uri ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + ATTACHMENTS_PATH);
+    private static final Uri PHOTOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PHOTOS_PATH);
+    private static final Uri DIALOGS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DIALOGS_PATH);
+    private static final Uri PEERS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PEERS_PATH);
+    private static final Uri DOCS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DOCS_PATH);
+    private static final Uri VIDEOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + VIDEOS_PATH);
+    private static final Uri POSTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + POSTS_PATH);
+    private static final Uri POSTS_ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + POSTS_ATTACHMENTS_PATH);
+    private static final Uri GROUPS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + GROUPS_PATH);
+    private static final Uri RELATIVESHIP_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + RELATIVESHIP_PATH);
+    private static final Uri COMMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
+    private static final Uri COMMENTS_ATTACHMENTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_ATTACHMENTS_PATH);
+    private static final Uri PHOTO_ALBUMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PHOTO_ALBUMS_PATH);
+    private static final Uri NEWS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + NEWS_PATH);
+    private static final Uri GROUPS_DET_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + GROUPS_DET_PATH);
+    private static final Uri VIDEO_ALBUMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + VIDEO_ALBUMS_PATH);
+    private static final Uri TOPICS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TOPICS_PATH);
+    private static final Uri NOTIFICATIONS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + NOTIFICATIONS_PATH);
+    private static final Uri USER_DET_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + USER_DET_PATH);
+    private static final Uri FAVE_PHOTOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_PHOTOS_PATH);
+    private static final Uri FAVE_VIDEOS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_VIDEOS_PATH);
     private static final Uri FAVE_PAGES_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_PAGES_PATH);
     private static final Uri FAVE_GROUPS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_GROUPS_PATH);
+    private static final Uri FAVE_LINKS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_LINKS_PATH);
+    private static final Uri FAVE_POSTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_POSTS_PATH);
+    private static final Uri COUNTRIES_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COUNTRIES_PATH);
+    private static final Uri FEED_LISTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FEED_LISTS_PATH);
+    private static final Uri FRIEND_LISTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FRIEND_LISTS_PATH);
+    private static final Uri KEYS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + KEYS_PATH);
+    private static final String AID = "aid";
+    private static Map<String, String> sUsersProjectionMap;
+    private static Map<String, String> sMessagesProjectionMap;
+    private static Map<String, String> sAttachmentsProjectionMap;
+    private static Map<String, String> sPhotosProjectionMap;
+    private static Map<String, String> sDialogsProjectionMap;
+    private static Map<String, String> sPeersProjectionMap;
+    private static Map<String, String> sDocsProjectionMap;
+    private static Map<String, String> sVideosProjectionMap;
+    private static Map<String, String> sPostsProjectionMap;
+    private static Map<String, String> sPostsAttachmentsProjectionMap;
+    private static Map<String, String> sGroupsProjectionMap;
+    private static Map<String, String> sGroupsDetProjectionMap;
+    private static Map<String, String> sRelativeshipProjectionMap;
+    private static Map<String, String> sCommentsProjectionMap;
+    private static Map<String, String> sCommentsAttachmentsProjectionMap;
+    private static Map<String, String> sPhotoAlbumsProjectionMap;
+    private static Map<String, String> sNewsProjectionMap;
+    private static Map<String, String> sVideoAlbumsProjectionMap;
+    private static Map<String, String> sTopicsProjectionMap;
+    private static Map<String, String> sNoticationsProjectionMap;
+    private static Map<String, String> sUserDetProjectionMap;
+    private static Map<String, String> sFavePhotosProjectionMap;
+    private static Map<String, String> sFaveVideosProjectionMap;
+    private static Map<String, String> sFaveUsersProjectionMap;
+    private static Map<String, String> sFaveGroupsProjectionMap;
+    private static Map<String, String> sFaveLinksProjectionMap;
+    private static Map<String, String> sFavePostsProjectionMap;
+    private static Map<String, String> sCountriesProjectionMap;
+    private static Map<String, String> sFeedListsProjectionMap;
+    private static Map<String, String> sFriendListsProjectionMap;
+    private static Map<String, String> sKeysProjectionMap;
 
     static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -307,24 +293,6 @@ public class MessengerContentProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, FRIEND_LISTS_PATH, URI_FRIEND_LISTS);
         sUriMatcher.addURI(AUTHORITY, KEYS_PATH, URI_KEYS);
     }
-
-    private static final Uri FAVE_LINKS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_LINKS_PATH);
-    static final String FAVE_LINKS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_LINKS_PATH;
-
-    private static final Uri FAVE_POSTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FAVE_POSTS_PATH);
-    static final String FAVE_POSTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FAVE_POSTS_PATH;
-
-    private static final Uri COUNTRIES_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COUNTRIES_PATH);
-    static final String COUNTRIES_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + COUNTRIES_PATH;
-
-    private static final Uri FEED_LISTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FEED_LISTS_PATH);
-    static final String FEED_LISTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FEED_LISTS_PATH;
-
-    private static final Uri FRIEND_LISTS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + FRIEND_LISTS_PATH);
-    static final String FRIEND_LISTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + FRIEND_LISTS_PATH;
-
-    private static final Uri KEYS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + KEYS_PATH);
-    static final String KEYS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + KEYS_PATH;
 
     static {
         //Setup projection maps
@@ -828,13 +796,13 @@ public class MessengerContentProvider extends ContentProvider {
         return appendAccountId(TOPICS_CONTENT_URI, aid);
     }
 
-    public static Uri getAttachmentsContentUriFor(int aid) {
-        return appendAccountId(ATTACHMENTS_CONTENT_URI, aid);
-    }
-
     //public static Uri getPollContentUriFor(int aid){
     //    return appendAccountId(POLL_CONTENT_URI, aid);
     //}
+
+    public static Uri getAttachmentsContentUriFor(int aid) {
+        return appendAccountId(ATTACHMENTS_CONTENT_URI, aid);
+    }
 
     public static Uri getPostsAttachmentsContentUriFor(int aid) {
         return appendAccountId(POSTS_ATTACHMENTS_CONTENT_URI, aid);
@@ -919,8 +887,6 @@ public class MessengerContentProvider extends ContentProvider {
     public static Uri getFriendListsContentUriFor(int aid) {
         return appendAccountId(FRIEND_LISTS_CONTENT_URI, aid);
     }
-
-    private static final String AID = "aid";
 
     private static Uri appendAccountId(@NonNull Uri uri, int aid) {
         return new Uri.Builder()

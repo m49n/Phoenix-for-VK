@@ -110,6 +110,10 @@ class AbsApi {
         return "\"" + word + "\"";
     }
 
+    static Integer integerFromBoolean(Boolean value) {
+        return isNull(value) ? null : (value ? 1 : 0);
+    }
+
     <T> Single<T> provideService(Class<T> serviceClass, int... tokenTypes) {
         if (isNull(tokenTypes) || tokenTypes.length == 0) {
             tokenTypes = new int[]{TokenType.USER}; // user by default
@@ -120,10 +124,6 @@ class AbsApi {
 
     int getAccountId() {
         return accountId;
-    }
-
-    static Integer integerFromBoolean(Boolean value) {
-        return isNull(value) ? null : (value ? 1 : 0);
     }
 
     interface SimpleFunction<F, S> {

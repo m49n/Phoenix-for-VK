@@ -42,12 +42,16 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerView.ViewHolder> {
 
+    private static final int TYPE_DELETED = 0;
+    private static final int TYPE_NORMAL = 1;
     private Context context;
     private AttachmentsViewBinder attachmentsViewBinder;
     private Transformation transformation;
     private int colorTextSecondary;
     private int iconColorActive;
     private EmojiconTextView.OnHashTagClickListener onHashTagClickListener;
+    private OnCommentActionListener listener;
+    private RecyclerView recyclerView;
 
     public CommentsAdapter(Context context, List<Comment> items, AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback) {
         super(items);
@@ -64,7 +68,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position, int type) {
-        switch (type){
+        switch (type) {
             case TYPE_NORMAL:
                 bindNormalHolder((NormalCommentHoler) viewHolder, getItem(position));
                 break;
@@ -74,7 +78,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         }
     }
 
-    private void bindDeletedComment(DeletedHolder holder, final Comment comment){
+    private void bindDeletedComment(DeletedHolder holder, final Comment comment) {
         holder.buttonRestore.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onRestoreComment(comment.getId());
@@ -82,7 +86,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         });
     }
 
-    private void bindNormalHolder(final NormalCommentHoler holder, final Comment comment){
+    private void bindNormalHolder(final NormalCommentHoler holder, final Comment comment) {
         holder.cancelSelectionAnimation();
 
         if (comment.isAnimationNow()) {
@@ -107,14 +111,14 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
             @Override
             public void onOwnerClick(int ownerId) {
-                if(listener != null){
+                if (listener != null) {
                     listener.onAvatarClick(ownerId);
                 }
             }
         });
 
         holder.item_comment_thread_root.setVisibility(comment.getThreads() > 0 ? View.VISIBLE : View.GONE);
-        if(comment.getThreads() > 0) {
+        if (comment.getThreads() > 0) {
             holder.itemView.setOnClickListener(v -> PlaceFactory.getCommentsThreadPlace(Settings.get().accounts().getCurrent(), comment.getCommented(), null, comment.getId()).tryOpenWith(context));
             holder.item_comment_thread_counter.setText(String.valueOf(comment.getThreads()));
         }
@@ -179,7 +183,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
     @Override
     protected RecyclerView.ViewHolder viewHolder(View view, int type) {
-        switch (type){
+        switch (type) {
             case TYPE_NORMAL:
                 return new NormalCommentHoler(view);
             case TYPE_DELETED:
@@ -201,8 +205,38 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         throw new IllegalArgumentException();
     }
 
-    private static final int TYPE_DELETED = 0;
-    private static final int TYPE_NORMAL = 1;
+    public void setListener(OnCommentActionListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
+
+    @Override
+    protected int getItemType(int position) {
+        return getItem(position - getHeadersCount()).isDeleted() ? TYPE_DELETED : TYPE_NORMAL;
+    }
+
+    public interface OnCommentActionListener {
+        void onReplyToOwnerClick(int ownerId, int commentId);
+
+        void onRestoreComment(int commentId);
+
+        void onAvatarClick(int ownerId);
+
+        void onCommentLikeClick(Comment comment, boolean add);
+
+        void populateCommentContextMenu(ContextMenu menu, Comment comment);
+    }
 
     private class DeletedHolder extends RecyclerView.ViewHolder {
 
@@ -228,6 +262,8 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         TextView item_comment_thread_counter;
 
         AttachmentsHolder attachmentContainers;
+        Animator.AnimatorListener animationAdapter;
+        ObjectAnimator animator;
 
         NormalCommentHoler(View root) {
             super(root);
@@ -236,7 +272,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             tvText = root.findViewById(R.id.item_comment_text);
 
             tvText.setOnHashTagClickListener(hashTag -> {
-                if(nonNull(onHashTagClickListener)){
+                if (nonNull(onHashTagClickListener)) {
                     onHashTagClickListener.onHashTagClicked(hashTag);
                 }
             });
@@ -272,11 +308,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             };
         }
 
-        Animator.AnimatorListener animationAdapter;
-
-        ObjectAnimator animator;
-
-        void startSelectionAnimation(){
+        void startSelectionAnimation() {
             selectionView.setAlpha(0.5f);
 
             animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
@@ -285,8 +317,8 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             animator.start();
         }
 
-        void cancelSelectionAnimation(){
-            if(animator != null){
+        void cancelSelectionAnimation() {
+            if (animator != null) {
                 animator.cancel();
                 animator = null;
             }
@@ -296,45 +328,12 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            if(isNull(recyclerView)) return;
+            if (isNull(recyclerView)) return;
 
             int position = recyclerView.getChildAdapterPosition(v) - getHeadersCount();
-            if(listener != null){
+            if (listener != null) {
                 listener.populateCommentContextMenu(menu, getItem(position));
             }
         }
-    }
-
-    private OnCommentActionListener listener;
-
-    public void setListener(OnCommentActionListener listener) {
-        this.listener = listener;
-    }
-
-    public interface OnCommentActionListener {
-        void onReplyToOwnerClick(int ownerId, int commentId);
-        void onRestoreComment(int commentId);
-        void onAvatarClick(int ownerId);
-        void onCommentLikeClick(Comment comment, boolean add);
-        void populateCommentContextMenu(ContextMenu menu, Comment comment);
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        this.recyclerView = null;
-    }
-
-    private RecyclerView recyclerView;
-
-    @Override
-    protected int getItemType(int position) {
-        return getItem(position - getHeadersCount()).isDeleted() ? TYPE_DELETED : TYPE_NORMAL;
     }
 }

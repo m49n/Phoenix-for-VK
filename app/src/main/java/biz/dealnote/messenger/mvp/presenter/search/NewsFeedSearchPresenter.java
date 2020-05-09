@@ -44,7 +44,7 @@ public class NewsFeedSearchPresenter extends AbsSearchPresenter<INewsFeedSearchV
                 .subscribe(this::onPostUpdate, RxUtils.ignore()));
     }
 
-    private void onPostUpdate(PostUpdate update){
+    private void onPostUpdate(PostUpdate update) {
         // TODO: 03.10.2017
     }
 

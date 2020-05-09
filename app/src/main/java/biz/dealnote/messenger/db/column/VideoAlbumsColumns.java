@@ -18,8 +18,16 @@ public final class VideoAlbumsColumns implements BaseColumns {
     public static final String COUNT = "count";
     public static final String UPDATE_TIME = "update_time";
     public static final String PRIVACY = "privacy";
+    public static final String FULL_ID = TABLENAME + "." + _ID;
+    public static final String FULL_ALBUM_ID = TABLENAME + "." + ALBUM_ID;
+    public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
+    public static final String FULL_TITLE = TABLENAME + "." + TITLE;
+    public static final String FULL_IMAGE = TABLENAME + "." + IMAGE;
+    public static final String FULL_COUNT = TABLENAME + "." + COUNT;
+    public static final String FULL_UPDATE_TIME = TABLENAME + "." + UPDATE_TIME;
+    public static final String FULL_PRIVACY = TABLENAME + "." + PRIVACY;
 
-    public static ContentValues getCV(VKApiVideoAlbum p){
+    public static ContentValues getCV(VKApiVideoAlbum p) {
         ContentValues cv = new ContentValues();
         cv.put(OWNER_ID, p.owner_id);
         cv.put(ALBUM_ID, p.id);
@@ -30,13 +38,4 @@ public final class VideoAlbumsColumns implements BaseColumns {
         cv.put(PRIVACY, isNull(p.privacy) ? null : p.privacy.toString());
         return cv;
     }
-
-    public static final String FULL_ID = TABLENAME + "." + _ID;
-    public static final String FULL_ALBUM_ID = TABLENAME + "." + ALBUM_ID;
-    public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
-    public static final String FULL_TITLE = TABLENAME + "." + TITLE;
-    public static final String FULL_IMAGE = TABLENAME + "." + IMAGE;
-    public static final String FULL_COUNT = TABLENAME + "." + COUNT;
-    public static final String FULL_UPDATE_TIME = TABLENAME + "." + UPDATE_TIME;
-    public static final String FULL_PRIVACY = TABLENAME + "." + PRIVACY;
 }

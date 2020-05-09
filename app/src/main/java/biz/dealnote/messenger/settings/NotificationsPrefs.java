@@ -24,6 +24,10 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
         preferences = context.getSharedPreferences(NOTIF_PREF_NAME, Context.MODE_PRIVATE);
     }
 
+    private static String keyFor(int aid, int peerId) {
+        return "peerid" + aid + "_" + peerId;
+    }
+
     @Override
     public void setNotifPref(int aid, int peerid, int mask) {
         preferences.edit()
@@ -31,7 +35,7 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
                 .apply();
     }
 
-    private boolean isOtherNotificationsEnable(){
+    private boolean isOtherNotificationsEnable() {
         return Utils.hasFlag(getOtherNotificationMask(), FLAG_SHOW_NOTIF);
     }
 
@@ -39,19 +43,19 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
     public int getOtherNotificationMask() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
         int mask = 0;
-        if(preferences.getBoolean("other_notifications_enable", true)){
+        if (preferences.getBoolean("other_notifications_enable", true)) {
             mask = mask + FLAG_SHOW_NOTIF;
         }
 
-        if(preferences.getBoolean("other_notif_sound", true)){
+        if (preferences.getBoolean("other_notif_sound", true)) {
             mask = mask + FLAG_SOUND;
         }
 
-        if(preferences.getBoolean("other_notif_vibration", true)){
+        if (preferences.getBoolean("other_notif_vibration", true)) {
             mask = mask + FLAG_VIBRO;
         }
 
-        if(preferences.getBoolean("other_notif_led", true)){
+        if (preferences.getBoolean("other_notif_led", true)) {
             mask = mask + FLAG_LED;
         }
         return mask;
@@ -169,7 +173,7 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
     }
 
     @Override
-    public void setDefault(int aid, int peerId){
+    public void setDefault(int aid, int peerId) {
         preferences.edit()
                 .remove(keyFor(aid, peerId))
                 .apply();
@@ -180,40 +184,36 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
         return preferences.getInt(keyFor(aid, peerid), getGlobalNotifPref(Peer.isGroupChat(peerid)));
     }
 
-    private static String keyFor(int aid, int peerId){
-        return "peerid" + aid + "_" + peerId;
-    }
-
-    private int getGlobalNotifPref(boolean isGroup){
+    private int getGlobalNotifPref(boolean isGroup) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(app);
         int value = sharedPreferences.getBoolean("high_notif_priority", false) ? FLAG_HIGH_PRIORITY : 0;
 
-        if (!isGroup){
-            if (sharedPreferences.getBoolean("new_dialog_message_notif_enable", true)){
+        if (!isGroup) {
+            if (sharedPreferences.getBoolean("new_dialog_message_notif_enable", true)) {
                 value += FLAG_SHOW_NOTIF;
             }
 
-            if (sharedPreferences.getBoolean("new_dialog_message_notif_sound", true)){
+            if (sharedPreferences.getBoolean("new_dialog_message_notif_sound", true)) {
                 value += FLAG_SOUND;
             }
 
-            if (sharedPreferences.getBoolean("new_dialog_message_notif_vibration", true)){
+            if (sharedPreferences.getBoolean("new_dialog_message_notif_vibration", true)) {
                 value += FLAG_VIBRO;
             }
 
-            if (sharedPreferences.getBoolean("new_dialog_message_notif_led", true)){
+            if (sharedPreferences.getBoolean("new_dialog_message_notif_led", true)) {
                 value += FLAG_LED;
             }
         } else {
-            if (sharedPreferences.getBoolean("new_groupchat_message_notif_enable", true)){
+            if (sharedPreferences.getBoolean("new_groupchat_message_notif_enable", true)) {
                 value += FLAG_SHOW_NOTIF;
             }
 
-            if (sharedPreferences.getBoolean("new_groupchat_message_notif_sound", true)){
+            if (sharedPreferences.getBoolean("new_groupchat_message_notif_sound", true)) {
                 value += FLAG_SOUND;
             }
 
-            if (sharedPreferences.getBoolean("new_groupchat_message_notif_vibration", true)){
+            if (sharedPreferences.getBoolean("new_groupchat_message_notif_vibration", true)) {
                 value += FLAG_VIBRO;
             }
 

@@ -29,19 +29,19 @@ public class VideoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer
         album.title = optString(root, "title");
         album.count = optInt(root, "count");
         album.updated_time = optInt(root, "updated_time");
-        if(root.has("privacy_view")){
+        if (root.has("privacy_view")) {
             album.privacy = context.deserialize(root.get("privacy_view"), VkApiPrivacy.class);
         }
-        if(root.has("image")) {
+        if (root.has("image")) {
             JsonArray images = root.getAsJsonArray("image");
-            if(images.size() > 0) {
-                for(int i = 0; i < images.size(); i++) {
-                    if(images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+            if (images.size() > 0) {
+                for (int i = 0; i < images.size(); i++) {
+                    if (images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
                         album.image = images.get(i).getAsJsonObject().get("url").getAsString();
                         break;
                     }
                 }
-                if(album.image == null)
+                if (album.image == null)
                     album.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
             }
         }

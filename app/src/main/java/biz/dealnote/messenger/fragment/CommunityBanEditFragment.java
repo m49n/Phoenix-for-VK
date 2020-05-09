@@ -54,6 +54,16 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPresenter, ICommunityBanEditView>
         implements ICommunityBanEditView {
 
+    private ImageView mAvatar;
+    private OnlineView mOnlineView;
+    private TextView mName;
+    private TextView mDomain;
+    private TextView mBanStatus;
+    private MySpinnerView mBlockFor;
+    private MySpinnerView mReason;
+    private EditText mComment;
+    private CheckBox mShowComment;
+
     public static CommunityBanEditFragment newInstance(int accountId, int groupId, Banned banned) {
         return newInstance(accountId, groupId, banned, null);
     }
@@ -72,19 +82,6 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
         fragment.setArguments(args);
         return fragment;
     }
-
-    private ImageView mAvatar;
-    private OnlineView mOnlineView;
-    private TextView mName;
-    private TextView mDomain;
-
-    private TextView mBanStatus;
-
-    private MySpinnerView mBlockFor;
-    private MySpinnerView mReason;
-
-    private EditText mComment;
-    private CheckBox mShowComment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,7 +111,7 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
         mReason.setIconOnClickListener(v -> getPresenter().fireResonClick());
 
         mComment = root.findViewById(R.id.community_ban_comment);
-        mComment.addTextChangedListener(new TextWatcherAdapter(){
+        mComment.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getPresenter().fireCommentEdit(s);
@@ -134,7 +131,7 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_save){
+        if (item.getItemId() == R.id.action_save) {
             getPresenter().fireButtonSaveClick();
             return true;
         }
@@ -163,13 +160,13 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
             int groupId = requireArguments().getInt(Extra.GROUP_ID);
             Banned banned = requireArguments().getParcelable(Extra.BANNED);
 
-            if(banned != null){
+            if (banned != null) {
                 return new CommunityBanEditPresenter(accountId, groupId, banned, saveInstanceState);
             }
 
             ArrayList<User> users = requireArguments().getParcelableArrayList(Extra.USERS);
             ArrayList<Owner> owners = new ArrayList<>();
-            if(Utils.nonEmpty(users)){
+            if (Utils.nonEmpty(users)) {
                 owners.addAll(users);
             }
 
@@ -179,43 +176,43 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
 
     @Override
     public void displayUserInfo(Owner owner) {
-        if(Objects.nonNull(mAvatar)){
+        if (Objects.nonNull(mAvatar)) {
             ViewUtils.displayAvatar(mAvatar, new RoundTransformation(), owner.getMaxSquareAvatar(), null);
         }
 
         safelySetText(mName, owner.getFullName());
 
         Integer iconRes = null;
-        if(owner instanceof User){
+        if (owner instanceof User) {
             User user = (User) owner;
             iconRes = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
         }
 
-        if(Objects.nonNull(mOnlineView)){
+        if (Objects.nonNull(mOnlineView)) {
             mOnlineView.setVisibility(Objects.nonNull(iconRes) ? View.VISIBLE : View.INVISIBLE);
-            if(Objects.nonNull(iconRes)){
+            if (Objects.nonNull(iconRes)) {
                 mOnlineView.setIcon(iconRes);
             }
         }
 
-        if(Utils.nonEmpty(owner.getDomain())){
+        if (Utils.nonEmpty(owner.getDomain())) {
             safelySetText(mDomain, "@" + owner.getDomain());
-        } else if(owner instanceof User){
+        } else if (owner instanceof User) {
             safelySetText(mDomain, "@id" + ((User) owner).getId());
-        } else if(owner instanceof Community){
+        } else if (owner instanceof Community) {
             safelySetText(mDomain, "@club" + ((Community) owner).getId());
         }
     }
 
     @Override
     public void displayBanStatus(int adminId, String adminName, long endDate) {
-        if(Objects.nonNull(mBanStatus)){
+        if (Objects.nonNull(mBanStatus)) {
             try {
                 Context context = mBanStatus.getContext();
                 Spannable spannable = FormatUtil.formatCommunityBanInfo(context, adminId, adminName, endDate, null);
                 mBanStatus.setText(spannable, TextView.BufferType.SPANNABLE);
                 mBanStatus.setMovementMethod(LinkMovementMethod.getInstance());
-            } catch (Exception ignored){
+            } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
         }
@@ -223,14 +220,14 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
 
     @Override
     public void displayBlockFor(String blockFor) {
-        if(Objects.nonNull(mBlockFor)){
+        if (Objects.nonNull(mBlockFor)) {
             mBlockFor.setValue(blockFor);
         }
     }
 
     @Override
     public void displayReason(String reason) {
-        if(Objects.nonNull(mReason)){
+        if (Objects.nonNull(mReason)) {
             mReason.setValue(reason);
         }
     }
@@ -253,7 +250,7 @@ public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPr
     @Override
     public void displaySelectOptionDialog(int requestCode, List<IdOption> options) {
         String[] strings = new String[options.size()];
-        for(int i = 0; i < options.size(); i++){
+        for (int i = 0; i < options.size(); i++) {
             strings[i] = options.get(i).getTitle();
         }
 

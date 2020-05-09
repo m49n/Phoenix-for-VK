@@ -5,27 +5,6 @@ import android.os.Parcelable;
 
 public class VkApiUploadServer implements Parcelable, UploadServer {
 
-    /**
-     * адрес для загрузки фотографий
-     */
-    public String upload_url;
-
-    /**
-     * идентификатор альбома, в который будет загружена фотография
-     */
-    public int album_id;
-
-    /**
-     * идентификатор пользователя, от чьего имени будет загружено фото
-     */
-    public int user_id;
-
-    protected VkApiUploadServer(Parcel in) {
-        this.upload_url = in.readString();
-        this.album_id = in.readInt();
-        this.user_id = in.readInt();
-    }
-
     public static final Creator<VkApiUploadServer> CREATOR = new Creator<VkApiUploadServer>() {
         @Override
         public VkApiUploadServer createFromParcel(Parcel in) {
@@ -37,8 +16,26 @@ public class VkApiUploadServer implements Parcelable, UploadServer {
             return new VkApiUploadServer[size];
         }
     };
+    /**
+     * адрес для загрузки фотографий
+     */
+    public String upload_url;
+    /**
+     * идентификатор альбома, в который будет загружена фотография
+     */
+    public int album_id;
+    /**
+     * идентификатор пользователя, от чьего имени будет загружено фото
+     */
+    public int user_id;
 
-    public VkApiUploadServer(){
+    protected VkApiUploadServer(Parcel in) {
+        this.upload_url = in.readString();
+        this.album_id = in.readInt();
+        this.user_id = in.readInt();
+    }
+
+    public VkApiUploadServer() {
 
     }
 

@@ -21,7 +21,7 @@ public class TitleExtractor {
      * sites that use uppercase title tags.
      * the DOTALL flag accounts for sites that have
      * line feeds in the title text */
-    private static final Pattern TITLE_TAG = Pattern.compile("<title>(.*)</title>", Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
+    private static final Pattern TITLE_TAG = Pattern.compile("<title>(.*)</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     /**
      * @param url the HTML page
@@ -61,9 +61,9 @@ public class TitleExtractor {
             // extract the title
             Matcher matcher = TITLE_TAG.matcher(content);
             if (matcher.find()) {
-            /* replace any occurrences of whitespace (which may
-             * include line feeds and other uglies) as well
-             * as HTML brackets with a space */
+                /* replace any occurrences of whitespace (which may
+                 * include line feeds and other uglies) as well
+                 * as HTML brackets with a space */
                 return matcher.group(1).replaceAll("[\\s<>]+", " ").trim();
             } else {
                 return null;
@@ -73,6 +73,7 @@ public class TitleExtractor {
 
     /**
      * Loops through response headers until Content-Type is found.
+     *
      * @param conn
      * @return ContentType object representing the value of
      * the Content-Type header
@@ -106,10 +107,11 @@ public class TitleExtractor {
      * Class holds the content type and charset (if present)
      */
     private static final class ContentType {
-        private static final Pattern CHARSET_HEADER = Pattern.compile("charset=([-_a-zA-Z0-9]+)", Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
+        private static final Pattern CHARSET_HEADER = Pattern.compile("charset=([-_a-zA-Z0-9]+)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
         private String contentType;
         private String charsetName;
+
         private ContentType(String headerValue) {
             if (headerValue == null)
                 throw new IllegalArgumentException("ContentType must be constructed with a not-null headerValue");
@@ -119,8 +121,7 @@ public class TitleExtractor {
                 Matcher matcher = CHARSET_HEADER.matcher(headerValue);
                 if (matcher.find())
                     charsetName = matcher.group(1);
-            }
-            else
+            } else
                 contentType = headerValue;
         }
     }

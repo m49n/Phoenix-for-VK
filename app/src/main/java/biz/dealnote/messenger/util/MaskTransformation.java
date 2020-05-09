@@ -15,12 +15,13 @@ import com.squareup.picasso.Transformation;
 public class MaskTransformation implements Transformation {
 
     private static Paint mMaskingPaint = new Paint();
-    private Context mContext;
-    private int mMaskId;
 
     static {
         mMaskingPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
     }
+
+    private Context mContext;
+    private int mMaskId;
 
     /**
      * @param maskId If you change the mask file, please also rename the mask file, or Glide will get
@@ -30,6 +31,16 @@ public class MaskTransformation implements Transformation {
     public MaskTransformation(Context context, int maskId) {
         mContext = context;
         mMaskId = maskId;
+    }
+
+    public static Drawable getMaskDrawable(Context context, int maskId) {
+        Drawable drawable = ContextCompat.getDrawable(context, maskId);
+
+        if (drawable == null) {
+            throw new IllegalArgumentException("maskId is invalid");
+        }
+
+        return drawable;
     }
 
     @Override
@@ -49,16 +60,6 @@ public class MaskTransformation implements Transformation {
         source.recycle();
 
         return result;
-    }
-
-    public static Drawable getMaskDrawable(Context context, int maskId) {
-        Drawable drawable = ContextCompat.getDrawable(context, maskId);
-
-        if (drawable == null) {
-            throw new IllegalArgumentException("maskId is invalid");
-        }
-
-        return drawable;
     }
 
     @Override

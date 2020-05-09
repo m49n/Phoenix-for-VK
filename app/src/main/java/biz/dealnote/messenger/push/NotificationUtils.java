@@ -25,7 +25,7 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
 public class NotificationUtils {
 
-    public static Single<Bitmap> loadRoundedImageRx(Context context, String url, @DrawableRes int ifErrorOrEmpty){
+    public static Single<Bitmap> loadRoundedImageRx(Context context, String url, @DrawableRes int ifErrorOrEmpty) {
         final Context app = context.getApplicationContext();
         return Single.fromCallable(() -> loadRoundedImage(app, url, ifErrorOrEmpty));
     }
@@ -36,7 +36,7 @@ public class NotificationUtils {
 
         int size = (int) Utils.dpToPx(64, app);
 
-        if(nonEmpty(url)){
+        if (nonEmpty(url)) {
             try {
                 return PicassoInstance.with()
                         .load(url)
@@ -61,7 +61,7 @@ public class NotificationUtils {
                     .transform(transformation)
                     .centerCrop()
                     .get();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
 
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), res);

@@ -68,17 +68,18 @@ public class MessageEntity extends Entity {
 
     private long updateTime;
 
-    public MessageEntity setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
-        return this;
+    public MessageEntity(int id, int peerId, int fromId) {
+        this.id = id;
+        this.peerId = peerId;
+        this.fromId = fromId;
     }
 
     public long getUpdateTime() {
         return updateTime;
     }
 
-    public MessageEntity setDeletedForAll(boolean deletedForAll) {
-        this.deletedForAll = deletedForAll;
+    public MessageEntity setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
         return this;
     }
 
@@ -86,19 +87,8 @@ public class MessageEntity extends Entity {
         return deletedForAll;
     }
 
-    public MessageEntity(int id, int peerId, int fromId) {
-        this.id = id;
-        this.peerId = peerId;
-        this.fromId = fromId;
-    }
-
-    public MessageEntity setDate(long date) {
-        this.date = date;
-        return this;
-    }
-
-    public MessageEntity setFromId(int fromId) {
-        this.fromId = fromId;
+    public MessageEntity setDeletedForAll(boolean deletedForAll) {
+        this.deletedForAll = deletedForAll;
         return this;
     }
 
@@ -114,8 +104,18 @@ public class MessageEntity extends Entity {
         return fromId;
     }
 
+    public MessageEntity setFromId(int fromId) {
+        this.fromId = fromId;
+        return this;
+    }
+
     public long getDate() {
         return date;
+    }
+
+    public MessageEntity setDate(long date) {
+        this.date = date;
+        return this;
     }
 
     public boolean isOut() {
@@ -280,22 +280,22 @@ public class MessageEntity extends Entity {
         return this;
     }
 
-    public MessageEntity setForwardMessages(List<MessageEntity> forwardMessages) {
-        this.forwardMessages = forwardMessages;
-        return this;
-    }
-
     public List<MessageEntity> getForwardMessages() {
         return forwardMessages;
     }
 
-    public MessageEntity setAttachments(List<Entity> attachments) {
-        this.attachments = EntitiesWrapper.wrap(attachments);
+    public MessageEntity setForwardMessages(List<MessageEntity> forwardMessages) {
+        this.forwardMessages = forwardMessages;
         return this;
     }
 
     @NonNull
     public List<Entity> getAttachments() {
         return attachments.get();
+    }
+
+    public MessageEntity setAttachments(List<Entity> attachments) {
+        this.attachments = EntitiesWrapper.wrap(attachments);
+        return this;
     }
 }

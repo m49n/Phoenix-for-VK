@@ -42,54 +42,17 @@ import static biz.dealnote.messenger.util.Utils.safeCountOf;
  */
 class WallStorage extends AbsStorage implements IWallStorage {
 
+    /**
+     * Идентификатор для сохранения "черновиков постов"
+     */
+    private static final int DRAFT_POST_ID = -1;
+    /**
+     * Идентификатор для сохранения временных постов, репостов, шаринга и прочего
+     */
+    private static final int TEMP_POST_ID = -2;
+
     WallStorage(@NonNull AppStorages base) {
         super(base);
-    }
-
-    @Override
-    public Single<int[]> storeWallEntities(int accountId, @NonNull List<PostEntity> dbos,
-                                           @Nullable OwnerEntities owners, @Nullable IClearWallTask clearWall) {
-        return Single.create(emitter -> {
-            final ArrayList<ContentProviderOperation> operations = new ArrayList<>();
-
-            if (nonNull(clearWall)) {
-                operations.add(operationForClearWall(accountId, clearWall.getOwnerId()));
-            }
-
-            int[] indexes = new int[dbos.size()];
-
-            for (int i = 0; i < dbos.size(); i++) {
-                PostEntity dbo = dbos.get(i);
-
-                ContentValues cv = createCv(dbo);
-
-                ContentProviderOperation mainPostHeaderOperation = ContentProviderOperation
-                        .newInsert(getPostsContentUriFor(accountId))
-                        .withValues(cv)
-                        .build();
-
-                int mainPostHeaderIndex = addToListAndReturnIndex(operations, mainPostHeaderOperation);
-                indexes[i] = mainPostHeaderIndex;
-
-                appendDboAttachmentsAndCopies(dbo, operations, accountId, mainPostHeaderIndex);
-            }
-
-            if (nonNull(owners)) {
-                OwnersStorage.appendOwnersInsertOperations(operations, accountId, owners);
-            }
-
-            ContentProviderResult[] results = getContext().getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
-
-            final int[] ids = new int[dbos.size()];
-
-            for (int i = 0; i < indexes.length; i++) {
-                int index = indexes[i];
-                ContentProviderResult result = results[index];
-                ids[i] = extractId(result);
-            }
-
-            emitter.onSuccess(ids);
-        });
     }
 
     private static void appendDboAttachmentsAndCopies(PostEntity dbo, List<ContentProviderOperation> operations,
@@ -149,6 +112,63 @@ class WallStorage extends AbsStorage implements IWallStorage {
         return cv;
     }
 
+    private static int getVkPostIdForEditingType(@EditingPostType int type) {
+        switch (type) {
+            case EditingPostType.DRAFT:
+                return DRAFT_POST_ID;
+            case EditingPostType.TEMP:
+                return TEMP_POST_ID;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public Single<int[]> storeWallEntities(int accountId, @NonNull List<PostEntity> dbos,
+                                           @Nullable OwnerEntities owners, @Nullable IClearWallTask clearWall) {
+        return Single.create(emitter -> {
+            final ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+            if (nonNull(clearWall)) {
+                operations.add(operationForClearWall(accountId, clearWall.getOwnerId()));
+            }
+
+            int[] indexes = new int[dbos.size()];
+
+            for (int i = 0; i < dbos.size(); i++) {
+                PostEntity dbo = dbos.get(i);
+
+                ContentValues cv = createCv(dbo);
+
+                ContentProviderOperation mainPostHeaderOperation = ContentProviderOperation
+                        .newInsert(getPostsContentUriFor(accountId))
+                        .withValues(cv)
+                        .build();
+
+                int mainPostHeaderIndex = addToListAndReturnIndex(operations, mainPostHeaderOperation);
+                indexes[i] = mainPostHeaderIndex;
+
+                appendDboAttachmentsAndCopies(dbo, operations, accountId, mainPostHeaderIndex);
+            }
+
+            if (nonNull(owners)) {
+                OwnersStorage.appendOwnersInsertOperations(operations, accountId, owners);
+            }
+
+            ContentProviderResult[] results = getContext().getContentResolver().applyBatch(MessengerContentProvider.AUTHORITY, operations);
+
+            final int[] ids = new int[dbos.size()];
+
+            for (int i = 0; i < indexes.length; i++) {
+                int index = indexes[i];
+                ContentProviderResult result = results[index];
+                ids[i] = extractId(result);
+            }
+
+            emitter.onSuccess(ids);
+        });
+    }
+
     @Override
     public Single<Integer> replacePost(int accountId, @NonNull PostEntity dbo) {
         return Single.create(e -> {
@@ -181,27 +201,6 @@ class WallStorage extends AbsStorage implements IWallStorage {
             int dbid = extractId(results[mainPostIndex]);
             e.onSuccess(dbid);
         });
-    }
-
-    /**
-     * Идентификатор для сохранения "черновиков постов"
-     */
-    private static final int DRAFT_POST_ID = -1;
-
-    /**
-     * Идентификатор для сохранения временных постов, репостов, шаринга и прочего
-     */
-    private static final int TEMP_POST_ID = -2;
-
-    private static int getVkPostIdForEditingType(@EditingPostType int type) {
-        switch (type) {
-            case EditingPostType.DRAFT:
-                return DRAFT_POST_ID;
-            case EditingPostType.TEMP:
-                return TEMP_POST_ID;
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 
     private Single<Integer> insertNew(int accountId, int vkId, int ownerId, int authorId) {

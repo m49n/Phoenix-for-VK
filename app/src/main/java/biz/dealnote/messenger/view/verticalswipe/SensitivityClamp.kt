@@ -7,9 +7,9 @@ package biz.dealnote.messenger.view.verticalswipe
  * @param downSensitivity Sensitivity when moving down
  */
 class SensitivityClamp(
-    private val upSensitivity: Float = 1f,
-    private val delegate: VerticalClamp,
-    private val downSensitivity: Float= 1f
+        private val upSensitivity: Float = 1f,
+        private val delegate: VerticalClamp,
+        private val downSensitivity: Float = 1f
 ) : VerticalClamp by delegate {
 
     override fun constraint(height: Int, top: Int, dy: Int): Int {

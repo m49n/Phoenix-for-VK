@@ -27,16 +27,10 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class PostEditFragment extends AbsPostEditFragment<PostEditPresenter, IPostEditView>
         implements IPostEditView {
 
-    public static PostEditFragment newInstance(Bundle args){
+    public static PostEditFragment newInstance(Bundle args) {
         PostEditFragment fragment = new PostEditFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     public static Bundle buildArgs(int accountId, @NonNull Post post, @NonNull WallEditorAttrs attrs) {
@@ -45,6 +39,12 @@ public class PostEditFragment extends AbsPostEditFragment<PostEditPresenter, IPo
         args.putParcelable(Extra.ATTRS, attrs);
         args.putInt(Extra.ACCOUNT_ID, accountId);
         return args;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override

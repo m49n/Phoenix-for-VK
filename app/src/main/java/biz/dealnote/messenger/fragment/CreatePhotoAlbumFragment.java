@@ -135,14 +135,14 @@ public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPres
 
     @Override
     public void updateStepView(int step) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.notifyItemChanged(step);
         }
     }
 
     @Override
     public void moveSteppers(int old, int current) {
-        if(Objects.nonNull(mRecyclerView) && Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mRecyclerView) && Objects.nonNull(mAdapter)) {
             mRecyclerView.scrollToPosition(current);
             mAdapter.notifyItemChanged(old);
             mAdapter.notifyItemChanged(current);
@@ -161,7 +161,7 @@ public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPres
 
     @Override
     public void updateStepButtonsAvailability(int step) {
-        if(Objects.nonNull(mAdapter)){
+        if (Objects.nonNull(mAdapter)) {
             mAdapter.updateNextButtonAvailability(step);
         }
     }

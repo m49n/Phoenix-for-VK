@@ -4,40 +4,34 @@ import biz.dealnote.messenger.db.model.entity.MessageEntity;
 
 public final class PeerPatch {
 
-    private ReadTo inRead;
-
-    private ReadTo outRead;
-
-    private Unread unread;
-
-    private LastMessage lastMessage;
-
-    private Pin pin;
-
-    private Title title;
-
     private final int id;
+    private ReadTo inRead;
+    private ReadTo outRead;
+    private Unread unread;
+    private LastMessage lastMessage;
+    private Pin pin;
+    private Title title;
 
     public PeerPatch(int id) {
         this.id = id;
     }
 
-    public PeerPatch withInRead(int id){
+    public PeerPatch withInRead(int id) {
         this.inRead = new ReadTo(id);
         return this;
     }
 
-    public PeerPatch withOutRead(int id){
+    public PeerPatch withOutRead(int id) {
         this.outRead = new ReadTo(id);
         return this;
     }
 
-    public PeerPatch withUnreadCount(int count){
+    public PeerPatch withUnreadCount(int count) {
         this.unread = new Unread(count);
         return this;
     }
 
-    public PeerPatch withLastMessage(int id){
+    public PeerPatch withLastMessage(int id) {
         this.lastMessage = new LastMessage(id);
         return this;
     }
@@ -46,12 +40,12 @@ public final class PeerPatch {
         return pin;
     }
 
-    public PeerPatch withPin(MessageEntity pinned){
+    public PeerPatch withPin(MessageEntity pinned) {
         this.pin = new Pin(pinned);
         return this;
     }
 
-    public PeerPatch withTitle(String title){
+    public PeerPatch withTitle(String title) {
         this.title = new Title(title);
         return this;
     }

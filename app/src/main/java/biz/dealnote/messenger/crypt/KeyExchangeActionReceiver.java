@@ -20,7 +20,7 @@ public class KeyExchangeActionReceiver extends BroadcastReceiver {
     @Override
     public final void onReceive(Context context, Intent intent) {
         String action = Objects.nonNull(intent) ? intent.getAction() : null;
-        if(KeyExchangeService.WHAT_SESSION_STATE_CHANGED.equals(action)){
+        if (KeyExchangeService.WHAT_SESSION_STATE_CHANGED.equals(action)) {
             @SessionState
             int state = intent.getExtras().getInt(Extra.STATUS);
             onSessionStateChanged(intent.getExtras().getInt(Extra.ACCOUNT_ID),
@@ -30,17 +30,17 @@ public class KeyExchangeActionReceiver extends BroadcastReceiver {
         }
     }
 
-    public void register(@NonNull Context context){
+    public void register(@NonNull Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(KeyExchangeService.WHAT_SESSION_STATE_CHANGED);
         LocalBroadcastManager.getInstance(context).registerReceiver(this, filter);
     }
 
-    public void unregister(@NonNull Context context){
+    public void unregister(@NonNull Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 
-    protected void onSessionStateChanged(int accountId, int peerId, long sessionId, @SessionState int sessionState){
+    protected void onSessionStateChanged(int accountId, int peerId, long sessionId, @SessionState int sessionState) {
 
     }
 }

@@ -28,8 +28,14 @@ import biz.dealnote.messenger.util.RxUtils;
 public class SelectChairsDialog extends AccountDependencyDialogFragment implements ChairsAdapter.Listener {
 
     private static final int COUNT_PER_REQUEST = 1000;
+    private int mAccountId;
+    private int facultyId;
+    private ArrayList<Chair> mData;
+    private RecyclerView mRecyclerView;
+    private ChairsAdapter mAdapter;
+    private IDatabaseInteractor mDatabaseInteractor;
 
-    public static SelectChairsDialog newInstance(int aid, int facultyId, Bundle additional){
+    public static SelectChairsDialog newInstance(int aid, int facultyId, Bundle additional) {
         Bundle args = additional == null ? new Bundle() : additional;
         args.putInt(Extra.FACULTY_ID, facultyId);
         args.putInt(Extra.ACCOUNT_ID, aid);
@@ -37,14 +43,6 @@ public class SelectChairsDialog extends AccountDependencyDialogFragment implemen
         selectCityDialog.setArguments(args);
         return selectCityDialog;
     }
-
-    private int mAccountId;
-    private int facultyId;
-
-    private ArrayList<Chair> mData;
-    private RecyclerView mRecyclerView;
-    private ChairsAdapter mAdapter;
-    private IDatabaseInteractor mDatabaseInteractor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,11 +64,11 @@ public class SelectChairsDialog extends AccountDependencyDialogFragment implemen
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         boolean firstRun = false;
-        if(mData == null){
+        if (mData == null) {
             mData = new ArrayList<>();
             firstRun = true;
         }
@@ -79,19 +77,20 @@ public class SelectChairsDialog extends AccountDependencyDialogFragment implemen
         mAdapter.setListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if(firstRun){
+        if (firstRun) {
             request(0);
         }
     }
 
-    private void request(int offset){
+    private void request(int offset) {
         appendDisposable(mDatabaseInteractor.getChairs(mAccountId, facultyId, COUNT_PER_REQUEST, offset)
-        .compose(RxUtils.applySingleIOToMainSchedulers())
-        .subscribe(chairs -> onDataReceived(offset, chairs), throwable -> {}));
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(chairs -> onDataReceived(offset, chairs), throwable -> {
+                }));
     }
 
-    private void onDataReceived(int offset, List<Chair> chairs){
-        if(offset == 0){
+    private void onDataReceived(int offset, List<Chair> chairs) {
+        if (offset == 0) {
             mData.clear();
         }
 

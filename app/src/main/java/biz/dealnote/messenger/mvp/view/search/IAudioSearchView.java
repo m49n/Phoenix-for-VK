@@ -4,5 +4,6 @@ import biz.dealnote.messenger.model.Audio;
 
 public interface IAudioSearchView extends IBaseSearchView<Audio> {
     void ProvideReadCachedAudio();
+
     void doesLoadCache();
 }

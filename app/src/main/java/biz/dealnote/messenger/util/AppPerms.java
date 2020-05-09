@@ -62,8 +62,8 @@ public class AppPerms {
         }
     }
 
-    public static void requestReadExternalStoragePermission(@NonNull Fragment fragment, int requestCode){
-        if(Utils.hasMarshmallow()){
+    public static void requestReadExternalStoragePermission(@NonNull Fragment fragment, int requestCode) {
+        if (Utils.hasMarshmallow()) {
             fragment.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
         }
     }

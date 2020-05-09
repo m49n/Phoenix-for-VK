@@ -72,8 +72,8 @@ public class SparseArrayOwnersBundle implements IOwnersBundle {
     public Collection<Integer> getMissing(Collection<Integer> ids) {
         Collection<Integer> missing = new ArrayList<>();
 
-        for(Integer id : ids){
-            if(data.get(id) == null){
+        for (Integer id : ids) {
+            if (data.get(id) == null) {
                 missing.add(id);
             }
         }

@@ -18,7 +18,7 @@ import biz.dealnote.mvp.core.IPresenter;
  * phoenix
  */
 public abstract class AbsPresenterBottomSheetFragment<P extends IPresenter<V>, V extends IMvpView>
-        extends BottomSheetDialogFragment implements ViewHostDelegate.IFactoryProvider<P,V> {
+        extends BottomSheetDialogFragment implements ViewHostDelegate.IFactoryProvider<P, V> {
 
     private final ViewHostDelegate<P, V> delegate = new ViewHostDelegate<>();
 
@@ -34,7 +34,7 @@ public abstract class AbsPresenterBottomSheetFragment<P extends IPresenter<V>, V
         fireViewCreated();
     }
 
-    public void fireViewCreated(){
+    public void fireViewCreated() {
         delegate.onViewCreated();
     }
 
@@ -75,7 +75,7 @@ public abstract class AbsPresenterBottomSheetFragment<P extends IPresenter<V>, V
         return (V) this;
     }
 
-    protected P getPresenter(){
+    protected P getPresenter() {
         return delegate.getPresenter();
     }
 }

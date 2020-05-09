@@ -18,16 +18,21 @@ import biz.dealnote.messenger.model.PostFilter;
 public interface IGroupWallView extends IWallView {
 
     void displayBaseCommunityData(Community community, CommunityDetails details);
+
     void displayCommunityCover(boolean enabled, String resource);
 
     void setupPrimaryButton(@StringRes Integer title);
+
     void setupSecondaryButton(@StringRes Integer title);
 
     void openTopics(int accoundId, int ownerId, @Nullable Owner owner);
+
     void openCommunityMembers(int accoundId, int groupId);
+
     void openDocuments(int accoundId, int ownerId, @Nullable Owner owner);
 
     void displayWallFilters(List<PostFilter> filters);
+
     void notifyWallFiltersChanged();
 
     void goToCommunityControl(int accountId, Community community, GroupSettings settings);

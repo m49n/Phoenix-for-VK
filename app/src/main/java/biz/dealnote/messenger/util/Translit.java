@@ -10,7 +10,7 @@ import static java.lang.Character.toUpperCase;
 public class Translit {
 
     public static String lat2cyr(String s) {
-        if(Utils.isEmpty(s)){
+        if (Utils.isEmpty(s)) {
             return s;
         }
 
@@ -222,7 +222,7 @@ public class Translit {
     }
 
     public static String cyr2lat(String s) {
-        if(Utils.isEmpty(s)){
+        if (Utils.isEmpty(s)) {
             return s;
         }
 

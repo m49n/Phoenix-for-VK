@@ -11,37 +11,42 @@ import biz.dealnote.messenger.model.Text;
  */
 public class Item {
 
-    private Icon icon;
-
     private final int key;
-
     private final Text title;
-
+    private Icon icon;
     private Section section;
 
     private int extra;
-
-    public Item setExtra(int extra) {
-        this.extra = extra;
-        return this;
-    }
-
-    public int getExtra() {
-        return extra;
-    }
 
     public Item(int key, Text title) {
         this.key = key;
         this.title = title;
     }
 
+    public int getExtra() {
+        return extra;
+    }
+
+    public Item setExtra(int extra) {
+        this.extra = extra;
+        return this;
+    }
+
     public int getKey() {
         return key;
+    }
+
+    public Section getSection() {
+        return section;
     }
 
     public Item setSection(Section section) {
         this.section = section;
         return this;
+    }
+
+    public Icon getIcon() {
+        return icon;
     }
 
     public Item setIcon(@DrawableRes int res) {
@@ -57,14 +62,6 @@ public class Item {
     public Item setIcon(Icon icon) {
         this.icon = icon;
         return this;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public Icon getIcon() {
-        return icon;
     }
 
     public Text getTitle() {

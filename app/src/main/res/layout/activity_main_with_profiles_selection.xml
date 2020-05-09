@@ -17,12 +17,12 @@
         app:cardElevation="2dp"
         app:contentPadding="0dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:padding="4dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:padding="4dp" />
     </com.google.android.material.card.MaterialCardView>
 
     <FrameLayout
@@ -39,8 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_menu_container"
-        tools:layout="@layout/fragment_navigation_drawer"
-        tools:ignore="FragmentTagUsage" />
+        tools:ignore="FragmentTagUsage"
+        tools:layout="@layout/fragment_navigation_drawer" />
 
     <include
         android:id="@+id/bottom_navigation_menu_container"

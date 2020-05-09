@@ -30,10 +30,10 @@
             android:id="@+id/selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/imageView"
             android:layout_alignStart="@+id/imageView"
-            android:layout_alignEnd="@+id/imageView"
             android:layout_alignTop="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@+id/imageView"
             android:background="#60000000"
             android:gravity="center">
 
@@ -51,8 +51,8 @@
             android:id="@+id/vk_photo_item_bottom"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignBottom="@id/imageView"
             android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@id/imageView"
             android:background="?attr/colorPrimaryDark"
             android:paddingStart="4dp"
             android:paddingEnd="8dp">
@@ -89,8 +89,8 @@
                 android:layout_marginEnd="2dp"
                 android:layout_toStartOf="@+id/vk_photo_item_comment_counter"
                 android:padding="4dp"
-                app:tint="?attr/colorOnSurface"
-                android:src="@drawable/comment" />
+                android:src="@drawable/comment"
+                app:tint="?attr/colorOnSurface" />
 
             <ImageView
                 android:id="@+id/vk_photo_item_like"
@@ -99,8 +99,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="4dp"
-                app:tint="?attr/colorOnSurface"
-                android:src="@drawable/heart_filled" />
+                android:src="@drawable/heart_filled"
+                app:tint="?attr/colorOnSurface" />
 
         </RelativeLayout>
 

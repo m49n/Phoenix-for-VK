@@ -30,10 +30,6 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
      * predefined non-interactive motion.
      */
     public static final int STATE_SETTLING = ViewDragHelper.STATE_SETTLING;
-    /** @hide */
-    @IntDef({SWIPE_DIRECTION_START_TO_END, SWIPE_DIRECTION_END_TO_START, SWIPE_DIRECTION_ANY})
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface SwipeDirection {}
     /**
      * Swipe direction that only allows swiping in the direction of start-to-end. That is
      * left-to-right in LTR, or right-to-left in RTL.
@@ -51,6 +47,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
     private static final float DEFAULT_DRAG_DISMISS_THRESHOLD = 0.7f;
     private static final float DEFAULT_ALPHA_START_DISTANCE = 0f;
     private static final float DEFAULT_ALPHA_END_DISTANCE = DEFAULT_DRAG_DISMISS_THRESHOLD;
+    public boolean canSwipe = true;
     private ViewDragHelper mViewDragHelper;
     private OnDismissListener mListener;
     private boolean mIgnoreEvents;
@@ -58,129 +55,30 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
     private boolean mSensitivitySet;
     private int mSwipeDirection = SWIPE_DIRECTION_ANY;
     private float mDragDismissThreshold = DEFAULT_DRAG_DISMISS_THRESHOLD;
-    public boolean canSwipe = true;
-
-    /**
-     * Callback interface used to notify the application that the view has been dismissed.
-     */
-    public interface OnDismissListener {
-        /**
-         * Called when {@code view} has been dismissed via swiping.
-         */
-        void onDismiss(View view);
-        /**
-         * Called when the drag state has changed.
-         *
-         * @param state the new state. One of
-         * {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
-         */
-        void onDragStateChanged(int state);
-
-        void onCaptured(View view);
-        void onReleased(View view);
-    }
-    /**
-     * Set the listener to be used when a dismiss event occurs.
-     *
-     * @param listener the listener to use.
-     */
-    public void setListener(OnDismissListener listener) {
-        mListener = listener;
-    }
-    /**
-     * Sets the swipe direction for this behavior.
-     *
-     * @param direction one of the {@link #SWIPE_DIRECTION_START_TO_END},
-     *                  {@link #SWIPE_DIRECTION_END_TO_START} or {@link #SWIPE_DIRECTION_ANY}
-     */
-    public void setSwipeDirection(@SwipeDirection int direction) {
-        mSwipeDirection = direction;
-    }
-    /**
-     * Set the threshold for telling if a view has been dragged enough to be dismissed.
-     *
-     * @param distance a ratio of a view's width, values are clamped to 0 >= x <= 1f;
-     */
-    public void setDragDismissDistance(float distance) {
-        mDragDismissThreshold = clamp(0f, distance, 1f);
-    }
-    /**
-     * The minimum swipe distance before the view's alpha is modified.
-     *
-     * @param fraction the distance as a fraction of the view's width.
-     */
-    public void setStartAlphaSwipeDistance(float fraction) {
-        float mAlphaStartSwipeDistance = clamp(0f, fraction, 1f);
-    }
-    /**
-     * The maximum swipe distance for the view's alpha is modified.
-     *
-     * @param fraction the distance as a fraction of the view's width.
-     */
-    public void setEndAlphaSwipeDistance(float fraction) {
-        float mAlphaEndSwipeDistance = clamp(0f, fraction, 1f);
-    }
-    /**
-     * Set the sensitivity used for detecting the start of a swipe. This only takes effect if
-     * no touch handling has occured yet.
-     *
-     * @param sensitivity Multiplier for how sensitive we should be about detecting
-     *                    the start of a drag. Larger values are more sensitive. 1.0f is normal.
-     */
-    public void setSensitivity(float sensitivity) {
-        mSensitivity = sensitivity;
-        mSensitivitySet = true;
-    }
-    @Override
-    public boolean onInterceptTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, MotionEvent event) {
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                // Reset the ignore flag
-                if (mIgnoreEvents) {
-                    mIgnoreEvents = false;
-                    return false;
-                }
-                break;
-            default:
-                mIgnoreEvents = !parent.isPointInChildBounds(child,
-                        (int) event.getX(), (int) event.getY());
-                break;
-        }
-        if (mIgnoreEvents) {
-            return false;
-        }
-        ensureViewDragHelper(parent);
-        return mViewDragHelper.shouldInterceptTouchEvent(event);
-    }
-    @Override
-    public boolean onTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, @NotNull MotionEvent event) {
-        if (mViewDragHelper != null) {
-            mViewDragHelper.processTouchEvent(event);
-            return true;
-        }
-        return false;
-    }
     private final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() {
         private int mOriginalCapturedViewLeft;
+
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
-            if(!canSwipe)
+            if (!canSwipe)
                 return false;
             mOriginalCapturedViewLeft = child.getLeft();
             return true;
         }
+
         @Override
         public void onViewCaptured(View child, int activePointerId) {
             super.onViewCaptured(child, activePointerId);
             mListener.onCaptured(child);
         }
+
         @Override
         public void onViewDragStateChanged(int state) {
             if (mListener != null) {
                 mListener.onDragStateChanged(state);
             }
         }
+
         @Override
         public void onViewReleased(View child, float xvel, float yvel) {
             mListener.onReleased(child);
@@ -205,6 +103,7 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
                 }
             }
         }
+
         private boolean shouldDismiss(View child, float xvel) {
             if (xvel != 0f) {
                 final boolean isRtl = ViewCompat.getLayoutDirection(child)
@@ -228,10 +127,12 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
             }
             return false;
         }
+
         @Override
         public int getViewHorizontalDragRange(View child) {
             return child.getWidth();
         }
+
         @Override
         public int clampViewPositionHorizontal(@NotNull View child, int left, int dx) {
             final boolean isRtl = ViewCompat.getLayoutDirection(child)
@@ -259,16 +160,123 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
             }
             return clamp(min, left, max);
         }
+
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
             return child.getTop();
         }
+
         @Override
         public void onViewPositionChanged(View child, int left, int top, int dx, int dy) {
             final float distance = fraction(0, child.getWidth(), Math.abs(left - mOriginalCapturedViewLeft));
             child.setAlpha(clamp(0f, 1f - distance, 1f));
         }
     };
+
+    private static float clamp(float min, float value, float max) {
+        return Math.min(Math.max(min, value), max);
+    }
+
+    private static int clamp(int min, int value, int max) {
+        return Math.min(Math.max(min, value), max);
+    }
+
+    /**
+     * The fraction that {@code value} is between {@code startValue} and {@code endValue}.
+     */
+    static float fraction(float startValue, float endValue, float value) {
+        return (value - startValue) / (endValue - startValue);
+    }
+
+    /**
+     * Set the listener to be used when a dismiss event occurs.
+     *
+     * @param listener the listener to use.
+     */
+    public void setListener(OnDismissListener listener) {
+        mListener = listener;
+    }
+
+    /**
+     * Sets the swipe direction for this behavior.
+     *
+     * @param direction one of the {@link #SWIPE_DIRECTION_START_TO_END},
+     *                  {@link #SWIPE_DIRECTION_END_TO_START} or {@link #SWIPE_DIRECTION_ANY}
+     */
+    public void setSwipeDirection(@SwipeDirection int direction) {
+        mSwipeDirection = direction;
+    }
+
+    /**
+     * Set the threshold for telling if a view has been dragged enough to be dismissed.
+     *
+     * @param distance a ratio of a view's width, values are clamped to 0 >= x <= 1f;
+     */
+    public void setDragDismissDistance(float distance) {
+        mDragDismissThreshold = clamp(0f, distance, 1f);
+    }
+
+    /**
+     * The minimum swipe distance before the view's alpha is modified.
+     *
+     * @param fraction the distance as a fraction of the view's width.
+     */
+    public void setStartAlphaSwipeDistance(float fraction) {
+        float mAlphaStartSwipeDistance = clamp(0f, fraction, 1f);
+    }
+
+    /**
+     * The maximum swipe distance for the view's alpha is modified.
+     *
+     * @param fraction the distance as a fraction of the view's width.
+     */
+    public void setEndAlphaSwipeDistance(float fraction) {
+        float mAlphaEndSwipeDistance = clamp(0f, fraction, 1f);
+    }
+
+    /**
+     * Set the sensitivity used for detecting the start of a swipe. This only takes effect if
+     * no touch handling has occured yet.
+     *
+     * @param sensitivity Multiplier for how sensitive we should be about detecting
+     *                    the start of a drag. Larger values are more sensitive. 1.0f is normal.
+     */
+    public void setSensitivity(float sensitivity) {
+        mSensitivity = sensitivity;
+        mSensitivitySet = true;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, MotionEvent event) {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                // Reset the ignore flag
+                if (mIgnoreEvents) {
+                    mIgnoreEvents = false;
+                    return false;
+                }
+                break;
+            default:
+                mIgnoreEvents = !parent.isPointInChildBounds(child,
+                        (int) event.getX(), (int) event.getY());
+                break;
+        }
+        if (mIgnoreEvents) {
+            return false;
+        }
+        ensureViewDragHelper(parent);
+        return mViewDragHelper.shouldInterceptTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(@NotNull CoordinatorLayout parent, @NotNull V child, @NotNull MotionEvent event) {
+        if (mViewDragHelper != null) {
+            mViewDragHelper.processTouchEvent(event);
+            return true;
+        }
+        return false;
+    }
 
     private void ensureViewDragHelper(ViewGroup parent) {
         if (mViewDragHelper == null) {
@@ -277,13 +285,56 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
                     : ViewDragHelper.create(parent, mDragCallback);
         }
     }
+
+    /**
+     * Retrieve the current drag state of this behavior. This will return one of
+     * {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
+     *
+     * @return The current drag state
+     */
+    public int getDragState() {
+        return mViewDragHelper != null ? mViewDragHelper.getViewDragState() : STATE_IDLE;
+    }
+
+    /**
+     * @hide
+     */
+    @IntDef({SWIPE_DIRECTION_START_TO_END, SWIPE_DIRECTION_END_TO_START, SWIPE_DIRECTION_ANY})
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface SwipeDirection {
+    }
+
+    /**
+     * Callback interface used to notify the application that the view has been dismissed.
+     */
+    public interface OnDismissListener {
+        /**
+         * Called when {@code view} has been dismissed via swiping.
+         */
+        void onDismiss(View view);
+
+        /**
+         * Called when the drag state has changed.
+         *
+         * @param state the new state. One of
+         *              {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
+         */
+        void onDragStateChanged(int state);
+
+        void onCaptured(View view);
+
+        void onReleased(View view);
+    }
+
     private class SettleRunnable implements Runnable {
         private final View mView;
         private final boolean mDismiss;
+
         SettleRunnable(View view, boolean dismiss) {
             mView = view;
             mDismiss = dismiss;
         }
+
         @Override
         public void run() {
             if (mViewDragHelper != null && mViewDragHelper.continueSettling(true)) {
@@ -297,26 +348,5 @@ public class SwipeDismissBehavior2<V extends View> extends CoordinatorLayout.Beh
                 }
             }
         }
-    }
-    private static float clamp(float min, float value, float max) {
-        return Math.min(Math.max(min, value), max);
-    }
-    private static int clamp(int min, int value, int max) {
-        return Math.min(Math.max(min, value), max);
-    }
-    /**
-     * Retrieve the current drag state of this behavior. This will return one of
-     * {@link #STATE_IDLE}, {@link #STATE_DRAGGING} or {@link #STATE_SETTLING}.
-     *
-     * @return The current drag state
-     */
-    public int getDragState() {
-        return mViewDragHelper != null ? mViewDragHelper.getViewDragState() : STATE_IDLE;
-    }
-    /**
-     * The fraction that {@code value} is between {@code startValue} and {@code endValue}.
-     */
-    static float fraction(float startValue, float endValue, float value) {
-        return (value - startValue) / (endValue - startValue);
     }
 }

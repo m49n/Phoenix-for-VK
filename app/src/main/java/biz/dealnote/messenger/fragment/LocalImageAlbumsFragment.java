@@ -45,7 +45,7 @@ public class LocalImageAlbumsFragment extends BaseMvpFragment<LocalPhotoAlbumsPr
         View view = inflater.inflate(R.layout.fragment_local_albums_gallery, container, false);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        if(!hasHideToolbarExtra()){
+        if (!hasHideToolbarExtra()) {
             ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         } else {
             toolbar.setVisibility(View.GONE);
@@ -83,21 +83,21 @@ public class LocalImageAlbumsFragment extends BaseMvpFragment<LocalPhotoAlbumsPr
 
     @Override
     public void displayData(@NonNull List<LocalImageAlbum> data) {
-        if(Objects.nonNull(mRecyclerView)){
+        if (Objects.nonNull(mRecyclerView)) {
             mAlbumsAdapter.setData(data);
         }
     }
 
     @Override
     public void setEmptyTextVisible(boolean visible) {
-        if(Objects.nonNull(mEmptyTextView)){
+        if (Objects.nonNull(mEmptyTextView)) {
             mEmptyTextView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void displayProgress(boolean loading) {
-        if(Objects.nonNull(mSwipeRefreshLayout)){
+        if (Objects.nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(loading));
         }
     }
@@ -109,7 +109,7 @@ public class LocalImageAlbumsFragment extends BaseMvpFragment<LocalPhotoAlbumsPr
 
     @Override
     public void notifyDataChanged() {
-        if(Objects.nonNull(mAlbumsAdapter)){
+        if (Objects.nonNull(mAlbumsAdapter)) {
             mAlbumsAdapter.notifyDataSetChanged();
         }
     }
@@ -122,7 +122,7 @@ public class LocalImageAlbumsFragment extends BaseMvpFragment<LocalPhotoAlbumsPr
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQYEST_PERMISSION_READ_EXTERNAL_STORAGE){
+        if (requestCode == REQYEST_PERMISSION_READ_EXTERNAL_STORAGE) {
             getPresenter().fireReadExternalStoregePermissionResolved();
         }
     }

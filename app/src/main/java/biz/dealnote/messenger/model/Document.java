@@ -12,29 +12,29 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
  */
 public class Document extends AbsModel implements Parcelable {
 
+    public static final Creator<Document> CREATOR = new Creator<Document>() {
+        @Override
+        public Document createFromParcel(Parcel in) {
+            return new Document(in);
+        }
+
+        @Override
+        public Document[] newArray(int size) {
+            return new Document[size];
+        }
+    };
     private final int id;
-
     private final int ownerId;
-
     private String title;
-
     private long size;
-
     private String ext;
-
     private String url;
-
     private long date;
-
     @DocType
     private int type;
-
     private String accessKey;
-
     private PhotoSizes photoPreview;
-
     private VideoPreview videoPreview;
-
     private Graffiti graffiti;
 
     public Document(int id, int ownerId) {
@@ -59,7 +59,7 @@ public class Document extends AbsModel implements Parcelable {
         graffiti = in.readParcelable(Graffiti.class.getClassLoader());
     }
 
-    public String getPreviewWithSize(@PhotoSize int size, boolean excludeNonAspectRatio){
+    public String getPreviewWithSize(@PhotoSize int size, boolean excludeNonAspectRatio) {
         return photoPreview == null ? null : photoPreview.getUrlForSize(size, excludeNonAspectRatio);
     }
 
@@ -101,18 +101,6 @@ public class Document extends AbsModel implements Parcelable {
         dest.writeParcelable(videoPreview, flags);
         dest.writeParcelable(graffiti, flags);
     }
-
-    public static final Creator<Document> CREATOR = new Creator<Document>() {
-        @Override
-        public Document createFromParcel(Parcel in) {
-            return new Document(in);
-        }
-
-        @Override
-        public Document[] newArray(int size) {
-            return new Document[size];
-        }
-    };
 
     public Graffiti getGraffiti() {
         return graffiti;
@@ -213,13 +201,22 @@ public class Document extends AbsModel implements Parcelable {
 
     public static class Graffiti extends AbsModel implements Parcelable {
 
+        public static final Creator<Graffiti> CREATOR = new Creator<Graffiti>() {
+            @Override
+            public Graffiti createFromParcel(Parcel in) {
+                return new Graffiti(in);
+            }
+
+            @Override
+            public Graffiti[] newArray(int size) {
+                return new Graffiti[size];
+            }
+        };
         private String src;
-
         private int width;
-
         private int height;
 
-        public Graffiti(){
+        public Graffiti() {
 
         }
 
@@ -237,18 +234,6 @@ public class Document extends AbsModel implements Parcelable {
             dest.writeInt(width);
             dest.writeInt(height);
         }
-
-        public static final Creator<Graffiti> CREATOR = new Creator<Graffiti>() {
-            @Override
-            public Graffiti createFromParcel(Parcel in) {
-                return new Graffiti(in);
-            }
-
-            @Override
-            public Graffiti[] newArray(int size) {
-                return new Graffiti[size];
-            }
-        };
 
         public String getSrc() {
             return src;
@@ -285,15 +270,23 @@ public class Document extends AbsModel implements Parcelable {
 
     public static class VideoPreview extends AbsModel implements Parcelable {
 
+        public static final Creator<VideoPreview> CREATOR = new Creator<VideoPreview>() {
+            @Override
+            public VideoPreview createFromParcel(Parcel in) {
+                return new VideoPreview(in);
+            }
+
+            @Override
+            public VideoPreview[] newArray(int size) {
+                return new VideoPreview[size];
+            }
+        };
         private String src;
-
         private int width;
-
         private int height;
-
         private long fileSize;
 
-        public VideoPreview(){
+        public VideoPreview() {
 
         }
 
@@ -314,18 +307,6 @@ public class Document extends AbsModel implements Parcelable {
             dest.writeLong(fileSize);
         }
 
-        public static final Creator<VideoPreview> CREATOR = new Creator<VideoPreview>() {
-            @Override
-            public VideoPreview createFromParcel(Parcel in) {
-                return new VideoPreview(in);
-            }
-
-            @Override
-            public VideoPreview[] newArray(int size) {
-                return new VideoPreview[size];
-            }
-        };
-
         public String getSrc() {
             return src;
         }
@@ -335,13 +316,13 @@ public class Document extends AbsModel implements Parcelable {
             return this;
         }
 
+        public long getFileSize() {
+            return fileSize;
+        }
+
         public VideoPreview setFileSize(long fileSize) {
             this.fileSize = fileSize;
             return this;
-        }
-
-        public long getFileSize() {
-            return fileSize;
         }
 
         public int getWidth() {

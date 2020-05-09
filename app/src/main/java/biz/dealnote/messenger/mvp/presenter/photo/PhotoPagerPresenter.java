@@ -45,7 +45,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
     private static final String SAVE_INDEX = "save-index";
     private static final String SAVE_DATA = "save-data";
-
+    final IPhotosInteractor photosInteractor;
     ArrayList<Photo> mPhotos;
     private int mCurrentIndex;
     private boolean mLoadingNow;
@@ -53,15 +53,13 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private boolean isStory;
     private Context context;
 
-    final IPhotosInteractor photosInteractor;
-
     PhotoPagerPresenter(@NonNull ArrayList<Photo> initialData, int accountId, boolean Story, Context context, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
         this.isStory = Story;
         this.context = context;
 
-        if(Objects.nonNull(savedInstanceState)){
+        if (Objects.nonNull(savedInstanceState)) {
             mCurrentIndex = savedInstanceState.getInt(SAVE_INDEX);
         }
 
@@ -77,11 +75,11 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         savePhotosState(outState);
     }
 
-    void savePhotosState(@NonNull Bundle outState){
+    void savePhotosState(@NonNull Bundle outState) {
         outState.putParcelableArrayList(SAVE_DATA, mPhotos);
     }
 
-    void initPhotosData(@NonNull ArrayList<Photo> initialData, @Nullable Bundle savedInstanceState){
+    void initPhotosData(@NonNull ArrayList<Photo> initialData, @Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             mPhotos = initialData;
         } else {
@@ -104,10 +102,6 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         if (isGuiReady()) {
             getView().displayPhotos(mPhotos, mCurrentIndex);
         }
-    }
-
-    void setCurrentIndex(int currentIndex) {
-        this.mCurrentIndex = currentIndex;
     }
 
     @NonNull
@@ -171,7 +165,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
     private void resolveLikeView() {
         if (isGuiReady() && hasPhotos()) {
-            if(isStory) {
+            if (isStory) {
                 getView().setupLikeButton(false, false, 0);
                 return;
             }
@@ -189,7 +183,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private void resolveCommentsView() {
         if (isGuiReady() && hasPhotos()) {
             Photo photo = getCurrent();
-            if(isStory) {
+            if (isStory) {
                 getView().setupCommentsButton(false, 0);
                 return;
             }
@@ -263,7 +257,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
     private void onDeleteOrRestoreResult(int photoId, int ownerId, boolean deleted) {
         int index = findIndexById(this.mPhotos, photoId, ownerId);
 
-        if(index != -1){
+        if (index != -1) {
             Photo photo = mPhotos.get(index);
             photo.setDeleted(deleted);
 
@@ -301,8 +295,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                 safeShowError(getView(), "Can't create directory " + dir);
                 return;
             }
-        }
-        else
+        } else
             dir.setLastModified(Calendar.getInstance().getTime().getTime());
 
         Photo photo = getCurrent();
@@ -312,17 +305,15 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                 .subscribe(userInfo -> DownloadResult(DownloadUtil.makeLegalFilename(userInfo.getOwner().getFullName(), null), dir, photo), throwable -> DownloadResult(null, dir, photo)));
     }
 
-    private String transform_owner(int owner_id)
-    {
-        if(owner_id < 0)
+    private String transform_owner(int owner_id) {
+        if (owner_id < 0)
             return "club" + Math.abs(owner_id);
         else
             return "id" + owner_id;
     }
 
-    private void DownloadResult(String Prefix, File dir, Photo photo)
-    {
-        if(Prefix != null && Settings.get().other().isPhoto_to_user_dir()) {
+    private void DownloadResult(String Prefix, File dir, Photo photo) {
+        if (Prefix != null && Settings.get().other().isPhoto_to_user_dir()) {
             File dir_final = new File(dir.getAbsolutePath() + "/" + Prefix);
             if (!dir_final.isDirectory()) {
                 boolean created = dir_final.mkdirs();
@@ -330,8 +321,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                     safeShowError(getView(), "Can't create directory " + dir_final);
                     return;
                 }
-            }
-            else
+            } else
                 dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
             dir = dir_final;
         }
@@ -341,38 +331,13 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
             File Temp = new File(file);
             if (Temp.exists()) {
                 Temp.setLastModified(Calendar.getInstance().getTime().getTime());
-                if(isGuiReady())
+                if (isGuiReady())
                     getView().getPhoenixToast().showToastError(R.string.exist_audio);
                 return;
             }
         }
-        while(false);
+        while (false);
         new InternalDownloader(this, getApplicationContext(), url, file, photo).doDownload();
-    }
-
-    private final class InternalDownloader extends DownloadImageTask {
-
-        final WeakReference<PhotoPagerPresenter> ref;
-
-        InternalDownloader(PhotoPagerPresenter presenter, Context context, String url, String file, Photo photo) {
-            super(context, url, file, photo.getId() + "_" + photo.getOwnerId(), true);
-            this.ref = new WeakReference<>(presenter);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            PhotoPagerPresenter presenter = ref.get();
-
-            if (Objects.isNull(presenter)) return;
-
-            if(isGuiReady()) {
-                if (Objects.isNull(s)) {
-                    getView().getPhoenixToast().showToastBottom(R.string.saved);
-                } else {
-                    getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
-                }
-            }
-        }
     }
 
     public void fireSaveYourselfClick() {
@@ -412,21 +377,21 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         deleteOrRestore(false);
     }
 
-    private void deleteOrRestore(boolean detele){
+    private void deleteOrRestore(boolean detele) {
         final Photo photo = getCurrent();
         final int photoId = photo.getId();
         final int ownerId = photo.getOwnerId();
         final int accountId = super.getAccountId();
 
         Completable completable;
-        if(detele){
+        if (detele) {
             completable = photosInteractor.deletePhoto(accountId, ownerId, photoId);
         } else {
             completable = photosInteractor.restorePhoto(accountId, ownerId, photoId);
         }
 
         appendDisposable(completable.compose(RxUtils.applyCompletableIOToMainSchedulers())
-        .subscribe(() -> onDeleteOrRestoreResult(photoId, ownerId, detele), t -> showError(getView(), getCauseIfRuntime(t))));
+                .subscribe(() -> onDeleteOrRestoreResult(photoId, ownerId, detele), t -> showError(getView(), getCauseIfRuntime(t))));
     }
 
     private void delete() {
@@ -467,10 +432,39 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         return mCurrentIndex;
     }
 
+    void setCurrentIndex(int currentIndex) {
+        this.mCurrentIndex = currentIndex;
+    }
+
     public void fireLikeLongClick() {
         if (!hasPhotos()) return;
 
         Photo photo = getCurrent();
         getView().goToLikesList(getAccountId(), photo.getOwnerId(), photo.getId());
+    }
+
+    private final class InternalDownloader extends DownloadImageTask {
+
+        final WeakReference<PhotoPagerPresenter> ref;
+
+        InternalDownloader(PhotoPagerPresenter presenter, Context context, String url, String file, Photo photo) {
+            super(context, url, file, photo.getId() + "_" + photo.getOwnerId(), true);
+            this.ref = new WeakReference<>(presenter);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            PhotoPagerPresenter presenter = ref.get();
+
+            if (Objects.isNull(presenter)) return;
+
+            if (isGuiReady()) {
+                if (Objects.isNull(s)) {
+                    getView().getPhoenixToast().showToastBottom(R.string.saved);
+                } else {
+                    getView().getPhoenixToast().showToastError(R.string.error_with_message, s);
+                }
+            }
+        }
     }
 }

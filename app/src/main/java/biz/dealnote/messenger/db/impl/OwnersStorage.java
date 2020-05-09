@@ -68,21 +68,21 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
                 .build());
     }
 
-    static void appendOwnersInsertOperations(@NonNull List<ContentProviderOperation> operations, int accountId, OwnerEntities ownerEntities){
+    static void appendOwnersInsertOperations(@NonNull List<ContentProviderOperation> operations, int accountId, OwnerEntities ownerEntities) {
         appendUsersInsertOperation(operations, accountId, ownerEntities.getUserEntities());
         appendCommunitiesInsertOperation(operations, accountId, ownerEntities.getCommunityEntities());
     }
 
-    static void appendUsersInsertOperation(@NonNull List<ContentProviderOperation> operations, int accouuntId, List<UserEntity> dbos){
+    static void appendUsersInsertOperation(@NonNull List<ContentProviderOperation> operations, int accouuntId, List<UserEntity> dbos) {
         final Uri uri = MessengerContentProvider.getUserContentUriFor(accouuntId);
-        for(UserEntity dbo : dbos){
+        for (UserEntity dbo : dbos) {
             appendUserInsertOperation(operations, uri, dbo);
         }
     }
 
-    static void appendCommunitiesInsertOperation(@NonNull List<ContentProviderOperation> operations, int accouuntId, List<CommunityEntity> dbos){
+    static void appendCommunitiesInsertOperation(@NonNull List<ContentProviderOperation> operations, int accouuntId, List<CommunityEntity> dbos) {
         final Uri uri = MessengerContentProvider.getGroupsContentUriFor(accouuntId);
-        for(CommunityEntity dbo : dbos){
+        for (CommunityEntity dbo : dbos) {
             appendCommunityInsertOperation(operations, uri, dbo);
         }
     }
@@ -128,6 +128,42 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
         return cv;
     }
 
+    private static CommunityEntity mapCommunityDbo(Cursor cursor) {
+        return new CommunityEntity(cursor.getInt(cursor.getColumnIndex(GroupColumns._ID)))
+                .setName(cursor.getString(cursor.getColumnIndex(GroupColumns.NAME)))
+                .setScreenName(cursor.getString(cursor.getColumnIndex(GroupColumns.SCREEN_NAME)))
+                .setClosed(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_CLOSED)))
+                .setAdmin(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_ADMIN)) == 1)
+                .setAdminLevel(cursor.getInt(cursor.getColumnIndex(GroupColumns.ADMIN_LEVEL)))
+                .setMember(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_MEMBER)) == 1)
+                .setType(cursor.getInt(cursor.getColumnIndex(GroupColumns.TYPE)))
+                .setPhoto50(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_50)))
+                .setPhoto100(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_100)))
+                .setPhoto200(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_200)));
+    }
+
+    private static UserEntity mapUserDbo(Cursor cursor) {
+        return new UserEntity(cursor.getInt(cursor.getColumnIndex(UserColumns._ID)))
+                .setFirstName(cursor.getString(cursor.getColumnIndex(UserColumns.FIRST_NAME)))
+                .setLastName(cursor.getString(cursor.getColumnIndex(UserColumns.LAST_NAME)))
+                .setOnline(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE)) == 1)
+                .setOnlineMobile(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE_MOBILE)) == 1)
+                .setOnlineApp(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE_APP)))
+                .setPhoto50(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_50)))
+                .setPhoto100(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_100)))
+                .setPhoto200(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_200)))
+                .setPhotoMax(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_MAX)))
+                .setLastSeen(cursor.getLong(cursor.getColumnIndex(UserColumns.LAST_SEEN)))
+                .setPlatform(cursor.getInt(cursor.getColumnIndex(UserColumns.PLATFORM)))
+                .setStatus(cursor.getString(cursor.getColumnIndex(UserColumns.USER_STATUS)))
+                .setSex(cursor.getInt(cursor.getColumnIndex(UserColumns.SEX)))
+                .setDomain(cursor.getString(cursor.getColumnIndex(UserColumns.DOMAIN)))
+                .setFriend(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_FRIEND)) == 1)
+                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(UserColumns.FRIEND_STATUS)))
+                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(UserColumns.WRITE_MESSAGE_STATUS)) == 1)
+                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_USER_BLACK_LIST)) == 1);
+    }
+
     @Override
     public Completable fireBanAction(BanAction action) {
         return Completable.fromAction(() -> banActionsPublisher.onNext(action));
@@ -158,10 +194,10 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
             Cursor cursor = getContentResolver().query(uri, null, where, args, null);
             UserDetailsEntity details = null;
 
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     String json = cursor.getString(cursor.getColumnIndex(UsersDetColumns.DATA));
-                    if(nonEmpty(json)){
+                    if (nonEmpty(json)) {
                         details = GSON.fromJson(json, UserDetailsEntity.class);
                     }
                 }
@@ -188,7 +224,7 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
 
     @Override
     public Completable applyPathes(int accountId, @NonNull List<UserPatch> patches) {
-        if(patches.isEmpty()){
+        if (patches.isEmpty()) {
             return Completable.complete();
         }
 
@@ -196,21 +232,21 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
             Uri uri = MessengerContentProvider.getUserContentUriFor(accountId);
             ArrayList<ContentProviderOperation> operations = new ArrayList<>(patches.size());
 
-            for(UserPatch patch : patches){
+            for (UserPatch patch : patches) {
                 ContentValues cv = new ContentValues();
 
-                if(nonNull(patch.getStatus())){
+                if (nonNull(patch.getStatus())) {
                     cv.put(UserColumns.USER_STATUS, patch.getStatus().getStatus());
                 }
 
-                if(nonNull(patch.getOnline())){
+                if (nonNull(patch.getOnline())) {
                     UserPatch.Online online = patch.getOnline();
                     cv.put(UserColumns.ONLINE, online.isOnline());
                     cv.put(UserColumns.LAST_SEEN, online.getLastSeen());
                     cv.put(UserColumns.PLATFORM, online.getPlatform());
                 }
 
-                if(cv.size() > 0){
+                if (cv.size() > 0) {
                     operations.add(ContentProviderOperation.newUpdate(uri)
                             .withValues(cv)
                             .withSelection(UserColumns._ID + " = ?", new String[]{String.valueOf(patch.getUserId())})
@@ -238,7 +274,7 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
 
             if (nonNull(cursor)) {
                 while (cursor.moveToNext()) {
-                    if(emitter.isDisposed()){
+                    if (emitter.isDisposed()) {
                         break;
                     }
 
@@ -336,8 +372,8 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
             Cursor cursor = getContentResolver().query(uri, null, where, args, null);
 
             UserEntity entity = null;
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     entity = mapUserDbo(cursor);
                 }
                 cursor.close();
@@ -357,8 +393,8 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
             Cursor cursor = getContentResolver().query(uri, null, where, args, null);
 
             CommunityEntity entity = null;
-            if(nonNull(cursor)){
-                if(cursor.moveToNext()){
+            if (nonNull(cursor)) {
+                if (cursor.moveToNext()) {
                     entity = mapCommunityDbo(cursor);
                 }
                 cursor.close();
@@ -525,42 +561,6 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
 
             e.onSuccess(copy);
         });
-    }
-
-    private static CommunityEntity mapCommunityDbo(Cursor cursor) {
-        return new CommunityEntity(cursor.getInt(cursor.getColumnIndex(GroupColumns._ID)))
-                .setName(cursor.getString(cursor.getColumnIndex(GroupColumns.NAME)))
-                .setScreenName(cursor.getString(cursor.getColumnIndex(GroupColumns.SCREEN_NAME)))
-                .setClosed(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_CLOSED)))
-                .setAdmin(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_ADMIN)) == 1)
-                .setAdminLevel(cursor.getInt(cursor.getColumnIndex(GroupColumns.ADMIN_LEVEL)))
-                .setMember(cursor.getInt(cursor.getColumnIndex(GroupColumns.IS_MEMBER)) == 1)
-                .setType(cursor.getInt(cursor.getColumnIndex(GroupColumns.TYPE)))
-                .setPhoto50(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_50)))
-                .setPhoto100(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_100)))
-                .setPhoto200(cursor.getString(cursor.getColumnIndex(GroupColumns.PHOTO_200)));
-    }
-
-    private static UserEntity mapUserDbo(Cursor cursor) {
-        return new UserEntity(cursor.getInt(cursor.getColumnIndex(UserColumns._ID)))
-                .setFirstName(cursor.getString(cursor.getColumnIndex(UserColumns.FIRST_NAME)))
-                .setLastName(cursor.getString(cursor.getColumnIndex(UserColumns.LAST_NAME)))
-                .setOnline(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE)) == 1)
-                .setOnlineMobile(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE_MOBILE)) == 1)
-                .setOnlineApp(cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE_APP)))
-                .setPhoto50(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_50)))
-                .setPhoto100(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_100)))
-                .setPhoto200(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_200)))
-                .setPhotoMax(cursor.getString(cursor.getColumnIndex(UserColumns.PHOTO_MAX)))
-                .setLastSeen(cursor.getLong(cursor.getColumnIndex(UserColumns.LAST_SEEN)))
-                .setPlatform(cursor.getInt(cursor.getColumnIndex(UserColumns.PLATFORM)))
-                .setStatus(cursor.getString(cursor.getColumnIndex(UserColumns.USER_STATUS)))
-                .setSex(cursor.getInt(cursor.getColumnIndex(UserColumns.SEX)))
-                .setDomain(cursor.getString(cursor.getColumnIndex(UserColumns.DOMAIN)))
-                .setFriend(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_FRIEND)) == 1)
-                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(UserColumns.FRIEND_STATUS)))
-                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(UserColumns.WRITE_MESSAGE_STATUS)) == 1)
-                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(UserColumns.IS_USER_BLACK_LIST)) == 1);
     }
 
     private FriendListEntity mapFriendsList(Cursor cursor) {

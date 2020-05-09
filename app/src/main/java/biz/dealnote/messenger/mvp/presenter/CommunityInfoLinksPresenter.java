@@ -29,10 +29,9 @@ public class CommunityInfoLinksPresenter extends AccountDependencyPresenter<ICom
     private static final String TAG = CommunityInfoLinksPresenter.class.getSimpleName();
 
     private final Community groupId;
-
-    private List<VKApiCommunity.Link> links;
-
     private final INetworker networker;
+    private List<VKApiCommunity.Link> links;
+    private boolean loadingNow;
 
     public CommunityInfoLinksPresenter(int accountId, Community groupId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -43,8 +42,6 @@ public class CommunityInfoLinksPresenter extends AccountDependencyPresenter<ICom
 
         requestLinks();
     }
-
-    private boolean loadingNow;
 
     private void setLoadingNow(boolean loadingNow) {
         this.loadingNow = loadingNow;

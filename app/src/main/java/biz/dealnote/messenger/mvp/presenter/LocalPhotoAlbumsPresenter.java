@@ -25,20 +25,19 @@ public class LocalPhotoAlbumsPresenter extends RxSupportPresenter<ILocalPhotoAlb
 
     private boolean permissionRequestedOnce;
     private List<LocalImageAlbum> mLocalImageAlbums;
+    private boolean mLoadingNow;
 
     public LocalPhotoAlbumsPresenter(@Nullable Bundle savedInstanceState) {
         super(savedInstanceState);
         mLocalImageAlbums = new ArrayList<>();
     }
 
-    private boolean mLoadingNow;
-
     @Override
     public void onGuiCreated(@NonNull ILocalPhotoAlbumsView viewHost) {
         super.onGuiCreated(viewHost);
 
-        if(!AppPerms.hasReadStoragePermision(getApplicationContext())){
-            if(!permissionRequestedOnce){
+        if (!AppPerms.hasReadStoragePermision(getApplicationContext())) {
+            if (!permissionRequestedOnce) {
                 permissionRequestedOnce = true;
                 getView().requestReadExternalStoragePermission();
             }
@@ -101,7 +100,7 @@ public class LocalPhotoAlbumsPresenter extends RxSupportPresenter<ILocalPhotoAlb
     }
 
     public void fireReadExternalStoregePermissionResolved() {
-        if(AppPerms.hasReadStoragePermision(getApplicationContext())){
+        if (AppPerms.hasReadStoragePermision(getApplicationContext())) {
             loadData();
         }
     }

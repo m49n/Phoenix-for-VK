@@ -16,28 +16,29 @@ public class MessageUpdate {
 
     private DeleteUpdate deleteUpdate;
 
-    public void setDeleteUpdate(DeleteUpdate deleteUpdate) {
-        this.deleteUpdate = deleteUpdate;
-    }
-
-    public void setImportantUpdate(ImportantUpdate importantUpdate) {
-        this.importantUpdate = importantUpdate;
+    public MessageUpdate(int accountId, int messageId) {
+        this.accountId = accountId;
+        this.messageId = messageId;
     }
 
     public DeleteUpdate getDeleteUpdate() {
         return deleteUpdate;
     }
 
+    public void setDeleteUpdate(DeleteUpdate deleteUpdate) {
+        this.deleteUpdate = deleteUpdate;
+    }
+
     public ImportantUpdate getImportantUpdate() {
         return importantUpdate;
     }
 
+    public void setImportantUpdate(ImportantUpdate importantUpdate) {
+        this.importantUpdate = importantUpdate;
+    }
+
     public int getAccountId() {
         return accountId;
-    }
-    public MessageUpdate(int accountId, int messageId) {
-        this.accountId = accountId;
-        this.messageId = messageId;
     }
 
     public int getMessageId() {

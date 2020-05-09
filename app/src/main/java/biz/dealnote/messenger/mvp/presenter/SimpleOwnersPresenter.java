@@ -31,11 +31,11 @@ public abstract class SimpleOwnersPresenter<V extends ISimpleOwnersView> extends
         view.displayOwnerList(data);
     }
 
-    public final void fireRefresh(){
+    public final void fireRefresh() {
         this.onUserRefreshed();
     }
 
-    void onUserRefreshed(){
+    void onUserRefreshed() {
 
     }
 
@@ -43,11 +43,11 @@ public abstract class SimpleOwnersPresenter<V extends ISimpleOwnersView> extends
         this.onUserScrolledToEnd();
     }
 
-    void onUserScrolledToEnd(){
+    void onUserScrolledToEnd() {
 
     }
 
-    void onUserOwnerClicked(Owner owner){
+    void onUserOwnerClicked(Owner owner) {
         getView().showOwnerWall(getAccountId(), owner);
     }
 

@@ -13,9 +13,14 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IAudiosView extends IMvpView, IErrorView, IAccountDependencyView {
     void displayList(List<Audio> audios);
+
     void notifyListChanged();
+
     void doesLoadCache();
+
     void ProvideReadCachedAudio();
+
     void displayRefreshing(boolean refresing);
+
     void updatePlaylists(List<VKApiAudioPlaylist> stories);
 }

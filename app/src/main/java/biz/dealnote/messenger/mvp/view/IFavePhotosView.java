@@ -13,8 +13,12 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IFavePhotosView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<Photo> photos);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
+
     void showRefreshing(boolean refreshing);
+
     void goToGallery(int accountId, ArrayList<Photo> photos, int position);
 }

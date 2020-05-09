@@ -14,7 +14,7 @@ public class MutualFriendsFragment extends AbsOwnersListFragment<MutualFriendsPr
 
     private static final String EXTRA_TARGET_ID = "targetId";
 
-    public static MutualFriendsFragment newInstance(int accountId, int targetId){
+    public static MutualFriendsFragment newInstance(int accountId, int targetId) {
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_TARGET_ID, targetId);
         bundle.putInt(Extra.ACCOUNT_ID, accountId);

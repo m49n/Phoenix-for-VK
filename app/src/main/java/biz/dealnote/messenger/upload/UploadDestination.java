@@ -7,10 +7,19 @@ public class UploadDestination implements Parcelable {
 
     public static final int WITHOUT_OWNER = 0;
     public static final int NO_ID = 0;
+    public static final Creator<UploadDestination> CREATOR = new Creator<UploadDestination>() {
+        @Override
+        public UploadDestination createFromParcel(Parcel in) {
+            return new UploadDestination(in);
+        }
 
+        @Override
+        public UploadDestination[] newArray(int size) {
+            return new UploadDestination[size];
+        }
+    };
     private int id;
     private int ownerId;
-
     @Method
     private int method;
 
@@ -29,44 +38,32 @@ public class UploadDestination implements Parcelable {
         this.method = tMethod;
     }
 
-    public static final Creator<UploadDestination> CREATOR = new Creator<UploadDestination>() {
-        @Override
-        public UploadDestination createFromParcel(Parcel in) {
-            return new UploadDestination(in);
-        }
-
-        @Override
-        public UploadDestination[] newArray(int size) {
-            return new UploadDestination[size];
-        }
-    };
-
-    public static UploadDestination forProfilePhoto(int ownerId){
+    public static UploadDestination forProfilePhoto(int ownerId) {
         return new UploadDestination(NO_ID, ownerId, Method.PHOTO_TO_PROFILE);
     }
 
-    public static UploadDestination forDocuments(int ownerId){
+    public static UploadDestination forDocuments(int ownerId) {
         return new UploadDestination(NO_ID, ownerId, Method.DOCUMENT);
     }
 
-    public static UploadDestination forVideo(int is_public){
+    public static UploadDestination forVideo(int is_public) {
         return new UploadDestination(is_public, WITHOUT_OWNER, Method.VIDEO);
     }
 
-    public static UploadDestination forMessage(int mdbid){
+    public static UploadDestination forMessage(int mdbid) {
         return new UploadDestination(mdbid, WITHOUT_OWNER,
                 Method.PHOTO_TO_MESSAGE);
     }
 
-    public static UploadDestination forPhotoAlbum(int albumId, int ownerId){
+    public static UploadDestination forPhotoAlbum(int albumId, int ownerId) {
         return new UploadDestination(albumId, ownerId, Method.PHOTO_TO_ALBUM);
     }
 
-    public static UploadDestination forPost(int dbid, int ownerId){
+    public static UploadDestination forPost(int dbid, int ownerId) {
         return new UploadDestination(dbid, ownerId, Method.PHOTO_TO_WALL);
     }
 
-    public static UploadDestination forComment(int dbid, int sourceOwnerId){
+    public static UploadDestination forComment(int dbid, int sourceOwnerId) {
         return new UploadDestination(dbid, sourceOwnerId, Method.PHOTO_TO_COMMENT);
     }
 
@@ -98,11 +95,11 @@ public class UploadDestination implements Parcelable {
         return result;
     }
 
-    public boolean compareTo(UploadDestination destination){
+    public boolean compareTo(UploadDestination destination) {
         return compareTo(destination.id, destination.ownerId, destination.method);
     }
 
-    public boolean compareTo(int id, int ownerId, int type){
+    public boolean compareTo(int id, int ownerId, int type) {
         return this.id == id && this.ownerId == ownerId && this.method == type;
     }
 

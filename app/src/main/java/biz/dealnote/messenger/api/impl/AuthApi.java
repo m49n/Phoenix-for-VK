@@ -24,31 +24,12 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
  */
 public class AuthApi implements IAuthApi {
 
+    private static final Gson BASE_RESPONSE_GSON = new Gson();
     private final IDirectLoginSeviceProvider service;
 
     public AuthApi(IDirectLoginSeviceProvider service) {
         this.service = service;
     }
-
-    @Override
-    public Single<LoginResponse> directLogin(String grantType, int clientId, String clientSecret,
-                                             String username, String pass, String v, boolean twoFaSupported,
-                                             String scope, String code, String captchaSid, String captchaKey, boolean forceSms) {
-        Integer forceSmsInteger = null;
-        if(forceSms){
-            forceSmsInteger = 1;
-        }
-
-
-
-        final Integer finalForceSms = forceSmsInteger;
-        return service.provideAuthService()
-                .flatMap(service -> service
-                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms, Constants.DEVICE_COUNTRY_CODE, Utils.getDiviceId(Injection.provideApplicationContext()))
-                        .compose(withHttpErrorHandling()));
-    }
-
-    private static final Gson BASE_RESPONSE_GSON = new Gson();
 
     private static <T> SingleTransformer<T, T> withHttpErrorHandling() {
         return single -> single.onErrorResumeNext(throwable -> {
@@ -70,7 +51,7 @@ public class AuthApi implements IAuthApi {
                         return Single.error(new NeedValidationException(response.validationType, response.redirect_uri));
                     }
 
-                    if(nonEmpty(response.error)){
+                    if (nonEmpty(response.error)) {
                         return Single.error(new AuthException(response.error, response.errorDescription));
                     }
                 } catch (Exception ignored) {
@@ -80,5 +61,22 @@ public class AuthApi implements IAuthApi {
 
             return Single.error(throwable);
         });
+    }
+
+    @Override
+    public Single<LoginResponse> directLogin(String grantType, int clientId, String clientSecret,
+                                             String username, String pass, String v, boolean twoFaSupported,
+                                             String scope, String code, String captchaSid, String captchaKey, boolean forceSms) {
+        Integer forceSmsInteger = null;
+        if (forceSms) {
+            forceSmsInteger = 1;
+        }
+
+
+        final Integer finalForceSms = forceSmsInteger;
+        return service.provideAuthService()
+                .flatMap(service -> service
+                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms, Constants.DEVICE_COUNTRY_CODE, Utils.getDiviceId(Injection.provideApplicationContext()))
+                        .compose(withHttpErrorHandling()));
     }
 }

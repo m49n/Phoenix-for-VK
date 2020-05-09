@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
  */
 public class VKStringUtils {
 
+    private static String pattern_string_profile_id = "^(id)?(\\d{1,10})$";
+    private static Pattern pattern_profile_id = Pattern.compile(pattern_string_profile_id);
+
     /**
      * Returns true if the string is null or 0-length.
+     *
      * @param str the string to be examined
      * @return true if str is null or zero length
      */
@@ -19,13 +23,14 @@ public class VKStringUtils {
 
     /**
      * Returns a string containing the tokens joined by delimiters.
+     *
      * @param tokens an array objects to be joined. Strings will be formed from
-     *     the objects by calling object.toString().
+     *               the objects by calling object.toString().
      */
     public static String join(CharSequence delimiter, Object[] tokens) {
         StringBuilder sb = new StringBuilder();
         boolean firstTime = true;
-        for (Object token: tokens) {
+        for (Object token : tokens) {
             if (firstTime) {
                 firstTime = false;
             } else {
@@ -49,13 +54,14 @@ public class VKStringUtils {
 
     /**
      * Returns a string containing the tokens joined by delimiters.
+     *
      * @param tokens an array objects to be joined. Strings will be formed from
-     *     the objects by calling object.toString().
+     *               the objects by calling object.toString().
      */
     public static String join(CharSequence delimiter, Iterable tokens) {
         StringBuilder sb = new StringBuilder();
         boolean firstTime = true;
-        for (Object token: tokens) {
+        for (Object token : tokens) {
             if (firstTime) {
                 firstTime = false;
             } else {
@@ -94,9 +100,6 @@ public class VKStringUtils {
         //amp встречается в сообщении, br в Ответах тип comment_photo, gt lt на стене - баг API, ndash в статусе когда аудио транслируется
         //quot в тексте сообщения из LongPoll - то есть в уведомлении
     }
-
-    private static String pattern_string_profile_id = "^(id)?(\\d{1,10})$";
-    private static Pattern pattern_profile_id = Pattern.compile(pattern_string_profile_id);
 
     public static String parseProfileId(String text) {
         Matcher m = pattern_profile_id.matcher(text);

@@ -18,41 +18,41 @@ public abstract class DifferentDataAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public int getItemCount() {
         int count = 0;
-        for(List<?> data : mData){
+        for (List<?> data : mData) {
             count = count + data.size();
         }
 
         return count;
     }
 
-    public void setData(int type, List<?> data){
+    public void setData(int type, List<?> data) {
         this.mData.add(type, data);
     }
 
-    public void notifyItemChanged(int dataPosition, int dataType){
+    public void notifyItemChanged(int dataPosition, int dataType) {
         notifyItemChanged(getOffset(dataType) + dataPosition);
     }
 
-    public void notifyItemRangeInserted(int dataPositionStart, int count, int dataType){
+    public void notifyItemRangeInserted(int dataPositionStart, int count, int dataType) {
         notifyItemRangeInserted(getOffset(dataType) + dataPositionStart, count);
     }
 
-    public void notifyItemInserted(int dataPosition, int dataType){
+    public void notifyItemInserted(int dataPosition, int dataType) {
         notifyItemInserted(dataPosition + getOffset(dataType));
     }
 
-    public void notifyItemRemoved(int dataPosition, int dataType){
+    public void notifyItemRemoved(int dataPosition, int dataType) {
         notifyItemRemoved(dataToAdapterPosition(dataPosition, dataType));
     }
 
-    protected int dataToAdapterPosition(int dataPosition, int dataType){
+    protected int dataToAdapterPosition(int dataPosition, int dataType) {
         return dataPosition + getOffset(dataType);
     }
 
-    protected int getOffset(int type){
+    protected int getOffset(int type) {
         int offset = 0;
-        for(int i = 0; i < mData.size(); i++){
-            if(i < type){
+        for (int i = 0; i < mData.size(); i++) {
+            if (i < type) {
                 offset = offset + Utils.safeCountOf(mData.get(i));
             }
         }
@@ -61,7 +61,7 @@ public abstract class DifferentDataAdapter extends RecyclerView.Adapter<Recycler
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getItem(int adapterPosition){
+    public <T> T getItem(int adapterPosition) {
         int offset = 0;
         for (List<?> data : mData) {
             int newOffset = offset + data.size();
@@ -76,7 +76,7 @@ public abstract class DifferentDataAdapter extends RecyclerView.Adapter<Recycler
         throw new IllegalArgumentException("Invalid adapter position");
     }
 
-    protected int getDataTypeByAdapterPosition(int adapterPosition){
+    protected int getDataTypeByAdapterPosition(int adapterPosition) {
         int offset = 0;
         for (int i = 0; i < mData.size(); i++) {
             List<?> data = mData.get(i);

@@ -54,7 +54,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
         boolean headerVisible = group && itemInfo.first;
         holder.header.setVisibility(headerVisible ? View.VISIBLE : View.GONE);
 
-        if(headerVisible){
+        if (headerVisible) {
             holder.headerCount.setText(String.valueOf(itemInfo.fullSectionCount));
             holder.headerTitle.setText(itemInfo.sectionTitleRes);
         }
@@ -66,7 +66,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
 
         holder.online.setVisibility(user.isOnline() ? View.VISIBLE : View.GONE);
         Integer onlineIcon = ViewUtils.getOnlineIcon(user.isOnline(), user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        if(onlineIcon != null){
+        if (onlineIcon != null) {
             holder.online.setImageResource(onlineIcon);
         }
 
@@ -74,7 +74,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
         ViewUtils.displayAvatar(holder.avatar, transformation, avaUrl, Constants.PICASSO_TAG);
 
         holder.itemView.setOnClickListener(v -> {
-            if(listener != null){
+            if (listener != null) {
                 listener.onUserClick(user);
             }
         });
@@ -85,8 +85,8 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
     @Override
     public int getItemCount() {
         int count = 0;
-        for(UsersPart pair : data){
-            if(!pair.enable){
+        for (UsersPart pair : data) {
+            if (!pair.enable) {
                 continue;
             }
 

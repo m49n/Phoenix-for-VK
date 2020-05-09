@@ -34,7 +34,7 @@ public class PostCreateFragment extends AbsPostEditFragment<PostCreatePresenter,
     private static final String EXTRA_EDITING_TYPE = "editing_type";
     private static final String EXTRA_STREAMS = "streams";
 
-    public static PostCreateFragment newInstance(Bundle args){
+    public static PostCreateFragment newInstance(Bundle args) {
         PostCreateFragment fragment = new PostCreateFragment();
         fragment.setArguments(args);
         return fragment;

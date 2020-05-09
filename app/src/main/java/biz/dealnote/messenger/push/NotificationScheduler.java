@@ -15,7 +15,7 @@ public class NotificationScheduler {
 
     public static final Scheduler INSTANCE = Schedulers.from(Executors.newFixedThreadPool(1));
 
-    public static <T> SingleTransformer<T,T> fromNotificationThreadToMain(){
+    public static <T> SingleTransformer<T, T> fromNotificationThreadToMain() {
         return single -> single
                 .subscribeOn(INSTANCE)
                 .observeOn(Injection.provideMainThreadScheduler());

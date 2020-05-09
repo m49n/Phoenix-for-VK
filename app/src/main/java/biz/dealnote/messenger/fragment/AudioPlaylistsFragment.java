@@ -34,6 +34,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 
 public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresenter, IAudioPlaylistsView> implements IAudioPlaylistsView, AudioPlaylistsAdapter.ClickListener {
 
+    private TextView mEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private AudioPlaylistsAdapter mAdapter;
+    private boolean doAudioLoadTabs;
+
     public static AudioPlaylistsFragment newInstance(int accountId, int ownerId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -42,11 +47,6 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
         fragment.setArguments(args);
         return fragment;
     }
-
-    private TextView mEmpty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private AudioPlaylistsAdapter mAdapter;
-    private boolean doAudioLoadTabs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,8 +88,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     @Override
     public void onResume() {
         super.onResume();
-        if(!doAudioLoadTabs)
-        {
+        if (!doAudioLoadTabs) {
             doAudioLoadTabs = true;
             getPresenter().LoadAudiosTool();
         }
@@ -134,19 +133,19 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
                 saveInstanceState
         );
     }
+
     @Override
-    public void onAlbumClick(int index, VKApiAudioPlaylist album)
-    {
+    public void onAlbumClick(int index, VKApiAudioPlaylist album) {
         PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), getPresenter().getOwner_id(), album.id, album.access_key).tryOpenWith(requireActivity());
     }
+
     @Override
-    public void onDelete(int index, VKApiAudioPlaylist album)
-    {
+    public void onDelete(int index, VKApiAudioPlaylist album) {
         getPresenter().onDelete(album);
     }
+
     @Override
-    public void onAdd(int index, VKApiAudioPlaylist album)
-    {
+    public void onAdd(int index, VKApiAudioPlaylist album) {
         getPresenter().onAdd(album);
     }
 }

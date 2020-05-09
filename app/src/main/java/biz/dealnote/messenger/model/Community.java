@@ -11,38 +11,33 @@ import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
  */
 public class Community extends Owner implements Parcelable {
 
+    public static final Creator<Community> CREATOR = new Creator<Community>() {
+        @Override
+        public Community createFromParcel(Parcel in) {
+            return new Community(in);
+        }
+
+        @Override
+        public Community[] newArray(int size) {
+            return new Community[size];
+        }
+    };
     private final int id;
-
     private String name;
-
     private String screenName;
-
     private int closed;
-
     private boolean admin;
-
     private int adminLevel;
-
     private boolean member;
-
     private int memberStatus;
-
     private int type;
-
     private String photo50;
-
     private String photo100;
-
     private String photo200;
 
-    public Community(int id){
+    public Community(int id) {
         super(OwnerType.COMMUNITY);
         this.id = id;
-    }
-
-    @Override
-    public String getFullName() {
-        return name;
     }
 
     protected Community(Parcel in) {
@@ -59,6 +54,11 @@ public class Community extends Owner implements Parcelable {
         photo50 = in.readString();
         photo100 = in.readString();
         photo200 = in.readString();
+    }
+
+    @Override
+    public String getFullName() {
+        return name;
     }
 
     @Override
@@ -181,18 +181,6 @@ public class Community extends Owner implements Parcelable {
         this.photo200 = photo200;
         return this;
     }
-
-    public static final Creator<Community> CREATOR = new Creator<Community>() {
-        @Override
-        public Community createFromParcel(Parcel in) {
-            return new Community(in);
-        }
-
-        @Override
-        public Community[] newArray(int size) {
-            return new Community[size];
-        }
-    };
 
     @Override
     public String get100photoOrSmaller() {

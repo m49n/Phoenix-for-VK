@@ -23,13 +23,12 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
     private static final int COUNT_PER_LOAD = 100;
-
+    private final IPhotosInteractor photosInteractor;
     private int mOwnerId;
     private int mAlbumId;
     private boolean canLoad;
-    private final IPhotosInteractor photosInteractor;
 
-    public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo>photos, Context context,
+    public PhotoAlbumPagerPresenter(int indexx, int accountId, int ownerId, int albumId, ArrayList<Photo> photos, Context context,
                                     @Nullable Bundle savedInstanceState) {
         super(new ArrayList<>(0), accountId, false, context, savedInstanceState);
         this.photosInteractor = InteractorFactory.createPhotosInteractor();
@@ -56,24 +55,20 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
         //no saving state
     }
 
-    private void loadData()
-    {
-        if(!canLoad)
+    private void loadData() {
+        if (!canLoad)
             return;
         changeLoadingNowState(true);
 
-        if(mAlbumId != -9001 && mAlbumId != -9000) {
+        if (mAlbumId != -9001 && mAlbumId != -9000) {
             appendDisposable(photosInteractor.get(getAccountId(), mOwnerId, mAlbumId, COUNT_PER_LOAD, mPhotos.size(), true)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
-        }
-        else if(mAlbumId == -9000)
-        {
+        } else if (mAlbumId == -9000) {
             appendDisposable(photosInteractor.getUsersPhoto(getAccountId(), mOwnerId, 1, mPhotos.size(), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
-        }
-        else {
+        } else {
             appendDisposable(photosInteractor.getAll(getAccountId(), mOwnerId, 1, 1, mPhotos.size(), COUNT_PER_LOAD)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(this::onActualPhotosReceived, this::onActualDataGetError));
@@ -86,7 +81,7 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
     private void onActualPhotosReceived(List<Photo> data) {
         changeLoadingNowState(false);
-        if(data.isEmpty()) {
+        if (data.isEmpty()) {
             canLoad = false;
             return;
         }
@@ -102,7 +97,7 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
     @Override
     protected void afterPageChangedFromUi(int oldPage, int newPage) {
         super.afterPageChangedFromUi(oldPage, newPage);
-        if(oldPage == newPage)
+        if (oldPage == newPage)
             return;
 
         if (newPage == count() - 1) {

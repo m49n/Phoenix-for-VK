@@ -4,10 +4,7 @@ import android.provider.BaseColumns;
 
 public final class MessageColumns implements BaseColumns {
 
-    private MessageColumns () {}
-
     public static final String TABLENAME = "messages";
-
     public static final String _ID = "_id";
     public static final String PEER_ID = "peer_id";
     public static final String FROM_ID = "from_id";
@@ -24,7 +21,6 @@ public final class MessageColumns implements BaseColumns {
     public static final String ATTACH_TO = "attach_to";
     public static final String ORIGINAL_ID = "original_id";
     public static final String UPDATE_TIME = "update_time";
-
     //chat_columns
     public static final String ACTION = "action";
     public static final String ACTION_MID = "action_mid";
@@ -35,9 +31,7 @@ public final class MessageColumns implements BaseColumns {
     public static final String PHOTO_200 = "photo_200";
     public static final String RANDOM_ID = "random_id";
     public static final String EXTRAS = "extras";
-
     public static final int DONT_ATTACH = 0;
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_PEER_ID = TABLENAME + "." + PEER_ID;
     public static final String FULL_FROM_ID = TABLENAME + "." + FROM_ID;
@@ -54,7 +48,6 @@ public final class MessageColumns implements BaseColumns {
     public static final String FULL_ATTACH_TO = TABLENAME + "." + ATTACH_TO;
     public static final String FULL_ORIGINAL_ID = TABLENAME + "." + ORIGINAL_ID;
     public static final String FULL_UPDATE_TIME = TABLENAME + "." + UPDATE_TIME;
-
     public static final String FULL_ACTION = TABLENAME + "." + ACTION;
     public static final String FULL_ACTION_MID = TABLENAME + "." + ACTION_MID;
     public static final String FULL_ACTION_EMAIL = TABLENAME + "." + ACTION_EMAIL;
@@ -64,4 +57,6 @@ public final class MessageColumns implements BaseColumns {
     public static final String FULL_PHOTO_200 = TABLENAME + "." + PHOTO_200;
     public static final String FULL_RANDOM_ID = TABLENAME + "." + RANDOM_ID;
     public static final String FULL_EXTRAS = TABLENAME + "." + EXTRAS;
+    private MessageColumns() {
+    }
 }

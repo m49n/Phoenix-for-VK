@@ -36,6 +36,48 @@ class TopicsStorage extends AbsStorage implements ITopicsStore {
         super(base);
     }
 
+    public static ContentValues getCV(TopicEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(TopicsColumns.TOPIC_ID, dbo.getId());
+        cv.put(TopicsColumns.OWNER_ID, dbo.getOwnerId());
+        cv.put(TopicsColumns.TITLE, dbo.getTitle());
+        cv.put(TopicsColumns.CREATED, dbo.getCreatedTime());
+        cv.put(TopicsColumns.CREATED_BY, dbo.getCreatorId());
+        cv.put(TopicsColumns.UPDATED, dbo.getLastUpdateTime());
+        cv.put(TopicsColumns.UPDATED_BY, dbo.getUpdatedBy());
+        cv.put(TopicsColumns.IS_CLOSED, dbo.isClosed());
+        cv.put(TopicsColumns.IS_FIXED, dbo.isFixed());
+        cv.put(TopicsColumns.COMMENTS, dbo.getCommentsCount());
+        cv.put(TopicsColumns.FIRST_COMMENT, dbo.getFirstComment());
+        cv.put(TopicsColumns.LAST_COMMENT, dbo.getLastComment());
+        cv.put(TopicsColumns.ATTACHED_POLL, nonNull(dbo.getPoll()) ? GSON.toJson(dbo.getPoll()) : null);
+        return cv;
+    }
+
+    private static TopicEntity mapDbo(Cursor cursor) {
+        int id = cursor.getInt(cursor.getColumnIndex(TopicsColumns.TOPIC_ID));
+        int ownerId = cursor.getInt(cursor.getColumnIndex(TopicsColumns.OWNER_ID));
+
+        TopicEntity dbo = new TopicEntity(id, ownerId)
+                .setTitle(cursor.getString(cursor.getColumnIndex(TopicsColumns.TITLE)))
+                .setCreatedTime(cursor.getLong(cursor.getColumnIndex(TopicsColumns.CREATED)))
+                .setCreatorId(cursor.getInt(cursor.getColumnIndex(TopicsColumns.CREATED_BY)))
+                .setLastUpdateTime(cursor.getLong(cursor.getColumnIndex(TopicsColumns.UPDATED)))
+                .setUpdatedBy(cursor.getInt(cursor.getColumnIndex(TopicsColumns.UPDATED_BY)))
+                .setClosed(cursor.getInt(cursor.getColumnIndex(TopicsColumns.IS_CLOSED)) == 1)
+                .setFixed(cursor.getInt(cursor.getColumnIndex(TopicsColumns.IS_FIXED)) == 1)
+                .setCommentsCount(cursor.getInt(cursor.getColumnIndex(TopicsColumns.COMMENTS)))
+                .setFirstComment(cursor.getString(cursor.getColumnIndex(TopicsColumns.FIRST_COMMENT)))
+                .setLastComment(cursor.getString(cursor.getColumnIndex(TopicsColumns.LAST_COMMENT)));
+
+        String pollJson = cursor.getString(cursor.getColumnIndex(TopicsColumns.ATTACHED_POLL));
+        if (nonEmpty(pollJson)) {
+            dbo.setPoll(GSON.fromJson(pollJson, PollEntity.class));
+        }
+
+        return dbo;
+    }
+
     @Override
     public Single<List<TopicEntity>> getByCriteria(@NonNull TopicsCriteria criteria) {
         return Single.create(e -> {
@@ -58,7 +100,7 @@ class TopicsStorage extends AbsStorage implements ITopicsStore {
             ArrayList<TopicEntity> topics = new ArrayList<>(safeCountOf(cursor));
             if (nonNull(cursor)) {
                 while (cursor.moveToNext()) {
-                    if(e.isDisposed()){
+                    if (e.isDisposed()) {
                         break;
                     }
 
@@ -109,24 +151,6 @@ class TopicsStorage extends AbsStorage implements ITopicsStore {
         });
     }
 
-    public static ContentValues getCV(TopicEntity dbo) {
-        ContentValues cv = new ContentValues();
-        cv.put(TopicsColumns.TOPIC_ID, dbo.getId());
-        cv.put(TopicsColumns.OWNER_ID, dbo.getOwnerId());
-        cv.put(TopicsColumns.TITLE, dbo.getTitle());
-        cv.put(TopicsColumns.CREATED, dbo.getCreatedTime());
-        cv.put(TopicsColumns.CREATED_BY, dbo.getCreatorId());
-        cv.put(TopicsColumns.UPDATED, dbo.getLastUpdateTime());
-        cv.put(TopicsColumns.UPDATED_BY, dbo.getUpdatedBy());
-        cv.put(TopicsColumns.IS_CLOSED, dbo.isClosed());
-        cv.put(TopicsColumns.IS_FIXED, dbo.isFixed());
-        cv.put(TopicsColumns.COMMENTS, dbo.getCommentsCount());
-        cv.put(TopicsColumns.FIRST_COMMENT, dbo.getFirstComment());
-        cv.put(TopicsColumns.LAST_COMMENT, dbo.getLastComment());
-        cv.put(TopicsColumns.ATTACHED_POLL, nonNull(dbo.getPoll()) ? GSON.toJson(dbo.getPoll()) : null);
-        return cv;
-    }
-
     @Override
     public Completable attachPoll(int accountId, int ownerId, int topicId, PollEntity dbo) {
         return Completable.create(e -> {
@@ -141,29 +165,5 @@ class TopicsStorage extends AbsStorage implements ITopicsStore {
             getContentResolver().update(uri, cv, where, args);
             e.onComplete();
         });
-    }
-
-    private static TopicEntity mapDbo(Cursor cursor) {
-        int id = cursor.getInt(cursor.getColumnIndex(TopicsColumns.TOPIC_ID));
-        int ownerId = cursor.getInt(cursor.getColumnIndex(TopicsColumns.OWNER_ID));
-
-        TopicEntity dbo = new TopicEntity(id, ownerId)
-                .setTitle(cursor.getString(cursor.getColumnIndex(TopicsColumns.TITLE)))
-                .setCreatedTime(cursor.getLong(cursor.getColumnIndex(TopicsColumns.CREATED)))
-                .setCreatorId(cursor.getInt(cursor.getColumnIndex(TopicsColumns.CREATED_BY)))
-                .setLastUpdateTime(cursor.getLong(cursor.getColumnIndex(TopicsColumns.UPDATED)))
-                .setUpdatedBy(cursor.getInt(cursor.getColumnIndex(TopicsColumns.UPDATED_BY)))
-                .setClosed(cursor.getInt(cursor.getColumnIndex(TopicsColumns.IS_CLOSED)) == 1)
-                .setFixed(cursor.getInt(cursor.getColumnIndex(TopicsColumns.IS_FIXED)) == 1)
-                .setCommentsCount(cursor.getInt(cursor.getColumnIndex(TopicsColumns.COMMENTS)))
-                .setFirstComment(cursor.getString(cursor.getColumnIndex(TopicsColumns.FIRST_COMMENT)))
-                .setLastComment(cursor.getString(cursor.getColumnIndex(TopicsColumns.LAST_COMMENT)));
-
-        String pollJson = cursor.getString(cursor.getColumnIndex(TopicsColumns.ATTACHED_POLL));
-        if (nonEmpty(pollJson)) {
-            dbo.setPoll(GSON.fromJson(pollJson, PollEntity.class));
-        }
-
-        return dbo;
     }
 }

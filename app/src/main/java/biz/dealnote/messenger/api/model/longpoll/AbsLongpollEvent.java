@@ -18,11 +18,11 @@ public class AbsLongpollEvent {
 
     public final int action;
 
-    public int getAction() {
-        return action;
-    }
-
     public AbsLongpollEvent(int action) {
         this.action = action;
+    }
+
+    public int getAction() {
+        return action;
     }
 }

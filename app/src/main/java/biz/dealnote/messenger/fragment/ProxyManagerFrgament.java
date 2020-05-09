@@ -35,14 +35,14 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class ProxyManagerFrgament extends BaseMvpFragment<ProxyManagerPresenter, IProxyManagerView>
         implements IProxyManagerView, ProxiesAdapter.ActionListener {
 
+    private ProxiesAdapter mProxiesAdapter;
+
     public static ProxyManagerFrgament newInstance() {
         Bundle args = new Bundle();
         ProxyManagerFrgament fragment = new ProxyManagerFrgament();
         fragment.setArguments(args);
         return fragment;
     }
-
-    private ProxiesAdapter mProxiesAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

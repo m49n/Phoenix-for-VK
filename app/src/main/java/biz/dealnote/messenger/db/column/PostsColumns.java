@@ -4,10 +4,7 @@ import android.provider.BaseColumns;
 
 public final class PostsColumns implements BaseColumns {
 
-    private PostsColumns(){}
-
     public static final String TABLENAME = "posts";
-
     public static final String POST_ID = "post_id";
     public static final String OWNER_ID = "owner_id";
     public static final String FROM_ID = "from_id";
@@ -34,7 +31,6 @@ public final class PostsColumns implements BaseColumns {
     public static final String DELETED = "deleted";
     public static final String POST_SOURCE = "post_source";
     public static final String VIEWS = "views";
-
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_POST_ID = TABLENAME + "." + POST_ID;
     public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
@@ -62,6 +58,8 @@ public final class PostsColumns implements BaseColumns {
     public static final String FULL_DELETED = TABLENAME + "." + DELETED;
     public static final String FULL_POST_SOURCE = TABLENAME + "." + POST_SOURCE;
     public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
+    private PostsColumns() {
+    }
 
     //public static final String FULL_HAS_COPY_HISTORY = TABLENAME + "." + HAS_COPY_HISTORY;
     //public static final String FULL_COPY_HISTORY_OF = TABLENAME + "." + COPY_HISTORY_OF;

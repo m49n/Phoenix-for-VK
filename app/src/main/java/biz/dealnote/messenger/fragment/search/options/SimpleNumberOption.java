@@ -7,6 +7,17 @@ import biz.dealnote.messenger.util.ParcelUtils;
 
 public class SimpleNumberOption extends BaseOption implements Parcelable {
 
+    public static final Creator<SimpleNumberOption> CREATOR = new Creator<SimpleNumberOption>() {
+        @Override
+        public SimpleNumberOption createFromParcel(Parcel in) {
+            return new SimpleNumberOption(in);
+        }
+
+        @Override
+        public SimpleNumberOption[] newArray(int size) {
+            return new SimpleNumberOption[size];
+        }
+    };
     public Integer value;
 
     public SimpleNumberOption(int key, int title, boolean active) {
@@ -52,16 +63,4 @@ public class SimpleNumberOption extends BaseOption implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SimpleNumberOption> CREATOR = new Creator<SimpleNumberOption>() {
-        @Override
-        public SimpleNumberOption createFromParcel(Parcel in) {
-            return new SimpleNumberOption(in);
-        }
-
-        @Override
-        public SimpleNumberOption[] newArray(int size) {
-            return new SimpleNumberOption[size];
-        }
-    };
 }

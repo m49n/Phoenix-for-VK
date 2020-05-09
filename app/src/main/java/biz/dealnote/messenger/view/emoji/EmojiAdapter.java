@@ -14,16 +14,16 @@ import biz.dealnote.messenger.view.emoji.section.Emojicon;
 
 class EmojiAdapter extends ArrayAdapter<Emojicon> {
 
-	private EmojiconsPopup.OnEmojiconClickedListener emojiClickListener;
+    private EmojiconsPopup.OnEmojiconClickedListener emojiClickListener;
 
     public EmojiAdapter(Context context, Emojicon[] data) {
         super(context, R.layout.emojicon_item, data);
     }
-    
-    public void setEmojiClickListener(@NonNull EmojiconsPopup.OnEmojiconClickedListener listener){
-    	this.emojiClickListener = listener;
+
+    public void setEmojiClickListener(@NonNull EmojiconsPopup.OnEmojiconClickedListener listener) {
+        this.emojiClickListener = listener;
     }
-    
+
     @NonNull
     @Override
     public View getView(final int position, View convertView, @NonNull ViewGroup parent) {

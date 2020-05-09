@@ -15,10 +15,19 @@ import biz.dealnote.messenger.api.model.Identificable;
  */
 public final class IdOption implements Parcelable, Identificable {
 
+    public static final Creator<IdOption> CREATOR = new Creator<IdOption>() {
+        @Override
+        public IdOption createFromParcel(Parcel in) {
+            return new IdOption(in);
+        }
+
+        @Override
+        public IdOption[] newArray(int size) {
+            return new IdOption[size];
+        }
+    };
     private final int id;
-
     private final String title;
-
     private final List<IdOption> childs;
 
     public IdOption(int id, String title, List<IdOption> childs) {
@@ -48,18 +57,6 @@ public final class IdOption implements Parcelable, Identificable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<IdOption> CREATOR = new Creator<IdOption>() {
-        @Override
-        public IdOption createFromParcel(Parcel in) {
-            return new IdOption(in);
-        }
-
-        @Override
-        public IdOption[] newArray(int size) {
-            return new IdOption[size];
-        }
-    };
 
     public List<IdOption> getChilds() {
         return childs;

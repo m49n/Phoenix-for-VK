@@ -16,13 +16,13 @@ public class CommentUpdate {
 
     private DeleteUpdate deleteUpdate;
 
-    private CommentUpdate(int accountId, Commented commented, int commentId){
+    private CommentUpdate(int accountId, Commented commented, int commentId) {
         this.accountId = accountId;
         this.commented = commented;
         this.commentId = commentId;
     }
 
-    public static CommentUpdate create(int accountId, Commented commented, int commentId){
+    public static CommentUpdate create(int accountId, Commented commented, int commentId) {
         return new CommentUpdate(accountId, commented, commentId);
     }
 
@@ -30,7 +30,7 @@ public class CommentUpdate {
         return accountId;
     }
 
-    public CommentUpdate withDeletion(boolean deleted){
+    public CommentUpdate withDeletion(boolean deleted) {
         this.deleteUpdate = new DeleteUpdate(deleted);
         return this;
     }
@@ -43,11 +43,11 @@ public class CommentUpdate {
         return commentId;
     }
 
-    public boolean hasDeleteUpdate(){
+    public boolean hasDeleteUpdate() {
         return deleteUpdate != null;
     }
 
-    public boolean hasLikesUpdate(){
+    public boolean hasLikesUpdate() {
         return likeUpdate != null;
     }
 
@@ -59,7 +59,7 @@ public class CommentUpdate {
         return likeUpdate;
     }
 
-    public CommentUpdate withLikes(boolean userLikes, int count){
+    public CommentUpdate withLikes(boolean userLikes, int count) {
         this.likeUpdate = new LikeUpdate(userLikes, count);
         return this;
     }

@@ -56,10 +56,10 @@ public class WallPublishFCMMessage {
         return message;
     }
 
-    public void notify(final Context context, int accountId){
+    public void notify(final Context context, int accountId) {
         if (!Settings.get()
                 .notifications()
-                .isWallPublishNotifEnabled()){
+                .isWallPublishNotifEnabled()) {
             return;
         }
 
@@ -69,11 +69,11 @@ public class WallPublishFCMMessage {
                 .subscribe(ownerInfo -> notifyImpl(app, ownerInfo.getCommunity(), ownerInfo.getAvatar()), throwable -> {/*ignore*/});
     }
 
-    private void notifyImpl(Context context, @NonNull Community community, Bitmap bitmap){
+    private void notifyImpl(Context context, @NonNull Community community, Bitmap bitmap) {
         String url = "vk.com/" + place;
         AbsLink link = VkLinkParser.parse(url);
 
-        if(link == null || !(link instanceof WallPostLink)){
+        if (link == null || !(link instanceof WallPostLink)) {
             PersistentLogger.logThrowable("Push issues", new Exception("Unknown place: " + place));
             return;
         }
@@ -81,7 +81,7 @@ public class WallPublishFCMMessage {
         WallPostLink wallPostLink = (WallPostLink) link;
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Utils.hasOreo()){
+        if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(context));
         }
 

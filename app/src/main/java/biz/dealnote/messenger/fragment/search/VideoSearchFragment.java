@@ -20,7 +20,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter, IVideosSearchView, Video>
         implements VideosAdapter.VideoOnClickListener {
 
-    public static VideoSearchFragment newInstance(int accountId, @Nullable VideoSearchCriteria initialCriteria){
+    public static VideoSearchFragment newInstance(int accountId, @Nullable VideoSearchCriteria initialCriteria) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         args.putParcelable(Extra.CRITERIA, initialCriteria);
@@ -31,7 +31,7 @@ public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter
 
     @Override
     void setAdapterData(RecyclerView.Adapter adapter, List<Video> data) {
-        ((VideosAdapter)adapter).setData(data);
+        ((VideosAdapter) adapter).setData(data);
     }
 
     @Override

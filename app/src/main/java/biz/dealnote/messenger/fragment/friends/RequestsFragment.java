@@ -42,7 +42,7 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IAllFri
     private FriendsRecycleAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public static RequestsFragment newInstance(int accountId, int userId){
+    public static RequestsFragment newInstance(int accountId, int userId) {
         Bundle args = new Bundle();
         args.putInt(Extra.USER_ID, userId);
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -112,7 +112,7 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IAllFri
 
     @Override
     public void notifyDatasetChanged(boolean enabled) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setGroup(enabled);
             mAdapter.notifyDataSetChanged();
         }
@@ -120,21 +120,21 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IAllFri
 
     @Override
     public void setSwipeRefreshEnabled(boolean enabled) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setEnabled(enabled);
         }
     }
 
     @Override
     public void displayData(List<UsersPart> data, boolean grouping) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setData(data, grouping);
         }
     }
 
     @Override
     public void notifyItemRangeInserted(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
         }
     }
@@ -146,7 +146,7 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IAllFri
 
     @Override
     public void showRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }

@@ -14,8 +14,19 @@ import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
  * Created by ruslan.kolbasa on 09.12.2016.
  * phoenix
  */
-public final class LikeFeedback extends Feedback implements Parcelable  {
+public final class LikeFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<LikeFeedback> CREATOR = new Creator<LikeFeedback>() {
+        @Override
+        public LikeFeedback createFromParcel(Parcel in) {
+            return new LikeFeedback(in);
+        }
+
+        @Override
+        public LikeFeedback[] newArray(int size) {
+            return new LikeFeedback[size];
+        }
+    };
     private AbsModel liked;
     private List<Owner> owners;
 
@@ -42,20 +53,13 @@ public final class LikeFeedback extends Feedback implements Parcelable  {
         return 0;
     }
 
-    public static final Creator<LikeFeedback> CREATOR = new Creator<LikeFeedback>() {
-        @Override
-        public LikeFeedback createFromParcel(Parcel in) {
-            return new LikeFeedback(in);
-        }
-
-        @Override
-        public LikeFeedback[] newArray(int size) {
-            return new LikeFeedback[size];
-        }
-    };
-
     public List<Owner> getOwners() {
         return owners;
+    }
+
+    public LikeFeedback setOwners(List<Owner> owners) {
+        this.owners = owners;
+        return this;
     }
 
     public AbsModel getLiked() {
@@ -64,11 +68,6 @@ public final class LikeFeedback extends Feedback implements Parcelable  {
 
     public LikeFeedback setLiked(AbsModel liked) {
         this.liked = liked;
-        return this;
-    }
-
-    public LikeFeedback setOwners(List<Owner> owners) {
-        this.owners = owners;
         return this;
     }
 }

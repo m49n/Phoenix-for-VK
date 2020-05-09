@@ -33,7 +33,7 @@ public class AppNotificationChannels {
             .build();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getChatMessageChannel(Context context){
+    public static NotificationChannel getChatMessageChannel(Context context) {
         String channelName = context.getString(R.string.message_channel);
 
         NotificationChannel channel = new NotificationChannel(CHAT_MESSAGE_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
@@ -44,7 +44,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getGroupChatMessageChannel(Context context){
+    public static NotificationChannel getGroupChatMessageChannel(Context context) {
         String channelName = context.getString(R.string.group_message_channel);
         NotificationChannel channel = new NotificationChannel(GROUP_CHAT_MESSAGE_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.setSound(NotificationHelper.findNotificationSound(), ATTRIBUTES);
@@ -54,7 +54,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getKeyExchangeChannel(Context context){
+    public static NotificationChannel getKeyExchangeChannel(Context context) {
         String channelName = context.getString(R.string.key_exchange_channel);
         NotificationChannel channel = new NotificationChannel(KEY_EXCHANGE_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
         channel.enableLights(false);
@@ -63,7 +63,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getLikesChannel(Context context){
+    public static NotificationChannel getLikesChannel(Context context) {
         String channelName = context.getString(R.string.likes_channel);
         NotificationChannel channel = new NotificationChannel(LIKES_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
@@ -71,7 +71,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getAudioChannel(Context context){
+    public static NotificationChannel getAudioChannel(Context context) {
         String channelName = context.getString(R.string.audio_channel);
         NotificationChannel channel = new NotificationChannel(AUDIO_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(false);
@@ -80,7 +80,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getCommentsChannel(Context context){
+    public static NotificationChannel getCommentsChannel(Context context) {
         String channelName = context.getString(R.string.comment_channel);
         NotificationChannel channel = new NotificationChannel(COMMENTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
@@ -89,7 +89,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getNewPostChannel(Context context){
+    public static NotificationChannel getNewPostChannel(Context context) {
         String channelName = context.getString(R.string.new_posts_channel);
         NotificationChannel channel = new NotificationChannel(NEW_POST_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
@@ -98,7 +98,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getDownloadChannel(Context context){
+    public static NotificationChannel getDownloadChannel(Context context) {
         String channelName = context.getString(R.string.downloading);
         NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
@@ -107,7 +107,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getGroupInvitesChannel(Context context){
+    public static NotificationChannel getGroupInvitesChannel(Context context) {
         String channelName = context.getString(R.string.group_invites_channel);
         NotificationChannel channel = new NotificationChannel(GROUP_INVITES_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
@@ -116,7 +116,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getFriendRequestsChannel(Context context){
+    public static NotificationChannel getFriendRequestsChannel(Context context) {
         String channelName = context.getString(R.string.friend_requests_channel);
         NotificationChannel channel = new NotificationChannel(FRIEND_REQUESTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
@@ -125,7 +125,7 @@ public class AppNotificationChannels {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getBirthdaysChannel(Context context){
+    public static NotificationChannel getBirthdaysChannel(Context context) {
         String channelName = context.getString(R.string.birthdays);
         NotificationChannel channel = new NotificationChannel(BIRTHDAYS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);

@@ -37,7 +37,7 @@ public class NewsAdapter extends AbsAdapter implements JsonDeserializer<VKApiNew
         dto.copy_owner_id = optInt(root, "copy_owner_id");
         dto.copy_post_id = optInt(root, "copy_post_id");
 
-        if(root.has("copy_history")){
+        if (root.has("copy_history")) {
             dto.copy_history = parseArray(root.getAsJsonArray("copy_history"), VKApiPost.class, context, null);
         } else {
             dto.copy_history = Collections.emptyList();
@@ -48,13 +48,13 @@ public class NewsAdapter extends AbsAdapter implements JsonDeserializer<VKApiNew
         dto.can_edit = optIntAsBoolean(root, "can_edit");
         dto.can_delete = optIntAsBoolean(root, "can_delete");
 
-        if(root.has("comments")){
+        if (root.has("comments")) {
             JsonObject commentsRoot = root.getAsJsonObject("comments");
             dto.comment_count = optInt(commentsRoot, "count");
             dto.comment_can_post = optIntAsBoolean(commentsRoot, "can_post");
         }
 
-        if(root.has("likes")){
+        if (root.has("likes")) {
             JsonObject likesRoot = root.getAsJsonObject("likes");
             dto.like_count = optInt(likesRoot, "count");
             dto.user_like = optIntAsBoolean(likesRoot, "user_likes");
@@ -62,26 +62,26 @@ public class NewsAdapter extends AbsAdapter implements JsonDeserializer<VKApiNew
             dto.can_publish = optIntAsBoolean(likesRoot, "can_publish");
         }
 
-        if(root.has("reposts")){
+        if (root.has("reposts")) {
             JsonObject repostsRoot = root.getAsJsonObject("reposts");
             dto.reposts_count = optInt(repostsRoot, "count");
             dto.user_reposted = optIntAsBoolean(repostsRoot, "user_reposted");
         }
 
-        if(root.has("views")){
+        if (root.has("views")) {
             JsonObject viewRoot = root.getAsJsonObject("views");
             dto.views = optInt(viewRoot, "count", 0);
         }
 
-        if(root.has("attachments")){
+        if (root.has("attachments")) {
             dto.attachments = context.deserialize(root.get("attachments"), VkApiAttachments.class);
         }
 
-        if(root.has("geo")){
+        if (root.has("geo")) {
             dto.geo = context.deserialize(root.get("geo"), VKApiPlace.class);
         }
 
-        if(root.has("photos")){
+        if (root.has("photos")) {
             JsonArray photosArray = root.getAsJsonObject("photos").getAsJsonArray("items");
             dto.photos = parseArray(photosArray, VKApiPhoto.class, context, null);
         }
@@ -95,10 +95,10 @@ public class NewsAdapter extends AbsAdapter implements JsonDeserializer<VKApiNew
         //    dto.notes = parseArray(root.getAsJsonArray("notes"), VKApiNote.class, context, null);
         //}
 
-        if(root.has("friends")){
+        if (root.has("friends")) {
             JsonArray friendsArray = root.getAsJsonObject("friends").getAsJsonArray("items");
             dto.friends = new ArrayList<>(friendsArray.size());
-            for(int i = 0; i < friendsArray.size(); i++){
+            for (int i = 0; i < friendsArray.size(); i++) {
                 JsonObject friendObj = friendsArray.get(i).getAsJsonObject();
                 dto.friends.add(friendObj.get("uid").getAsString());
             }

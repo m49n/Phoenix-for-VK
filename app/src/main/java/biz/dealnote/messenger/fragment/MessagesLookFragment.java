@@ -51,6 +51,13 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
 
     private RecyclerView mRecyclerView;
     private MessagesAdapter mMessagesAdapter;
+    private View mHeaderView;
+    private View mFooterView;
+    private LoadMoreFooterHelper mHeaderHelper;
+    private LoadMoreFooterHelper mFooterHelper;
+    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener;
+    private ActionMode mActionMode;
+    private ActionModeCallback mActionModeCallback = new ActionModeCallback();
 
     public static Bundle buildArgs(int accountId, int peerId, int focusMesssageId) {
         Bundle args = new Bundle();
@@ -65,12 +72,6 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
         fragment.setArguments(args);
         return fragment;
     }
-
-    private View mHeaderView;
-    private View mFooterView;
-
-    private LoadMoreFooterHelper mHeaderHelper;
-    private LoadMoreFooterHelper mFooterHelper;
 
     @Nullable
     @Override
@@ -115,8 +116,6 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
                 .show();
     }
 
-    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener;
-
     private void onFooterLoadMoreClick() {
         getPresenter().fireFooterLoadMoreClick();
     }
@@ -143,14 +142,14 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
 
     @Override
     public void notifyMessagesUpAdded(int startPosition, int count) {
-        if(Objects.nonNull(mMessagesAdapter)){
+        if (Objects.nonNull(mMessagesAdapter)) {
             mMessagesAdapter.notifyItemRangeInserted(startPosition + 1, count); //+header
         }
     }
 
     @Override
     public void notifyMessagesDownAdded(int count) {
-        if(Objects.nonNull(mMessagesAdapter)){
+        if (Objects.nonNull(mMessagesAdapter)) {
             mMessagesAdapter.notifyItemRemoved(0);
             mMessagesAdapter.notifyItemRangeInserted(0, count + 1); //+header
         }
@@ -171,8 +170,100 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
         // TODO: 09.10.2016
     }
 
-    private ActionMode mActionMode;
-    private ActionModeCallback mActionModeCallback = new ActionModeCallback();
+    @Override
+    public void showActionMode(String title, Boolean canEdit, Boolean canPin) {
+        if (Objects.isNull(mActionMode)) {
+            mActionMode = ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
+        }
+
+        if (Objects.nonNull(mActionMode)) {
+            mActionMode.setTitle(title);
+            mActionMode.invalidate();
+        }
+    }
+
+    @Override
+    public void finishActionMode() {
+        if (Objects.nonNull(mActionMode)) {
+            mActionMode.finish();
+            mActionMode = null;
+        }
+    }
+
+    @Override
+    public void notifyDataChanged() {
+        if (Objects.nonNull(mMessagesAdapter)) {
+            mMessagesAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void setupHeaders(@LoadMoreState int upHeaderState, @LoadMoreState int downHeaderState) {
+        if (Objects.nonNull(mHeaderHelper)) {
+            mHeaderHelper.switchToState(upHeaderState);
+        }
+
+        if (Objects.nonNull(mFooterHelper)) {
+            mFooterHelper.switchToState(downHeaderState);
+        }
+    }
+
+    @Override
+    public void forwardMessages(int accountId, @NonNull ArrayList<Message> messages) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), accountId, new FwdMessages(messages));
+    }
+
+    @Override
+    public IPresenterFactory<MessagesLookPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
+        return () -> {
+            int aid = requireArguments().getInt(Extra.ACCOUNT_ID);
+            int peerId = requireArguments().getInt(Extra.PEER_ID);
+            Integer focusTo = requireArguments().containsKey(Extra.FOCUS_TO) ? requireArguments().getInt(Extra.FOCUS_TO) : null;
+            return new MessagesLookPresenter(aid, peerId, focusTo, saveInstanceState);
+        };
+    }
+
+    @Override
+    public void onAvatarClick(@NonNull Message message, int userId) {
+        if (Objects.nonNull(mActionMode)) {
+            getPresenter().fireMessageClick(message);
+        } else {
+            getPresenter().fireOwnerClick(userId);
+        }
+    }
+
+    @Override
+    public void onRestoreClick(@NonNull Message message, int position) {
+        getPresenter().fireMessageRestoreClick(message, position);
+    }
+
+    @Override
+    public boolean onMessageLongClick(@NonNull Message message) {
+        getPresenter().fireMessageLongClick(message);
+        return true;
+    }
+
+    @Override
+    public void onMessageClicked(@NonNull Message message) {
+        getPresenter().fireMessageClick(message);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
+        if (Objects.nonNull(actionBar)) {
+            actionBar.setTitle(R.string.viewing_messages);
+            actionBar.setSubtitle(null);
+        }
+
+        new ActivityFeatures.Builder()
+                .begin()
+                .setHideNavigationMenu(false)
+                .setBarsColored(requireActivity(), true)
+                .build()
+                .apply(requireActivity());
+    }
 
     private class ActionModeCallback implements ActionMode.Callback {
 
@@ -211,100 +302,5 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
             getPresenter().fireActionModeDestroy();
             mActionMode = null;
         }
-    }
-
-    @Override
-    public void showActionMode(String title, Boolean canEdit, Boolean canPin) {
-        if (Objects.isNull(mActionMode)) {
-            mActionMode = ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-        }
-
-        if(Objects.nonNull(mActionMode)){
-            mActionMode.setTitle(title);
-            mActionMode.invalidate();
-        }
-    }
-
-    @Override
-    public void finishActionMode() {
-        if(Objects.nonNull(mActionMode)){
-            mActionMode.finish();
-            mActionMode = null;
-        }
-    }
-
-    @Override
-    public void notifyDataChanged() {
-        if(Objects.nonNull(mMessagesAdapter)){
-            mMessagesAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void setupHeaders(@LoadMoreState int upHeaderState, @LoadMoreState int downHeaderState) {
-        if(Objects.nonNull(mHeaderHelper)){
-            mHeaderHelper.switchToState(upHeaderState);
-        }
-
-        if(Objects.nonNull(mFooterHelper)){
-            mFooterHelper.switchToState(downHeaderState);
-        }
-    }
-
-    @Override
-    public void forwardMessages(int accountId, @NonNull ArrayList<Message> messages) {
-        SendAttachmentsActivity.startForSendAttachments(requireActivity(), accountId, new FwdMessages(messages));
-    }
-
-    @Override
-    public IPresenterFactory<MessagesLookPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> {
-            int aid = requireArguments().getInt(Extra.ACCOUNT_ID);
-            int peerId = requireArguments().getInt(Extra.PEER_ID);
-            Integer focusTo = requireArguments().containsKey(Extra.FOCUS_TO) ? requireArguments().getInt(Extra.FOCUS_TO) : null;
-            return new MessagesLookPresenter(aid, peerId, focusTo, saveInstanceState);
-        };
-    }
-
-    @Override
-    public void onAvatarClick(@NonNull Message message, int userId) {
-        if(Objects.nonNull(mActionMode)){
-            getPresenter().fireMessageClick(message);
-        } else {
-            getPresenter().fireOwnerClick(userId);
-        }
-    }
-
-    @Override
-    public void onRestoreClick(@NonNull Message message, int position) {
-        getPresenter().fireMessageRestoreClick(message, position);
-    }
-
-    @Override
-    public boolean onMessageLongClick(@NonNull Message message) {
-        getPresenter().fireMessageLongClick(message);
-        return true;
-    }
-
-    @Override
-    public void onMessageClicked(@NonNull Message message) {
-        getPresenter().fireMessageClick(message);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(Objects.nonNull(actionBar)){
-            actionBar.setTitle(R.string.viewing_messages);
-            actionBar.setSubtitle(null);
-        }
-
-        new ActivityFeatures.Builder()
-                .begin()
-                .setHideNavigationMenu(false)
-                .setBarsColored(requireActivity(), true)
-                .build()
-                .apply(requireActivity());
     }
 }

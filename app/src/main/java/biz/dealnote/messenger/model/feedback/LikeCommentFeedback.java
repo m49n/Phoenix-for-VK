@@ -15,8 +15,19 @@ import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
  * Created by ruslan.kolbasa on 09.12.2016.
  * phoenix
  */
-public final class LikeCommentFeedback extends Feedback implements Parcelable  {
+public final class LikeCommentFeedback extends Feedback implements Parcelable {
 
+    public static final Creator<LikeCommentFeedback> CREATOR = new Creator<LikeCommentFeedback>() {
+        @Override
+        public LikeCommentFeedback createFromParcel(Parcel in) {
+            return new LikeCommentFeedback(in);
+        }
+
+        @Override
+        public LikeCommentFeedback[] newArray(int size) {
+            return new LikeCommentFeedback[size];
+        }
+    };
     private Comment liked;
     private AbsModel commented;
     private List<Owner> owners;
@@ -46,18 +57,6 @@ public final class LikeCommentFeedback extends Feedback implements Parcelable  {
         return 0;
     }
 
-    public static final Creator<LikeCommentFeedback> CREATOR = new Creator<LikeCommentFeedback>() {
-        @Override
-        public LikeCommentFeedback createFromParcel(Parcel in) {
-            return new LikeCommentFeedback(in);
-        }
-
-        @Override
-        public LikeCommentFeedback[] newArray(int size) {
-            return new LikeCommentFeedback[size];
-        }
-    };
-
     public AbsModel getCommented() {
         return commented;
     }
@@ -67,21 +66,21 @@ public final class LikeCommentFeedback extends Feedback implements Parcelable  {
         return this;
     }
 
+    public Comment getLiked() {
+        return liked;
+    }
+
     public LikeCommentFeedback setLiked(Comment liked) {
         this.liked = liked;
         return this;
     }
 
+    public List<Owner> getOwners() {
+        return owners;
+    }
+
     public LikeCommentFeedback setOwners(List<Owner> owners) {
         this.owners = owners;
         return this;
-    }
-
-    public Comment getLiked() {
-        return liked;
-    }
-
-    public List<Owner> getOwners() {
-        return owners;
     }
 }

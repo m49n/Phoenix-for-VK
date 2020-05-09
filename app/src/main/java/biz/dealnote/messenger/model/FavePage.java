@@ -64,6 +64,11 @@ public class FavePage implements Identificable {
         return group;
     }
 
+    public FavePage setGroup(Community group) {
+        this.group = group;
+        return this;
+    }
+
     public Owner getOwner() {
         switch (type) {
             case FavePageType.USER:
@@ -72,11 +77,6 @@ public class FavePage implements Identificable {
                 return group;
         }
         return null;
-    }
-
-    public FavePage setGroup(Community group) {
-        this.group = group;
-        return this;
     }
 }
 

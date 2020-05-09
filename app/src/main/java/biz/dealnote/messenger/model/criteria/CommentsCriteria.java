@@ -12,6 +12,7 @@ public class CommentsCriteria {
     private final Commented commented;
 
     private final int accountId;
+    public DatabaseIdRange range;
 
     public CommentsCriteria(int accountId, Commented commented) {
         this.accountId = accountId;
@@ -26,14 +27,12 @@ public class CommentsCriteria {
         return accountId;
     }
 
-    public DatabaseIdRange range;
+    public DatabaseIdRange getRange() {
+        return range;
+    }
 
     public CommentsCriteria setRange(DatabaseIdRange range) {
         this.range = range;
         return this;
-    }
-
-    public DatabaseIdRange getRange() {
-        return range;
     }
 }

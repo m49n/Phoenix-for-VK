@@ -8,6 +8,17 @@ import java.util.ArrayList;
 
 public class SpinnerOption extends BaseOption implements Parcelable {
 
+    public static final Creator<SpinnerOption> CREATOR = new Creator<SpinnerOption>() {
+        @Override
+        public SpinnerOption createFromParcel(Parcel in) {
+            return new SpinnerOption(in);
+        }
+
+        @Override
+        public SpinnerOption[] newArray(int size) {
+            return new SpinnerOption[size];
+        }
+    };
     public Entry value;
     public ArrayList<Entry> available;
 
@@ -15,62 +26,10 @@ public class SpinnerOption extends BaseOption implements Parcelable {
         super(SPINNER, key, title, active);
     }
 
-    public static class Entry implements Parcelable, Cloneable {
-
-        public int id;
-        public int name;
-
-        public Entry(int id, int name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        protected Entry(Parcel in) {
-            id = in.readInt();
-            name = in.readInt();
-        }
-
-        @Override
-        protected Entry clone() throws CloneNotSupportedException {
-            return (Entry) super.clone();
-        }
-
-        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
-            @Override
-            public Entry createFromParcel(Parcel in) {
-                return new Entry(in);
-            }
-
-            @Override
-            public Entry[] newArray(int size) {
-                return new Entry[size];
-            }
-        };
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Entry entry = (Entry) o;
-            return id == entry.id;
-        }
-
-        @Override
-        public int hashCode() {
-            return id;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(id);
-            dest.writeInt(name);
-        }
+    protected SpinnerOption(Parcel in) {
+        super(in);
+        value = in.readParcelable(Entry.class.getClassLoader());
+        available = in.createTypedArrayList(Entry.CREATOR);
     }
 
     @Override
@@ -78,12 +37,6 @@ public class SpinnerOption extends BaseOption implements Parcelable {
         SpinnerOption clone = (SpinnerOption) super.clone();
         clone.value = this.value == null ? null : this.value.clone();
         return clone;
-    }
-
-    protected SpinnerOption(Parcel in) {
-        super(in);
-        value = in.readParcelable(Entry.class.getClassLoader());
-        available = in.createTypedArrayList(Entry.CREATOR);
     }
 
     @Override
@@ -115,24 +68,69 @@ public class SpinnerOption extends BaseOption implements Parcelable {
         return 0;
     }
 
-    public static final Creator<SpinnerOption> CREATOR = new Creator<SpinnerOption>() {
-        @Override
-        public SpinnerOption createFromParcel(Parcel in) {
-            return new SpinnerOption(in);
-        }
-
-        @Override
-        public SpinnerOption[] newArray(int size) {
-            return new SpinnerOption[size];
-        }
-    };
-
-    public String[] createAvailableNames(Context context){
+    public String[] createAvailableNames(Context context) {
         String[] names = new String[available.size()];
-        for(int i = 0; i < available.size(); i++){
+        for (int i = 0; i < available.size(); i++) {
             names[i] = context.getString(available.get(i).name);
         }
 
         return names;
+    }
+
+    public static class Entry implements Parcelable, Cloneable {
+
+        public static final Creator<Entry> CREATOR = new Creator<Entry>() {
+            @Override
+            public Entry createFromParcel(Parcel in) {
+                return new Entry(in);
+            }
+
+            @Override
+            public Entry[] newArray(int size) {
+                return new Entry[size];
+            }
+        };
+        public int id;
+        public int name;
+
+        public Entry(int id, int name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        protected Entry(Parcel in) {
+            id = in.readInt();
+            name = in.readInt();
+        }
+
+        @Override
+        protected Entry clone() throws CloneNotSupportedException {
+            return (Entry) super.clone();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Entry entry = (Entry) o;
+            return id == entry.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(id);
+            dest.writeInt(name);
+        }
     }
 }

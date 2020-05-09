@@ -19,21 +19,21 @@ public class NewCommentEntity extends FeedbackEntity {
         super(type);
     }
 
+    public CommentEntity getComment() {
+        return comment;
+    }
+
     public NewCommentEntity setComment(CommentEntity comment) {
         this.comment = comment;
         return this;
     }
 
+    public Entity getCommented() {
+        return commented.get();
+    }
+
     public NewCommentEntity setCommented(Entity commented) {
         this.commented = new EntityWrapper(commented);
         return this;
-    }
-
-    public CommentEntity getComment() {
-        return comment;
-    }
-
-    public Entity getCommented() {
-        return commented.get();
     }
 }

@@ -93,7 +93,7 @@ public class BoardInteractor implements IBoardInteractor {
                             .andThen(ownersRepository.findBaseOwnersDataAsBundle(accountId, ownerIds.getAll(), IOwnersRepository.MODE_ANY, owners)
                                     .map(ownersBundle -> {
                                         List<Topic> topics = new ArrayList<>(dbos.size());
-                                        for(TopicEntity dbo : dbos){
+                                        for (TopicEntity dbo : dbos) {
                                             topics.add(Entity2Model.buildTopicFromDbo(dbo, ownersBundle));
                                         }
                                         return topics;

@@ -45,20 +45,17 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
         implements ILogsView, HorizontalOptionsAdapter.Listener<LogEventType>, LogsAdapter.ActionListener {
 
+    private HorizontalOptionsAdapter<LogEventType> mTypesAdapter;
+    private LogsAdapter mLogsAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView mEmptyText;
+
     public static LogsFragement newInstance() {
         Bundle args = new Bundle();
         LogsFragement fragment = new LogsFragement();
         fragment.setArguments(args);
         return fragment;
     }
-
-    private HorizontalOptionsAdapter<LogEventType> mTypesAdapter;
-
-    private LogsAdapter mLogsAdapter;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private TextView mEmptyText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,21 +96,21 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
 
     @Override
     public void displayTypes(List<LogEventType> types) {
-        if(nonNull(mTypesAdapter)){
+        if (nonNull(mTypesAdapter)) {
             mTypesAdapter.setItems(types);
         }
     }
 
     @Override
     public void displayData(List<LogEventWrapper> events) {
-        if(nonNull(mLogsAdapter)){
+        if (nonNull(mLogsAdapter)) {
             mLogsAdapter.setItems(events);
         }
     }
 
     @Override
     public void showRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refreshing);
         }
     }
@@ -123,7 +120,7 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
         super.onResume();
 
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if(nonNull(actionBar)){
+        if (nonNull(actionBar)) {
             actionBar.setTitle(R.string.application_logs);
             actionBar.setSubtitle(null);
         }
@@ -142,21 +139,21 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
 
     @Override
     public void notifyEventDataChanged() {
-        if(nonNull(mLogsAdapter)){
+        if (nonNull(mLogsAdapter)) {
             mLogsAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void notifyTypesDataChanged() {
-        if(nonNull(mTypesAdapter)){
+        if (nonNull(mTypesAdapter)) {
             mTypesAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void setEmptyTextVisible(boolean visible) {
-        if(nonNull(mEmptyText)){
+        if (nonNull(mEmptyText)) {
             mEmptyText.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }

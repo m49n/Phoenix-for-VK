@@ -19,18 +19,6 @@ import biz.dealnote.messenger.util.Objects;
  */
 public class AudioSelectActivity extends NoMainActivity implements PlaceProvider {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
-        super.onCreate(savedInstanceState);
-
-        if (Objects.isNull(savedInstanceState)) {
-            int accountId = super.getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
-            int ownerId = super.getIntent().getExtras().getInt(Extra.OWNER_ID);
-            attachInitialFragment(accountId, ownerId);
-        }
-    }
-
     /**
      * @param context
      * @param accountId От чьего имени получать
@@ -41,6 +29,18 @@ public class AudioSelectActivity extends NoMainActivity implements PlaceProvider
         return new Intent(context, AudioSelectActivity.class)
                 .putExtra(Extra.ACCOUNT_ID, accountId)
                 .putExtra(Extra.OWNER_ID, ownerId);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(Settings.get().ui().getMainTheme());
+        super.onCreate(savedInstanceState);
+
+        if (Objects.isNull(savedInstanceState)) {
+            int accountId = super.getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
+            int ownerId = super.getIntent().getExtras().getInt(Extra.OWNER_ID);
+            attachInitialFragment(accountId, ownerId);
+        }
     }
 
     private void attachInitialFragment(int accountId, int ownerId) {

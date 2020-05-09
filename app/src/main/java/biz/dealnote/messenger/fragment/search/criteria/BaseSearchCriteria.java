@@ -14,6 +14,17 @@ import biz.dealnote.messenger.fragment.search.options.SpinnerOption;
 
 public class BaseSearchCriteria implements Parcelable, Cloneable {
 
+    public static final Creator<BaseSearchCriteria> CREATOR = new Creator<BaseSearchCriteria>() {
+        @Override
+        public BaseSearchCriteria createFromParcel(Parcel in) {
+            return new BaseSearchCriteria(in);
+        }
+
+        @Override
+        public BaseSearchCriteria[] newArray(int size) {
+            return new BaseSearchCriteria[size];
+        }
+    };
     private String query;
     private ArrayList<BaseOption> options;
 
@@ -26,17 +37,39 @@ public class BaseSearchCriteria implements Parcelable, Cloneable {
         this.options = new ArrayList<>(optionsCount);
     }
 
-    public static final Creator<BaseSearchCriteria> CREATOR = new Creator<BaseSearchCriteria>() {
-        @Override
-        public BaseSearchCriteria createFromParcel(Parcel in) {
-            return new BaseSearchCriteria(in);
-        }
+    protected BaseSearchCriteria(Parcel in) {
+        this.query = in.readString();
 
-        @Override
-        public BaseSearchCriteria[] newArray(int size) {
-            return new BaseSearchCriteria[size];
+        int optionsSize = in.readInt();
+        this.options = new ArrayList<>(optionsSize);
+
+        for (int i = 0; i < optionsSize; i++) {
+            int optionType = in.readInt();
+
+            ClassLoader classLoader;
+            switch (optionType) {
+                case BaseOption.DATABASE:
+                    classLoader = DatabaseOption.class.getClassLoader();
+                    break;
+                case BaseOption.SIMPLE_BOOLEAN:
+                    classLoader = SimpleBooleanOption.class.getClassLoader();
+                    break;
+                case BaseOption.SIMPLE_TEXT:
+                    classLoader = SimpleTextOption.class.getClassLoader();
+                    break;
+                case BaseOption.SIMPLE_NUMBER:
+                    classLoader = SimpleNumberOption.class.getClassLoader();
+                    break;
+                case BaseOption.SPINNER:
+                    classLoader = SpinnerOption.class.getClassLoader();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown option type !!!");
+            }
+
+            this.options.add(in.readParcelable(classLoader));
         }
-    };
+    }
 
     void appendOption(BaseOption option) {
         this.options.add(option);
@@ -44,6 +77,10 @@ public class BaseSearchCriteria implements Parcelable, Cloneable {
 
     public String getQuery() {
         return query;
+    }
+
+    public void setQuery(String q) {
+        this.query = q;
     }
 
     @Override
@@ -101,40 +138,6 @@ public class BaseSearchCriteria implements Parcelable, Cloneable {
         }
     }
 
-    protected BaseSearchCriteria(Parcel in) {
-        this.query = in.readString();
-
-        int optionsSize = in.readInt();
-        this.options = new ArrayList<>(optionsSize);
-
-        for (int i = 0; i < optionsSize; i++) {
-            int optionType = in.readInt();
-
-            ClassLoader classLoader;
-            switch (optionType) {
-                case BaseOption.DATABASE:
-                    classLoader = DatabaseOption.class.getClassLoader();
-                    break;
-                case BaseOption.SIMPLE_BOOLEAN:
-                    classLoader = SimpleBooleanOption.class.getClassLoader();
-                    break;
-                case BaseOption.SIMPLE_TEXT:
-                    classLoader = SimpleTextOption.class.getClassLoader();
-                    break;
-                case BaseOption.SIMPLE_NUMBER:
-                    classLoader = SimpleNumberOption.class.getClassLoader();
-                    break;
-                case BaseOption.SPINNER:
-                    classLoader = SpinnerOption.class.getClassLoader();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown option type !!!");
-            }
-
-            this.options.add(in.readParcelable(classLoader));
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public <T extends BaseOption> T findOptionByKey(int key) {
         for (BaseOption option : options) {
@@ -168,10 +171,6 @@ public class BaseSearchCriteria implements Parcelable, Cloneable {
         } else {
             return databaseOption.value.id;
         }
-    }
-
-    public void setQuery(String q) {
-        this.query = q;
     }
 
     public ArrayList<BaseOption> getOptions() {

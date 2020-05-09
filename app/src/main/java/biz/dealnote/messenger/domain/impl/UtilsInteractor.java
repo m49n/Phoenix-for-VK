@@ -102,7 +102,7 @@ public class UtilsInteractor implements IUtilsInteractor {
         return stores.owners()
                 .findUserByDomain(accountId, domain)
                 .<Optional<Owner>>flatMap(optionalUserEntity -> {
-                    if(optionalUserEntity.nonEmpty()){
+                    if (optionalUserEntity.nonEmpty()) {
                         User user = Entity2Model.map(optionalUserEntity.get());
                         return Single.just(Optional.wrap(user));
                     }
@@ -110,7 +110,7 @@ public class UtilsInteractor implements IUtilsInteractor {
                     return stores.owners()
                             .findCommunityByDomain(accountId, domain)
                             .flatMap(optionalCommunityEntity -> {
-                                if(optionalCommunityEntity.nonEmpty()){
+                                if (optionalCommunityEntity.nonEmpty()) {
                                     Community community = Entity2Model.buildCommunityFromDbo(optionalCommunityEntity.get());
                                     return Single.just(Optional.<Owner>wrap(community));
                                 }
@@ -119,7 +119,7 @@ public class UtilsInteractor implements IUtilsInteractor {
                             });
                 })
                 .flatMap(optionalOwner -> {
-                    if(optionalOwner.nonEmpty()){
+                    if (optionalOwner.nonEmpty()) {
                         return Single.just(optionalOwner);
                     }
 
@@ -127,13 +127,13 @@ public class UtilsInteractor implements IUtilsInteractor {
                             .utils()
                             .resolveScreenName(domain)
                             .flatMap(response -> {
-                                if("user".equals(response.type)){
+                                if ("user".equals(response.type)) {
                                     int userId = Integer.parseInt(response.object_id);
                                     return ownersRepository.getBaseOwnerInfo(accountId, userId, IOwnersRepository.MODE_ANY)
                                             .map(Optional::wrap);
                                 }
 
-                                if("group".equals(response.type)){
+                                if ("group".equals(response.type)) {
                                     int ownerId = -Math.abs(Integer.parseInt(response.object_id));
                                     return ownersRepository.getBaseOwnerInfo(accountId, ownerId, IOwnersRepository.MODE_ANY)
                                             .map(Optional::wrap);

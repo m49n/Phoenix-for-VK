@@ -78,6 +78,23 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     private static final int REQUEST_CODE_ATTACHMENTS = 17;
     private static final int REQUEST_EDIT = 18;
+    private CommentsInputViewController mInputController;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
+    private ViewGroup mReplyView;
+    private TextView mReplyText;
+    private LoadMoreFooterHelper upHelper;
+    private LoadMoreFooterHelper downhelper;
+    private CommentsAdapter mAdapter;
+    private ProgressBar mCenterProgressBar;
+    private View mEmptyView;
+    private ImageView mAuthorAvatar;
+    private AlertDialog mDeepLookingProgressDialog;
+    private boolean mCanSendCommentAsAdmin;
+    private boolean mTopicPollAvailable;
+    private boolean mGotoSourceAvailable;
+    @StringRes
+    private Integer mGotoSourceText;
 
     public static CommentsFragment newInstance(@NonNull Place place) {
         CommentsFragment fragment = new CommentsFragment();
@@ -92,34 +109,17 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         if (focusToComment != null) {
             bundle.putInt(EXTRA_AT_COMMENT_OBJECT, focusToComment);
         }
-        if(CommentThread != null)
+        if (CommentThread != null)
             bundle.putInt(EXTRA_AT_COMMENT_THREAD, CommentThread);
 
         return bundle;
     }
-
-    private CommentsInputViewController mInputController;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
-
-    private ViewGroup mReplyView;
-    private TextView mReplyText;
-
-    private LoadMoreFooterHelper upHelper;
-    private LoadMoreFooterHelper downhelper;
-
-    private CommentsAdapter mAdapter;
-
-    private ProgressBar mCenterProgressBar;
-    private View mEmptyView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
-    private ImageView mAuthorAvatar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -413,8 +413,6 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         }
     }
 
-    private AlertDialog mDeepLookingProgressDialog;
-
     @Override
     public void displayDeepLookingCommentProgress() {
         mDeepLookingProgressDialog = new SpotsDialog.Builder().setContext(requireActivity()).setCancelable(true).setCancelListener(dialog -> getPresenter().fireDeepLookingCancelledByUser()).build();
@@ -427,8 +425,6 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
             mDeepLookingProgressDialog.dismiss();
         }
     }
-
-    private boolean mCanSendCommentAsAdmin;
 
     @Override
     public void setCanSendSelectAuthor(boolean can) {
@@ -473,30 +469,6 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
     @Override
     public void onCommentLikeClick(Comment comment, boolean add) {
         getPresenter().fireCommentLikeClick(comment, add);
-    }
-
-    private static final class ContextView implements ICommentContextView {
-
-        boolean canEdit;
-
-        boolean canDelete;
-
-        boolean canBan;
-
-        @Override
-        public void setCanEdit(boolean can) {
-            this.canEdit = can;
-        }
-
-        @Override
-        public void setCanDelete(boolean can) {
-            this.canDelete = can;
-        }
-
-        @Override
-        public void setCanBan(boolean can) {
-            this.canBan = can;
-        }
     }
 
     @Override
@@ -606,12 +578,6 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         inflater.inflate(R.menu.comments_list_menu, menu);
     }
 
-    private boolean mTopicPollAvailable;
-    private boolean mGotoSourceAvailable;
-
-    @StringRes
-    private Integer mGotoSourceText;
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -665,5 +631,29 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         super.onDestroyView();
         mInputController.destroyView();
         mInputController = null;
+    }
+
+    private static final class ContextView implements ICommentContextView {
+
+        boolean canEdit;
+
+        boolean canDelete;
+
+        boolean canBan;
+
+        @Override
+        public void setCanEdit(boolean can) {
+            this.canEdit = can;
+        }
+
+        @Override
+        public void setCanDelete(boolean can) {
+            this.canDelete = can;
+        }
+
+        @Override
+        public void setCanBan(boolean can) {
+            this.canBan = can;
+        }
     }
 }

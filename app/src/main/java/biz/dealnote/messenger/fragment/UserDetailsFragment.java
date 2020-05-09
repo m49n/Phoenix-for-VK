@@ -44,6 +44,8 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, IUserDetailsView> implements IUserDetailsView, RecyclerMenuAdapter.ActionListener {
 
+    private RecyclerMenuAdapter menuAdapter;
+
     public static UserDetailsFragment newInstance(int accountId, @NonNull User user, @NonNull UserDetails details) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -53,8 +55,6 @@ public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, I
         fragment.setArguments(args);
         return fragment;
     }
-
-    private RecyclerMenuAdapter menuAdapter;
 
     @Nullable
     @Override

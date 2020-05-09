@@ -31,12 +31,10 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
     private final int ownerId;
     private final String accessKey;
     private final boolean isStory;
-
-    private IFaveInteractor faveInteractor;
-
-    private Video video;
-
     private final IVideosInteractor interactor;
+    private IFaveInteractor faveInteractor;
+    private Video video;
+    private boolean refreshingNow;
 
     public VideoPreviewPresenter(int accountId, int videoId, int ownerId, @Nullable Video video, Integer Story, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -63,8 +61,6 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
         outState.putParcelable("video", video);
     }
 
-    private boolean refreshingNow;
-
     private void setRefreshingNow(boolean refreshingNow) {
         this.refreshingNow = refreshingNow;
     }
@@ -74,8 +70,7 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
             getView().showSuccessToast();
     }
 
-    public void fireAddFaveVideo()
-    {
+    public void fireAddFaveVideo() {
         appendDisposable(faveInteractor.addVideo(getAccountId(), video.getOwnerId(), video.getId(), video.getAccessKey())
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(this::onVideoAddedToBookmarks, t -> showError(getView(), getCauseIfRuntime(t))));
@@ -129,12 +124,11 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
 
         setRefreshingNow(true);
 
-        if(isNull(video)){
+        if (isNull(video)) {
             callView(IVideoPreviewView::displayLoading);
         }
 
-        if(isStory)
-        {
+        if (isStory) {
             onActualInfoReceived(this.video);
             return;
         }

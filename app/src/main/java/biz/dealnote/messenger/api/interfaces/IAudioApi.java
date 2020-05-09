@@ -34,13 +34,14 @@ public interface IAudioApi {
 
     @CheckResult
     Single<Integer> add(int audioId, int ownerId, Integer groupId, Integer album_id);
+
     @CheckResult
     Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerI,
                                   Integer offset, String accessKey);
 
     @CheckResult
     Single<List<VKApiAudio>> getPopular(Integer foreign,
-                                         Integer genre);
+                                        Integer genre);
 
     @CheckResult
     Single<Integer> deletePlaylist(int playlist_id, int ownerId);

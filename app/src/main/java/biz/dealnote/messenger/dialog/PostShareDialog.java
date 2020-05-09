@@ -37,6 +37,13 @@ import static biz.dealnote.messenger.util.RxUtils.ignore;
  */
 public class PostShareDialog extends DialogFragment {
 
+    private static final String EXTRA_METHOD = "share-method";
+    private static final String EXTRA_OWNER_ID = "share-owner-id";
+    private int mAccountId;
+    private Post mPost;
+    private MenuAdapter mAdapter;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     public static PostShareDialog newInstance(int accountId, @NonNull Post post) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -44,21 +51,6 @@ public class PostShareDialog extends DialogFragment {
         PostShareDialog fragment = new PostShareDialog();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public PostShareDialog targetTo(Fragment fragment, int requestCode) {
-        setTargetFragment(fragment, requestCode);
-        return this;
-    }
-
-    private int mAccountId;
-    private Post mPost;
-
-    public static final class Methods {
-        public static final int SHARE_LINK = 1;
-        public static final int SEND_MESSAGE = 2;
-        public static final int REPOST_YOURSELF = 3;
-        public static final int REPOST_GROUP = 4;
     }
 
     public static int extractMethod(@NonNull Intent data) {
@@ -80,6 +72,11 @@ public class PostShareDialog extends DialogFragment {
         return data.getExtras().getInt(EXTRA_OWNER_ID);
     }
 
+    public PostShareDialog targetTo(Fragment fragment, int requestCode) {
+        setTargetFragment(fragment, requestCode);
+        return this;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,18 +85,11 @@ public class PostShareDialog extends DialogFragment {
         mPost = getArguments().getParcelable(Extra.POST);
     }
 
-    private MenuAdapter mAdapter;
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     @Override
     public void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
     }
-
-    private static final String EXTRA_METHOD = "share-method";
-    private static final String EXTRA_OWNER_ID = "share-owner-id";
 
     private void onItemClick(Item item) {
         if (nonNull(getTargetFragment())) {
@@ -168,5 +158,12 @@ public class PostShareDialog extends DialogFragment {
         }
 
         return builder.create();
+    }
+
+    public static final class Methods {
+        public static final int SHARE_LINK = 1;
+        public static final int SEND_MESSAGE = 2;
+        public static final int REPOST_YOURSELF = 3;
+        public static final int REPOST_GROUP = 4;
     }
 }

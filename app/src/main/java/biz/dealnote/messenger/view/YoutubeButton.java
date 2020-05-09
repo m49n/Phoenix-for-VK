@@ -30,7 +30,7 @@ public class YoutubeButton extends LinearLayout {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs){
+    private void init(Context context, AttributeSet attrs) {
         inflate(context, R.layout.view_youtube_button, this);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.YoutubeButton);
@@ -55,7 +55,7 @@ public class YoutubeButton extends LinearLayout {
         }
     }
 
-    public void setIconColor(@ColorInt int color){
-        ((ImageView)findViewById(R.id.youtube_button_icon)).setColorFilter(color);
+    public void setIconColor(@ColorInt int color) {
+        ((ImageView) findViewById(R.id.youtube_button_icon)).setColorFilter(color);
     }
 }

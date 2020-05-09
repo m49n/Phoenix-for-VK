@@ -8,7 +8,7 @@ class PeerUpdate(val accountId: Int, val peerId: Int) {
     var pin: Pin? = null
     var title: Title? = null
 
-    class Read (val messageId: Int)
+    class Read(val messageId: Int)
 
     class Unread(val count: Int)
 

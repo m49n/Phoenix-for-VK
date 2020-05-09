@@ -30,6 +30,43 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
         super(base);
     }
 
+    private static CommunityEntity mapCommunity(Cursor cursor) {
+        return new CommunityEntity(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.SUBJECT_ID)))
+                .setName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_NAME)))
+                .setScreenName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_SCREEN_NAME)))
+                .setClosed(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED)))
+                .setAdmin(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_ADMIN)) == 1)
+                .setAdminLevel(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_ADMIN_LEVEL)))
+                .setMember(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_MEMBER)) == 1)
+                .setMemberStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_MEMBER_STATUS)))
+                .setType(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_TYPE)))
+                .setPhoto50(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_50)))
+                .setPhoto100(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_100)))
+                .setPhoto200(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_200)));
+    }
+
+    private static UserEntity mapDbo(Cursor cursor) {
+        int gid = Math.abs(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.SUBJECT_ID)));
+        return new UserEntity(gid)
+                .setFirstName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FIRST_NAME)))
+                .setLastName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_NAME)))
+                .setOnline(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE)) == 1)
+                .setOnlineMobile(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE)) == 1)
+                .setOnlineApp(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE_APP)))
+                .setPhoto50(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_50)))
+                .setPhoto100(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_100)))
+                .setPhoto200(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_200)))
+                .setPhotoMax(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_MAX)))
+                .setLastSeen(cursor.getLong(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_SEEN)))
+                .setPlatform(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PLATFORM)))
+                .setStatus(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS)))
+                .setSex(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_SEX)))
+                .setFriend(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_IS_FRIEND)) == 1)
+                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS)))
+                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS)) == 1)
+                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_IS_USER_BLACK_LIST)) == 1);
+    }
+
     @Override
     public Completable storeFriendsList(int accountId, int userId, @NonNull Collection<FriendListEntity> data) {
         return Completable.create(e -> {
@@ -176,43 +213,6 @@ class RelativeshipStorage extends AbsStorage implements IRelativeshipStorage {
 
             emitter.onSuccess(dbos);
         });
-    }
-
-    private static CommunityEntity mapCommunity(Cursor cursor) {
-        return new CommunityEntity(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.SUBJECT_ID)))
-                .setName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_NAME)))
-                .setScreenName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_SCREEN_NAME)))
-                .setClosed(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED)))
-                .setAdmin(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_ADMIN)) == 1)
-                .setAdminLevel(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_ADMIN_LEVEL)))
-                .setMember(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_MEMBER)) == 1)
-                .setMemberStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_MEMBER_STATUS)))
-                .setType(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_TYPE)))
-                .setPhoto50(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_50)))
-                .setPhoto100(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_100)))
-                .setPhoto200(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_200)));
-    }
-
-    private static UserEntity mapDbo(Cursor cursor) {
-        int gid = Math.abs(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.SUBJECT_ID)));
-        return new UserEntity(gid)
-                .setFirstName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FIRST_NAME)))
-                .setLastName(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_NAME)))
-                .setOnline(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE)) == 1)
-                .setOnlineMobile(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE)) == 1)
-                .setOnlineApp(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_ONLINE_APP)))
-                .setPhoto50(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_50)))
-                .setPhoto100(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_100)))
-                .setPhoto200(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_200)))
-                .setPhotoMax(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PHOTO_MAX)))
-                .setLastSeen(cursor.getLong(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_LAST_SEEN)))
-                .setPlatform(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_PLATFORM)))
-                .setStatus(cursor.getString(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_STATUS)))
-                .setSex(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_SEX)))
-                .setFriend(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_IS_FRIEND)) == 1)
-                .setFriendStatus(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_USER_FRIEND_STATUS)))
-                .setCanWritePrivateMessage(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_WRITE_MESSAGE_STATUS)) == 1)
-                .setBlacklisted_by_me(cursor.getInt(cursor.getColumnIndex(RelationshipColumns.FOREIGN_SUBJECT_IS_USER_BLACK_LIST)) == 1);
     }
 
     private void appendInsertHeaders(Uri uri, List<ContentProviderOperation> operations, int objectId, List<UserEntity> dbos, int type) {

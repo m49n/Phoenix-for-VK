@@ -84,7 +84,7 @@ public class DialogNotifOptionsDialog extends DialogFragment {
         return builder.create();
     }
 
-    private void onSaveClick(){
+    private void onSaveClick() {
         int newMask = 0;
         if (scEnable.isChecked()) {
             newMask += FLAG_SHOW_NOTIF;

@@ -49,7 +49,7 @@ public class Photo2AlbumUploadable implements IUploadable<Photo> {
         final Integer groupId = upload.getDestination().getOwnerId() < 0 ? Math.abs(upload.getDestination().getOwnerId()) : null;
 
         Single<UploadServer> serverSingle;
-        if(Objects.nonNull(initialServer)){
+        if (Objects.nonNull(initialServer)) {
             serverSingle = Single.just(initialServer);
         } else {
             serverSingle = networker.vkDefault(accountId)
@@ -85,7 +85,7 @@ public class Photo2AlbumUploadable implements IUploadable<Photo> {
                                     .photos()
                                     .save(albumId, groupId, dto.server, dto.photosList, dto.hash, latitude, longitude, null)
                                     .flatMap(photos -> {
-                                        if(photos.isEmpty()){
+                                        if (photos.isEmpty()) {
                                             return Single.error(new NotFoundException());
                                         }
 
@@ -95,14 +95,14 @@ public class Photo2AlbumUploadable implements IUploadable<Photo> {
                                         return upload.isAutoCommit() ? commit(storage, upload, entity).andThen(result) : result;
                                     });
                         });
-            } catch (Exception e){
+            } catch (Exception e) {
                 safelyClose(is[0]);
                 return Single.error(e);
             }
         });
     }
 
-    private Completable commit(IPhotosStorage storage, Upload upload, PhotoEntity entity){
+    private Completable commit(IPhotosStorage storage, Upload upload, PhotoEntity entity) {
         return storage.insertPhotosRx(upload.getAccountId(), entity.getOwnerId(), entity.getAlbumId(), Collections.singletonList(entity), false);
     }
 }

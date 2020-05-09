@@ -30,7 +30,7 @@ public abstract class AbsLink {
         this.type = vkLinkType;
     }
 
-    public boolean isValid(){
+    public boolean isValid() {
         return true;
     }
 }

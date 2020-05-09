@@ -34,7 +34,7 @@ public class ConversationLinksFragment extends AbsChatAttachmentsFragment<Link, 
 
     @Override
     public void displayAttachments(List<Link> data) {
-        if(getAdapter() instanceof LinksAdapter){
+        if (getAdapter() instanceof LinksAdapter) {
             ((LinksAdapter) getAdapter()).setItems(data);
         }
     }

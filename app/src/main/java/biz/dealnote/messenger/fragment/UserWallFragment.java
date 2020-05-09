@@ -71,39 +71,34 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         implements IUserWallView {
 
     private static final int REQUEST_UPLOAD_AVATAR = 46;
-
-    private UserHeaderHolder mHeaderHolder;
     boolean NeedShowClBlk;
+    private UserHeaderHolder mHeaderHolder;
 
-    private String transform_owner(int owner_id)
-    {
-        if(owner_id < 0)
+    private String transform_owner(int owner_id) {
+        if (owner_id < 0)
             return "club" + Math.abs(owner_id);
         else
             return "id" + owner_id;
     }
 
-    private void downloadAvatar(User user)
-    {
+    private void downloadAvatar(User user) {
         File dir = new File(Settings.get().other().getPhotoDir());
         if (!dir.isDirectory()) {
             boolean created = dir.mkdirs();
             if (!created) {
                 return;
             }
-        }
-        else
+        } else
             dir.setLastModified(Calendar.getInstance().getTime().getTime());
 
-        if(user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
+        if (user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
             File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
             if (!dir_final.isDirectory()) {
                 boolean created = dir_final.mkdirs();
                 if (!created) {
                     return;
                 }
-            }
-            else
+            } else
                 dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
             dir = dir_final;
         }
@@ -113,21 +108,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         new InternalDownloader(requireActivity(), url, file, user).doDownload();
     }
 
-    private final class InternalDownloader extends DownloadImageTask {
-        InternalDownloader(Context context, String url, String file, User user) {
-            super(context, url, file, "profile_" + user.getId(), true);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (Objects.isNull(s)) {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
-            } else {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
-            }
-        }
-    }
-
     @Override
     public void displayBaseUserInfo(User user) {
         if (isNull(mHeaderHolder)) return;
@@ -135,7 +115,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         mHeaderHolder.tvName.setText(user.getFullName());
         mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user));
 
-        if(!user.getCanWritePrivateMessage())
+        if (!user.getCanWritePrivateMessage())
             mHeaderHolder.fabMessage.setImageResource(R.drawable.close);
         else
             mHeaderHolder.fabMessage.setImageResource(R.drawable.email);
@@ -159,7 +139,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         });
 
         Integer onlineIcon = ViewUtils.getOnlineIcon(true, user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
-        if(!user.isOnline())
+        if (!user.isOnline())
             mHeaderHolder.ivOnline.setCircleColor(CurrentTheme.getColorFromAttrs(R.attr.icon_color_inactive, requireContext(), "#000000"));
         else
             mHeaderHolder.ivOnline.setCircleColor(CurrentTheme.getColorFromAttrs(R.attr.icon_color_active, requireContext(), "#000000"));
@@ -182,6 +162,18 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                 .setPositiveButton(R.string.button_show, (dialog, which) -> PlaceFactory.getPostPreviewPlace(accountId, post.getVkid(), post.getOwnerId(), post).tryOpenWith(requireActivity()))
                 .setNegativeButton(R.string.button_ok, null)
                 .show();
+    }
+
+    @Override
+    public void displayCounters(int friends, int followers, int groups, int photos, int audios, int videos) {
+        if (nonNull(mHeaderHolder)) {
+            setupCounter(mHeaderHolder.bFriends, friends);
+//            setupCounter(mHeaderHolder.bFollowers, followers);
+            setupCounter(mHeaderHolder.bGroups, groups);
+            setupCounter(mHeaderHolder.bPhotos, photos);
+            setupCounter(mHeaderHolder.bAudios, audios);
+            setupCounter(mHeaderHolder.bVideos, videos);
+        }
     }
 
     /*@Override
@@ -234,18 +226,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
         SelectionUtils.addSelectionProfileSupport(getContext(), mHeaderHolder.avatarRoot, user);
     }*/
-
-    @Override
-    public void displayCounters(int friends, int followers, int groups, int photos, int audios, int videos) {
-        if (nonNull(mHeaderHolder)) {
-            setupCounter(mHeaderHolder.bFriends, friends);
-//            setupCounter(mHeaderHolder.bFollowers, followers);
-            setupCounter(mHeaderHolder.bGroups, groups);
-            setupCounter(mHeaderHolder.bPhotos, photos);
-            setupCounter(mHeaderHolder.bAudios, audios);
-            setupCounter(mHeaderHolder.bVideos, videos);
-        }
-    }
 
     @Override
     public void displayUserStatus(String statusText) {
@@ -402,7 +382,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             getPresenter().fireMentions();
             return true;
         });
-        if(getPresenter().getAccountId() != getPresenter().getOwnerId()) {
+        if (getPresenter().getAccountId() != getPresenter().getOwnerId()) {
             menu.add(R.string.report).setOnMenuItemClickListener(item -> {
                 getPresenter().fireReport();
                 return true;
@@ -417,6 +397,21 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     getPresenter().fireRemoveBlacklistClick();
                     return true;
                 });
+        }
+    }
+
+    private final class InternalDownloader extends DownloadImageTask {
+        InternalDownloader(Context context, String url, String file, User user) {
+            super(context, url, file, "profile_" + user.getId(), true);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (Objects.isNull(s)) {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
+            } else {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
+            }
         }
     }
 

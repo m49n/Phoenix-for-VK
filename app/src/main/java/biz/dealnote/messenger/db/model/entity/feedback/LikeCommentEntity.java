@@ -20,9 +20,8 @@ public class LikeCommentEntity extends FeedbackEntity {
         super(type);
     }
 
-    public LikeCommentEntity setCommented(Entity commented) {
-        this.commented = new EntityWrapper(commented);
-        return this;
+    public CommentEntity getLiked() {
+        return liked;
     }
 
     public LikeCommentEntity setLiked(CommentEntity liked) {
@@ -30,20 +29,21 @@ public class LikeCommentEntity extends FeedbackEntity {
         return this;
     }
 
-    public CommentEntity getLiked() {
-        return liked;
-    }
-
     public Entity getCommented() {
         return commented.get();
     }
 
-    public LikeCommentEntity setLikesOwnerIds(int[] likesOwnerIds) {
-        this.likesOwnerIds = likesOwnerIds;
+    public LikeCommentEntity setCommented(Entity commented) {
+        this.commented = new EntityWrapper(commented);
         return this;
     }
 
     public int[] getLikesOwnerIds() {
         return likesOwnerIds;
+    }
+
+    public LikeCommentEntity setLikesOwnerIds(int[] likesOwnerIds) {
+        this.likesOwnerIds = likesOwnerIds;
+        return this;
     }
 }

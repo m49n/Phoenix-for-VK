@@ -22,7 +22,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPresenter, INewsFeedSearchView, Post>
         implements WallAdapter.ClickListener, INewsFeedSearchView {
 
-    public static NewsFeedSearchFragment newInstance(int accountId, @Nullable NewsFeedCriteria initialCriteria){
+    public static NewsFeedSearchFragment newInstance(int accountId, @Nullable NewsFeedCriteria initialCriteria) {
         Bundle args = new Bundle();
         args.putParcelable(Extra.CRITERIA, initialCriteria);
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -33,7 +33,7 @@ public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPres
 
     @Override
     void setAdapterData(RecyclerView.Adapter adapter, List<Post> data) {
-        ((WallAdapter)adapter).setItems(data);
+        ((WallAdapter) adapter).setItems(data);
     }
 
     @Override

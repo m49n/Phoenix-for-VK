@@ -27,6 +27,7 @@ public class SelectedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context mContext;
     private List<User> mData;
     private Transformation mTransformation;
+    private ActionListener mActionListener;
 
     public SelectedProfilesAdapter(Context context, List<User> data) {
         this.mContext = context;
@@ -51,7 +52,7 @@ public class SelectedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(position == 0){
+        if (position == 0) {
             bindCheckViewHolder((CheckViewHolder) holder);
         } else {
             bindProfileViewHolder((ProfileViewHolder) holder, position);
@@ -63,15 +64,15 @@ public class SelectedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.V
         return position == 0 ? VIEW_TYPE_CHECK : VIEW_TYPE_USER;
     }
 
-    private void bindCheckViewHolder(CheckViewHolder holder){
-        if(mData.isEmpty()){
+    private void bindCheckViewHolder(CheckViewHolder holder) {
+        if (mData.isEmpty()) {
             holder.counter.setText(R.string.press_plus_for_add);
         } else {
             holder.counter.setText(String.valueOf(mData.size()));
         }
 
         holder.root.setOnClickListener(v -> {
-            if(mActionListener != null){
+            if (mActionListener != null) {
                 mActionListener.onCheckClick();
             }
         });
@@ -98,14 +99,25 @@ public class SelectedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.V
         return mData.size() + 1;
     }
 
-    private ActionListener mActionListener;
-
     public void setActionListener(ActionListener actionListener) {
         this.mActionListener = actionListener;
     }
 
+    public int toAdapterPosition(int dataPosition) {
+        return dataPosition + 1;
+    }
+
+    public int toDataPosition(int adapterPosition) {
+        return adapterPosition - 1;
+    }
+
+    public void notifyHeaderChange() {
+        notifyItemChanged(0);
+    }
+
     public interface ActionListener extends EventListener {
         void onClick(int adapterPosition, User user);
+
         void onCheckClick();
     }
 
@@ -119,18 +131,6 @@ public class SelectedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.counter = itemView.findViewById(R.id.counter);
             this.root = itemView.findViewById(R.id.root);
         }
-    }
-
-    public int toAdapterPosition(int dataPosition){
-        return dataPosition + 1;
-    }
-
-    public int toDataPosition(int adapterPosition){
-        return adapterPosition - 1;
-    }
-
-    public void notifyHeaderChange(){
-        notifyItemChanged(0);
     }
 
     private class ProfileViewHolder extends RecyclerView.ViewHolder {

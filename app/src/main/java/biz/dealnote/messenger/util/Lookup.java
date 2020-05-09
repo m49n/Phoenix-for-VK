@@ -13,6 +13,7 @@ public class Lookup {
     private Handler mHandler;
 
     private int mDelay;
+    private Callback mCallback;
 
     public Lookup(int initialDelay) {
         mDelay = initialDelay;
@@ -22,32 +23,30 @@ public class Lookup {
         });
     }
 
-    private void onLookupHandle(){
+    private void onLookupHandle() {
         mHandler.sendEmptyMessageDelayed(LOOKUP, mDelay);
-        if(Objects.nonNull(mCallback)){
+        if (Objects.nonNull(mCallback)) {
             mCallback.onIterated();
         }
     }
 
-    public void changeDelayTime(int delay, boolean startNow){
+    public void changeDelayTime(int delay, boolean startNow) {
         mDelay = delay;
-        if(startNow){
+        if (startNow) {
             mHandler.removeMessages(LOOKUP);
             mHandler.sendEmptyMessageDelayed(LOOKUP, mDelay);
         }
     }
 
-    public void stop(){
+    public void stop() {
         mHandler.removeMessages(LOOKUP);
     }
 
-    public void start(){
-        if(!mHandler.hasMessages(LOOKUP)){
+    public void start() {
+        if (!mHandler.hasMessages(LOOKUP)) {
             mHandler.sendEmptyMessageDelayed(LOOKUP, mDelay);
         }
     }
-
-    private Callback mCallback;
 
     public void setCallback(Callback callback) {
         this.mCallback = callback;

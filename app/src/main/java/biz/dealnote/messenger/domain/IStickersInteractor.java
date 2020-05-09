@@ -12,6 +12,8 @@ import io.reactivex.Single;
  */
 public interface IStickersInteractor {
     Completable getAndStore(int accountId);
+
     Single<List<StickerSet>> getStickers(int accountId);
+
     Single<List<StickerSet>> getRecentStickers(int accountId);
 }

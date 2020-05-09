@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
@@ -14,11 +14,11 @@
         android:layout_height="@dimen/pincode_row_height">
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -30,19 +30,19 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorSecondary" />
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -54,20 +54,20 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ABC"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -79,11 +79,11 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DEF"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
     </TableRow>
@@ -93,11 +93,11 @@
         android:layout_height="@dimen/pincode_row_height">
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button4"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -109,20 +109,20 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="GHI"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button5"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -134,20 +134,20 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="JKL"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -159,11 +159,11 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MNO"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
     </TableRow>
@@ -173,11 +173,11 @@
         android:layout_height="@dimen/pincode_row_height">
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -189,20 +189,20 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PQRS"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button8"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -214,20 +214,20 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TUV"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button9"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -239,11 +239,11 @@
                 android:textSize="30dp" />
 
             <TextView
-                android:textSize="@dimen/pincode_button_subtitle_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="WXYZ"
-                android:textColor="?attr/icon_color_active" />
+                android:textColor="?attr/icon_color_active"
+                android:textSize="@dimen/pincode_button_subtitle_text_size" />
 
         </LinearLayout>
     </TableRow>
@@ -253,11 +253,11 @@
         android:layout_height="@dimen/pincode_row_height">
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/buttonFingerprint"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -270,11 +270,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/button0"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -288,11 +288,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/buttonBackspace"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pincode_row_height"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 

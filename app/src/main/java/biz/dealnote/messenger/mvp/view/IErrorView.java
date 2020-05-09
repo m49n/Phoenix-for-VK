@@ -10,6 +10,8 @@ import biz.dealnote.messenger.util.PhoenixToast;
  */
 public interface IErrorView {
     void showError(String errorText);
+
     void showError(@StringRes int titleTes, Object... params);
+
     PhoenixToast getPhoenixToast();
 }

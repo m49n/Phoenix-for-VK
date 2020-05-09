@@ -32,13 +32,13 @@ public class AttachmentsDboAdapter implements JsonDeserializer<AttachmentsEntity
     public AttachmentsEntity deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonArray array = jsonElement.getAsJsonArray();
 
-        if(array.size() == 0){
+        if (array.size() == 0) {
             return new AttachmentsEntity(Collections.emptyList());
         }
 
         List<Entity> entities = new ArrayList<>(array.size());
 
-        for(int i = 0; i < array.size(); i++){
+        for (int i = 0; i < array.size(); i++) {
             JsonObject o = array.get(i).getAsJsonObject();
             int dbotype = o.get(KEY_ENTITY_TYPE).getAsInt();
             entities.add(context.deserialize(o.get(KEY_ENTITY), AttachmentsTypes.classForType(dbotype)));
@@ -52,7 +52,7 @@ public class AttachmentsDboAdapter implements JsonDeserializer<AttachmentsEntity
         List<Entity> entities = attachmentsEntity.getEntities();
 
         JsonArray array = new JsonArray(entities.size());
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             int dbotype = AttachmentsTypes.typeForInstance(entity);
 
             JsonObject o = new JsonObject();

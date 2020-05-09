@@ -11,6 +11,17 @@ import biz.dealnote.messenger.adapter.horizontal.Entry;
 
 public class FeedSource implements Entry, Parcelable {
 
+    public static final Creator<FeedSource> CREATOR = new Creator<FeedSource>() {
+        @Override
+        public FeedSource createFromParcel(Parcel in) {
+            return new FeedSource(in);
+        }
+
+        @Override
+        public FeedSource[] newArray(int size) {
+            return new FeedSource[size];
+        }
+    };
     private final String value;
     private final Text title;
     private boolean active;
@@ -35,23 +46,6 @@ public class FeedSource implements Entry, Parcelable {
         return value;
     }
 
-    public static final Creator<FeedSource> CREATOR = new Creator<FeedSource>() {
-        @Override
-        public FeedSource createFromParcel(Parcel in) {
-            return new FeedSource(in);
-        }
-
-        @Override
-        public FeedSource[] newArray(int size) {
-            return new FeedSource[size];
-        }
-    };
-
-    public FeedSource setActive(boolean active) {
-        this.active = active;
-        return this;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -72,5 +66,10 @@ public class FeedSource implements Entry, Parcelable {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    public FeedSource setActive(boolean active) {
+        this.active = active;
+        return this;
     }
 }

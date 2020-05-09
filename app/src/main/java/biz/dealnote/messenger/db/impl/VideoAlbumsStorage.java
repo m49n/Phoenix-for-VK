@@ -33,6 +33,18 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
         super(base);
     }
 
+    public static ContentValues getCV(VideoAlbumEntity dbo) {
+        ContentValues cv = new ContentValues();
+        cv.put(VideoAlbumsColumns.OWNER_ID, dbo.getOwnerId());
+        cv.put(VideoAlbumsColumns.ALBUM_ID, dbo.getId());
+        cv.put(VideoAlbumsColumns.TITLE, dbo.getTitle());
+        cv.put(VideoAlbumsColumns.IMAGE, dbo.getImage());
+        cv.put(VideoAlbumsColumns.COUNT, dbo.getCount());
+        cv.put(VideoAlbumsColumns.UPDATE_TIME, dbo.getUpdateTime());
+        cv.put(VideoAlbumsColumns.PRIVACY, nonNull(dbo.getPrivacy()) ? GSON.toJson(dbo.getPrivacy()) : null);
+        return cv;
+    }
+
     @Override
     public Single<List<VideoAlbumEntity>> findByCriteria(@NonNull VideoAlbumCriteria criteria) {
         return Single.create(e -> {
@@ -42,7 +54,7 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
 
             DatabaseIdRange range = criteria.getRange();
 
-            if(nonNull(range)){
+            if (nonNull(range)) {
                 where = VideoAlbumsColumns.OWNER_ID + " = ? " +
                         " AND " + VideoAlbumsColumns._ID + " >= ? " +
                         " AND " + VideoAlbumsColumns._ID + " <= ?";
@@ -57,9 +69,9 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
             Cursor cursor = getContentResolver().query(uri, null, where, args, null);
             List<VideoAlbumEntity> data = new ArrayList<>(Utils.safeCountOf(cursor));
 
-            if(nonNull(cursor)){
-                while (cursor.moveToNext()){
-                    if(e.isDisposed()){
+            if (nonNull(cursor)) {
+                while (cursor.moveToNext()) {
+                    if (e.isDisposed()) {
                         break;
                     }
 
@@ -98,26 +110,14 @@ class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
         });
     }
 
-    public static ContentValues getCV(VideoAlbumEntity dbo){
-        ContentValues cv = new ContentValues();
-        cv.put(VideoAlbumsColumns.OWNER_ID, dbo.getOwnerId());
-        cv.put(VideoAlbumsColumns.ALBUM_ID, dbo.getId());
-        cv.put(VideoAlbumsColumns.TITLE, dbo.getTitle());
-        cv.put(VideoAlbumsColumns.IMAGE, dbo.getImage());
-        cv.put(VideoAlbumsColumns.COUNT, dbo.getCount());
-        cv.put(VideoAlbumsColumns.UPDATE_TIME, dbo.getUpdateTime());
-        cv.put(VideoAlbumsColumns.PRIVACY, nonNull(dbo.getPrivacy()) ? GSON.toJson(dbo.getPrivacy()) : null);
-        return cv;
-    }
-
-    private VideoAlbumEntity mapAlbum(Cursor cursor){
+    private VideoAlbumEntity mapAlbum(Cursor cursor) {
         final int id = cursor.getInt(cursor.getColumnIndex(VideoAlbumsColumns.ALBUM_ID));
         final int ownerId = cursor.getInt(cursor.getColumnIndex(VideoAlbumsColumns.OWNER_ID));
 
         PrivacyEntity privacyEntity = null;
 
         String privacyJson = cursor.getString(cursor.getColumnIndex(VideoAlbumsColumns.PRIVACY));
-        if(Utils.nonEmpty(privacyJson)){
+        if (Utils.nonEmpty(privacyJson)) {
             privacyEntity = GSON.fromJson(privacyJson, PrivacyEntity.class);
         }
 

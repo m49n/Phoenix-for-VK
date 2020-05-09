@@ -21,6 +21,6 @@ class UtilsApi extends AbsApi implements IUtilsApi {
     public Single<ResolveDomailResponse> resolveScreenName(String screenName) {
         return provideService(IUtilsService.class, TokenType.USER)
                 .flatMap(service -> service.resolveScreenName(screenName)
-                .map(extractResponseWithErrorHandling()));
+                        .map(extractResponseWithErrorHandling()));
     }
 }

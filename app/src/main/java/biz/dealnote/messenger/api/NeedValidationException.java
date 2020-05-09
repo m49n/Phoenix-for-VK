@@ -17,6 +17,7 @@ public class NeedValidationException extends Exception {
     public String getValidationType() {
         return type;
     }
+
     public String getValidationURL() {
         return validate_url;
     }

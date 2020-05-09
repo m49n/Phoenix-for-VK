@@ -65,7 +65,7 @@ public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditP
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.ready:
                 getPresenter().fireReadyClick();
                 return true;
@@ -98,7 +98,7 @@ public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditP
         Intent data = new Intent();
         data.putExtra(Extra.COMMENT, comment);
 
-        if(nonNull(getTargetFragment())){
+        if (nonNull(getTargetFragment())) {
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         }
 

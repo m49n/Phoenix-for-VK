@@ -30,7 +30,7 @@ public abstract class AbsDocumentPreviewFragment<P extends BaseDocumentPresenter
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_WRITE_PERMISSION && isPresenterPrepared()){
+        if (requestCode == REQUEST_WRITE_PERMISSION && isPresenterPrepared()) {
             getPresenter().fireWritePermissionResolved();
         }
     }

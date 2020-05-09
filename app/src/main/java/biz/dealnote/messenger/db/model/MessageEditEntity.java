@@ -12,24 +12,15 @@ import biz.dealnote.messenger.db.model.entity.MessageEntity;
  */
 public class MessageEditEntity {
 
-    private boolean encrypted;
-
-    private long date;
-
-    private boolean out;
-
-    private boolean deleted;
-
-    private boolean important;
-
-    private List<MessageEntity> forward;
-
-    private List<Entity> attachments;
-
     private final int status;
-
     private final int senderId;
-
+    private boolean encrypted;
+    private long date;
+    private boolean out;
+    private boolean deleted;
+    private boolean important;
+    private List<MessageEntity> forward;
+    private List<Entity> attachments;
     private boolean read;
 
     private String body;
@@ -41,9 +32,8 @@ public class MessageEditEntity {
         this.senderId = senderId;
     }
 
-    public MessageEditEntity setRead(boolean read) {
-        this.read = read;
-        return this;
+    public String getBody() {
+        return body;
     }
 
     public MessageEditEntity setBody(String body) {
@@ -51,8 +41,8 @@ public class MessageEditEntity {
         return this;
     }
 
-    public String getBody() {
-        return body;
+    public Map<Integer, String> getExtras() {
+        return extras;
     }
 
     public MessageEditEntity setExtras(Map<Integer, String> extras) {
@@ -60,12 +50,13 @@ public class MessageEditEntity {
         return this;
     }
 
-    public Map<Integer, String> getExtras() {
-        return extras;
-    }
-
     public boolean isRead() {
         return read;
+    }
+
+    public MessageEditEntity setRead(boolean read) {
+        this.read = read;
+        return this;
     }
 
     public boolean isEncrypted() {

@@ -17,6 +17,7 @@ public class FacultiesAdapter extends RecyclerView.Adapter<FacultiesAdapter.Hold
 
     private Context mContext;
     private List<Faculty> mData;
+    private Listener mListener;
 
     public FacultiesAdapter(Context mContext, List<Faculty> mData) {
         this.mContext = mContext;
@@ -34,7 +35,7 @@ public class FacultiesAdapter extends RecyclerView.Adapter<FacultiesAdapter.Hold
         holder.name.setText(faculty.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            if(mListener != null){
+            if (mListener != null) {
                 mListener.onClick(faculty);
             }
         });
@@ -45,6 +46,14 @@ public class FacultiesAdapter extends RecyclerView.Adapter<FacultiesAdapter.Hold
         return mData.size();
     }
 
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
+    public interface Listener {
+        void onClick(Faculty faculty);
+    }
+
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -53,15 +62,5 @@ public class FacultiesAdapter extends RecyclerView.Adapter<FacultiesAdapter.Hold
             super(itemView);
             name = itemView.findViewById(R.id.name);
         }
-    }
-
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
-
-    private Listener mListener;
-
-    public interface Listener {
-        void onClick(Faculty faculty);
     }
 }

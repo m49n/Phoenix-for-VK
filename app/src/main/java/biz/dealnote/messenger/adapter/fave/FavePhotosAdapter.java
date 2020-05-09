@@ -24,6 +24,7 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
 
     private List<Photo> data;
     private int colorPrimary;
+    private PhotoSelectionListener photoSelectionListener;
 
     public FavePhotosAdapter(Context context, List<Photo> data) {
         this.data = data;
@@ -60,7 +61,7 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
                 .into(viewHolder.photoImageView);
 
         viewHolder.cardView.setOnClickListener(v -> {
-            if(photoSelectionListener != null){
+            if (photoSelectionListener != null) {
                 photoSelectionListener.onPhotoClicked(viewHolder.getBindingAdapterPosition(), photo);
             }
         });
@@ -74,6 +75,14 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
     public void setData(List<Photo> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public void setPhotoSelectionListener(PhotoSelectionListener photoSelectionListener) {
+        this.photoSelectionListener = photoSelectionListener;
+    }
+
+    public interface PhotoSelectionListener {
+        void onPhotoClicked(int position, Photo photo);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,15 +105,5 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
             ivComment = itemView.findViewById(R.id.vk_photo_item_comment);
             tvComment = itemView.findViewById(R.id.vk_photo_item_comment_counter);
         }
-    }
-
-    private PhotoSelectionListener photoSelectionListener;
-
-    public void setPhotoSelectionListener(PhotoSelectionListener photoSelectionListener) {
-        this.photoSelectionListener = photoSelectionListener;
-    }
-
-    public interface PhotoSelectionListener {
-        void onPhotoClicked(int position, Photo photo);
     }
 }

@@ -12,8 +12,11 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface IFavePostsView extends IAccountDependencyView, IMvpView, IErrorView, IAttachmentsPlacesView {
     void displayData(List<Post> posts);
+
     void notifyDataSetChanged();
+
     void notifyDataAdded(int position, int count);
+
     void showRefreshing(boolean refreshing);
 
     void notifyItemChanged(int index);

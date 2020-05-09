@@ -34,18 +34,18 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFaveVideosView>
         implements IFaveVideosView, SwipeRefreshLayout.OnRefreshListener, VideosAdapter.VideoOnClickListener {
 
-    public static FaveVideosFragment newInstance(int accountId){
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private VideosAdapter mAdapter;
+    private TextView mEmpty;
+    private boolean isRequestLast = false;
+
+    public static FaveVideosFragment newInstance(int accountId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
         FaveVideosFragment fragment = new FaveVideosFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private VideosAdapter mAdapter;
-    private TextView mEmpty;
-    private boolean isRequestLast = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
 
     @Override
     public void displayData(List<Video> videos) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.setData(videos);
             resolveEmptyTextVisibility();
         }
@@ -101,7 +101,7 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
 
     @Override
     public void notifyDataSetChanged() {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyDataSetChanged();
             resolveEmptyTextVisibility();
         }
@@ -109,21 +109,21 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
 
     @Override
     public void notifyDataAdded(int position, int count) {
-        if(nonNull(mAdapter)){
+        if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(position, count);
             resolveEmptyTextVisibility();
         }
     }
 
     private void resolveEmptyTextVisibility() {
-        if(nonNull(mEmpty) && nonNull(mAdapter)){
+        if (nonNull(mEmpty) && nonNull(mAdapter)) {
             mEmpty.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void showRefreshing(boolean refreshing) {
-        if(nonNull(mSwipeRefreshLayout)){
+        if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
         }
     }
@@ -142,7 +142,7 @@ public class FaveVideosFragment extends BaseMvpFragment<FaveVideosPresenter, IFa
     @Override
     public void onResume() {
         super.onResume();
-        if(!isRequestLast) {
+        if (!isRequestLast) {
             isRequestLast = true;
             getPresenter().LoadTool();
         }

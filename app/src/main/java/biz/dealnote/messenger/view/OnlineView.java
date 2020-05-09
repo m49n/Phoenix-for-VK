@@ -21,11 +21,13 @@ import biz.dealnote.messenger.util.Utils;
  */
 public class OnlineView extends AppCompatImageView {
 
-    @ColorInt
-    private int mCircleColor;
+    private static final Paint PAINT = new Paint();
 
-    @ColorInt
-    private int mStrokeColor;
+    static {
+        PAINT.setStyle(Paint.Style.FILL);
+        PAINT.setAntiAlias(true);
+        PAINT.setDither(true);
+    }
 
     //@DrawableRes
     //private int mIcon;
@@ -33,6 +35,10 @@ public class OnlineView extends AppCompatImageView {
     //@Dimension
     //private float mIconPadding;
 
+    @ColorInt
+    private int mCircleColor;
+    @ColorInt
+    private int mStrokeColor;
     @Dimension
     private float mStrokeWidth;
 
@@ -45,14 +51,6 @@ public class OnlineView extends AppCompatImageView {
         init(context, attrs);
     }
 
-    private static final Paint PAINT = new Paint();
-
-    static {
-        PAINT.setStyle(Paint.Style.FILL);
-        PAINT.setAntiAlias(true);
-        PAINT.setDither(true);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         drawStroke(canvas);
@@ -60,31 +58,31 @@ public class OnlineView extends AppCompatImageView {
         super.onDraw(canvas);
     }
 
-    private void drawSolid(Canvas canvas){
+    private void drawSolid(Canvas canvas) {
         float minSize = Math.min(getHeightF(), getWidthF());
         float radius = minSize / 2 - mStrokeWidth;
 
         PAINT.setColor(mCircleColor);
-        canvas.drawCircle(getWidthF() / 2, getHeightF()/ 2, radius, PAINT);
+        canvas.drawCircle(getWidthF() / 2, getHeightF() / 2, radius, PAINT);
     }
 
-    private void drawStroke(Canvas canvas){
+    private void drawStroke(Canvas canvas) {
         float minSize = Math.min(getHeightF(), getWidthF());
         float radius = minSize / 2;
 
         PAINT.setColor(mStrokeColor);
-        canvas.drawCircle(getWidthF() / 2, getHeightF()/ 2, radius, PAINT);
+        canvas.drawCircle(getWidthF() / 2, getHeightF() / 2, radius, PAINT);
     }
 
-    private float getWidthF(){
+    private float getWidthF() {
         return (float) getWidth();
     }
 
-    private float getHeightF(){
+    private float getHeightF() {
         return (float) getHeight();
     }
 
-    private float pxOf(float dp){
+    private float pxOf(float dp) {
         return Utils.dpToPx(dp, getContext());
     }
 
@@ -115,21 +113,21 @@ public class OnlineView extends AppCompatImageView {
         //setPadding(dp4, dp4, dp4, dp4);
     }
 
-    public void setIcon(int resourceId){
+    public void setIcon(int resourceId) {
         setImageResource(resourceId);
         //mIcon = resourceId;
         //ImageView circle = (ImageView) findViewById(R.id.circle);
         //circle.setImageResource(mIcon);
     }
 
-    public void setStrokeColor(int color){
+    public void setStrokeColor(int color) {
         mStrokeColor = color;
         invalidate();
         //View strokeView = findViewById(R.id.stroke);
         //strokeView.getBackground().setColorFilter(mStrokeColor, PorterDuff.Mode.MULTIPLY);
     }
 
-    public void setCircleColor(int color){
+    public void setCircleColor(int color) {
         mCircleColor = color;
         invalidate();
         //View strokeView = findViewById(R.id.stroke);

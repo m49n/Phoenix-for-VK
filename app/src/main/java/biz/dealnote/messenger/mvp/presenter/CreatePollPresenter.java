@@ -27,13 +27,13 @@ import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
  */
 public class CreatePollPresenter extends AccountDependencyPresenter<ICreatePollView> {
 
+    private final IPollInteractor pollInteractor;
     private String mQuestion;
     private String[] mOptions;
     private int mOwnerId;
     private boolean mAnonymous;
     private boolean mMultiply;
-
-    private final IPollInteractor pollInteractor;
+    private boolean creationNow;
 
     public CreatePollPresenter(int accountId, int ownerId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -53,8 +53,6 @@ public class CreatePollPresenter extends AccountDependencyPresenter<ICreatePollV
         viewHost.setMultiply(mMultiply);
         viewHost.displayOptions(mOptions);
     }
-
-    private boolean creationNow;
 
     private void setCreationNow(boolean creationNow) {
         this.creationNow = creationNow;

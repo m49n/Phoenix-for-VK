@@ -20,7 +20,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 public class DocsSearchFragment extends AbsSearchFragment<DocsSearchPresenter, IDocSearchView, Document>
         implements DocsAdapter.ActionListener, IDocSearchView {
 
-    public static DocsSearchFragment newInstance(int accountId, @Nullable DocumentSearchCriteria initialCriteria){
+    public static DocsSearchFragment newInstance(int accountId, @Nullable DocumentSearchCriteria initialCriteria) {
         Bundle args = new Bundle();
         args.putParcelable(Extra.CRITERIA, initialCriteria);
         args.putInt(Extra.ACCOUNT_ID, accountId);

@@ -9,20 +9,6 @@ import android.os.Parcelable;
  */
 public final class Token implements Parcelable {
 
-    private final int ownerId;
-
-    private final String accessToken;
-
-    public Token(int ownerId, String accessToken) {
-        this.ownerId = ownerId;
-        this.accessToken = accessToken;
-    }
-
-    private Token(Parcel in) {
-        ownerId = in.readInt();
-        accessToken = in.readString();
-    }
-
     public static final Creator<Token> CREATOR = new Creator<Token>() {
         @Override
         public Token createFromParcel(Parcel in) {
@@ -34,6 +20,18 @@ public final class Token implements Parcelable {
             return new Token[size];
         }
     };
+    private final int ownerId;
+    private final String accessToken;
+
+    public Token(int ownerId, String accessToken) {
+        this.ownerId = ownerId;
+        this.accessToken = accessToken;
+    }
+
+    private Token(Parcel in) {
+        ownerId = in.readInt();
+        accessToken = in.readString();
+    }
 
     @Override
     public int describeContents() {

@@ -40,6 +40,7 @@ public class EmojiconEditText extends AppCompatEditText {
         super(context, attrs);
         init(attrs);
     }
+
     private void init(AttributeSet attrs) {
         mEmojiconSize = (int) getTextSize();
 

@@ -49,44 +49,29 @@ public class AbsStorage implements IStorage {
         this.mRepositoryContext = base;
     }
 
-    @Override
-    public IStorages getStores() {
-        return mRepositoryContext;
-    }
-
-    @NonNull
-    public Context getContext() {
-        return mRepositoryContext.getApplicationContext();
-    }
-
     @Nullable
-    static String serializeJson(@Nullable Object o){
+    static String serializeJson(@Nullable Object o) {
         return isNull(o) ? null : GSON.toJson(o);
     }
 
-    @NonNull
-    DBHelper helper(int accountId){
-        return DBHelper.getInstance(getContext(), accountId);
-    }
-
     @Nullable
-    static <T> T deserializeJson(Cursor cursor, String column, Class<T> clazz){
+    static <T> T deserializeJson(Cursor cursor, String column, Class<T> clazz) {
         String json = cursor.getString(cursor.getColumnIndex(column));
-        if(nonEmpty(json)){
+        if (nonEmpty(json)) {
             return GSON.fromJson(json, clazz);
         } else {
             return null;
         }
     }
 
-    static <T> List<T> mapAll(Cursor cursor, MapFunction<T> function, boolean close){
+    static <T> List<T> mapAll(Cursor cursor, MapFunction<T> function, boolean close) {
         List<T> data = new ArrayList<>(safeCountOf(cursor));
         if (nonNull(cursor)) {
             while (cursor.moveToNext()) {
                 data.add(function.map(cursor));
             }
 
-            if(close){
+            if (close) {
                 cursor.close();
             }
         }
@@ -94,7 +79,7 @@ public class AbsStorage implements IStorage {
         return data;
     }
 
-    static <T> List<T> mapAll(Cancelable cancelable, Cursor cursor, MapFunction<T> function, boolean close){
+    static <T> List<T> mapAll(Cancelable cancelable, Cursor cursor, MapFunction<T> function, boolean close) {
         List<T> data = new ArrayList<>(safeCountOf(cursor));
         if (nonNull(cursor)) {
             while (cursor.moveToNext()) {
@@ -105,7 +90,7 @@ public class AbsStorage implements IStorage {
                 data.add(function.map(cursor));
             }
 
-            if(close){
+            if (close) {
                 cursor.close();
             }
         }
@@ -117,12 +102,27 @@ public class AbsStorage implements IStorage {
         return Integer.parseInt(result.uri.getPathSegments().get(1));
     }
 
-    protected ContentResolver getContentResolver(){
-        return mRepositoryContext.getContentResolver();
-    }
-
     static <T> int addToListAndReturnIndex(@NonNull List<T> target, @NonNull T item) {
         target.add(item);
         return target.size() - 1;
+    }
+
+    @Override
+    public IStorages getStores() {
+        return mRepositoryContext;
+    }
+
+    @NonNull
+    public Context getContext() {
+        return mRepositoryContext.getApplicationContext();
+    }
+
+    @NonNull
+    DBHelper helper(int accountId) {
+        return DBHelper.getInstance(getContext(), accountId);
+    }
+
+    protected ContentResolver getContentResolver() {
+        return mRepositoryContext.getContentResolver();
     }
 }

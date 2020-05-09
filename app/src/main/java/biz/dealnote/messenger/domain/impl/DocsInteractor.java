@@ -46,7 +46,7 @@ public class DocsInteractor implements IDocsInteractor {
                     List<Document> documents = new ArrayList<>(dtos.size());
                     List<DocumentEntity> entities = new ArrayList<>(dtos.size());
 
-                    for(VkApiDoc dto : dtos){
+                    for (VkApiDoc dto : dtos) {
                         documents.add(Dto2Model.transform(dto));
                         entities.add(Dto2Entity.mapDoc(dto));
                     }
@@ -61,7 +61,7 @@ public class DocsInteractor implements IDocsInteractor {
         return cache.get(new DocsCriteria(accountId, ownerId).setFilter(filter))
                 .map(entities -> {
                     List<Document> documents = new ArrayList<>(entities.size());
-                    for(DocumentEntity entity : entities){
+                    for (DocumentEntity entity : entities) {
                         documents.add(Entity2Model.buildDocumentFromDbo(entity));
                     }
                     return documents;
@@ -81,7 +81,7 @@ public class DocsInteractor implements IDocsInteractor {
                 .docs()
                 .getById(Collections.singletonList(new IdPair(docId, ownerId)))
                 .map(dtos -> {
-                    if(dtos.isEmpty()){
+                    if (dtos.isEmpty()) {
                         throw new NotFoundException();
                     }
 
@@ -98,7 +98,7 @@ public class DocsInteractor implements IDocsInteractor {
                     List<VkApiDoc> dtos = listEmptyIfNull(items.getItems());
                     List<Document> documents = new ArrayList<>();
 
-                    for(VkApiDoc dto : dtos){
+                    for (VkApiDoc dto : dtos) {
                         documents.add(Dto2Model.transform(dto));
                     }
 

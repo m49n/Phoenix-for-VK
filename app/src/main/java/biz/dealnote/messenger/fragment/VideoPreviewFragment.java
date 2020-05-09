@@ -70,14 +70,20 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter, IVideoPreviewView> implements View.OnClickListener, IVideoPreviewView {
 
     private static final String EXTRA_VIDEO_ID = "video_id";
-
+    private static final Section SECTION_PLAY = new Section(new Text(R.string.section_play_title));
+    private static final Section SECTION_OTHER = new Section(new Text(R.string.other));
     private View mRootView;
     private CircleCounterButton likeButton;
     private CircleCounterButton commentsButton;
-
     private TextView mTitleText;
     private TextView mSubtitleText;
     private ImageView mPreviewImage;
+    private OwnerLinkSpanFactory.ActionListener ownerLinkAdapter = new LinkActionAdapter() {
+        @Override
+        public void onOwnerClick(int ownerId) {
+            getPresenter().fireOwnerClick(ownerId);
+        }
+    };
 
     public static Bundle buildArgs(int accountId, int ownerId, int videoId, @Nullable Video video) {
         Bundle bundle = new Bundle();
@@ -140,16 +146,6 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         menu.findItem(R.id.action_add_to_my_videos).setVisible(view.canAdd);
     }
 
-    private final static class OptionView implements IVideoPreviewView.IOptionView {
-
-        boolean canAdd;
-
-        @Override
-        public void setCanAdd(boolean can) {
-            this.canAdd = can;
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_to_my_videos) {
@@ -184,13 +180,6 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         return mRootView;
     }
 
-    private OwnerLinkSpanFactory.ActionListener ownerLinkAdapter = new LinkActionAdapter() {
-        @Override
-        public void onOwnerClick(int ownerId) {
-            getPresenter().fireOwnerClick(ownerId);
-        }
-    };
-
     private void playWithExternalSoftware(String url) {
         if (isEmpty(url)) {
             Toast.makeText(requireActivity(), R.string.error_video_playback_is_not_possible, Toast.LENGTH_SHORT).show();
@@ -205,9 +194,6 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             Toast.makeText(requireActivity(), R.string.no_compatible_software_installed, Toast.LENGTH_SHORT).show();
         }
     }
-
-    private static final Section SECTION_PLAY = new Section(new Text(R.string.section_play_title));
-    private static final Section SECTION_OTHER = new Section(new Text(R.string.other));
 
     @Override
     public IPresenterFactory<VideoPreviewPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
@@ -341,28 +327,6 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .show();
     }
 
-    private static final class Menu {
-        static final int P_240 = 240;
-        static final int P_360 = 360;
-        static final int P_480 = 480;
-        static final int P_720 = 720;
-        static final int P_1080 = 1080;
-        static final int HLS = -10;
-        static final int LIVE = -8;
-        static final int P_EXTERNAL_PLAYER = -1;
-
-        static final int YOUTUBE_FULL = -2;
-        static final int YOUTUBE_MIN = -3;
-        static final int COUB = -4;
-
-        static final int PLAY_ANOTHER_SOFT = -5;
-        static final int PLAY_BROWSER = -6;
-        static final int DOWNLOAD = -7;
-        static final int COPY_LINK = -9;
-
-        static final int ADD_TO_FAVE = -11;
-    }
-
     private List<Item> createDirectVkPlayItems(Video video, Section section, boolean isDownload) {
         List<Item> items = new ArrayList<>();
         if (nonEmpty(video.getHls()) && !isDownload) {
@@ -460,8 +424,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .setIcon(R.drawable.ic_external)
                 .setSection(SECTION_OTHER));
 
-        if(nonEmpty(external))
-        {
+        if (nonEmpty(external)) {
             items.add(new Item(Menu.COPY_LINK, new Text(R.string.copy_url))
                     .setIcon(R.drawable.content_copy)
                     .setSection(SECTION_OTHER));
@@ -471,12 +434,11 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 .setIcon(R.drawable.star)
                 .setSection(SECTION_OTHER));
 
-        if(nonEmpty(firstNonEmptyString(video.getMp4link240(),
+        if (nonEmpty(firstNonEmptyString(video.getMp4link240(),
                 video.getMp4link360(),
                 video.getMp4link480(),
                 video.getMp4link720(),
-                video.getMp4link1080())))
-        {
+                video.getMp4link1080()))) {
             items.add(new Item(Menu.DOWNLOAD, new Text(R.string.download))
                     .setIcon(R.drawable.save)
                     .setSection(SECTION_OTHER));
@@ -547,7 +509,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             case Menu.DOWNLOAD:
                 showDownloadPlayerMenu(video);
                 break;
-            case  Menu.ADD_TO_FAVE:
+            case Menu.ADD_TO_FAVE:
                 getPresenter().fireAddFaveVideo();
                 break;
             case Menu.COPY_LINK:
@@ -698,5 +660,37 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 getPresenter().fireShareClick();
                 break;
         }
+    }
+
+    private final static class OptionView implements IVideoPreviewView.IOptionView {
+
+        boolean canAdd;
+
+        @Override
+        public void setCanAdd(boolean can) {
+            this.canAdd = can;
+        }
+    }
+
+    private static final class Menu {
+        static final int P_240 = 240;
+        static final int P_360 = 360;
+        static final int P_480 = 480;
+        static final int P_720 = 720;
+        static final int P_1080 = 1080;
+        static final int HLS = -10;
+        static final int LIVE = -8;
+        static final int P_EXTERNAL_PLAYER = -1;
+
+        static final int YOUTUBE_FULL = -2;
+        static final int YOUTUBE_MIN = -3;
+        static final int COUB = -4;
+
+        static final int PLAY_ANOTHER_SOFT = -5;
+        static final int PLAY_BROWSER = -6;
+        static final int DOWNLOAD = -7;
+        static final int COPY_LINK = -9;
+
+        static final int ADD_TO_FAVE = -11;
     }
 }

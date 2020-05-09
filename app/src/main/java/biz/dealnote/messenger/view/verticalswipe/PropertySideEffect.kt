@@ -7,7 +7,7 @@ import kotlin.math.abs
 /**
  * Common way for changing several properties of view at the same time
  */
-class PropertySideEffect(vararg props: Property<View, Float>): SideEffect {
+class PropertySideEffect(vararg props: Property<View, Float>) : SideEffect {
 
     private val properties = props
     private val capturedValues: Array<Float> = Array(props.size) { 0f }

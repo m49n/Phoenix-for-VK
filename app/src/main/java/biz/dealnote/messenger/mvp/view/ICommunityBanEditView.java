@@ -13,11 +13,15 @@ import biz.dealnote.mvp.core.IMvpView;
  */
 public interface ICommunityBanEditView extends IMvpView, IAccountDependencyView, IErrorView, IProgressView, IToastView {
     void displayUserInfo(Owner user);
+
     void displayBanStatus(int adminId, String adminName, long endDate);
+
     void displayBlockFor(String blockFor);
+
     void displayReason(String reason);
 
     void diplayComment(String comment);
+
     void setShowCommentChecked(boolean checked);
 
     void goBack();

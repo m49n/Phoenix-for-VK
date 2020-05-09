@@ -43,6 +43,9 @@ import static biz.dealnote.messenger.util.Utils.isLandscape;
 public class NewsfeedMentionsFragment extends PlaceSupportMvpFragment<NewsfeedMentionsPresenter, INewsfeedCommentsView>
         implements INewsfeedCommentsView, NewsfeedCommentsAdapter.ActionListener {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private NewsfeedCommentsAdapter mAdapter;
+
     public static NewsfeedMentionsFragment newInstance(int accountId, int ownerId) {
         Bundle args = new Bundle();
         args.putInt(Extra.ACCOUNT_ID, accountId);
@@ -51,9 +54,6 @@ public class NewsfeedMentionsFragment extends PlaceSupportMvpFragment<NewsfeedMe
         fragment.setArguments(args);
         return fragment;
     }
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private NewsfeedCommentsAdapter mAdapter;
 
     @Nullable
     @Override

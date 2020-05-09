@@ -39,14 +39,17 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
  */
 public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbumsView> {
 
+    private final IPhotosInteractor photosInteractor;
+    private final IOwnersRepository ownersRepository;
+    private final IUtilsInteractor utilsInteractor;
     private int mOwnerId;
     private Owner mOwner;
     private String mAction;
     private ArrayList<PhotoAlbum> mData;
-
-    private final IPhotosInteractor photosInteractor;
-    private final IOwnersRepository ownersRepository;
-    private final IUtilsInteractor utilsInteractor;
+    private CompositeDisposable netDisposable = new CompositeDisposable();
+    private boolean netLoadingNow;
+    private CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private boolean cacheLoadingNow;
 
     public PhotoAlbumsPresenter(int accountId, int ownerId, @Nullable AdditionalParams params, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -117,9 +120,6 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
         resolveCreateAlbumButtonVisibility();
     }
 
-    private CompositeDisposable netDisposable = new CompositeDisposable();
-    private boolean netLoadingNow;
-
     private void refreshFromNet(int offset) {
         this.netLoadingNow = true;
         resolveProgressView();
@@ -156,9 +156,6 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
 
         resolveProgressView();
     }
-
-    private CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private boolean cacheLoadingNow;
 
     private void loadAllFromDb() {
         this.cacheLoadingNow = true;
@@ -309,22 +306,22 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
         private Owner owner;
         private String action;
 
+        private Owner getOwner() {
+            return owner;
+        }
+
         public AdditionalParams setOwner(Owner owner) {
             this.owner = owner;
             return this;
         }
 
-        private Owner getOwner() {
-            return owner;
+        private String getAction() {
+            return action;
         }
 
         public AdditionalParams setAction(String action) {
             this.action = action;
             return this;
-        }
-
-        private String getAction() {
-            return action;
         }
     }
 }

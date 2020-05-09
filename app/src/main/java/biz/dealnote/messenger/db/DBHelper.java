@@ -56,6 +56,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static volatile Map<Integer, DBHelper> dbHelperMap = new ConcurrentHashMap<>();
 
+    private DBHelper(Context context, int aid) {
+        super(context, getDatabaseFileName(aid), null, Constants.DATABASE_VERSION);
+    }
+
     @NonNull
     public synchronized static DBHelper getInstance(Context context, int aid) {
         DBHelper helper = dbHelperMap.get(aid);
@@ -70,10 +74,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static void removeDatabaseFor(Context context, int aid) {
         dbHelperMap.remove(aid);
         context.deleteDatabase(DBHelper.getDatabaseFileName(aid));
-    }
-
-    private DBHelper(Context context, int aid) {
-        super(context, getDatabaseFileName(aid), null, Constants.DATABASE_VERSION);
     }
 
     private static String getDatabaseFileName(int aid) {
