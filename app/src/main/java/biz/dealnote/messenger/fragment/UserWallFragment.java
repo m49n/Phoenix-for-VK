@@ -329,6 +329,10 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        menu.add(R.string.show_qr).setOnMenuItemClickListener(item -> {
+            getPresenter().fireShowQR(requireActivity());
+            return true;
+        });
         menu.add(R.string.add_to_bookmarks).setOnMenuItemClickListener(item -> {
             getPresenter().fireAddToBookmarks();
             return true;

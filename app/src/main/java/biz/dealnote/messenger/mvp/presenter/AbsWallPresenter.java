@@ -1,10 +1,30 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +46,9 @@ import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IWallView;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Analytics;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Pair;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
@@ -343,6 +365,81 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         }
 
         onRefresh();
+    }
+
+    private Bitmap TextToImageEncode(String Value) throws WriterException {
+        BitMatrix bitMatrix;
+        try {
+            bitMatrix = new MultiFormatWriter().encode(
+                    Value,
+                    BarcodeFormat.QR_CODE,
+                    500, 500, null
+            );
+
+        } catch (IllegalArgumentException Illegalargumentexception) {
+
+            return null;
+        }
+        int bitMatrixWidth = bitMatrix.getWidth();
+
+        int bitMatrixHeight = bitMatrix.getHeight();
+
+        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
+
+        for (int y = 0; y < bitMatrixHeight; y++) {
+            int offset = y * bitMatrixWidth;
+
+            for (int x = 0; x < bitMatrixWidth; x++) {
+
+                pixels[offset + x] = bitMatrix.get(x, y) ?
+                        Color.parseColor("#000000") : Color.parseColor("#ffffff");
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888);
+
+        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        return bitmap;
+    }
+
+    public void fireShowQR(Context context) {
+        try {
+            Bitmap qr = TextToImageEncode("https://vk.com/" + (ownerId < 0 ? "club" : "id") + Math.abs(ownerId));
+            MaterialAlertDialogBuilder dlgAlert = new MaterialAlertDialogBuilder(context);
+            dlgAlert.setCancelable(true);
+            dlgAlert.setNegativeButton(R.string.button_cancel, null);
+            dlgAlert.setPositiveButton(R.string.save, (dialogInterface, i) -> {
+                if (!AppPerms.hasReadWriteStoragePermision(context)) {
+                    AppPerms.requestReadWriteStoragePermission((Activity) context);
+                } else {
+                    String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    OutputStream fOutputStream;
+                    File file = new File(path, "qr_phoenix_" + (ownerId < 0 ? "club" : "id") + Math.abs(ownerId) + ".jpg");
+                    try {
+                        fOutputStream = new FileOutputStream(file);
+
+                        assert qr != null;
+                        qr.compress(Bitmap.CompressFormat.JPEG, 100, fOutputStream);
+
+                        fOutputStream.flush();
+                        fOutputStream.close();
+                        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                        PhoenixToast.CreatePhoenixToast(context).showToast(R.string.success);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        PhoenixToast.CreatePhoenixToast(context).showToastError("Save Failed");
+                    }
+                }
+            });
+            dlgAlert.setIcon(R.drawable.qr_code);
+            final View view = LayoutInflater.from(context).inflate(R.layout.qr, null);
+            dlgAlert.setTitle(R.string.show_qr);
+            ImageView imageView = (ImageView) view.findViewById(R.id.qr);
+            imageView.setImageBitmap(qr);
+            dlgAlert.setView(view);
+            dlgAlert.show();
+        } catch (WriterException ignored) {
+
+        }
     }
 
     protected void onRefresh() {

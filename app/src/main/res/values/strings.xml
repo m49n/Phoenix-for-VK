@@ -1298,4 +1298,5 @@
     <string name="use_speach_voice">Разговорный динамик для голосовух</string>
     <string name="import_accounts">Импорт аккаунтов</string>
     <string name="export_accounts">Экспорт аккаунтов</string>
+    <string name="show_qr">Показать QR</string>
 </resources>

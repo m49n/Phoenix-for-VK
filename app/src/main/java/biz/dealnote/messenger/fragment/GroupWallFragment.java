@@ -218,6 +218,11 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
             return true;
         }
 
+        if (item.getItemId() == R.id.action_show_qr) {
+            getPresenter().fireShowQR(requireActivity());
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

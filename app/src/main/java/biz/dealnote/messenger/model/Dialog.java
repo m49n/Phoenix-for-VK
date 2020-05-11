@@ -11,7 +11,6 @@ import biz.dealnote.messenger.api.model.Identificable;
 import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
-import static biz.dealnote.messenger.util.Utils.isEmpty;
 
 /**
  * Created by hp-dv6 on 04.06.2016 with Core i7 2670QM.
@@ -219,9 +218,9 @@ public class Dialog implements Identificable, Parcelable {
         if (Peer.getType(peerId) == Peer.CHAT) {
             String img = firstNonEmptyString(photo200, photo100, photo50);
 
-            if (isEmpty(img) && interlocutor != null) {
-                img = interlocutor.getMaxSquareAvatar();
-            }
+            //if (isEmpty(img) && interlocutor != null) {
+            //img = interlocutor.getMaxSquareAvatar();
+            // }
 
             return img;
         }

@@ -53,6 +53,20 @@
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true" />
 
+            <TextView
+                android:id="@+id/empty_avatar_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Aa"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:textAllCaps="true" />
+
             <biz.dealnote.messenger.view.OnlineView
                 android:id="@+id/item_chat_online"
                 android:layout_width="16dp"
