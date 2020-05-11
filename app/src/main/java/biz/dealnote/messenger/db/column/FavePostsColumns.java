@@ -8,6 +8,7 @@ public final class FavePostsColumns implements BaseColumns {
     public static final String POST = "post";
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_POST = TABLENAME + "." + POST;
+
     private FavePostsColumns() {
     }
 

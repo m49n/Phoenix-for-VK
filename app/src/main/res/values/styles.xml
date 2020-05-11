@@ -307,6 +307,11 @@
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
+    <style name="Theme.Toolbar.Video" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
     <style name="Theme.Tablayout" parent="Widget.MaterialComponents.TabLayout.PrimarySurface">
         <item name="tabRippleColor">?colorPrimary</item>
         <item name="tabMode">scrollable</item>

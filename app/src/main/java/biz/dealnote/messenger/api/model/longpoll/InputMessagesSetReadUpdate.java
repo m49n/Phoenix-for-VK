@@ -5,6 +5,7 @@ public class InputMessagesSetReadUpdate extends AbsLongpollEvent {
     public int peer_id;
     public int local_id;
     public int unread_count;
+
     public InputMessagesSetReadUpdate() {
         super(ACTION_SET_INPUT_MESSAGES_AS_READ);
     }

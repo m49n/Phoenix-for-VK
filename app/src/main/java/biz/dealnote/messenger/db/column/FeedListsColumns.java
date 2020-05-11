@@ -18,6 +18,7 @@ public class FeedListsColumns implements BaseColumns {
     public static final String FULL_TITLE = TABLENAME + "." + TITLE;
     public static final String FULL_NO_REPOSTS = TABLENAME + "." + NO_REPOSTS;
     public static final String FULL_SOURCE_IDS = TABLENAME + "." + SOURCE_IDS;
+
     private FeedListsColumns() {
     }
 

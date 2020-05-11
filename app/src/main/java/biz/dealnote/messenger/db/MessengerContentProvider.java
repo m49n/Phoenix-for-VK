@@ -345,7 +345,7 @@ public class MessengerContentProvider extends ContentProvider {
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_50, GroupColumns.FULL_PHOTO_50 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_50);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_100, GroupColumns.FULL_PHOTO_100 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_100);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_200, GroupColumns.FULL_PHOTO_200 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_PHOTO_200);
-        sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED, GroupColumns.FULL_PHOTO_200 + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED);
+        sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED, GroupColumns.FULL_IS_CLOSED + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_CLOSED);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_ADMIN, GroupColumns.FULL_IS_ADMIN + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_ADMIN);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_ADMIN_LEVEL, GroupColumns.FULL_ADMIN_LEVEL + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_ADMIN_LEVEL);
         sRelativeshipProjectionMap.put(RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_MEMBER, GroupColumns.FULL_IS_MEMBER + " AS " + RelationshipColumns.FOREIGN_SUBJECT_GROUP_IS_MEMBER);

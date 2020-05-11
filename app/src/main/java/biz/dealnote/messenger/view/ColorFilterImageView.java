@@ -26,6 +26,7 @@ public class ColorFilterImageView extends AppCompatImageView {
     public ColorFilterImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     public ColorFilterImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);

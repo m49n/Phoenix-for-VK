@@ -112,6 +112,7 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
         private TextView title;
         private TextView subtitle;
         private ImageView creator;
+
         private ViewHolder(View root) {
             super(root);
             title = root.findViewById(R.id.item_topic_title);

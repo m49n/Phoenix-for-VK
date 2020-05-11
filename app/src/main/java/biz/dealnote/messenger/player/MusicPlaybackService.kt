@@ -90,7 +90,6 @@ class MusicPlaybackService : Service() {
     private var mPlayPos = -1
     private var CoverAudio: String? = null
     private var CoverBitmap: Bitmap? = null
-    private var NullCoverBitmap: Bitmap = BitmapFactory.decodeResource(Injection.provideApplicationContext().getResources(), R.drawable.generic_audio_nowplaying);
     private var AlbumTitle: String? = null
     private var mShuffleMode = SHUFFLE_NONE
     private var mRepeatMode = REPEAT_NONE
@@ -342,8 +341,8 @@ class MusicPlaybackService : Service() {
      * Updates the notification, considering the current play and activity state
      */
     private fun updateNotification() {
-        mNotificationHelper!!.buildNotification(applicationContext, artistName,
-                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, NullCoverBitmap), mMediaSession!!.sessionToken)
+        mNotificationHelper!!.buildNotification(this, artistName,
+                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(getResources(), R.drawable.generic_audio_nowplaying_service)), mMediaSession!!.sessionToken)
     }
 
     private fun scheduleDelayedShutdown() {
@@ -516,7 +515,7 @@ class MusicPlaybackService : Service() {
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artistName)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, albumName)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, trackName)
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, Utils.firstNonNull(CoverBitmap, NullCoverBitmap))
+                //.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(getResources(), R.drawable.generic_audio_nowplaying_service)))
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration())
                 .build()
         mMediaSession!!.setMetadata(mMediaMetadataCompat)
@@ -1015,14 +1014,14 @@ class MusicPlaybackService : Service() {
 
     private class MultiPlayer internal constructor(service: MusicPlaybackService) {
         val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
-        var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(Injection.provideApplicationContext()).build()
+        var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(service).build()
         var mHandler: Handler? = null
         var isInitialized = false
         var isPreparing = false
         var isPaused = false
         val audioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor()
         val compositeDisposable = CompositeDisposable()
-        var First: Boolean = true;
+        var First: Boolean = true
 
         /**
          * @param remoteUrl The path of the file, or the http/rtsp URL of the stream
@@ -1053,7 +1052,7 @@ class MusicPlaybackService : Service() {
             val mediaSource: MediaSource
             mediaSource = if (url.contains("file://")) {
                 ProgressiveMediaSource.Factory(DefaultDataSourceFactory(
-                        Injection.provideApplicationContext(), userAgent
+                        mService.get(), userAgent
                 )).createMediaSource(Uri.parse(url))
             } else {
                 if (Settings.get().other().isForce_hls) {

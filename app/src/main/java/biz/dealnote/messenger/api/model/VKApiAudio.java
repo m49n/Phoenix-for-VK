@@ -110,6 +110,7 @@ public class VKApiAudio implements VKApiAttachment {
         public final static int SPEECH = 19;
         public final static int ALTERNATIVE = 21;
         public final static int ELECTROPOP_AND_DISCO = 22;
+
         private Genre() {
         }
 

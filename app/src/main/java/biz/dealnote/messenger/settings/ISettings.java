@@ -93,8 +93,6 @@ public interface ISettings {
 
         boolean isShow_mini_player();
 
-        boolean isEnable_Photo_advanced();
-
         boolean isEnable_show_recent_dialogs();
 
         boolean isEnable_show_audio_top();

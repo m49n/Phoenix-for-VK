@@ -44,7 +44,7 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
         // Notification Builder
         mNotificationBuilder = NotificationCompat.Builder(mService, AppNotificationChannels.AUDIO_CHANNEL_ID)
                 .setShowWhen(false)
-                .setSmallIcon(R.drawable.itunes)
+                .setSmallIcon(R.drawable.song)
                 .setContentTitle(artistName)
                 .setContentText(trackName)
                 .setContentIntent(getOpenIntent(context))
@@ -54,13 +54,13 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                         .setShowCancelButton(true)
                         .setShowActionsInCompactView(0, 1, 2)
                         .setCancelButtonIntent(retreivePlaybackActions(4)))
-                .addAction(NotificationCompat.Action(R.drawable.prev_notification,
+                .addAction(NotificationCompat.Action(R.drawable.skip_previous,
                         context.resources.getString(R.string.previous),
                         retreivePlaybackActions(ACTION_PREV)))
                 .addAction(NotificationCompat.Action(if (isPlaying) R.drawable.pause_notification else R.drawable.play_notification,
                         context.resources.getString(if (isPlaying) R.string.pause else R.string.play),
                         retreivePlaybackActions(ACTION_PLAY_PAUSE)))
-                .addAction(NotificationCompat.Action(R.drawable.next_notification,
+                .addAction(NotificationCompat.Action(R.drawable.skip_next,
                         context.resources.getString(R.string.next),
                         retreivePlaybackActions(ACTION_NEXT)))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

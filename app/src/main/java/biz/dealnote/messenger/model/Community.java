@@ -199,7 +199,7 @@ public class Community extends Owner implements Parcelable {
 
     @Override
     public String getOriginalAvatar() {
-        return firstNonEmptyString(photo200, photo100, photo50);
+        return getMaxSquareAvatar();
     }
 
     @Override

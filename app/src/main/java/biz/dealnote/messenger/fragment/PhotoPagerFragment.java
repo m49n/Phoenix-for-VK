@@ -280,7 +280,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (Settings.get().other().isEnable_Photo_advanced()) {
+        if (!Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
             menu.findItem(R.id.action_delete).setVisible(mCanDelete);
         } else {
@@ -507,12 +507,11 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 .setCancelable(true)
                 .create();
         String res = "";
-        if (photo.getAlbumId() >= 0)
-            res += "<p><i><a href=\"" + "https://vk.com/album" + photo.getOwnerId() + "_" + photo.getAlbumId() + "\">" + requireContext().getString(R.string.open_photo_album) + "</a></i></p>";
+        res += "<p><i><a href=\"" + "https://vk.com/album" + photo.getOwnerId() + "_" + photo.getAlbumId() + "\">" + requireContext().getString(R.string.open_photo_album) + "</a></i></p>";
         if (photo.getOwnerId() >= 0)
             res += "<p><i><a href=\"" + "https://vk.com/id" + photo.getOwnerId() + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
         else
-            res += "<p><i><a href=\"" + "https://vk.com/club" + (photo.getOwnerId() * -1) + "\">" + requireContext().getString(R.string.goto_user) + "</a></i></p>";
+            res += "<p><i><a href=\"" + "https://vk.com/club" + (photo.getOwnerId() * -1) + "\">" + requireContext().getString(R.string.goto_community) + "</a></i></p>";
         if (photo.getText().length() > 0)
             res += ("<p><b>" + requireContext().getString(R.string.description_hint) + ":</b></p>" + photo.getText());
         if (photo.getTagsCount() > 0) {

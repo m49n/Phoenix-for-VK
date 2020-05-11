@@ -12,6 +12,7 @@ public final class AttachmentsColumns implements BaseColumns {
     public static final String FULL_MESSAGE_ID = TABLENAME + "." + MESSAGE_ID;
     public static final String FULL_TYPE = TABLENAME + "." + TYPE;
     public static final String FULL_DATA = TABLENAME + "." + DATA;
+
     private AttachmentsColumns() {
     }
 }

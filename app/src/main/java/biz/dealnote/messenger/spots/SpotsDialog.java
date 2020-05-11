@@ -28,6 +28,7 @@ public class SpotsDialog extends AlertDialog {
     private AnimatedView[] spots;
     private AnimatorPlayer animator;
     private CharSequence message;
+
     private SpotsDialog(Context context, String message, boolean cancelable, OnCancelListener cancelListener) {
         super(context);
         this.message = message;

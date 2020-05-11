@@ -28,6 +28,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Video;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.view.CircleRoadProgress;
 
@@ -48,11 +49,13 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
     private final ActionListener actionListener;
     private SharedHolders<EntryHolder> holders;
     private int nextHolderId;
+    private Context context;
 
     public AttachmentsBottomSheetAdapter(Context context, List<AttachmenEntry> data, ActionListener actionListener) {
         this.data = data;
         this.actionListener = actionListener;
         this.holders = new SharedHolders<>(false);
+        this.context = context;
     }
 
     @NonNull
@@ -132,7 +135,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
     private void bindImageAudioView(EntryHolder holder, String url) {
         if (isEmpty(url)) {
             PicassoInstance.with().cancelRequest(holder.image);
-            holder.image.setImageResource(R.drawable.generic_audio_nowplaying);
+            holder.image.setImageResource(Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light);
         } else {
             PicassoInstance.with()
                     .load(url)

@@ -21,7 +21,7 @@
         <ImageButton
             android:id="@id/exo_prev"
             style="@style/ExoMediaButton.Previous"
-            android:src="@drawable/prev_notification"
+            android:src="@drawable/page_first"
             android:tint="?colorSecondary" />
 
         <ImageButton
@@ -63,7 +63,7 @@
         <ImageButton
             android:id="@id/exo_next"
             style="@style/ExoMediaButton.Next"
-            android:src="@drawable/next_notification"
+            android:src="@drawable/page_last"
             android:tint="?colorSecondary" />
 
         <ImageButton

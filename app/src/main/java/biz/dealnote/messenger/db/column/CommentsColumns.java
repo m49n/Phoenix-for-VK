@@ -42,6 +42,7 @@ public final class CommentsColumns implements BaseColumns {
     public static final String FULL_SOURCE_OWNER_ID = TABLENAME + "." + SOURCE_OWNER_ID;
     public static final String FULL_SOURCE_TYPE = TABLENAME + "." + SOURCE_TYPE;
     public static final String FULL_SOURCE_ACCESS_KEY = TABLENAME + "." + SOURCE_ACCESS_KEY;
+
     private CommentsColumns() {
     }
 }

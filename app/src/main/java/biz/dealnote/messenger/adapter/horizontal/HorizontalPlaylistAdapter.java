@@ -43,7 +43,7 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
         if (!isNullOrEmptyString(playlist.thumb_image))
             ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.thumb_image, Constants.PICASSO_TAG);
         else
-            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.generic_audio_nowplaying)));
+            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light)));
         holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
         holder.name.setText(playlist.title);
         if (isNullOrEmptyString(playlist.description))

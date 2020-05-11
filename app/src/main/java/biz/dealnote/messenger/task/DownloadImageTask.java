@@ -141,12 +141,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
                 intent.setData(Uri.parse(file));
 
                 PendingIntent ReadPendingIntent = PendingIntent.getActivity(mContext, ID.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationCompat.Action actionRead = new NotificationCompat.Action.Builder
-                        (/*may be missing in some cases*/ R.drawable.succ,
-                                mContext.getResources().getString(R.string.open), ReadPendingIntent)
-                        .build();
-                mBuilder.addAction(actionRead);
+                mBuilder.setContentIntent(ReadPendingIntent);
             }
             mBuilder.setContentText(mContext.getString(R.string.success) + " " + this.filename)
                     .setProgress(0, 0, false)

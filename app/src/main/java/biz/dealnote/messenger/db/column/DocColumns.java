@@ -30,6 +30,7 @@ public final class DocColumns implements BaseColumns {
     public static final String FULL_DATE = TABLENAME + "." + DATE;
     public static final String FULL_TYPE = TABLENAME + "." + TYPE;
     public static final String FULL_ACCESS_KEY = TABLENAME + "." + ACCESS_KEY;
+
     private DocColumns() {
     }
 }

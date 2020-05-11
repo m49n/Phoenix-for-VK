@@ -88,6 +88,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .load(photoUrl).transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
+        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
+            downloadAvatar(community);
+            return true;
+        });
     }
 
     @Override

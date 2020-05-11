@@ -1,6 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,8 +14,10 @@ import java.util.List;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
+import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.PhotoSizes;
+import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
@@ -30,9 +32,11 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.LinkViewHolder> {
 
     private ActionListener mActionListner;
+    private Context context;
 
-    public LinksAdapter(List<Link> data) {
+    public LinksAdapter(List<Link> data, Context context) {
         super(data);
+        this.context = context;
     }
 
     public void setActionListner(ActionListener listner) {
@@ -56,15 +60,20 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
     protected void onBindItemViewHolder(LinkViewHolder holder, int position, int type) {
         Link item = getItem(position);
 
-        holder.ivType.setImageResource(R.drawable.share_colored);
+        holder.ivType.setImageResource(R.drawable.attachment);
         holder.tvTitle.setText(item.getTitle());
         holder.tvSize.setText(item.getDescription());
 
         String imageUrl = getImageUrl(item);
         if (imageUrl != null) {
+            holder.ivImage.setVisibility(View.VISIBLE);
             ViewUtils.displayAvatar(holder.ivImage, null, imageUrl, Constants.PICASSO_TAG);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.ivImage);
+            holder.ivImage.setVisibility(View.GONE);
         }
-        holder.ivImage.setBackgroundColor(Color.TRANSPARENT);
+
+        Utils.setColorFilter(holder.ivType.getBackground(), CurrentTheme.getColorPrimary(context));
 
         holder.itemView.setOnClickListener(v -> {
             if (nonNull(mActionListner)) {
@@ -99,7 +108,6 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
             tvTitle = root.findViewById(R.id.item_document_title);
             tvSize = root.findViewById(R.id.item_document_ext_size);
             ivType = root.findViewById(R.id.item_document_type);
-            Utils.setColorFilter(ivType.getBackground(), Color.TRANSPARENT);
         }
     }
 }

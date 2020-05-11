@@ -14,6 +14,7 @@ public final class FavePhotosColumns implements BaseColumns {
     public static final String FULL_OWNER_ID = TABLENAME + "." + OWNER_ID;
     public static final String FULL_POST_ID = TABLENAME + "." + POST_ID;
     public static final String FULL_PHOTO = TABLENAME + "." + PHOTO;
+
     private FavePhotosColumns() {
     }
 

@@ -190,13 +190,6 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="enable_photo_advanced"
-            android:summary="@string/enable_photo_advanced"
-            android:title="@string/enable_photo_advanced"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
             android:key="enable_last_read"
             android:summary="@string/enable_last_read"
             android:title="@string/enable_last_read"

@@ -55,6 +55,11 @@ public class LoadMoreFooterHelper {
                 holder.progress.setVisibility(View.INVISIBLE);
                 holder.bLoadMore.setVisibility(View.VISIBLE);
                 break;
+            case LoadMoreState.INVISIBLE:
+                holder.tvEndOfList.setVisibility(View.GONE);
+                holder.progress.setVisibility(View.GONE);
+                holder.bLoadMore.setVisibility(View.GONE);
+                break;
         }
     }
 

@@ -15,6 +15,7 @@ public class FriendListsColumns implements BaseColumns {
     public static final String FULL_USER_ID = TABLENAME + "." + USER_ID;
     public static final String FULL_LIST_ID = TABLENAME + "." + LIST_ID;
     public static final String FULL_NAME = TABLENAME + "." + NAME;
+
     private FriendListsColumns() {
     }
 

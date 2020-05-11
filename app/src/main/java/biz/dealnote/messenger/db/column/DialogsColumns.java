@@ -39,6 +39,7 @@ public final class DialogsColumns implements BaseColumns {
     public static final String FOREIGN_MESSAGE_FWD_COUNT = "message_forward_count";
     public static final String FOREIGN_MESSAGE_ACTION = "message_action";
     public static final String FOREIGN_MESSAGE_ENCRYPTED = "message_encrypted";
+
     private DialogsColumns() {
     }
 

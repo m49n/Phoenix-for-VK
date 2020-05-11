@@ -83,6 +83,7 @@ public class ImageSizeAlertDialog {
                 })
                 .show();
     }
+
     public interface OnSelectedCallback {
         void onSizeSelected(int size);
     }

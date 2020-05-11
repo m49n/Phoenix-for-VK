@@ -37,6 +37,7 @@ public final class PhotosColumns implements BaseColumns {
     public static final String FULL_TAGS = TABLENAME + "." + TAGS;
     public static final String FULL_ACCESS_KEY = TABLENAME + "." + ACCESS_KEY;
     public static final String FULL_DELETED = TABLENAME + "." + DELETED;
+
     private PhotosColumns() {
     }
 }

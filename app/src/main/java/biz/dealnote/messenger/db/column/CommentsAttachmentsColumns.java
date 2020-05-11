@@ -12,6 +12,7 @@ public final class CommentsAttachmentsColumns implements BaseColumns {
     public static final String FULL_C_ID = TABLENAME + "." + C_ID;
     public static final String FULL_TYPE = TABLENAME + "." + TYPE;
     public static final String FULL_DATA = TABLENAME + "." + DATA;
+
     private CommentsAttachmentsColumns() {
     }
 }

@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,15 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -49,12 +42,8 @@ import biz.dealnote.messenger.mvp.presenter.UserWallPresenter;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
-import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
-import biz.dealnote.messenger.util.Objects;
-import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -73,40 +62,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     private static final int REQUEST_UPLOAD_AVATAR = 46;
     boolean NeedShowClBlk;
     private UserHeaderHolder mHeaderHolder;
-
-    private String transform_owner(int owner_id) {
-        if (owner_id < 0)
-            return "club" + Math.abs(owner_id);
-        else
-            return "id" + owner_id;
-    }
-
-    private void downloadAvatar(User user) {
-        File dir = new File(Settings.get().other().getPhotoDir());
-        if (!dir.isDirectory()) {
-            boolean created = dir.mkdirs();
-            if (!created) {
-                return;
-            }
-        } else
-            dir.setLastModified(Calendar.getInstance().getTime().getTime());
-
-        if (user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
-            File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
-            if (!dir_final.isDirectory()) {
-                boolean created = dir_final.mkdirs();
-                if (!created) {
-                    return;
-                }
-            } else
-                dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
-            dir = dir_final;
-        }
-        DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user.getId()) + ".profile." + DOWNLOAD_DATE_FORMAT.format(new Date()) + ".jpg";
-        String url = user.getOriginalAvatar();
-        new InternalDownloader(requireActivity(), url, file, user).doDownload();
-    }
 
     @Override
     public void displayBaseUserInfo(User user) {
@@ -397,21 +352,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     getPresenter().fireRemoveBlacklistClick();
                     return true;
                 });
-        }
-    }
-
-    private final class InternalDownloader extends DownloadImageTask {
-        InternalDownloader(Context context, String url, String file, User user) {
-            super(context, url, file, "profile_" + user.getId(), true);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (Objects.isNull(s)) {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
-            } else {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
-            }
         }
     }
 

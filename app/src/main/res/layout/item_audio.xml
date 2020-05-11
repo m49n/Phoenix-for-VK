@@ -33,17 +33,17 @@
                 android:paddingEnd="18dp">
 
                 <TextView
-                    android:id="@+id/dialog_title"
+                    android:id="@+id/dialog_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?attr/colorSecondary"
-                    android:textSize="14sp"
-                    tools:text="Artist" />
+                    android:textSize="15sp"
+                    tools:text="Name" />
 
                 <TextView
-                    android:id="@+id/dialog_message"
+                    android:id="@+id/dialog_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
@@ -52,9 +52,9 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     android:textSize="12sp"
-                    tools:text="Title" />
+                    tools:text="Artist" />
 
             </LinearLayout>
 
@@ -142,8 +142,10 @@
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/audio_root"
         android:layout_alignBottom="@+id/audio_root"
+        android:alpha="0.5"
         android:orientation="horizontal"
         android:visibility="gone"
+        app:cardBackgroundColor="?colorPrimary"
         app:cardCornerRadius="15dp"
         app:cardElevation="2dp"
         app:contentPadding="0dp" />
@@ -154,8 +156,9 @@
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/audio_root"
         android:layout_alignBottom="@+id/audio_root"
+        android:alpha="0.5"
         android:orientation="horizontal"
-        app:cardBackgroundColor="?my_messages_bubble_color"
+        app:cardBackgroundColor="?colorPrimary"
         app:cardCornerRadius="15dp"
         app:cardElevation="2dp"
         app:contentPadding="0dp"

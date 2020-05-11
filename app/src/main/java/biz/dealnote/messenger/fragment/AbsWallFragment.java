@@ -25,9 +25,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
@@ -46,6 +52,7 @@ import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Post;
@@ -55,7 +62,9 @@ import biz.dealnote.messenger.mvp.view.IWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppTextUtils;
+import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -153,9 +162,11 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         headerStoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
         mStoryAdapter.setListener((item, pos) -> {
-            if (item.getVideo() != null)
+            if (item.getVideo() != null) {
+                if (item.getOwner() != null)
+                    item.getVideo().setTitle(item.getOwner().getFullName());
                 openHistoryVideo(Settings.get().accounts().getCurrent(), item.getVideo());
-            else if (item.getPhoto() != null) {
+            } else if (item.getPhoto() != null) {
                 ArrayList<Story> photos_story = new ArrayList<>();
                 ArrayList<Photo> tmp = new ArrayList<>();
                 List<Story> st = getPresenter().getStories();
@@ -164,8 +175,11 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                         photos_story.add(i);
                 }
                 for (Story i : photos_story) {
-                    if (i.getPhoto() != null)
+                    if (i.getPhoto() != null) {
+                        if (item.getOwner() != null)
+                            i.getPhoto().setText(i.getOwner().getFullName());
                         tmp.add(i.getPhoto());
+                    }
                 }
                 int indx = photos_story.indexOf(item);
                 openSimplePhotoGalleryHistory(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
@@ -181,6 +195,40 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
         recyclerView.setAdapter(mWallAdapter);
         return root;
+    }
+
+    private String transform_owner(Owner owner) {
+        if (owner.getOwnerType() == OwnerType.COMMUNITY)
+            return "club" + owner.getOwnerId();
+        else
+            return "id" + owner.getOwnerId();
+    }
+
+    void downloadAvatar(Owner user) {
+        File dir = new File(Settings.get().other().getPhotoDir());
+        if (!dir.isDirectory()) {
+            boolean created = dir.mkdirs();
+            if (!created) {
+                return;
+            }
+        } else
+            dir.setLastModified(Calendar.getInstance().getTime().getTime());
+
+        if (user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
+            File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
+            if (!dir_final.isDirectory()) {
+                boolean created = dir_final.mkdirs();
+                if (!created) {
+                    return;
+                }
+            } else
+                dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
+            dir = dir_final;
+        }
+        DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user) + ".profile." + DOWNLOAD_DATE_FORMAT.format(new Date()) + ".jpg";
+        String url = user.getOriginalAvatar();
+        new InternalDownloader(requireActivity(), url, file, user).doDownload();
     }
 
     @Override
@@ -409,5 +457,20 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     @Override
     public void onButtonRemoveClick(Post post) {
         getPresenter().fireButtonRemoveClick(post);
+    }
+
+    private final class InternalDownloader extends DownloadImageTask {
+        InternalDownloader(Context context, String url, String file, Owner user) {
+            super(context, url, file, "profile_" + user.getOwnerId(), true);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (Objects.isNull(s)) {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
+            } else {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
+            }
+        }
     }
 }

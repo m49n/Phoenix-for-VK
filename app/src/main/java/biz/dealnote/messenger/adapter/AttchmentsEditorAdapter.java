@@ -28,6 +28,7 @@ import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Video;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.view.CircleRoadProgress;
 
@@ -190,7 +191,7 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
     private void bindAudio(ViewHolder holder, Audio audio) {
         if (isEmpty(audio.getThumb_image_big())) {
             PicassoInstance.with().cancelRequest(holder.photoImageView);
-            holder.photoImageView.setImageResource(R.drawable.generic_audio_nowplaying);
+            holder.photoImageView.setImageResource(Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light);
         } else {
             PicassoInstance.with()
                     .load(audio.getThumb_image_big())

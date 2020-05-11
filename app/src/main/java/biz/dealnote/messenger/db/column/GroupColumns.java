@@ -37,6 +37,7 @@ public final class GroupColumns implements BaseColumns {
     public static final String FULL_PHOTO_200 = TABLENAME + "." + PHOTO_200;
     public static final String FULL_CAN_ADD_TOPICS = TABLENAME + "." + CAN_ADD_TOPICS;
     public static final String FULL_TOPICS_ORDER = TABLENAME + "." + TOPICS_ORDER;
+
     private GroupColumns() {
     }
 

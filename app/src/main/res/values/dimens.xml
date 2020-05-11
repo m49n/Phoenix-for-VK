@@ -25,7 +25,7 @@
 
     <!--Диаметр кнопки "Play" для вложенных аудиозаписей-->
     <dimen name="audio_play_button_size">40dp</dimen>
-    <dimen name="article_size">50dp</dimen>
+    <dimen name="article_size">45dp</dimen>
 
     <!--Диаметр изображения аватара владельца поста-->
 

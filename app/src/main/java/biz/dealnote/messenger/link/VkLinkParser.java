@@ -43,7 +43,7 @@ public class VkLinkParser {
     private static final Pattern PATTERN_DIALOG = Pattern.compile("vk\\.com/im\\?sel=(c?)(-?\\d+)");
     private static final Pattern PATTERN_ALBUMS = Pattern.compile("vk\\.com/albums(-?\\d+)");
     private static final Pattern PATTERN_AUDIOS = Pattern.compile("vk\\.com/audios(-?\\d+)");
-    private static final Pattern PATTERN_ALBUM = Pattern.compile("vk\\.com/album(-?\\d*)_(\\d*)");
+    private static final Pattern PATTERN_ALBUM = Pattern.compile("vk\\.com/album(-?\\d*)_(-?\\d*)");
     private static final Pattern PATTERN_WALL = Pattern.compile("vk\\.com/wall(-?\\d*)");
     private static final Pattern PATTERN_PHOTO = Pattern.compile("vk\\.com/(\\w)*(-)?(\\d)*(\\?z=)?photo(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_VIDEO = Pattern.compile("vk\\.com/video(-?\\d*)_(\\d*)"); //+

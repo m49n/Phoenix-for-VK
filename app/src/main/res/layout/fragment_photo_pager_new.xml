@@ -71,10 +71,11 @@
 
     <Button
         android:id="@+id/button_restore"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/register_button_selector"
+        android:alpha="0.8"
         android:minWidth="100dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

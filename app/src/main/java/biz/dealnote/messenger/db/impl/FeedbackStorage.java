@@ -63,6 +63,7 @@ class FeedbackStorage extends AbsStorage implements IFeedbackStorage {
         TYPES.put(ReplyCommentEntity.class, REPLY_COMMENT);
         TYPES.put(UsersEntity.class, USERS);
     }
+
     FeedbackStorage(@NonNull AppStorages context) {
         super(context);
     }

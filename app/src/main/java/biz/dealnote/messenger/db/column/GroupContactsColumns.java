@@ -13,6 +13,7 @@ public final class GroupContactsColumns implements BaseColumns {
     public static final String FULL_ID = TABLENAME + "." + _ID;
     public static final String FULL_GROUP_ID = TABLENAME + "." + GROUP_ID;
     public static final String FULL_USER_ID = TABLENAME + "." + USER_ID;
+
     private GroupContactsColumns() {
     }
 

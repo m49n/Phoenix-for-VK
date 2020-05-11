@@ -66,6 +66,7 @@ public class GroupsDetColumns implements BaseColumns {
     public static final String FULL_CONTACTS_COUNT = TABLENAME + "." + CONTACTS_COUNT;
     public static final String FULL_CAN_MESSAGE = TABLENAME + "." + CAN_MESSAGE;
     private static final Gson GSON = new Gson();
+
     private GroupsDetColumns() {
     }
 

@@ -182,11 +182,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isEnable_Photo_advanced() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_photo_advanced", true);
-    }
-
-    @Override
     public boolean isEnable_last_read() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_last_read", true);
     }

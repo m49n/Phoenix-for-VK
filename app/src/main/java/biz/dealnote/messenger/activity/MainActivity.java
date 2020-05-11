@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     public static final String ACTION_OPEN_FILE = "biz.dealnote.messenger.activity.MainActivity.openFile";
     public static final String ACTION_SEND_ATTACHMENTS = "biz.dealnote.messenger.ACTION_SEND_ATTACHMENTS";
     public static final String ACTION_SWITH_ACCOUNT = "biz.dealnote.messenger.ACTION_SWITH_ACCOUNT";
+    public static final String ACTION_OPEN_WALL = "biz.dealnote.messenger.ACTION_OPEN_WALL";
 
     public static final String EXTRA_NO_REQUIRE_PIN = "no_require_pin";
 
@@ -495,6 +496,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private boolean handleIntent(Intent intent) {
         if (intent == null) {
             return false;
+        }
+
+        if (ACTION_OPEN_WALL.equals(intent.getAction())) {
+            int owner_id = intent.getExtras().getInt(Extra.OWNER_ID);
+            PlaceFactory.getOwnerWallPlace(mAccountId, owner_id, null).tryOpenWith(this);
+            return true;
         }
 
         if (ACTION_SWITH_ACCOUNT.equals(intent.getAction())) {
