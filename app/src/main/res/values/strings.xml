@@ -89,7 +89,7 @@
     <string name="attachment_link">Ссылка</string>
     <string name="user_type_message">набирает сообщение…</string>
 
-    <string name="load_more">Загрузить еще</string>
+    <string name="load_more">Загрузить ещё</string>
     <string name="last_seen_sex_man">был в сети: %1$s</string>
     <string name="last_seen_sex_woman">была в сети: %1$s</string>
     <string name="last_seen_sex_unknown">был(-а) в сети: %1$s</string>
@@ -121,7 +121,7 @@
     <string name="here">Сюда</string>
     <string name="to_another_dialogue">В другой диалог</string>
 
-    <string name="music">Аудиозаписи</string>
+    <string name="music">Музыка</string>
 
     <string name="image_number">%1$d из %2$d</string>
 
@@ -406,7 +406,7 @@
     <string name="play">Воспроизвести</string>
     <string name="for_video">к видеозаписи</string>
 
-    <string name="more_info">Больше</string>
+    <string name="more_info">Подробнее</string>
 
     <!--Основная информация о пользователе-->
     <string name="mail_information">Основная информация</string>
@@ -518,6 +518,7 @@
     <string name="copy_url">Копировать ссылку</string>
     <string name="copy_original_url">Прямая ссылка</string>
     <string name="goto_user">Открыть владельца</string>
+    <string name="goto_community">Открыть сообщество</string>
 
     <!-- Friend status -->
     <string name="add_to_friends">Добавить в друзья</string>
@@ -1259,7 +1260,6 @@
     <string name="auto_update">Получать обновления</string>
     <string name="info_reading">Уведомлять о прочтении вашего сообщения</string>
     <string name="use_stop_audio">Стоп вместо паузы аудио</string>
-    <string name="enable_photo_advanced">Включить дополнительное меню в фото"</string>
     <string name="download">Скачать"</string>
     <string name="downloading">Скачивание"</string>
     <string name="recommendation">Рекомендации"</string>
@@ -1281,12 +1281,14 @@
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
     <string name="custom_chat_color">Цвет фона в чате</string>
+    <string name="custom_chat_color_second">Градиент Цвет фона в чате</string>
     <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
     <string name="disable_swipes">Отключить свайпы для плеера</string>
+    <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
     <string name="display_writing">Показывать набор сообщения</string>
     <string name="download_directory">Куда скачивать</string>
@@ -1298,4 +1300,6 @@
     <string name="use_speach_voice">Разговорный динамик для голосовух</string>
     <string name="import_accounts">Импорт аккаунтов</string>
     <string name="export_accounts">Экспорт аккаунтов</string>
+    <string name="show_qr">Показать QR</string>
+    <string name="download_peer_html">Скачать переписку в HTML</string>
 </resources>

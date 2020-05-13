@@ -21,6 +21,7 @@ public final class GroupLinksColumns implements BaseColumns {
     public static final String FULL_DESC = TABLENAME + "." + DESC;
     public static final String FULL_PHOTO_50 = TABLENAME + "." + PHOTO_50;
     public static final String FULL_PHOTO_100 = TABLENAME + "." + PHOTO_100;
+
     private GroupLinksColumns() {
     }
 

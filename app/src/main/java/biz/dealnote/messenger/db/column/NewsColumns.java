@@ -70,6 +70,7 @@ public final class NewsColumns implements BaseColumns {
     public static final String FULL_TAG_FRIENDS = TABLENAME + "." + TAG_FRIENDS;
     public static final String FULL_ATTACHMENTS_JSON = TABLENAME + "." + ATTACHMENTS_JSON;
     public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
+
     private NewsColumns() {
     }
 

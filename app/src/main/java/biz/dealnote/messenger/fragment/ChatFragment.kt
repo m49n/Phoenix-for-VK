@@ -987,6 +987,15 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
 
+            R.id.download_peer_html -> {
+                if (!AppPerms.hasReadWriteStoragePermision(requireActivity())) {
+                    AppPerms.requestReadWriteStoragePermission(requireActivity())
+                    return true
+                }
+                presenter?.fireChatDownloadClick(requireActivity())
+                return true
+            }
+
             R.id.action_attachments_in_conversation -> presenter?.fireDialogAttachmentsClick()
             R.id.messages_search -> presenter?.fireSearchClick()
             R.id.crypt_state -> presenter?.fireEncriptionStatusClick()

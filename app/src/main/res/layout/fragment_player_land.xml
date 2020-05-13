@@ -158,24 +158,9 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         android:textSize="12sp"
                         tools:text="Album" />
-
-                    <TextView
-                        android:id="@+id/audio_player_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="?attr/colorSecondary"
-                        android:textSize="14sp"
-                        tools:text="Emin" />
 
                     <TextView
                         android:id="@+id/audio_player_subtitle"
@@ -188,8 +173,22 @@
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textColor="?attr/colorSecondary"
+                        tools:text="Jara" />
+
+                    <TextView
+                        android:id="@+id/audio_player_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textSize="12sp"
-                        tools:text="Sunny" />
+                        tools:text="Warduna" />
 
                 </LinearLayout>
 

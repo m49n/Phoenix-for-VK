@@ -27,7 +27,6 @@ import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IOwnersRepository;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
-import biz.dealnote.messenger.model.Sex;
 import biz.dealnote.messenger.model.SwitchableCategory;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.drawer.AbsMenuItem;
@@ -292,16 +291,13 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         String avaUrl = user.getMaxSquareAvatar();
 
         Transformation transformation = CurrentTheme.createTransformationForAvatar(requireActivity());
-        if (nonNull(avaUrl) && !avaUrl.contains("camera")) {
+        if (nonNull(avaUrl)) {
             PicassoInstance.with()
                     .load(avaUrl)
                     .transform(transformation)
                     .into(ivHeaderAvatar);
         } else {
-            PicassoInstance.with()
-                    .load(user.getSex() == Sex.WOMAN ? R.drawable.ic_sex_woman : R.drawable.ic_sex_man)
-                    .transform(transformation)
-                    .into(ivHeaderAvatar);
+            ivHeaderAvatar.setImageResource(R.drawable.ic_avatar_unknown);
         }
 
         String domailText = "@" + user.getDomain();

@@ -15,6 +15,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.activity.QuickAnswerActivity;
+import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -89,7 +90,7 @@ public class NotificationHelper {
                 .setSmallIcon(R.drawable.phoenix_round)
                 .setLargeIcon(avatar)
                 .setContentTitle(peer.getTitle())
-                .setContentText(text)
+                .setContentText(OwnerLinkSpanFactory.withSpans(text, true, false, null))
                 .setAutoCancel(true);
 
         int notificationMask = Settings.get()

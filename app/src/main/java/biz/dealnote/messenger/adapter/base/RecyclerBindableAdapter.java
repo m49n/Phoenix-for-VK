@@ -29,6 +29,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
             return getGridSpan(position);
         }
     };
+
     public RecyclerBindableAdapter(List<T> items) {
         this.items = items;
     }

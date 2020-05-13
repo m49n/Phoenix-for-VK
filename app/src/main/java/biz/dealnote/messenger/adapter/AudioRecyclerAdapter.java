@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -21,6 +22,7 @@ import com.squareup.picasso.Transformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
@@ -159,13 +161,13 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
             if (!isNullOrEmptyString(item.getThumb_image_little())) {
                 PicassoInstance.with()
                         .load(item.getThumb_image_little())
-                        .placeholder(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()))
+                        .placeholder(Objects.requireNonNull(ResourcesCompat.getDrawable(mContext.getResources(), getAudioCoverSimple(), mContext.getTheme())))
                         .transform(TransformCover())
                         .tag(Constants.PICASSO_TAG)
                         .into(holder.play_cover);
             } else {
                 PicassoInstance.with().cancelRequest(holder.play_cover);
-                holder.play_cover.setImageDrawable(mContext.getResources().getDrawable(getAudioCoverSimple(), mContext.getTheme()));
+                holder.play_cover.setImageResource(getAudioCoverSimple());
             }
         }
 
@@ -362,6 +364,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         MaterialCardView isSelectedView;
         Animator.AnimatorListener animationAdapter;
         ObjectAnimator animator;
+
         AudioHolder(View itemView) {
             super(itemView);
             artist = itemView.findViewById(R.id.dialog_title);

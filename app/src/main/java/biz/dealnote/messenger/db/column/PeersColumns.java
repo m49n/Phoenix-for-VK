@@ -28,6 +28,7 @@ public final class PeersColumns implements BaseColumns {
     public static final String FULL_LAST_MESSAGE_ID = TABLENAME + "." + LAST_MESSAGE_ID;
     public static final String FULL_ACL = TABLENAME + "." + ACL;
     public static final String FULL_IS_GROUP_CHANNEL = TABLENAME + "." + IS_GROUP_CHANNEL;
+
     private PeersColumns() {
     }
 }

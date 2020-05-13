@@ -23,6 +23,7 @@ public final class FaveLinksColumns implements BaseColumns {
     public static final String FULL_DESCRIPTION = TABLENAME + "." + DESCRIPTION;
     public static final String FULL_PHOTO_50 = TABLENAME + "." + PHOTO_50;
     public static final String FULL_PHOTO_100 = TABLENAME + "." + PHOTO_100;
+
     private FaveLinksColumns() {
     }
 

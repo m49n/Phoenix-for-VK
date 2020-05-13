@@ -24,6 +24,7 @@ public class AddMessageUpdate extends AbsLongpollEvent {
     public ArrayList<String> fwds;
     public int peer_id;
     public String random_id;
+
     public AddMessageUpdate() {
         super(ACTION_MESSAGE_ADDED);
     }

@@ -26,6 +26,7 @@ public class MutualFriendsPresenter extends SimpleOwnersPresenter<ISimpleOwnersV
     private boolean endOfContent;
     private boolean actualDataLoading;
     private CompositeDisposable actualDataDisposable = new CompositeDisposable();
+
     public MutualFriendsPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.userId = userId;

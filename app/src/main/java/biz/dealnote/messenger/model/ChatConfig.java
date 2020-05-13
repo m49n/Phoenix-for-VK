@@ -23,6 +23,7 @@ public final class ChatConfig implements Parcelable {
     private boolean closeOnSend;
     private String initialText;
     private ArrayList<Uri> uploadFiles;
+
     public ChatConfig() {
         this.models = new ModelsBundle();
     }

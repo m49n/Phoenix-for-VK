@@ -29,6 +29,7 @@ public class UserCareerColumns implements BaseColumns {
     public static final String FULL_YEAR_FROM = TABLENAME + "." + YEAR_FROM;
     public static final String FULL_YEAR_UNTIL = TABLENAME + "." + YEAR_UNTIL;
     public static final String FULL_POSITION = TABLENAME + "." + POSITION;
+
     private UserCareerColumns() {
     }
 

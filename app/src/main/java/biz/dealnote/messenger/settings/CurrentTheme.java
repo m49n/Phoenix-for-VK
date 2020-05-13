@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.TypedValue;
 
 import androidx.core.content.ContextCompat;
@@ -53,8 +54,11 @@ public class CurrentTheme {
                 ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
                 break;
             default: //"0
-                if (Settings.get().other().isCustom_chat_color())
-                    return new ColorDrawable(Settings.get().other().getColorChat());
+                if (Settings.get().other().isCustom_chat_color()) {
+
+                    return new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                            new int[]{Settings.get().other().getColorChat(), Settings.get().other().getSecondColorChat()});
+                }
                 int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
                 return new ColorDrawable(color);
         }

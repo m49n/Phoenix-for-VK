@@ -4,6 +4,7 @@ public class UserIsOnlineUpdate extends AbsLongpollEvent {
 
     public int user_id;
     public int extra;
+
     public UserIsOnlineUpdate() {
         super(ACTION_USER_IS_ONLINE);
     }

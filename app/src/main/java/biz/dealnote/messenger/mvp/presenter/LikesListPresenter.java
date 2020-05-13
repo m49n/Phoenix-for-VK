@@ -30,6 +30,7 @@ public class LikesListPresenter extends SimpleOwnersPresenter<ISimpleOwnersView>
     private boolean endOfContent;
     private CompositeDisposable netDisposable = new CompositeDisposable();
     private boolean loadingNow;
+
     public LikesListPresenter(int accountId, String type, int ownerId, int itemId, String filter, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.type = type;

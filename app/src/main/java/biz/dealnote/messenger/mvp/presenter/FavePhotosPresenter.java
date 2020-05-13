@@ -34,6 +34,7 @@ public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosV
     private CompositeDisposable netDisposable = new CompositeDisposable();
     private boolean cacheLoadingNow;
     private boolean requestNow;
+
     public FavePhotosPresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
 

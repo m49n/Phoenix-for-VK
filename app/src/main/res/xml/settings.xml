@@ -135,6 +135,18 @@
             app:preference_palette="@drawable/palette"
             app:preference_selector="@drawable/wheel" />
 
+        <com.skydoves.colorpickerpreference.ColorPickerPreference
+            android:key="custom_chat_color_second"
+            android:summary="@string/custom_chat_color_second"
+            android:title="@string/custom_chat_color_second"
+            app:default_color="#ffffffff"
+            app:iconSpaceReserved="false"
+            app:preference_dialog_negative="@string/button_cancel"
+            app:preference_dialog_positive="@string/button_yes"
+            app:preference_dialog_title="@string/custom_chat_color_second"
+            app:preference_palette="@drawable/palette"
+            app:preference_selector="@drawable/wheel" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="custom_message_color_usage"
@@ -186,13 +198,6 @@
             android:key="show_mini_player"
             android:summary="@string/show_mini_player"
             android:title="@string/show_mini_player"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="enable_photo_advanced"
-            android:summary="@string/enable_photo_advanced"
-            android:title="@string/enable_photo_advanced"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
@@ -286,6 +291,13 @@
             android:key="disable_swipes"
             android:summary="@string/disable_swipes"
             android:title="@string/disable_swipes"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="disable_swipes_chat"
+            android:summary="@string/disable_swipes_chat"
+            android:title="@string/disable_swipes_chat"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

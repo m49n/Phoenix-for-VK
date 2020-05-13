@@ -88,6 +88,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .load(photoUrl).transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
+        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
+            downloadAvatar(community);
+            return true;
+        });
     }
 
     @Override
@@ -211,6 +215,11 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
 
         if (item.getItemId() == R.id.action_add_to_bookmarks) {
             getPresenter().fireAddToBookmarksClick();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_show_qr) {
+            getPresenter().fireShowQR(requireActivity());
             return true;
         }
 

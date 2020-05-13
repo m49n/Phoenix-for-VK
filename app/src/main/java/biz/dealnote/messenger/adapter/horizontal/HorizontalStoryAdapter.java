@@ -43,8 +43,13 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
 
         Context context = holder.itemView.getContext();
         holder.name.setText(item.getOwner().getFullName());
-        Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
-        holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), getExpH(exp)));
+        if (item.getExpires() <= 0)
+            holder.expires.setVisibility(View.GONE);
+        else {
+            holder.expires.setVisibility(View.VISIBLE);
+            Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
+            holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), getExpH(exp)));
+        }
 
         if (Objects.isNull(item.getOwner())) {
             ViewUtils.displayAvatar(holder.story_image, new RoundTransformation(), null, Constants.PICASSO_TAG);
@@ -52,9 +57,7 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
             ViewUtils.displayAvatar(holder.story_image, new RoundTransformation(), item.getOwner().getMaxSquareAvatar(), Constants.PICASSO_TAG);
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            listener.onOptionClick(item, position);
-        });
+        holder.itemView.setOnClickListener(v -> listener.onOptionClick(item, position));
     }
 
     @Override

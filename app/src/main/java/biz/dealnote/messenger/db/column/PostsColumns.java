@@ -58,6 +58,7 @@ public final class PostsColumns implements BaseColumns {
     public static final String FULL_DELETED = TABLENAME + "." + DELETED;
     public static final String FULL_POST_SOURCE = TABLENAME + "." + POST_SOURCE;
     public static final String FULL_VIEWS = TABLENAME + "." + VIEWS;
+
     private PostsColumns() {
     }
 

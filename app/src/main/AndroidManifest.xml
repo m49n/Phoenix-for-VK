@@ -26,9 +26,11 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/App.DayNight"
+        tools:ignore="AllowBackup"
         tools:targetApi="q">
 
         <meta-data
@@ -96,6 +98,10 @@
             android:name=".service.QuickReplyService"
             android:exported="false" />
 
+        <service
+            android:name=".service.ChatDownloadIntentService"
+            android:exported="false" />
+
         <activity
             android:name=".activity.PhotosActivity"
             android:label="@string/photos" />
@@ -137,6 +143,20 @@
                     android:scheme="http" />
                 <data
                     android:host="vk.com"
+                    android:scheme="https" />
+
+                <data
+                    android:host="vk.cc"
+                    android:scheme="http" />
+                <data
+                    android:host="vk.cc"
+                    android:scheme="https" />
+
+                <data
+                    android:host="vk.me"
+                    android:scheme="http" />
+                <data
+                    android:host="vk.me"
                     android:scheme="https" />
 
                 <data
@@ -251,7 +271,9 @@
             android:name=".service.KeepLongpollService"
             android:exported="false" />
 
-        <service android:name=".FcmListenerService">
+        <service
+            android:name=".FcmListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

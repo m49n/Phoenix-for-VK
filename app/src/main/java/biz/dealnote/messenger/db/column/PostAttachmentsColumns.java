@@ -12,6 +12,7 @@ public final class PostAttachmentsColumns implements BaseColumns {
     public static final String FULL_P_ID = TABLENAME + "." + P_ID;
     public static final String FULL_TYPE = TABLENAME + "." + TYPE;
     public static final String FULL_DATA = TABLENAME + "." + DATA;
+
     private PostAttachmentsColumns() {
     }
 }

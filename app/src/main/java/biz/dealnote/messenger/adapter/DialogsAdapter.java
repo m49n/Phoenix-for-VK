@@ -1,6 +1,12 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -25,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.ChatAction;
 import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.User;
@@ -91,6 +99,61 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
                 .inflate(R.layout.item_dialog, parent, false));
     }
 
+    private Bitmap createImage(int width, int height, int owner_id) {
+        int pp = owner_id % 10;
+        String Color1 = "#D81B60";
+        String Color2 = "#F48FB1";
+        switch (pp) {
+            case 0:
+                Color1 = "#FF0061";
+                Color2 = "#FF4200";
+                break;
+            case 1:
+                Color1 = "#00ABD6";
+                Color2 = "#8700D6";
+                break;
+            case 2:
+                Color1 = "#FF7900";
+                Color2 = "#FF9500";
+                break;
+            case 3:
+                Color1 = "#55D600";
+                Color2 = "#00D67A";
+                break;
+            case 4:
+                Color1 = "#9400D6";
+                Color2 = "#D6008E";
+                break;
+            case 5:
+                Color1 = "#cd8fff";
+                Color2 = "#9100ff";
+                break;
+            case 6:
+                Color1 = "#ff7f69";
+                Color2 = "#fe0bdb";
+                break;
+            case 7:
+                Color1 = "#FE790B";
+                Color2 = "#0BFEAB";
+                break;
+            case 8:
+                Color1 = "#9D0BFE";
+                Color2 = "#0BFEAB";
+                break;
+            case 9:
+                Color1 = "#9D0BFE";
+                Color2 = "#FEDF0B";
+                break;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        LinearGradient gradient = new LinearGradient(0, 0, width, height, Color.parseColor(Color1), Color.parseColor(Color2), Shader.TileMode.CLAMP);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint2 = new Paint();
+        paint2.setShader(gradient);
+        canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
+        return bitmap;
+    }
+
     @Override
     public void onBindViewHolder(DialogViewHolder holder, int position) {
         final Dialog dialog = mDialogs.get(position);
@@ -98,8 +161,17 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         holder.mDialogTitle.setText(dialog.getDisplayTitle(mContext));
 
-        SpannableStringBuilder lastMessage = dialog.getLastMessageBody() != null ?
-                SpannableStringBuilder.valueOf(dialog.getLastMessageBody()) : new SpannableStringBuilder();
+        SpannableStringBuilder lastMessage;
+
+        Spannable query = OwnerLinkSpanFactory.withSpans(dialog.getLastMessageBody() != null ? dialog.getLastMessageBody() : "", true, false, null);
+        if (query == null) {
+            lastMessage = dialog.getLastMessageBody() != null ?
+                    SpannableStringBuilder.valueOf(dialog.getLastMessageBody()) : new SpannableStringBuilder();
+        } else {
+            lastMessage = new SpannableStringBuilder();
+            lastMessage.append(query);
+        }
+
         if (dialog.hasAttachments()) {
             SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(mContext.getString(R.string.attachments));
             spannable.setSpan(new ForegroundColorSpan(CurrentTheme.getColorPrimary(mContext)), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -200,7 +272,19 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             holder.tvOldDate.setVisibility(View.GONE);
         }
 
-        ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
+        if (dialog.getImageUrl() != null) {
+            holder.EmptyAvatar.setVisibility(View.INVISIBLE);
+            ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.ivAvatar);
+            holder.EmptyAvatar.setVisibility(View.VISIBLE);
+            String name = dialog.getTitle();
+            if (name.length() > 2)
+                name = name.substring(0, 2);
+            name = name.trim();
+            holder.EmptyAvatar.setText(name);
+            holder.ivAvatar.setImageBitmap(mTransformation.transform(createImage(200, 200, dialog.getId())));
+        }
 
         holder.mContentRoot.setOnClickListener(v -> {
             if (mClickListener != null) {
@@ -288,6 +372,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         TextView tvOldDate;
         View mHeaderRoot;
         TextView mHeaderTitle;
+        TextView EmptyAvatar;
 
         DialogViewHolder(View view) {
             super(view);
@@ -303,6 +388,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             tvOldDate = view.findViewById(R.id.item_chat_old_date);
             mHeaderRoot = view.findViewById(R.id.header_root);
             mHeaderTitle = view.findViewById(R.id.header_title);
+            EmptyAvatar = view.findViewById(R.id.empty_avatar_text);
         }
     }
 }

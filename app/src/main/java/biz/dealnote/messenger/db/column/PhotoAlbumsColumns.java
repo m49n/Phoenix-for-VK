@@ -43,6 +43,7 @@ public final class PhotoAlbumsColumns implements BaseColumns {
     public static final String FULL_UPLOAD_BY_ADMINS = TABLENAME + "." + UPLOAD_BY_ADMINS;
     public static final String FULL_COMMENTS_DISABLED = TABLENAME + "." + COMMENTS_DISABLED;
     private static final Gson GSON = new Gson();
+
     private PhotoAlbumsColumns() {
     }
 

@@ -7,6 +7,7 @@ public class MessageFlagsSetUpdate extends AbsLongpollEvent {
     public int message_id;
     public int mask;
     public int peer_id;
+
     public MessageFlagsSetUpdate() {
         super(ACTION_MESSAGES_FLAGS_SET);
     }

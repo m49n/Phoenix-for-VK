@@ -288,8 +288,9 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     }
 
     private void bindDeletedHolder(final DeletedMessageHolder holder, final Message message) {
+        String displayedBody = message.getCryptStatus() == CryptStatus.DECRYPTED ? message.getDecryptedBody() : message.getBody();
         holder.buttonRestore.setVisibility(message.isDeletedForAll() ? View.GONE : View.VISIBLE);
-        holder.text.setText(TextUtils.isEmpty(message.getBody()) ? context.getString(R.string.message_was_deleted) : message.getBody());
+        holder.text.setText(TextUtils.isEmpty(message.getBody()) ? context.getString(R.string.message_was_deleted) : OwnerLinkSpanFactory.withSpans(displayedBody, true, false, ownerLinkAdapter));
         holder.buttonRestore.setOnClickListener(v -> {
             if (onMessageActionListener != null) {
                 onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
@@ -405,6 +406,51 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         void onMessageClicked(@NonNull Message message);
     }
 
+    private static class ServiceMessageHolder extends RecyclerView.ViewHolder {
+
+        TextView tvAction;
+        AttachmentsHolder mAttachmentsHolder;
+
+        ServiceMessageHolder(View itemView) {
+            super(itemView);
+            tvAction = itemView.findViewById(R.id.item_service_message_text);
+
+            mAttachmentsHolder = new AttachmentsHolder();
+            mAttachmentsHolder.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
+                    setVgVideos(itemView.findViewById(R.id.video_attachments)).
+                    setVgDocs(itemView.findViewById(R.id.docs_attachments)).
+                    setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
+                    setVgPosts(itemView.findViewById(R.id.posts_attachments)).
+                    setVgStickers(itemView.findViewById(R.id.stickers_attachments));
+        }
+    }
+
+    private static class DeletedMessageHolder extends RecyclerView.ViewHolder {
+
+        Button buttonRestore;
+        ViewGroup forwardMessagesRoot;
+        View attachmentsRoot;
+        AttachmentsHolder attachmentsHolder;
+        EmojiconTextView text;
+
+        DeletedMessageHolder(View itemView) {
+            super(itemView);
+            buttonRestore = itemView.findViewById(R.id.item_messages_deleted_restore);
+            text = itemView.findViewById(R.id.item_message_text);
+
+            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
+
+            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
+            attachmentsHolder = new AttachmentsHolder();
+            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
+                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
+                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
+                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
+                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
+                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
+        }
+    }
+
     private class GiftMessageHolder extends BaseMessageHolder {
 
         ImageView gift;
@@ -444,51 +490,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             this.status = itemView.findViewById(R.id.item_message_status_text);
             this.important = itemView.findViewById(R.id.item_message_important);
             this.avatar = itemView.findViewById(R.id.item_message_avatar);
-        }
-    }
-
-    private class ServiceMessageHolder extends RecyclerView.ViewHolder {
-
-        TextView tvAction;
-        AttachmentsHolder mAttachmentsHolder;
-
-        ServiceMessageHolder(View itemView) {
-            super(itemView);
-            tvAction = itemView.findViewById(R.id.item_service_message_text);
-
-            mAttachmentsHolder = new AttachmentsHolder();
-            mAttachmentsHolder.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
-                    setVgVideos(itemView.findViewById(R.id.video_attachments)).
-                    setVgDocs(itemView.findViewById(R.id.docs_attachments)).
-                    setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
-                    setVgPosts(itemView.findViewById(R.id.posts_attachments)).
-                    setVgStickers(itemView.findViewById(R.id.stickers_attachments));
-        }
-    }
-
-    private class DeletedMessageHolder extends RecyclerView.ViewHolder {
-
-        Button buttonRestore;
-        ViewGroup forwardMessagesRoot;
-        View attachmentsRoot;
-        AttachmentsHolder attachmentsHolder;
-        TextView text;
-
-        DeletedMessageHolder(View itemView) {
-            super(itemView);
-            buttonRestore = itemView.findViewById(R.id.item_messages_deleted_restore);
-            text = itemView.findViewById(R.id.item_message_text);
-
-            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
-
-            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
-            attachmentsHolder = new AttachmentsHolder();
-            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
-                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
-                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
-                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
-                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
-                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
         }
     }
 

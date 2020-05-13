@@ -152,6 +152,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public int getSecondColorChat() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt("custom_chat_color_second", Color.argb(255, 255, 255, 255));
+    }
+
+    @Override
     public boolean isCustom_chat_color() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("custom_chat_color_usage", false);
     }
@@ -179,11 +184,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isShow_mini_player() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_mini_player", true);
-    }
-
-    @Override
-    public boolean isEnable_Photo_advanced() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("enable_photo_advanced", true);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package biz.dealnote.messenger.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 
 import biz.dealnote.messenger.Constants;
+import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.ProxyUtil;
@@ -29,9 +32,13 @@ import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.model.InternalVideoSize;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.Video;
+import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
@@ -41,12 +48,13 @@ public class VideoPlayerActivity extends AppCompatActivity {
     public static final String EXTRA_SIZE = "size";
 
     private View mDecorView;
-    private PlayerView mSurfaceView;
 
     private Player mPlayer;
 
     private Video video;
     private int size;
+
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     private static MediaSource createMediaSource(String url, ProxyConfig proxyConfig, boolean isHLS) {
         Proxy proxy = null;
@@ -74,6 +82,14 @@ public class VideoPlayerActivity extends AppCompatActivity {
             return new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
     }
 
+    private void onOpen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction(MainActivity.ACTION_OPEN_WALL);
+        intent.putExtra(Extra.OWNER_ID, video.getOwnerId());
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(Settings.get().ui().getMainTheme());
@@ -95,6 +111,16 @@ public class VideoPlayerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (toolbar != null) {
+            mCompositeDisposable.add(OwnerInfo.getRx(this, Settings.get().accounts().getCurrent(), video.getOwnerId())
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(userInfo -> {
+                        ImageView av = findViewById(R.id.toolbar_avatar);
+                        av.setImageBitmap(userInfo.getAvatar());
+                        av.setOnClickListener(v -> onOpen());
+                        if (Objects.isNullOrEmptyString(video.getDescription()))
+                            toolbar.setSubtitle(userInfo.getOwner().getFullName());
+                    }, throwable -> {
+                    }));
             toolbar.setNavigationIcon(R.drawable.arrow_left);
             toolbar.setNavigationOnClickListener(v -> finish());
         }
@@ -105,7 +131,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             actionBar.setSubtitle(video.getDescription());
         }
 
-        mSurfaceView = findViewById(R.id.videoSurface);
+        PlayerView mSurfaceView = findViewById(R.id.videoSurface);
 
         resolveControlsVisibility(false);
 
@@ -150,6 +176,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        mCompositeDisposable.dispose();
         mPlayer.release();
         super.onDestroy();
     }

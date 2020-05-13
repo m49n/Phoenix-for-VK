@@ -108,6 +108,7 @@ public class VKApiMessage {
 
     public int conversation_message_id;
     public long update_time;
+
     /**
      * Creates empty Country instance.
      */

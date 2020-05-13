@@ -44,23 +44,24 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
         // Notification Builder
         mNotificationBuilder = NotificationCompat.Builder(mService, AppNotificationChannels.AUDIO_CHANNEL_ID)
                 .setShowWhen(false)
-                .setSmallIcon(R.drawable.itunes)
+                .setSmallIcon(R.drawable.song)
                 .setContentTitle(artistName)
                 .setContentText(trackName)
                 .setContentIntent(getOpenIntent(context))
                 .setLargeIcon(cover)
+                .setDeleteIntent(retreivePlaybackActions(5))
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionToken)
                         .setShowCancelButton(true)
                         .setShowActionsInCompactView(0, 1, 2)
                         .setCancelButtonIntent(retreivePlaybackActions(4)))
-                .addAction(NotificationCompat.Action(R.drawable.prev_notification,
+                .addAction(NotificationCompat.Action(R.drawable.skip_previous,
                         context.resources.getString(R.string.previous),
                         retreivePlaybackActions(ACTION_PREV)))
                 .addAction(NotificationCompat.Action(if (isPlaying) R.drawable.pause_notification else R.drawable.play_notification,
                         context.resources.getString(if (isPlaying) R.string.pause else R.string.play),
                         retreivePlaybackActions(ACTION_PLAY_PAUSE)))
-                .addAction(NotificationCompat.Action(R.drawable.next_notification,
+                .addAction(NotificationCompat.Action(R.drawable.skip_next,
                         context.resources.getString(R.string.next),
                         retreivePlaybackActions(ACTION_NEXT)))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -128,11 +129,18 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                 pendingIntent = PendingIntent.getService(mService, 3, action, 0)
                 return pendingIntent
             }
-            4 -> {
+            ACTION_STOP_ACTION -> {
                 // Stop and collapse the notification
                 action = Intent(MusicPlaybackService.STOP_ACTION)
                 action.component = serviceName
                 pendingIntent = PendingIntent.getService(mService, 4, action, 0)
+                return pendingIntent
+            }
+            SWIPE_DISMISS_ACTION -> {
+                // Stop and collapse the notification
+                action = Intent(MusicPlaybackService.SWIPE_DISMISS_ACTION)
+                action.component = serviceName
+                pendingIntent = PendingIntent.getService(mService, 5, action, 0)
                 return pendingIntent
             }
             else -> {
@@ -146,6 +154,8 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
         private const val ACTION_PLAY_PAUSE = 1
         private const val ACTION_NEXT = 2
         private const val ACTION_PREV = 3
+        private const val ACTION_STOP_ACTION = 4
+        private const val SWIPE_DISMISS_ACTION = 5
     }
 
     init {

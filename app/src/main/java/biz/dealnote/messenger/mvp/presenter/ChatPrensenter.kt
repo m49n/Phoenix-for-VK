@@ -33,6 +33,7 @@ import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter
 import biz.dealnote.messenger.mvp.view.IChatView
 import biz.dealnote.messenger.push.OwnerInfo
 import biz.dealnote.messenger.realtime.Processors
+import biz.dealnote.messenger.service.ChatDownloadIntentService
 import biz.dealnote.messenger.settings.ISettings
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.task.TextingNotifier
@@ -1289,6 +1290,14 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     fun fireChatMembersClick() {
         view?.goToChatMembers(accountId, Peer.toChatId(peerId))
+    }
+
+    fun fireChatDownloadClick(context: Context) {
+        val intent = Intent(context, ChatDownloadIntentService::class.java)
+        intent.putExtra(Extra.OWNER_ID, peerId)
+        intent.putExtra(Extra.ACCOUNT_ID, accountId)
+        intent.putExtra(Extra.TITLE, conversation?.title)
+        context.startService(intent)
     }
 
     fun fireDialogAttachmentsClick() {

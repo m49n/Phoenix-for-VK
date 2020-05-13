@@ -26,6 +26,7 @@ public class KeyColumns implements BaseColumns {
     public static final String FULL_END_SESSION_MESSAGE_ID = TABLENAME + "." + END_SESSION_MESSAGE_ID;
     public static final String FULL_OUT_KEY = TABLENAME + "." + OUT_KEY;
     public static final String FULL_IN_KEY = TABLENAME + "." + IN_KEY;
+
     private KeyColumns() {
     }
 }

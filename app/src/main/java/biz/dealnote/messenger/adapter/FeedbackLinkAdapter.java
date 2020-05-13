@@ -153,6 +153,7 @@ public class FeedbackLinkAdapter extends RecyclerView.Adapter<FeedbackLinkAdapte
         private TextView mSubtitle;
         private ImageView ivImage;
         private ImageView ivForward;
+
         ViewHolder(View root) {
             super(root);
             mTitle = root.findViewById(R.id.item_feedback_link_text);

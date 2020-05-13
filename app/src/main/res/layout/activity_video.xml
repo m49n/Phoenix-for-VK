@@ -20,6 +20,20 @@
             app:controller_layout_id="@layout/player_controls" />
     </FrameLayout>
 
-    <include layout="@layout/toolbar_photo" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:theme="@style/Theme.Toolbar.Video"
+        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:subtitleTextColor="?colorSecondary">
+
+        <ImageView
+            android:id="@+id/toolbar_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </RelativeLayout>

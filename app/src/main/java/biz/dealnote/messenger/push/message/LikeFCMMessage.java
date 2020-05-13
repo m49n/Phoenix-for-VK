@@ -66,6 +66,7 @@ public class LikeFCMMessage {
     private int owner_id;
     private String like_type;
     private int reply_id;
+
     public LikeFCMMessage(int accountId, RemoteMessage remote) {
         this.accountId = accountId;
         Map<String, String> data = remote.getData();

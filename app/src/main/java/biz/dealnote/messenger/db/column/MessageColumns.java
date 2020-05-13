@@ -57,6 +57,7 @@ public final class MessageColumns implements BaseColumns {
     public static final String FULL_PHOTO_200 = TABLENAME + "." + PHOTO_200;
     public static final String FULL_RANDOM_ID = TABLENAME + "." + RANDOM_ID;
     public static final String FULL_EXTRAS = TABLENAME + "." + EXTRAS;
+
     private MessageColumns() {
     }
 }
