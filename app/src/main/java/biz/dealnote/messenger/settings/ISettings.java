@@ -83,6 +83,8 @@ public interface ISettings {
 
         int getColorChat();
 
+        int getSecondColorChat();
+
         boolean isCustom_chat_color();
 
         int getColorMyMessage();
@@ -309,6 +311,8 @@ public interface ISettings {
         boolean isShow_profile_in_additional_page();
 
         boolean isDisable_swipes();
+
+        boolean isDisable_swipes_chat();
 
         boolean isDisplay_writing();
     }

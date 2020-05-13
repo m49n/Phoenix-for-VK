@@ -603,8 +603,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             getNavigationFragment().selectPage(recentChat);
         }
         clearBackStack();
-        DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
-        attachToFront(chatFragment);
+        if (Settings.get().ui().isDisable_swipes_chat()) {
+            ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
+            attachToFront(chatFragment);
+        } else {
+            DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
+            attachToFront(chatFragment);
+        }
     }
 
     private void openRecentChat(RecentChat chat) {

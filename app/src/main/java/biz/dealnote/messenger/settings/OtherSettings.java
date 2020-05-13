@@ -152,6 +152,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public int getSecondColorChat() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt("custom_chat_color_second", Color.argb(255, 255, 255, 255));
+    }
+
+    @Override
     public boolean isCustom_chat_color() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("custom_chat_color_usage", false);
     }

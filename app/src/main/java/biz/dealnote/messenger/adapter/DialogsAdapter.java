@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.ChatAction;
 import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.User;
@@ -160,8 +161,17 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         holder.mDialogTitle.setText(dialog.getDisplayTitle(mContext));
 
-        SpannableStringBuilder lastMessage = dialog.getLastMessageBody() != null ?
-                SpannableStringBuilder.valueOf(dialog.getLastMessageBody()) : new SpannableStringBuilder();
+        SpannableStringBuilder lastMessage;
+
+        Spannable query = OwnerLinkSpanFactory.withSpans(dialog.getLastMessageBody() != null ? dialog.getLastMessageBody() : "", true, false, null);
+        if (query == null) {
+            lastMessage = dialog.getLastMessageBody() != null ?
+                    SpannableStringBuilder.valueOf(dialog.getLastMessageBody()) : new SpannableStringBuilder();
+        } else {
+            lastMessage = new SpannableStringBuilder();
+            lastMessage.append(query);
+        }
+
         if (dialog.hasAttachments()) {
             SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(mContext.getString(R.string.attachments));
             spannable.setSpan(new ForegroundColorSpan(CurrentTheme.getColorPrimary(mContext)), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

@@ -136,6 +136,7 @@ class MusicPlaybackService : Service() {
         val filter = IntentFilter()
         filter.addAction(SERVICECMD)
         filter.addAction(TOGGLEPAUSE_ACTION)
+        filter.addAction(SWIPE_DISMISS_ACTION)
         filter.addAction(PAUSE_ACTION)
         filter.addAction(STOP_ACTION)
         filter.addAction(NEXT_ACTION)
@@ -294,6 +295,9 @@ class MusicPlaybackService : Service() {
         val action = intent.action
         val command = if (SERVICECMD == action) intent.getStringExtra(CMDNAME) else null
         if (D) Logger.d(TAG, "handleCommandIntent: action = $action, command = $command")
+        if (SWIPE_DISMISS_ACTION == action) {
+            stopSelf()
+        }
         if (CMDNEXT == command || NEXT_ACTION == action) {
             mTransportController!!.skipToNext()
         }
@@ -1333,6 +1337,7 @@ class MusicPlaybackService : Service() {
         const val TOGGLEPAUSE_ACTION = "biz.dealnote.phoenix.player.togglepause"
         const val PAUSE_ACTION = "biz.dealnote.phoenix.player.pause"
         const val STOP_ACTION = "biz.dealnote.phoenix.player.stop"
+        const val SWIPE_DISMISS_ACTION = "biz.dealnote.phoenix.player.swipe_dismiss"
         const val PREVIOUS_ACTION = "biz.dealnote.phoenix.player.previous"
         const val NEXT_ACTION = "biz.dealnote.phoenix.player.next"
         const val REPEAT_ACTION = "biz.dealnote.phoenix.player.repeat"

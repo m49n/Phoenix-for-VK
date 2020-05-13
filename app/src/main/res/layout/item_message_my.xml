@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textColorLink="?android:textColorPrimary"
+            android:textColorLink="?colorPrimary"
             app:displayHashTags="true"
             app:emojiconSize="20sp"
             app:fixWrapText="true"

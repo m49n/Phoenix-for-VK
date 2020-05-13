@@ -35,6 +35,10 @@
         android:title="@string/chat_users" />
 
     <item
+        android:id="@+id/download_peer_html"
+        android:title="@string/download_peer_html" />
+
+    <item
         android:id="@+id/action_key_exchange"
         android:title="@string/key_exchange" />
 

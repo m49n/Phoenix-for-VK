@@ -1281,12 +1281,14 @@
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
     <string name="custom_chat_color">Цвет фона в чате</string>
+    <string name="custom_chat_color_second">Градиент Цвет фона в чате</string>
     <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
     <string name="disable_swipes">Отключить свайпы для плеера</string>
+    <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
     <string name="display_writing">Показывать набор сообщения</string>
     <string name="download_directory">Куда скачивать</string>
@@ -1299,4 +1301,5 @@
     <string name="import_accounts">Импорт аккаунтов</string>
     <string name="export_accounts">Экспорт аккаунтов</string>
     <string name="show_qr">Показать QR</string>
+    <string name="download_peer_html">Скачать переписку в HTML</string>
 </resources>

@@ -9,7 +9,13 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
 
+    <ImageView
+        android:id="@+id/item_post_avatar_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -19,8 +25,8 @@
 
         <ImageView
             android:id="@+id/item_document_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </com.google.android.material.card.MaterialCardView>
 
     <ImageView
@@ -63,7 +69,6 @@
             android:autoLink="web"
             android:paddingTop="20dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textColorLink="?android:textColorPrimary"
             app:displayHashTags="true"
             app:emojiconSize="20sp"
             app:fixWrapText="true"

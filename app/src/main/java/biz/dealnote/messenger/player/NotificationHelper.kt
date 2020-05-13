@@ -49,6 +49,7 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                 .setContentText(trackName)
                 .setContentIntent(getOpenIntent(context))
                 .setLargeIcon(cover)
+                .setDeleteIntent(retreivePlaybackActions(5))
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionToken)
                         .setShowCancelButton(true)
@@ -128,11 +129,18 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                 pendingIntent = PendingIntent.getService(mService, 3, action, 0)
                 return pendingIntent
             }
-            4 -> {
+            ACTION_STOP_ACTION -> {
                 // Stop and collapse the notification
                 action = Intent(MusicPlaybackService.STOP_ACTION)
                 action.component = serviceName
                 pendingIntent = PendingIntent.getService(mService, 4, action, 0)
+                return pendingIntent
+            }
+            SWIPE_DISMISS_ACTION -> {
+                // Stop and collapse the notification
+                action = Intent(MusicPlaybackService.SWIPE_DISMISS_ACTION)
+                action.component = serviceName
+                pendingIntent = PendingIntent.getService(mService, 5, action, 0)
                 return pendingIntent
             }
             else -> {
@@ -146,6 +154,8 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
         private const val ACTION_PLAY_PAUSE = 1
         private const val ACTION_NEXT = 2
         private const val ACTION_PREV = 3
+        private const val ACTION_STOP_ACTION = 4
+        private const val SWIPE_DISMISS_ACTION = 5
     }
 
     init {
