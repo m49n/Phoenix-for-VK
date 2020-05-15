@@ -51,6 +51,11 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
+    public boolean isPlayer_support_volume() {
+        return getDefaultPreferences().getBoolean("is_player_support_volume", false);
+    }
+
+    @Override
     public boolean isMy_message_no_color() {
         return getDefaultPreferences().getBoolean("my_message_no_color", false);
     }

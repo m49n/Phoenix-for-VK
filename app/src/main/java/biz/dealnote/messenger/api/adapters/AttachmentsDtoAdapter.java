@@ -87,6 +87,19 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VkApiAudioMessage.class);
         } else if (VKApiAttachment.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
+        } else if (VKApiAttachment.TYPE_GRAFFITY.equals(type)) {
+            VKApiSticker graph = new VKApiSticker();
+            graph.sticker_id = optInt(o.getAsJsonObject(), "id");
+            graph.images = new ArrayList<>();
+            VKApiSticker.Image img = new VKApiSticker.Image();
+            img.url = optString(o.getAsJsonObject(), "url");
+            img.height = optInt(o.getAsJsonObject(), "height");
+            img.width = optInt(o.getAsJsonObject(), "width");
+            graph.images.add(img);
+            graph.images_with_background = new ArrayList<>();
+            graph.images_with_background.add(img);
+            return graph;
+
         } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
             if (o.getAsJsonObject().has("photo"))
                 return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);

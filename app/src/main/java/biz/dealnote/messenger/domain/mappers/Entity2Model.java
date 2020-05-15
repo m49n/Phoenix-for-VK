@@ -560,7 +560,7 @@ public class Entity2Model {
     }
 
     public static StickerSet map(StickerSetEntity entity) {
-        return new StickerSet(entity.getPhoto70(), mapAll(entity.getStickers(), Entity2Model::buildStickerFromDbo));
+        return new StickerSet(entity.getPhoto70(), mapAll(entity.getStickers(), Entity2Model::buildStickerFromDbo), entity.getTitle());
     }
 
     public static Sticker.Image map(StickerEntity.Img entity) {

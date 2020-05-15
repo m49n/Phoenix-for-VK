@@ -158,6 +158,8 @@ public interface ISettings {
 
         boolean isAudio_round_icon();
 
+        boolean isPlayer_support_volume();
+
         boolean isCustomTabEnabled();
 
         @Nullable

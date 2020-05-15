@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -35,6 +36,7 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.emoji.section.Cars;
 import biz.dealnote.messenger.view.emoji.section.Electronics;
 import biz.dealnote.messenger.view.emoji.section.Emojicon;
@@ -423,6 +425,12 @@ public class EmojiconsPopup {
 
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(holder.itemView.getContext(), 4);
                     recyclerView.setLayoutManager(gridLayoutManager);
+                    String title = stickersGridViews.get(position - 7).getTitle();
+                    if (!Utils.isEmpty(title) && title.equals("recent"))
+                        title = recyclerView.getContext().getString(R.string.usages);
+
+                    ((TextView) holder.itemView.findViewById(R.id.header_sticker)).setText(title);
+
                     recyclerView.setAdapter(mAdaptert);
                     break;
             }

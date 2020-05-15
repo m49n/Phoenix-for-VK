@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import biz.dealnote.messenger.api.model.VKApiCommunity;
+import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 
 public class AttachmentsHistoryResponse {
@@ -13,6 +15,12 @@ public class AttachmentsHistoryResponse {
 
     @SerializedName("next_from")
     public String next_from;
+
+    @SerializedName("profiles")
+    public List<VKApiUser> profiles;
+
+    @SerializedName("groups")
+    public List<VKApiCommunity> groups;
 
     public static class One {
 

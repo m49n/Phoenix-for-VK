@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -324,14 +325,32 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mNextButton.setRepeatListener(mFastForwardListener);
         mProgress.setOnSeekBarChangeListener(this);
 
-        ivAdd = root.findViewById(R.id.audio_add);
-        ivAdd.setOnClickListener(v -> onAddButtonClick());
-
         ivSave = root.findViewById(R.id.audio_save);
         ivSave.setOnClickListener(v -> onSaveButtonClick());
 
+        ivAdd = root.findViewById(R.id.audio_add);
+        if (Settings.get().main().isPlayer_support_volume()) {
+            ivAdd.setIcon(R.drawable.volume_minus);
+            ivAdd.setOnClickListener(v -> {
+                AudioManager audio = (AudioManager) requireActivity().getSystemService(Context.AUDIO_SERVICE);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamVolume(AudioManager.STREAM_MUSIC) - 1, 0);
+            });
+        } else {
+            ivAdd.setIcon(R.drawable.plus);
+            ivAdd.setOnClickListener(v -> onAddButtonClick());
+        }
+
         CircleCounterButton ivShare = root.findViewById(R.id.audio_share);
-        ivShare.setOnClickListener(v -> shareAudio());
+        if (Settings.get().main().isPlayer_support_volume()) {
+            ivShare.setIcon(R.drawable.volume_plus);
+            ivShare.setOnClickListener(v -> {
+                AudioManager audio = (AudioManager) requireActivity().getSystemService(Context.AUDIO_SERVICE);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 1, 0);
+            });
+        } else {
+            ivShare.setIcon(R.drawable.share_variant);
+            ivShare.setOnClickListener(v -> shareAudio());
+        }
 
 //        if (isAudioStreaming()) {
 //            broadcastAudio();
@@ -745,6 +764,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     }
 
     private void resolveAddButton() {
+        if (Settings.get().main().isPlayer_support_volume())
+            return;
+
         if (!isAdded()) return;
 
         Audio currentAudio = MusicUtils.getCurrentAudio();

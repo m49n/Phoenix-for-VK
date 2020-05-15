@@ -119,9 +119,9 @@ public class ExoVoicePlayer implements IVoicePlayer {
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
         if (Settings.get().other().isUse_speach_voice())
-            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build());
+            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build(), false);
         else
-            exoPlayer.setAudioAttributes(AudioAttributes.DEFAULT);
+            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), true);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override
             public void onPlayerStateChanged(boolean b, int i) {
@@ -134,8 +134,10 @@ public class ExoVoicePlayer implements IVoicePlayer {
             }
         });
 
-        if (MusicUtils.isPlaying() || MusicUtils.isPreparing())
-            MusicUtils.playOrPause();
+        if (Settings.get().other().isUse_speach_voice()) {
+            if (MusicUtils.isPlaying() || MusicUtils.isPreparing())
+                MusicUtils.playOrPause();
+        }
 
         exoPlayer.setPlayWhenReady(supposedToBePlaying);
         exoPlayer.prepare(mediaSource);

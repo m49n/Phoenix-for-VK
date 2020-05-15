@@ -1090,11 +1090,13 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun onDraftMessageRestored(message: DraftMessage, ignoreBody: Boolean) {
-        draftMessageDbAttachmentsCount = message.attachmentsCount
-        draftMessageId = message.id
+        if (isEmpty(draftMessageText)) {
+            draftMessageDbAttachmentsCount = message.attachmentsCount
+            draftMessageId = message.id
 
-        if (!ignoreBody) {
-            draftMessageText = message.body
+            if (!ignoreBody) {
+                draftMessageText = message.body
+            }
         }
 
         resolveAttachmentsCounter()

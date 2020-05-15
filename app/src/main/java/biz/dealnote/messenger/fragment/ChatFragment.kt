@@ -186,7 +186,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun displayWriting(owner_id: Int) {
         Writing_msg_Group?.visibility = View.VISIBLE
         Writing_msg_Group?.alpha = 0.0f
-        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 1.0f).setDuration(200).start()
+        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 0.8f).setDuration(200).start()
         Writing_msg?.setText(R.string.user_type_message)
         Writing_msg_Ava?.setImageResource(R.drawable.background_gray_round)
         presenter?.ResolveWritingInfo(requireActivity(), owner_id)
@@ -802,9 +802,9 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun goToConversationAttachments(accountId: Int, peerId: Int) {
-        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK)
+        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK, VKApiAttachment.TYPE_POST)
 
-        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links))
+        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links), getString(R.string.posts))
 
         MaterialAlertDialogBuilder(requireActivity()).setItems(items) { _, which ->
             showConversationAttachments(accountId, peerId, types[which])

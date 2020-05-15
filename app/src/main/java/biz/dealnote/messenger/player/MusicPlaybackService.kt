@@ -10,10 +10,6 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
-import android.media.AudioManager
-import android.media.AudioManager.OnAudioFocusChangeListener
 import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.os.*
@@ -42,9 +38,11 @@ import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.util.*
 import biz.dealnote.messenger.util.Objects
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -73,7 +71,6 @@ class MusicPlaybackService : Service() {
     private var mAlarmManager: AlarmManager? = null
     private var mShutdownIntent: PendingIntent? = null
     private var mShutdownScheduled = false
-    private var mAudioManager: AudioManager? = null
     var isPlaying = false
         private set
 
@@ -83,7 +80,6 @@ class MusicPlaybackService : Service() {
     private var ErrorsCount = 0;
     private var OnceCloseMiniPlayer = false
     private var SuperCloseMiniPlayer = MusicUtils.SuperCloseMiniPlayer
-    private var mPausedByTransientLossOfFocus = false
     private var mAnyActivityInForeground = false
     private var mMediaSession: MediaSessionCompat? = null
     private var mTransportController: MediaControllerCompat.TransportControls? = null
@@ -105,7 +101,7 @@ class MusicPlaybackService : Service() {
 
     override fun onUnbind(intent: Intent): Boolean {
         if (D) Logger.d(TAG, "Service unbound")
-        if (isPlaying || mPausedByTransientLossOfFocus || isPreparing) {
+        if (isPlaying || isPreparing) {
             Logger.d(TAG, "onUnbind, mIsSupposedToBePlaying || mPausedByTransientLossOfFocus || isPreparing()")
             return true
         } else if (Utils.safeIsEmpty(mPlayList) || mPlayerHandler!!.hasMessages(TRACK_ENDED)) {
@@ -128,8 +124,7 @@ class MusicPlaybackService : Service() {
         mNotificationHelper = NotificationHelper(this)
         val thread = HandlerThread("MusicPlayerHandler", Process.THREAD_PRIORITY_BACKGROUND)
         thread.start()
-        mPlayerHandler = MusicPlayerHandler(this, thread.looper)
-        mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        mPlayerHandler = MusicPlayerHandler(this)
         setUpRemoteControlClient()
         mPlayer = MultiPlayer(this)
         mPlayer!!.setHandler(mPlayerHandler)
@@ -161,17 +156,6 @@ class MusicPlaybackService : Service() {
 
     @Suppress("DEPRECATION")
     private fun setUpRemoteControlClient() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (audioFocusRequest != null)
-                mAudioManager!!.requestAudioFocus(audioFocusRequest);
-        } else {
-            mAudioManager!!.requestAudioFocus(
-                    mAudioFocusListener,
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN);
-        }
-
         mMediaSession = MediaSessionCompat(application, "TAG", null, null)
         val playbackStateCompat = PlaybackStateCompat.Builder()
                 .setActions(
@@ -237,13 +221,6 @@ class MusicPlaybackService : Service() {
         mPlayerHandler!!.removeCallbacksAndMessages(null)
         mPlayer!!.release()
         mPlayer = null
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (audioFocusRequest != null)
-                mAudioManager!!.abandonAudioFocusRequest(audioFocusRequest);
-        } else {
-            mAudioManager!!.abandonAudioFocus(mAudioFocusListener)
-        }
         mMediaSession!!.release()
         mPlayerHandler!!.removeCallbacksAndMessages(null)
         unregisterReceiver(mIntentReceiver)
@@ -275,17 +252,11 @@ class MusicPlaybackService : Service() {
 
     @Suppress("DEPRECATION")
     private fun releaseServiceUiAndStop() {
-        if (isPlaying || mPausedByTransientLossOfFocus || mPlayerHandler!!.hasMessages(TRACK_ENDED)) {
+        if (isPlaying || mPlayerHandler!!.hasMessages(TRACK_ENDED)) {
             return
         }
         if (D) Logger.d(TAG, "Nothing is playing anymore, releasing notification")
         mNotificationHelper!!.killNotification()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (audioFocusRequest != null)
-                mAudioManager!!.abandonAudioFocusRequest(audioFocusRequest);
-        } else {
-            mAudioManager!!.abandonAudioFocus(mAudioFocusListener)
-        }
         if (!mAnyActivityInForeground) {
             stopSelf()
         }
@@ -307,21 +278,18 @@ class MusicPlaybackService : Service() {
         if (CMDTOGGLEPAUSE == command || TOGGLEPAUSE_ACTION == action) {
             if (isPlaying) {
                 mTransportController!!.pause()
-                mPausedByTransientLossOfFocus = false
             } else {
                 mTransportController!!.play()
             }
         }
         if (CMDPAUSE == command || PAUSE_ACTION == action) {
             mTransportController!!.pause()
-            mPausedByTransientLossOfFocus = false
         }
         if (CMDPLAY == command) {
             play()
         }
         if (CMDSTOP == command || STOP_ACTION == action) {
             mTransportController!!.pause()
-            mPausedByTransientLossOfFocus = false
             seek(0)
             releaseServiceUiAndStop()
         }
@@ -782,25 +750,7 @@ class MusicPlaybackService : Service() {
         stop(true)
     }
 
-    @Suppress("DEPRECATION")
     fun play() {
-        val status = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (audioFocusRequest != null)
-                mAudioManager!!.requestAudioFocus(audioFocusRequest);
-            else
-                -1
-        } else {
-            mAudioManager!!.requestAudioFocus(
-                    mAudioFocusListener,
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN);
-        }
-        if (D) {
-            Logger.d(TAG, "Starting playback: audio focus request status = $status")
-        }
-        if (status != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            return
-        }
         if (mPlayer != null && mPlayer!!.isInitialized) {
             val duration = mPlayer!!.duration()
             if (mRepeatMode != REPEAT_CURRENT && duration > 2000 && mPlayer!!.position() >= duration - 2000) {
@@ -927,22 +877,8 @@ class MusicPlaybackService : Service() {
             handleCommandIntent(intent)
         }
     }
-    private val mAudioFocusListener = OnAudioFocusChangeListener { focusChange -> mPlayerHandler!!.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget() }
 
-    private val audioFocusRequest: AudioFocusRequest? =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                        .setOnAudioFocusChangeListener(mAudioFocusListener)
-                        .setAcceptsDelayedFocusGain(true)
-                        .setAudioAttributes(AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .build())
-                        .build()
-            } else
-                null
-
-    private class MusicPlayerHandler internal constructor(service: MusicPlaybackService, looper: Looper) : Handler(looper) {
+    private class MusicPlayerHandler internal constructor(service: MusicPlaybackService) : Handler(Looper.getMainLooper()) {
         private val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
         private var mCurrentVolume = 1.0f
         override fun handleMessage(msg: Message) {
@@ -983,32 +919,6 @@ class MusicPlaybackService : Service() {
                     service.gotoNext(false)
                 }
                 RELEASE_WAKELOCK -> service.mWakeLock!!.release()
-                FOCUSCHANGE -> {
-                    if (D) Logger.d(TAG, "Received audio focus change event " + msg.arg1)
-                    when (msg.arg1) {
-                        AudioManager.AUDIOFOCUS_LOSS, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                            if (service.isPlaying) {
-                                service.mPausedByTransientLossOfFocus = msg.arg1 == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
-                            }
-                            service.pause()
-                        }
-                        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                            removeMessages(FADEUP)
-                            sendEmptyMessage(FADEDOWN)
-                        }
-                        AudioManager.AUDIOFOCUS_GAIN -> if (!service.isPlaying && service.mPausedByTransientLossOfFocus) {
-                            service.mPausedByTransientLossOfFocus = false
-                            mCurrentVolume = 0f
-                            service.mPlayer!!.setVolume(mCurrentVolume)
-                            service.play()
-                        } else {
-                            removeMessages(FADEDOWN)
-                            sendEmptyMessage(FADEUP)
-                        }
-                        else -> {
-                        }
-                    }
-                }
                 else -> {
                 }
             }
@@ -1097,6 +1007,7 @@ class MusicPlaybackService : Service() {
                 })
             }
             mCurrentMediaPlayer.prepare(mediaSource)
+            mCurrentMediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), true)
             val intent = Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION)
             intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId)
             intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, mService.get()!!.packageName)
@@ -1160,13 +1071,10 @@ class MusicPlaybackService : Service() {
         }
 
         fun setVolume(vol: Float) {
-            val uiHandler = Handler(Looper.getMainLooper())
-            uiHandler.post {
-                try {
-                    mCurrentMediaPlayer.volume = vol
-                } catch (ignored: IllegalStateException) {
-                    // случается
-                }
+            try {
+                mCurrentMediaPlayer.volume = vol
+            } catch (ignored: IllegalStateException) {
+                // случается
             }
         }
 

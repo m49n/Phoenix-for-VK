@@ -211,7 +211,7 @@
 
     <string name="emojis_type_summary">Если включено, будут использоваться системные смайлы</string>
     <string name="emojis_type_title">Использовать системные смайлы</string>
-    <string name="emojis_recents">Показывать последние смайлы</string>
+    <string name="emojis_recents">Показывать последние стикеры</string>
     <string name="appearance_settings">Внешний вид</string>
 
     <string name="wall_post">Запись на стене</string>
@@ -722,6 +722,7 @@
     <string name="audios_pattern_count">аудиозаписей</string>
     <string name="documents_count">%1$d документов</string>
     <string name="links_count">%1$d ссылок</string>
+    <string name="posts_count">%1$d постов</string>
     <string name="cancel_invitation">Отклонить приглашение</string>
     <string name="invitation_has_been_declined">Приглашение было отклонено</string>
     <string name="request_canceled">Заявка отменена</string>
@@ -1302,4 +1303,6 @@
     <string name="export_accounts">Экспорт аккаунтов</string>
     <string name="show_qr">Показать QR</string>
     <string name="download_peer_html">Скачать переписку в HTML</string>
+    <string name="usages">Использованные</string>
+    <string name="is_player_support_volume">Переключатель громкости в плеере</string>
 </resources>

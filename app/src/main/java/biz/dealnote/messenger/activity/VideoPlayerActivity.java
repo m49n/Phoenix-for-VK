@@ -12,8 +12,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -148,6 +150,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
         final String url = getFileUrl();
         SimpleExoPlayer ret = new SimpleExoPlayer.Builder(this).build();
+        ret.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MOVIE).setUsage(C.USAGE_MEDIA).build(), true);
         ret.prepare(createMediaSource(url, config, isHLS));
         ret.setPlayWhenReady(true);
         return ret;

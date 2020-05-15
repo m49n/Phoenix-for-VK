@@ -18,8 +18,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
@@ -45,7 +47,6 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     private static final int REFRESH_TIME = 1;
     private int mAccountId;
     private PlaybackStatus mPlaybackStatus;
-    private View play;
     private ImageView play_icon;
     private ImageView play_cover;
     private TextView Title;
@@ -94,7 +95,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mini_player, container, false);
-        play = root.findViewById(R.id.item_audio_play);
+        View play = root.findViewById(R.id.item_audio_play);
         play_icon = root.findViewById(R.id.item_audio_play_icon);
         play_cover = root.findViewById(R.id.item_audio_play_cover);
         lnt = root.findViewById(R.id.miniplayer_layout);
@@ -113,6 +114,10 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             } else {
                 play_icon.setImageResource(R.drawable.song);
             }
+        });
+        play.setOnLongClickListener(v -> {
+            MusicUtils.next();
+            return true;
         });
         ImageButton mOpenPlayer = root.findViewById(R.id.open_player);
         mOpenPlayer.setOnClickListener(v -> PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(requireActivity()));
@@ -135,13 +140,13 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
             if (audio != null && !isNullOrEmptyString(audio.getThumb_image_little())) {
                 PicassoInstance.with()
                         .load(audio.getThumb_image_little())
-                        .placeholder(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()))
+                        .placeholder(Objects.requireNonNull(ResourcesCompat.getDrawable(getResources(), R.drawable.audio_button_material, requireActivity().getTheme())))
                         .transform(new PolyTransformation())
                         .tag(Constants.PICASSO_TAG)
                         .into(play_cover);
             } else {
                 PicassoInstance.with().cancelRequest(play_cover);
-                play_cover.setImageDrawable(getResources().getDrawable(R.drawable.audio_button_material, requireActivity().getTheme()));
+                play_cover.setImageResource(R.drawable.audio_button_material);
             }
 
             if (MusicUtils.isPlaying()) {
@@ -293,13 +298,9 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
 
         @Override
         public void handleMessage(final Message msg) {
-            switch (msg.what) {
-                case REFRESH_TIME:
-                    final long next = mAudioPlayer.get().refreshCurrentTime();
-                    mAudioPlayer.get().queueNextRefresh(next);
-                    break;
-                default:
-                    break;
+            if (msg.what == REFRESH_TIME) {
+                final long next = mAudioPlayer.get().refreshCurrentTime();
+                mAudioPlayer.get().queueNextRefresh(next);
             }
         }
     }

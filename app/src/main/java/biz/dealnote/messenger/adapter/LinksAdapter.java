@@ -17,10 +17,8 @@ import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.PhotoSizes;
-import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
-import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -60,20 +58,35 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
     protected void onBindItemViewHolder(LinkViewHolder holder, int position, int type) {
         Link item = getItem(position);
 
-        holder.ivType.setImageResource(R.drawable.attachment);
-        holder.tvTitle.setText(item.getTitle());
-        holder.tvSize.setText(item.getDescription());
+        if (Objects.isNullOrEmptyString(item.getTitle()))
+            holder.tvTitle.setVisibility(View.GONE);
+        else {
+            holder.tvTitle.setVisibility(View.VISIBLE);
+            holder.tvTitle.setText(item.getTitle());
+        }
+        if (Objects.isNullOrEmptyString(item.getDescription()))
+            holder.tvDescription.setVisibility(View.GONE);
+        else {
+            holder.tvDescription.setVisibility(View.VISIBLE);
+            holder.tvDescription.setText(item.getDescription());
+        }
+        if (Objects.isNullOrEmptyString(item.getUrl()))
+            holder.tvURL.setVisibility(View.GONE);
+        else {
+            holder.tvURL.setVisibility(View.VISIBLE);
+            holder.tvURL.setText(item.getUrl());
+        }
 
         String imageUrl = getImageUrl(item);
         if (imageUrl != null) {
+            holder.ivEmpty.setVisibility(View.GONE);
             holder.ivImage.setVisibility(View.VISIBLE);
             ViewUtils.displayAvatar(holder.ivImage, null, imageUrl, Constants.PICASSO_TAG);
         } else {
             PicassoInstance.with().cancelRequest(holder.ivImage);
             holder.ivImage.setVisibility(View.GONE);
+            holder.ivEmpty.setVisibility(View.VISIBLE);
         }
-
-        Utils.setColorFilter(holder.ivType.getBackground(), CurrentTheme.getColorPrimary(context));
 
         holder.itemView.setOnClickListener(v -> {
             if (nonNull(mActionListner)) {
@@ -98,16 +111,18 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
 
     static class LinkViewHolder extends RecyclerView.ViewHolder {
         ImageView ivImage;
+        ImageView ivEmpty;
         TextView tvTitle;
-        TextView tvSize;
-        ImageView ivType;
+        TextView tvDescription;
+        TextView tvURL;
 
         private LinkViewHolder(View root) {
             super(root);
             ivImage = root.findViewById(R.id.item_document_image);
+            ivEmpty = root.findViewById(R.id.item_document_empty);
             tvTitle = root.findViewById(R.id.item_document_title);
-            tvSize = root.findViewById(R.id.item_document_ext_size);
-            ivType = root.findViewById(R.id.item_document_type);
+            tvDescription = root.findViewById(R.id.item_document_description);
+            tvURL = root.findViewById(R.id.item_document_url);
         }
     }
 }
