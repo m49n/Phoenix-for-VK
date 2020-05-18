@@ -305,9 +305,15 @@ public class Model2Entity {
                 .setUrl(audio.getUrl())
                 .setLyricsId(audio.getLyricsId())
                 .setAlbumId(audio.getAlbumId())
+                .setAlbum_owner_id(audio.getAlbum_owner_id())
+                .setAlbum_access_key(audio.getAlbum_access_key())
                 .setGenre(audio.getGenre())
                 .setAccessKey(audio.getAccessKey())
-                .setDeleted(audio.isDeleted());
+                .setAlbum_title(audio.getAlbum_title())
+                .setThumb_image_big(audio.getThumb_image_big())
+                .setThumb_image_little(audio.getThumb_image_little())
+                .setThumb_image_very_big(audio.getThumb_image_very_big())
+                .setIsHq(audio.getIsHq());
     }
 
     public static PhotoEntity buildPhotoEntity(Photo photo) {

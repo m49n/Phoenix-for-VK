@@ -19,12 +19,14 @@ import biz.dealnote.messenger.domain.IAttachmentsRepository;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.LocalPhoto;
+import biz.dealnote.messenger.model.LocalVideo;
 import biz.dealnote.messenger.model.ModelsBundle;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter;
 import biz.dealnote.messenger.mvp.view.IMessageAttachmentsView;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.IUploadManager;
+import biz.dealnote.messenger.upload.MessageMethod;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.upload.UploadDestination;
 import biz.dealnote.messenger.upload.UploadIntent;
@@ -262,13 +264,15 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         getView().addPhoto(accountId, messageOwnerId);
     }
 
-    public void firePhotosSelected(ArrayList<Photo> photos, ArrayList<LocalPhoto> localPhotos, String file) {
+    public void firePhotosSelected(ArrayList<Photo> photos, ArrayList<LocalPhoto> localPhotos, String file, LocalVideo video) {
         if (nonEmpty(file))
             doUploadFile(file);
         else if (nonEmpty(photos)) {
             fireAttachmentsSelected(photos);
         } else if (nonEmpty(localPhotos)) {
             doUploadPhotos(localPhotos);
+        } else if (video != null) {
+            doUploadVideo(video.getData().getPath());
         }
     }
 
@@ -298,6 +302,11 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
 
     private void doUploadFile(String file, int size) {
         List<UploadIntent> intents = UploadUtils.createIntents(messageOwnerId, destination, file, size, true);
+        uploadManager.enqueue(intents);
+    }
+
+    private void doUploadVideo(String file) {
+        List<UploadIntent> intents = UploadUtils.createVideoIntents(messageOwnerId, UploadDestination.forMessage(messageId, MessageMethod.VIDEO), file, true);
         uploadManager.enqueue(intents);
     }
 

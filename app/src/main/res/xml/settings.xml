@@ -98,6 +98,14 @@
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_chat_background_names"
+            android:entryValues="@array/array_chat_background_items"
+            android:key="chat_background"
+            android:title="@string/chat_background"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="chat_light_background"
             android:summary="@string/chat_light_background"
@@ -245,14 +253,6 @@
             android:defaultValue="true"
             android:key="amoled_theme"
             android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/array_chat_background_names"
-            android:entryValues="@array/array_chat_background_items"
-            android:key="chat_background"
-            android:title="@string/chat_background"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference

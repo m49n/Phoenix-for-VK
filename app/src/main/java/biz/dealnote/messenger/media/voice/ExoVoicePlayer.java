@@ -84,6 +84,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
         setStatus(STATUS_PREPARING);
 
         exoPlayer = new SimpleExoPlayer.Builder(app).build();
+        exoPlayer.setWakeMode(C.WAKE_MODE_NETWORK);
 
         // DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.

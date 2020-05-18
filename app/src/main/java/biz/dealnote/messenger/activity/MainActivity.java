@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private List<Action<MainActivity>> postResumeActions = new ArrayList<>(0);
 
     private boolean resumed;
+    private boolean bNoDestroyServiceAudio = false;
 
     private static String getFileExtension(File file) {
         String extension = "";
@@ -251,6 +252,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         setTheme(Settings.get().ui().getMainTheme());
         getDelegate().applyDayNight();
         super.onCreate(savedInstanceState);
+        mDestroyed = false;
+        bNoDestroyServiceAudio = false;
 
         mCompositeDisposable.add(Settings.get()
                 .accounts()
@@ -386,7 +389,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ;
                 }
             }
         });
@@ -752,12 +754,19 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        bNoDestroyServiceAudio = true;
+    }
+
+    @Override
     protected void onDestroy() {
         mCompositeDisposable.dispose();
         mDestroyed = true;
 
         getSupportFragmentManager().removeOnBackStackChangedListener(mOnBackStackChangedListener);
 
+        //if(!bNoDestroyServiceAudio)
         unbindFromAudioPlayService();
         super.onDestroy();
     }

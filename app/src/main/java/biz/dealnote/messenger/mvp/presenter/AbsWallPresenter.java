@@ -107,9 +107,11 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
             appendDisposable(ownersRepository.getStory(accountId, accountId == ownerId ? null : ownerId)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(data -> {
-                        stories.clear();
-                        stories.addAll(data);
-                        getView().updateStory(data);
+                        if (!Utils.isEmpty(data)) {
+                            stories.clear();
+                            stories.addAll(data);
+                            getView().updateStory(stories);
+                        }
                     }, t -> {
                     }));
         }

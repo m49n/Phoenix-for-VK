@@ -94,6 +94,11 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
     }
 
     @Override
+    public void onLongAvatarClick(@NonNull Message message, int userId) {
+        super.onOpenOwner(userId);
+    }
+
+    @Override
     public void onRestoreClick(@NonNull Message message, int position) {
         // not supported
     }

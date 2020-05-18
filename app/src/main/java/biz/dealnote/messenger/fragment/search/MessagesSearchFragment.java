@@ -58,6 +58,11 @@ public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPres
     }
 
     @Override
+    public void onLongAvatarClick(@NonNull Message message, int userId) {
+        getPresenter().fireOwnerClick(userId);
+    }
+
+    @Override
     public void onRestoreClick(@NonNull Message message, int position) {
         // delete is not supported
     }

@@ -327,16 +327,13 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         }
         String file = dir.getAbsolutePath() + "/" + (Prefix != null ? (Prefix + "_") : "") + transform_owner(photo.getOwnerId()) + "_" + photo.getId() + ".jpg";
         String url = photo.getUrlForSize(PhotoSize.W, true);
-        do {
-            File Temp = new File(file);
-            if (Temp.exists()) {
-                Temp.setLastModified(Calendar.getInstance().getTime().getTime());
-                if (isGuiReady())
-                    getView().getPhoenixToast().showToastError(R.string.exist_audio);
-                return;
-            }
+        File Temp = new File(file);
+        if (Temp.exists()) {
+            Temp.setLastModified(Calendar.getInstance().getTime().getTime());
+            if (isGuiReady())
+                getView().getPhoenixToast().showToastError(R.string.exist_audio);
+            return;
         }
-        while (false);
         new InternalDownloader(this, getApplicationContext(), url, file, photo).doDownload();
     }
 

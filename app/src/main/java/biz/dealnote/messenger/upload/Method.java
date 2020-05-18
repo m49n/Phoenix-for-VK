@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
         Method.PHOTO_TO_WALL,
         Method.PHOTO_TO_COMMENT,
         Method.PHOTO_TO_PROFILE,
-        Method.PHOTO_TO_MESSAGE,
+        Method.TO_MESSAGE,
         Method.AUDIO,
         Method.VIDEO,
         Method.DOCUMENT})
@@ -19,7 +19,7 @@ public @interface Method {
     int PHOTO_TO_WALL = 2;
     int PHOTO_TO_COMMENT = 3;
     int PHOTO_TO_PROFILE = 4;
-    int PHOTO_TO_MESSAGE = 6;
+    int TO_MESSAGE = 6;
     int AUDIO = 7;
     int VIDEO = 8;
     int DOCUMENT = 9;

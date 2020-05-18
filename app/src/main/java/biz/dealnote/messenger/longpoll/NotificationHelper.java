@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.longpoll;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,11 +17,14 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.MainActivity;
 import biz.dealnote.messenger.activity.QuickAnswerActivity;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
+import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Peer;
+import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.push.ChatEntryFetcher;
 import biz.dealnote.messenger.push.NotificationScheduler;
+import biz.dealnote.messenger.push.NotificationUtils;
 import biz.dealnote.messenger.service.QuickReplyService;
 import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.Settings;
@@ -29,6 +33,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.hasFlag;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 
 public class NotificationHelper {
 
@@ -51,26 +56,37 @@ public class NotificationHelper {
      * Отображение уведомления в statusbar о новом сообщении.
      * Этот метод сначала в отдельном потоке получает всю необходимую информацию для отображения
      *
-     * @param context   контекст
-     * @param text      текст сообщения
-     * @param messageId идентификатор сообщения
+     * @param context контекст
      */
-    public static void notifNewMessage(final Context context, final int accountId, final String text, final int peerId, final int messageId, final long messageTime) {
-        ChatEntryFetcher.getRx(context, accountId, peerId)
+
+    @SuppressLint("CheckResult")
+    public static void notifNewMessage(final Context context, final int accountId, final Message message) {
+        ChatEntryFetcher.getRx(context, accountId, message.getPeerId())
                 .subscribeOn(NotificationScheduler.INSTANCE)
                 .subscribe(info -> {
-                    Peer peer = new Peer(peerId).setTitle(info.title).setAvaUrl(info.img);
-                    showNotification(context, accountId, peer, text, messageId, peerId, messageTime, info.icon);
+                    Peer peer = new Peer(message.getPeerId()).setTitle(info.title).setAvaUrl(info.img);
+                    showNotification(context, accountId, peer, message, info.icon);
                 }, RxUtils.ignore());
     }
 
-    public static void showNotification(Context context, int accountId, Peer peer, String body, int mid,
-                                        int peerId, long messageSentTime, Bitmap avatar) {
+    @SuppressLint("CheckResult")
+    public static void showNotification(Context context, int accountId, Peer peer, Message message, Bitmap avatar) {
         boolean hideBody = Settings.get()
                 .security()
                 .needHideMessagesBodyForNotif();
 
-        String text = hideBody ? context.getString(R.string.message_text_is_not_available) : body;
+        String messageText = Utils.isEmpty(message.getDecryptedBody()) ? message.getBody() : message.getDecryptedBody();
+        if (messageText == null)
+            messageText = "";
+
+        if (message.getForwardMessagesCount() > 0) {
+            messageText += " " + context.getString(R.string.notif_forward, message.getForwardMessagesCount());
+        }
+        if (message.getAttachments() != null && message.getAttachments().size() > 0) {
+            messageText += " " + context.getString(R.string.notif_attach, message.getAttachments().size());
+        }
+
+        String text = hideBody ? context.getString(R.string.message_text_is_not_available) : messageText;
 
         final NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -83,7 +99,7 @@ public class NotificationHelper {
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }
 
-        String channelId = Peer.isGroupChat(peerId) ? AppNotificationChannels.GROUP_CHAT_MESSAGE_CHANNEL_ID :
+        String channelId = Peer.isGroupChat(message.getPeerId()) ? AppNotificationChannels.GROUP_CHAT_MESSAGE_CHANNEL_ID :
                 AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
@@ -91,19 +107,21 @@ public class NotificationHelper {
                 .setLargeIcon(avatar)
                 .setContentTitle(peer.getTitle())
                 .setContentText(OwnerLinkSpanFactory.withSpans(text, true, false, null))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(OwnerLinkSpanFactory.withSpans(text, true, false, null)))
                 .setAutoCancel(true);
 
         int notificationMask = Settings.get()
                 .notifications()
-                .getNotifPref(accountId, peerId);
+                .getNotifPref(accountId, message.getPeerId());
 
         if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_HIGH_PRIORITY)) {
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
         }
 
         //Our quickreply
-        Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, peerId, text, mid, messageSentTime, peer.getAvaUrl(), peer.getTitle());
-        PendingIntent quickPendingIntent = PendingIntent.getActivity(context, mid, intentQuick, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, message.getPeerId(), text, message.getId(), message.getDate(), peer.getAvaUrl(), peer.getTitle());
+        PendingIntent quickPendingIntent = PendingIntent.getActivity(context, message.getId(), intentQuick, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action actionCustomReply = new NotificationCompat.Action(R.drawable.reply, context.getString(R.string.quick_answer_title), quickPendingIntent);
 
         //System reply. Works only on Wear (20 Api) and N+
@@ -111,11 +129,11 @@ public class NotificationHelper {
                 .setLabel(context.getResources().getString(R.string.reply))
                 .build();
 
-        Intent ReadIntent = QuickReplyService.intentForReadMessage(context, accountId, peerId, mid);
+        Intent ReadIntent = QuickReplyService.intentForReadMessage(context, accountId, message.getPeerId(), message.getId());
 
-        Intent directIntent = QuickReplyService.intentForAddMessage(context, accountId, peerId);
-        PendingIntent ReadPendingIntent = PendingIntent.getService(context, mid, ReadIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent directPendingIntent = PendingIntent.getService(context, mid, directIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent directIntent = QuickReplyService.intentForAddMessage(context, accountId, message.getPeerId());
+        PendingIntent ReadPendingIntent = PendingIntent.getService(context, message.getId(), ReadIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent directPendingIntent = PendingIntent.getService(context, message.getId(), directIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action actionDirectReply = new NotificationCompat.Action.Builder
                 (/*may be missing in some cases*/ R.drawable.reply,
@@ -134,7 +152,7 @@ public class NotificationHelper {
         Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, peer, 0);
         intent.putExtra(Extra.PLACE, chatPlace);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, mid, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, message.getId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(contentIntent);
 
         if (!Utils.hasNougat()) {
@@ -154,30 +172,41 @@ public class NotificationHelper {
 
         builder.extend(War);
 
-        Notification notification = builder.build();
-
         if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_LED)) {
-            notification.ledARGB = 0xFF0000FF;
-            notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-            notification.ledOnMS = 100;
-            notification.ledOffMS = 1000;
+            builder.setLights(0xFF0000FF, 100, 1000);
         }
 
         if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_VIBRO)) {
-            //notification.defaults |= Notification.DEFAULT_VIBRATE;
-            notification.vibrate = Settings.get()
+            builder.setVibrate(Settings.get()
                     .notifications()
-                    .getVibrationLength();
+                    .getVibrationLength());
         }
 
         if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_SOUND)) {
-            notification.sound = findNotificationSound();
+            builder.setSound(findNotificationSound());
         }
 
-        nManager.notify(createPeerTagFor(accountId, peerId), NOTIFICATION_MESSAGE, notification);
+        nManager.notify(createPeerTagFor(accountId, message.getPeerId()), NOTIFICATION_MESSAGE, builder.build());
+
+        if (!hideBody && message.isHasAttachments() && message.getAttachments() != null && !isEmpty(message.getAttachments().getPhotos())) {
+            String url = message.getAttachments().getPhotos().get(0).getUrlForSize(PhotoSize.X, false);
+
+            NotificationUtils.loadImageRx(url)
+                    .subscribeOn(NotificationScheduler.INSTANCE)
+                    .subscribe(bitmap -> {
+                        if (bitmap != null) {
+                            builder.setStyle(new NotificationCompat.BigPictureStyle()
+                                    .setBigContentTitle(OwnerLinkSpanFactory.withSpans(text, true, false, null))
+                                    .setSummaryText(context.getString(R.string.notif_photos, message.getAttachments().getPhotos().size()))
+                                    .bigPicture(bitmap));
+                            nManager.notify(createPeerTagFor(accountId, message.getPeerId()), NOTIFICATION_MESSAGE, builder.build());
+                        }
+                    }, t -> {
+                    });
+        }
 
         if (Settings.get().notifications().isQuickReplyImmediately()) {
-            Intent startQuickReply = QuickAnswerActivity.forStart(context, accountId, peerId, text, mid, messageSentTime, peer.getAvaUrl(), peer.getTitle());
+            Intent startQuickReply = QuickAnswerActivity.forStart(context, accountId, message.getPeerId(), text, message.getId(), message.getDate(), peer.getAvaUrl(), peer.getTitle());
             startQuickReply.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startQuickReply.putExtra(QuickAnswerActivity.EXTRA_FOCUS_TO_FIELD, false);
             startQuickReply.putExtra(QuickAnswerActivity.EXTRA_LIVE_DELAY, true);

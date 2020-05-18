@@ -61,7 +61,6 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
     private TextView mEmptyText;
     private RecyclerView mRecycleView;
     private RecyclerView.LayoutManager mFeedLayoutManager;
-    private FloatingActionButton Goto;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -140,9 +139,10 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
             }
         });
 
-        Goto = root.findViewById(R.id.goto_button);
+        FloatingActionButton Goto = root.findViewById(R.id.goto_button);
         Goto.setOnClickListener(v -> mRecycleView.scrollToPosition(0));
         Goto.setOnLongClickListener(v -> {
+            mRecycleView.scrollToPosition(0);
             getPresenter().fireRefresh();
             return true;
         });

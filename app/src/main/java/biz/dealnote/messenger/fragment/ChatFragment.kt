@@ -186,7 +186,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun displayWriting(owner_id: Int) {
         Writing_msg_Group?.visibility = View.VISIBLE
         Writing_msg_Group?.alpha = 0.0f
-        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 0.8f).setDuration(200).start()
+        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 1f).setDuration(200).start()
         Writing_msg?.setText(R.string.user_type_message)
         Writing_msg_Ava?.setImageResource(R.drawable.background_gray_round)
         presenter?.ResolveWritingInfo(requireActivity(), owner_id)
@@ -194,7 +194,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     @SuppressLint("SetTextI18n")
     override fun displayWriting(owner: Owner) {
-        Writing_msg?.text = owner.fullName + " " + getString(R.string.user_type_message)
+        Writing_msg?.text = owner.fullName + "... "
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
     }
@@ -377,6 +377,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         inputViewController?.setTextQuietly(text)
     }
 
+    override fun AppendMessageText(text: String?) {
+        inputViewController?.AppendTextQuietly(text)
+    }
+
     override fun displayToolbarTitle(text: String?) {
         toolbar?.title = text
     }
@@ -484,6 +488,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
+    private fun onEditLocalVideoSelected(video: LocalVideo) {
+        presenter?.fireEditLocalVideoSelected(video)
+    }
+
     private fun onEditLocalFileSelected(file: String) {
         val defaultSize = Settings.get().main().uploadImageSize
         when (defaultSize) {
@@ -517,6 +525,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             val localPhotos: List<LocalPhoto> = data?.getParcelableArrayListExtra(Extra.PHOTOS)
                     ?: Collections.emptyList()
 
+            val vid: LocalVideo? = data?.getParcelableExtra(Extra.VIDEO)
+
             val file = data?.getStringExtra(FileManagerFragment.returnFileParameter)
 
             if (file != null && nonEmpty(file)) {
@@ -525,6 +535,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 presenter?.fireEditAttachmentsSelected(vkphotos)
             } else if (localPhotos.isNotEmpty()) {
                 onEditLocalPhotosSelected(localPhotos)
+            } else if (vid != null) {
+                onEditLocalVideoSelected(vid)
             }
         }
 
@@ -558,6 +570,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         val sources = Sources()
                 .with(LocalPhotosSelectableSource())
                 .with(LocalGallerySelectableSource())
+                .with(LocalVideosSelectableSource())
                 .with(VkPhotosSelectableSource(accountId, ownerId))
                 .with(FileManagerSelectableSource())
 
@@ -1070,6 +1083,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     override fun onMessageClicked(message: Message) {
         presenter?.fireMessageClick(message)
+    }
+
+    override fun onLongAvatarClick(message: Message, userId: Int) {
+        presenter?.fireLongAvatarClick(userId)
     }
 
     override fun onDestroyView() {

@@ -12,7 +12,9 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.audiofx.AudioEffect
 import android.net.Uri
-import android.os.*
+import android.os.Handler
+import android.os.IBinder
+import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -67,7 +69,6 @@ class MusicPlaybackService : Service() {
     val SHUTDOWN = "biz.dealnote.phoenix.player.shutdown"
     private val mBinder: IBinder = ServiceStub(this)
     private var mPlayer: MultiPlayer? = null
-    private var mWakeLock: PowerManager.WakeLock? = null
     private var mAlarmManager: AlarmManager? = null
     private var mShutdownIntent: PendingIntent? = null
     private var mShutdownScheduled = false
@@ -90,7 +91,6 @@ class MusicPlaybackService : Service() {
     private var mShuffleMode = SHUFFLE_NONE
     private var mRepeatMode = REPEAT_NONE
     private var mPlayList: List<Audio>? = null
-    private var mPlayerHandler: MusicPlayerHandler? = null
     private var mNotificationHelper: NotificationHelper? = null
     private var mMediaMetadataCompat: MediaMetadataCompat? = null
     override fun onBind(intent: Intent): IBinder {
@@ -101,12 +101,8 @@ class MusicPlaybackService : Service() {
 
     override fun onUnbind(intent: Intent): Boolean {
         if (D) Logger.d(TAG, "Service unbound")
-        if (isPlaying || isPreparing) {
+        if (isPlaying) {
             Logger.d(TAG, "onUnbind, mIsSupposedToBePlaying || mPausedByTransientLossOfFocus || isPreparing()")
-            return true
-        } else if (Utils.safeIsEmpty(mPlayList) || mPlayerHandler!!.hasMessages(TRACK_ENDED)) {
-            scheduleDelayedShutdown()
-            Logger.d(TAG, "onUnbind, scheduleDelayedShutdown")
             return true
         }
         stopSelf()
@@ -122,12 +118,8 @@ class MusicPlaybackService : Service() {
         if (D) Logger.d(TAG, "Creating service")
         super.onCreate()
         mNotificationHelper = NotificationHelper(this)
-        val thread = HandlerThread("MusicPlayerHandler", Process.THREAD_PRIORITY_BACKGROUND)
-        thread.start()
-        mPlayerHandler = MusicPlayerHandler(this)
         setUpRemoteControlClient()
         mPlayer = MultiPlayer(this)
-        mPlayer!!.setHandler(mPlayerHandler)
         val filter = IntentFilter()
         filter.addAction(SERVICECMD)
         filter.addAction(TOGGLEPAUSE_ACTION)
@@ -139,9 +131,6 @@ class MusicPlaybackService : Service() {
         filter.addAction(REPEAT_ACTION)
         filter.addAction(SHUFFLE_ACTION)
         registerReceiver(mIntentReceiver, filter)
-        val powerManager = java.util.Objects.requireNonNull(getSystemService(Context.POWER_SERVICE)) as PowerManager
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
-        mWakeLock?.setReferenceCounted(false)
 
         // Initialize the delayed shutdown intent
         val shutdownIntent = Intent(this, MusicPlaybackService::class.java)
@@ -218,13 +207,10 @@ class MusicPlaybackService : Service() {
         audioEffectsIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, packageName)
         sendBroadcast(audioEffectsIntent)
         mAlarmManager!!.cancel(mShutdownIntent)
-        mPlayerHandler!!.removeCallbacksAndMessages(null)
         mPlayer!!.release()
-        mPlayer = null
         mMediaSession!!.release()
-        mPlayerHandler!!.removeCallbacksAndMessages(null)
+        mNotificationHelper!!.killNotification()
         unregisterReceiver(mIntentReceiver)
-        mWakeLock!!.release()
     }
 
     /**
@@ -252,7 +238,7 @@ class MusicPlaybackService : Service() {
 
     @Suppress("DEPRECATION")
     private fun releaseServiceUiAndStop() {
-        if (isPlaying || mPlayerHandler!!.hasMessages(TRACK_ENDED)) {
+        if (isPlaying) {
             return
         }
         if (D) Logger.d(TAG, "Nothing is playing anymore, releasing notification")
@@ -746,10 +732,6 @@ class MusicPlaybackService : Service() {
         }
     }
 
-    fun stop() {
-        stop(true)
-    }
-
     fun play() {
         if (mPlayer != null && mPlayer!!.isInitialized) {
             val duration = mPlayer!!.duration()
@@ -757,8 +739,6 @@ class MusicPlaybackService : Service() {
                 gotoNext(false)
             }
             mPlayer!!.start()
-            mPlayerHandler!!.removeMessages(FADEDOWN)
-            mPlayerHandler!!.sendEmptyMessage(FADEUP)
             if (!isPlaying) {
                 isPlaying = true
                 notifyChange(PLAYSTATE_CHANGED)
@@ -774,7 +754,6 @@ class MusicPlaybackService : Service() {
     fun pause() {
         if (D) Logger.d(TAG, "Pausing playback")
         synchronized(this) {
-            mPlayerHandler!!.removeMessages(FADEUP)
             if (mPlayer != null && isPlaying) {
                 mPlayer!!.pause()
                 scheduleDelayedShutdown()
@@ -878,64 +857,14 @@ class MusicPlaybackService : Service() {
         }
     }
 
-    private class MusicPlayerHandler internal constructor(service: MusicPlaybackService) : Handler(Looper.getMainLooper()) {
-        private val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
-        private var mCurrentVolume = 1.0f
-        override fun handleMessage(msg: Message) {
-            val service = mService.get() ?: return
-            when (msg.what) {
-                FADEDOWN -> {
-                    mCurrentVolume -= .05f
-                    if (mCurrentVolume > .2f) {
-                        sendEmptyMessageDelayed(FADEDOWN, 10)
-                    } else {
-                        mCurrentVolume = .2f
-                    }
-                    service.mPlayer!!.setVolume(mCurrentVolume)
-                }
-                FADEUP -> {
-                    mCurrentVolume += .01f
-                    if (mCurrentVolume < 1.0f) {
-                        sendEmptyMessageDelayed(FADEUP, 10)
-                    } else {
-                        mCurrentVolume = 1.0f
-                    }
-                    service.mPlayer!!.setVolume(mCurrentVolume)
-                }
-                SERVER_DIED -> if (service.isPlaying) {
-                    service.gotoNext(true)
-                } else {
-                    service.playCurrentTrack(false)
-                }
-                TRACK_WENT_TO_NEXT -> {
-                    //service.mPlayPos = service.mNextPlayPos;
-                    service.notifyChange(META_CHANGED)
-                    service.updateNotification()
-                }
-                TRACK_ENDED -> if (service.mRepeatMode == REPEAT_CURRENT) {
-                    service.seek(0)
-                    service.play()
-                } else {
-                    service.gotoNext(false)
-                }
-                RELEASE_WAKELOCK -> service.mWakeLock!!.release()
-                else -> {
-                }
-            }
-        }
-
-    }
-
     private class MultiPlayer internal constructor(service: MusicPlaybackService) {
         val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
         var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(service).build()
-        var mHandler: Handler? = null
         var isInitialized = false
         var isPreparing = false
         var isPaused = false
         val audioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor()
         val compositeDisposable = CompositeDisposable()
-        var First: Boolean = true
 
         /**
          * @param remoteUrl The path of the file, or the http/rtsp URL of the stream
@@ -973,39 +902,6 @@ class MusicPlaybackService : Service() {
                     if (url.contains("index.m3u8")) HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(url)) else ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url))
                 } else ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(Audio.getMp3FromM3u8(url)))
             }
-            if (First) {
-                First = false;
-                mCurrentMediaPlayer.repeatMode = Player.REPEAT_MODE_OFF
-                mCurrentMediaPlayer.addListener(object : ExoEventAdapter() {
-                    override fun onPlayerStateChanged(b: Boolean, i: Int) {
-                        when (i) {
-                            Player.STATE_READY -> if (isPreparing) {
-                                isPreparing = false
-                                isInitialized = true
-                                mService.get()!!.notifyChange(PREPARED)
-                                mService.get()!!.play()
-                            }
-                            Player.STATE_ENDED -> if (!isPreparing && isInitialized) {
-                                isInitialized = false
-                                mService.get()!!.gotoNext(false)
-                            }
-                        }
-                    }
-
-                    override fun onPlayerError(error: ExoPlaybackException) {
-                        mService.get()!!.ErrorsCount++
-                        if (mService.get()!!.ErrorsCount > 10) {
-                            mService.get()!!.ErrorsCount = 0
-                            mService.get()!!.stopSelf()
-                        } else {
-                            val playbackPos = mCurrentMediaPlayer.currentPosition
-                            mService.get()!!.playCurrentTrack(false)
-                            mCurrentMediaPlayer.seekTo(playbackPos)
-                            mService.get()!!.notifyChange(META_CHANGED)
-                        }
-                    }
-                })
-            }
             mCurrentMediaPlayer.prepare(mediaSource)
             mCurrentMediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), true)
             val intent = Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION)
@@ -1024,15 +920,6 @@ class MusicPlaybackService : Service() {
             } else {
                 setDataSource(url)
             }
-        }
-
-        /**
-         * Sets the handler
-         *
-         * @param handler The handler to use
-         */
-        fun setHandler(handler: Handler?) {
-            mHandler = handler
         }
 
         fun start() {
@@ -1070,14 +957,6 @@ class MusicPlaybackService : Service() {
             return whereto
         }
 
-        fun setVolume(vol: Float) {
-            try {
-                mCurrentMediaPlayer.volume = vol
-            } catch (ignored: IllegalStateException) {
-                // случается
-            }
-        }
-
         val audioSessionId: Int
             get() = mCurrentMediaPlayer.audioSessionId
 
@@ -1088,7 +967,46 @@ class MusicPlaybackService : Service() {
          * Constructor of `MultiPlayer`
          */
         init {
-            //mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
+            mCurrentMediaPlayer.setHandleAudioBecomingNoisy(true)
+            mCurrentMediaPlayer.setWakeMode(C.WAKE_MODE_NETWORK)
+
+            mCurrentMediaPlayer.repeatMode = Player.REPEAT_MODE_OFF
+            mCurrentMediaPlayer.addListener(object : ExoEventAdapter() {
+                override fun onPlayerStateChanged(b: Boolean, i: Int) {
+                    if (mService.get()!!.isPlaying != b) {
+                        mService.get()!!.isPlaying = b
+                        mService.get()!!.notifyChange(PLAYSTATE_CHANGED)
+                    }
+                    super.onPlayerStateChanged(b, i)
+                    when (i) {
+                        Player.STATE_READY -> if (isPreparing) {
+                            isPreparing = false
+                            isInitialized = true
+                            mService.get()!!.notifyChange(PREPARED)
+                            mService.get()!!.play()
+                        }
+                        Player.STATE_ENDED -> if (!isPreparing && isInitialized) {
+                            isInitialized = false
+                            mService.get()!!.gotoNext(false)
+                        }
+                        else -> {
+                        }
+                    }
+                }
+
+                override fun onPlayerError(error: ExoPlaybackException) {
+                    mService.get()!!.ErrorsCount++
+                    if (mService.get()!!.ErrorsCount > 10) {
+                        mService.get()!!.ErrorsCount = 0
+                        mService.get()!!.stopSelf()
+                    } else {
+                        val playbackPos = mCurrentMediaPlayer.currentPosition
+                        mService.get()!!.playCurrentTrack(false)
+                        mCurrentMediaPlayer.seekTo(playbackPos)
+                        mService.get()!!.notifyChange(META_CHANGED)
+                    }
+                }
+            })
         }
     }
 
@@ -1103,8 +1021,8 @@ class MusicPlaybackService : Service() {
         }
 
         override fun stop() {
-            mService.get()!!.stop()
-            mService.get()!!.stopSelf()
+            mService.get()!!.pause()
+            mService.get()!!.releaseServiceUiAndStop()
         }
 
         override fun pause() {
@@ -1275,18 +1193,11 @@ class MusicPlaybackService : Service() {
         const val REPEAT_NONE = 0
         const val REPEAT_CURRENT = 1
         const val REPEAT_ALL = 2
-        private const val TRACK_ENDED = 1
-        private const val TRACK_WENT_TO_NEXT = 2
-        private const val RELEASE_WAKELOCK = 3
-        private const val SERVER_DIED = 4
-        private const val FOCUSCHANGE = 5
-        private const val FADEDOWN = 6
-        private const val FADEUP = 7
         private const val IDLE_DELAY = 60000
         private const val MAX_HISTORY_SIZE = 100
         private val mHistory = LinkedList<Int>()
         private val mShuffler = Shuffler(MAX_HISTORY_SIZE)
-        const val MAX_QUEUE_SIZE = 200
+        private const val MAX_QUEUE_SIZE = 200
         private fun listToIdPair(audios: ArrayList<Audio>): List<IdPair> {
             val result: MutableList<IdPair> = ArrayList()
             for (item in audios) {

@@ -14,6 +14,7 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun setupLoadUpHeaderState(@LoadMoreState state: Int)
     fun displayDraftMessageAttachmentsCount(count: Int)
     fun displayDraftMessageText(text: String?)
+    fun AppendMessageText(text: String?)
     fun displayToolbarTitle(text: String?)
     fun displayToolbarSubtitle(text: String?)
     fun displayWriting(owner_id: Int)

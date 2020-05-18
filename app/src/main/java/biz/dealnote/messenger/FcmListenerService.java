@@ -1,5 +1,6 @@
 package biz.dealnote.messenger;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -33,6 +34,7 @@ public class FcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "FcmListenerService";
 
+    @SuppressLint("CheckResult")
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);

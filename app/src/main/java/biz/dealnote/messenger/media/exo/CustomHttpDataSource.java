@@ -46,8 +46,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import biz.dealnote.messenger.Constants;
-
 /**
  * An {@link HttpDataSource} that uses Android's {@link HttpURLConnection}.
  * <p>
@@ -80,6 +78,7 @@ public class CustomHttpDataSource implements HttpDataSource {
     private final RequestProperties defaultRequestProperties;
     private final RequestProperties requestProperties;
     private final Proxy proxy;
+    private final String userAgent;
     private TransferListener listener;
     private DataSpec dataSpec;
     private HttpURLConnection connection;
@@ -150,7 +149,7 @@ public class CustomHttpDataSource implements HttpDataSource {
                                 TransferListener listener, int connectTimeoutMillis,
                                 int readTimeoutMillis, boolean allowCrossProtocolRedirects,
                                 RequestProperties defaultRequestProperties, Proxy proxy) {
-        String userAgent1 = Assertions.checkNotEmpty(userAgent);
+        this.userAgent = Assertions.checkNotEmpty(userAgent);
         this.contentTypePredicate = contentTypePredicate;
         this.listener = listener;
         this.requestProperties = new RequestProperties();
@@ -554,7 +553,7 @@ public class CustomHttpDataSource implements HttpDataSource {
             }
             connection.setRequestProperty("Range", rangeRequest);
         }
-        connection.setRequestProperty("User-Agent", Constants.USER_AGENT(null));
+        connection.setRequestProperty("User-Agent", userAgent);
         if (!allowGzip) {
             connection.setRequestProperty("Accept-Encoding", "identity");
         }

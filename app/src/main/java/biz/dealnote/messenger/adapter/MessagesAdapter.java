@@ -217,6 +217,13 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             }
         });
 
+        holder.avatar.setOnLongClickListener(v -> {
+            if (nonNull(onMessageActionListener)) {
+                onMessageActionListener.onLongAvatarClick(message, message.getSenderId());
+            }
+            return true;
+        });
+
         holder.itemView.setOnClickListener(v -> {
             if (nonNull(onMessageActionListener)) {
                 onMessageActionListener.onMessageClicked(message);
@@ -278,6 +285,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     }
 
     private void bindServiceHolder(ServiceMessageHolder holder, Message message) {
+        boolean read = message.isOut() ? lastReadId.getOutgoing() >= message.getId() : lastReadId.getIncoming() >= message.getId();
+        bindReadState(holder.itemView, message.getStatus() == MessageStatus.SENT && read);
         holder.tvAction.setText(message.getServiceText(context));
         holder.itemView.setOnClickListener(v -> {
             if (nonNull(onMessageActionListener)) {
@@ -399,6 +408,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     public interface OnMessageActionListener {
         void onAvatarClick(@NonNull Message message, int userId);
 
+        void onLongAvatarClick(@NonNull Message message, int userId);
+
         void onRestoreClick(@NonNull Message message, int position);
 
         boolean onMessageLongClick(@NonNull Message message);
@@ -408,12 +419,14 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
     private static class ServiceMessageHolder extends RecyclerView.ViewHolder {
 
+        View root;
         TextView tvAction;
         AttachmentsHolder mAttachmentsHolder;
 
         ServiceMessageHolder(View itemView) {
             super(itemView);
             tvAction = itemView.findViewById(R.id.item_service_message_text);
+            root = itemView.findViewById(R.id.message_container);
 
             mAttachmentsHolder = new AttachmentsHolder();
             mAttachmentsHolder.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
@@ -451,6 +464,32 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         }
     }
 
+    private static class StickerMessageHolder extends BaseMessageHolder {
+
+        LottieAnimationView sticker;
+
+        StickerMessageHolder(View itemView) {
+            super(itemView);
+            this.sticker = itemView.findViewById(R.id.sticker);
+        }
+    }
+
+    private abstract static class BaseMessageHolder extends RecyclerView.ViewHolder {
+
+        EmojiconTextView user;
+        TextView status;
+        ImageView avatar;
+        OnlineView important;
+
+        BaseMessageHolder(View itemView) {
+            super(itemView);
+            this.user = itemView.findViewById(R.id.item_message_user);
+            this.status = itemView.findViewById(R.id.item_message_status_text);
+            this.important = itemView.findViewById(R.id.item_message_important);
+            this.avatar = itemView.findViewById(R.id.item_message_avatar);
+        }
+    }
+
     private class GiftMessageHolder extends BaseMessageHolder {
 
         ImageView gift;
@@ -464,32 +503,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             message.setOnLongClickListener(v -> this.itemView.performLongClick());
             message.setOnClickListener(v -> this.itemView.performClick());
             this.gift = itemView.findViewById(R.id.gift);
-        }
-    }
-
-    private class StickerMessageHolder extends BaseMessageHolder {
-
-        LottieAnimationView sticker;
-
-        StickerMessageHolder(View itemView) {
-            super(itemView);
-            this.sticker = itemView.findViewById(R.id.sticker);
-        }
-    }
-
-    private abstract class BaseMessageHolder extends RecyclerView.ViewHolder {
-
-        EmojiconTextView user;
-        TextView status;
-        ImageView avatar;
-        OnlineView important;
-
-        BaseMessageHolder(View itemView) {
-            super(itemView);
-            this.user = itemView.findViewById(R.id.item_message_user);
-            this.status = itemView.findViewById(R.id.item_message_status_text);
-            this.important = itemView.findViewById(R.id.item_message_important);
-            this.avatar = itemView.findViewById(R.id.item_message_avatar);
         }
     }
 

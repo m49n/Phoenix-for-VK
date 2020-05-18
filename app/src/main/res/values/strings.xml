@@ -51,8 +51,8 @@
     <string name="dialog_day_older">Старые</string>
     <string name="dialog_me">Я</string>
     <string name="attachments">[вложения]</string>
-    <string name="forward_messages">[сообщения]</string>
-    <string name="service_message">[служебное сообщение]</string>
+    <string name="forward_messages">[пересланные]</string>
+    <string name="service_message">[служебное]</string>
     <string name="title_mssages">Сообщения</string>
 
     <!-- Settings-->
@@ -70,6 +70,7 @@
     <string name="send">Отправить</string>
 
     <string name="text_hint">Сообщение</string>
+    <string name="search_hint">Найти</string>
     <!-- MessagesSending-->
     <string name="sending">Отправка</string>
     <string name="in_order">В очереди</string>
@@ -946,8 +947,8 @@
     <string name="local_photos_tab_title">Локальные фото</string>
     <string name="local_gallery_tab_title">Галерея</string>
     <string name="send_short">Отпр.</string>
-    <string name="message_attachment_empty_text">Вложений пока нет</string>
-    <string name="button_add_photo">Добавить фото</string>
+    <string name="message_attachment_empty_text">Вложений пока нет (лимит 10)</string>
+    <string name="button_add_photo">Добавить фото/видео</string>
     <string name="log_type_error" translatable="false">Исключения</string>
     <string name="settings_show_logs_title" translatable="false">Логи</string>
     <string name="application_logs" translatable="false">Логи приложения</string>
@@ -1305,4 +1306,8 @@
     <string name="download_peer_html">Скачать переписку в HTML</string>
     <string name="usages">Использованные</string>
     <string name="is_player_support_volume">Переключатель громкости в плеере</string>
+    <string name="notif_photos">%1$d Фото</string>
+    <string name="notif_attach">[%1$d Вложений]</string>
+    <string name="notif_forward">[%1$d Пересланных]</string>
+    <string name="sticker">[стикер]</string>
 </resources>

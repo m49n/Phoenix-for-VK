@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import biz.dealnote.messenger.Constants;
@@ -159,7 +160,8 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             Matcher matcher = LinkParser.MENTIONS_AVATAR_PATTERN.matcher(Page.header);
             if (matcher.find()) {
                 String Type = matcher.group(1);
-                int Id = Integer.parseInt(matcher.group(2));
+                int Id = Integer.parseInt(Objects.requireNonNull(matcher.group(2)));
+                assert Type != null;
                 if (Type.equals("event") || Type.equals("club") || Type.equals("public"))
                     Id *= -1;
                 String icn = data.getAvatar(Id);

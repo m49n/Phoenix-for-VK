@@ -20,6 +20,7 @@ import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.mvp.view.ICommentEditView;
+import biz.dealnote.messenger.upload.MessageMethod;
 import biz.dealnote.messenger.upload.Method;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.upload.UploadDestination;
@@ -54,7 +55,7 @@ public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEd
         super(accountId, savedInstanceState);
         this.commentsInteractor = new CommentsInteractor(Injection.provideNetworkInterfaces(), Injection.provideStores(), Repository.INSTANCE.getOwners());
         this.orig = comment;
-        this.destination = new UploadDestination(comment.getId(), comment.getCommented().getSourceOwnerId(), Method.PHOTO_TO_COMMENT);
+        this.destination = new UploadDestination(comment.getId(), comment.getCommented().getSourceOwnerId(), Method.PHOTO_TO_COMMENT, MessageMethod.NULL);
         this.CommentThread = CommentThread;
 
         if (isNull(savedInstanceState)) {

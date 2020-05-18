@@ -72,8 +72,6 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
-        filter.addAction(MusicPlaybackService.SHUFFLEMODE_CHANGED);
-        filter.addAction(MusicPlaybackService.REPEATMODE_CHANGED);
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PREPARED);
         filter.addAction(MusicPlaybackService.REFRESH);

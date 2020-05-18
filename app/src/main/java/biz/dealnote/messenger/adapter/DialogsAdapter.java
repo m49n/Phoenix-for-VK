@@ -173,10 +173,17 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         }
 
         if (dialog.hasAttachments()) {
-            SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(mContext.getString(R.string.attachments));
-            spannable.setSpan(new ForegroundColorSpan(CurrentTheme.getColorPrimary(mContext)), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            lastMessage = TextUtils.isEmpty(lastMessage) ?
-                    spannable : lastMessage.append(" ").append(spannable);
+            if (dialog.getMessage() != null && dialog.getMessage().getAttachments() != null && !Utils.isEmpty(dialog.getMessage().getAttachments().getStickers())) {
+                SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(mContext.getString(R.string.sticker));
+                spannable.setSpan(new ForegroundColorSpan(CurrentTheme.getColorPrimary(mContext)), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                lastMessage = TextUtils.isEmpty(lastMessage) ?
+                        spannable : lastMessage.append(" ").append(spannable);
+            } else {
+                SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(mContext.getString(R.string.attachments));
+                spannable.setSpan(new ForegroundColorSpan(CurrentTheme.getColorPrimary(mContext)), 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                lastMessage = TextUtils.isEmpty(lastMessage) ?
+                        spannable : lastMessage.append(" ").append(spannable);
+            }
         }
 
         if (dialog.hasForwardMessages()) {

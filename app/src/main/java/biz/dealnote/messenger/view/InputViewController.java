@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
@@ -213,6 +214,18 @@ public class InputViewController {
         if (!Utils.isEmpty(text))
             this.mInputField.setSelection(text.length());
         this.mInputField.addTextChangedListener(mTextWatcher);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void AppendTextQuietly(String text) {
+        if (text != null) {
+            this.mInputField.removeTextChangedListener(mTextWatcher);
+            this.mInputField.setText(this.mInputField.getText() + " " + text);
+            this.mInputField.requestFocus();
+            if (!Utils.isEmpty(text))
+                this.mInputField.setSelection(this.mInputField.getText().length());
+            this.mInputField.addTextChangedListener(mTextWatcher);
+        }
     }
 
     public void setAttachmentsCount(int count) {

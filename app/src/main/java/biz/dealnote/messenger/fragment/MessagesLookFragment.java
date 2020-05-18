@@ -233,6 +233,15 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
     }
 
     @Override
+    public void onLongAvatarClick(@NonNull Message message, int userId) {
+        if (Objects.nonNull(mActionMode)) {
+            getPresenter().fireMessageClick(message);
+        } else {
+            getPresenter().fireOwnerClick(userId);
+        }
+    }
+
+    @Override
     public void onRestoreClick(@NonNull Message message, int position) {
         getPresenter().fireMessageRestoreClick(message, position);
     }
