@@ -116,7 +116,7 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public int getNightMode() {
         String mode = PreferenceManager.getDefaultSharedPreferences(app)
-                .getString("night_switch", String.valueOf(NightMode.DISABLE));
+                .getString("night_switch", String.valueOf(NightMode.ENABLE));
         return Integer.parseInt(mode);
     }
 

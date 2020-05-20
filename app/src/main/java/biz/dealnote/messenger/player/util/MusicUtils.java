@@ -498,6 +498,8 @@ public final class MusicUtils {
             sForegroundActivities++;
         } else {
             sForegroundActivities--;
+            if (sForegroundActivities < 0)
+                sForegroundActivities = 0;
         }
 
         if (old == 0 || sForegroundActivities == 0) {

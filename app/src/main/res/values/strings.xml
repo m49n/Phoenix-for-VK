@@ -241,8 +241,8 @@
     <string name="anonymous_poll">Анонимный опрос</string>
     <string name="open_poll">Открытое голосование</string>
 
-    <string name="drawer_categories_title">Элементы бокового меню</string>
-    <string name="drawer_categories_summary">Выберите элементы, которые будут отображаться в боковом меню приложения</string>
+    <string name="drawer_categories_title">Элементы всплывающего меню</string>
+    <string name="drawer_categories_summary">Выберите элементы, которые будут отображаться в сплывающем меню приложения</string>
 
     <string name="add_vote">Голосовать</string>
     <string name="remove_vote">Удалить голос</string>
@@ -738,7 +738,7 @@
     <string name="reply_notification">Ответы в комментариях</string>
     <string name="wall_publish_notification">Опубликована предложенная Вами запись</string>
     <string name="set_default">Установить по умолчанию</string>
-    <string name="sidebar_settings">Боковое меню</string>
+    <string name="sidebar_settings">Всплывающее меню</string>
     <string name="custom_chat">Кастомизировать чат</string>
     <string name="formatted_date_today">Сегодня в %1$s</string>
     <string name="formatted_date_tomorrow">Завтра в %1$s</string>
@@ -1121,7 +1121,7 @@
     <string name="button_login_via_web">Через Web</string>
     <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
-    <string name="drawer_edit_title">Боковое меню</string>
+    <string name="drawer_edit_title">Всплывающее меню</string>
     <string name="theme_edit_title">Выбор темы</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
@@ -1288,7 +1288,7 @@
     <string name="custom_message_color">Цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
-    <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
+    <string name="show_profile_in_additional_page">Показывать профиль в всплывающем меню (перезапуск)</string>
     <string name="disable_swipes">Отключить свайпы для плеера</string>
     <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
@@ -1299,7 +1299,6 @@
     <string name="video_dir">Видео</string>
     <string name="docs_dir">Документы</string>
     <string name="photo_to_user_dir">Сортировать фото по папкам</string>
-    <string name="use_speach_voice">Разговорный динамик для голосовух</string>
     <string name="import_accounts">Импорт аккаунтов</string>
     <string name="export_accounts">Экспорт аккаунтов</string>
     <string name="show_qr">Показать QR</string>
@@ -1307,7 +1306,16 @@
     <string name="usages">Использованные</string>
     <string name="is_player_support_volume">Переключатель громкости в плеере</string>
     <string name="notif_photos">%1$d Фото</string>
-    <string name="notif_attach">[%1$d Вложений]</string>
-    <string name="notif_forward">[%1$d Пересланных]</string>
+    <string name="notif_attach">(%1$d %2$s)</string>
+    <string name="notif_forward">(%1$d Пересланных)</string>
     <string name="sticker">[стикер]</string>
+    <string name="auto_read">Авто-прочтение</string>
+    <string name="hours">Часов</string>
+    <string name="hour">Час</string>
+    <string name="hour_sec">Часа</string>
+    <string name="attachments_notif">Вложений</string>
+    <string name="attachment_notif">Вложение</string>
+    <string name="attacment_sec_notif">Вложения</string>
+    <string name="for_wear">Для Гугл-Часов</string>
+    <string name="music_enable_toolbar">Включить тулбар для списка музыки</string>
 </resources>

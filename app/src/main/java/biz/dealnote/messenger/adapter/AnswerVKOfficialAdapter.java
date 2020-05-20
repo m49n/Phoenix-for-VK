@@ -73,7 +73,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             int IconRes = GetIconResByType(Page.iconType);
 
             Drawable tr = AppCompatResources.getDrawable(context, IconRes);
-            if (IconRes == R.drawable.phoenix) {
+            if (IconRes == R.drawable.phoenix_round) {
                 assert tr != null;
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(context));
             }
@@ -198,7 +198,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
     private int GetIconResByType(String IconType) {
         if (IconType == null)
-            return R.drawable.phoenix;
+            return R.drawable.phoenix_round;
         if (IconType.equals("suggested_post_published")) {
             return R.drawable.ic_feedback_suggested_post_published;
         }
@@ -292,7 +292,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         if (IconType.equals("transfer_votes")) {
             return R.drawable.ic_feedback_transfer_votes;
         }
-        return R.drawable.phoenix;
+        return R.drawable.phoenix_round;
     }
 
     @Override

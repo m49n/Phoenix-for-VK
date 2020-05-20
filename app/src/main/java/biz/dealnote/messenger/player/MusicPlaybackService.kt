@@ -101,7 +101,7 @@ class MusicPlaybackService : Service() {
 
     override fun onUnbind(intent: Intent): Boolean {
         if (D) Logger.d(TAG, "Service unbound")
-        if (isPlaying) {
+        if (isPlaying || mAnyActivityInForeground) {
             Logger.d(TAG, "onUnbind, mIsSupposedToBePlaying || mPausedByTransientLossOfFocus || isPreparing()")
             return true
         }

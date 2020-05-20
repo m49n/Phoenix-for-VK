@@ -27,8 +27,6 @@ public interface IVoicePlayer {
 
     boolean isSupposedToPlay();
 
-    void stop();
-
     void release();
 
     interface IPlayerStatusListener {

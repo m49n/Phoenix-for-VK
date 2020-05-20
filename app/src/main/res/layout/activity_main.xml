@@ -7,20 +7,19 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/miniplayer"
         android:clipToPadding="false" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/additional_navigation_menu"
         android:name="biz.dealnote.messenger.fragment.AdditionalNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/miniplayer"
-        tools:ignore="FragmentTagUsage"
         tools:layout="@layout/fragment_navigation_drawer" />
 
     <include
@@ -30,13 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/miniplayer"
         android:name="biz.dealnote.messenger.fragment.MiniPlayerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_menu_container"
-        tools:ignore="FragmentTagUsage"
         tools:layout="@layout/mini_player" />
 
 </RelativeLayout>

@@ -118,10 +118,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         getPresenter().fireOptionViewCreated(optionView);
         toolbar.getMenu().findItem(R.id.action_search).setVisible(optionView.canSearch);
         toolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.action_search:
-                    getPresenter().fireSearchClick();
-                    break;
+            if (item.getItemId() == R.id.action_search) {
+                getPresenter().fireSearchClick();
             }
             return true;
         });

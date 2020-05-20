@@ -52,11 +52,10 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private static final int TYPE_MY_MESSAGE = 1;
     private static final int TYPE_FRIEND_MESSAGE = 2;
     private static final int TYPE_SERVICE = 3;
-    private static final int TYPE_DELETED = 4;
-    private static final int TYPE_STICKER_MY = 5;
-    private static final int TYPE_STICKER_FRIEND = 6;
-    private static final int TYPE_GIFT_MY = 7;
-    private static final int TYPE_GIFT_FRIEND = 8;
+    private static final int TYPE_STICKER_MY = 4;
+    private static final int TYPE_STICKER_FRIEND = 5;
+    private static final int TYPE_GIFT_MY = 6;
+    private static final int TYPE_GIFT_FRIEND = 7;
     private static final Date DATE = new Date();
     private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     private Context context;
@@ -97,9 +96,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position, int type) {
         Message message = getItem(position);
         switch (type) {
-            case TYPE_DELETED:
-                bindDeletedHolder((DeletedMessageHolder) viewHolder, message);
-                break;
             case TYPE_SERVICE:
                 bindServiceHolder((ServiceMessageHolder) viewHolder, message);
                 break;
@@ -121,6 +117,19 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private void bindStickerHolder(StickerMessageHolder holder, final Message message) {
         bindBaseMessageHolder(holder, message);
 
+        if (message.isDeleted()) {
+            holder.root.setAlpha(0.6f);
+            holder.Restore.setVisibility(View.VISIBLE);
+            holder.Restore.setOnClickListener(v -> {
+                if (onMessageActionListener != null) {
+                    onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
+                }
+            });
+        } else {
+            holder.root.setAlpha(1);
+            holder.Restore.setVisibility(View.GONE);
+        }
+
         Sticker sticker = message.getAttachments().getStickers().get(0);
         if (sticker.isAnimated()) {
             holder.sticker.setAnimationFromUrl(sticker.getAnimationUrl());
@@ -141,6 +150,19 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
     private void bindGiftHolder(GiftMessageHolder holder, final Message message) {
         bindBaseMessageHolder(holder, message);
+
+        if (message.isDeleted()) {
+            holder.root.setAlpha(0.6f);
+            holder.Restore.setVisibility(View.VISIBLE);
+            holder.Restore.setOnClickListener(v -> {
+                if (onMessageActionListener != null) {
+                    onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
+                }
+            });
+        } else {
+            holder.root.setAlpha(1);
+            holder.Restore.setVisibility(View.GONE);
+        }
 
         holder.message.setVisibility(TextUtils.isEmpty(message.getBody()) ? View.GONE : View.VISIBLE);
         holder.message.setText(OwnerLinkSpanFactory.withSpans(message.getBody(), true, false, ownerLinkAdapter));
@@ -237,6 +259,19 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private void bindNormalMessage(final MessageHolder holder, final Message message) {
         bindBaseMessageHolder(holder, message);
 
+        if (message.isDeleted()) {
+            holder.root.setAlpha(0.6f);
+            holder.Restore.setVisibility(View.VISIBLE);
+            holder.Restore.setOnClickListener(v -> {
+                if (onMessageActionListener != null) {
+                    onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
+                }
+            });
+        } else {
+            holder.root.setAlpha(1);
+            holder.Restore.setVisibility(View.GONE);
+        }
+
         holder.body.setVisibility(TextUtils.isEmpty(message.getBody()) ? View.GONE : View.VISIBLE);
         String displayedBody = null;
 
@@ -285,6 +320,19 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     }
 
     private void bindServiceHolder(ServiceMessageHolder holder, Message message) {
+        if (message.isDeleted()) {
+            holder.root.setAlpha(0.6f);
+            holder.Restore.setVisibility(View.VISIBLE);
+            holder.Restore.setOnClickListener(v -> {
+                if (onMessageActionListener != null) {
+                    onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
+                }
+            });
+        } else {
+            holder.root.setAlpha(1);
+            holder.Restore.setVisibility(View.GONE);
+        }
+
         boolean read = message.isOut() ? lastReadId.getOutgoing() >= message.getId() : lastReadId.getIncoming() >= message.getId();
         bindReadState(holder.itemView, message.getStatus() == MessageStatus.SENT && read);
         holder.tvAction.setText(message.getServiceText(context));
@@ -293,32 +341,18 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 onMessageActionListener.onMessageClicked(message);
             }
         });
-        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true);
-    }
-
-    private void bindDeletedHolder(final DeletedMessageHolder holder, final Message message) {
-        String displayedBody = message.getCryptStatus() == CryptStatus.DECRYPTED ? message.getDecryptedBody() : message.getBody();
-        holder.buttonRestore.setVisibility(message.isDeletedForAll() ? View.GONE : View.VISIBLE);
-        holder.text.setText(TextUtils.isEmpty(message.getBody()) ? context.getString(R.string.message_was_deleted) : OwnerLinkSpanFactory.withSpans(displayedBody, true, false, ownerLinkAdapter));
-        holder.buttonRestore.setOnClickListener(v -> {
-            if (onMessageActionListener != null) {
-                onMessageActionListener.onRestoreClick(message, holder.getBindingAdapterPosition());
+        holder.itemView.setOnLongClickListener(v -> {
+            if (nonNull(onMessageActionListener)) {
+                onMessageActionListener.onMessageDelete(message);
             }
+            return true;
         });
-        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size() > 0);
-        holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
-
-        if (hasAttachments) {
-            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true);
-            attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
-        }
+        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true);
     }
 
     @Override
     protected RecyclerView.ViewHolder viewHolder(View view, int type) {
         switch (type) {
-            case TYPE_DELETED:
-                return new DeletedMessageHolder(view);
             case TYPE_MY_MESSAGE:
             case TYPE_FRIEND_MESSAGE:
                 return new MessageHolder(view);
@@ -344,8 +378,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 return R.layout.item_message_friend;
             case TYPE_SERVICE:
                 return R.layout.item_service_message;
-            case TYPE_DELETED:
-                return R.layout.item_message_deleted;
             case TYPE_STICKER_FRIEND:
                 return R.layout.item_message_friend_sticker;
             case TYPE_STICKER_MY:
@@ -362,10 +394,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     @Override
     protected int getItemType(int position) {
         Message m = getItem(position - getHeadersCount());
-        if (m.isDeleted()) {
-            return TYPE_DELETED;
-        }
-
         if (m.isServiseMessage()) {
             return TYPE_SERVICE;
         }
@@ -415,6 +443,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         boolean onMessageLongClick(@NonNull Message message);
 
         void onMessageClicked(@NonNull Message message);
+
+        void onMessageDelete(@NonNull Message message);
     }
 
     private static class ServiceMessageHolder extends RecyclerView.ViewHolder {
@@ -422,11 +452,13 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         View root;
         TextView tvAction;
         AttachmentsHolder mAttachmentsHolder;
+        Button Restore;
 
         ServiceMessageHolder(View itemView) {
             super(itemView);
             tvAction = itemView.findViewById(R.id.item_service_message_text);
             root = itemView.findViewById(R.id.message_container);
+            Restore = itemView.findViewById(R.id.item_message_restore);
 
             mAttachmentsHolder = new AttachmentsHolder();
             mAttachmentsHolder.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
@@ -435,32 +467,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                     setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
                     setVgPosts(itemView.findViewById(R.id.posts_attachments)).
                     setVgStickers(itemView.findViewById(R.id.stickers_attachments));
-        }
-    }
-
-    private static class DeletedMessageHolder extends RecyclerView.ViewHolder {
-
-        Button buttonRestore;
-        ViewGroup forwardMessagesRoot;
-        View attachmentsRoot;
-        AttachmentsHolder attachmentsHolder;
-        EmojiconTextView text;
-
-        DeletedMessageHolder(View itemView) {
-            super(itemView);
-            buttonRestore = itemView.findViewById(R.id.item_messages_deleted_restore);
-            text = itemView.findViewById(R.id.item_message_text);
-
-            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
-
-            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
-            attachmentsHolder = new AttachmentsHolder();
-            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
-                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
-                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
-                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
-                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
-                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
         }
     }
 
@@ -476,13 +482,17 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
     private abstract static class BaseMessageHolder extends RecyclerView.ViewHolder {
 
+        View root;
         EmojiconTextView user;
         TextView status;
         ImageView avatar;
         OnlineView important;
+        Button Restore;
 
         BaseMessageHolder(View itemView) {
             super(itemView);
+            this.root = itemView.findViewById(R.id.message_container);
+            this.Restore = itemView.findViewById(R.id.item_message_restore);
             this.user = itemView.findViewById(R.id.item_message_user);
             this.status = itemView.findViewById(R.id.item_message_status_text);
             this.important = itemView.findViewById(R.id.item_message_important);
@@ -491,7 +501,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     }
 
     private class GiftMessageHolder extends BaseMessageHolder {
-
         ImageView gift;
         EmojiconTextView message;
 
@@ -507,8 +516,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     }
 
     private class MessageHolder extends BaseMessageHolder {
-
-        View root;
         EmojiconTextView body;
         ViewGroup forwardMessagesRoot;
         BubbleLinearLayout bubble;
@@ -526,7 +533,6 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             body.setOnLongClickListener(v -> this.itemView.performLongClick());
             body.setOnClickListener(v -> this.itemView.performClick());
 
-            root = itemView.findViewById(R.id.message_container);
             forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
             bubble = itemView.findViewById(R.id.item_message_bubble);
 

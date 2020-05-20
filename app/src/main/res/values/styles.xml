@@ -321,6 +321,10 @@
         <item name="enforceTextAppearance">true</item>
     </style>
 
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/open_sans</item>
+    </style>
+
     <style name="Theme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">?colorSurface</item>
         <item name="tint">?colorSecondary</item>

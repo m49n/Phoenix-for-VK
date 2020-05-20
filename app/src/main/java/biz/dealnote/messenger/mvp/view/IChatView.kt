@@ -16,6 +16,7 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun displayDraftMessageText(text: String?)
     fun AppendMessageText(text: String?)
     fun displayToolbarTitle(text: String?)
+    fun displayToolbarAvatar(peer: Peer?)
     fun displayToolbarSubtitle(text: String?)
     fun displayWriting(owner_id: Int)
     fun hideWriting()

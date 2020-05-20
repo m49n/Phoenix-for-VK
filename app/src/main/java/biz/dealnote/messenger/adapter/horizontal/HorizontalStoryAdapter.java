@@ -18,6 +18,7 @@ import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
 import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RoundTransformation;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, HorizontalStoryAdapter.Holder> {
@@ -26,15 +27,6 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
 
     public HorizontalStoryAdapter(List<Story> data) {
         super(data);
-    }
-
-    private String getExpH(Long time) {
-        if (time <= 4 && time > 1 || time <= 24 && time > 21)
-            return "Часа";
-        else if (time == 1)
-            return "Час";
-        else
-            return "Часов";
     }
 
     @Override
@@ -48,7 +40,7 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
         else {
             holder.expires.setVisibility(View.VISIBLE);
             Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
-            holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), getExpH(exp)));
+            holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), context.getString(Utils.declOfNum(exp, new int[]{R.string.hour, R.string.hour_sec, R.string.hours}))));
         }
 
         if (Objects.isNull(item.getOwner())) {

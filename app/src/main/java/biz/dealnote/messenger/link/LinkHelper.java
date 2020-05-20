@@ -31,6 +31,7 @@ import biz.dealnote.messenger.link.types.PageLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumsLink;
 import biz.dealnote.messenger.link.types.PhotoLink;
+import biz.dealnote.messenger.link.types.PollLink;
 import biz.dealnote.messenger.link.types.TopicLink;
 import biz.dealnote.messenger.link.types.VideoLink;
 import biz.dealnote.messenger.link.types.WallCommentLink;
@@ -66,6 +67,11 @@ public class LinkHelper {
             case AbsLink.PLAYLIST:
                 AudioPlaylistLink plLink = (AudioPlaylistLink) link;
                 PlaceFactory.getAudiosInAlbumPlace(accountId, plLink.ownerId, plLink.playlistId, plLink.access_key).tryOpenWith(activity);
+                break;
+
+            case AbsLink.POLL:
+                PollLink pollLink = (PollLink) link;
+                openLinkInBrowser(activity, "https://vk.com/poll" + pollLink.ownerId + "_" + pollLink.Id);
                 break;
 
             case AbsLink.WALL_COMMENT:

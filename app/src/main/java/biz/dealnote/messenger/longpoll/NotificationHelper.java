@@ -83,7 +83,7 @@ public class NotificationHelper {
             messageText += " " + context.getString(R.string.notif_forward, message.getForwardMessagesCount());
         }
         if (message.getAttachments() != null && message.getAttachments().size() > 0) {
-            messageText += " " + context.getString(R.string.notif_attach, message.getAttachments().size());
+            messageText += " " + context.getString(R.string.notif_attach, message.getAttachments().size(), context.getString(Utils.declOfNum(message.getAttachments().size(), new int[]{R.string.attachment_notif, R.string.attacment_sec_notif, R.string.attachments_notif})));
         }
 
         String text = hideBody ? context.getString(R.string.message_text_is_not_available) : messageText;

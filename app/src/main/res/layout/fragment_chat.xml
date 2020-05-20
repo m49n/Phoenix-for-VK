@@ -16,7 +16,73 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar_no_card" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clipToPadding="true"
+                android:theme="@style/Theme.Toolbar.Surface"
+                app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                app:titleTextAppearance="@style/TextAppearance.Toolbar.Title">
+
+                <RelativeLayout
+                    android:id="@+id/avatar_root"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageView
+                        android:id="@+id/toolbar_avatar"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp" />
+
+                    <TextView
+                        android:id="@+id/empty_avatar_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:text="Aa"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:textAllCaps="true" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/avatar_root"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/dialog_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textSize="16sp"
+                        tools:text="Name" />
+
+                    <TextView
+                        android:id="@+id/dialog_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:textSize="12sp"
+                        tools:text="SubTitle" />
+
+                </LinearLayout>
+
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </RelativeLayout>
 

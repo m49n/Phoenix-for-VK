@@ -42,7 +42,7 @@ class MainSettings implements ISettings.IMainSettings {
 
     @Override
     public boolean isAmoledTheme() {
-        return getDefaultPreferences().getBoolean("amoled_theme", true);
+        return getDefaultPreferences().getBoolean("amoled_theme", false);
     }
 
     @Override
@@ -53,6 +53,11 @@ class MainSettings implements ISettings.IMainSettings {
     @Override
     public boolean isPlayer_support_volume() {
         return getDefaultPreferences().getBoolean("is_player_support_volume", false);
+    }
+
+    @Override
+    public boolean isMusic_enable_toolbar() {
+        return getDefaultPreferences().getBoolean("music_enable_toolbar", true);
     }
 
     @Override

@@ -115,6 +115,11 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
     }
 
     @Override
+    public void onMessageDelete(@NonNull Message message) {
+
+    }
+
+    @Override
     public void displayMessages(@NonNull List<Message> messages, @NonNull LastReadId lastReadId) {
         if (Objects.nonNull(mAdapter)) {
             mAdapter.setItems(messages, lastReadId);

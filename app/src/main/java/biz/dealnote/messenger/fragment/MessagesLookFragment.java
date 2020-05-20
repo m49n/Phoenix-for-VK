@@ -258,6 +258,13 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
     }
 
     @Override
+    public void onMessageDelete(@NonNull Message message) {
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(message.getId());
+        getPresenter().fireDeleteForMeClick(ids);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);

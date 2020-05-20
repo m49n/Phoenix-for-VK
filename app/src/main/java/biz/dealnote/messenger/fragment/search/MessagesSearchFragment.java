@@ -78,6 +78,11 @@ public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPres
     }
 
     @Override
+    public void onMessageDelete(@NonNull Message message) {
+
+    }
+
+    @Override
     public IPresenterFactory<MessagesSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
             int accountId = getArguments().getInt(Extra.ACCOUNT_ID);

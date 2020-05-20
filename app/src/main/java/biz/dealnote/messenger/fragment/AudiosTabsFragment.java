@@ -70,7 +70,11 @@ public class AudiosTabsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_audios_tabs, container, false);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        if (Settings.get().main().isMusic_enable_toolbar()) {
+            root.findViewById(R.id.fragment_audios_tabs_view).setVisibility(View.VISIBLE);
+            ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        } else
+            root.findViewById(R.id.fragment_audios_tabs_view).setVisibility(View.GONE);
         return root;
     }
 

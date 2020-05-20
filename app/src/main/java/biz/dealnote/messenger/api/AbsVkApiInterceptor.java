@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Random;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.model.Captcha;
 import biz.dealnote.messenger.api.model.Error;
@@ -55,6 +56,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         }
 
         FormBody.Builder formBuiler = new FormBody.Builder()
+                .add("lang", Constants.DEVICE_COUNTRY_CODE)
                 .add("v", version)
                 .add("access_token", token);
 

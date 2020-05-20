@@ -508,6 +508,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         resolveEmptyTextVisibility()
+        if (Settings.get().other().isAuto_read)
+            readAllUnreadMessagesIfExists()
     }
 
     private fun setCacheLoadingNow(cacheLoadingNow: Boolean) {
@@ -746,6 +748,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         view?.displayToolbarTitle(peer.title)
     }
 
+    @OnGuiCreated
+    private fun resolveToolbarAvatar() {
+        view?.displayToolbarAvatar(peer)
+    }
+
     fun fireRecordCancelClick() {
         audioRecordWrapper.stopRecording()
         onRecordingStateChanged()
@@ -864,7 +871,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun addMessageToList(message: Message) {
-        Utils.addElementToList(message, data, MESSAGES_COMPARATOR)
+        addElementToList(message, data, MESSAGES_COMPARATOR)
     }
 
     private fun onMessagesUpdate(updates: List<MessageUpdate>) {
@@ -912,6 +919,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         view?.notifyDataChanged()
+        if (Settings.get().other().isAuto_read)
+            readAllUnreadMessagesIfExists()
     }
 
     private fun onRealtimeMessageReceived(message: Message) {
