@@ -84,8 +84,8 @@
             android:layout_alignTop="@+id/avatar_root"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/avatar_root"
-            android:gravity="center_vertical"
             android:height="60dp"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -156,9 +156,9 @@
                     android:backgroundTint="?colorPrimary"
                     android:ellipsize="marquee"
                     android:gravity="center"
-                    android:maxLines="1"
                     android:paddingStart="6dp"
                     android:paddingEnd="6dp"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     android:textColor="?colorOnPrimary"
                     tools:text="2000" />

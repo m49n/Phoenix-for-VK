@@ -1,12 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -97,61 +91,6 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
     public DialogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DialogViewHolder(LayoutInflater.from(mContext)
                 .inflate(R.layout.item_dialog, parent, false));
-    }
-
-    private Bitmap createImage(int width, int height, int owner_id) {
-        int pp = owner_id % 10;
-        String Color1 = "#D81B60";
-        String Color2 = "#F48FB1";
-        switch (pp) {
-            case 0:
-                Color1 = "#FF0061";
-                Color2 = "#FF4200";
-                break;
-            case 1:
-                Color1 = "#00ABD6";
-                Color2 = "#8700D6";
-                break;
-            case 2:
-                Color1 = "#FF7900";
-                Color2 = "#FF9500";
-                break;
-            case 3:
-                Color1 = "#55D600";
-                Color2 = "#00D67A";
-                break;
-            case 4:
-                Color1 = "#9400D6";
-                Color2 = "#D6008E";
-                break;
-            case 5:
-                Color1 = "#cd8fff";
-                Color2 = "#9100ff";
-                break;
-            case 6:
-                Color1 = "#ff7f69";
-                Color2 = "#fe0bdb";
-                break;
-            case 7:
-                Color1 = "#FE790B";
-                Color2 = "#0BFEAB";
-                break;
-            case 8:
-                Color1 = "#9D0BFE";
-                Color2 = "#0BFEAB";
-                break;
-            case 9:
-                Color1 = "#9D0BFE";
-                Color2 = "#FEDF0B";
-                break;
-        }
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        LinearGradient gradient = new LinearGradient(0, 0, width, height, Color.parseColor(Color1), Color.parseColor(Color2), Shader.TileMode.CLAMP);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint2 = new Paint();
-        paint2.setShader(gradient);
-        canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
-        return bitmap;
     }
 
     @Override
@@ -272,9 +211,14 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         DATE.setTime(lastMessageJavaTime);
         if (lastMessageJavaTime < mStartOfToday) {
-            holder.tvDate.setText(DF_OLD.format(DATE));
+            holder.tvDate.setTextColor(CurrentTheme.getPrimaryTextColorCode(mContext));
+            if (getStatus(lastMessageJavaTime) == DIV_YESTERDAY)
+                holder.tvDate.setText(DF_TODAY.format(DATE));
+            else
+                holder.tvDate.setText(DF_OLD.format(DATE));
         } else {
             holder.tvDate.setText(DF_TODAY.format(DATE));
+            holder.tvDate.setTextColor(CurrentTheme.getColorPrimary(mContext));
         }
 
         if (dialog.getImageUrl() != null) {
@@ -288,7 +232,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
                 name = name.substring(0, 2);
             name = name.trim();
             holder.EmptyAvatar.setText(name);
-            holder.ivAvatar.setImageBitmap(mTransformation.transform(createImage(200, 200, dialog.getId())));
+            holder.ivAvatar.setImageBitmap(mTransformation.transform(Utils.createGradientChatImage(200, 200, dialog.getId())));
         }
 
         holder.mContentRoot.setOnClickListener(v -> {
