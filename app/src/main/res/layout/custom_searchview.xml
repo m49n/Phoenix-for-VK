@@ -25,7 +25,7 @@
         android:layout_toStartOf="@+id/right_buttons"
         android:layout_toEndOf="@+id/button_back"
         android:background="@null"
-        android:hint="@string/text_hint"
+        android:hint="@string/search_hint"
         android:imeOptions="actionSearch"
         android:inputType="text|textAutoComplete|textNoSuggestions"
         android:maxLines="1"

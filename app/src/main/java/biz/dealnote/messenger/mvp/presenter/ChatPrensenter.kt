@@ -20,6 +20,7 @@ import biz.dealnote.messenger.crypt.KeyPairDoesNotExistException
 import biz.dealnote.messenger.db.Stores
 import biz.dealnote.messenger.domain.IAttachmentsRepository
 import biz.dealnote.messenger.domain.IMessagesRepository
+import biz.dealnote.messenger.domain.IOwnersRepository.MODE_NET
 import biz.dealnote.messenger.domain.Mode
 import biz.dealnote.messenger.domain.Repository
 import biz.dealnote.messenger.exception.UploadNotResolvedException
@@ -372,8 +373,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         edited?.run {
             val destination = pair.first.destination
 
-            if (message.id == destination.id && destination.method == Method.PHOTO_TO_MESSAGE) {
-                val photo: Photo = pair.second.result as Photo
+            if (message.id == destination.id && destination.method == Method.TO_MESSAGE) {
+                val photo: AbsModel = pair.second.result as AbsModel
                 val sizeBefore = attachments.size
 
                 attachments.add(AttachmenEntry(true, photo))
@@ -404,7 +405,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             val filtered = uploads
                     .asSequence()
                     .filter { u ->
-                        u.destination.id == message.id && u.destination.method == Method.PHOTO_TO_MESSAGE
+                        u.destination.id == message.id && u.destination.method == Method.TO_MESSAGE
                     }.map {
                         AttachmenEntry(true, it)
                     }.toList()
@@ -507,6 +508,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         resolveEmptyTextVisibility()
+        if (Settings.get().other().isAuto_read)
+            readAllUnreadMessagesIfExists()
     }
 
     private fun setCacheLoadingNow(cacheLoadingNow: Boolean) {
@@ -719,7 +722,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         val messageId = draftMessageId ?: return false
 
         val current = uploadManager.current
-        return current.nonEmpty() && current.get().destination.compareTo(messageId, UploadDestination.WITHOUT_OWNER, Method.PHOTO_TO_MESSAGE)
+        return current.nonEmpty() && current.get().destination.compareTo(messageId, UploadDestination.WITHOUT_OWNER, Method.TO_MESSAGE)
     }
 
     @OnGuiCreated
@@ -743,6 +746,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     @OnGuiCreated
     private fun resolveToolbarTitle() {
         view?.displayToolbarTitle(peer.title)
+    }
+
+    @OnGuiCreated
+    private fun resolveToolbarAvatar() {
+        view?.displayToolbarAvatar(peer)
     }
 
     fun fireRecordCancelClick() {
@@ -863,7 +871,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun addMessageToList(message: Message) {
-        Utils.addElementToList(message, data, MESSAGES_COMPARATOR)
+        addElementToList(message, data, MESSAGES_COMPARATOR)
     }
 
     private fun onMessagesUpdate(updates: List<MessageUpdate>) {
@@ -911,6 +919,8 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         view?.notifyDataChanged()
+        if (Settings.get().other().isAuto_read)
+            readAllUnreadMessagesIfExists()
     }
 
     private fun onRealtimeMessageReceived(message: Message) {
@@ -1090,11 +1100,13 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private fun onDraftMessageRestored(message: DraftMessage, ignoreBody: Boolean) {
-        draftMessageDbAttachmentsCount = message.attachmentsCount
-        draftMessageId = message.id
+        if (isEmpty(draftMessageText)) {
+            draftMessageDbAttachmentsCount = message.attachmentsCount
+            draftMessageId = message.id
 
-        if (!ignoreBody) {
-            draftMessageText = message.body
+            if (!ignoreBody) {
+                draftMessageText = message.body
+            }
         }
 
         resolveAttachmentsCounter()
@@ -1619,6 +1631,22 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         view?.startImagesSelection(accountId, messagesOwnerId)
     }
 
+    fun fireLongAvatarClick(Id: Int) {
+        if (Id > 0) {
+            netLoadingDisposable = Repository.owners.getFullUserInfo(accountId, Id, MODE_NET)
+                    .fromIOToMain()
+                    .subscribe({ info ->
+                        run {
+                            val Dmn: String = if (info.first.domain == null)
+                                "@id$Id,"
+                            else
+                                "@" + info.first.domain + ","
+                            view?.AppendMessageText(Dmn)
+                        }
+                    }, { })
+        }
+    }
+
     fun fireFileForUploadSelected(file: String?, imageSize: Int) {
         edited?.run {
             val destination = UploadDestination.forMessage(message.id)
@@ -1645,6 +1673,19 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
                 uploadManager.enqueue(intents)
             }
+        }
+    }
+
+    fun fireEditLocalVideoSelected(video: LocalVideo) {
+        edited?.run {
+            val destination = UploadDestination.forMessage(message.id, MessageMethod.VIDEO)
+
+            val intents = UploadIntent(accountId, destination).apply {
+                isAutoCommit = false
+                fileUri = Uri.parse(video.data.path)
+            }
+
+            uploadManager.enqueue(Collections.singletonList(intents))
         }
     }
 

@@ -31,12 +31,14 @@ import biz.dealnote.messenger.fragment.FileManagerFragment;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.LocalPhoto;
+import biz.dealnote.messenger.model.LocalVideo;
 import biz.dealnote.messenger.model.ModelsBundle;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.selection.FileManagerSelectableSource;
 import biz.dealnote.messenger.model.selection.LocalGallerySelectableSource;
 import biz.dealnote.messenger.model.selection.LocalPhotosSelectableSource;
+import biz.dealnote.messenger.model.selection.LocalVideosSelectableSource;
 import biz.dealnote.messenger.model.selection.Sources;
 import biz.dealnote.messenger.model.selection.VkPhotosSelectableSource;
 import biz.dealnote.messenger.mvp.presenter.MessageAttachmentsPresenter;
@@ -110,7 +112,8 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
             ArrayList<Photo> vkphotos = data.getParcelableArrayListExtra(Extra.ATTACHMENTS);
             ArrayList<LocalPhoto> localPhotos = data.getParcelableArrayListExtra(Extra.PHOTOS);
             String file = data.getStringExtra(FileManagerFragment.returnFileParameter);
-            getPresenter().firePhotosSelected(vkphotos, localPhotos, file);
+            LocalVideo video = data.getParcelableExtra(Extra.VIDEO);
+            getPresenter().firePhotosSelected(vkphotos, localPhotos, file, video);
         }
 
         if (requestCode == REQUEST_SELECT_ATTACHMENTS && resultCode == Activity.RESULT_OK) {
@@ -154,6 +157,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         Sources sources = new Sources()
                 .with(new LocalPhotosSelectableSource())
                 .with(new LocalGallerySelectableSource())
+                .with(new LocalVideosSelectableSource())
                 .with(new VkPhotosSelectableSource(accountId, ownerId))
                 .with(new FileManagerSelectableSource());
 

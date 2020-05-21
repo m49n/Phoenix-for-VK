@@ -29,6 +29,8 @@ public interface IAttachmentsPlacesView {
 
     void openLink(int accountId, @NonNull Link link);
 
+    void openUrl(int accountId, @NonNull String url);
+
     void openWikiPage(int accountId, @NonNull WikiPage page);
 
     void openSimplePhotoGallery(int accountId, @NonNull ArrayList<Photo> photos, int index, boolean needUpdate);

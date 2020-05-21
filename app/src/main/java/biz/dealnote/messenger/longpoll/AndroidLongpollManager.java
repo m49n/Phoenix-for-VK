@@ -30,7 +30,6 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
 
     private final static String TAG = AndroidLongpollManager.class.getSimpleName();
     private static final Scheduler MONO_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(1));
-    private final Context app;
     private final SparseArray<LongpollEntry> map;
     private final INetworker networker;
     private final PublishProcessor<Integer> keepAlivePublisher;
@@ -40,7 +39,6 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     AndroidLongpollManager(Context context, INetworker networker, IRealtimeMessagesProcessor messagesProcessor) {
-        this.app = context.getApplicationContext();
         this.networker = networker;
         this.messagesProcessor = messagesProcessor;
         this.keepAlivePublisher = PublishProcessor.create();

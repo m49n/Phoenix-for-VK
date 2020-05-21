@@ -35,6 +35,7 @@ import biz.dealnote.messenger.upload.impl.OwnerPhotoUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2AlbumUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2MessageUploadable;
 import biz.dealnote.messenger.upload.impl.Photo2WallUploadable;
+import biz.dealnote.messenger.upload.impl.VideoToMessageUploadable;
 import biz.dealnote.messenger.upload.impl.VideoUploadable;
 import biz.dealnote.messenger.util.Optional;
 import biz.dealnote.messenger.util.Pair;
@@ -128,7 +129,7 @@ public class UploadManagerImpl implements IUploadManager {
             case Method.VIDEO:
                 builder.append(Extra.OWNER_ID).append(dest.getOwnerId());
                 break;
-            case Method.PHOTO_TO_MESSAGE:
+            case Method.TO_MESSAGE:
                 //do nothink
                 break;
             case Method.PHOTO_TO_PROFILE:
@@ -274,11 +275,13 @@ public class UploadManagerImpl implements IUploadManager {
 
             //final int accountId = upload.getAccountId();
             //final UploadDestination destination = upload.getDestination();
-            //if (destination.getMethod() == Method.PHOTO_TO_MESSAGE && getByDestination(accountId, destination).isEmpty()) {
+            //if (destination.getMethod() == Method.TO_MESSAGE && getByDestination(accountId, destination).isEmpty()) {
             //    sendMessageIfWaitForUpload(accountId, destination.getId());
             //}
 
-            serverMap.put(createServerKey(upload), result.getServer());
+            final UploadDestination destination = upload.getDestination();
+            if (destination.getMessageMethod() != MessageMethod.VIDEO && destination.getMethod() != Method.VIDEO)
+                serverMap.put(createServerKey(upload), result.getServer());
 
             completeProcessor.onNext(Pair.Companion.create(upload, result));
             startIfNotStartedInternal();
@@ -407,9 +410,14 @@ public class UploadManagerImpl implements IUploadManager {
 
         switch (destination.getMethod()) {
             case Method.VIDEO:
-                return new VideoUploadable(context, networker, storages.docs());
-            case Method.PHOTO_TO_MESSAGE:
-                return new Photo2MessageUploadable(context, networker, attachmentsRepository, storages.messages());
+                return new VideoUploadable(context, networker);
+            case Method.TO_MESSAGE:
+                if (destination.getMessageMethod() == MessageMethod.PHOTO)
+                    return new Photo2MessageUploadable(context, networker, attachmentsRepository, storages.messages());
+                else if (destination.getMessageMethod() == MessageMethod.VIDEO)
+                    return new VideoToMessageUploadable(context, networker, attachmentsRepository, storages.messages());
+                else
+                    throw new UnsupportedOperationException();
             case Method.PHOTO_TO_ALBUM:
                 return new Photo2AlbumUploadable(context, networker, storages.photos());
             case Method.DOCUMENT:

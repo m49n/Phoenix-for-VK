@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import biz.dealnote.messenger.Constants;
@@ -72,7 +73,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             int IconRes = GetIconResByType(Page.iconType);
 
             Drawable tr = AppCompatResources.getDrawable(context, IconRes);
-            if (IconRes == R.drawable.phoenix) {
+            if (IconRes == R.drawable.phoenix_round) {
                 assert tr != null;
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(context));
             }
@@ -159,7 +160,8 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             Matcher matcher = LinkParser.MENTIONS_AVATAR_PATTERN.matcher(Page.header);
             if (matcher.find()) {
                 String Type = matcher.group(1);
-                int Id = Integer.parseInt(matcher.group(2));
+                int Id = Integer.parseInt(Objects.requireNonNull(matcher.group(2)));
+                assert Type != null;
                 if (Type.equals("event") || Type.equals("club") || Type.equals("public"))
                     Id *= -1;
                 String icn = data.getAvatar(Id);
@@ -196,7 +198,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
     private int GetIconResByType(String IconType) {
         if (IconType == null)
-            return R.drawable.phoenix;
+            return R.drawable.phoenix_round;
         if (IconType.equals("suggested_post_published")) {
             return R.drawable.ic_feedback_suggested_post_published;
         }
@@ -290,7 +292,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         if (IconType.equals("transfer_votes")) {
             return R.drawable.ic_feedback_transfer_votes;
         }
-        return R.drawable.phoenix;
+        return R.drawable.phoenix_round;
     }
 
     @Override

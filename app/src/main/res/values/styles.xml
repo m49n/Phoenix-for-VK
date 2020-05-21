@@ -224,37 +224,37 @@
         <item name="my_messages_bubble_color">#D4B6B6B6</item>
     </style>
 
-    <style name="App.DayNight.Ice.Amoled" parent="App.DayNight.Ice"></style>
+    <style name="App.DayNight.Ice.Amoled" parent="App.DayNight.Ice" />
 
-    <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce"></style>
+    <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce" />
 
-    <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed"></style>
+    <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed" />
 
-    <style name="App.DayNight.BlueYellow.Amoled" parent="App.DayNight.BlueYellow"></style>
+    <style name="App.DayNight.BlueYellow.Amoled" parent="App.DayNight.BlueYellow" />
 
-    <style name="App.DayNight.Fire.Amoled" parent="App.DayNight.Fire"></style>
+    <style name="App.DayNight.Fire.Amoled" parent="App.DayNight.Fire" />
 
-    <style name="App.DayNight.Red.Amoled" parent="App.DayNight.Red"></style>
+    <style name="App.DayNight.Red.Amoled" parent="App.DayNight.Red" />
 
-    <style name="App.DayNight.VioletRed.Amoled" parent="App.DayNight.VioletRed"></style>
+    <style name="App.DayNight.VioletRed.Amoled" parent="App.DayNight.VioletRed" />
 
-    <style name="App.DayNight.YellowRed.Amoled" parent="App.DayNight.YellowRed"></style>
+    <style name="App.DayNight.YellowRed.Amoled" parent="App.DayNight.YellowRed" />
 
-    <style name="App.DayNight.RedViolet.Amoled" parent="App.DayNight.RedViolet"></style>
+    <style name="App.DayNight.RedViolet.Amoled" parent="App.DayNight.RedViolet" />
 
-    <style name="App.DayNight.Violet.Amoled" parent="App.DayNight.Violet"></style>
+    <style name="App.DayNight.Violet.Amoled" parent="App.DayNight.Violet" />
 
-    <style name="App.DayNight.BlueViolet.Amoled" parent="App.DayNight.BlueViolet"></style>
+    <style name="App.DayNight.BlueViolet.Amoled" parent="App.DayNight.BlueViolet" />
 
-    <style name="App.DayNight.YellowViolet.Amoled" parent="App.DayNight.YellowViolet"></style>
+    <style name="App.DayNight.YellowViolet.Amoled" parent="App.DayNight.YellowViolet" />
 
-    <style name="App.DayNight.VioletYellow.Amoled" parent="App.DayNight.VioletYellow"></style>
+    <style name="App.DayNight.VioletYellow.Amoled" parent="App.DayNight.VioletYellow" />
 
-    <style name="App.DayNight.VioletGreen.Amoled" parent="App.DayNight.VioletGreen"></style>
+    <style name="App.DayNight.VioletGreen.Amoled" parent="App.DayNight.VioletGreen" />
 
-    <style name="App.DayNight.GreenViolet.Amoled" parent="App.DayNight.GreenViolet"></style>
+    <style name="App.DayNight.GreenViolet.Amoled" parent="App.DayNight.GreenViolet" />
 
-    <style name="App.DayNight.Gray.Amoled" parent="App.DayNight.Gray"></style>
+    <style name="App.DayNight.Gray.Amoled" parent="App.DayNight.Gray" />
 
     <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">3dp</item>
@@ -268,7 +268,7 @@
         <item name="quick_reply_icon_color">#151515</item>
     </style>
 
-    <style name="QuickReply.Amoled" parent="QuickReply"></style>
+    <style name="QuickReply.Amoled" parent="QuickReply" />
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowNoTitle">true</item>
@@ -298,7 +298,7 @@
     </style>
 
     <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Theme.Toolbar.Photo" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -319,6 +319,10 @@
         <item name="tabSelectedTextColor">?colorPrimary</item>
         <item name="tabIndicatorColor">?colorPrimary</item>
         <item name="enforceTextAppearance">true</item>
+    </style>
+
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
     <style name="Theme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">

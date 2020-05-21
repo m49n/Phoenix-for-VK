@@ -81,6 +81,8 @@ public interface ISettings {
 
         boolean isInfo_reading();
 
+        boolean isAuto_read();
+
         int getColorChat();
 
         int getSecondColorChat();
@@ -112,8 +114,6 @@ public interface ISettings {
         String getDocDir();
 
         boolean isPhoto_to_user_dir();
-
-        boolean isUse_speach_voice();
     }
 
     interface IAccountsSettings {
@@ -157,6 +157,10 @@ public interface ISettings {
         boolean isAmoledTheme();
 
         boolean isAudio_round_icon();
+
+        boolean isPlayer_support_volume();
+
+        boolean isMusic_enable_toolbar();
 
         boolean isCustomTabEnabled();
 

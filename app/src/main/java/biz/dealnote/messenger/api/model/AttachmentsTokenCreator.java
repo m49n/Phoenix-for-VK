@@ -18,6 +18,10 @@ public class AttachmentsTokenCreator {
         return new LinkAttachmentToken(url);
     }
 
+    public static IAttachmentToken ofArticle(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("article", id, ownerId, accessKey);
+    }
+
     public static IAttachmentToken ofPhoto(int id, int ownerId, String accessKey) {
         return new AttachmentToken("photo", id, ownerId, accessKey);
     }

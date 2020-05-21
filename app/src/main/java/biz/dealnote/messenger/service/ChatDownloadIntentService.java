@@ -33,6 +33,7 @@ import biz.dealnote.messenger.domain.IMessagesRepository;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.longpoll.AppNotificationChannels;
 import biz.dealnote.messenger.longpoll.NotificationHelper;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
@@ -194,6 +195,17 @@ public class ChatDownloadIntentService extends IntentService {
                         continue;
                     String atcontent = Image;
                     atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", att.getUrl(), atcontent);
+                    atcontent = Apply("<#IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.Y, false), atcontent);
+                    Attachments.append(atcontent);
+                }
+            }
+
+            if (!Utils.isEmpty(i.getAttachments().getArticles())) {
+                for (Article att : i.getAttachments().getArticles()) {
+                    if (att.getPhoto() == null)
+                        continue;
+                    String atcontent = Image;
+                    atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", att.getURL(), atcontent);
                     atcontent = Apply("<#IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.Y, false), atcontent);
                     Attachments.append(atcontent);
                 }

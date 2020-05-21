@@ -54,6 +54,10 @@ public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
         return this;
     }
 
+    public void remove(AbsModel model) {
+        this.wrappers.remove(model);
+    }
+
     public ModelsBundle append(Collection<? extends AbsModel> data) {
         for (AbsModel model : data) {
             this.wrappers.add(ParcelableModelWrapper.wrap(model));

@@ -31,7 +31,8 @@ public class Auth {
 
     public static String getScope() {
         //http://vk.com/dev/permission
-        return "notify,friends,photos,audio,video,stories,pages,status,notes,messages,wall,offline,docs,groups,notifications,stats,email,market";
+        //return "notify,friends,photos,audio,video,stories,pages,status,notes,messages,wall,offline,docs,groups,notifications,stats,email,market";
+        return "all";
     }
 
     public static String[] parseRedirectUrl(String url) throws Exception {

@@ -25,6 +25,7 @@ import biz.dealnote.messenger.activity.*
 import biz.dealnote.messenger.adapter.AttachmentsBottomSheetAdapter
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder
 import biz.dealnote.messenger.adapter.MessagesAdapter
+import biz.dealnote.messenger.api.PicassoInstance
 import biz.dealnote.messenger.api.model.VKApiAttachment
 import biz.dealnote.messenger.api.model.VKApiMessage
 import biz.dealnote.messenger.crypt.KeyLocationPolicy
@@ -98,7 +99,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     private var Writing_msg: TextView? = null
     private var Writing_msg_Ava: ImageView? = null
 
+    private var Title: TextView? = null
+    private var SubTitle: TextView? = null
+
+    private var Avatar: ImageView? = null
+
     private var toolbar: Toolbar? = null
+    private var EmptyAvatar: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_chat, container, false) as ViewGroup
@@ -110,6 +117,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         toolbar!!.setOnMenuItemClickListener { item: MenuItem ->
             OptionsItemSelected(item)
         }
+
+        Title = root.findViewById(R.id.dialog_title)
+        SubTitle = root.findViewById(R.id.dialog_subtitle)
+        Avatar = root.findViewById(R.id.toolbar_avatar)
+        EmptyAvatar = root.findViewById(R.id.empty_avatar_text)
 
         emptyText = root.findViewById(R.id.fragment_chat_empty_text)
         toolbarRootView = root.findViewById(R.id.toolbar_root)
@@ -186,7 +198,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     override fun displayWriting(owner_id: Int) {
         Writing_msg_Group?.visibility = View.VISIBLE
         Writing_msg_Group?.alpha = 0.0f
-        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 1.0f).setDuration(200).start()
+        ObjectAnimator.ofFloat(Writing_msg_Group, View.ALPHA, 1f).setDuration(200).start()
         Writing_msg?.setText(R.string.user_type_message)
         Writing_msg_Ava?.setImageResource(R.drawable.background_gray_round)
         presenter?.ResolveWritingInfo(requireActivity(), owner_id)
@@ -194,7 +206,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     @SuppressLint("SetTextI18n")
     override fun displayWriting(owner: Owner) {
-        Writing_msg?.text = owner.fullName + " " + getString(R.string.user_type_message)
+        Writing_msg?.text = owner.fullName + "... "
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
     }
@@ -377,12 +389,34 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         inputViewController?.setTextQuietly(text)
     }
 
+    override fun AppendMessageText(text: String?) {
+        inputViewController?.AppendTextQuietly(text)
+    }
+
     override fun displayToolbarTitle(text: String?) {
-        toolbar?.title = text
+        Title?.setText(text)
     }
 
     override fun displayToolbarSubtitle(text: String?) {
-        toolbar?.subtitle = text
+        SubTitle?.setText(text)
+    }
+
+    override fun displayToolbarAvatar(peer: Peer?) {
+        if (nonEmpty(peer?.avaUrl)) {
+            EmptyAvatar?.visibility = View.GONE
+            PicassoInstance.with()
+                    .load(peer?.avaUrl)
+                    .transform(RoundTransformation())
+                    .into(Avatar)
+        } else {
+            PicassoInstance.with().cancelRequest(Avatar!!)
+            EmptyAvatar?.visibility = View.VISIBLE
+            var name: String = peer!!.title
+            if (name.length > 2) name = name.substring(0, 2)
+            name = name.trim { it <= ' ' }
+            EmptyAvatar?.setText(name)
+            Avatar?.setImageBitmap(RoundTransformation().transform(Utils.createGradientChatImage(200, 200, peer.id)))
+        }
     }
 
     override fun setupPrimaryButtonAsEditing(canSave: Boolean) {
@@ -484,6 +518,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
+    private fun onEditLocalVideoSelected(video: LocalVideo) {
+        presenter?.fireEditLocalVideoSelected(video)
+    }
+
     private fun onEditLocalFileSelected(file: String) {
         val defaultSize = Settings.get().main().uploadImageSize
         when (defaultSize) {
@@ -517,6 +555,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             val localPhotos: List<LocalPhoto> = data?.getParcelableArrayListExtra(Extra.PHOTOS)
                     ?: Collections.emptyList()
 
+            val vid: LocalVideo? = data?.getParcelableExtra(Extra.VIDEO)
+
             val file = data?.getStringExtra(FileManagerFragment.returnFileParameter)
 
             if (file != null && nonEmpty(file)) {
@@ -525,6 +565,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 presenter?.fireEditAttachmentsSelected(vkphotos)
             } else if (localPhotos.isNotEmpty()) {
                 onEditLocalPhotosSelected(localPhotos)
+            } else if (vid != null) {
+                onEditLocalVideoSelected(vid)
             }
         }
 
@@ -558,6 +600,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         val sources = Sources()
                 .with(LocalPhotosSelectableSource())
                 .with(LocalGallerySelectableSource())
+                .with(LocalVideosSelectableSource())
                 .with(VkPhotosSelectableSource(accountId, ownerId))
                 .with(FileManagerSelectableSource())
 
@@ -775,16 +818,28 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         ActivityUtils.resetInputText(requireActivity())
     }
 
+    private fun resolveToolbarNavigationIcon() {
+        if (Objects.isNull(toolbar)) return
+        val tr = AppCompatResources.getDrawable(requireActivity(), R.drawable.arrow_left)
+        Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()))
+        toolbar!!.navigationIcon = tr
+        toolbar!!.setNavigationOnClickListener { requireActivity().onBackPressed() }
+    }
+
     private fun resolveLeftButton(peerId: Int) {
         try {
             if (Objects.nonNull(toolbar)) {
-                val tr = AppCompatResources.getDrawable(requireActivity(), (if (peerId >= VKApiMessage.CHAT_PEER) R.drawable.groups else R.drawable.person))
-                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()))
-                toolbar?.navigationIcon = tr
-                if (peerId in 0..VKApiMessage.CHAT_PEER) {
-                    toolbar?.setNavigationOnClickListener {
+                resolveToolbarNavigationIcon()
+                if (peerId < VKApiMessage.CHAT_PEER) {
+                    Avatar?.setOnClickListener {
                         run {
                             showUserWall(Settings.get().accounts().current, peerId)
+                        }
+                    }
+                } else {
+                    Avatar?.setOnClickListener {
+                        run {
+                            PlaceFactory.getChatMembersPlace(Settings.get().accounts().current, Peer.toChatId(peerId)).tryOpenWith(requireActivity())
                         }
                     }
                 }
@@ -797,14 +852,14 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         if (activity is OnSectionResumeCallback) {
             (activity as OnSectionResumeCallback).onChatResume(accountId, peerId, title, image)
         }
-        toolbar?.title = title
+        Title?.setText(title)
         resolveLeftButton(peerId)
     }
 
     override fun goToConversationAttachments(accountId: Int, peerId: Int) {
-        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK)
+        val types = arrayOf(VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK, VKApiAttachment.TYPE_POST)
 
-        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links))
+        val items = arrayOf(getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links), getString(R.string.posts))
 
         MaterialAlertDialogBuilder(requireActivity()).setItems(items) { _, which ->
             showConversationAttachments(accountId, peerId, types[which])
@@ -1051,6 +1106,12 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         return actionModeHolder?.rootView?.visibility == View.VISIBLE
     }
 
+    override fun onMessageDelete(message: Message) {
+        val ids: ArrayList<Int> = ArrayList()
+        ids.add(message.id)
+        presenter?.fireDeleteForMeClick(ids)
+    }
+
     override fun onAvatarClick(message: Message, userId: Int) {
         if (isActionModeVisible()) {
             presenter?.fireMessageClick(message)
@@ -1070,6 +1131,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     override fun onMessageClicked(message: Message) {
         presenter?.fireMessageClick(message)
+    }
+
+    override fun onLongAvatarClick(message: Message, userId: Int) {
+        presenter?.fireLongAvatarClick(userId)
     }
 
     override fun onDestroyView() {

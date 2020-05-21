@@ -131,8 +131,9 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         setupTabCounterView(TAB_FOLLOWERS, counters.getFollowers());
         setupTabCounterView(TAB_REQUESTS, 0);
         setupTabCounterView(TAB_MUTUAL, counters.getMutual());
-        for (int i = 0; i < tabLayout.getTabCount(); i++)
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setText(adapter.getPageTitle(i));
+        }
     }
 
     @Override
@@ -140,9 +141,7 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         adapter = new Adapter(requireActivity(), this, accountId, userId, showMutualTab);
 
         viewPager.setAdapter(adapter);
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            tab.setText(adapter.getPageTitle(position));
-        }).attach();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(adapter.getPageTitle(position))).attach();
 
         if (getArguments().containsKey(Extra.TAB)) {
             int tab = getArguments().getInt(Extra.TAB);

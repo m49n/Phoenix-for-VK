@@ -13,8 +13,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BlendMode;
 import android.graphics.BlendModeColorFilter;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -575,26 +579,6 @@ public class Utils {
         return i;
     }
 
-    public static boolean hasJellyBean() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    }
-
-    public static boolean hasJellyBeanMR2() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
-    }
-
-    public static boolean isKitkat() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-    }
-
-    public static boolean hasKitkat() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-    }
-
-    public static boolean isKitkatWear() {
-        return Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT_WATCH;
-    }
-
     public static boolean hasLollipop() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
@@ -647,6 +631,7 @@ public class Utils {
         return null;
     }
 
+    @SafeVarargs
     public static <T> T firstNonNull(T... items) {
         for (T t : items) {
             if (t != null) {
@@ -853,7 +838,7 @@ public class Utils {
         List<ResolveInfo> resolveInfo = pm.queryIntentServices(implicitIntent, 0);
 
         // Make sure only one match was found
-        if (resolveInfo == null || resolveInfo.size() != 1) {
+        if (resolveInfo.size() != 1) {
             return null;
         }
 
@@ -896,6 +881,18 @@ public class Utils {
         }
     }
 
+    @StringRes
+    public static int declOfNum(int number, @StringRes int[] titles) {
+        int[] cases = {2, 0, 1, 1, 1, 2};
+        return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[Math.min(number % 10, 5)]];
+    }
+
+    @StringRes
+    public static int declOfNum(Long number, @StringRes int[] titles) {
+        int[] cases = {2, 0, 1, 1, 1, 2};
+        return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(int) Math.min(number % 10, 5)]];
+    }
+
     public static void doAnimate(Drawable dr, boolean Play) {
         if (dr instanceof Animatable) {
             if (Play)
@@ -906,7 +903,7 @@ public class Utils {
     }
 
     public static Drawable AnimateDrawable(Context context, @DrawableRes int Res, boolean Play) {
-        Drawable dr = context.getDrawable(Res);
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable dr = context.getDrawable(Res);
         if (dr instanceof Animatable) {
             if (Play)
                 ((Animatable) dr).start();
@@ -914,6 +911,61 @@ public class Utils {
                 ((Animatable) dr).stop();
         }
         return dr;
+    }
+
+    public static Bitmap createGradientChatImage(int width, int height, int owner_id) {
+        int pp = owner_id % 10;
+        String Color1 = "#D81B60";
+        String Color2 = "#F48FB1";
+        switch (pp) {
+            case 0:
+                Color1 = "#FF0061";
+                Color2 = "#FF4200";
+                break;
+            case 1:
+                Color1 = "#00ABD6";
+                Color2 = "#8700D6";
+                break;
+            case 2:
+                Color1 = "#FF7900";
+                Color2 = "#FF9500";
+                break;
+            case 3:
+                Color1 = "#55D600";
+                Color2 = "#00D67A";
+                break;
+            case 4:
+                Color1 = "#9400D6";
+                Color2 = "#D6008E";
+                break;
+            case 5:
+                Color1 = "#cd8fff";
+                Color2 = "#9100ff";
+                break;
+            case 6:
+                Color1 = "#ff7f69";
+                Color2 = "#fe0bdb";
+                break;
+            case 7:
+                Color1 = "#FE790B";
+                Color2 = "#0BFEAB";
+                break;
+            case 8:
+                Color1 = "#9D0BFE";
+                Color2 = "#0BFEAB";
+                break;
+            case 9:
+                Color1 = "#9D0BFE";
+                Color2 = "#FEDF0B";
+                break;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        LinearGradient gradient = new LinearGradient(0, 0, width, height, Color.parseColor(Color1), Color.parseColor(Color2), Shader.TileMode.CLAMP);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint2 = new Paint();
+        paint2.setShader(gradient);
+        canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
+        return bitmap;
     }
 
     public interface SimpleFunction<F, S> {

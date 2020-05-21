@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -32,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,6 +39,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -195,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private Toolbar mToolbar;
     private BottomNavigationView mBottomNavigation;
     private ViewGroup mBottomNavigationContainer;
-    private View mMiniPlayer;
+    private FragmentContainerView mMiniPlayer;
+    private FragmentContainerView mViewFragment;
     private MusicUtils.ServiceToken mAudioPlayServiceToken;
     private boolean mDestroyed;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -210,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private List<Action<MainActivity>> postResumeActions = new ArrayList<>(0);
 
     private boolean resumed;
+    private boolean bNoDestroyServiceAudio = false;
 
     private static String getFileExtension(File file) {
         String extension = "";
@@ -251,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         setTheme(Settings.get().ui().getMainTheme());
         getDelegate().applyDayNight();
         super.onCreate(savedInstanceState);
+        mDestroyed = false;
+        bNoDestroyServiceAudio = false;
 
         mCompositeDisposable.add(Settings.get()
                 .accounts()
@@ -279,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
 
         mBottomNavigationContainer = findViewById(R.id.bottom_navigation_menu_container);
+        mViewFragment = findViewById(R.id.fragment);
         mMiniPlayer = findViewById(R.id.miniplayer);
 
         getSupportFragmentManager().addOnBackStackChangedListener(mOnBackStackChangedListener);
@@ -386,7 +392,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ;
                 }
             }
         });
@@ -752,12 +757,19 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        bNoDestroyServiceAudio = true;
+    }
+
+    @Override
     protected void onDestroy() {
         mCompositeDisposable.dispose();
         mDestroyed = true;
 
         getSupportFragmentManager().removeOnBackStackChangedListener(mOnBackStackChangedListener);
 
+        //if(!bNoDestroyServiceAudio)
         unbindFromAudioPlayService();
         super.onDestroy();
     }
@@ -856,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             }
 
             this.mLastBackPressedTime = System.currentTimeMillis();
-            Toast.makeText(this, getString(R.string.click_back_to_exit), Toast.LENGTH_SHORT).show();
+            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
         }
@@ -980,14 +992,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
     @Override
     public void hideMenu(boolean hide) {
-        MusicUtils.setMiniPlayerVisibility(!hide);
-        if (hide)
-            mMiniPlayer.setVisibility(View.GONE);
+        //MusicUtils.setMiniPlayerVisibility(!hide);
         if (hide) {
+            mMiniPlayer.setVisibility(View.GONE);
             getNavigationFragment().closeSheet();
             getNavigationFragment().blockSheet();
             mBottomNavigationContainer.setVisibility(View.GONE);
         } else {
+            mMiniPlayer.setVisibility(View.VISIBLE);
             mBottomNavigationContainer.setVisibility(View.VISIBLE);
             getNavigationFragment().unblockSheet();
         }
@@ -1427,12 +1439,21 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             } else {
                 mBottomNavigation.removeBadge(R.id.menu_feedback);
             }
+            if (counters.getMessages() > 0) {
+                BadgeDrawable badgeDrawable = mBottomNavigation.getOrCreateBadge(R.id.menu_messages);
+                badgeDrawable.setBackgroundColor(CurrentTheme.getColorPrimary(this));
+                badgeDrawable.setBadgeTextColor(CurrentTheme.getColorOnPrimary(this));
+                badgeDrawable.setNumber(counters.getMessages());
+            } else {
+                mBottomNavigation.removeBadge(R.id.menu_messages);
+            }
         }
     }
 
     private void removeNotificationsBagde() {
         if (mBottomNavigation != null) {
             mBottomNavigation.removeBadge(R.id.menu_feedback);
+            mBottomNavigation.removeBadge(R.id.menu_messages);
         }
     }
 

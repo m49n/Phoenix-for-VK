@@ -177,6 +177,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isAuto_read() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("auto_read", false);
+    }
+
+    @Override
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }
@@ -249,10 +254,5 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isPhoto_to_user_dir() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("photo_to_user_dir", true);
-    }
-
-    @Override
-    public boolean isUse_speach_voice() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_speach_voice", true);
     }
 }

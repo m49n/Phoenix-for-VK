@@ -1,7 +1,12 @@
 package biz.dealnote.messenger.media.voice;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.PowerManager;
 
 import androidx.annotation.Nullable;
 
@@ -25,7 +30,6 @@ import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.player.util.MusicUtils;
-import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Optional;
@@ -37,7 +41,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  * Created by r.kolbasa on 28.11.2017.
  * Phoenix-for-VK
  */
-public class ExoVoicePlayer implements IVoicePlayer {
+public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     private final Context app;
     private final ProxyConfig proxyConfig;
@@ -47,11 +51,27 @@ public class ExoVoicePlayer implements IVoicePlayer {
     private boolean supposedToBePlaying;
     private IPlayerStatusListener statusListener;
     private IErrorListener errorListener;
+    private SensorManager sensorManager;
+    private Sensor proxym;
+    private boolean isProximityNear;
+    private boolean isPlaying;
+    private PowerManager.WakeLock proximityWakelock;
+    private boolean HasPlaying;
+
+    private boolean Registered;
+    private boolean ProximitRegistered;
 
     public ExoVoicePlayer(Context context, ProxyConfig config) {
         this.app = context.getApplicationContext();
         this.proxyConfig = config;
         this.status = STATUS_NO_PLAYBACK;
+
+        sensorManager = (SensorManager) this.app.getSystemService(Context.SENSOR_SERVICE);
+        proxym = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        proximityWakelock = ((PowerManager) this.app.getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "phoenix:voip=proxim");
+        Registered = false;
+        ProximitRegistered = false;
+        HasPlaying = false;
     }
 
     @Override
@@ -70,6 +90,44 @@ public class ExoVoicePlayer implements IVoicePlayer {
         return true;
     }
 
+    private void RegisterCallBack() {
+        if (Registered)
+            return;
+        try {
+            Registered = true;
+            if (MusicUtils.isPlaying() || MusicUtils.isPreparing()) {
+                MusicUtils.notifyForegroundStateChanged(app, true);
+                MusicUtils.playOrPause();
+                HasPlaying = true;
+            }
+            isProximityNear = false;
+            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), false);
+            sensorManager.registerListener(ExoVoicePlayer.this, proxym, SensorManager.SENSOR_DELAY_NORMAL);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void UnRegisterCallBack() {
+        if (!Registered)
+            return;
+        try {
+            Registered = false;
+            sensorManager.unregisterListener(ExoVoicePlayer.this);
+            if (HasPlaying) {
+                MusicUtils.playOrPause();
+                MusicUtils.notifyForegroundStateChanged(app, false);
+            }
+            HasPlaying = false;
+            if (ProximitRegistered) {
+                ProximitRegistered = false;
+                proximityWakelock.release();
+            }
+            isProximityNear = false;
+            isPlaying = false;
+        } catch (Exception ignored) {
+        }
+    }
+
     private void setStatus(int status) {
         if (this.status != status) {
             this.status = status;
@@ -81,9 +139,12 @@ public class ExoVoicePlayer implements IVoicePlayer {
     }
 
     private void preparePlayer() {
+        isProximityNear = false;
+        isPlaying = false;
         setStatus(STATUS_PREPARING);
 
         exoPlayer = new SimpleExoPlayer.Builder(app).build();
+        exoPlayer.setWakeMode(C.WAKE_MODE_NETWORK);
 
         // DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.
@@ -118,24 +179,27 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
-        if (Settings.get().other().isUse_speach_voice())
-            exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build());
-        else
-            exoPlayer.setAudioAttributes(AudioAttributes.DEFAULT);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override
             public void onPlayerStateChanged(boolean b, int i) {
                 onInternalPlayerStateChanged(i);
+
+                if (isPlaying != b) {
+                    isPlaying = b;
+                    if (isPlaying) {
+                        RegisterCallBack();
+                    } else {
+                        UnRegisterCallBack();
+                    }
+                }
             }
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 onExoPlayerException(error);
+                UnRegisterCallBack();
             }
         });
-
-        if (MusicUtils.isPlaying() || MusicUtils.isPreparing())
-            MusicUtils.playOrPause();
 
         exoPlayer.setPlayWhenReady(supposedToBePlaying);
         exoPlayer.prepare(mediaSource);
@@ -157,6 +221,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
             case Player.STATE_ENDED:
                 setSupposedToBePlaying(false);
                 exoPlayer.seekTo(0);
+                UnRegisterCallBack();
                 break;
         }
     }
@@ -208,17 +273,44 @@ public class ExoVoicePlayer implements IVoicePlayer {
     }
 
     @Override
-    public void stop() {
-        if (nonNull(exoPlayer)) {
-            exoPlayer.stop();
+    public void release() {
+        try {
+            if (nonNull(exoPlayer)) {
+                exoPlayer.stop();
+                exoPlayer.release();
+                UnRegisterCallBack();
+            }
+        } catch (Exception ignored) {
         }
     }
 
     @Override
-    public void release() {
-        if (nonNull(exoPlayer)) {
-            exoPlayer.stop();
-            exoPlayer.release();
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            boolean newIsNear = event.values[0] < Math.min(event.sensor.getMaximumRange(), 3);
+            if (newIsNear != isProximityNear) {
+                isProximityNear = newIsNear;
+                try {
+                    if (isProximityNear) {
+                        exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_SPEECH).setUsage(C.USAGE_VOICE_COMMUNICATION).build(), false);
+                        if (!ProximitRegistered) {
+                            ProximitRegistered = true;
+                            proximityWakelock.acquire(10 * 60 * 1000L /*10 minutes*/);
+                        }
+                    } else {
+                        if (ProximitRegistered) {
+                            ProximitRegistered = false;
+                            proximityWakelock.release(1); // this is non-public API before L
+                        }
+                        exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), false);
+                    }
+                } catch (Exception ignored) {
+                }
+            }
         }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

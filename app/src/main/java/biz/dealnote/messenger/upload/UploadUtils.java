@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.model.LocalPhoto;
@@ -76,6 +77,12 @@ public final class UploadUtils {
                     .setFileUri(photo.getFullImageUri()));
         }
         return intents;
+    }
+
+    public static List<UploadIntent> createVideoIntents(int accountId, UploadDestination destination, String path,
+                                                        boolean autoCommit) {
+        UploadIntent intent = new UploadIntent(accountId, destination).setAutoCommit(autoCommit).setFileUri(Uri.parse(path));
+        return Collections.singletonList(intent);
     }
 
     public static List<UploadIntent> createIntents(int accountId, UploadDestination destination, String file, int size,

@@ -31,6 +31,7 @@ import biz.dealnote.messenger.link.types.PageLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumsLink;
 import biz.dealnote.messenger.link.types.PhotoLink;
+import biz.dealnote.messenger.link.types.PollLink;
 import biz.dealnote.messenger.link.types.TopicLink;
 import biz.dealnote.messenger.link.types.VideoLink;
 import biz.dealnote.messenger.link.types.WallCommentLink;
@@ -45,6 +46,7 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.PhoenixToast;
 
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.singletonArrayList;
 
 public class LinkHelper {
@@ -66,6 +68,11 @@ public class LinkHelper {
             case AbsLink.PLAYLIST:
                 AudioPlaylistLink plLink = (AudioPlaylistLink) link;
                 PlaceFactory.getAudiosInAlbumPlace(accountId, plLink.ownerId, plLink.playlistId, plLink.access_key).tryOpenWith(activity);
+                break;
+
+            case AbsLink.POLL:
+                PollLink pollLink = (PollLink) link;
+                openLinkInBrowser(activity, "https://vk.com/poll" + pollLink.ownerId + "_" + pollLink.Id);
                 break;
 
             case AbsLink.WALL_COMMENT:
@@ -213,6 +220,12 @@ public class LinkHelper {
             customTabsIntent.intent.setPackage(getCustomTabsPackages(context).get(0).resolvePackageName);
         }
         customTabsIntent.launchUrl(context, Uri.parse(url));
+    }
+
+    public static void openLinkInBrowserInternal(Context context, int accoutnId, String url) {
+        if (isEmpty(url))
+            return;
+        PlaceFactory.getExternalLinkPlace(accoutnId, url).tryOpenWith(context);
     }
 
     public static Commented findCommentedFrom(String url) {

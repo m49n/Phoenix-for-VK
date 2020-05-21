@@ -54,7 +54,7 @@ public class StickersInteractor implements IStickersInteractor {
         return networker.vkDefault(accountId).users().getRecentStickers().flatMap(t -> {
             List<Sticker> list = Dto2Model.transformStickers(listEmptyIfNull(t.items));
             List<StickerSet> ret = new ArrayList<>();
-            StickerSet temp = new StickerSet("recent", list);
+            StickerSet temp = new StickerSet("recent", list, "recent");
             ret.add(temp);
             return Single.just(ret);
         });

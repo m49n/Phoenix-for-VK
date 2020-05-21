@@ -13,6 +13,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Document;
@@ -134,6 +136,7 @@ public class AttachmentsViewBinder {
         if (attachments == null) {
             safeSetVisibitity(containers.getVgAudios(), View.GONE);
             safeSetVisibitity(containers.getVgVideos(), View.GONE);
+            safeSetVisibitity(containers.getVgArticles(), View.GONE);
             safeSetVisibitity(containers.getVgDocs(), View.GONE);
             safeSetVisibitity(containers.getVgPhotos(), View.GONE);
             safeSetVisibitity(containers.getVgPosts(), View.GONE);
@@ -141,6 +144,7 @@ public class AttachmentsViewBinder {
             safeSetVisibitity(containers.getVoiceMessageRoot(), View.GONE);
             safeSetVisibitity(containers.getVgFriends(), View.GONE);
         } else {
+            displayArticles(attachments.getArticles(), containers.getVgArticles());
             displayAudios(attachments.getAudios(), containers.getVgAudios());
             displayVoiceMessages(attachments.getVoiceMessages(), containers.getVoiceMessageRoot());
             displayDocs(attachments.getDocLinks(postsAsLinks, true), containers.getVgDocs());
@@ -415,6 +419,7 @@ public class AttachmentsViewBinder {
                 attachmentContainers.setVgAudios(itemView.findViewById(R.id.audio_attachments)).
                         setVgVideos(itemView.findViewById(R.id.video_attachments)).
                         setVgDocs(itemView.findViewById(R.id.docs_attachments)).
+                        setVgArticles(itemView.findViewById(R.id.articles_attachments)).
                         setVgPhotos(itemView.findViewById(R.id.photo_attachments)).
                         setVgPosts(itemView.findViewById(R.id.posts_attachments)).
                         setVgStickers(itemView.findViewById(R.id.stickers_attachments)).
@@ -478,6 +483,7 @@ public class AttachmentsViewBinder {
                 attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
                         .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
                         .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
+                        .setVgArticles(attachmentsRoot.findViewById(R.id.articles_attachments))
                         .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
                         .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
                         .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
@@ -545,6 +551,73 @@ public class AttachmentsViewBinder {
                         backCard.setVisibility(View.GONE);
                         break;
                 }
+
+            } else {
+                itemView.setVisibility(View.GONE);
+                itemView.setTag(null);
+            }
+        }
+    }
+
+    private void displayArticles(List<Article> articles, ViewGroup root) {
+        root.setVisibility(safeIsEmpty(articles) ? View.GONE : View.VISIBLE);
+        if (safeIsEmpty(articles)) {
+            return;
+        }
+
+        int i = articles.size() - root.getChildCount();
+        for (int j = 0; j < i; j++) {
+            root.addView(LayoutInflater.from(mContext).inflate(R.layout.item_article, root, false));
+        }
+
+        for (int g = 0; g < root.getChildCount(); g++) {
+            ViewGroup itemView = (ViewGroup) root.getChildAt(g);
+            if (g < articles.size()) {
+                final Article article = articles.get(g);
+                itemView.setVisibility(View.VISIBLE);
+                itemView.setTag(article);
+
+                ImageView ivPhoto = itemView.findViewById(R.id.item_article_image);
+                TextView ivSubTitle = itemView.findViewById(R.id.item_article_subtitle);
+
+                TextView ivTitle = itemView.findViewById(R.id.item_article_title);
+                TextView ivName = itemView.findViewById(R.id.item_article_name);
+
+                Button ivButton = itemView.findViewById(R.id.item_article_read);
+                if (article.getURL() != null) {
+                    ivButton.setVisibility(View.VISIBLE);
+                    ivButton.setOnClickListener(v -> mAttachmentsActionCallback.onUrlOpen(article.getURL()));
+                } else
+                    ivButton.setVisibility(View.GONE);
+
+                String photo_url = null;
+                if (article.getPhoto() != null) {
+                    photo_url = article.getPhoto().getUrlForSize(Settings.get().main().getPrefPreviewImageSize(), false);
+                }
+
+                if (photo_url != null) {
+                    ivPhoto.setVisibility(View.VISIBLE);
+                    ViewUtils.displayAvatar(ivPhoto, null, photo_url, Constants.PICASSO_TAG);
+                } else
+                    ivPhoto.setVisibility(View.GONE);
+
+                if (article.getSubTitle() != null) {
+                    ivSubTitle.setVisibility(View.VISIBLE);
+                    ivSubTitle.setText(article.getSubTitle());
+                } else
+                    ivSubTitle.setVisibility(View.GONE);
+
+                if (article.getTitle() != null) {
+                    ivTitle.setVisibility(View.VISIBLE);
+                    ivTitle.setText(article.getTitle());
+                } else
+                    ivTitle.setVisibility(View.GONE);
+
+                if (article.getOwnerName() != null) {
+                    ivName.setVisibility(View.VISIBLE);
+                    ivName.setText(article.getOwnerName());
+                } else
+                    ivName.setVisibility(View.GONE);
 
             } else {
                 itemView.setVisibility(View.GONE);
@@ -871,6 +944,8 @@ public class AttachmentsViewBinder {
         void onPostOpen(@NonNull Post post);
 
         void onLinkOpen(@NonNull Link link);
+
+        void onUrlOpen(@NonNull String url);
 
         void onWikiPageOpen(@NonNull WikiPage page);
 

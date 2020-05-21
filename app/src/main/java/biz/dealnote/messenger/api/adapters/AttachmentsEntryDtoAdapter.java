@@ -8,6 +8,7 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
@@ -67,6 +68,8 @@ public class AttachmentsEntryDtoAdapter extends AbsAdapter implements JsonDeseri
             //    return context.deserialize(o, VKApiNote.class);
             //} else if (VkApiAttachments.TYPE_APP.equals(type)) {
             //    return context.deserialize(o, VKApiApplicationContent.class);
+        } else if (VkApiAttachments.TYPE_ARTICLE.equals(type)) {
+            return context.deserialize(o, VKApiArticle.class);
         } else if (VkApiAttachments.TYPE_POLL.equals(type)) {
             return context.deserialize(o, VKApiPoll.class);
         } else if (VkApiAttachments.TYPE_WIKI_PAGE.equals(type)) {

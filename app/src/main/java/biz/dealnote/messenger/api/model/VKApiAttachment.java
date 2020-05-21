@@ -22,6 +22,7 @@ public interface VKApiAttachment {
     String TYPE_STICKER = "sticker";
     String TYPE_AUDIO_MESSAGE = "audio_message";
     String TYPE_GIFT = "gift";
+    String TYPE_GRAFFITY = "graffiti";
     String TYPE_AUDIO_PLAYLIST = "audio_playlist";
 
     /**

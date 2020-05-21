@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
@@ -69,12 +70,14 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VKApiPost.class);
             //} else if (VkApiAttachments.TYPE_POSTED_PHOTO.equals(type)) {
             //    return context.deserialize(o, VKApiPostedPhoto.class);
-        } else if (VkApiAttachments.TYPE_LINK.equals(type) || VkApiAttachments.TYPE_ARTICLE.equals(type)) {
+        } else if (VkApiAttachments.TYPE_LINK.equals(type)) {
             return context.deserialize(o, VKApiLink.class);
             //} else if (VkApiAttachments.TYPE_NOTE.equals(type)) {
             //    return context.deserialize(o, VKApiNote.class);
             //} else if (VkApiAttachments.TYPE_APP.equals(type)) {
             //    return context.deserialize(o, VKApiApplicationContent.class);
+        } else if (VkApiAttachments.TYPE_ARTICLE.equals(type)) {
+            return context.deserialize(o, VKApiArticle.class);
         } else if (VkApiAttachments.TYPE_POLL.equals(type)) {
             return context.deserialize(o, VKApiPoll.class);
         } else if (VkApiAttachments.TYPE_WIKI_PAGE.equals(type)) {
@@ -87,6 +90,19 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VkApiAudioMessage.class);
         } else if (VKApiAttachment.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
+        } else if (VKApiAttachment.TYPE_GRAFFITY.equals(type)) {
+            VKApiSticker graph = new VKApiSticker();
+            graph.sticker_id = optInt(o.getAsJsonObject(), "id");
+            graph.images = new ArrayList<>();
+            VKApiSticker.Image img = new VKApiSticker.Image();
+            img.url = optString(o.getAsJsonObject(), "url");
+            img.height = optInt(o.getAsJsonObject(), "height");
+            img.width = optInt(o.getAsJsonObject(), "width");
+            graph.images.add(img);
+            graph.images_with_background = new ArrayList<>();
+            graph.images_with_background.add(img);
+            return graph;
+
         } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
             if (o.getAsJsonObject().has("photo"))
                 return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);

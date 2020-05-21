@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.Collections;
@@ -136,6 +137,14 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
             public void onScrollToLastElement() {
                 getPresenter().fireScrollToBottom();
             }
+        });
+
+        FloatingActionButton Goto = root.findViewById(R.id.goto_button);
+        Goto.setOnClickListener(v -> mRecycleView.scrollToPosition(0));
+        Goto.setOnLongClickListener(v -> {
+            mRecycleView.scrollToPosition(0);
+            getPresenter().fireRefresh();
+            return true;
         });
 
         mEmptyText = root.findViewById(R.id.fragment_feeds_empty_text);

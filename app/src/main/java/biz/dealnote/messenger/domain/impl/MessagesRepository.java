@@ -178,7 +178,7 @@ public class MessagesRepository implements IMessagesRepository {
         this.uploadManager = uploadManager;
 
         compositeDisposable.add(uploadManager.observeResults()
-                .filter(data -> data.getFirst().getDestination().getMethod() == Method.PHOTO_TO_MESSAGE)
+                .filter(data -> data.getFirst().getDestination().getMethod() == Method.TO_MESSAGE)
                 .subscribe(result -> onUpdloadSuccess(result.getFirst()), ignore()));
 
         compositeDisposable.add(accountsSettings.observeRegistered()

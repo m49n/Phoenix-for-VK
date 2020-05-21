@@ -32,6 +32,9 @@ public class ConversationFragmentFactory {
             case VKApiAttachment.TYPE_LINK:
                 fragment = new ConversationLinksFragment();
                 break;
+            case VKApiAttachment.TYPE_POST:
+                fragment = new ConversationPostsFragment();
+                break;
         }
 
         if (fragment != null) {

@@ -15,7 +15,6 @@ import java.io.InputStream;
 import biz.dealnote.messenger.api.PercentagePublisher;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.model.server.UploadServer;
-import biz.dealnote.messenger.db.interfaces.IDocsStorage;
 import biz.dealnote.messenger.exception.NotFoundException;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.upload.IUploadable;
@@ -30,12 +29,10 @@ public class VideoUploadable implements IUploadable<Video> {
 
     private final Context context;
     private final INetworker networker;
-    private final IDocsStorage storage;
 
-    public VideoUploadable(Context context, INetworker networker, IDocsStorage storage) {
+    public VideoUploadable(Context context, INetworker networker) {
         this.context = context;
         this.networker = networker;
-        this.storage = storage;
     }
 
     private static String findFileName(Context context, Uri uri) {
@@ -98,7 +95,7 @@ public class VideoUploadable implements IUploadable<Video> {
                         .uploadVideoRx(server.getUrl(), filename, is[0], listener)
                         .doFinally(safelyCloseAction(is[0]))
                         .flatMap(dto -> {
-                            UploadResult<Video> result = new UploadResult<>(server, new Video().setId(dto.video_id).setOwnerId(dto.owner_id));
+                            UploadResult<Video> result = new UploadResult<>(server, new Video().setId(dto.video_id).setOwnerId(dto.owner_id).setTitle(findFileName(context, upload.getFileUri())));
                             return Single.just(result);
                         });
             } catch (Exception e) {

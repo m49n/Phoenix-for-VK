@@ -22,6 +22,7 @@ import biz.dealnote.messenger.link.types.PageLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumLink;
 import biz.dealnote.messenger.link.types.PhotoAlbumsLink;
 import biz.dealnote.messenger.link.types.PhotoLink;
+import biz.dealnote.messenger.link.types.PollLink;
 import biz.dealnote.messenger.link.types.TopicLink;
 import biz.dealnote.messenger.link.types.VideoLink;
 import biz.dealnote.messenger.link.types.WallCommentLink;
@@ -45,6 +46,7 @@ public class VkLinkParser {
     private static final Pattern PATTERN_AUDIOS = Pattern.compile("vk\\.com/audios(-?\\d+)");
     private static final Pattern PATTERN_ALBUM = Pattern.compile("vk\\.com/album(-?\\d*)_(-?\\d*)");
     private static final Pattern PATTERN_WALL = Pattern.compile("vk\\.com/wall(-?\\d*)");
+    private static final Pattern PATTERN_POLL = Pattern.compile("vk\\.com/poll(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_PHOTO = Pattern.compile("vk\\.com/(\\w)*(-)?(\\d)*(\\?z=)?photo(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_VIDEO = Pattern.compile("vk\\.com/video(-?\\d*)_(\\d*)"); //+
     private static final Pattern PATTERN_PLAYLIST = Pattern.compile("vk\\.com/music/album/(-?\\d*)_(\\d*)_([^&]*)"); //+
@@ -214,6 +216,11 @@ public class VkLinkParser {
         }
 
         vkLink = parseWall(string);
+        if (vkLink != null) {
+            return vkLink;
+        }
+
+        vkLink = parsePoll(string);
         if (vkLink != null) {
             return vkLink;
         }
@@ -486,6 +493,20 @@ public class VkLinkParser {
         }
 
         return new WallLink(parseInt(matcher.group(1)));
+    }
+
+    private static AbsLink parsePoll(String string) {
+        Matcher matcher = PATTERN_POLL.matcher(string);
+
+        try {
+            if (matcher.find()) {
+                return new PollLink(parseInt(matcher.group(1)), parseInt(matcher.group(2)));
+            }
+        } catch (Exception ignored) {
+
+        }
+
+        return null;
     }
 
     private static AbsLink parseWallCommentLink(String string) {

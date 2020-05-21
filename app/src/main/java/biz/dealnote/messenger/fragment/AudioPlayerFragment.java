@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -189,13 +192,13 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.audio_player_menu, menu);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.eq).setVisible(isEqualizerAvailable());
     }
@@ -216,7 +219,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 if (MusicUtils.getCurrentAudio().getAlbum_title() != null)
                     Artist += " (" + MusicUtils.getCurrentAudio().getAlbum_title() + ")";
                 String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";
-                ;
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
@@ -234,9 +236,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutRes;
         if (Utils.isLandscape(requireActivity()) && !Utils.is600dp(requireActivity())) {
-            layoutRes = R.layout.fragment_player_land;
+            layoutRes = Settings.get().ui().isDisable_swipes() ? R.layout.fragment_player_land_no_swipe : R.layout.fragment_player_land;
         } else {
-            layoutRes = R.layout.fragment_player_port_new;
+            layoutRes = Settings.get().ui().isDisable_swipes() ? R.layout.fragment_player_port_new_no_swipe : R.layout.fragment_player_port_new;
         }
 
         View root = inflater.inflate(layoutRes, container, false);
@@ -244,51 +246,38 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         ConstraintLayout Root = root.findViewById(R.id.player_layout);
-
-        VerticalSwipeBehavior<ConstraintLayout> ui = VerticalSwipeBehavior.Companion.from(Root);
-        ui.setSettle(new SettleOnTopAction());
-        PropertySideEffect sideDelegate = new PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y);
-        ui.setSideEffect(new NegativeFactorFilterSideEffect(sideDelegate));
-        BelowFractionalClamp clampDelegate = new BelowFractionalClamp(3f, 3f);
-        ui.setClamp(new SensitivityClamp(0.5f, clampDelegate, 0.5f));
-        ui.setListener(new VerticalSwipeBehavior.SwipeListener() {
-            @Override
-            public void onReleased() {
-                isCaptured = false;
-            }
-
-            @Override
-            public void onCaptured() {
-                isCaptured = true;
-            }
-
-            @Override
-            public void onPreSettled(int diff) {
-            }
-
-            @Override
-            public void onPostSettled(int diff) {
-                if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
-                    goBack();
-                } else
-                    isCaptured = false;
-            }
-        });
-
-        mPlayPauseButton = root.findViewById(R.id.action_button_play);
-        mShuffleButton = root.findViewById(R.id.action_button_shuffle);
-        mRepeatButton = root.findViewById(R.id.action_button_repeat);
-
-        RepeatingImageButton mPreviousButton = root.findViewById(R.id.action_button_previous);
-        RepeatingImageButton mNextButton = root.findViewById(R.id.action_button_next);
-
-        ivCover = root.findViewById(R.id.cover);
-
-        mCurrentTime = root.findViewById(R.id.audio_player_current_time);
-        mTotalTime = root.findViewById(R.id.audio_player_total_time);
         mProgress = root.findViewById(android.R.id.progress);
 
         if (!Settings.get().ui().isDisable_swipes()) {
+            VerticalSwipeBehavior<ConstraintLayout> ui = VerticalSwipeBehavior.Companion.from(Root);
+            ui.setSettle(new SettleOnTopAction());
+            PropertySideEffect sideDelegate = new PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y);
+            ui.setSideEffect(new NegativeFactorFilterSideEffect(sideDelegate));
+            BelowFractionalClamp clampDelegate = new BelowFractionalClamp(3f, 3f);
+            ui.setClamp(new SensitivityClamp(0.5f, clampDelegate, 0.5f));
+            ui.setListener(new VerticalSwipeBehavior.SwipeListener() {
+                @Override
+                public void onReleased() {
+                    isCaptured = false;
+                }
+
+                @Override
+                public void onCaptured() {
+                    isCaptured = true;
+                }
+
+                @Override
+                public void onPreSettled(int diff) {
+                }
+
+                @Override
+                public void onPostSettled(int diff) {
+                    if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
+                        goBack();
+                    } else
+                        isCaptured = false;
+                }
+            });
             mProgress.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -301,8 +290,20 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 }
                 return false;
             });
-        } else
-            ui.setCanSwipe(false);
+        }
+
+        mPlayPauseButton = root.findViewById(R.id.action_button_play);
+        mShuffleButton = root.findViewById(R.id.action_button_shuffle);
+        mRepeatButton = root.findViewById(R.id.action_button_repeat);
+
+        RepeatingImageButton mPreviousButton = root.findViewById(R.id.action_button_previous);
+        RepeatingImageButton mNextButton = root.findViewById(R.id.action_button_next);
+
+        ivCover = root.findViewById(R.id.cover);
+
+        mCurrentTime = root.findViewById(R.id.audio_player_current_time);
+        mTotalTime = root.findViewById(R.id.audio_player_total_time);
+
         tvTitle = root.findViewById(R.id.audio_player_title);
         tvAlbum = root.findViewById(R.id.audio_player_album);
         tvSubtitle = root.findViewById(R.id.audio_player_subtitle);
@@ -324,14 +325,32 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         mNextButton.setRepeatListener(mFastForwardListener);
         mProgress.setOnSeekBarChangeListener(this);
 
-        ivAdd = root.findViewById(R.id.audio_add);
-        ivAdd.setOnClickListener(v -> onAddButtonClick());
-
         ivSave = root.findViewById(R.id.audio_save);
         ivSave.setOnClickListener(v -> onSaveButtonClick());
 
+        ivAdd = root.findViewById(R.id.audio_add);
+        if (Settings.get().main().isPlayer_support_volume()) {
+            ivAdd.setIcon(R.drawable.volume_minus);
+            ivAdd.setOnClickListener(v -> {
+                AudioManager audio = (AudioManager) requireActivity().getSystemService(Context.AUDIO_SERVICE);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamVolume(AudioManager.STREAM_MUSIC) - 1, 0);
+            });
+        } else {
+            ivAdd.setIcon(R.drawable.plus);
+            ivAdd.setOnClickListener(v -> onAddButtonClick());
+        }
+
         CircleCounterButton ivShare = root.findViewById(R.id.audio_share);
-        ivShare.setOnClickListener(v -> shareAudio());
+        if (Settings.get().main().isPlayer_support_volume()) {
+            ivShare.setIcon(R.drawable.volume_plus);
+            ivShare.setOnClickListener(v -> {
+                AudioManager audio = (AudioManager) requireActivity().getSystemService(Context.AUDIO_SERVICE);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 1, 0);
+            });
+        } else {
+            ivShare.setIcon(R.drawable.share_variant);
+            ivShare.setOnClickListener(v -> shareAudio());
+        }
 
 //        if (isAudioStreaming()) {
 //            broadcastAudio();
@@ -745,6 +764,9 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     }
 
     private void resolveAddButton() {
+        if (Settings.get().main().isPlayer_support_volume())
+            return;
+
         if (!isAdded()) return;
 
         Audio currentAudio = MusicUtils.getCurrentAudio();
@@ -976,17 +998,13 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
         @Override
         public void handleMessage(final Message msg) {
-            switch (msg.what) {
-                case REFRESH_TIME:
-                    if (mAudioPlayer.get().isCaptured) {
-                        mAudioPlayer.get().queueNextRefresh(300);
-                        break;
-                    }
-                    final long next = mAudioPlayer.get().refreshCurrentTime();
-                    mAudioPlayer.get().queueNextRefresh(next);
-                    break;
-                default:
-                    break;
+            if (msg.what == REFRESH_TIME) {
+                if (mAudioPlayer.get().isCaptured) {
+                    mAudioPlayer.get().queueNextRefresh(300);
+                    return;
+                }
+                final long next = mAudioPlayer.get().refreshCurrentTime();
+                mAudioPlayer.get().queueNextRefresh(next);
             }
         }
     }

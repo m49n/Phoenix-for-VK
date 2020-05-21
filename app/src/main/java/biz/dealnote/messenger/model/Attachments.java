@@ -37,6 +37,7 @@ public class Attachments implements Parcelable, Cloneable {
     private ArrayList<Video> videos;
     private ArrayList<Post> posts;
     private ArrayList<Link> links;
+    private ArrayList<Article> articles;
     private ArrayList<Poll> polls;
     private ArrayList<WikiPage> pages;
     private ArrayList<VoiceMessage> voiceMessages;
@@ -53,6 +54,7 @@ public class Attachments implements Parcelable, Cloneable {
         videos = in.createTypedArrayList(Video.CREATOR);
         posts = in.createTypedArrayList(Post.CREATOR);
         links = in.createTypedArrayList(Link.CREATOR);
+        articles = in.createTypedArrayList(Article.CREATOR);
         polls = in.createTypedArrayList(Poll.CREATOR);
         pages = in.createTypedArrayList(WikiPage.CREATOR);
         voiceMessages = in.createTypedArrayList(VoiceMessage.CREATOR);
@@ -72,6 +74,7 @@ public class Attachments implements Parcelable, Cloneable {
         dest.writeTypedList(videos);
         dest.writeTypedList(posts);
         dest.writeTypedList(links);
+        dest.writeTypedList(articles);
         dest.writeTypedList(polls);
         dest.writeTypedList(pages);
         dest.writeTypedList(voiceMessages);
@@ -116,6 +119,11 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (model instanceof Link) {
             prepareLinks().add((Link) model);
+            return;
+        }
+
+        if (model instanceof Article) {
+            prepareArticles().add((Article) model);
             return;
         }
 
@@ -165,6 +173,10 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(links)) {
             result.addAll(links);
+        }
+
+        if (nonEmpty(articles)) {
+            result.addAll(articles);
         }
 
         if (nonEmpty(polls)) {
@@ -220,6 +232,14 @@ public class Attachments implements Parcelable, Cloneable {
         }
 
         return links;
+    }
+
+    public ArrayList<Article> prepareArticles() {
+        if (articles == null) {
+            articles = new ArrayList<>(1);
+        }
+
+        return articles;
     }
 
     public ArrayList<Document> prepareDocs() {
@@ -279,6 +299,7 @@ public class Attachments implements Parcelable, Cloneable {
                 videos,
                 posts,
                 links,
+                articles,
                 polls,
                 pages,
                 voiceMessages,
@@ -311,6 +332,7 @@ public class Attachments implements Parcelable, Cloneable {
                 safeIsEmpty(stickers) &&
                 safeIsEmpty(posts) &&
                 safeIsEmpty(links) &&
+                safeIsEmpty(articles) &&
                 safeIsEmpty(pages) &&
                 safeIsEmpty(polls) &&
                 safeIsEmpty(voiceMessages) &&
@@ -402,6 +424,7 @@ public class Attachments implements Parcelable, Cloneable {
         clone.videos = cloneListAsArrayList(this.videos);
         clone.posts = cloneListAsArrayList(this.posts);
         clone.links = cloneListAsArrayList(this.links);
+        clone.articles = cloneListAsArrayList(this.articles);
         clone.polls = cloneListAsArrayList(this.polls);
         clone.pages = cloneListAsArrayList(this.pages);
         clone.voiceMessages = cloneListAsArrayList(this.voiceMessages);
@@ -437,6 +460,10 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonNull(links)) {
             line = line + " links=" + safeCountOf(links);
+        }
+
+        if (nonNull(articles)) {
+            line = line + " articles=" + safeCountOf(articles);
         }
 
         if (nonNull(polls)) {
@@ -488,6 +515,10 @@ public class Attachments implements Parcelable, Cloneable {
 
     public ArrayList<Link> getLinks() {
         return links;
+    }
+
+    public ArrayList<Article> getArticles() {
+        return articles;
     }
 
     public ArrayList<Poll> getPolls() {

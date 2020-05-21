@@ -8,7 +8,7 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="2"
             android:entries="@array/night_mode_names"
             android:entryValues="@array/night_mode_values"
             android:key="night_switch"
@@ -98,6 +98,14 @@
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_chat_background_names"
+            android:entryValues="@array/array_chat_background_items"
+            android:key="chat_background"
+            android:title="@string/chat_background"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="chat_light_background"
             android:summary="@string/chat_light_background"
@@ -180,6 +188,13 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_read"
+            android:summary="@string/auto_read"
+            android:title="@string/auto_read"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="info_reading"
             android:summary="@string/info_reading"
@@ -224,6 +239,27 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="for_wear"
+        android:title="@string/for_wear"
+        app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="is_player_support_volume"
+            android:summary="@string/is_player_support_volume"
+            android:title="@string/is_player_support_volume"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="music_enable_toolbar"
+            android:summary="@string/music_enable_toolbar"
+            android:title="@string/music_enable_toolbar"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="group_appearance"
         android:title="@string/appearance_settings"
         app:iconSpaceReserved="false">
@@ -235,17 +271,9 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="amoled_theme"
             android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/array_chat_background_names"
-            android:entryValues="@array/array_chat_background_items"
-            android:key="chat_background"
-            android:title="@string/chat_background"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
@@ -372,13 +400,6 @@
             android:defaultValue="true"
             android:key="show_audio_cover"
             android:title="@string/show_audio_cover"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="use_speach_voice"
-            android:summary="@string/use_speach_voice"
-            android:title="@string/use_speach_voice"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:defaultValue="true"

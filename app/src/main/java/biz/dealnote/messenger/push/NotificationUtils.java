@@ -30,6 +30,25 @@ public class NotificationUtils {
         return Single.fromCallable(() -> loadRoundedImage(app, url, ifErrorOrEmpty));
     }
 
+    public static Single<Bitmap> loadImageRx(String url) {
+        return Single.fromCallable(() -> loadImage(url));
+    }
+
+    public static Bitmap loadImage(String url) {
+        if (nonEmpty(url)) {
+            try {
+                return PicassoInstance.with()
+                        .load(url)
+                        .config(Bitmap.Config.ARGB_8888)
+                        .get();
+            } catch (IOException e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     public static Bitmap loadRoundedImage(Context context, String url, @DrawableRes int ifErrorOrEmpty) {
         final Context app = context.getApplicationContext();
         Transformation transformation = CurrentTheme.createTransformationForAvatar(app);

@@ -18,6 +18,7 @@ import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Document;
@@ -166,6 +167,22 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         }
     }
 
+    private void bindArticle(ViewHolder holder, Article link) {
+        holder.tvTitle.setText(R.string.article);
+
+        String photoLink = nonNull(link.getPhoto()) ? link.getPhoto().getUrlForSize(PhotoSize.X, false) : null;
+
+        if (nonEmpty(photoLink)) {
+            PicassoInstance.with()
+                    .load(photoLink)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.background_gray);
+        }
+    }
+
     private void bindPhoto(ViewHolder holder, Photo photo) {
         holder.tvTitle.setText(R.string.photo);
 
@@ -291,6 +308,8 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
             configUploadObject((Upload) model, holder);
         } else if (model instanceof Link) {
             bindLink(holder, (Link) model);
+        } else if (model instanceof Article) {
+            bindArticle(holder, (Article) model);
         } else {
             throw new UnsupportedOperationException("Type " + model.getClass() + " in not supported");
         }

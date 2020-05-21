@@ -51,8 +51,8 @@
     <string name="dialog_day_older">Старые</string>
     <string name="dialog_me">Я</string>
     <string name="attachments">[вложения]</string>
-    <string name="forward_messages">[сообщения]</string>
-    <string name="service_message">[служебное сообщение]</string>
+    <string name="forward_messages">[пересланные]</string>
+    <string name="service_message">[служебное]</string>
     <string name="title_mssages">Сообщения</string>
 
     <!-- Settings-->
@@ -70,6 +70,7 @@
     <string name="send">Отправить</string>
 
     <string name="text_hint">Сообщение</string>
+    <string name="search_hint">Найти</string>
     <!-- MessagesSending-->
     <string name="sending">Отправка</string>
     <string name="in_order">В очереди</string>
@@ -211,7 +212,7 @@
 
     <string name="emojis_type_summary">Если включено, будут использоваться системные смайлы</string>
     <string name="emojis_type_title">Использовать системные смайлы</string>
-    <string name="emojis_recents">Показывать последние смайлы</string>
+    <string name="emojis_recents">Показывать последние стикеры</string>
     <string name="appearance_settings">Внешний вид</string>
 
     <string name="wall_post">Запись на стене</string>
@@ -240,8 +241,8 @@
     <string name="anonymous_poll">Анонимный опрос</string>
     <string name="open_poll">Открытое голосование</string>
 
-    <string name="drawer_categories_title">Элементы бокового меню</string>
-    <string name="drawer_categories_summary">Выберите элементы, которые будут отображаться в боковом меню приложения</string>
+    <string name="drawer_categories_title">Элементы всплывающего меню</string>
+    <string name="drawer_categories_summary">Выберите элементы, которые будут отображаться в сплывающем меню приложения</string>
 
     <string name="add_vote">Голосовать</string>
     <string name="remove_vote">Удалить голос</string>
@@ -722,6 +723,7 @@
     <string name="audios_pattern_count">аудиозаписей</string>
     <string name="documents_count">%1$d документов</string>
     <string name="links_count">%1$d ссылок</string>
+    <string name="posts_count">%1$d постов</string>
     <string name="cancel_invitation">Отклонить приглашение</string>
     <string name="invitation_has_been_declined">Приглашение было отклонено</string>
     <string name="request_canceled">Заявка отменена</string>
@@ -736,7 +738,7 @@
     <string name="reply_notification">Ответы в комментариях</string>
     <string name="wall_publish_notification">Опубликована предложенная Вами запись</string>
     <string name="set_default">Установить по умолчанию</string>
-    <string name="sidebar_settings">Боковое меню</string>
+    <string name="sidebar_settings">Всплывающее меню</string>
     <string name="custom_chat">Кастомизировать чат</string>
     <string name="formatted_date_today">Сегодня в %1$s</string>
     <string name="formatted_date_tomorrow">Завтра в %1$s</string>
@@ -921,6 +923,7 @@
     <string name="go_to_photo">Перейти к фото</string>
     <string name="wait_until_file_upload_is_complete">Дождитесь завершения загрузки файла</string>
     <string name="link">Ссылка</string>
+    <string name="article">Статья</string>
     <string name="copied">Скопировано</string>
 
     <string-array name="array_vibration_length_names">
@@ -945,8 +948,8 @@
     <string name="local_photos_tab_title">Локальные фото</string>
     <string name="local_gallery_tab_title">Галерея</string>
     <string name="send_short">Отпр.</string>
-    <string name="message_attachment_empty_text">Вложений пока нет</string>
-    <string name="button_add_photo">Добавить фото</string>
+    <string name="message_attachment_empty_text">Вложений пока нет (лимит 10)</string>
+    <string name="button_add_photo">Добавить фото/видео</string>
     <string name="log_type_error" translatable="false">Исключения</string>
     <string name="settings_show_logs_title" translatable="false">Логи</string>
     <string name="application_logs" translatable="false">Логи приложения</string>
@@ -1119,7 +1122,7 @@
     <string name="button_login_via_web">Через Web</string>
     <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
-    <string name="drawer_edit_title">Боковое меню</string>
+    <string name="drawer_edit_title">Всплывающее меню</string>
     <string name="theme_edit_title">Выбор темы</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
@@ -1286,7 +1289,7 @@
     <string name="custom_message_color">Цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
-    <string name="show_profile_in_additional_page">Показывать профиль в боковом меню (перезапуск)</string>
+    <string name="show_profile_in_additional_page">Показывать профиль в всплывающем меню (перезапуск)</string>
     <string name="disable_swipes">Отключить свайпы для плеера</string>
     <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
@@ -1297,9 +1300,25 @@
     <string name="video_dir">Видео</string>
     <string name="docs_dir">Документы</string>
     <string name="photo_to_user_dir">Сортировать фото по папкам</string>
-    <string name="use_speach_voice">Разговорный динамик для голосовух</string>
     <string name="import_accounts">Импорт аккаунтов</string>
     <string name="export_accounts">Экспорт аккаунтов</string>
     <string name="show_qr">Показать QR</string>
     <string name="download_peer_html">Скачать переписку в HTML</string>
+    <string name="usages">Использованные</string>
+    <string name="is_player_support_volume">Переключатель громкости в плеере</string>
+    <string name="notif_photos">%1$d Фото</string>
+    <string name="notif_attach">(%1$d %2$s)</string>
+    <string name="notif_forward">(%1$d Пересланных)</string>
+    <string name="sticker">[стикер]</string>
+    <string name="auto_read">Авто-прочтение</string>
+    <string name="hours">Часов</string>
+    <string name="hour">Час</string>
+    <string name="hour_sec">Часа</string>
+    <string name="attachments_notif">Вложений</string>
+    <string name="attachment_notif">Вложение</string>
+    <string name="attacment_sec_notif">Вложения</string>
+    <string name="for_wear">Для Гугл-Часов</string>
+    <string name="music_enable_toolbar">Включить тулбар для списка музыки</string>
+    <string name="read_article">Читать</string>
+    <string name="copy_simple">Копировать</string>
 </resources>

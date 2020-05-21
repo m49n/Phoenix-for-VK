@@ -50,14 +50,14 @@
 
             <ImageView
                 android:id="@+id/item_friend_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/avatar_size_chat"
+                android:layout_height="@dimen/avatar_size_chat"
                 android:layout_centerInParent="true" />
 
             <ImageView
                 android:id="@+id/item_icon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignStart="@+id/item_friend_avatar"
                 android:layout_alignBottom="@+id/item_friend_avatar"
                 android:padding="3dp" />
