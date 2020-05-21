@@ -46,6 +46,7 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.PhoenixToast;
 
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.singletonArrayList;
 
 public class LinkHelper {
@@ -219,6 +220,12 @@ public class LinkHelper {
             customTabsIntent.intent.setPackage(getCustomTabsPackages(context).get(0).resolvePackageName);
         }
         customTabsIntent.launchUrl(context, Uri.parse(url));
+    }
+
+    public static void openLinkInBrowserInternal(Context context, int accoutnId, String url) {
+        if (isEmpty(url))
+            return;
+        PlaceFactory.getExternalLinkPlace(accoutnId, url).tryOpenWith(context);
     }
 
     public static Commented findCommentedFrom(String url) {

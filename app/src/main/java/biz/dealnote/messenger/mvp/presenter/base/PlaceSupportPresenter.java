@@ -39,6 +39,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
         getView().openLink(getAccountId(), link);
     }
 
+    public void fireUrlClick(@NonNull String url) {
+        getView().openUrl(getAccountId(), url);
+    }
+
     public void fireWikiPageClick(@NonNull WikiPage page) {
         getView().openWikiPage(getAccountId(), page);
     }

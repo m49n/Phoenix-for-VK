@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
@@ -41,6 +42,7 @@ import biz.dealnote.messenger.db.model.entity.UserEntity;
 import biz.dealnote.messenger.db.model.entity.VideoAlbumEntity;
 import biz.dealnote.messenger.db.model.entity.VideoEntity;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Career;
@@ -479,6 +481,10 @@ public class Entity2Model {
             return buildLinkFromDbo((LinkEntity) entity);
         }
 
+        if (entity instanceof ArticleEntity) {
+            return buildArticleFromDbo((ArticleEntity) entity);
+        }
+
         if (entity instanceof PollEntity) {
             return buildPollFromDbo((PollEntity) entity);
         }
@@ -655,6 +661,16 @@ public class Entity2Model {
                 .setDescription(dbo.getDescription())
                 .setPreviewPhoto(dbo.getPreviewPhoto())
                 .setPhoto(nonNull(dbo.getPhoto()) ? map(dbo.getPhoto()) : null);
+    }
+
+    public static Article buildArticleFromDbo(ArticleEntity dbo) {
+        return new Article(dbo.getId(), dbo.getOwnerId())
+                .setAccessKey(dbo.getAccessKey())
+                .setOwnerName(dbo.getOwnerName())
+                .setPhoto(nonNull(dbo.getPhoto()) ? map(dbo.getPhoto()) : null)
+                .setTitle(dbo.getTitle())
+                .setSubTitle(dbo.getSubTitle())
+                .setURL(dbo.getURL());
     }
 
     public static News buildNewsFromDbo(NewsEntity dbo, IOwnersBundle owners) {

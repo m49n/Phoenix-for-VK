@@ -28,7 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="marquee"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textSize="@dimen/navi_drawer_font_size"
             tools:text="Test action" />
 

@@ -148,6 +148,9 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
                 .recentChats()
                 .get(mAccountId);
 
+        mDrawerItems = new ArrayList<>();
+        mDrawerItems.addAll(generateNavDrawerItems());
+
         mCompositeDisposable.add(Settings.get().drawerSettings()
                 .observeChanges()
                 .observeOn(Injection.provideMainThreadScheduler())
@@ -185,9 +188,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         tvUserName = root.findViewById(R.id.header_navi_menu_username);
         tvDomain = root.findViewById(R.id.header_navi_menu_usernick);
 
-        mDrawerItems = new ArrayList<>();
-        mDrawerItems.addAll(generateNavDrawerItems());
-
         mAdapter = new MenuListAdapter(requireActivity(), mDrawerItems, this);
 
         mBottomSheetBehavior = BottomSheetBehavior.from(root.findViewById(R.id.bottom_sheet));
@@ -223,6 +223,7 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         mDrawerItems.addAll(generateNavDrawerItems());
 
         safellyNotifyDataSetChanged();
+        backupRecentChats();
     }
 
     private ArrayList<AbsMenuItem> generateNavDrawerItems() {
@@ -380,7 +381,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
     @Override
     public void onDestroy() {
         mCompositeDisposable.dispose();
-        backupRecentChats();
         super.onDestroy();
     }
 

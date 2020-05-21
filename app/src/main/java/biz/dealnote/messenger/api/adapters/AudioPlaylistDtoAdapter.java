@@ -11,10 +11,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class AudioPlaylistDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiAudioPlaylist> {
 
     @Override

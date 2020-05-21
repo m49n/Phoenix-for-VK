@@ -7,6 +7,7 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.Commentable;
 import biz.dealnote.messenger.api.model.Likeable;
 import biz.dealnote.messenger.api.model.PhotoSizeDto;
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiCareer;
@@ -55,6 +56,7 @@ import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.crypt.CryptHelper;
 import biz.dealnote.messenger.crypt.MessageType;
 import biz.dealnote.messenger.db.model.IdPairEntity;
+import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
@@ -718,6 +720,10 @@ public class Dto2Entity {
             return mapLink((VKApiLink) dto);
         }
 
+        if (dto instanceof VKApiArticle) {
+            return mapArticle((VKApiArticle) dto);
+        }
+
         if (dto instanceof VKApiWikiPage) {
             return mapWikiPage((VKApiWikiPage) dto);
         }
@@ -881,6 +887,16 @@ public class Dto2Entity {
                 .setTitle(link.title)
                 .setPreviewPhoto(link.preview_photo)
                 .setPhoto(nonNull(link.photo) ? mapPhoto(link.photo) : null);
+    }
+
+    public static ArticleEntity mapArticle(VKApiArticle article) {
+        return new ArticleEntity(article.id, article.owner_id)
+                .setAccessKey(article.access_key)
+                .setOwnerName(article.owner_name)
+                .setPhoto(nonNull(article.photo) ? mapPhoto(article.photo) : null)
+                .setTitle(article.title)
+                .setSubTitle(article.subtitle)
+                .setURL(article.url);
     }
 
     public static AudioMessageEntity mapAudioMessage(VkApiAudioMessage dto) {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.AttachmentsTokenCreator;
 import biz.dealnote.messenger.api.model.IAttachmentToken;
+import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
@@ -49,6 +50,11 @@ public class Entity2Dto {
 
         if (entity instanceof LinkEntity) {
             return AttachmentsTokenCreator.ofLink(((LinkEntity) entity).getUrl());
+        }
+
+        if (entity instanceof ArticleEntity) {
+            ArticleEntity article = (ArticleEntity) entity;
+            return AttachmentsTokenCreator.ofArticle(article.getId(), article.getOwnerId(), article.getAccessKey());
         }
 
         if (entity instanceof PhotoEntity) {

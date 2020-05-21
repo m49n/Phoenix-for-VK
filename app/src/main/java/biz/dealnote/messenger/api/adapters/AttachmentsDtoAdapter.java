@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
@@ -69,12 +70,14 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VKApiPost.class);
             //} else if (VkApiAttachments.TYPE_POSTED_PHOTO.equals(type)) {
             //    return context.deserialize(o, VKApiPostedPhoto.class);
-        } else if (VkApiAttachments.TYPE_LINK.equals(type) || VkApiAttachments.TYPE_ARTICLE.equals(type)) {
+        } else if (VkApiAttachments.TYPE_LINK.equals(type)) {
             return context.deserialize(o, VKApiLink.class);
             //} else if (VkApiAttachments.TYPE_NOTE.equals(type)) {
             //    return context.deserialize(o, VKApiNote.class);
             //} else if (VkApiAttachments.TYPE_APP.equals(type)) {
             //    return context.deserialize(o, VKApiApplicationContent.class);
+        } else if (VkApiAttachments.TYPE_ARTICLE.equals(type)) {
+            return context.deserialize(o, VKApiArticle.class);
         } else if (VkApiAttachments.TYPE_POLL.equals(type)) {
             return context.deserialize(o, VKApiPoll.class);
         } else if (VkApiAttachments.TYPE_WIKI_PAGE.equals(type)) {

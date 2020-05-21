@@ -923,6 +923,7 @@
     <string name="go_to_photo">Перейти к фото</string>
     <string name="wait_until_file_upload_is_complete">Дождитесь завершения загрузки файла</string>
     <string name="link">Ссылка</string>
+    <string name="article">Статья</string>
     <string name="copied">Скопировано</string>
 
     <string-array name="array_vibration_length_names">
@@ -1318,4 +1319,6 @@
     <string name="attacment_sec_notif">Вложения</string>
     <string name="for_wear">Для Гугл-Часов</string>
     <string name="music_enable_toolbar">Включить тулбар для списка музыки</string>
+    <string name="read_article">Читать</string>
+    <string name="copy_simple">Копировать</string>
 </resources>

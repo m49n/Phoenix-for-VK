@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import biz.dealnote.messenger.api.adapters.AnswerVKOfficialDtoAdapter;
+import biz.dealnote.messenger.api.adapters.ArticleDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AttachmentsEntryDtoAdapter;
 import biz.dealnote.messenger.api.adapters.AudioDtoAdapter;
@@ -46,6 +47,7 @@ import biz.dealnote.messenger.api.adapters.VideoDtoAdapter;
 import biz.dealnote.messenger.api.model.ChatUserDto;
 import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.GroupSettingsDto;
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VKApiChat;
@@ -128,6 +130,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(VKApiAudioPlaylist.class, new AudioPlaylistDtoAdapter())
             .registerTypeAdapter(VKApiStory.class, new StoryDtoAdapter())
             .registerTypeAdapter(FaveLinkDto.class, new FaveLinkDtoAdapter())
+            .registerTypeAdapter(VKApiArticle.class, new ArticleDtoAdapter())
             .create();
 
     private static final GsonConverterFactory GSON_CONVERTER_FACTORY = GsonConverterFactory.create(VKGSON);

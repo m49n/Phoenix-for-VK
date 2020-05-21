@@ -219,7 +219,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 if (MusicUtils.getCurrentAudio().getAlbum_title() != null)
                     Artist += " (" + MusicUtils.getCurrentAudio().getAlbum_title() + ")";
                 String Name = MusicUtils.getCurrentAudio().getTitle() != null ? MusicUtils.getCurrentAudio().getTitle() : "";
-                ;
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);

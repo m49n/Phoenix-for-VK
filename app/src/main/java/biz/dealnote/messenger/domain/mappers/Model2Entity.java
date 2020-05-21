@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
@@ -22,6 +23,7 @@ import biz.dealnote.messenger.db.model.entity.PrivacyEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
 import biz.dealnote.messenger.db.model.entity.VideoEntity;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.CryptStatus;
@@ -88,6 +90,7 @@ public class Model2Entity {
         mapAndAdd(attachments.getVideos(), Model2Entity::buildVideoDbo, entities);
         mapAndAdd(attachments.getPosts(), Model2Entity::buildPostDbo, entities);
         mapAndAdd(attachments.getLinks(), Model2Entity::buildLinkDbo, entities);
+        mapAndAdd(attachments.getArticles(), Model2Entity::buildArticleDbo, entities);
         mapAndAdd(attachments.getPolls(), Model2Entity::buildPollDbo, entities);
         mapAndAdd(attachments.getPages(), Model2Entity::buildPageEntity, entities);
         mapAndAdd(attachments.getGifts(), Model2Entity::buildGiftItemEntity, entities);
@@ -112,6 +115,8 @@ public class Model2Entity {
                 entities.add(buildPostDbo((Post) model));
             } else if (model instanceof Link) {
                 entities.add(buildLinkDbo((Link) model));
+            } else if (model instanceof Article) {
+                entities.add(buildArticleDbo((Article) model));
             } else if (model instanceof Poll) {
                 entities.add(buildPollDbo((Poll) model));
             } else if (model instanceof WikiPage) {
@@ -175,6 +180,16 @@ public class Model2Entity {
                 .setDescription(link.getDescription())
                 .setCaption(link.getCaption())
                 .setPreviewPhoto(link.getPreviewPhoto());
+    }
+
+    public static ArticleEntity buildArticleDbo(Article dbo) {
+        return new ArticleEntity(dbo.getId(), dbo.getOwnerId())
+                .setAccessKey(dbo.getAccessKey())
+                .setOwnerName(dbo.getOwnerName())
+                .setPhoto(isNull(dbo.getPhoto()) ? null : buildPhotoEntity(dbo.getPhoto()))
+                .setTitle(dbo.getTitle())
+                .setSubTitle(dbo.getSubTitle())
+                .setURL(dbo.getURL());
     }
 
     public static PostEntity buildPostDbo(Post post) {

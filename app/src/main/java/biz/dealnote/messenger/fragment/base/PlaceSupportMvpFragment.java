@@ -99,6 +99,11 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
+    public void onUrlOpen(@NonNull String url) {
+        getPresenter().fireUrlClick(url);
+    }
+
+    @Override
     public void onWikiPageOpen(@NonNull WikiPage page) {
         getPresenter().fireWikiPageClick(page);
     }
@@ -111,6 +116,11 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void openLink(int accountId, @NonNull Link link) {
         LinkHelper.openLinkInBrowser(requireActivity(), link.getUrl());
+    }
+
+    @Override
+    public void openUrl(int accountId, @NonNull String url) {
+        LinkHelper.openLinkInBrowserInternal(requireActivity(), accountId, url);
     }
 
     @Override

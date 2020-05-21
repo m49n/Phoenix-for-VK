@@ -10,6 +10,7 @@ public class AttachmentsHolder {
     private ViewGroup vgAudios;
     private ViewGroup mVoiceMessageRoot;
     private ViewGroup vgDocs;
+    private ViewGroup vgArticles;
     private ViewGroup vgStickers;
     private ViewGroup vgPhotos;
     private ViewGroup vgVideos;
@@ -22,7 +23,8 @@ public class AttachmentsHolder {
                 setVgPhotos(container.findViewById(R.id.copy_history_photo_attachments)).
                 setVgAudios(container.findViewById(R.id.copy_history_audio_attachments)).
                 setVgVideos(container.findViewById(R.id.copy_history_video_attachments)).
-                setVgDocs(container.findViewById(R.id.copy_history_docs_attachments));
+                setVgDocs(container.findViewById(R.id.copy_history_docs_attachments)).
+                setVgArticles(container.findViewById(R.id.copy_history_articles_attachments));
         return containers;
     }
 
@@ -34,7 +36,8 @@ public class AttachmentsHolder {
                 setVgAudios(container.findViewById(R.id.post_audio_attachments)).
                 setVgVideos(container.findViewById(R.id.post_video_attachments)).
                 setVgDocs(container.findViewById(R.id.post_docs_attachments)).
-                setVgFriends(container.findViewById(R.id.post_friends_attachments));
+                setVgFriends(container.findViewById(R.id.post_friends_attachments)).
+                setVgArticles(container.findViewById(R.id.post_articles_attachments));
         return containers;
     }
 
@@ -44,7 +47,8 @@ public class AttachmentsHolder {
                 setVgPhotos(container.findViewById(R.id.comments_photo_attachments)).
                 setVgAudios(container.findViewById(R.id.comments_audio_attachments)).
                 setVgVideos(container.findViewById(R.id.comments_video_attachments)).
-                setVgDocs(container.findViewById(R.id.comments_docs_attachments));
+                setVgDocs(container.findViewById(R.id.comments_docs_attachments)).
+                setVgArticles(container.findViewById(R.id.comments_articles_attachments));
         return containers;
     }
 
@@ -54,7 +58,8 @@ public class AttachmentsHolder {
                 setVgPhotos(container.findViewById(R.id.feedback_photo_attachments)).
                 setVgAudios(container.findViewById(R.id.feedback_audio_attachments)).
                 setVgVideos(container.findViewById(R.id.feedback_video_attachments)).
-                setVgDocs(container.findViewById(R.id.feedback_docs_attachments));
+                setVgDocs(container.findViewById(R.id.feedback_docs_attachments)).
+                setVgArticles(container.findViewById(R.id.feedback_articles_attachments));
         return containers;
     }
 
@@ -82,6 +87,15 @@ public class AttachmentsHolder {
 
     public AttachmentsHolder setVgDocs(ViewGroup vgDocs) {
         this.vgDocs = vgDocs;
+        return this;
+    }
+
+    public ViewGroup getVgArticles() {
+        return vgArticles;
+    }
+
+    public AttachmentsHolder setVgArticles(ViewGroup vgArticles) {
+        this.vgArticles = vgArticles;
         return this;
     }
 

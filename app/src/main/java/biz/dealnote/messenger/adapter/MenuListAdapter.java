@@ -132,7 +132,7 @@ public class MenuListAdapter extends RecyclerBindableAdapter<AbsMenuItem, Recycl
         void onDrawerItemLongClick(AbsMenuItem item);
     }
 
-    private class NormalHolder extends RecyclerView.ViewHolder {
+    private static class NormalHolder extends RecyclerView.ViewHolder {
 
         ImageView imgIcon;
         TextView txtTitle;
@@ -148,7 +148,7 @@ public class MenuListAdapter extends RecyclerBindableAdapter<AbsMenuItem, Recycl
         }
     }
 
-    private class RecentChatHolder extends RecyclerView.ViewHolder {
+    private static class RecentChatHolder extends RecyclerView.ViewHolder {
 
         TextView tvChatTitle;
         ImageView ivChatImage;

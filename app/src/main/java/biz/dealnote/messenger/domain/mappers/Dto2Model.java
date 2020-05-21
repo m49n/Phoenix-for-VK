@@ -9,6 +9,7 @@ import java.util.Map;
 
 import biz.dealnote.messenger.api.model.FaveLinkDto;
 import biz.dealnote.messenger.api.model.PhotoSizeDto;
+import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiChat;
@@ -42,6 +43,7 @@ import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 import biz.dealnote.messenger.crypt.CryptHelper;
 import biz.dealnote.messenger.crypt.MessageType;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Chat;
@@ -651,6 +653,16 @@ public class Dto2Model {
                 .setPhoto(Objects.isNull(link.photo) ? null : transform(link.photo));
     }
 
+    public static Article transform(@NonNull VKApiArticle article) {
+        return new Article(article.id, article.owner_id)
+                .setAccessKey(article.access_key)
+                .setOwnerName(article.owner_name)
+                .setPhoto(Objects.isNull(article.photo) ? null : transform(article.photo))
+                .setTitle(article.title)
+                .setSubTitle(article.subtitle)
+                .setURL(article.url);
+    }
+
     public static Sticker.Image map(VKApiSticker.Image dto) {
         return new Sticker.Image(dto.url, dto.width, dto.height);
     }
@@ -836,6 +848,9 @@ public class Dto2Model {
                     break;
                 case VKApiAttachment.TYPE_LINK:
                     attachments.prepareLinks().add(transform((VKApiLink) attachment));
+                    break;
+                case VKApiAttachment.TYPE_ARTICLE:
+                    attachments.prepareArticles().add(transform((VKApiArticle) attachment));
                     break;
                 case VKApiAttachment.TYPE_POLL:
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));

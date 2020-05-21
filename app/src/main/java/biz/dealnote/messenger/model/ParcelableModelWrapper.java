@@ -36,6 +36,7 @@ public final class ParcelableModelWrapper implements Parcelable {
         TYPES.add(Chat.class);
         TYPES.add(Poll.class);
         TYPES.add(Link.class);
+        TYPES.add(Article.class);
         TYPES.add(Comment.class);
     }
 
