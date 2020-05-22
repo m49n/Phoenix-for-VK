@@ -181,13 +181,13 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     @Override
     public Single<Integer> send(Integer randomId, Integer peerId, String domain, String message,
                                 Double latitude, Double longitude, Collection<IAttachmentToken> attachments,
-                                Collection<Integer> forwardMessages, Integer stickerId) {
+                                Collection<Integer> forwardMessages, Integer stickerId, Collection<Integer> users) {
 
         String atts = join(attachments, ",", AbsApi::formatAttachmentToken);
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service
                         .send(randomId, peerId, domain, message, latitude, longitude, atts,
-                                join(forwardMessages, ","), stickerId)
+                                join(forwardMessages, ","), stickerId, join(users, ","))
                         .map(extractResponseWithErrorHandling()));
     }
 

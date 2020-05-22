@@ -451,11 +451,11 @@ public class AttachmentsViewBinder {
                 itemView.setVisibility(View.VISIBLE);
                 itemView.setTag(doc);
 
-                MaterialCardView backCard = itemView.findViewById(R.id.card_view);
+                MaterialCardView backCardT = itemView.findViewById(R.id.card_view);
                 TextView tvTitle = itemView.findViewById(R.id.item_document_title);
                 TextView tvDetails = itemView.findViewById(R.id.item_document_ext_size);
                 EmojiconTextView tvPostText = itemView.findViewById(R.id.item_message_text);
-                ImageView ivPhoto = itemView.findViewById(R.id.item_document_image);
+                ImageView ivPhotoT = itemView.findViewById(R.id.item_document_image);
                 ImageView ivPhoto_Post = itemView.findViewById(R.id.item_post_avatar_image);
                 ImageView ivType = itemView.findViewById(R.id.item_document_type);
 
@@ -490,33 +490,28 @@ public class AttachmentsViewBinder {
                 attachmentsRoot.setVisibility(View.GONE);
 
                 itemView.setOnClickListener(v -> openDocLink(doc));
-                backCard.setVisibility(View.VISIBLE);
                 ivPhoto_Post.setVisibility(View.GONE);
 
                 switch (doc.getType()) {
                     case Types.DOC:
                         if (imageUrl != null) {
                             ivType.setVisibility(View.GONE);
-                            ivPhoto.setVisibility(View.VISIBLE);
-                            ViewUtils.displayAvatar(ivPhoto, null, imageUrl, Constants.PICASSO_TAG);
+                            backCardT.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhotoT, null, imageUrl, Constants.PICASSO_TAG);
                         } else {
-                            backCard.setVisibility(View.GONE);
                             ivType.setVisibility(View.VISIBLE);
-                            ivPhoto.setVisibility(View.GONE);
+                            backCardT.setVisibility(View.GONE);
                             Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                             ivType.setImageResource(R.drawable.file);
                         }
                         break;
                     case Types.POST:
-                        backCard.setVisibility(View.GONE);
+                        backCardT.setVisibility(View.GONE);
+                        ivType.setVisibility(View.GONE);
                         if (imageUrl != null) {
-                            ivType.setVisibility(View.GONE);
-                            ivPhoto.setVisibility(View.GONE);
                             ivPhoto_Post.setVisibility(View.VISIBLE);
                             ViewUtils.displayAvatar(ivPhoto_Post, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
                         } else {
-                            ivPhoto.setVisibility(View.GONE);
-                            ivType.setVisibility(View.GONE);
                             ivPhoto_Post.setVisibility(View.GONE);
                         }
                         Post post = (Post) doc.attachment;
@@ -529,26 +524,23 @@ public class AttachmentsViewBinder {
                     case Types.WIKI_PAGE:
                         ivType.setVisibility(View.VISIBLE);
                         if (imageUrl != null) {
-                            ivPhoto.setVisibility(View.VISIBLE);
-                            ViewUtils.displayAvatar(ivPhoto, null, imageUrl, Constants.PICASSO_TAG);
+                            backCardT.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhotoT, null, imageUrl, Constants.PICASSO_TAG);
                         } else {
-                            backCard.setVisibility(View.GONE);
-                            ivPhoto.setVisibility(View.GONE);
+                            backCardT.setVisibility(View.GONE);
                         }
                         Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                         ivType.setImageResource(R.drawable.attachment);
                         break;
                     case Types.POLL:
                         ivType.setVisibility(View.VISIBLE);
-                        ivPhoto.setVisibility(View.GONE);
-                        backCard.setVisibility(View.GONE);
+                        backCardT.setVisibility(View.GONE);
                         Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                         ivType.setImageResource(R.drawable.chart_bar);
                         break;
                     default:
                         ivType.setVisibility(View.GONE);
-                        ivPhoto.setVisibility(View.GONE);
-                        backCard.setVisibility(View.GONE);
+                        backCardT.setVisibility(View.GONE);
                         break;
                 }
 

@@ -176,6 +176,8 @@ public interface ISettings {
         int getPrefDisplayImageSize(@PhotoSize int byDefault);
 
         void setPrefDisplayImageSize(@PhotoSize int size);
+
+        boolean isWebview_night_mode();
     }
 
     interface INotificationSettings {

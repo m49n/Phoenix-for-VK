@@ -300,7 +300,8 @@ public interface IMessageService {
                                        @Field("long") Double longitude,
                                        @Field("attachment") String attachment,
                                        @Field("forward_messages") String forwardMessages,
-                                       @Field("sticker_id") Integer stickerId);
+                                       @Field("sticker_id") Integer stickerId,
+                                       @Field("user_ids") String user_ids);
 
     /**
      * Returns messages by their IDs.

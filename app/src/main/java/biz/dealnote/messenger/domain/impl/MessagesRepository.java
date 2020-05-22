@@ -1241,7 +1241,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (isEmpty(dbo.getExtras()) && isEmpty(dbo.getAttachments()) && dbo.getForwardCount() == 0) {
             return networker.vkDefault(accountId)
                     .messages()
-                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null);
+                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null, null);
         }
 
         final Collection<IAttachmentToken> attachments = new LinkedList<>();
@@ -1254,7 +1254,7 @@ public class MessagesRepository implements IMessagesRepository {
 
                         return networker.vkDefault(accountId)
                                 .messages()
-                                .send(dbo.getId(), dbo.getPeerId(), null, null, null, null, null, null, stickerId);
+                                .send(dbo.getId(), dbo.getPeerId(), null, null, null, null, null, null, stickerId, null);
                     }
 
                     attachments.add(Entity2Dto.createToken(a));
@@ -1273,7 +1273,7 @@ public class MessagesRepository implements IMessagesRepository {
                     return checkForwardMessages(accountId, dbo)
                             .flatMap(optionalFwd -> networker.vkDefault(accountId)
                                     .messages()
-                                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, attachments, optionalFwd.get(), null));
+                                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, attachments, optionalFwd.get(), null, null));
                 });
     }
 

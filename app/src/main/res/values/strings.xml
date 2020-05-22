@@ -91,11 +91,11 @@
     <string name="user_type_message">набирает сообщение…</string>
 
     <string name="load_more">Загрузить ещё</string>
-    <string name="last_seen_sex_man">был в сети: %1$s</string>
-    <string name="last_seen_sex_woman">была в сети: %1$s</string>
-    <string name="last_seen_sex_unknown">был(-а) в сети: %1$s</string>
+    <string name="last_seen_sex_man">был: %1$s</string>
+    <string name="last_seen_sex_woman">была: %1$s</string>
+    <string name="last_seen_sex_unknown">был(-а): %1$s</string>
     <string name="online">Онлайн</string>
-    <string name="offline">Оффлайн</string>
+    <string name="offline">Не в сети</string>
     <string name="thank_you">На вашей стене создан пост с информацией о приложении. Спасибо большое за поддержку!</string>
 
 
@@ -1321,4 +1321,5 @@
     <string name="music_enable_toolbar">Включить тулбар для списка музыки</string>
     <string name="read_article">Читать</string>
     <string name="copy_simple">Копировать</string>
+    <string name="webview_night_mode">Разрешить WebView ночной режим</string>
 </resources>

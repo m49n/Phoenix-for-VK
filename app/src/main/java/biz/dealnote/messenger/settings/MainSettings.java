@@ -126,4 +126,9 @@ class MainSettings implements ISettings.IMainSettings {
     public boolean isCustomTabEnabled() {
         return getDefaultPreferences().getBoolean(KEY_CUSTOM_TABS, true);
     }
+
+    @Override
+    public boolean isWebview_night_mode() {
+        return getDefaultPreferences().getBoolean("webview_night_mode", true);
+    }
 }

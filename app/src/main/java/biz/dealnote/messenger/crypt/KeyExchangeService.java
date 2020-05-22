@@ -26,6 +26,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -120,7 +121,7 @@ public class KeyExchangeService extends Service {
                 .flatMap(o -> Apis.get()
                         .vkDefault(accountId)
                         .messages()
-                        .send((int) Math.random(), peerId, null, message.toString(), null, null, null, null, null));
+                        .send(new Random().nextInt(), peerId, null, message.toString(), null, null, null, null, null, null));
     }
 
     public static void iniciateKeyExchangeSession(@NonNull Context context, int accountId,

@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -132,6 +133,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             requireActivity().recreate();
             return true;
         });
+
+        CheckBoxPreference autoupdate = findPreference("auto_update");
+        if (autoupdate != null) {
+            if (Constants.NEED_CHECK_UPDATE)
+                autoupdate.setVisible(true);
+            else
+                autoupdate.setVisible(false);
+        }
 
         CheckBoxPreference prefAmoled = findPreference("amoled_theme");
         prefAmoled.setOnPreferenceChangeListener((preference, newValue) -> {

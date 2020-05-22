@@ -832,15 +832,19 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 resolveToolbarNavigationIcon()
                 if (peerId < VKApiMessage.CHAT_PEER) {
                     Avatar?.setOnClickListener {
-                        run {
-                            showUserWall(Settings.get().accounts().current, peerId)
-                        }
+                        showUserWall(Settings.get().accounts().current, peerId)
+                    }
+                    Avatar?.setOnLongClickListener {
+                        presenter?.fireLongAvatarClick(peerId)
+                        true
                     }
                 } else {
                     Avatar?.setOnClickListener {
-                        run {
-                            PlaceFactory.getChatMembersPlace(Settings.get().accounts().current, Peer.toChatId(peerId)).tryOpenWith(requireActivity())
-                        }
+                        PlaceFactory.getChatMembersPlace(Settings.get().accounts().current, Peer.toChatId(peerId)).tryOpenWith(requireActivity())
+                    }
+                    Avatar?.setOnLongClickListener {
+                        AppendMessageText("@all,")
+                        true
                     }
                 }
             }

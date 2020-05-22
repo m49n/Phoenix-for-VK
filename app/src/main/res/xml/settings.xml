@@ -277,6 +277,13 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="webview_night_mode"
+            android:summary="@string/webview_night_mode"
+            android:title="@string/webview_night_mode"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="audio_round_icon"
             android:title="@string/audio_round_icon"
