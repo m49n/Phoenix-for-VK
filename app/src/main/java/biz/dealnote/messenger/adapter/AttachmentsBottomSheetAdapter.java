@@ -108,11 +108,13 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
+        holder.Retry.setOnClickListener(v -> actionListener.onButtonRetryClick(entry));
     }
 
     @SuppressWarnings("unused")
     private void bindMessages(EntryHolder holder, FwdMessages messages) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
 
         holder.title.setText(R.string.messages);
@@ -148,12 +150,14 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         String audiostr = audio.getArtist() + " - " + audio.getTitle();
         holder.title.setText(audiostr);
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         bindImageAudioView(holder, audio.getThumb_image_big());
     }
 
     private void bindVideo(EntryHolder holder, Video video) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(video.getTitle());
 
@@ -162,6 +166,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
 
     private void bindDoc(EntryHolder holder, Document doc) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(doc.getTitle());
 
@@ -172,6 +177,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
 
     private void bindPost(EntryHolder holder, Post post) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
 
         String title = post.getTextCopiesInclude();
@@ -199,6 +205,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         @ColorInt
         int titleColor = holder.title.getTextColors().getDefaultColor();
 
+        holder.Retry.setVisibility(View.GONE);
         switch (upload.getStatus()) {
             case Upload.STATUS_UPLOADING:
                 String precentText = upload.getProgress() + "%";
@@ -213,6 +220,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             case Upload.STATUS_ERROR:
                 holder.title.setText(R.string.error);
                 titleColor = ERROR_COLOR;
+                holder.Retry.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -246,6 +254,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
     private void bindImageHolder(EntryHolder holder, Photo photo) {
         String url = photo.getUrlForSize(PhotoSize.Q, false);
 
+        holder.Retry.setVisibility(View.GONE);
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(R.string.photo);
@@ -276,6 +285,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         void onAddPhotoButtonClick();
 
         void onButtonRemoveClick(AttachmenEntry entry);
+
+        void onButtonRetryClick(AttachmenEntry entry);
     }
 
     private static class ImagesButtonHolder extends RecyclerView.ViewHolder {
@@ -294,6 +305,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         TextView title;
         View buttomRemove;
         CircleRoadProgress progress;
+        ImageView Retry;
         View tintView;
 
         EntryHolder(View itemView) {
@@ -303,6 +315,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             this.buttomRemove = itemView.findViewById(R.id.progress_root);
             this.progress = itemView.findViewById(R.id.progress_view);
             this.tintView = itemView.findViewById(R.id.tint_view);
+            this.Retry = itemView.findViewById(R.id.retry_upload);
         }
 
         @Override

@@ -462,7 +462,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private fun onCachedDataReceived(data: List<Message>) {
         setCacheLoadingNow(false)
-        onAllDataLoaded(data, false)
+        onAllDataLoaded(data, appendToList = false, isCache = true)
     }
 
     private fun onNetDataReceived(messages: List<Message>, startMessageId: Int?) {
@@ -474,10 +474,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             endOfContent = true
 
         setNetLoadingNow(false)
-        onAllDataLoaded(messages, startMessageId != null)
+        onAllDataLoaded(messages, startMessageId != null, isCache = false)
     }
 
-    private fun onAllDataLoaded(messages: List<Message>, appendToList: Boolean) {
+    @SuppressLint("CheckResult")
+    private fun onAllDataLoaded(messages: List<Message>, appendToList: Boolean, isCache: Boolean) {
         val all = !appendToList
 
         //сохранение выделенных сообщений
@@ -508,8 +509,20 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         resolveEmptyTextVisibility()
-        if (Settings.get().other().isAuto_read)
+        if (Settings.get().other().isAuto_read && !isCache)
             readAllUnreadMessagesIfExists()
+
+        if (!isCache) {
+            var need = false;
+            for (i: Message in data) {
+                if (i.status == MessageStatus.ERROR) {
+                    need = true
+                    messagesRepository.enqueueAgain(messagesOwnerId, i.id).blockingGet()
+                }
+            }
+            if (need)
+                startSendService()
+        }
     }
 
     private fun setCacheLoadingNow(cacheLoadingNow: Boolean) {
@@ -1607,6 +1620,20 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         if (index != -1) {
             data[index] = message
             view?.notifyDataChanged()
+        }
+    }
+
+    fun fireEditAttachmentRetry(entry: AttachmenEntry) {
+        fireEditAttachmentRemoved(entry)
+        if (entry.attachment is Upload) {
+            val upl = entry.attachment as Upload
+            val intents: MutableList<UploadIntent> = java.util.ArrayList()
+            intents.add(UploadIntent(accountId, upl.destination)
+                    .setSize(upl.size)
+                    .setAutoCommit(upl.isAutoCommit)
+                    .setFileId(upl.fileId)
+                    .setFileUri(upl.fileUri))
+            uploadManager.enqueue(intents)
         }
     }
 

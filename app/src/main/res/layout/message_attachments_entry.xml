@@ -68,14 +68,23 @@
                         app:roadStrokeWidth="8dp" />
 
                 </RelativeLayout>
-
             </FrameLayout>
+
+            <ImageView
+                android:id="@+id/retry_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/audio_button_material"
+                android:scaleType="centerCrop"
+                android:src="@drawable/refresh" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@id/retry_upload"
                 android:background="?android:colorBackground"
                 android:gravity="center"
                 android:maxLines="2"

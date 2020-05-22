@@ -607,11 +607,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             getNavigationFragment().refreshNavigationItems();
             getNavigationFragment().selectPage(recentChat);
         }
-        clearBackStack();
         if (Settings.get().ui().isDisable_swipes_chat()) {
             ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
             attachToFront(chatFragment);
         } else {
+            clearBackStack();
             DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
             attachToFront(chatFragment);
         }
@@ -860,6 +860,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_FEED);
                 return;
             }
+            if (isChatFragment()) {
+                openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_DIALOGS);
+                return;
+            }
             if (mLastBackPressedTime < 0
                     || mLastBackPressedTime + DOUBLE_BACK_PRESSED_TIMEOUT > System.currentTimeMillis()
                     || !Settings.get().main().isNeedDoublePressToExit()) {
@@ -874,9 +878,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
     }
 
+    private boolean isChatFragment() {
+        return getFrontFragment() instanceof ChatFragment;
+    }
+
     private boolean isFragmentWithoutNavigation() {
-        return getFrontFragment() instanceof ChatFragment ||
-                getFrontFragment() instanceof CommentsFragment ||
+        return getFrontFragment() instanceof CommentsFragment ||
                 getFrontFragment() instanceof PostCreateFragment ||
                 getFrontFragment() instanceof GifPagerFragment;
     }

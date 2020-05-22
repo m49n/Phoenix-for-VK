@@ -70,16 +70,30 @@ public class AnswerVKOfficialDtoAdapter extends AbsAdapter implements JsonDeseri
             dto.text = optString(root_item, "text");
             if (dto.text != null)
                 dto.text = dto.text.replace("{date}", "").replaceAll("'''(((?!''').)*)'''", "<b>$1</b>").replaceAll("\\[vk(ontakte)?:\\/\\/[A-Za-z0-9\\/\\?=]+\\|([^\\]]+)\\]", "$2");
-            ;
+            dto.footer = optString(root_item, "footer");
+            if (dto.footer != null)
+                dto.footer = dto.footer.replace("{date}", "").replaceAll("'''(((?!''').)*)'''", "<b>$1</b>").replaceAll("\\[vk(ontakte)?:\\/\\/[A-Za-z0-9\\/\\?=]+\\|([^\\]]+)\\]", "$2");
             dto.time = optLong(root_item, "date");
             dto.iconURL = optString(root_item, "icon_url");
 
             if (root_item.has("main_item")) {
-                root_item = root_item.get("main_item").getAsJsonObject();
-                if (root_item.has("image_object")) {
-                    JsonArray jsonPhotos2 = root_item.get("image_object").getAsJsonArray();
+                JsonObject main_item = root_item.get("main_item").getAsJsonObject();
+                if (main_item.has("image_object")) {
+                    JsonArray jsonPhotos2 = main_item.get("image_object").getAsJsonArray();
                     if (jsonPhotos2.size() > 0) {
                         dto.iconURL = jsonPhotos2.get(jsonPhotos2.size() - 1).getAsJsonObject().get("url").getAsString();
+                    }
+                }
+            }
+            if (root_item.has("additional_item")) {
+                JsonObject additional_item = root_item.get("additional_item").getAsJsonObject();
+                if (additional_item.has("image_object") && additional_item.get("image_object").isJsonArray() && additional_item.getAsJsonArray("image_object").size() > 0) {
+                    dto.images = new ArrayList<>();
+                    JsonArray arrt = additional_item.getAsJsonArray("image_object");
+                    for (JsonElement s : arrt) {
+                        AnswerVKOfficial.ImageAdditional imgh = context.deserialize(s, AnswerVKOfficial.ImageAdditional.class);
+                        if (imgh != null)
+                            dto.images.add(imgh);
                     }
                 }
             }

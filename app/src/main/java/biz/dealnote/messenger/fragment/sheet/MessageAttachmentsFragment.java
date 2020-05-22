@@ -275,6 +275,11 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     }
 
     @Override
+    public void onButtonRetryClick(AttachmenEntry entry) {
+        getPresenter().fireRetryClick(entry);
+    }
+
+    @Override
     public void showError(String errorText) {
         if (isAdded()) {
             Utils.showRedTopToast(requireActivity(), errorText);

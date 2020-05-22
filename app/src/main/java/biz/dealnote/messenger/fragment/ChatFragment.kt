@@ -669,6 +669,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             reference.get()?.presenter?.fireEditAttachmentRemoved(entry)
         }
 
+        override fun onButtonRetryClick(entry: AttachmenEntry) {
+            reference.get()?.presenter?.fireEditAttachmentRetry(entry)
+        }
+
         val reference = WeakReference(fragment)
         val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerView)
         val emptyView: View = rootView.findViewById(R.id.emptyRootView)

@@ -315,6 +315,20 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         uploadManager.enqueue(intents);
     }
 
+    public void fireRetryClick(AttachmenEntry entry) {
+        fireRemoveClick(entry);
+        if (entry.getAttachment() instanceof Upload) {
+            Upload upl = ((Upload) entry.getAttachment());
+            List<UploadIntent> intents = new ArrayList<>();
+            intents.add(new UploadIntent(accountId, upl.getDestination())
+                    .setSize(upl.getSize())
+                    .setAutoCommit(upl.isAutoCommit())
+                    .setFileId(upl.getFileId())
+                    .setFileUri(upl.getFileUri()));
+            uploadManager.enqueue(intents);
+        }
+    }
+
     public void fireRemoveClick(AttachmenEntry entry) {
         if (entry.getOptionalId() != 0) {
             RxUtils.subscribeOnIOAndIgnore(attachmentsRepository.remove(messageOwnerId, AttachToType.MESSAGE, messageId, entry.getOptionalId()));

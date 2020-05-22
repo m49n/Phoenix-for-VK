@@ -154,6 +154,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
         holder.small.setVisibility(View.INVISIBLE);
         if (Page.header != null) {
+            holder.name.setVisibility(View.VISIBLE);
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.header));
             holder.name.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
 
@@ -184,16 +185,35 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
                 LoadIcon(holder, Page, false);
             }
         } else {
-            holder.name.setText("");
+            holder.name.setVisibility(View.GONE);
             LoadIcon(holder, Page, false);
         }
         if (Page.text != null) {
-
+            holder.description.setVisibility(View.VISIBLE);
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.text));
             holder.description.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
         } else
-            holder.description.setText("");
+            holder.description.setVisibility(View.GONE);
+
+        if (Page.footer != null) {
+            holder.footer.setVisibility(View.VISIBLE);
+            SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.footer));
+            holder.footer.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
+        } else
+            holder.footer.setVisibility(View.GONE);
         holder.time.setText(AppTextUtils.getDateFromUnixTime(context, Page.time));
+        AnswerVKOfficial.ImageAdditional Img = Page.getImage(256);
+        if (Img == null) {
+            holder.additional_root.setVisibility(View.GONE);
+            PicassoInstance.with().cancelRequest(holder.additional);
+        } else {
+            holder.additional_root.setVisibility(View.VISIBLE);
+            PicassoInstance.with()
+                    .load(Img.url)
+                    .tag(Constants.PICASSO_TAG)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.additional);
+        }
     }
 
     private int GetIconResByType(String IconType) {
@@ -326,10 +346,13 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         ImageView avatar;
         TextView name;
         TextView description;
+        TextView footer;
         TextView time;
         ImageView small;
         View mHeaderRoot;
         TextView mHeaderTitle;
+        ImageView additional;
+        View additional_root;
 
         public Holder(View itemView) {
             super(itemView);
@@ -339,10 +362,14 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             name.setMovementMethod(LinkMovementMethod.getInstance());
             description = itemView.findViewById(R.id.item_additional_info);
             description.setMovementMethod(LinkMovementMethod.getInstance());
+            footer = itemView.findViewById(R.id.item_friend_footer);
+            footer.setMovementMethod(LinkMovementMethod.getInstance());
             time = itemView.findViewById(R.id.item_friend_time);
             small = itemView.findViewById(R.id.item_icon);
             mHeaderRoot = itemView.findViewById(R.id.header_root);
             mHeaderTitle = itemView.findViewById(R.id.header_title);
+            additional = itemView.findViewById(R.id.additional_image);
+            additional_root = itemView.findViewById(R.id.additional_image_root);
         }
     }
 }
