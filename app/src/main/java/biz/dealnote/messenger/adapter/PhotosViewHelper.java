@@ -47,8 +47,8 @@ public class PhotosViewHelper {
 
     @SuppressLint("SetTextI18n")
     public void displayVideos(final List<PostImage> videos, final ViewGroup container) {
-        container.setVisibility(videos.size() == 0 ? View.GONE : View.VISIBLE);
-        if (videos.size() == 0) {
+        container.setVisibility(videos.isEmpty() ? View.GONE : View.VISIBLE);
+        if (videos.isEmpty()) {
             return;
         }
         int i = videos.size() - container.getChildCount();
@@ -101,9 +101,9 @@ public class PhotosViewHelper {
     }
 
     public void displayPhotos(final List<PostImage> photos, final ViewGroup container) {
-        container.setVisibility(photos.size() == 0 ? View.GONE : View.VISIBLE);
+        container.setVisibility(photos.isEmpty() ? View.GONE : View.VISIBLE);
 
-        if (photos.size() == 0) {
+        if (photos.isEmpty()) {
             return;
         }
 

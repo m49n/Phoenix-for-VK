@@ -63,11 +63,6 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }

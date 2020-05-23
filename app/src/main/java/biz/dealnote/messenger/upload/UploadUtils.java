@@ -40,10 +40,9 @@ public final class UploadUtils {
         Bitmap bitmap = BitmapFactory.decodeStream(originalStream);
         File tempFile = new File(context.getExternalCacheDir() + File.separator + "scale.jpg");
 
-        FileOutputStream ostream = null;
         Bitmap target = null;
 
-        try {
+        try (FileOutputStream ostream = new FileOutputStream(tempFile)){
             if (tempFile.exists()) {
                 if (!tempFile.delete()) {
                     throw new IOException("Unable to delete old image file");
@@ -54,14 +53,12 @@ public final class UploadUtils {
                 throw new IOException("Unable to create new file");
             }
 
-            ostream = new FileOutputStream(tempFile);
             target = scaleDown(bitmap, size, true);
             target.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
             return new FileInputStream(tempFile);
         } finally {
             IOUtils.recycleBitmapQuietly(bitmap);
             IOUtils.recycleBitmapQuietly(target);
-            IOUtils.closeStreamQuietly(ostream);
             IOUtils.closeStreamQuietly(originalStream);
         }
     }

@@ -156,6 +156,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
             proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
             if (proxyConfig.isAuthEnabled()) {
                 Authenticator authenticator = new Authenticator() {
+                    @Override
                     public PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
                     }

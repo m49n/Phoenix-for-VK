@@ -345,7 +345,7 @@ public class EmojiconsPopup {
         void onKeyboardClose();
     }
 
-    private final static class Holder extends RecyclerView.ViewHolder {
+    private static final class Holder extends RecyclerView.ViewHolder {
         Holder(View rootView) {
             super(rootView);
         }

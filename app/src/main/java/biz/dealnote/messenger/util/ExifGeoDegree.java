@@ -61,7 +61,7 @@ public class ExifGeoDegree {
 
     @Override
     public String toString() {
-        return (String.valueOf(Latitude) + ", " + String.valueOf(Longitude));
+        return (Latitude + ", " + Longitude);
     }
 
     public int getLatitudeE6() {

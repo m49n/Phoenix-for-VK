@@ -28,7 +28,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Callback, GroupLongpoll.Callback {
 
-    private final static String TAG = AndroidLongpollManager.class.getSimpleName();
+    private static final String TAG = AndroidLongpollManager.class.getSimpleName();
     private static final Scheduler MONO_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(1));
     private final SparseArray<LongpollEntry> map;
     private final INetworker networker;
@@ -172,8 +172,8 @@ public class AndroidLongpollManager implements ILongpollManager, UserLongpoll.Ca
 
     private static final class SocketHandler extends android.os.Handler {
 
-        final static int PRE_DESTROY = 2;
-        final static int DESTROY = 3;
+        static final int PRE_DESTROY = 2;
+        static final int DESTROY = 3;
 
         final WeakReference<LongpollEntry> reference;
 

@@ -7,7 +7,7 @@ public class AnswerVKOfficialList {
     public List<AnswerField> fields;
 
     public String getAvatar(int id) {
-        if (fields.size() <= 0)
+        if (fields.isEmpty())
             return null;
         for (AnswerField i : fields) {
             if (i.id == id)

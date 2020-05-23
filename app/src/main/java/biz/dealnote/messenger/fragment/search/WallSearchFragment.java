@@ -55,8 +55,7 @@ public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, I
 
     @Override
     RecyclerView.Adapter createAdapter(List<Post> data) {
-        WallAdapter adapter = new WallAdapter(requireActivity(), data, this, this);
-        return adapter;
+        return new WallAdapter(requireActivity(), data, this, this);
     }
 
     @Override

@@ -422,27 +422,27 @@ public class VKApiUser extends VKApiOwner {
         /**
          * Field name for {@link #online} param.
          */
-        public final static String ONLINE = "online";
+        public static final String ONLINE = "online";
 
         /**
          * Field name for {@link #online_mobile} param.
          */
-        public final static String ONLINE_MOBILE = "online_mobile";
+        public static final String ONLINE_MOBILE = "online_mobile";
 
         /**
          * Field name for {@link #photo_50} param.
          */
-        public final static String PHOTO_50 = "photo_50";
+        public static final String PHOTO_50 = "photo_50";
 
         /**
          * Field name for {@link #photo_100} param.
          */
-        public final static String PHOTO_100 = "photo_100";
+        public static final String PHOTO_100 = "photo_100";
 
         /**
          * Field name for {@link #photo_200} param.
          */
-        public final static String PHOTO_200 = "photo_200";
+        public static final String PHOTO_200 = "photo_200";
 
         /**
          * Filed last_seen from VK fields set
@@ -660,7 +660,7 @@ public class VKApiUser extends VKApiOwner {
         /**
          * Count was not in server response.
          */
-        public final static int NO_COUNTER = -1;
+        public static final int NO_COUNTER = -1;
 
         public int albums = NO_COUNTER;
         public int videos = NO_COUNTER;

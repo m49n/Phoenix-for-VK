@@ -29,7 +29,7 @@ public class NewsfeedCommentsResponse {
     @SerializedName("next_from")
     public String nextFrom;
 
-    public static abstract class Dto {
+    public abstract static class Dto {
 
     }
 

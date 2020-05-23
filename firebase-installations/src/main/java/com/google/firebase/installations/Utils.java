@@ -35,9 +35,7 @@ class Utils {
       return true;
     }
     if ((entry.getTokenCreationEpochInSecs() + entry.getExpiresInSecs())
-        < (currentTimeInSecs() + AUTH_TOKEN_EXPIRATION_BUFFER_IN_SECS)) {
-      return true;
-    }
+        < (currentTimeInSecs() + AUTH_TOKEN_EXPIRATION_BUFFER_IN_SECS)) return true;
     return false;
   }
 

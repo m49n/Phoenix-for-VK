@@ -65,6 +65,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
             if (proxyConfig.isAuthEnabled()) {
                 Authenticator authenticator = new Authenticator() {
+                    @Override
                     public PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
                     }

@@ -166,11 +166,12 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         List<Message> selected = getSelected(getData(), true);
         if (safeIsEmpty(selected)) return;
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         boolean firstTime = true;
         for (Message message : selected) {
             String body = TextUtils.isEmpty(message.getDecryptedBody()) ? message.getBody() : message.getDecryptedBody();
-            result = result + (!firstTime ? "\n" : "") + body;
+            result.append(!firstTime ? "\n" : "");
+            result.append(body);
             firstTime = false;
         }
 

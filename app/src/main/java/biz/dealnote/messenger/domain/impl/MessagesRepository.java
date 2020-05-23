@@ -283,7 +283,7 @@ public class MessagesRepository implements IMessagesRepository {
 
         compositeDisposable.add(uploadManager.get(accountId, upload.getDestination())
                 .flatMap(uploads -> {
-                    if (uploads.size() > 0) {
+                    if (!uploads.isEmpty()) {
                         return Single.just(false);
                     }
 
@@ -1151,7 +1151,7 @@ public class MessagesRepository implements IMessagesRepository {
             invalidatePeers.add(invalidatePeerLastMessage(pair.accountId, pair.peerId));
         }
 
-        if (invalidatePeers.size() > 0) {
+        if (!invalidatePeers.isEmpty()) {
             afterApply = Completable.merge(invalidatePeers);
         }
 

@@ -59,7 +59,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     public void LoadAudiosTool() {
-        if (audios.size() <= 0) {
+        if (audios.isEmpty()) {
             if (!iSSelectMode && isAlbum == 0 && option_menu_id == -1 && MusicUtils.Audios.containsKey(ownerId)) {
                 audios.addAll(Objects.requireNonNull(MusicUtils.Audios.get(ownerId)));
                 actualReceived = true;
@@ -193,7 +193,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
                 files.add(file);
             }
         }
-        if (files.size() <= 0)
+        if (files.isEmpty())
             return new ArrayList<>();
         Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 
@@ -289,18 +289,16 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         final int accountId = super.getAccountId();
         audioListDisposable.add(audioInteractor.deletePlaylist(accountId, album.id, album.owner_id)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
-                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());
-                }));
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable ->
+                        getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage())));
     }
 
     public void onAdd(VKApiAudioPlaylist album) {
         final int accountId = super.getAccountId();
         audioListDisposable.add(audioInteractor.followPlaylist(accountId, album.id, album.owner_id, album.access_key)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable -> {
-                    getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage());
-                }));
+                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable ->
+                        getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage())));
     }
 
     public void fireScrollToEnd() {

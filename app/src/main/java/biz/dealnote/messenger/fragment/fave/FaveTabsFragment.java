@@ -142,9 +142,8 @@ public class FaveTabsFragment extends BaseFragment {
         Adapter adapter = new Adapter(tabs, this);
         viewPager.setAdapter(adapter);
 
-        new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
-            tab.setText(tabs.get(position).getTabTitle());
-        }).attach();
+        new TabLayoutMediator(view.findViewById(R.id.tablayout), viewPager, (tab, position) ->
+                tab.setText(tabs.get(position).getTabTitle())).attach();
     }
 
     private interface ITab {

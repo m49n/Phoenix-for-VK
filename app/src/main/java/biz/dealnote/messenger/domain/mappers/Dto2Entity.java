@@ -428,7 +428,7 @@ public class Dto2Entity {
 
         try {
             if (nonEmpty(user.photo_id)) {
-                int dividerIndex = user.photo_id.indexOf("_");
+                int dividerIndex = user.photo_id.indexOf('_');
                 if (dividerIndex != -1) {
                     int photoId = Integer.parseInt(user.photo_id.substring(dividerIndex + 1));
                     dbo.setPhotoId(new IdPairEntity(photoId, user.id));

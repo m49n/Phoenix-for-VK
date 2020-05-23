@@ -91,9 +91,8 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             }
         });
 
-        new TabLayoutMediator(root.findViewById(R.id.tablayout), viewPager, (tab, position) -> {
-            tab.setText(mPagerAdapter.getPageTitle(position));
-        }).attach();
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), viewPager, (tab, position) ->
+                tab.setText(mPagerAdapter.getPageTitle(position))).attach();
         return root;
     }
 

@@ -60,7 +60,7 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
                 files.add(file);
             }
         }
-        if (files.size() <= 0)
+        if (files.isEmpty())
             return new ArrayList<>();
         Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 

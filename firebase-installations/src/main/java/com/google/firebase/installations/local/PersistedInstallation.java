@@ -98,8 +98,7 @@ public class PersistedInstallation {
     long expiresIn = json.optLong(EXPIRES_IN_SECONDS_KEY, 0);
     String fisError = json.optString(FIS_ERROR_KEY, null);
 
-    PersistedInstallationEntry prefs =
-        PersistedInstallationEntry.builder()
+    return PersistedInstallationEntry.builder()
             .setFirebaseInstallationId(fid)
             .setRegistrationStatus(RegistrationStatus.values()[status])
             .setAuthToken(authToken)
@@ -108,7 +107,6 @@ public class PersistedInstallation {
             .setExpiresInSecs(expiresIn)
             .setFisError(fisError)
             .build();
-    return prefs;
   }
 
   private JSONObject readJSONFromFile() {
@@ -136,7 +134,7 @@ public class PersistedInstallation {
   @NonNull
   public PersistedInstallationEntry insertOrUpdatePersistedInstallationEntry(
       @NonNull PersistedInstallationEntry prefs) {
-    try {
+    try (FileOutputStream fos = new FileOutputStream(tmpFile)) {
       // Write the prefs into a JSON object
       JSONObject json = new JSONObject();
       json.put(FIREBASE_INSTALLATION_ID_KEY, prefs.getFirebaseInstallationId());
@@ -150,10 +148,8 @@ public class PersistedInstallation {
           File.createTempFile(
               SETTINGS_FILE_NAME_PREFIX, "tmp", firebaseApp.getApplicationContext().getFilesDir());
 
-      // Werialize the JSON object into a string and write the bytes to a temp file
-      FileOutputStream fos = new FileOutputStream(tmpFile);
+      // Serialize the JSON object into a string and write the bytes to a temp file
       fos.write(json.toString().getBytes("UTF-8"));
-      fos.close();
 
       // Snapshot the temp file to the actual file
       if (!tmpFile.renameTo(dataFile)) {

@@ -327,16 +327,6 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
         notifyDataSetChanged();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-    }
-
     public interface ClickListener {
         void openOwnerWall(int owner_id);
     }

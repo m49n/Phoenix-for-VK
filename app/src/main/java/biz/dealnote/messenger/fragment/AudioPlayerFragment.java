@@ -127,27 +127,13 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     /**
      * Used to scan backwards through the track
      */
-    private final RepeatingImageButton.RepeatListener mRewindListener = new RepeatingImageButton.RepeatListener() {
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onRepeat(final View v, final long howlong, final int repcnt) {
-            scanBackward(repcnt, howlong);
-        }
-    };
+    private final RepeatingImageButton.RepeatListener mRewindListener = ((v, howlong, repcnt) ->
+            scanBackward(repcnt, howlong));
     /**
      * Used to scan ahead through the track
      */
-    private final RepeatingImageButton.RepeatListener mFastForwardListener = new RepeatingImageButton.RepeatListener() {
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onRepeat(final View v, final long howlong, final int repcnt) {
-            scanForward(repcnt, howlong);
-        }
-    };
+    private final RepeatingImageButton.RepeatListener mFastForwardListener = ((v, howlong, repcnt) ->
+            scanForward(repcnt, howlong));
     private IAudioInteractor mAudioInteractor;
 
     private int mAccountId;

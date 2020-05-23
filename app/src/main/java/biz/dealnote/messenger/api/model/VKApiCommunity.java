@@ -9,94 +9,94 @@ import java.util.List;
  */
 public class VKApiCommunity extends VKApiOwner {
 
-    public final static String TYPE_GROUP = "group";
-    public final static String TYPE_PAGE = "page";
-    public final static String TYPE_EVENT = "event";
+    public static final String TYPE_GROUP = "group";
+    public static final String TYPE_PAGE = "page";
+    public static final String TYPE_EVENT = "event";
 
-    public final static String PHOTO_50 = "http://vk.com/images/community_50.gif";
-    public final static String PHOTO_100 = "http://vk.com/images/community_100.gif";
-    public final static String IS_FAVORITE = "is_favorite";
-    public final static String MAIN_ALBUM_ID = "main_album_id";
-    public final static String CAN_UPLOAD_DOC = "can_upload_doc";
-    public final static String CAN_CTARE_TOPIC = "can_upload_video";
-    public final static String CAN_UPLOAD_VIDEO = "can_create_topic";
-    public final static String BAN_INFO = "ban_info";
+    public static final String PHOTO_50 = "http://vk.com/images/community_50.gif";
+    public static final String PHOTO_100 = "http://vk.com/images/community_100.gif";
+    public static final String IS_FAVORITE = "is_favorite";
+    public static final String MAIN_ALBUM_ID = "main_album_id";
+    public static final String CAN_UPLOAD_DOC = "can_upload_doc";
+    public static final String CAN_CTARE_TOPIC = "can_upload_video";
+    public static final String CAN_UPLOAD_VIDEO = "can_create_topic";
+    public static final String BAN_INFO = "ban_info";
     /**
      * Filed city from VK fields set
      */
-    public final static String CITY = "city";
+    public static final String CITY = "city";
     /**
      * Filed country from VK fields set
      */
-    public final static String COUNTRY = "country";
+    public static final String COUNTRY = "country";
     /**
      * Filed place from VK fields set
      */
-    public final static String PLACE = "place";
+    public static final String PLACE = "place";
     /**
      * Filed description from VK fields set
      */
-    public final static String DESCRIPTION = "description";
+    public static final String DESCRIPTION = "description";
     /**
      * Filed wiki_page from VK fields set
      */
-    public final static String WIKI_PAGE = "wiki_page";
+    public static final String WIKI_PAGE = "wiki_page";
     /**
      * Filed members_count from VK fields set
      */
-    public final static String MEMBERS_COUNT = "members_count";
+    public static final String MEMBERS_COUNT = "members_count";
     /**
      * Filed counters from VK fields set
      */
-    public final static String COUNTERS = "counters";
+    public static final String COUNTERS = "counters";
     /**
      * Filed start_date from VK fields set
      */
-    public final static String START_DATE = "start_date";
+    public static final String START_DATE = "start_date";
     /**
      * Filed end_date from VK fields set
      */
-    public final static String FINISH_DATE = "finish_date";
+    public static final String FINISH_DATE = "finish_date";
     /**
      * Filed can_post from VK fields set
      */
-    public final static String CAN_POST = "can_post";
+    public static final String CAN_POST = "can_post";
     /**
      * Filed can_see_all_posts from VK fields set
      */
-    public final static String CAN_SEE_ALL_POSTS = "can_see_all_posts";
+    public static final String CAN_SEE_ALL_POSTS = "can_see_all_posts";
     /**
      * Filed status from VK fields set
      */
-    public final static String STATUS = "status";
+    public static final String STATUS = "status";
     /**
      * Filed contacts from VK fields set
      */
-    public final static String CONTACTS = "contacts";
+    public static final String CONTACTS = "contacts";
     /**
      * Filed links from VK fields set
      */
-    public final static String LINKS = "links";
+    public static final String LINKS = "links";
     /**
      * Filed fixed_post from VK fields set
      */
-    public final static String FIXED_POST = "fixed_post";
+    public static final String FIXED_POST = "fixed_post";
     /**
      * Filed verified from VK fields set
      */
-    public final static String VERIFIED = "verified";
+    public static final String VERIFIED = "verified";
     /**
      * Filed blacklisted from VK fields set
      */
-    public final static String BLACKLISTED = "blacklisted";
+    public static final String BLACKLISTED = "blacklisted";
     /**
      * Filed site from VK fields set
      */
-    public final static String SITE = "site";
+    public static final String SITE = "site";
     /**
      * Filed activity from VK fields set
      */
-    public final static String ACTIVITY = "activity";
+    public static final String ACTIVITY = "activity";
     /**
      * Community name
      */
@@ -307,12 +307,12 @@ public class VKApiCommunity extends VKApiOwner {
      * VkApiPrivacy status of the group.
      */
     public static class MemberStatus {
-        public final static int IS_NOT_MEMBER = 0;
-        public final static int IS_MEMBER = 1;
-        public final static int NOT_SURE = 2;
-        public final static int DECLINED_INVITATION = 3;
-        public final static int SENT_REQUEST = 4;
-        public final static int INVITED = 5;
+        public static final int IS_NOT_MEMBER = 0;
+        public static final int IS_MEMBER = 1;
+        public static final int NOT_SURE = 2;
+        public static final int DECLINED_INVITATION = 3;
+        public static final int SENT_REQUEST = 4;
+        public static final int INVITED = 5;
 
         private MemberStatus() {
         }
@@ -322,9 +322,9 @@ public class VKApiCommunity extends VKApiOwner {
      * Access level to manage community.
      */
     public static class AdminLevel {
-        public final static int MODERATOR = 1;
-        public final static int EDITOR = 2;
-        public final static int ADMIN = 3;
+        public static final int MODERATOR = 1;
+        public static final int EDITOR = 2;
+        public static final int ADMIN = 3;
 
         private AdminLevel() {
         }
@@ -334,9 +334,9 @@ public class VKApiCommunity extends VKApiOwner {
      * VkApiPrivacy status of the group.
      */
     public static class Status {
-        public final static int OPEN = 0;
-        public final static int CLOSED = 1;
-        public final static int PRIVATE = 2;
+        public static final int OPEN = 0;
+        public static final int CLOSED = 1;
+        public static final int PRIVATE = 2;
 
         private Status() {
         }
@@ -346,9 +346,9 @@ public class VKApiCommunity extends VKApiOwner {
      * Types of communities.
      */
     public static class Type {
-        public final static int GROUP = 0;
-        public final static int PAGE = 1;
-        public final static int EVENT = 2;
+        public static final int GROUP = 0;
+        public static final int PAGE = 1;
+        public static final int EVENT = 2;
 
         private Type() {
         }
@@ -359,7 +359,7 @@ public class VKApiCommunity extends VKApiOwner {
         /**
          * Значение в том случае, если счетчик не был явно указан.
          */
-        public final static int NO_COUNTER = -1;
+        public static final int NO_COUNTER = -1;
 
         public int photos = NO_COUNTER;
         public int albums = NO_COUNTER;

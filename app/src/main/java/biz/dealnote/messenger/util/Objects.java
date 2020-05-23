@@ -23,9 +23,7 @@ public class Objects {
     public static boolean isNullOrEmptyString(@Nullable String o) {
         if (o == null)
             return true;
-        if (o.length() <= 0)
-            return true;
-        return false;
+        return o.length() <= 0;
     }
 
     /**

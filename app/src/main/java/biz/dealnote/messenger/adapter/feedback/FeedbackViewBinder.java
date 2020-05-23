@@ -1189,7 +1189,7 @@ public class FeedbackViewBinder {
      * @param imageView вьюв
      */
     private void showFirstUserAvatarOnImageView(List<Owner> owners, ImageView imageView) {
-        if (owners == null || owners.size() == 0 || TextUtils.isEmpty(owners.get(0).getMaxSquareAvatar())) {
+        if (owners == null || owners.isEmpty() || TextUtils.isEmpty(owners.get(0).getMaxSquareAvatar())) {
             PicassoInstance.with()
                     .load(R.drawable.ic_avatar_unknown)
                     .tag(Constants.PICASSO_TAG)

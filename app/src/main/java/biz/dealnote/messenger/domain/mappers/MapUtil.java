@@ -43,7 +43,7 @@ public class MapUtil {
     }
 
     public static <O, R> List<R> mapAll(@Nullable Collection<O> orig, @NonNull MapF<O, R> function, boolean mutable) {
-        if (orig != null && orig.size() > 0) {
+        if (orig != null && !orig.isEmpty()) {
             if (mutable || orig.size() > 1) {
                 List<R> list = new ArrayList<>(orig.size());
                 for (O o : orig) {

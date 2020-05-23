@@ -115,7 +115,7 @@ public class TitleExtractor {
         private ContentType(String headerValue) {
             if (headerValue == null)
                 throw new IllegalArgumentException("ContentType must be constructed with a not-null headerValue");
-            int n = headerValue.indexOf(";");
+            int n = headerValue.indexOf(';');
             if (n != -1) {
                 contentType = headerValue.substring(0, n);
                 Matcher matcher = CHARSET_HEADER.matcher(headerValue);

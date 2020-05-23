@@ -30,11 +30,6 @@ public class FileManagerSelectableSource extends AbsSelectableSource implements 
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }

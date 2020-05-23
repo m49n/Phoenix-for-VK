@@ -470,7 +470,7 @@ public class OwnersRepository implements IOwnersRepository {
         if (ownerId > 0) {
             return getUsers(accountId, singletonList(ownerId), mode)
                     .map(users -> {
-                        if (users.size() == 0) {
+                        if (users.isEmpty()) {
                             throw new NotFoundException();
                         }
                         return users.get(0);
@@ -478,7 +478,7 @@ public class OwnersRepository implements IOwnersRepository {
         } else {
             return getCommunities(accountId, singletonList(-ownerId), mode)
                     .map(communities -> {
-                        if (communities.size() == 0) {
+                        if (communities.isEmpty()) {
                             throw new NotFoundException();
                         }
                         return communities.get(0);

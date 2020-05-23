@@ -30,11 +30,6 @@ public final class NewsFeedCriteria extends BaseSearchCriteria implements Parcel
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }

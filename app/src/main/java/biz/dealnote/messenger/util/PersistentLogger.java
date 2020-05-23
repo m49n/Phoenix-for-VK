@@ -33,16 +33,10 @@ public class PersistentLogger {
 
     private static Single<String> getStackTrace(final Throwable throwable) {
         return Single.fromCallable(() -> {
-            StringWriter sw = null;
-            PrintWriter pw = null;
-            try {
-                sw = new StringWriter();
-                pw = new PrintWriter(sw);
+            try (StringWriter sw = new StringWriter();
+                 PrintWriter pw = new PrintWriter(sw)) {
                 throwable.printStackTrace(pw);
                 return sw.toString();
-            } finally {
-                safelyClose(pw);
-                safelyClose(sw);
             }
         });
     }
