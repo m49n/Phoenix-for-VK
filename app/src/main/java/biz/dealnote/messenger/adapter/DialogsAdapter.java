@@ -145,7 +145,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(dialog.isLastMessageOut() ? mContext.getString(R.string.dialog_me) : dialog.getSenderShortName(mContext));
             spannable.setSpan(mForegroundColorSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            lastMessage = spannable.append(" - ").append(lastMessage);
+            lastMessage = spannable.append(": ").append(lastMessage);
         }
 
         holder.mDialogMessage.setText(lastMessage);
