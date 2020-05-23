@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toast_card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:alpha="0.88"
-    app:cardBackgroundColor="#F44336"
+    android:alpha="0.95"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
     app:contentPaddingBottom="8dp"
@@ -19,30 +20,19 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/icon_toast_error"
+            android:id="@+id/toast_image_view"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="8dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_launcher_round" />
+            android:scaleType="fitCenter" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text"
-            android:layout_width="0dp"
+            android:id="@+id/toast_text_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="15sp" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/toast_error"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_error_toast_vector" />
 
     </LinearLayout>
 

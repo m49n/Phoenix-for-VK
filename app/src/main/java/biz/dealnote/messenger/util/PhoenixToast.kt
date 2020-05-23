@@ -2,13 +2,20 @@ package biz.dealnote.messenger.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.cardview.widget.CardView
+import androidx.core.graphics.ColorUtils
 import biz.dealnote.messenger.R
+import biz.dealnote.messenger.settings.CurrentTheme
+
 
 class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
     private val M_context: Context?
@@ -26,14 +33,8 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
 
     fun showToast(message: String?) {
         if (M_context == null) return
-        val t = AnimatedToast(M_context)
-        t.duration = duration
-        if (image == null)
-            t.set_image(R.mipmap.ic_launcher_round)
-        else
-            t.set_image(image)
-        t.setText(message!!)
-        t.setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, 0)
+        val t = getToast(M_context, message, CurrentTheme.getColorToast(M_context))
+        t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 15)
         t.show()
     }
 
@@ -44,14 +45,8 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
 
     fun showToastBottom(message: String?) {
         if (M_context == null) return
-        val t = AnimatedToast(M_context)
-        t.duration = duration
-        if (image == null)
-            t.set_image(R.mipmap.ic_launcher_round)
-        else
-            t.set_image(image)
-        t.setText(message!!)
-        t.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+        val t = getToast(M_context, message, CurrentTheme.getColorToast(M_context))
+        t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 0, 0)
         t.show()
     }
 
@@ -62,17 +57,9 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
 
     fun showToastInfo(message: String?) {
         if (M_context == null) return
-        val view = View.inflate(M_context, R.layout.phoenix_toast_info, null)
-        val subtitle = view.findViewById<TextView>(R.id.subtitle)
-        val imagev = view.findViewById<ImageView>(R.id.icon_toast)
-        if (image != null)
-            imagev.setImageBitmap(image)
-        subtitle.text = message
-        val toast = Toast(M_context)
-        toast.duration = duration
-        toast.view = view
-        toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, 0)
-        toast.show()
+        val t = getToast(M_context, message, Color.parseColor("#3F51B5"))
+        t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 15)
+        t.show()
     }
 
     fun showToastInfo(@StringRes message: Int, vararg params: Any?) {
@@ -91,7 +78,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         val toast = Toast(M_context)
         toast.duration = duration
         toast.view = view
-        toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, 0)
+        toast.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 0)
         toast.show()
     }
 
@@ -105,6 +92,28 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
         fun CreatePhoenixToast(context: Context): PhoenixToast {
             return PhoenixToast(context, null)
         }
+    }
+
+    private fun getToast(context: Context, message: String?, bgColor: Int): Toast {
+        val toast = Toast(context)
+        val view: View = View.inflate(context, R.layout.phoenix_toast_base, null)
+        val cardView: CardView = view.findViewById(R.id.toast_card_view)
+        cardView.setCardBackgroundColor(bgColor)
+        val textView: AppCompatTextView = view.findViewById(R.id.toast_text_view)
+        if (message != null) textView.text = message
+        if (isColorDark(bgColor)) textView.setTextColor(Color.WHITE)
+        toast.view = view
+        val iconIV: AppCompatImageView = view.findViewById(R.id.toast_image_view)
+        if (image != null)
+            iconIV.setImageBitmap(image)
+        else
+            iconIV.setImageResource(R.mipmap.ic_launcher_round)
+        toast.duration = duration
+        return toast
+    }
+
+    private fun isColorDark(color: Int): Boolean {
+        return ColorUtils.calculateLuminance(color) < 0.5
     }
 
     init {

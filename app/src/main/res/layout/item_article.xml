@@ -27,7 +27,7 @@
                 app:aspectRatioH="9"
                 app:aspectRatioW="16"
                 app:dominantMeasurement="width"
-                app:tint="#48000000"
+                app:tint="#5E000000"
                 app:tintMode="src_atop" />
 
             <LinearLayout

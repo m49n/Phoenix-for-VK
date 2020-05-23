@@ -397,7 +397,7 @@ public class Utils {
 
         Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
         toast.setView(view);
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15);
         toast.show();
     }
 
@@ -407,7 +407,7 @@ public class Utils {
 
         Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
         toast.setView(view);
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15);
         toast.show();
     }
 

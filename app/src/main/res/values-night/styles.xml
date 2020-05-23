@@ -31,7 +31,7 @@
         <item name="dialogs_unread_color">#20b0b0b0</item>
         <item name="navi_menu_color">#00000000</item>
         <item name="navi_menu_selector">@drawable/list_selector_dark</item>
-        <item name="toast_background">#EEFFFFFF</item>
+        <item name="toast_background">#FFFFFF</item>
 
         <item name="messages_background_color">#151515</item>
         <item name="my_messages_bubble_color">#D4151515</item>

@@ -257,6 +257,13 @@
             android:title="@string/music_enable_toolbar"
             app:iconSpaceReserved="false" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_profile_in_additional_page"
+            android:summary="@string/show_profile_in_additional_page"
+            android:title="@string/show_profile_in_additional_page"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -346,13 +353,6 @@
             android:key="drawer_categories"
             android:summary="@string/drawer_categories_summary"
             android:title="@string/drawer_categories_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="show_profile_in_additional_page"
-            android:summary="@string/show_profile_in_additional_page"
-            android:title="@string/show_profile_in_additional_page"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference

@@ -89,6 +89,10 @@ public class CurrentTheme {
         return getColorFromAttrs(R.attr.colorPrimary, context, "#000000");
     }
 
+    public static int getColorToast(Context context) {
+        return getColorFromAttrs(R.attr.toast_background, context, "#FFFFFF");
+    }
+
     public static int getColorOnPrimary(Context context) {
         return getColorFromAttrs(R.attr.colorOnPrimary, context, "#000000");
     }

@@ -30,6 +30,7 @@ import com.squareup.picasso.Transformation;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
@@ -590,6 +591,11 @@ public class AttachmentsViewBinder {
                 if (photo_url != null) {
                     ivPhoto.setVisibility(View.VISIBLE);
                     ViewUtils.displayAvatar(ivPhoto, null, photo_url, Constants.PICASSO_TAG);
+                    ivPhoto.setOnLongClickListener(v -> {
+                        ArrayList<Photo> temp = new ArrayList<>(Collections.singletonList(article.getPhoto()));
+                        mAttachmentsActionCallback.onPhotosOpen(temp, 0);
+                        return true;
+                    });
                 } else
                     ivPhoto.setVisibility(View.GONE);
 
