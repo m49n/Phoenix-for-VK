@@ -870,7 +870,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             }
 
             this.mLastBackPressedTime = System.currentTimeMillis();
-            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).setAnchorView(mBottomNavigationContainer).show();
         } else {
             super.onBackPressed();
         }
