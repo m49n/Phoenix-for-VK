@@ -52,8 +52,7 @@ public final class AESCrypt {
 
         log("SHA-256 key ", key);
 
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        return secretKeySpec;
+        return new SecretKeySpec(key, "AES");
     }
 
     /**

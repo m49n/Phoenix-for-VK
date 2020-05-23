@@ -88,7 +88,7 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
 
     public void fireFabClick() {
         ArrayList<LocalVideo> localVideos = Utils.getSelected(mLocalVideos);
-        if (localVideos.size() > 0) {
+        if (!localVideos.isEmpty()) {
             getView().returnResultToParent(localVideos);
         } else {
             safeShowError(getView(), R.string.select_attachments);
@@ -103,7 +103,6 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
             ArrayList<LocalVideo> single = new ArrayList<>(1);
             single.add(video);
             getView().returnResultToParent(single);
-            return;
         }
     }
 

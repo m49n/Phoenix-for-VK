@@ -70,11 +70,6 @@ public class GroupSearchCriteria extends BaseSearchCriteria implements Parcelabl
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }

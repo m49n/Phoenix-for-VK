@@ -95,20 +95,10 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
             getView().getPhoenixToast().showToastError(R.string.biometric_not_support);
     }
 
-    @Override
-    public void onGuiResumed() {
-        super.onGuiResumed();
-    }
-
     private void onFingerprintRecognizeSuccess() {
         if (isGuiReady()) {
             getView().sendSuccessAndClose();
         }
-    }
-
-    @Override
-    public void onGuiPaused() {
-        super.onGuiPaused();
     }
 
     @OnGuiCreated
@@ -259,20 +249,11 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
     private BiometricPrompt.AuthenticationCallback getAuthenticationCallback() {
         return new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-            }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 onFingerprintRecognizeSuccess();
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
             }
         };
     }

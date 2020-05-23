@@ -87,11 +87,9 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         this.ownerId = ownerId;
         this.editingType = editingType;
 
-        if (isNull(savedInstanceState)) {
-            if (nonNull(bundle)) {
-                for (AbsModel i : bundle) {
-                    getData().add(new AttachmenEntry(false, i));
-                }
+        if (isNull(savedInstanceState) && nonNull(bundle)) {
+            for (AbsModel i : bundle) {
+                getData().add(new AttachmenEntry(false, i));
             }
         }
 
@@ -178,14 +176,8 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         if (isGuiReady()) {
             boolean visible = false;
 
-            if (isGroup()) {
-                if (!isEditorOrHigher()) {
-                    visible = true;
-                } else if (!fromGroup.get()) {
-                    visible = true;
-                } else if (addSignature.get()) {
-                    visible = true;
-                }
+            if (isGroup() && !isEditorOrHigher() || !fromGroup.get() || addSignature.get()) {
+                visible = true;
             }
 
             if (isCommunity() && isEditorOrHigher()) {

@@ -23,6 +23,7 @@ import biz.dealnote.messenger.Constants;
 public class FileUtil {
 
     private static DateFormat PHOTO_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+    private static Random Random = new Random();
 
     public static Uri getExportedUriForFile(Context context, File file) {
         return FileProvider.getUriForFile(context, Constants.FILE_PROVIDER_AUTHORITY, file);
@@ -38,11 +39,10 @@ public class FileUtil {
         }
 
         File targetFile = null;
-        Random random = new Random();
 
         boolean noExist = false;
         while (!noExist) {
-            int randomInt = random.nextInt(1000000);
+            int randomInt = Random.nextInt(1000000);
             String fileName = "Captured_" + timeStamp + "_" + randomInt + ".jpg";
             File file = new File(directory, fileName);
 

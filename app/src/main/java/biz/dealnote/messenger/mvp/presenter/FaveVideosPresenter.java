@@ -141,7 +141,6 @@ public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosV
         this.cacheDisposable.clear();
         this.netDisposable.clear();
         this.netLoadingNow = false;
-        this.netLoadingNow = false;
 
         requestAtLast();
     }

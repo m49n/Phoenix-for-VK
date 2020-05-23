@@ -29,15 +29,12 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
     private int[] mCreatedPin;
     private int[] mRepeatedPin;
     private Handler mHandler = new Handler();
-    private Runnable mOnFullyEnteredRunnable = new Runnable() {
-        @Override
-        public void run() {
+    private Runnable mOnFullyEnteredRunnable = () -> {
             if (mCurrentStep == STEP_CREATE) {
                 onCreatedPinFullyEntered();
             } else {
                 onRepeatedPinFullyEntered();
             }
-        }
     };
 
     public CreatePinPresenter(Bundle savedInstanceState) {

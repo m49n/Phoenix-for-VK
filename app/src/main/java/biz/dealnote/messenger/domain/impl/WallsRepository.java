@@ -247,9 +247,7 @@ public class WallsRepository implements IWallsRepository {
 
                     return ownersRepository
                             .findBaseOwnersDataAsBundle(accountId, ids.getAll(), IOwnersRepository.MODE_ANY)
-                            .map(owners -> {
-                                return Entity2Model.buildPostFromDbo(dbo, owners);
-                            });
+                            .map(owners -> Entity2Model.buildPostFromDbo(dbo, owners));
                 });
     }
 

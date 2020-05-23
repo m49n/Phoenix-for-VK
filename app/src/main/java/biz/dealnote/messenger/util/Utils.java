@@ -226,7 +226,7 @@ public class Utils {
     }
 
     public static boolean isEmpty(Collection<?> data) {
-        return data == null || data.size() == 0;
+        return data == null || data.isEmpty();
     }
 
     public static boolean isEmpty(Map<?, ?> data) {

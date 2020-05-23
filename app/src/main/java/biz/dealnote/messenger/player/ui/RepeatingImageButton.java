@@ -62,6 +62,7 @@ public class RepeatingImageButton extends AppCompatImageButton implements OnClic
                 break;
             case R.id.action_button_next:
                 MusicUtils.next();
+                break;
             default:
                 break;
         }

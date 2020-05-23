@@ -240,9 +240,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
                 Add.setVisibility(View.GONE);
             else {
                 Add.setVisibility(View.VISIBLE);
-                Add.setOnClickListener(v -> {
-                    getPresenter().doUpload();
-                });
+                Add.setOnClickListener(v -> getPresenter().doUpload());
             }
         }
 

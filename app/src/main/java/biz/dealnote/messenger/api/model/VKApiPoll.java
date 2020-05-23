@@ -112,7 +112,7 @@ public class VKApiPoll implements VKApiAttachment {
     /**
      * Represents answer for the poll
      */
-    public final static class Answer {
+    public static final class Answer {
 
         /**
          * ID of the answer for the question

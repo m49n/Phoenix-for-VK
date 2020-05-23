@@ -251,7 +251,7 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
             }
         }
 
-        GroupSettings settings = new GroupSettings()
+        return new GroupSettings()
                 .setTitle(dto.title)
                 .setDescription(dto.description)
                 .setAddress(dto.address)
@@ -264,7 +264,5 @@ public class GroupSettingsInteractor implements IGroupSettingsInteractor {
                 .setObsceneFilterEnabled(dto.obscene_filter)
                 .setObsceneStopwordsEnabled(dto.obscene_stopwords)
                 .setObsceneWords(Utils.join(dto.obscene_words, ",", orig -> orig));
-
-        return settings;
     }
 }

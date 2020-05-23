@@ -345,7 +345,7 @@ public class UploadManagerImpl implements IUploadManager {
                 }
             }
 
-            if (target.size() > 0) {
+            if (!target.isEmpty()) {
                 int[] ids = new int[target.size()];
                 for (int i = 0; i < target.size(); i++) {
                     ids[i] = target.get(i).getId();

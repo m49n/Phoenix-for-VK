@@ -50,7 +50,7 @@ public class AddMessageUpdate extends AbsLongpollEvent {
     }
 
     public boolean hasFwds() {
-        return fwds != null && fwds.size() > 0;
+        return fwds != null && !fwds.isEmpty();
     }
 
     public boolean isServiceMessage() {

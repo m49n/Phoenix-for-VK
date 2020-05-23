@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import biz.dealnote.messenger.db.column.GroupColumns;
 import biz.dealnote.messenger.db.column.UserColumns;
+import biz.dealnote.messenger.settings.ISettings;
 
 public class Constants {
     public static final boolean NEED_CHECK_UPDATE = true;
@@ -54,7 +55,7 @@ public class Constants {
                 return VKANDROID_USER_AGENT;
         }
         String Type = Injection.provideSettings().accounts().getType(Injection.provideSettings().accounts().getCurrent());
-        if ((Injection.provideSettings().accounts().getCurrent() != Injection.provideSettings().accounts().INVALID_ID && Type != null && Type.equals("kate")))
+        if (Injection.provideSettings().accounts().getCurrent() != ISettings.IAccountsSettings.INVALID_ID && Type != null && Type.equals("kate"))
             return KATE_USER_AGENT;
         return VKANDROID_USER_AGENT;
     }

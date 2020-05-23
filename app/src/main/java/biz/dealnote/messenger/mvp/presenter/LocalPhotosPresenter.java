@@ -116,7 +116,7 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
     public void fireFabClick() {
         ArrayList<LocalPhoto> localPhotos = Utils.getSelected(mLocalPhotos);
-        if (localPhotos.size() > 0) {
+        if (!localPhotos.isEmpty()) {
             getView().returnResultToParent(localPhotos);
         } else {
             safeShowError(getView(), R.string.select_attachments);

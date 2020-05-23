@@ -32,7 +32,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
  */
 public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
 
-    private final static int COUNT = 50;
+    private static final int COUNT = 50;
     private final List<Post> posts;
     private final IFaveInteractor faveInteractor;
     private final IWallsRepository wallInteractor;

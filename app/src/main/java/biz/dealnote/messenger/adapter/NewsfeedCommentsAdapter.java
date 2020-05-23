@@ -345,7 +345,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         }
     }
 
-    static abstract class AbsHolder extends RecyclerView.ViewHolder {
+    abstract static class AbsHolder extends RecyclerView.ViewHolder {
 
         View commentRoot;
 

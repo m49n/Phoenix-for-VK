@@ -223,7 +223,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                 .setNegativeButton(R.string.button_cancel, null)
                 .show();
 
-        return options.size() > 0;
+        return !options.isEmpty();
     }
 
     @Override

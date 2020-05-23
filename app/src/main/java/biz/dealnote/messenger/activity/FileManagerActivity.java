@@ -51,7 +51,7 @@ public class FileManagerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
-        if (fragment != null && fragment instanceof BackPressCallback) {
+        if (fragment instanceof BackPressCallback) {
             if (((BackPressCallback) fragment).onBackPressed()) {
                 super.onBackPressed();
             }

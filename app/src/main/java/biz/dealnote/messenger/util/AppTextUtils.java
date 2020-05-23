@@ -115,7 +115,7 @@ public class AppTextUtils {
     }
 
     public static String getDurationStringMS(int ms) {
-        return getDurationString((int) (ms / 1000));
+        return getDurationString(ms / 1000);
     }
 
     private static String twoDigitString(int number) {

@@ -76,8 +76,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
 
     public static long getFreeSpace(String path) {
         StatFs stat = new StatFs(path);
-        long availSize = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
-        return availSize;
+        return stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
     }
 
     public static String formatBytes(long bytes) {
@@ -242,7 +241,7 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
                 fileList.add(i, new FileItem(isDirectory, fList[i], details, drawableID, mod, file.getAbsolutePath(), canRead));
             }
 
-            if (fileList.size() == 0) {
+            if (fileList.isEmpty()) {
                 directoryShownIsEmpty = true;
             } else {
                 ArrayList<FileItem> dirsList = new ArrayList<>();
@@ -288,10 +287,9 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
     }
 
     private void updateCurrentDirectoryTextView() {
-        int i = 0;
         String curDirString = TextUtils.join("/", pathDirsList) + "/";
 
-        if (pathDirsList.size() == 0) {
+        if (pathDirsList.isEmpty()) {
             curDirString = "/";
         }
 

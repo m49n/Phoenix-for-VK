@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         try {
             if (file != null && file.exists()) {
                 String name = file.getName();
-                extension = name.substring(name.lastIndexOf(".") + 1);
+                extension = name.substring(name.lastIndexOf('.') + 1);
             }
         } catch (Exception e) {
             extension = "";
@@ -524,12 +524,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         Logger.d(TAG, "handleIntent, extras: " + extras + ", action: " + action);
 
-        if (extras != null) {
-            if (ActivityUtils.checkInputExist(this)) {
-                mCurrentFrontSection = AdditionalNavigationFragment.SECTION_ITEM_DIALOGS;
-                openNavigationPage(mCurrentFrontSection);
-                return true;
-            }
+        if (extras != null && ActivityUtils.checkInputExist(this)) {
+            mCurrentFrontSection = AdditionalNavigationFragment.SECTION_ITEM_DIALOGS;
+            openNavigationPage(mCurrentFrontSection);
+            return true;
         }
 
         if (ACTION_SEND_ATTACHMENTS.equals(action)) {
@@ -872,7 +870,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             }
 
             this.mLastBackPressedTime = System.currentTimeMillis();
-            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).setAnchorView(mBottomNavigationContainer).show();
         } else {
             super.onBackPressed();
         }
@@ -980,13 +978,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         if (Utils.hasOreo()) {
             Window w = getWindow();
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
             if (invertIcons) {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 w.getDecorView().setSystemUiVisibility(flags);
                 w.setNavigationBarColor(Color.WHITE);
             } else {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 w.getDecorView().setSystemUiVisibility(flags);
                 @ColorInt

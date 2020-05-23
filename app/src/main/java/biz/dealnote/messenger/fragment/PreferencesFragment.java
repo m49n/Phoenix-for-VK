@@ -136,10 +136,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         CheckBoxPreference autoupdate = findPreference("auto_update");
         if (autoupdate != null) {
-            if (Constants.NEED_CHECK_UPDATE)
-                autoupdate.setVisible(true);
-            else
-                autoupdate.setVisible(false);
+            autoupdate.setVisible(Constants.NEED_CHECK_UPDATE);
         }
 
         CheckBoxPreference prefAmoled = findPreference("amoled_theme");
@@ -438,25 +435,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         File file = getDrawerBackgroundFile(requireActivity(), light);
 
-        Bitmap original = null;
-        FileOutputStream fos = null;
+        Bitmap original;
 
-        try {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             original = BitmapFactory.decodeFile(photo.getFullImageUri().getPath());
 
             tryDeleteFile(file);
-
-            fos = new FileOutputStream(file);
-
             original.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
             fos.flush();
+            safelyRecycle(original);
         } catch (IOException e) {
             Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-            return;
-        } finally {
-            safelyRecycle(original);
-            safelyClose(fos);
         }
 
         PicassoInstance.with().invalidate(file);

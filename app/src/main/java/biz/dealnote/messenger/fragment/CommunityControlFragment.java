@@ -71,9 +71,8 @@ public class CommunityControlFragment extends Fragment {
         Adapter tab_set = new Adapter(tabs, this);
         pager.setAdapter(tab_set);
 
-        new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
-            tab.setText(tab_set.tabs.get(position).getTabTitle());
-        }).attach();
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (tab, position) ->
+                tab.setText(tab_set.tabs.get(position).getTabTitle())).attach();
         return root;
     }
 

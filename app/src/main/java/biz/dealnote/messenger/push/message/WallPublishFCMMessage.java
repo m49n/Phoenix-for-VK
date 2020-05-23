@@ -73,7 +73,7 @@ public class WallPublishFCMMessage {
         String url = "vk.com/" + place;
         AbsLink link = VkLinkParser.parse(url);
 
-        if (link == null || !(link instanceof WallPostLink)) {
+        if (!(link instanceof WallPostLink)) {
             PersistentLogger.logThrowable("Push issues", new Exception("Unknown place: " + place));
             return;
         }

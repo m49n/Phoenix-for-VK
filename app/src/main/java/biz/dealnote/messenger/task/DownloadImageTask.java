@@ -61,7 +61,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
         }
         this.mBuilder = new NotificationCompat.Builder(this.mContext, AppNotificationChannels.DOWNLOAD_CHANNEL_ID);
         if (new File(file).exists()) {
-            int lastExt = this.file.lastIndexOf(".");
+            int lastExt = this.file.lastIndexOf('.');
             if (lastExt != -1) {
                 String ext = this.file.substring(lastExt);
 
@@ -92,7 +92,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wl.acquire(10 * 60 * 1000L /*10 minutes*/);
 
-        try {
+        try (OutputStream output = new FileOutputStream(file)) {
             if (photourl == null || photourl.isEmpty())
                 throw new Exception(mContext.getString(R.string.null_image_link));
 
@@ -115,7 +115,6 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             }
             InputStream is = Objects.requireNonNull(response.body()).byteStream();
             BufferedInputStream input = new BufferedInputStream(is);
-            OutputStream output = new FileOutputStream(file);
             byte[] data = new byte[8 * 1024];
             int bufferLength;
             double downloadedSize = 0.0;
@@ -130,7 +129,6 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             }
 
             output.flush();
-            output.close();
             input.close();
 
             if (UseMediaScanner) {

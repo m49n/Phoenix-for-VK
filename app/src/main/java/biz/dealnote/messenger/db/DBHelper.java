@@ -61,7 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @NonNull
-    public synchronized static DBHelper getInstance(Context context, int aid) {
+    public static synchronized DBHelper getInstance(Context context, int aid) {
         DBHelper helper = dbHelperMap.get(aid);
         if (helper == null) {
             helper = new DBHelper(context, aid);

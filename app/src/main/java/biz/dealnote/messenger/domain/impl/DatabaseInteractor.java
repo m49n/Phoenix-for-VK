@@ -78,7 +78,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
 
         return cache.getCountries(accountId)
                 .flatMap(dbos -> {
-                    if (dbos.size() > 0) {
+                    if (!dbos.isEmpty()) {
                         List<Country> countries = new ArrayList<>(dbos.size());
                         for (CountryEntity dbo : dbos) {
                             countries.add(new Country(dbo.getId(), dbo.getTitle()));

@@ -10,17 +10,17 @@ public class VKApiPhotoAlbum implements VKApiAttachment {
     /**
      * URL for empty album cover with max width at 75px
      */
-    public final static String COVER_S = "http://vk.com/images/s_noalbum.png";
+    public static final String COVER_S = "http://vk.com/images/s_noalbum.png";
 
     /**
      * URL of empty album cover with max width at 130px
      */
-    public final static String COVER_M = "http://vk.com/images/m_noalbum.png";
+    public static final String COVER_M = "http://vk.com/images/m_noalbum.png";
 
     /**
      * URL of empty album cover with max width at 604px
      */
-    public final static String COVER_X = "http://vk.com/images/x_noalbum.png";
+    public static final String COVER_X = "http://vk.com/images/x_noalbum.png";
 
     /**
      * Album ID.
