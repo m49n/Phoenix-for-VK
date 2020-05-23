@@ -62,7 +62,6 @@ import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
-import static biz.dealnote.messenger.util.Utils.safelyClose;
 import static biz.dealnote.messenger.util.Utils.safelyRecycle;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {

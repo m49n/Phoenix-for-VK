@@ -42,7 +42,7 @@ public final class UploadUtils {
 
         Bitmap target = null;
 
-        try (FileOutputStream ostream = new FileOutputStream(tempFile)){
+        try (FileOutputStream ostream = new FileOutputStream(tempFile)) {
             if (tempFile.exists()) {
                 if (!tempFile.delete()) {
                     throw new IOException("Unable to delete old image file");

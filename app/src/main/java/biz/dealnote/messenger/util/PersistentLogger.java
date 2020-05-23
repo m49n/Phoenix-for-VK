@@ -9,8 +9,6 @@ import biz.dealnote.messenger.model.LogEvent;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
-import static biz.dealnote.messenger.util.Utils.safelyClose;
-
 /**
  * Created by Ruslan Kolbasa on 26.04.2017.
  * phoenix
