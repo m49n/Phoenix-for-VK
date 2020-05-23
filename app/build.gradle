@@ -88,8 +88,8 @@ allprojects {
 }
 
 ext {
-    retrofitLibraryVersion = '2.8.1'
-    okhttpLibraryVersion = '4.6.0'
+    retrofitLibraryVersion = '2.9.0'
+    okhttpLibraryVersion = '4.7.2'
 }
 
 dependencies {
