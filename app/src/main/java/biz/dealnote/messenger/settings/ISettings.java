@@ -83,6 +83,8 @@ public interface ISettings {
 
         boolean isAuto_read();
 
+        boolean isBe_online();
+
         int getColorChat();
 
         int getSecondColorChat();

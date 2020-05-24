@@ -1124,7 +1124,7 @@
     <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
     <string name="drawer_edit_title">Всплывающее меню</string>
-    <string name="theme_edit_title">Выбор темы</string>
+    <string name="theme_edit_title">Выбор цветового оформления</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
     <string name="button_validate_web">Не пришёл код</string>
@@ -1215,8 +1215,8 @@
     <string name="playlist">Плейлист</string>
     <string name="playlists">Плейлисты</string>
     <string name="equalizer">Эквалайзер</string>
-    <string name="phoenix_player">Phoenix Плеер</string>
-    <string name="choose_theme_title">Тема приложения</string>
+    <string name="phoenix_player">Плеер</string>
+    <string name="choose_theme_title">Цветовое Оформление</string>
     <string name="album">Альбом:</string>
     <string name="open_album">Открыть Альбом</string>
     <string name="acoustic">Акустика</string>
@@ -1323,4 +1323,5 @@
     <string name="read_article">Читать</string>
     <string name="copy_simple">Копировать</string>
     <string name="webview_night_mode">Разрешить WebView ночной режим</string>
+    <string name="be_online">Быть онлайн</string>
 </resources>

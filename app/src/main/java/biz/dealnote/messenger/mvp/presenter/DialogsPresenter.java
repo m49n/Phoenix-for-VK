@@ -28,6 +28,7 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IDialogsView;
 import biz.dealnote.messenger.settings.ISettings;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Analytics;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Optional;
@@ -119,12 +120,13 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     private void onDialogsFisrtResponse(List<Dialog> data) {
-        netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(t -> {
-                        },
-                        t -> {
-                        }));
+        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+            netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(t -> {
+                    }, t -> {
+                    }));
+        }
         setNetLoadnigNow(false);
 
         endOfContent = false;
@@ -200,12 +202,13 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     private void onNextDialogsResponse(List<Dialog> data) {
-        netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(t -> {
-                        },
-                        t -> {
-                        }));
+        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+            netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
+                    .compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(t -> {
+                    }, t -> {
+                    }));
+        }
 
         setNetLoadnigNow(false);
         endOfContent = isEmpty(dialogs);

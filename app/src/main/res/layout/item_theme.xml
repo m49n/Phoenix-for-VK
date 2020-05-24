@@ -27,15 +27,18 @@
 
                 <ImageView
                     android:id="@+id/theme_icon_primary"
-                    android:layout_width="50dp"
-                    android:layout_height="100dp"
-                    android:padding="8dp" />
+                    android:layout_width="33dp"
+                    android:layout_height="100dp" />
+
+                <ImageView
+                    android:id="@+id/theme_icon_gradient"
+                    android:layout_width="34dp"
+                    android:layout_height="100dp" />
 
                 <ImageView
                     android:id="@+id/theme_icon_secondary"
-                    android:layout_width="50dp"
-                    android:layout_height="100dp"
-                    android:padding="8dp" />
+                    android:layout_width="33dp"
+                    android:layout_height="100dp" />
 
             </LinearLayout>
 
@@ -54,7 +57,6 @@
             android:id="@+id/selected"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:padding="8dp"
             android:src="@drawable/check"
             android:visibility="gone" />
 

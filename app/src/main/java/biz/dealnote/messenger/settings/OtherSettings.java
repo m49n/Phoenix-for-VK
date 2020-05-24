@@ -182,6 +182,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isBe_online() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("be_online", false);
+    }
+
+    @Override
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }

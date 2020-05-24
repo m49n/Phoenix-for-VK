@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.adapter;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
         this.data = data;
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme, parent, false));
@@ -37,6 +41,8 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
         holder.secondary.setBackgroundColor(category.color_secondary);
         holder.selected.setVisibility(Settings.get().ui().getMainThemeKey().equals(category.id) ? View.VISIBLE : View.GONE);
         holder.clicked.setOnClickListener(v -> clickListener.onClick(position, category));
+        holder.gradient.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                new int[]{category.color_primary, category.color_secondary}));
     }
 
     public void setClickListener(ClickListener clickListener) {
@@ -57,11 +63,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
         void onClick(int index, ThemeValue value);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView primary;
         ImageView secondary;
         ImageView selected;
+        ImageView gradient;
         ViewGroup clicked;
         TextView title;
 
@@ -72,6 +79,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             selected = itemView.findViewById(R.id.selected);
             clicked = itemView.findViewById(R.id.theme_type);
             title = itemView.findViewById(R.id.item_title);
+            gradient = itemView.findViewById(R.id.theme_icon_gradient);
         }
     }
 }

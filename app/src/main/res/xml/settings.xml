@@ -195,6 +195,13 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="be_online"
+            android:summary="@string/be_online"
+            android:title="@string/be_online"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="info_reading"
             android:summary="@string/info_reading"

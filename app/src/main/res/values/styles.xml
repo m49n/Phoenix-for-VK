@@ -59,6 +59,17 @@
         <item name="my_messages_bubble_color">#D490BDFF</item>
     </style>
 
+    <style name="App.DayNight.IceGreen" parent="App.DayNight">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorControlNormal">#448AFF</item>
+        <item name="colorSecondary">#4CAF50</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
+        <item name="my_messages_bubble_color">#D490BDFF</item>
+    </style>
+
     <style name="App.DayNight.OldIce" parent="App.DayNight">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
@@ -225,6 +236,8 @@
     </style>
 
     <style name="App.DayNight.Ice.Amoled" parent="App.DayNight.Ice" />
+
+    <style name="App.DayNight.IceGreen.Amoled" parent="App.DayNight.IceGreen" />
 
     <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce" />
 
