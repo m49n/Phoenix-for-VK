@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -64,7 +65,7 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "RequiresFeature"})
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_browser, container, false);
@@ -84,9 +85,11 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
             }
         });
 
+
         if (Settings.get().main().isWebview_night_mode() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) && Settings.get().ui().isDarkModeEnabled(requireActivity())) {
             WebSettingsCompat.setForceDark(mWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
         }
+        mWebView.getSettings().setUserAgentString(Constants.USER_AGENT(null));
 
         mWebView.getSettings().setJavaScriptEnabled(true); // из-за этого не срабатывал метод
         // shouldOverrideUrlLoading в WebClient

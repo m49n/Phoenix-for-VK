@@ -38,6 +38,14 @@
             android:title="@string/photo_preview_size_title"
             app:iconSpaceReserved="false" />
 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/array_photo_rounded_names"
+            android:entryValues="@array/array_photo_rounded_items"
+            android:key="photo_rounded_view"
+            android:title="@string/photo_rounded_view"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="proxy"
             android:title="@string/http_proxy"
@@ -98,6 +106,12 @@
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:key="reset_chat_background"
+            android:summary="@string/set_default"
+            android:title="@string/set_default"
+            app:iconSpaceReserved="false" />
+
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/array_chat_background_names"
@@ -118,17 +132,11 @@
             android:title="@string/chat_dark_background"
             app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="reset_chat_background"
-            android:summary="@string/set_default"
-            android:title="@string/set_default"
-            app:iconSpaceReserved="false" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="custom_chat_color_usage"
             android:summary="@string/custom_chat_color_summary"
-            android:title="@string/custom_chat_color"
+            android:title="@string/use_custom_chat_color"
             app:iconSpaceReserved="false" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference
@@ -158,8 +166,8 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="custom_message_color_usage"
-            android:summary="@string/custom_message_color"
-            android:title="@string/custom_message_color"
+            android:summary="@string/usage_custom_message_color"
+            android:title="@string/usage_custom_message_color"
             app:iconSpaceReserved="false" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference

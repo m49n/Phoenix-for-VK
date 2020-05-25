@@ -52,6 +52,7 @@ import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
@@ -399,7 +400,12 @@ public class AttachmentsViewBinder {
                 itemView.setTag(message);
 
                 TextView tvBody = itemView.findViewById(R.id.item_fwd_message_text);
-                tvBody.setText(message.getBody());
+                tvBody.setText(OwnerLinkSpanFactory.withSpans(message.getCryptStatus() == CryptStatus.DECRYPTED ? message.getDecryptedBody() : message.getBody(), true, false, new LinkActionAdapter() {
+                    @Override
+                    public void onOwnerClick(int ownerId) {
+                        mAttachmentsActionCallback.onOpenOwner(ownerId);
+                    }
+                }));
                 tvBody.setVisibility(message.getBody() == null || message.getBody().length() == 0 ? View.GONE : View.VISIBLE);
 
                 ((TextView) itemView.findViewById(R.id.item_fwd_message_username)).setText(message.getSender().getFullName());

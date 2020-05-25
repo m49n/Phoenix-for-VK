@@ -4,7 +4,7 @@
     <string name="app_name">Phoenix V</string>
 
     <string-array name="array_chat_background_names">
-        <item>Статик</item>
+        <item>Однотонный</item>
         <item>Печеньки</item>
         <item>Линии</item>
         <item>Руны</item>
@@ -31,6 +31,18 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+    </string-array>
+
+    <string-array name="array_photo_rounded_names">
+        <item>Скруглённые края</item>
+        <item>Скруглить, если одно фото</item>
+        <item>Не скруглять края</item>
+    </string-array>
+
+    <string-array name="array_photo_rounded_items" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string-array name="player_progress_state" translatable="false">
@@ -721,6 +733,7 @@
     <string name="school_country">Страна, в которой закончили школу</string>
     <string name="religious_affiliation">Религиозная принадлежность</string>
     <string name="audios_count">%1$d аудиозаписей</string>
+    <string name="audios_posts_count">%1$d аудио-постов</string>
     <string name="audios_pattern_count">аудиозаписей</string>
     <string name="documents_count">%1$d документов</string>
     <string name="links_count">%1$d ссылок</string>
@@ -909,8 +922,8 @@
     <string name="like_title">Мне нравится</string>
     <string name="likes">Отметки \"Мне нравится\"</string>
     <string name="chat_background">Фон чата</string>
-    <string name="chat_light_background">Светлый фон чата</string>
-    <string name="chat_dark_background">Ночной фон чата</string>
+    <string name="chat_light_background">Светлый фон чата (фото)</string>
+    <string name="chat_dark_background">Ночной фон чата (фото)</string>
     <string name="go_to_post">Перейти к записи</string>
     <string name="success">Успех</string>
     <string name="post_text">Текст записи</string>
@@ -1285,10 +1298,12 @@
     <string name="expires">%1$s %2$s</string>
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
-    <string name="custom_chat_color">Цвет фона в чате</string>
-    <string name="custom_chat_color_second">Градиент Цвет фона в чате</string>
-    <string name="custom_chat_color_summary">Установите фон Чата в Статик, чтобы фон стал цветом</string>
+    <string name="custom_chat_color">1) Цвет фона в чате</string>
+    <string name="use_custom_chat_color">Задать цвет фона в чате</string>
+    <string name="custom_chat_color_second">2) Цвет фона в чате</string>
+    <string name="custom_chat_color_summary">Установите фон Чата в Однотонный, чтобы фон стал градиентом</string>
     <string name="custom_message_color">Цвет исходящего сообщения</string>
+    <string name="usage_custom_message_color">Задать цвет исходящего сообщения</string>
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в всплывающем меню (перезапуск)</string>
@@ -1327,4 +1342,5 @@
     <string name="be_online">Быть онлайн</string>
     <string name="wall_attachments">Вложения на стене</string>
     <string name="posts_analized">%1$d постов проверено</string>
+    <string name="photo_rounded_view">Скругление краёв у фото</string>
 </resources>

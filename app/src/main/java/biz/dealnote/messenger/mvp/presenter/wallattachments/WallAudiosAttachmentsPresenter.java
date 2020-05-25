@@ -124,7 +124,7 @@ public class WallAudiosAttachmentsPresenter extends PlaceSupportPresenter<IWallA
     private void resolveToolbar() {
         if (isGuiReady()) {
             getView().setToolbarTitle(getString(R.string.attachments_in_wall));
-            getView().setToolbarSubtitle(getString(R.string.audios_count, safeCountOf(mAudios)) + " " + getString(R.string.posts_analized, loaded));
+            getView().setToolbarSubtitle(getString(R.string.audios_posts_count, safeCountOf(mAudios)) + " " + getString(R.string.posts_analized, loaded));
         }
     }
 

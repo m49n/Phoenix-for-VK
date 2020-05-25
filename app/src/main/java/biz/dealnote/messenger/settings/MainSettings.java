@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import java.util.Objects;
+
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.util.Optional;
@@ -112,6 +114,11 @@ class MainSettings implements ISettings.IMainSettings {
     @Override
     public int getPrefDisplayImageSize(@PhotoSize int byDefault) {
         return getDefaultPreferences().getInt("pref_display_photo_size", byDefault);
+    }
+
+    @Override
+    public int getPhotoRoundMode() {
+        return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("photo_rounded_view", "0")));
     }
 
     @Override

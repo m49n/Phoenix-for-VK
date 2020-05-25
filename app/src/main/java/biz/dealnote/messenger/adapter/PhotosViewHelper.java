@@ -107,10 +107,27 @@ public class PhotosViewHelper {
             return;
         }
 
+        int RoundedMode = Settings.get().main().getPhotoRoundMode();
+
+        if (RoundedMode == 1)
+            container.removeAllViews();
+
         int i = photos.size() - container.getChildCount();
 
         for (int j = 0; j < i; j++) {
-            View root = LayoutInflater.from(context).inflate(R.layout.item_video, container, false);
+            View root;
+            switch (RoundedMode) {
+                case 1:
+                    root = photos.size() > 1 ? LayoutInflater.from(context).inflate(R.layout.item_photo_gif_not_round, container, false) :
+                            LayoutInflater.from(context).inflate(R.layout.item_photo_gif, container, false);
+                    break;
+                case 2:
+                    root = LayoutInflater.from(context).inflate(R.layout.item_photo_gif_not_round, container, false);
+                    break;
+                default:
+                    root = LayoutInflater.from(context).inflate(R.layout.item_photo_gif, container, false);
+                    break;
+            }
             Holder holder = new Holder(root);
             root.setTag(holder);
             Utils.setColorFilter(holder.ivPlay.getBackground(), mIconColorActive);

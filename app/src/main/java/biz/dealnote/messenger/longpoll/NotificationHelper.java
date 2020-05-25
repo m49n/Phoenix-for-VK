@@ -111,6 +111,9 @@ public class NotificationHelper {
                         .bigText(OwnerLinkSpanFactory.withSpans(text, true, false, null)))
                 .setAutoCancel(true);
 
+        if (message.getSender() != null && !Utils.isEmpty(message.getSender().getFullName()))
+            builder.setSubText(message.getSender().getFullName());
+
         int notificationMask = Settings.get()
                 .notifications()
                 .getNotifPref(accountId, message.getPeerId());
