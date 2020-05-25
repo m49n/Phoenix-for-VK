@@ -13,8 +13,8 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.adapter.DocsAdapter;
 import biz.dealnote.messenger.model.Document;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentDocsPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentDocsView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentDocsPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentDocsView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class ConversationDocsFragment extends AbsChatAttachmentsFragment<Document, ChatAttachmentDocsPresenter, IChatAttachmentDocsView>

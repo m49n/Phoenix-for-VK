@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -41,6 +42,7 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.adapter.WallAdapter;
 import biz.dealnote.messenger.adapter.horizontal.HorizontalStoryAdapter;
+import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.WallSearchCriteria;
@@ -253,6 +255,16 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         PlaceFactory.getSingleTabSearchPlace(accountId, SearchContentType.WALL, criteria).tryOpenWith(requireActivity());
     }
 
+    private void goToConversationAttachments() {
+        String[] types = new String[]{VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK};
+
+        String[] items = new String[]{getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links)};
+
+        new MaterialAlertDialogBuilder(requireActivity()).setItems(items, (dialogInterface, j) -> {
+            PlaceFactory.getWallAttachmentsPlace(getPresenter().getAccountId(), getPresenter().getOwnerId(), types[j]).tryOpenWith(requireActivity());
+        }).show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -265,8 +277,11 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             case R.id.action_search:
                 getPresenter().fireSearchClick();
                 return true;
+            case R.id.wall_attachments:
+                goToConversationAttachments();
+                return true;
             case R.id.action_open_url:
-                final ClipboardManager clipBoard = (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
+                final ClipboardManager clipBoard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
                     String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
                     LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);

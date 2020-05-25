@@ -642,6 +642,7 @@
     <string name="no_videos">Нет видео</string>
     <string name="invites_you_to_join_community">%1$s приглашает Вас вступить в сообщество</string>
     <string name="attachments_in_chat">Материалы беседы</string>
+    <string name="attachments_in_wall">Материалы стены</string>
     <string name="change_hrono_history">Показать начало</string>
     <string name="show_profile">Профиль</string>
     <string name="unknown_photos_count">неизвестно</string>
@@ -1324,4 +1325,6 @@
     <string name="copy_simple">Копировать</string>
     <string name="webview_night_mode">Разрешить WebView ночной режим</string>
     <string name="be_online">Быть онлайн</string>
+    <string name="wall_attachments">Вложения на стене</string>
+    <string name="posts_analized">%1$d постов проверено</string>
 </resources>

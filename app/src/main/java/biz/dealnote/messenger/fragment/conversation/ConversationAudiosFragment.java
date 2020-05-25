@@ -16,8 +16,8 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
 import biz.dealnote.messenger.model.Audio;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentAudioPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentAudiosView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentAudioPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentAudiosView;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.mvp.core.IPresenterFactory;
 

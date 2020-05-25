@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +101,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
             final T item = items.remove(fromPosition);
             items.add(toPosition, item);
             notifyItemMoved(getHeadersCount() + fromPosition, getHeadersCount() + toPosition);
-            int positionStart = fromPosition < toPosition ? fromPosition : toPosition;
+            int positionStart = Math.min(fromPosition, toPosition);
             int itemCount = Math.abs(fromPosition - toPosition) + 1;
             notifyItemRangeChanged(positionStart + getHeadersCount(), itemCount);
         }
@@ -117,6 +119,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
         setItems(items, true);
     }
 
+    @NotNull
     @Override
     public VH onCreateViewHolder(ViewGroup viewGroup, int type) {
         //if our position is one of our items (this comes from getItemViewType(int position) below)
@@ -206,7 +209,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NotNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         if (manager == null) {
             setManager(recyclerView.getLayoutManager());

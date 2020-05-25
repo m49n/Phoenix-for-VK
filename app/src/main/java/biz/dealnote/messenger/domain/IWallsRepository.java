@@ -37,6 +37,8 @@ public interface IWallsRepository {
 
     Single<List<Post>> getWall(int accountId, int ownerId, int offset, int count, int wallFilter);
 
+    Single<List<Post>> getWallNoCache(int accountId, int ownerId, int offset, int count, int wallFilter);
+
     Single<List<Post>> getCachedWall(int accountId, int ownerId, int wallFilter);
 
     Completable delete(int accountId, int ownerId, int postId);

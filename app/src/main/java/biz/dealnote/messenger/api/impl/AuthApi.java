@@ -2,7 +2,6 @@ package biz.dealnote.messenger.api.impl;
 
 import com.google.gson.Gson;
 
-import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.api.AuthException;
 import biz.dealnote.messenger.api.CaptchaNeedException;
@@ -76,7 +75,7 @@ public class AuthApi implements IAuthApi {
         final Integer finalForceSms = forceSmsInteger;
         return service.provideAuthService()
                 .flatMap(service -> service
-                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms, Constants.DEVICE_COUNTRY_CODE, Utils.getDiviceId(Injection.provideApplicationContext()))
+                        .directLogin(grantType, clientId, clientSecret, username, pass, v, twoFaSupported ? 1 : 0, scope, code, captchaSid, captchaKey, finalForceSms, Utils.getDiviceId(Injection.provideApplicationContext()))
                         .compose(withHttpErrorHandling()));
     }
 }

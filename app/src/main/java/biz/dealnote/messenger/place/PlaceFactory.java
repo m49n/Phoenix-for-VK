@@ -243,6 +243,13 @@ public class PlaceFactory {
         return place;
     }
 
+    public static Place getWallAttachmentsPlace(int accountId, int ownerId, String type) {
+        return new Place(Place.WALL_ATTACHMENTS)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withIntExtra(Extra.OWNER_ID, ownerId)
+                .withStringExtra(Extra.TYPE, type);
+    }
+
     public static Place getMessagesLookupPlace(int aid, int peerId, int focusMessageId) {
         return new Place(Place.MESSAGE_LOOKUP)
                 .setArguments(MessagesLookFragment.buildArgs(aid, peerId, focusMessageId));

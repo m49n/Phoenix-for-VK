@@ -276,7 +276,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         final int nextOffset = offset + COUNT;
         final boolean append = offset > 0;
 
-        netCompositeDisposable.add(walls.getWall(accountId, ownerId, offset, COUNT, wallFilter)
+        netCompositeDisposable.add(walls.getWallNoCache(accountId, ownerId, offset, COUNT, wallFilter)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(posts -> onActualDataReceived(nextOffset, posts, append), this::onActualDataGetError));
     }

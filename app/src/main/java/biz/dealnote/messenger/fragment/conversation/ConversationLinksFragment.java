@@ -13,8 +13,8 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.adapter.LinksAdapter;
 import biz.dealnote.messenger.model.Link;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentLinksPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentLinksView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentLinksPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentLinksView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class ConversationLinksFragment extends AbsChatAttachmentsFragment<Link, ChatAttachmentLinksPresenter, IChatAttachmentLinksView>

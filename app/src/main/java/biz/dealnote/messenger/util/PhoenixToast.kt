@@ -46,7 +46,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
     fun showToastBottom(message: String?) {
         if (M_context == null) return
         val t = getToast(M_context, message, CurrentTheme.getColorToast(M_context))
-        t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+        t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM, 0, 40)
         t.show()
     }
 

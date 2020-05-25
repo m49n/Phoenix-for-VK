@@ -119,6 +119,7 @@ import biz.dealnote.messenger.fragment.fave.FaveTabsFragment;
 import biz.dealnote.messenger.fragment.friends.FriendsTabsFragment;
 import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.fragment.search.SingleTabSearchFragment;
+import biz.dealnote.messenger.fragment.wallattachments.WallAttachmentsFragmentFactory;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.listener.BackPressCallback;
@@ -1371,7 +1372,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 UserDetails details = args.getParcelable("details");
                 attachToFront(UserDetailsFragment.newInstance(accountId, user, details));
                 break;
-
+            case Place.WALL_ATTACHMENTS:
+                Fragment wall_attachments = WallAttachmentsFragmentFactory.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getString(Extra.TYPE));
+                if (wall_attachments == null) {
+                    throw new IllegalArgumentException("wall_attachments cant bee null");
+                }
+                attachToFront(wall_attachments);
+                break;
             default:
                 throw new IllegalArgumentException("Main activity can't open this place, type: " + place.type);
         }

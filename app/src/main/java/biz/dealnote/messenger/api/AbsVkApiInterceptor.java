@@ -55,22 +55,26 @@ abstract class AbsVkApiInterceptor implements Interceptor {
             throw new UnauthorizedException("No authorization! Please, login and retry");
         }
 
-        FormBody.Builder formBuiler = new FormBody.Builder()
-                .add("lang", Constants.DEVICE_COUNTRY_CODE)
-                .add("v", version)
-                .add("access_token", token);
+        FormBody.Builder formBuiler = new FormBody.Builder();
 
         RequestBody body = original.body();
 
+        boolean HasVersion = false;
         if (body instanceof FormBody) {
             FormBody formBody = (FormBody) body;
-
             for (int i = 0; i < formBody.size(); i++) {
                 String name = formBody.name(i);
+                if (name.equals("v"))
+                    HasVersion = true;
                 String value = formBody.value(i);
                 formBuiler.add(name, value);
             }
         }
+        if (!HasVersion)
+            formBuiler.add("v", version);
+
+        formBuiler.add("access_token", token)
+                .add("lang", Constants.DEVICE_COUNTRY_CODE);
 
         Request request = original.newBuilder()
                 .method("POST", formBuiler.build())

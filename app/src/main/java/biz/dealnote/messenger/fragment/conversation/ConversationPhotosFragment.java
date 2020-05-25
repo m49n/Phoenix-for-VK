@@ -15,8 +15,8 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.fave.FavePhotosAdapter;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.TmpSource;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentPhotoPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentPhotosView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentPhotoPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentPhotosView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 

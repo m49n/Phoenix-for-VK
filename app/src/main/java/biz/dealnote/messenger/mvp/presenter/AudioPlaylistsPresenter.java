@@ -80,7 +80,7 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
     private void onActualDataReceived(int offset, List<VKApiAudioPlaylist> data) {
 
         this.actualDataLoading = false;
-        this.endOfContent = (data.size() < 50);
+        this.endOfContent = data.isEmpty();
         this.actualDataReceived = true;
 
         if (offset == 0) {
