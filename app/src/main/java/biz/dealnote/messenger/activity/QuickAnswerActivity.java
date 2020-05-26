@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.squareup.picasso.Transformation;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.Extra;
@@ -47,30 +49,26 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 public class QuickAnswerActivity extends AppCompatActivity {
 
     public static final String PARAM_BODY = "body";
-    public static final String PARAM_MESSAGE_SENT_TIME = "message_sent_time";
 
     public static final String EXTRA_FOCUS_TO_FIELD = "focus_to_field";
     public static final String EXTRA_LIVE_DELAY = "live_delay";
 
     private EditText etText;
-    private int peerId;
     private TextingNotifier notifier;
     private int accountId;
-    private int messageId;
+    private Message msg;
 
     private boolean messageIsRead;
     private IMessagesRepository messagesRepository;
     private CompositeDisposable mLiveSubscription = new CompositeDisposable();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public static Intent forStart(Context context, int accountId, int peerId, String body, int mid, long messageTime, String imgUrl, String title) {
+    public static Intent forStart(Context context, int accountId, Message msg, String body, String imgUrl, String title) {
         Intent intent = new Intent(context, QuickAnswerActivity.class);
         intent.putExtra(PARAM_BODY, body);
         intent.putExtra(Extra.ACCOUNT_ID, accountId);
-        intent.putExtra(Extra.MESSAGE_ID, mid);
-        intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE, msg);
         intent.putExtra(Extra.TITLE, title);
-        intent.putExtra(PARAM_MESSAGE_SENT_TIME, messageTime);
         intent.putExtra(Extra.IMAGE, imgUrl);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
@@ -89,9 +87,8 @@ public class QuickAnswerActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
 
-        messageId = getIntent().getExtras().getInt(Extra.MESSAGE_ID);
+        msg = java.util.Objects.requireNonNull(getIntent().getExtras()).getParcelable(Extra.MESSAGE);
         accountId = getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
-        peerId = getIntent().getExtras().getInt(Extra.PEER_ID);
         notifier = new TextingNotifier(accountId);
 
         setContentView(R.layout.activity_quick_answer);
@@ -112,7 +109,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
         ImageButton btnToDialog = findViewById(R.id.activity_quick_answer_to_dialog);
         ImageButton btnSend = findViewById(R.id.activity_quick_answer_send);
 
-        String messageTime = AppTextUtils.getDateFromUnixTime(this, getIntent().getLongExtra(PARAM_MESSAGE_SENT_TIME, 0));
+        String messageTime = AppTextUtils.getDateFromUnixTime(this, msg.getDate());
         final String title = getIntent().getStringExtra(Extra.TITLE);
 
         if (getSupportActionBar() != null) {
@@ -139,7 +136,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
                 cancelFinishWithDelay();
 
                 if (Objects.nonNull(notifier)) {
-                    notifier.notifyAboutTyping(peerId);
+                    notifier.notifyAboutTyping(msg.getPeerId());
                 }
             }
         });
@@ -149,7 +146,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
             Intent intent = new Intent(QuickAnswerActivity.this, MainActivity.class);
             intent.setAction(MainActivity.ACTION_OPEN_PLACE);
 
-            Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, new Peer(peerId).setAvaUrl(imgUrl).setTitle(title), 0);
+            Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, new Peer(msg.getPeerId()).setAvaUrl(imgUrl).setTitle(title), 0);
             intent.putExtra(Extra.PLACE, chatPlace);
             startActivity(intent);
             finish();
@@ -196,7 +193,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
         boolean requireEncryption = Settings.get()
                 .security()
-                .isMessageEncryptionEnabled(accountId, peerId);
+                .isMessageEncryptionEnabled(accountId, msg.getPeerId());
 
         @KeyLocationPolicy
         int policy = KeyLocationPolicy.PERSIST;
@@ -204,11 +201,12 @@ public class QuickAnswerActivity extends AppCompatActivity {
         if (requireEncryption) {
             policy = Settings.get()
                     .security()
-                    .getEncryptionLocationPolicy(accountId, peerId);
+                    .getEncryptionLocationPolicy(accountId, msg.getPeerId());
         }
 
-        final SaveMessageBuilder builder = new SaveMessageBuilder(accountId, peerId)
+        final SaveMessageBuilder builder = new SaveMessageBuilder(accountId, msg.getPeerId())
                 .setBody(trimmedtext)
+                .setForwardMessages(new ArrayList<>(Collections.singleton(msg)))
                 .setRequireEncryption(requireEncryption)
                 .setKeyLocationPolicy(policy);
 
@@ -223,13 +221,13 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
     @SuppressWarnings("unused")
     private void onMessageSaved(Message message) {
-        NotificationHelper.tryCancelNotificationForPeer(this, accountId, peerId);
+        NotificationHelper.tryCancelNotificationForPeer(this, accountId, msg.getPeerId(), msg.getId());
         messagesRepository.runSendingQueue();
         finish();
     }
 
     private void setMessageAsRead() {
-        compositeDisposable.add(messagesRepository.markAsRead(accountId, peerId, messageId)
+        compositeDisposable.add(messagesRepository.markAsRead(accountId, msg.getPeerId(), msg.getId())
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(RxUtils.dummy(), ignore()));
     }

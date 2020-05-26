@@ -8,6 +8,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.core.app.RemoteInput;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.domain.IMessagesRepository;
 import biz.dealnote.messenger.domain.Repository;
@@ -23,11 +26,12 @@ public class QuickReplyService extends IntentService {
         super(QuickReplyService.class.getName());
     }
 
-    public static Intent intentForAddMessage(Context context, int accountId, int peerId) {
+    public static Intent intentForAddMessage(Context context, int accountId, int peerId, Message msg) {
         Intent intent = new Intent(context, QuickReplyService.class);
         intent.setAction(ACTION_ADD_MESSAGE);
         intent.putExtra(Extra.ACCOUNT_ID, accountId);
         intent.putExtra(Extra.PEER_ID, peerId);
+        intent.putExtra(Extra.MESSAGE, msg);
         return intent;
     }
 
@@ -49,7 +53,7 @@ public class QuickReplyService extends IntentService {
 
             if (msg != null) {
                 CharSequence body = msg.getCharSequence(Extra.BODY);
-                addMessage(accountId, peerId, body == null ? null : body.toString());
+                addMessage(accountId, peerId, body == null ? null : body.toString(), intent.getExtras().getParcelable(Extra.MESSAGE));
             }
         } else if (intent != null && ACTION_MARK_AS_READ.equals(intent.getAction()) && intent.getExtras() != null) {
             int accountId = intent.getExtras().getInt(Extra.ACCOUNT_ID);
@@ -59,9 +63,9 @@ public class QuickReplyService extends IntentService {
         }
     }
 
-    private void addMessage(int accountId, int peerId, String body) {
+    private void addMessage(int accountId, int peerId, String body, Message msg) {
         final IMessagesRepository messagesInteractor = Repository.INSTANCE.getMessages();
-        SaveMessageBuilder builder = new SaveMessageBuilder(accountId, peerId).setBody(body);
+        SaveMessageBuilder builder = new SaveMessageBuilder(accountId, peerId).setBody(body).setForwardMessages(new ArrayList<>(Collections.singleton(msg)));
 
         Message message = messagesInteractor.put(builder).blockingGet();
 

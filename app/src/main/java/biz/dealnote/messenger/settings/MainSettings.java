@@ -138,4 +138,9 @@ class MainSettings implements ISettings.IMainSettings {
     public boolean isWebview_night_mode() {
         return getDefaultPreferences().getBoolean("webview_night_mode", true);
     }
+
+    @Override
+    public boolean isGrouping_notifications() {
+        return getDefaultPreferences().getBoolean("grouping_notifications", true);
+    }
 }

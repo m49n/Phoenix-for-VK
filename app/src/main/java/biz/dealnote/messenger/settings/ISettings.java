@@ -182,6 +182,8 @@ public interface ISettings {
         boolean isWebview_night_mode();
 
         int getPhotoRoundMode();
+
+        boolean isGrouping_notifications();
     }
 
     interface INotificationSettings {

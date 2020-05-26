@@ -478,7 +478,12 @@ public class AttachmentsViewBinder {
                 if (doc.getType() == Types.POST) {
                     tvDetails.setVisibility(View.GONE);
                     tvPostText.setVisibility(View.VISIBLE);
-                    tvPostText.setText(subtitle);
+                    tvPostText.setText(OwnerLinkSpanFactory.withSpans(subtitle, true, false, new LinkActionAdapter() {
+                        @Override
+                        public void onOwnerClick(int ownerId) {
+                            mAttachmentsActionCallback.onOpenOwner(ownerId);
+                        }
+                    }));
                 } else {
                     tvDetails.setVisibility(View.VISIBLE);
                     tvPostText.setVisibility(View.GONE);

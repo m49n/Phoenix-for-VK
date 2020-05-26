@@ -331,6 +331,7 @@ public class ChatDownloadIntentService extends IntentService {
             result_msgs = Apply("<#MESSAGE_LIST#>", msgs.toString(), result_msgs);
             main = Apply("<#MESSAGES#>", result_msgs, main);
 
+            DownloadUtil.CheckDirectory(Settings.get().other().getDocDir());
 
             File html = new File(Settings.get().other().getDocDir(), DownloadUtil.makeLegalFilename(peer_title + "_" + DOWNLOAD_DATE_FORMAT.format(new Date()), "html"));
             OutputStream output = new FileOutputStream(html);

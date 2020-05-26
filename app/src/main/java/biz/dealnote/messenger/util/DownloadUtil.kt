@@ -53,7 +53,7 @@ object DownloadUtil {
 
     @Suppress("DEPRECATION")
     @JvmStatic
-    private fun CheckDirectory(Path: String) {
+    public fun CheckDirectory(Path: String) {
         val dir_final = File(Path)
         if (!dir_final.isDirectory) {
             val created: Boolean = dir_final.mkdirs()

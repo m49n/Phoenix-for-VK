@@ -1343,4 +1343,5 @@
     <string name="wall_attachments">Вложения на стене</string>
     <string name="posts_analized">%1$d постов проверено</string>
     <string name="photo_rounded_view">Скругление краёв у фото</string>
+    <string name="grouping_notifications">Группировать уведомления</string>
 </resources>
