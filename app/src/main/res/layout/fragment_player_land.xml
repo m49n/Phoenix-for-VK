@@ -71,19 +71,22 @@
                     android:id="@+id/audio_player_current_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="14dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:textSize="11sp"
+                    tools:ignore="SmallSp" />
 
                 <TextView
                     android:id="@+id/audio_player_total_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="14dp"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    tools:ignore="RelativeOverlap" />
+                    android:textSize="11sp"
+                    tools:ignore="RelativeOverlap,SmallSp" />
 
                 <SeekBar
                     android:id="@android:id/progress"
@@ -102,8 +105,8 @@
                     <biz.dealnote.messenger.player.ui.RepeatingImageButton
                         android:id="@+id/audio_save"
                         style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/save"
                         android:tint="?attr/colorPrimary" />
                 </LinearLayout>
@@ -114,27 +117,17 @@
                 android:id="@+id/title_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
                 android:padding="8dp"
                 app:layout_constraintBottom_toTopOf="@id/audio_player_controls">
-
-                <TextView
-                    android:id="@+id/audio_player_get_lyrics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/audio_add"
-                    android:layout_marginTop="15dp"
-                    android:textColor="?attr/colorSecondary"
-                    android:textSize="12sp"
-                    tools:text="@string/get_lyrics" />
 
                 <biz.dealnote.messenger.view.CircleCounterButton
                     android:id="@+id/audio_add"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="start"
                     app:active="true"
                     app:active_background_color="?attr/icon_color_active"
                     app:button_icon="@drawable/plus"
@@ -170,6 +163,7 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:marqueeRepeatLimit="marquee_forever"
+                        android:padding="4dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
@@ -184,11 +178,20 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:marqueeRepeatLimit="marquee_forever"
+                        android:paddingBottom="4dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textSize="12sp"
                         tools:text="Warduna" />
+
+                    <TextView
+                        android:id="@+id/audio_player_get_lyrics"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/colorSecondary"
+                        android:textSize="12sp"
+                        tools:text="@string/get_lyrics" />
 
                 </LinearLayout>
 
@@ -197,8 +200,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="end"
                     app:active="true"
                     app:active_background_color="?attr/icon_color_active"
                     app:button_icon="@drawable/share_variant"
@@ -260,7 +263,10 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:src="@drawable/play"
-                        app:fabSize="auto" />
+                        app:borderWidth="1dp"
+                        app:elevation="1dp"
+                        app:fabSize="auto"
+                        app:pressedTranslationZ="3dp" />
                 </FrameLayout>
 
                 <FrameLayout
