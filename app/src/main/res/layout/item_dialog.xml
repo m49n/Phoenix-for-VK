@@ -156,6 +156,7 @@
                     android:backgroundTint="?colorPrimary"
                     android:ellipsize="marquee"
                     android:gravity="center"
+                    android:minWidth="26dp"
                     android:paddingStart="6dp"
                     android:paddingEnd="6dp"
                     android:singleLine="true"
