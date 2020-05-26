@@ -152,7 +152,6 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
             holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
         holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.GONE);
-        holder.saved.setImageResource(R.drawable.downloaded);
 
         holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(item) ? R.drawable.paused : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
         Utils.doAnimate(holder.play_icon.getDrawable(), true);

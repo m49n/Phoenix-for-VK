@@ -9,34 +9,36 @@
         android:id="@+id/audio_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="4dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:paddingStart="14dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="6dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/item_audio_play"
-            android:padding="4dp">
+            android:padding="0dp">
 
             <LinearLayout
                 android:id="@+id/track_option"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="21dp"
                 android:layout_toStartOf="@id/item_audio_time"
-                android:orientation="vertical"
-                android:paddingStart="0dp"
-                android:paddingEnd="18dp">
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/dialog_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?attr/colorSecondary"
                     android:textSize="15sp"
@@ -46,10 +48,11 @@
                     android:id="@+id/dialog_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
+                    android:ellipsize="end"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
@@ -65,52 +68,56 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/item_audio_time"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="0dp"
-                android:paddingEnd="2dp">
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/my"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:padding="4dp"
                     android:src="@drawable/my"
                     app:tint="?colorSecondary" />
 
                 <ImageView
                     android:id="@+id/lyric"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="end"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:padding="4dp"
                     android:src="@drawable/lyric"
                     app:tint="?colorSecondary" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/item_audio_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="42dp"
+                android:layout_height="21dp"
                 android:layout_alignParentEnd="true"
+                android:gravity="end"
                 android:maxLines="1"
+                android:paddingStart="0dp"
+                android:paddingEnd="2dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="Time" />
 
             <ImageView
                 android:id="@+id/saved"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_below="@id/item_audio_time"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/downloaded"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="21dp"
+                android:padding="2dp"
+                android:src="@drawable/save"
                 app:tint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/quality"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
                 android:layout_below="@id/item_audio_time"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="2dp"
+                android:layout_alignParentBottom="true"
+                android:padding="2dp"
                 android:src="@drawable/high_quality"
                 app:tint="?attr/colorPrimary" />
 
