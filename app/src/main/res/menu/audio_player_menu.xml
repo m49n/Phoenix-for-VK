@@ -3,17 +3,21 @@
 
     <item
         android:id="@+id/eq"
+        android:icon="@drawable/settings"
         android:title="@string/equalizer" />
 
     <item
         android:id="@+id/playlist"
+        android:icon="@drawable/ic_menu_24_white"
         android:title="@string/playlist" />
 
     <item
         android:id="@+id/copy_track_info"
+        android:icon="@drawable/content_copy"
         android:title="@string/copy_track_info" />
 
     <item
         android:id="@+id/search_by_artist"
+        android:icon="@drawable/magnify"
         android:title="@string/search_by_artist" />
 </menu>

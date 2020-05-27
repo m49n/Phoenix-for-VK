@@ -1212,10 +1212,13 @@ class MusicPlaybackService : Service() {
             val url = audios[0].url
             val interactor = InteractorFactory.createAudioInteractor()
             if (Utils.isEmpty(url) || "https://vk.com/mp3/audio_api_unavailable.mp3" == url) {
-                audios = interactor
-                        .getById(listToIdPair(audios))
-                        .subscribeOn(Schedulers.io())
-                        .blockingGet() as ArrayList<Audio>
+                try {
+                    audios = interactor
+                            .getById(listToIdPair(audios))
+                            .subscribeOn(Schedulers.io())
+                            .blockingGet() as ArrayList<Audio>
+                } catch (ignore: Throwable) {
+                }
             }
             Logger.d(TAG, "startForPlayList, count: " + audios.size + ", position: " + position)
             val target: ArrayList<Audio>

@@ -1,8 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
 import android.app.Activity;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -39,10 +37,11 @@ import biz.dealnote.messenger.dialog.DialogNotifOptionsDialog;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.DialogsSearchCriteria;
-import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.Peer;
@@ -249,12 +248,10 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
             toolbar.setNavigationIcon(tr);
             toolbar.setNavigationOnClickListener(v -> {
-
-                final ClipboardManager clipBoard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
-                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                    LinkHelper.openUrl(requireActivity(), Settings.get().accounts().getCurrent(), temp);
-                }
+                ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+                menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.view));
+                menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
+                menus.show(getChildFragmentManager(), "left_options", option -> getPresenter().fireDialogOptions(requireActivity(), option));
             });
         }
     }
@@ -336,7 +333,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
 
     @Override
     public void goToChat(int accountId, int messagesOwnerId, int peerId, String title, String avaurl, int offset) {
-        PlaceFactory.getChatPlace(accountId, messagesOwnerId, new Peer(peerId).setTitle(title).setAvaUrl(avaurl), offset).tryOpenWith(requireActivity());
+        PlaceFactory.getChatDualPlace(accountId, messagesOwnerId, new Peer(peerId).setTitle(title).setAvaUrl(avaurl), offset).tryOpenWith(requireActivity());
     }
 
     @Override

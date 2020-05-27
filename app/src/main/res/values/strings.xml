@@ -1153,7 +1153,7 @@
     <string name="message_channel">Сообщения</string>
     <string name="group_message_channel">Групповые беседы</string>
     <string name="key_exchange_channel">Обмен ключами</string>
-    <string name="audio_channel">Плеер</string>
+    <string name="audio_channel">Phoenix-Плеер</string>
     <string name="comment_channel">Комментарии</string>
     <string name="friend_requests_channel">Заявки в друзья</string>
     <string name="group_invites_channel">Приглашения в группы</string>
@@ -1307,7 +1307,6 @@
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый доступ к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в всплывающем меню (перезапуск)</string>
-    <string name="disable_swipes">Отключить свайпы для плеера</string>
     <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
     <string name="display_writing">Показывать набор сообщения</string>

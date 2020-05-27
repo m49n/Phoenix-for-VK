@@ -320,6 +320,14 @@ public class PlaceFactory {
                 .withParcelableExtra(Extra.PEER, peer);
     }
 
+    public static Place getChatDualPlace(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset) {
+        return new Place(Place.CHAT_DUAL)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withIntExtra(Extra.OWNER_ID, messagesOwnerId)
+                .withIntExtra(Extra.OFFSET, Offset)
+                .withParcelableExtra(Extra.PEER, peer);
+    }
+
     public static Place getVKPhotosAlbumPlace(int accountId, int ownerId, int albumId, String action) {
         return new Place(Place.VK_PHOTO_ALBUM).setArguments(VKPhotosFragment.buildArgs(accountId, ownerId, albumId, action));
     }

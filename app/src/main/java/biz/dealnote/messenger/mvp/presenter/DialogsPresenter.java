@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -18,8 +20,10 @@ import biz.dealnote.messenger.domain.IMessagesRepository;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.exception.UnauthorizedException;
+import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.longpoll.ILongpollManager;
 import biz.dealnote.messenger.longpoll.LongpollInstance;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.Option;
 import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Peer;
@@ -32,6 +36,7 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Analytics;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Optional;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.ShortcutUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -149,6 +154,30 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         } catch (Exception ignored) {
             /*ignore*/
         }
+    }
+
+    public void fireDialogOptions(Context context, Option option) {
+        switch (option.getId()) {
+            case R.id.button_ok:
+                appendDisposable(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                        .subscribe(e -> OnSetOffline(context, e), t -> OnSetOffline(context, false)));
+                break;
+            case R.id.button_cancel:
+                final ClipboardManager clipBoard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
+                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                    LinkHelper.openUrl((Activity) context, getAccountId(), temp);
+                }
+                break;
+        }
+    }
+
+    private void OnSetOffline(Context context, boolean succ) {
+        if (succ)
+            PhoenixToast.CreatePhoenixToast(context).showToast(R.string.succ_offline);
+        else
+            PhoenixToast.CreatePhoenixToast(context).showToastError(R.string.err_offline);
     }
 
     private void onDialogsGetError(Throwable t) {

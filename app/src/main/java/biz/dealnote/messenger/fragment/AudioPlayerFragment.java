@@ -1,6 +1,5 @@
 package biz.dealnote.messenger.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -17,10 +16,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,9 +26,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,16 +41,15 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
-import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
-import biz.dealnote.messenger.listener.OnSectionResumeCallback;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.Option;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
@@ -74,13 +67,9 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
-import biz.dealnote.messenger.view.verticalswipe.BelowFractionalClamp;
-import biz.dealnote.messenger.view.verticalswipe.NegativeFactorFilterSideEffect;
-import biz.dealnote.messenger.view.verticalswipe.PropertySideEffect;
-import biz.dealnote.messenger.view.verticalswipe.SensitivityClamp;
-import biz.dealnote.messenger.view.verticalswipe.SettleOnTopAction;
-import biz.dealnote.messenger.view.verticalswipe.VerticalSwipeBehavior;
+import biz.dealnote.messenger.view.SeekBarSamsungFixed;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static biz.dealnote.messenger.player.util.MusicUtils.isPlaying;
 import static biz.dealnote.messenger.player.util.MusicUtils.mService;
@@ -88,7 +77,7 @@ import static biz.dealnote.messenger.player.util.MusicUtils.observeServiceBindin
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
+public class AudioPlayerFragment extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
     // Message to refresh the time
     private static final int REFRESH_TIME = 1;
     private static final int REQUEST_EQ = 139;
@@ -104,7 +93,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private TextView mTotalTime;
     private TextView mGetLyrics;
     // Progress
-    private SeekBar mProgress;
+    private SeekBarSamsungFixed mProgress;
     // VK Additional action
     private CircleCounterButton ivAdd;
     private RepeatingImageButton ivSave;
@@ -113,7 +102,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     private TextView tvAlbum;
     private TextView tvSubtitle;
     private ImageView ivCover;
-    private boolean isCaptured = false;
+
     // Broadcast receiver
     private PlaybackStatus mPlaybackStatus;
     // Handler used to update the current time
@@ -138,6 +127,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
 
     private int mAccountId;
     private CompositeDisposable mBroadcastDisposable = new CompositeDisposable();
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public static Bundle buildArgs(int accountId) {
         Bundle bundle = new Bundle();
@@ -155,10 +145,13 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         return fragment;
     }
 
+    protected void appendDisposable(Disposable disposable) {
+        mCompositeDisposable.add(disposable);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
         mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         mAudioInteractor = InteractorFactory.createAudioInteractor();
@@ -177,28 +170,15 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         updateNowPlayingInfo();
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.audio_player_menu, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NotNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.eq).setVisible(isEqualizerAvailable());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    private void OptionsItemSelected(@NotNull Option item) {
+        switch (item.getId()) {
             case R.id.eq:
                 startEffectsPanel();
-                return true;
+                break;
 
             case R.id.playlist:
                 PlaceFactory.getPlaylistPlace().tryOpenWith(requireActivity());
-                return true;
+                break;
             case R.id.copy_track_info:
                 ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 String Artist = MusicUtils.getCurrentAudio().getArtist() != null ? MusicUtils.getCurrentAudio().getArtist() : "";
@@ -208,79 +188,37 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 ClipData clip = ClipData.newPlainText("response", Artist + " - " + Name);
                 clipboard.setPrimaryClip(clip);
                 PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.copied_to_clipboard);
-                return true;
+                break;
             case R.id.search_by_artist:
                 PlaceFactory.getSingleTabSearchPlace(mAccountId, SearchContentType.AUDIOS, new AudioSearchCriteria(MusicUtils.getCurrentAudio().getArtist(), true, false)).tryOpenWith(requireActivity());
-                return true;
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutRes;
         if (Utils.isLandscape(requireActivity()) && !Utils.is600dp(requireActivity())) {
-            layoutRes = Settings.get().ui().isDisable_swipes() ? R.layout.fragment_player_land_no_swipe : R.layout.fragment_player_land;
+            layoutRes = R.layout.fragment_player_land;
         } else {
-            layoutRes = Settings.get().ui().isDisable_swipes() ? R.layout.fragment_player_port_new_no_swipe : R.layout.fragment_player_port_new;
+            layoutRes = R.layout.fragment_player_port_new;
         }
 
         View root = inflater.inflate(layoutRes, container, false);
-
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
-
-        ConstraintLayout Root = root.findViewById(R.id.player_layout);
         mProgress = root.findViewById(android.R.id.progress);
-
-        if (!Settings.get().ui().isDisable_swipes()) {
-            VerticalSwipeBehavior<ConstraintLayout> ui = VerticalSwipeBehavior.Companion.from(Root);
-            ui.setSettle(new SettleOnTopAction());
-            PropertySideEffect sideDelegate = new PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y);
-            ui.setSideEffect(new NegativeFactorFilterSideEffect(sideDelegate));
-            BelowFractionalClamp clampDelegate = new BelowFractionalClamp(3f, 3f);
-            ui.setClamp(new SensitivityClamp(0.5f, clampDelegate, 0.5f));
-            ui.setListener(new VerticalSwipeBehavior.SwipeListener() {
-                @Override
-                public void onReleased() {
-                    isCaptured = false;
-                }
-
-                @Override
-                public void onCaptured() {
-                    isCaptured = true;
-                }
-
-                @Override
-                public void onPreSettled(int diff) {
-                }
-
-                @Override
-                public void onPostSettled(int diff) {
-                    if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff >= 120 || !Settings.get().ui().isPhoto_swipe_pos_top_to_bottom() && diff <= -120) {
-                        goBack();
-                    } else
-                        isCaptured = false;
-                }
-            });
-            mProgress.setOnTouchListener((v, event) -> {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_MOVE:
-                        ui.setCanSwipe(false);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        ui.setCanSwipe(true);
-                        break;
-                }
-                return false;
-            });
-        }
-
         mPlayPauseButton = root.findViewById(R.id.action_button_play);
         mShuffleButton = root.findViewById(R.id.action_button_shuffle);
         mRepeatButton = root.findViewById(R.id.action_button_repeat);
+
+        ImageView mAdditional = root.findViewById(R.id.goto_button);
+        mAdditional.setOnClickListener(v -> {
+            ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder()
+                    .add(R.menu.audio_player_menu)
+                    .header(getString(R.string.audio_channel), R.drawable.audio_player, null);
+            if (!isEqualizerAvailable())
+                menus.exclude(R.id.eq);
+            menus.show(getChildFragmentManager(), "audio_player_options", this::OptionsItemSelected);
+        });
 
         RepeatingImageButton mPreviousButton = root.findViewById(R.id.action_button_previous);
         RepeatingImageButton mNextButton = root.findViewById(R.id.action_button_next);
@@ -347,16 +285,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         return root;
     }
 
-    private boolean canGoBack() {
-        return requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1;
-    }
-
-    private void goBack() {
-        if (isAdded() && canGoBack()) {
-            requireActivity().getSupportFragmentManager().popBackStack();
-        }
-    }
-
     private void onAudioBroadcastButtonClick() {
         ivTranslate.setActive(!ivTranslate.isActive());
 
@@ -386,9 +314,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         }
 
         int ret = DownloadUtil.downloadTrack(getContext(), audio, false);
-        if (ret == 0)
+        if (ret == 0) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved_audio);
-        else if (ret == 1) {
+            ivSave.setImageResource(R.drawable.succ);
+        } else if (ret == 1) {
             PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio);
             new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.error)
@@ -551,22 +480,10 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
     @Override
     public void onResume() {
         super.onResume();
-
-        if (requireActivity() instanceof OnSectionResumeCallback) {
-            ((OnSectionResumeCallback) requireActivity()).onClearSelection();
-        }
-
         // Set the playback drawables
         updatePlaybackControls();
         // Current info
         updateNowPlayingInfo();
-
-        new ActivityFeatures.Builder()
-                .begin()
-                .setHideNavigationMenu(true)
-                .setBarsColored(requireActivity(), true)
-                .build()
-                .apply(requireActivity());
     }
 
     /**
@@ -610,6 +527,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
      */
     @Override
     public void onDestroy() {
+        mCompositeDisposable.dispose();
         super.onDestroy();
 
         mIsPaused = false;
@@ -919,7 +837,7 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
                 mProgress.setSecondaryProgress(bufferProgress);
 
                 if (mFromTouch) {
-                    return 500;
+                    return 1500;
                 } else if (MusicUtils.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {
@@ -985,10 +903,6 @@ public class AudioPlayerFragment extends BaseFragment implements SeekBar.OnSeekB
         @Override
         public void handleMessage(final Message msg) {
             if (msg.what == REFRESH_TIME) {
-                if (mAudioPlayer.get().isCaptured) {
-                    mAudioPlayer.get().queueNextRefresh(300);
-                    return;
-                }
                 final long next = mAudioPlayer.get().refreshCurrentTime();
                 mAudioPlayer.get().queueNextRefresh(next);
             }

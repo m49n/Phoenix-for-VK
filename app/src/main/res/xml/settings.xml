@@ -351,13 +351,6 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="disable_swipes"
-            android:summary="@string/disable_swipes"
-            android:title="@string/disable_swipes"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="disable_swipes_chat"
             android:summary="@string/disable_swipes_chat"
             android:title="@string/disable_swipes_chat"

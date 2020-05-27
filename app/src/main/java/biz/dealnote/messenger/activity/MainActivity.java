@@ -124,6 +124,8 @@ import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.Banned;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Document;
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     public static final String ACTION_MAIN = "android.intent.action.MAIN";
     public static final String ACTION_CHAT_FROM_SHORTCUT = "biz.dealnote.messenger.ACTION_CHAT_FROM_SHORTCUT";
     public static final String ACTION_OPEN_PLACE = "biz.dealnote.messenger.activity.MainActivity.openPlace";
+    public static final String ACTION_OPEN_AUDIO_PLAYER = "biz.dealnote.messenger.activity.MainActivity.openAudioPlayer";
     public static final String ACTION_OPEN_FILE = "biz.dealnote.messenger.activity.MainActivity.openFile";
     public static final String ACTION_SEND_ATTACHMENTS = "biz.dealnote.messenger.ACTION_SEND_ATTACHMENTS";
     public static final String ACTION_SWITH_ACCOUNT = "biz.dealnote.messenger.ACTION_SWITH_ACCOUNT";
@@ -455,20 +458,26 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                    builder.setPositiveButton(R.string.set_offline, (dialog, which) ->
-                            mCompositeDisposable.add(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
-                                    .compose(RxUtils.applySingleIOToMainSchedulers())
-                                    .subscribe(this::OnSetOffline, t -> OnSetOffline(false))));
-                    builder.setNegativeButton(R.string.open_clipboard_url, (dialog, which) -> {
-                        final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
-                            String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                            LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
+
+                    ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.view));
+                    menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
+                    menus.show(getSupportFragmentManager(), "left_options", option -> {
+                        switch (option.getId()) {
+                            case R.id.button_ok:
+                                mCompositeDisposable.add(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
+                                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                                        .subscribe(MainActivity.this::OnSetOffline, t -> OnSetOffline(false)));
+                                break;
+                            case R.id.button_cancel:
+                                final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
+                                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                                    LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
+                                }
+                                break;
                         }
                     });
-                    builder.setCancelable(true);
-                    builder.create().show();
                 });
             } else {
                 Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
@@ -543,6 +552,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             return true;
         }
 
+        if (ACTION_OPEN_AUDIO_PLAYER.equals(action)) {
+            openPlace(PlaceFactory.getPlayerPlace(mAccountId));
+            return false;
+        }
+
         if (ACTION_OPEN_FILE.equals(action)) {
             Uri data = intent.getData();
             Intent intent_open = new Intent(Intent.ACTION_VIEW);
@@ -599,14 +613,14 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         resolveToolbarNavigationIcon();
     }
 
-    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset) {
+    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset, boolean ChatOnly) {
         if (Settings.get().other().isEnable_show_recent_dialogs()) {
             RecentChat recentChat = new RecentChat(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
             getNavigationFragment().appendRecentChat(recentChat);
             getNavigationFragment().refreshNavigationItems();
             getNavigationFragment().selectPage(recentChat);
         }
-        if (Settings.get().ui().isDisable_swipes_chat()) {
+        if (Settings.get().ui().isDisable_swipes_chat() || ChatOnly) {
             ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
             attachToFront(chatFragment);
         } else {
@@ -619,7 +633,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private void openRecentChat(RecentChat chat) {
         final int accountId = this.mAccountId;
         final int messagesOwnerId = this.mAccountId;
-        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()), 0);
+        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()), 0, true);
     }
 
     private void openTargetPage() {
@@ -1066,15 +1080,21 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.PLAYER:
-                if (!(getFrontFragment() instanceof AudioPlayerFragment)) {
-                    attachToFront(AudioPlayerFragment.newInstance(args));
-                }
+                if (getSupportFragmentManager().findFragmentByTag("audio_player") instanceof AudioPlayerFragment)
+                    break;
+                AudioPlayerFragment.newInstance(args).show(getSupportFragmentManager(), "audio_player");
                 break;
 
             case Place.CHAT:
                 final Peer peer = args.getParcelable(Extra.PEER);
                 AssertUtils.requireNonNull(peer);
-                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer, args.getInt(Extra.OFFSET));
+                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer, args.getInt(Extra.OFFSET), true);
+                break;
+
+            case Place.CHAT_DUAL:
+                final Peer peer1 = args.getParcelable(Extra.PEER);
+                AssertUtils.requireNonNull(peer1);
+                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer1, args.getInt(Extra.OFFSET), false);
                 break;
 
             case Place.SEARCH:

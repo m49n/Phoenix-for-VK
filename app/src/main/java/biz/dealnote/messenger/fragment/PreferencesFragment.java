@@ -203,7 +203,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         Preference version = findPreference("version");
         if (version != null) {
-            version.setSummary(Utils.getAppVersionName(requireActivity()));
+            version.setSummary(Utils.getAppVersionName(requireActivity()) + ", VK API " + Constants.API_VERSION);
             version.setOnPreferenceClickListener(preference -> {
                 openAboutUs();
                 return true;

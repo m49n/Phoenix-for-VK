@@ -21,13 +21,10 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
-import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.R
 import biz.dealnote.messenger.activity.MainActivity
 import biz.dealnote.messenger.longpoll.AppNotificationChannels
-import biz.dealnote.messenger.place.PlaceFactory
 import biz.dealnote.messenger.player.MusicPlaybackService
-import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.util.Utils
 
 class NotificationHelper(private val mService: MusicPlaybackService) {
@@ -68,7 +65,9 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
             mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH;
         else
             mNotificationBuilder?.priority = Notification.PRIORITY_MAX
-        mService.startForeground(PHOENIX_MUSIC_SERVICE, mNotificationBuilder?.build())
+        if (isPlaying) {
+            mService.startForeground(PHOENIX_MUSIC_SERVICE, mNotificationBuilder?.build())
+        }
     }
 
     fun killNotification() {
@@ -94,12 +93,8 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
     }
 
     private fun getOpenIntent(context: Context): PendingIntent {
-        val aid = Settings.get()
-                .accounts()
-                .current
         val intent = Intent(context, MainActivity::class.java)
-        intent.putExtra(Extra.PLACE, PlaceFactory.getPlayerPlace(aid))
-        intent.action = MainActivity.ACTION_OPEN_PLACE
+        intent.action = MainActivity.ACTION_OPEN_AUDIO_PLAYER
         return PendingIntent.getActivity(mService, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
     }
 

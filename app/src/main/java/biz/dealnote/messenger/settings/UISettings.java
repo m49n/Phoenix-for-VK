@@ -217,11 +217,6 @@ class UISettings implements ISettings.IUISettings {
     }
 
     @Override
-    public boolean isDisable_swipes() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_swipes", false);
-    }
-
-    @Override
     public boolean isDisable_swipes_chat() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_swipes_chat", false);
     }

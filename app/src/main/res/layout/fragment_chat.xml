@@ -48,8 +48,8 @@
                         android:text="Aa"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         app:textAllCaps="true" />
                 </RelativeLayout>
 
