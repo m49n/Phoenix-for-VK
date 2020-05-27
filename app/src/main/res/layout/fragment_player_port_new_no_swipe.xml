@@ -60,19 +60,22 @@
             android:id="@+id/audio_player_current_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textSize="11sp"
+            tools:ignore="SmallSp" />
 
         <TextView
             android:id="@+id/audio_player_total_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            tools:ignore="RelativeOverlap" />
+            android:textSize="11sp"
+            tools:ignore="RelativeOverlap,SmallSp" />
 
         <SeekBar
             android:id="@android:id/progress"
@@ -88,10 +91,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:layout_marginTop="-2dp"
             android:layout_toEndOf="@+id/audio_player_current_time"
             android:textColor="?attr/colorSecondary"
             tools:text="@string/get_lyrics" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -107,8 +110,8 @@
             android:id="@+id/audio_add"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="top"
             app:active="true"
             app:active_background_color="?attr/icon_color_active"
             app:button_icon="@drawable/plus"
@@ -127,8 +130,8 @@
             <biz.dealnote.messenger.player.ui.RepeatingImageButton
                 android:id="@+id/audio_save"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/save"
                 android:tint="?attr/colorPrimary" />
 
@@ -154,6 +157,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
+                android:padding="4dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
@@ -181,8 +185,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="top"
             app:active="true"
             app:active_background_color="?attr/icon_color_active"
             app:button_icon="@drawable/share_variant"
@@ -244,7 +248,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/play"
-                app:fabSize="auto" />
+                app:borderWidth="1dp"
+                app:elevation="1dp"
+                app:fabSize="auto"
+                app:pressedTranslationZ="3dp" />
         </FrameLayout>
 
         <FrameLayout
