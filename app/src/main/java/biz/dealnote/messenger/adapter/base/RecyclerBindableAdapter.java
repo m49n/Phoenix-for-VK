@@ -121,7 +121,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
 
     @NotNull
     @Override
-    public VH onCreateViewHolder(ViewGroup viewGroup, int type) {
+    public VH onCreateViewHolder(@NotNull ViewGroup viewGroup, int type) {
         //if our position is one of our items (this comes from getItemViewType(int position) below)
         if (type != TYPE_HEADER && type != TYPE_FOOTER) {
             return onCreateItemViewHolder(viewGroup, type);
@@ -138,7 +138,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    public final void onBindViewHolder(final RecyclerView.ViewHolder vh, int position) {
+    public final void onBindViewHolder(@NotNull final RecyclerView.ViewHolder vh, int position) {
         //check what type of view our position is
         if (isHeader(position)) {
             View v = headers.get(position);

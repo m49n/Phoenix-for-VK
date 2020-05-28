@@ -189,15 +189,14 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         switch (headerStatus) {
             case DIV_DISABLE:
+            case DIV_TODAY:
                 holder.mHeaderRoot.setVisibility(View.GONE);
+                //holder.mHeaderRoot.setVisibility(View.VISIBLE);
+                //holder.mHeaderTitle.setText(R.string.dialog_day_today);
                 break;
             case DIV_OLD:
                 holder.mHeaderRoot.setVisibility(View.VISIBLE);
                 holder.mHeaderTitle.setText(R.string.dialog_day_older);
-                break;
-            case DIV_TODAY:
-                holder.mHeaderRoot.setVisibility(View.VISIBLE);
-                holder.mHeaderTitle.setText(R.string.dialog_day_today);
                 break;
             case DIV_YESTERDAY:
                 holder.mHeaderRoot.setVisibility(View.VISIBLE);
