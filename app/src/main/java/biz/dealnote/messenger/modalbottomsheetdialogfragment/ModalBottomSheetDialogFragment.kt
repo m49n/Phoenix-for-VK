@@ -65,6 +65,11 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         return inflater.inflate(R.layout.modal_bottom_sheet_dialog_fragment, container, false)
     }
 
+    override fun onPause() {
+        super.onPause()
+        dismiss()
+    }
+
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -143,6 +148,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         internal var excludes = ArrayList<Int>()
         internal var columns = 1
         internal var header: String? = null
+
         @DrawableRes
         internal var icon: Int = R.drawable.ic_error_toast_vector
         internal var urlicon: String? = null
@@ -224,6 +230,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         private var layoutRes = R.layout.modal_bottom_sheet_dialog_fragment_item
         private var headerLayoutRes = R.layout.modal_bottom_sheet_dialog_fragment_header
         internal var header: String? = null
+
         @DrawableRes
         internal var icon: Int = R.drawable.ic_error_toast_vector
         internal var urlicon: String? = null

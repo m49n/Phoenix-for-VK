@@ -19,54 +19,65 @@
         <ImageButton
             android:id="@id/exo_prev"
             style="@style/ExoMediaButton.Previous"
+            android:alpha="0.8"
             android:src="@drawable/page_first"
             android:tint="?colorSecondary" />
 
         <ImageButton
             android:id="@id/exo_rew"
             style="@style/ExoMediaButton.Rewind"
+            android:alpha="0.8"
             android:tint="?colorSecondary" />
 
         <ImageButton
             android:id="@id/exo_shuffle"
             style="@style/ExoMediaButton"
+            android:alpha="0.8"
             android:src="@drawable/shuffle"
             android:tint="?colorSecondary" />
 
         <ImageButton
             android:id="@id/exo_repeat_toggle"
             style="@style/ExoMediaButton"
+            android:alpha="0.8"
             android:src="@drawable/repeat"
             android:tint="?colorSecondary" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@id/exo_play"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:background="@drawable/audio_button"
-            android:src="@drawable/play" />
+            style="?attr/fab_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:src="@drawable/play"
+            app:fabSize="normal" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@id/exo_pause"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:background="@drawable/audio_button"
-            android:src="@drawable/pause" />
+            style="?attr/fab_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:src="@drawable/pause"
+            app:fabSize="normal" />
 
         <ImageButton
             android:id="@id/exo_ffwd"
             style="@style/ExoMediaButton.FastForward"
+            android:alpha="0.8"
             android:tint="?colorSecondary" />
 
         <ImageButton
             android:id="@id/exo_next"
             style="@style/ExoMediaButton.Next"
+            android:alpha="0.8"
             android:src="@drawable/page_last"
             android:tint="?colorSecondary" />
 
         <ImageButton
             android:id="@id/exo_vr"
             style="@style/ExoMediaButton.VR"
+            android:alpha="0.8"
             android:tint="?colorSecondary" />
 
     </LinearLayout>
@@ -82,6 +93,7 @@
             android:id="@id/exo_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0.8"
             android:includeFontPadding="false"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
@@ -94,16 +106,18 @@
             android:layout_width="0dp"
             android:layout_height="26dp"
             android:layout_weight="1"
+            android:alpha="0.8"
             app:buffered_color="?colorSecondary"
             app:played_ad_marker_color="?colorPrimary"
             app:played_color="?colorPrimary"
             app:scrubber_color="?colorPrimary"
-            app:unplayed_color="#22ffffff" />
+            app:unplayed_color="#3E393939" />
 
         <TextView
             android:id="@id/exo_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0.8"
             android:includeFontPadding="false"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"

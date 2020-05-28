@@ -102,13 +102,16 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/header_group_fab_message"
-                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    style="?attr/fab_secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/email"
-                    app:fabSize="mini" />
+                    app:borderWidth="1dp"
+                    app:elevation="1dp"
+                    app:fabSize="mini"
+                    app:pressedTranslationZ="3dp" />
             </LinearLayout>
 
         </LinearLayout>

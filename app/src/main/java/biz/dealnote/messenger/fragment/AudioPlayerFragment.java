@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -41,7 +40,6 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.domain.IAudioInteractor;
@@ -238,12 +236,6 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
         tvTitle.setSelected(true);
         tvSubtitle.setSelected(true);
         tvAlbum.setSelected(true);
-
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.phoenix_player));
-            actionBar.setSubtitle(null);
-        }
 
         mPreviousButton.setRepeatListener(mRewindListener);
         mNextButton.setRepeatListener(mFastForwardListener);

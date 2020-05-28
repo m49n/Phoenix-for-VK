@@ -109,6 +109,77 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="group_appearance"
+        android:title="@string/appearance_settings"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:defaultValue="ice"
+            android:key="app_theme"
+            android:title="@string/choose_theme_title"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="amoled_theme"
+            android:title="@string/amoled_theme"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="webview_night_mode"
+            android:summary="@string/webview_night_mode"
+            android:title="@string/webview_night_mode"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="audio_round_icon"
+            android:title="@string/audio_round_icon"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="avatar_style"
+            android:summary="@string/avatar_style_summary"
+            android:title="@string/avatar_style_title"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="double_press_to_exit"
+            android:title="@string/double_press_to_exit"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="my_message_no_color"
+            android:title="@string/my_message_no_color"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="display_writing"
+            android:summary="@string/display_writing"
+            android:title="@string/display_writing"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="photo_swipe_pos_top_to_bottom"
+            android:summary="@string/photo_swipe_pos_top_to_bottom"
+            android:title="@string/photo_swipe_pos_top_to_bottom"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="disable_swipes_chat"
+            android:summary="@string/disable_swipes_chat"
+            android:title="@string/disable_swipes_chat"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
@@ -283,77 +354,6 @@
             android:key="show_profile_in_additional_page"
             android:summary="@string/show_profile_in_additional_page"
             android:title="@string/show_profile_in_additional_page"
-            app:iconSpaceReserved="false" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="group_appearance"
-        android:title="@string/appearance_settings"
-        app:iconSpaceReserved="false">
-
-        <Preference
-            android:defaultValue="ice"
-            android:key="app_theme"
-            android:title="@string/choose_theme_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="amoled_theme"
-            android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="webview_night_mode"
-            android:summary="@string/webview_night_mode"
-            android:title="@string/webview_night_mode"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="audio_round_icon"
-            android:title="@string/audio_round_icon"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="avatar_style"
-            android:summary="@string/avatar_style_summary"
-            android:title="@string/avatar_style_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="double_press_to_exit"
-            android:title="@string/double_press_to_exit"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="my_message_no_color"
-            android:title="@string/my_message_no_color"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="display_writing"
-            android:summary="@string/display_writing"
-            android:title="@string/display_writing"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="photo_swipe_pos_top_to_bottom"
-            android:summary="@string/photo_swipe_pos_top_to_bottom"
-            android:title="@string/photo_swipe_pos_top_to_bottom"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="disable_swipes_chat"
-            android:summary="@string/disable_swipes_chat"
-            android:title="@string/disable_swipes_chat"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

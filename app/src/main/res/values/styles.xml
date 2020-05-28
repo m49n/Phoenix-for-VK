@@ -24,6 +24,7 @@
 
         <item name="materialCardViewStyle">@style/Theme.MaterialCardView</item>
         <item name="floatingActionButtonStyle">@style/Theme.FloatingActionButton</item>
+        <item name="fab_secondary">@style/Theme.FloatingActionButtonSecondary</item>
 
         <item name="dividerColor">#E1E3E7</item>
 
@@ -341,6 +342,11 @@
     <style name="Theme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">?colorSurface</item>
         <item name="tint">?colorSecondary</item>
+    </style>
+
+    <style name="Theme.FloatingActionButtonSecondary" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?colorSecondary</item>
+        <item name="tint">@color/white</item>
     </style>
 
     <style name="ShapeAppearance.AppTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
