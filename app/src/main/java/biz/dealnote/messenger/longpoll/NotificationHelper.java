@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
@@ -85,7 +86,10 @@ public class NotificationHelper {
             messageText += " " + context.getString(R.string.notif_forward, message.getForwardMessagesCount());
         }
         if (message.getAttachments() != null && message.getAttachments().size() > 0) {
-            messageText += " " + context.getString(R.string.notif_attach, message.getAttachments().size(), context.getString(Utils.declOfNum(message.getAttachments().size(), new int[]{R.string.attachment_notif, R.string.attacment_sec_notif, R.string.attachments_notif})));
+            if (!isEmpty(message.getAttachments().getStickers()))
+                messageText += " " + context.getString(R.string.notif_sticker);
+            else
+                messageText += " " + context.getString(R.string.notif_attach, message.getAttachments().size(), context.getString(Utils.declOfNum(message.getAttachments().size(), new int[]{R.string.attachment_notif, R.string.attacment_sec_notif, R.string.attachments_notif})));
         }
 
         String text = hideBody ? context.getString(R.string.message_text_is_not_available) : messageText;
@@ -111,6 +115,11 @@ public class NotificationHelper {
                 .setContentText(OwnerLinkSpanFactory.withSpans(text, true, false, null))
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(OwnerLinkSpanFactory.withSpans(text, true, false, null)))
+                .setColor(0xff11acfa)
+                .setWhen(message.getDate() * 1000)
+                .setShowWhen(true)
+                .setSortKey("" + (Long.MAX_VALUE - message.getDate() * 1000))
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT > 23 && Settings.get().main().isGrouping_notifications()) {
@@ -209,6 +218,22 @@ public class NotificationHelper {
                                     .setBigContentTitle(OwnerLinkSpanFactory.withSpans(text, true, false, null))
                                     .setSummaryText(context.getString(R.string.notif_photos, message.getAttachments().getPhotos().size()))
                                     .bigPicture(bitmap));
+                            nManager.notify(createPeerTagFor(accountId, message.getPeerId(), message.getId()), NOTIFICATION_MESSAGE, builder.build());
+                        }
+                    }, t -> {
+                    });
+        } else if (!hideBody && message.isHasAttachments() && message.getAttachments() != null && !isEmpty(message.getAttachments().getStickers())) {
+            String url = message.getAttachments().getStickers().get(0).getImage(256, true).getUrl();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.custom_notification);
+
+            NotificationUtils.loadImageRx(url)
+                    .subscribeOn(NotificationScheduler.INSTANCE)
+                    .subscribe(bitmap -> {
+                        if (bitmap != null) {
+                            remoteViews.setBitmap(R.id.image, "setImageBitmap", bitmap);
+                            builder.setCustomBigContentView(remoteViews);
                             nManager.notify(createPeerTagFor(accountId, message.getPeerId(), message.getId()), NOTIFICATION_MESSAGE, builder.build());
                         }
                     }, t -> {

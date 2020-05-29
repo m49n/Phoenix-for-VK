@@ -460,6 +460,8 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
     public void onStopTrackingTouch(final SeekBar bar) {
         if (mPosOverride != -1) {
             MusicUtils.seek(mPosOverride);
+            final int progress = (int) (1000 * mPosOverride / MusicUtils.duration());
+            bar.setProgress(progress);
             mPosOverride = -1;
         }
 
@@ -713,7 +715,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
         boolean preparing = MusicUtils.isPreparing();
         boolean initialized = MusicUtils.isInitialized();
         mProgress.setEnabled(!preparing && initialized);
-        //mProgress.setIndeterminate(preparing);
+        mProgress.setIndeterminate(preparing);
     }
 
     /**
@@ -829,7 +831,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
                 mProgress.setSecondaryProgress(bufferProgress);
 
                 if (mFromTouch) {
-                    return 1500;
+                    return 500;
                 } else if (MusicUtils.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {

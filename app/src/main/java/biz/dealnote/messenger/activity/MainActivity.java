@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -372,16 +373,18 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                         uiHandler.post(() -> {
                             String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/blob/5.x/VKPhoenix.apk\">Скачать с github.com</a></i>";
                             res += ("<p>Изменения: " + Chenges_log + "</p>");
-                            res += ("<p>Донат на энергетик: 5599005042882048 (номер карты скопирован в буфер обмена)</p>");
-
-                            ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("response", "5599005042882048");
-                            clipboard.setPrimaryClip(clip);
 
                             AlertDialog dlg = new MaterialAlertDialogBuilder(MainActivity.this)
                                     .setTitle("Обновление клиента")
                                     .setMessage(Html.fromHtml(res))
-                                    .setPositiveButton("OK", null)
+                                    .setPositiveButton("Закрыть", null)
+                                    .setNegativeButton("Донатнуть", (dialog, which) -> {
+                                        ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData clip = ClipData.newPlainText("response", "5599005042882048");
+                                        clipboard.setPrimaryClip(clip);
+                                        PhoenixToast.CreatePhoenixToast(MainActivity.this).setDuration(Toast.LENGTH_LONG).showToast("Номер карты скопирован в буфер");
+                                    })
+
                                     .setCancelable(true)
                                     .create();
                             dlg.show();
@@ -620,11 +623,12 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             getNavigationFragment().refreshNavigationItems();
             getNavigationFragment().selectPage(recentChat);
         }
-        if (Settings.get().ui().isDisable_swipes_chat() || ChatOnly) {
+        if (Settings.get().ui().isDisable_swipes_chat()) {
             ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
             attachToFront(chatFragment);
         } else {
-            clearBackStack();
+            if (!ChatOnly)
+                clearBackStack();
             DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
             attachToFront(chatFragment);
         }

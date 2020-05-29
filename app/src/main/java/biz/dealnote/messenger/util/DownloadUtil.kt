@@ -10,6 +10,7 @@ import biz.dealnote.messenger.domain.InteractorFactory
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.Document
 import biz.dealnote.messenger.model.Video
+import biz.dealnote.messenger.model.VoiceMessage
 import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.task.DownloadImageTask
@@ -200,6 +201,39 @@ object DownloadUtil {
         }
     }
 
+    @Suppress("DEPRECATION")
+    @JvmStatic
+    fun downloadVoice(context: Context, doc: VoiceMessage, URL: String?) {
+        if (URL == null || URL.isEmpty()) return
+        val docName = makeLegalFilename("Голосовуха " + doc.ownerId + "_" + doc.id, "mp3")
+        CheckDirectory(Settings.get().other().docDir)
+        do {
+            val Temp = File(Settings.get().other().docDir + "/" + docName)
+            if (Temp.exists()) {
+                Temp.setLastModified(Calendar.getInstance().time.time)
+                CreatePhoenixToast(context).showToastError(R.string.exist_audio)
+                return
+            }
+        } while (false)
+        try {
+            if (Settings.get().other().isUse_internal_downloader())
+                VoiceInternalDownloader(context, doc, URL, Settings.get().other().docDir + "/" + docName).doDownload()
+            else {
+                val downloadRequest = DownloadManager.Request(Uri.parse(URL))
+                downloadRequest.allowScanningByMediaScanner()
+                downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                downloadRequest.setDescription(docName)
+                downloadRequest.setDestinationUri(Uri.fromFile(File(Settings.get().other().docDir + "/$docName")))
+                val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                downloadManager.enqueue(downloadRequest)
+                CreatePhoenixToast(context).showToastBottom(R.string.downloading)
+            }
+        } catch (e: Exception) {
+            CreatePhoenixToast(context).showToastError("Voice Error: " + e.message)
+            return
+        }
+    }
+
     private fun createPeerTagFor(aid: Int, peerId: Int): String? {
         return aid.toString() + "_" + peerId
     }
@@ -217,6 +251,18 @@ object DownloadUtil {
     }
 
     private class DocsInternalDownloader internal constructor(private val context: Context, doc: Document, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "doc_" + createPeerTagFor(doc.id, doc.ownerId), true) {
+        @SuppressLint("CheckResult")
+        override fun onPostExecute(s: String?) {
+            if (Objects.isNull(s)) {
+                CreatePhoenixToast(context).showToastBottom(R.string.saved)
+            } else {
+                CreatePhoenixToast(context).showToastError(R.string.error_with_message, s)
+            }
+        }
+
+    }
+
+    private class VoiceInternalDownloader internal constructor(private val context: Context, doc: VoiceMessage, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "voice_" + createPeerTagFor(doc.id, doc.ownerId), true) {
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
@@ -270,7 +316,7 @@ object DownloadUtil {
                         if (tag == NullTag.INSTANCE || tag is ID3v1Tag || tag is ID3v11Tag) {
                             tag = audioFile.setNewDefaultTag(); }
 
-                        val Cover = File(file!!);
+                        val Cover = File(file!!)
                         val newartwork = ArtworkFactory.createArtworkFromFile(Cover);
                         tag.setArtwork(newartwork)
                         if (!Objects.isNullOrEmptyString(current_audio.artist))
@@ -283,9 +329,11 @@ object DownloadUtil {
                             val mAudioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor();
                             mAudioInteractor.getLyrics(current_audio.getLyricsId())
                                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                                    .subscribe({ t -> run { tag.setField(FieldKey.COMMENT, t); FlushAudio(Cover, audioFile, Flaudio, lst); } }, { FlushAudio(Cover, audioFile, Flaudio, lst) })
-                        } else
+                                    .subscribe({ t -> run { tag.setField(FieldKey.COMMENT, "{owner_id=" + current_audio.ownerId + "_id=" + current_audio.id + "} " + t); FlushAudio(Cover, audioFile, Flaudio, lst); } }, { tag.setField(FieldKey.COMMENT, "{owner_id=" + current_audio.ownerId + "_id=" + current_audio.id + "}"); FlushAudio(Cover, audioFile, Flaudio, lst) })
+                        } else {
+                            tag.setField(FieldKey.COMMENT, "{owner_id=" + current_audio.ownerId + "_id=" + current_audio.id + "}")
                             FlushAudio(Cover, audioFile, Flaudio, lst)
+                        }
                     } catch (e: RuntimeException) {
                         CreatePhoenixToast(context).showToastError(R.string.error_with_message, e.localizedMessage)
                     }

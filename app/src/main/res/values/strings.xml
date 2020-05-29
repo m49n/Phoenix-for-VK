@@ -1272,6 +1272,8 @@
     <string name="succ_offline">Вы стали Оффлайн</string>
     <string name="err_offline">Ошибка, вы Онлайн!</string>
     <string name="user_readed_yor_message">Прочитал(а) ваше сообщение</string>
+    <string name="user_readed_yor_message_woman">Прочитала ваше сообщение</string>
+    <string name="user_readed_yor_message_man">Прочитал ваше сообщение</string>
     <string name="copy_track_info">Скопировать информацию трека</string>
     <string name="search_by_artist">Поиск по исполнителю</string>
     <string name="auto_update">Получать обновления</string>
@@ -1342,4 +1344,9 @@
     <string name="posts_analized">%1$d постов проверено</string>
     <string name="photo_rounded_view">Скругление краёв у фото</string>
     <string name="grouping_notifications">Группировать уведомления</string>
+    <string name="mp3_friendly">Если не работает скачивание</string>
+    <string name="search_stories">Искать истории</string>
+    <string name="by_name">По имени</string>
+    <string name="by_owner">По владельцу</string>
+    <string name="notif_sticker">Стикер</string>
 </resources>

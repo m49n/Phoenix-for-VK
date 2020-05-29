@@ -47,6 +47,9 @@ public interface IUsersApi {
     Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields);
 
     @CheckResult
+    Single<StoryResponse> searchStory(String q, Integer mentioned_id, Integer count, Integer extended, String fields);
+
+    @CheckResult
     Single<Integer> report(Integer userId, String type, String comment);
 
     @CheckResult

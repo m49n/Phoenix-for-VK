@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/player_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/goto_button_header"
@@ -106,8 +106,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/audio_player_current_time"
                 android:layout_marginTop="4dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:max="1000" />
 
         </RelativeLayout>

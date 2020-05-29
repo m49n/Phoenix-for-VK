@@ -20,6 +20,10 @@
         android:title="@string/open_clipboard_url" />
 
     <item
+        android:id="@+id/search_stories"
+        android:title="@string/search_stories" />
+
+    <item
         android:id="@+id/wall_attachments"
         android:title="@string/wall_attachments" />
 </menu>

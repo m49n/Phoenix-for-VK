@@ -17,6 +17,7 @@ import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOfflineUpdate;
 import biz.dealnote.messenger.api.model.longpoll.UserIsOnlineUpdate;
+import biz.dealnote.messenger.api.model.response.StoryBlockResponce;
 import biz.dealnote.messenger.db.column.GroupColumns;
 import biz.dealnote.messenger.db.column.UserColumns;
 import biz.dealnote.messenger.db.interfaces.IOwnersStorage;
@@ -166,10 +167,48 @@ public class OwnersRepository implements IOwnersRepository {
                 .users()
                 .getStory(owner_id, 1, UserColumns.API_FIELDS)
                 .flatMap(story -> {
-                    List<List<VKApiStory>> dtos_multy = listEmptyIfNull(story.items);
+                    List<StoryBlockResponce> dtos_multy = listEmptyIfNull(story.items);
                     List<VKApiStory> dtos = new ArrayList<>();
-                    for (List<VKApiStory> itst : dtos_multy)
-                        dtos.addAll(itst);
+                    for (StoryBlockResponce itst : dtos_multy) {
+                        dtos.addAll(listEmptyIfNull(itst.stories));
+                        dtos.addAll(listEmptyIfNull(itst.app_grouped_stories));
+                        dtos.addAll(listEmptyIfNull(itst.community_grouped_stories));
+                        dtos.addAll(listEmptyIfNull(itst.live_active));
+                        dtos.addAll(listEmptyIfNull(itst.live_finished));
+                        dtos.addAll(listEmptyIfNull(itst.promo_stories));
+                    }
+                    List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
+                    VKOwnIds ownIds = new VKOwnIds();
+                    for (VKApiStory news : dtos) {
+                        ownIds.appendStory(news);
+                    }
+                    return findBaseOwnersDataAsBundle(accountId, ownIds.getAll(), IOwnersRepository.MODE_ANY, owners)
+                            .map(owners1 -> {
+                                List<Story> stories = new ArrayList<>(dtos.size());
+                                for (VKApiStory dto : dtos) {
+                                    stories.add(Dto2Model.transformStory(dto, owners1));
+                                }
+                                return stories;
+                            });
+                });
+    }
+
+    @Override
+    public Single<List<Story>> searchStory(int accountId, String q, Integer mentioned_id) {
+        return networker.vkDefault(accountId)
+                .users()
+                .searchStory(q, mentioned_id, 1000, 1, UserColumns.API_FIELDS)
+                .flatMap(story -> {
+                    List<StoryBlockResponce> dtos_multy = listEmptyIfNull(story.items);
+                    List<VKApiStory> dtos = new ArrayList<>();
+                    for (StoryBlockResponce itst : dtos_multy) {
+                        dtos.addAll(listEmptyIfNull(itst.stories));
+                        dtos.addAll(listEmptyIfNull(itst.app_grouped_stories));
+                        dtos.addAll(listEmptyIfNull(itst.community_grouped_stories));
+                        dtos.addAll(listEmptyIfNull(itst.live_active));
+                        dtos.addAll(listEmptyIfNull(itst.live_finished));
+                        dtos.addAll(listEmptyIfNull(itst.promo_stories));
+                    }
                     List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
                     VKOwnIds ownIds = new VKOwnIds();
                     for (VKApiStory news : dtos) {

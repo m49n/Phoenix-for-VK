@@ -88,7 +88,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.Holder> {
         void onVideoClick(int position, Video video);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         View card;
         ImageView image;

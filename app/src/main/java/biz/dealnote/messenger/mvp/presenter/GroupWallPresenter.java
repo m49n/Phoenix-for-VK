@@ -486,4 +486,19 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         final int accountId = super.getAccountId();
         getView().openChatWith(accountId, accountId, peer);
     }
+
+    @Override
+    public void searchStory(boolean ByName) {
+        appendDisposable(ownersRepository.searchStory(getAccountId(), ByName ? community.getFullName() : null, ByName ? null : ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> {
+                    if (!Utils.isEmpty(data)) {
+                        stories.clear();
+                        stories.addAll(data);
+                        getView().updateStory(stories);
+                    }
+                }, t -> {
+                }));
+    }
+
 }

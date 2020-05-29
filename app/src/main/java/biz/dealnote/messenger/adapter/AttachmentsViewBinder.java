@@ -258,6 +258,16 @@ public class AttachmentsViewBinder {
             holder.mWaveFormView.setWaveForm(DEFAUL_WAVEFORM);
         }
 
+        holder.mWaveFormView.setOnLongClickListener(v -> {
+            if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
+                AppPerms.requestReadWriteStoragePermission((Activity) mContext);
+                return true;
+            }
+            DownloadUtil.downloadVoice(mContext, voice, voice.getLinkMp3());
+
+            return true;
+        });
+
         holder.mButtonPlay.setOnClickListener(v -> {
             if (nonNull(mVoiceActionListener)) {
                 mVoiceActionListener.onVoicePlayButtonClick(holder.getHolderId(), voiceMessageId, voice);

@@ -425,18 +425,22 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="force_hls"
+            android:summary="@string/force_hls"
             android:title="@string/force_hls"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="use_old_vk_api"
+            android:summary="@string/mp3_friendly"
             android:title="@string/use_old_vk_api"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="disable_history"
+            android:summary="@string/disable_history"
             android:title="@string/disable_history"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="force_cache"
+            android:summary="@string/force_cache"
             android:title="@string/force_cache"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
@@ -456,16 +460,19 @@
 
         <Preference
             android:key="request_executor"
+            android:summary="@string/request_executor_title"
             android:title="@string/request_executor_title"
             app:iconSpaceReserved="false" />
 
         <Preference
             android:key="account_cache_cleaner"
+            android:summary="@string/account_cache_cleaner"
             android:title="@string/account_cache_cleaner"
             app:iconSpaceReserved="false" />
 
         <Preference
             android:key="picture_cache_cleaner"
+            android:summary="@string/picture_cache_cleaner"
             android:title="@string/picture_cache_cleaner"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>

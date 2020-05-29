@@ -154,6 +154,10 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         throw new IllegalArgumentException("Unknown filter");
     }
 
+    public void searchStory(boolean ByName) {
+        throw new IllegalArgumentException("Unknown story search");
+    }
+
     public List<Story> getStories() {
         return stories;
     }

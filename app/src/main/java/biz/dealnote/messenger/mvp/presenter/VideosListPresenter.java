@@ -51,7 +51,6 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
     private final List<Video> data;
     private final IVideosInteractor interactor;
     private final IUploadManager uploadManager;
-    private Context context;
     private String albumTitle;
     private boolean endOfContent;
     private IntNextFrom intNextFrom;
@@ -70,7 +69,6 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         this.uploadManager = Injection.provideUploadManager();
         this.destination = UploadDestination.forVideo(IVideosListView.ACTION_SELECT.equalsIgnoreCase(action) ? 0 : 1);
         this.uploadsData = new ArrayList<>(0);
-        this.context = context;
 
         this.ownerId = ownerId;
         this.albumId = albumId;

@@ -64,4 +64,6 @@ public interface IOwnersRepository {
     Single<Integer> report(int accountId, int userId, String type, String comment);
 
     Single<List<Story>> getStory(int accountId, Integer owner_id);
+
+    Single<List<Story>> searchStory(int accountId, String q, Integer mentioned_id);
 }

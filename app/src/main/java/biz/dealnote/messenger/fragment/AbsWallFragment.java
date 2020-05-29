@@ -50,6 +50,8 @@ import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
@@ -72,6 +74,7 @@ import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.isLandscape;
 
 /**
@@ -280,6 +283,21 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             case R.id.wall_attachments:
                 goToConversationAttachments();
                 return true;
+            case R.id.search_stories:
+                ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+                menus.add(new OptionRequest(R.id.button_ok, getString(R.string.by_name), R.drawable.pencil));
+                menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.by_owner), R.drawable.person));
+                menus.show(requireActivity().getSupportFragmentManager(), "search_story_options", option -> {
+                    switch (option.getId()) {
+                        case R.id.button_ok:
+                            getPresenter().searchStory(true);
+                            break;
+                        case R.id.button_cancel:
+                            getPresenter().searchStory(false);
+                            break;
+                    }
+                });
+                return true;
             case R.id.action_open_url:
                 final ClipboardManager clipBoard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
@@ -340,7 +358,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
     @Override
     public void updateStory(List<Story> stories) {
-        if (nonNull(mStoryAdapter)) {
+        if (nonNull(mStoryAdapter) && !isEmpty(stories)) {
             mStoryAdapter.setItems(stories);
             mStoryAdapter.notifyDataSetChanged();
         }

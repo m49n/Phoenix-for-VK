@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,11 +88,13 @@ import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.MessageStatus;
 import biz.dealnote.messenger.model.MessageUpdate;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.PeerDeleting;
 import biz.dealnote.messenger.model.PeerUpdate;
 import biz.dealnote.messenger.model.SaveMessageBuilder;
 import biz.dealnote.messenger.model.SentMsg;
+import biz.dealnote.messenger.model.Sex;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.WriteText;
 import biz.dealnote.messenger.model.criteria.DialogsCriteria;
@@ -120,6 +123,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
 
+import static biz.dealnote.messenger.longpoll.NotificationHelper.tryCancelNotificationForPeer;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.RxUtils.ignore;
@@ -373,6 +377,22 @@ public class MessagesRepository implements IMessagesRepository {
         });
     }
 
+    @StringRes
+    private int GetTypeUser(OwnerInfo ownr) {
+        if (ownr.getOwner().getOwnerType() == OwnerType.USER) {
+            switch (ownr.getUser().getSex()) {
+                case Sex.MAN:
+                    return R.string.user_readed_yor_message_man;
+                case Sex.WOMAN:
+                    return R.string.user_readed_yor_message_woman;
+                case Sex.UNKNOWN:
+                default:
+                    return R.string.user_readed_yor_message;
+            }
+        }
+        return R.string.user_readed_yor_message;
+    }
+
     @Override
     public Completable handleReadUpdates(int accountId, @Nullable List<OutputMessagesSetReadUpdate> outgoing, @Nullable List<InputMessagesSetReadUpdate> incoming) {
         List<PeerPatch> patches = new ArrayList<>();
@@ -385,7 +405,7 @@ public class MessagesRepository implements IMessagesRepository {
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
                                 Handler handlerMain = new Handler(Looper.getMainLooper());
-                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).setBitmap(userInfo.getAvatar()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).setBitmap(userInfo.getAvatar()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(GetTypeUser(userInfo))));
                             }, throwable -> {
                             }));
                 }
@@ -396,6 +416,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(incoming)) {
             for (InputMessagesSetReadUpdate update : incoming) {
                 patches.add(new PeerPatch(update.peer_id).withInRead(update.local_id).withUnreadCount(update.unread_count));
+                tryCancelNotificationForPeer(Injection.provideApplicationContext(), accountId, update.getPeerId());
             }
         }
 

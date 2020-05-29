@@ -119,7 +119,10 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             int bufferLength;
             double downloadedSize = 0.0;
 
-            int totalSize = Integer.parseInt(Objects.requireNonNull(response.header("Content-Length")));
+            String cntlength = response.header("Content-Length");
+            int totalSize = 1;
+            if (!Utils.isEmpty(cntlength))
+                totalSize = Integer.parseInt(cntlength);
             while ((bufferLength = input.read(data)) != -1) {
                 output.write(data, 0, bufferLength);
                 downloadedSize += bufferLength;
@@ -148,6 +151,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             mNotifyManager.cancel(ID, NotificationHelper.NOTIFICATION_DOWNLOADING);
             mNotifyManager.notify(ID, NotificationHelper.NOTIFICATION_DOWNLOAD, mBuilder.build());
         } catch (Exception e) {
+            e.printStackTrace();
             mBuilder.setContentText(mContext.getString(R.string.error) + " " + e.getLocalizedMessage() + ". " + this.filename)
                     .setSmallIcon(R.drawable.ic_error_toast_vector)
                     .setAutoCancel(true)

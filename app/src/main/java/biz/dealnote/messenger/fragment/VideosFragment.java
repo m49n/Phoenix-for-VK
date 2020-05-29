@@ -20,6 +20,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -94,6 +96,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
         return fragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<VideosListPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

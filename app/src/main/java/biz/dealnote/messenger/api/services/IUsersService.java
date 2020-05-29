@@ -115,6 +115,14 @@ public interface IUsersService {
                                                  @Field("extended") Integer extended,
                                                  @Field("fields") String fields);
 
+    @POST("stories.search")
+    @FormUrlEncoded
+    Single<BaseResponse<StoryResponse>> searchStory(@Field("q") String q,
+                                                    @Field("mentioned_id") Integer mentioned_id,
+                                                    @Field("count") Integer count,
+                                                    @Field("extended") Integer extended,
+                                                    @Field("fields") String fields);
+
     @POST("messages.getRecentStickers")
     Single<BaseResponse<Items<VKApiSticker>>> getRecentStickers();
 
