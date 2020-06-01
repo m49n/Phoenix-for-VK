@@ -28,12 +28,10 @@
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
+                android:paddingBottom="6dp"
                 android:text="@string/post_is_pinned"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
-
-            <include layout="@layout/line_divider" />
 
         </LinearLayout>
 
@@ -45,10 +43,6 @@
 
 
         <include layout="@layout/content_post" />
-
-        <include
-            android:id="@+id/bottom_divider"
-            layout="@layout/line_divider" />
 
         <LinearLayout
             android:id="@+id/buttons_bar"
