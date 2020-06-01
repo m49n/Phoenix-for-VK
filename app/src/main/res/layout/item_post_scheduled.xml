@@ -40,7 +40,7 @@
                 android:focusable="true"
                 app:active_background_color="?attr/icon_color_active"
                 app:always_counter="false"
-                app:button_icon="@drawable/delete"
+                app:button_icon="@drawable/ic_outline_delete"
                 app:noactive_icon_color="?attr/colorOnSurface" />
 
         </LinearLayout>

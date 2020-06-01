@@ -845,8 +845,8 @@ public class AttachmentsViewBinder {
                     if (audio.getOwnerId() != Settings.get().accounts().getCurrent())
                         menus.add(new OptionRequest(R.id.add_item_audio, mContext.getString(R.string.action_add), R.drawable.list_add));
                     else
-                        menus.add(new OptionRequest(R.id.add_item_audio, mContext.getString(R.string.delete), R.drawable.delete));
-                    menus.add(new OptionRequest(R.id.share_button, mContext.getString(R.string.share), R.drawable.share_variant));
+                        menus.add(new OptionRequest(R.id.add_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
+                    menus.add(new OptionRequest(R.id.share_button, mContext.getString(R.string.share), R.drawable.ic_outline_share));
                     menus.add(new OptionRequest(R.id.save_item_audio, mContext.getString(R.string.save), R.drawable.save));
                     if (audio.getAlbumId() != 0)
                         menus.add(new OptionRequest(R.id.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));

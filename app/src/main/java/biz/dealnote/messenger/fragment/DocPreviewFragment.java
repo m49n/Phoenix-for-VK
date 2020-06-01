@@ -120,7 +120,7 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         rootView.findViewById(R.id.download_button).setOnClickListener(this);
         rootView.findViewById(R.id.share_button).setOnClickListener(this);
 
-        deleteOrAddButton.setIcon(isMy() ? R.drawable.delete : R.drawable.plus);
+        deleteOrAddButton.setIcon(isMy() ? R.drawable.ic_outline_delete : R.drawable.plus);
 
         return rootView;
     }

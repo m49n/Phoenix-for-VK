@@ -211,7 +211,7 @@
                 android:gravity="end"
                 app:active="true"
                 app:active_background_color="?attr/icon_color_active"
-                app:button_icon="@drawable/share_variant"
+                app:button_icon="@drawable/ic_outline_share"
                 app:noactive_icon_color="?colorOnSurface" />
 
         </RelativeLayout>

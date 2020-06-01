@@ -63,7 +63,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:active_background_color="?attr/icon_color_active"
             app:active_icon_color="#ffffff"
-            app:button_icon="@drawable/share_variant"
+            app:button_icon="@drawable/ic_outline_share"
             app:noactive_background_color="#45dcdcdc"
             app:noactive_icon_color="#fff" />
 

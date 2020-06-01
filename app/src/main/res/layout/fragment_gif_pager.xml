@@ -52,7 +52,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             custom:active_background_color="?attr/icon_color_active"
             custom:always_counter="false"
-            custom:button_icon="@drawable/share_variant"
+            custom:button_icon="@drawable/ic_outline_share"
             custom:noactive_icon_color="#fff" />
 
     </LinearLayout>

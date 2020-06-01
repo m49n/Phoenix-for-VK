@@ -143,7 +143,7 @@
                         android:focusable="true"
                         custom:active_background_color="?attr/icon_color_active"
                         custom:always_counter="true"
-                        custom:button_icon="@drawable/share_variant"
+                        custom:button_icon="@drawable/ic_outline_share"
                         custom:noactive_icon_color="?attr/colorOnSurface" />
 
                 </RelativeLayout>
