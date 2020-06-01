@@ -157,7 +157,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         holder.ownerName.setText(owner.getFullName());
         holder.dateTime.setText(AppTextUtils.getDateFromUnixTime(context, photo.getDate()));
 
-        holder.divider.setVisibility(nonEmpty(photo.getText()) ? View.VISIBLE : View.GONE);
         holder.title.setVisibility(nonEmpty(photo.getText()) ? View.VISIBLE : View.GONE);
         holder.title.setText(photo.getText());
 
@@ -278,7 +277,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         holder.friendsOnlyIcon.setVisibility(post.isFriendsOnly() ? View.VISIBLE : View.GONE);
 
         holder.topDivider.setVisibility(WallAdapter.needToShowTopDivider(post) ? View.VISIBLE : View.GONE);
-        holder.bottomDivider.setVisibility(WallAdapter.needToShowBottomDivider(post) ? View.VISIBLE : View.GONE);
 
         View.OnClickListener postOpenClickListener = v -> {
             if (nonNull(actionListener)) {
@@ -395,7 +393,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             this.dateTime = itemView.findViewById(R.id.photo_datetime);
             this.image = itemView.findViewById(R.id.photo_image);
             this.title = itemView.findViewById(R.id.photo_title);
-            this.divider = itemView.findViewById(R.id.bottom_divider);
         }
     }
 
@@ -449,7 +446,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         View friendsOnlyIcon;
 
         View topDivider;
-        View bottomDivider;
 
         View postRoot;
 
@@ -457,7 +453,6 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             super(itemView);
 
             this.topDivider = itemView.findViewById(R.id.top_divider);
-            this.bottomDivider = itemView.findViewById(R.id.bottom_divider);
 
             this.ownerAvatar = itemView.findViewById(R.id.item_post_avatar);
             this.ownerName = itemView.findViewById(R.id.item_post_owner_name);

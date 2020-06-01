@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.preference.CheckBoxPreference;
+import androidx.preference.SwitchPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -133,12 +133,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        CheckBoxPreference autoupdate = findPreference("auto_update");
+        SwitchPreference autoupdate = findPreference("auto_update");
         if (autoupdate != null) {
             autoupdate.setVisible(Constants.NEED_CHECK_UPDATE);
         }
 
-        CheckBoxPreference prefAmoled = findPreference("amoled_theme");
+        SwitchPreference prefAmoled = findPreference("amoled_theme");
         prefAmoled.setOnPreferenceChangeListener((preference, newValue) -> {
             requireActivity().recreate();
             return true;
@@ -377,7 +377,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     return true;
                 });
 
-        CheckBoxPreference keepLongpoll = findPreference("keep_longpoll");
+        SwitchPreference keepLongpoll = findPreference("keep_longpoll");
         keepLongpoll.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean keep = (boolean) newValue;
             if (keep) {

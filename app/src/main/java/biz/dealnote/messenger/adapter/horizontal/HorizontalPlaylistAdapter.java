@@ -73,7 +73,7 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
         holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
         holder.add.setOnClickListener(v -> listener.onPlayListClick(playlist, position));
         if (playlist.owner_id == Settings.get().accounts().getCurrent())
-            holder.add.setImageResource(R.drawable.delete);
+            holder.add.setImageResource(R.drawable.ic_outline_delete);
         else
             holder.add.setImageResource(R.drawable.plus);
     }

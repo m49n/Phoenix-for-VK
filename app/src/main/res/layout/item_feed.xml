@@ -111,6 +111,7 @@
                     android:autoLink="web"
                     android:gravity="start"
                     android:linksClickable="false"
+                    android:paddingBottom="4dp"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     app:displayHashTags="true"
                     app:emojiconSize="20sp"
@@ -122,10 +123,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_post_text"
-                    android:layout_alignParentStart="true"
+                    android:paddingBottom="4dp"
                     android:text="@string/show_more"
                     android:textAllCaps="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="?attr/colorAccent" />
 
             </RelativeLayout>
 
@@ -144,10 +146,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-        <include
-            android:id="@+id/bottom_divider"
-            layout="@layout/line_divider" />
 
         <LinearLayout
             android:id="@+id/buttons_bar"
@@ -187,7 +185,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:active_background_color="?attr/icon_color_active"
-                app:button_icon="@drawable/share_variant"
+                app:button_icon="@drawable/ic_outline_share"
                 app:noactive_icon_color="?attr/colorOnSurface" />
 
         </LinearLayout>

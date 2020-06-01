@@ -86,19 +86,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         return safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos());
     }
 
-    public static boolean needToShowBottomDivider(Post post) {
-        if (post.getSignerId() > 0 && nonNull(post.getCreator())) {
-            return true;
-        }
-
-        if (isEmpty(post.getCopyHierarchy())) {
-            return isNull(post.getAttachments()) || !post.getAttachments().isPhotosVideosGifsOnly();
-        }
-
-        Post last = post.getCopyHierarchy().get(post.getCopyHierarchy().size() - 1);
-        return isNull(last.getAttachments()) || !last.getAttachments().isPhotosVideosGifsOnly();
-    }
-
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position, int type) {
         Post item = getItem(position);
@@ -170,7 +157,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         holder.root.setOnClickListener(v -> clickListener.onPostClick(post));
 
         holder.topDivider.setVisibility(View.GONE);
-        holder.bottomDivider.setVisibility(needToShowBottomDivider(post) ? View.VISIBLE : View.GONE);
 
         if (holder.viewCounterRoot != null) {
             holder.viewCounterRoot.setVisibility(post.getViewCount() > 0 ? View.VISIBLE : View.GONE);
@@ -321,7 +307,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         View vSignerRoot;
         ImageView ivSignerIcon;
         TextView tvSignerName;
-        View bottomDivider;
         ImageView ivPlatform;
 
         AttachmentsHolder attachmentContainers;
@@ -337,7 +322,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
             tvText.setOnHashTagClickListener(mOnHashTagClickListener);
             tvShowMore = itemView.findViewById(R.id.item_post_show_more);
             tvTime = itemView.findViewById(R.id.item_post_time);
-            bottomDivider = itemView.findViewById(R.id.bottom_divider);
 
             ivFriendOnly = itemView.findViewById(R.id.item_post_friedns_only);
 

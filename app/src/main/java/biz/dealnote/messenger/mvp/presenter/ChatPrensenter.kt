@@ -261,7 +261,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             if (update.accountId == accountId && isChatWithUser(update.userId)) {
                 update.online?.run {
                     subtitle = if (isOnline) {
-                        getString(R.string.online) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen));
+                        getString(R.string.online)
                     } else {
                         getString(R.string.offline) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen))
                     }

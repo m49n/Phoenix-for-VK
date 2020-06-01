@@ -29,7 +29,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_button_add_photo"
+                android:src="@drawable/ic_outline_add_a_photo"
                 app:tint="?attr/colorOnSurface" />
 
             <TextView

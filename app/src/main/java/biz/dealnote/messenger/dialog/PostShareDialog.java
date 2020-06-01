@@ -122,7 +122,7 @@ public class PostShareDialog extends DialogFragment {
         boolean canRepostYourself = mPost.getOwnerId() != mAccountId && !mPost.isFriendsOnly() && mPost.getAuthorId() != mAccountId;
 
         if (canRepostYourself) {
-            items.add(new Item(Methods.REPOST_YOURSELF, new Text(R.string.repost_to_wall)).setIcon(R.drawable.share_variant));
+            items.add(new Item(Methods.REPOST_YOURSELF, new Text(R.string.repost_to_wall)).setIcon(R.drawable.ic_outline_share));
         }
 
         mAdapter = new MenuAdapter(requireActivity(), items);

@@ -264,7 +264,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
                 audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 1, 0);
             });
         } else {
-            ivShare.setIcon(R.drawable.share_variant);
+            ivShare.setIcon(R.drawable.ic_outline_share);
             ivShare.setOnClickListener(v -> shareAudio());
         }
 
@@ -674,7 +674,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
         }
 
         boolean myAudio = currentAudio.getOwnerId() == mAccountId;
-        int icon = myAudio && !currentAudio.isDeleted() ? R.drawable.delete : R.drawable.plus;
+        int icon = myAudio && !currentAudio.isDeleted() ? R.drawable.ic_outline_delete : R.drawable.plus;
         ivAdd.setIcon(icon);
     }
 

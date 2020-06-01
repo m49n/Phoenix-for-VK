@@ -991,13 +991,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
         if (encryptionStatusVisible) {
             @AttrRes
-            var drawableRes = R.drawable.unlock
+            var drawableRes = R.drawable.ic_outline_lock_open
 
             if (optionMenuSettings.get(ENCRYPTION_ENABLED, false)) {
                 drawableRes = if (optionMenuSettings.get(ENCRYPTION_PLUS_ENABLED, false)) {
                     R.drawable.lock_plus
                 } else {
-                    R.drawable.lock
+                    R.drawable.ic_outline_lock
                 }
             }
 

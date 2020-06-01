@@ -48,7 +48,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/forward"
             android:padding="8dp"
-            android:src="@drawable/forward"
+            android:src="@drawable/ic_outline_forward"
             app:tint="?colorOnSurface" />
 
         <ImageView
@@ -92,7 +92,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/delete"
             android:padding="8dp"
-            android:src="@drawable/delete"
+            android:src="@drawable/ic_outline_delete"
             app:tint="?colorOnSurface" />
 
     </LinearLayout>

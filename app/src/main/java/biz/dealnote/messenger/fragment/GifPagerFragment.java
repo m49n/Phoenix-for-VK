@@ -198,7 +198,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     @Override
     public void setupAddRemoveButton(boolean addEnable) {
         if (Objects.nonNull(mButtonAddOrDelete)) {
-            mButtonAddOrDelete.setIcon(addEnable ? R.drawable.plus : R.drawable.delete);
+            mButtonAddOrDelete.setIcon(addEnable ? R.drawable.plus : R.drawable.ic_outline_delete);
         }
     }
 
