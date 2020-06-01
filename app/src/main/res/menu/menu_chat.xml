@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/crypt_state"
-        android:icon="@drawable/unlock"
+        android:icon="@drawable/ic_outline_lock_open"
         android:title="@string/encryption_status"
         app:iconTint="?colorOnSurface"
         app:showAsAction="always" />

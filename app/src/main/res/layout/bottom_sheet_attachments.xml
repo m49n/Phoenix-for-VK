@@ -68,7 +68,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/ic_camera_oval_vector"
+            android:src="@drawable/ic_outline_camera"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
