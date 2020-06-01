@@ -7,6 +7,32 @@
         android:title="@string/general_settings"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:key="proxy"
+            android:title="@string/http_proxy"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="security"
+            android:title="@string/security"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="blacklist"
+            android:title="@string/user_blacklist_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="notifications"
+            android:title="@string/notif_setting_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/behaviour_settings"
+        app:iconSpaceReserved="false">
+
         <ListPreference
             android:key="default_category"
             android:summary="@string/default_category_summary"
@@ -32,26 +58,6 @@
             android:title="@string/photo_preview_size_title"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
-
-        <Preference
-            android:key="proxy"
-            android:title="@string/http_proxy"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="security"
-            android:title="@string/security"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="blacklist"
-            android:title="@string/user_blacklist_title"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="notifications"
-            android:title="@string/notif_setting_title"
-            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="true"

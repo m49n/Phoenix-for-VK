@@ -18,11 +18,11 @@
     </string-array>
 
     <string-array name="preview_preview_size" translatable="false">
-        <item>S: 75px</item>
-        <item>M: 130px</item>
-        <item>X: 604px</item>
-        <item>Y: 807px</item>
-        <item>Z: 1280px</item>
+        <item>S: 75 px</item>
+        <item>M: 130 px</item>
+        <item>X: 604 px</item>
+        <item>Y: 807 px</item>
+        <item>Z: 1280 px</item>
     </string-array>
 
     <string-array name="preview_preview_size_values" translatable="false">
@@ -187,14 +187,14 @@
     <string name="select_image_size_summary">Рекомендуется средний</string>
     <string name="select_image_size_title">Размер отправляемого изображения</string>
     <string-array name="array_image_sizes_names">
-        <item>Маленький 800px</item>
-        <item>Средний 1200px</item>
+        <item>Маленький (800 px)</item>
+        <item>Средний (1200 px)</item>
         <item>Оригинал</item>
     </string-array>
 
     <string-array name="array_image_sizes_settings_names">
-        <item>Маленький 800px</item>
-        <item>Средний 1200px</item>
+        <item>Маленький (800 px)</item>
+        <item>Средний (1200 px)</item>
         <item>Оригинал</item>
         <item>Спрашивать каждый раз</item>
     </string-array>
@@ -226,6 +226,7 @@
     <string name="emojis_type_title">Использовать системные смайлы</string>
     <string name="emojis_recents">Показывать последние стикеры</string>
     <string name="appearance_settings">Внешний вид</string>
+    <string name="behaviour_settings">Поведение</string>
     <string name="music_settings">Плеер</string>
 
     <string name="wall_post">Запись на стене</string>
@@ -1124,7 +1125,7 @@
     <string name="button_disable">Отключить</string>
     <string name="action_add">Добавить</string>
     <string name="get_bitrate">Узнать Битрейт</string>
-    <string name="use_internal_downloader">Внутренний загрузчик</string>
+    <string name="use_internal_downloader">Использовать внутренний загрузчик</string>
     <string name="use_internal_downloader_summary">Для видео и документов</string>
     <string name="bitrate">Битрейт:</string>
     <string name="error_timeout_message">Превышено время ожидание запроса</string>
