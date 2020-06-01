@@ -53,32 +53,32 @@
             android:title="@string/notif_setting_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="grouping_notifications"
             android:title="@string/grouping_notifications"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="custom_tabs"
             android:title="@string/open_links_in_app"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="double_press_to_exit"
             android:title="@string/double_press_to_exit"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="photo_swipe_pos_top_to_bottom"
             android:summary="@string/photo_swipe_pos_top_to_bottom_summary"
             android:title="@string/photo_swipe_pos_top_to_bottom"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="use_internal_downloader"
             android:summary="@string/use_internal_downloader_summary"
@@ -107,20 +107,20 @@
             android:title="@string/choose_theme_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="amoled_theme"
             android:title="@string/amoled_theme"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="webview_night_mode"
             android:summary="@string/webview_summary"
             android:title="@string/webview_night_mode"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="disable_history"
             android:title="@string/disable_history"
@@ -146,19 +146,19 @@
         android:title="@string/input"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="emojis_type"
             android:title="@string/emojis_type_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="emojis_recents"
             android:title="@string/emojis_recents"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="send_by_enter"
             android:title="@string/send_on_enter_title"
@@ -189,7 +189,7 @@
             android:title="@string/chat_dark_background"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="custom_chat_color_usage"
             android:summary="@string/custom_chat_color_summary"
@@ -220,14 +220,14 @@
             app:preference_palette="@drawable/palette"
             app:preference_selector="@drawable/wheel" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="my_message_no_color"
             android:title="@string/my_message_no_color"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:dependency="my_message_no_color"
             android:key="custom_message_color_usage"
@@ -246,13 +246,13 @@
             app:preference_palette="@drawable/palette"
             app:preference_selector="@drawable/wheel" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="disable_swipes_chat"
             android:title="@string/disable_swipes_chat"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="display_writing"
             android:title="@string/display_writing"
@@ -269,25 +269,25 @@
         android:title="@string/additional_settings"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="auto_read"
             android:title="@string/auto_read"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="be_online"
             android:title="@string/be_online"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="info_reading"
             android:title="@string/info_reading"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="enable_last_read"
             android:title="@string/enable_last_read"
@@ -299,26 +299,26 @@
         android:title="@string/music_settings"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="audio_round_icon"
             android:title="@string/audio_round_icon"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="use_stop_audio"
             android:title="@string/use_stop_audio"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_mini_player"
             android:summary="@string/restart_needed"
             android:title="@string/show_mini_player"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_audio_top"
             android:title="@string/show_audio_top"
@@ -331,19 +331,19 @@
         android:title="@string/for_wear"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="is_player_support_volume"
             android:title="@string/is_player_support_volume"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="music_enable_toolbar"
             android:title="@string/music_enable_toolbar"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_profile_in_additional_page"
             android:summary="@string/restart_needed"
@@ -363,7 +363,7 @@
             android:title="@string/drawer_categories_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_recent_dialogs"
             android:summary="@string/restart_needed"
@@ -397,7 +397,7 @@
             app:icon="@drawable/dir_doc"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="photo_to_user_dir"
             android:title="@string/photo_to_user_dir"
@@ -410,31 +410,31 @@
         android:key="dev"
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false">
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_audio_cover"
             android:title="@string/show_audio_cover"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="force_hls"
             android:title="@string/force_hls"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="use_old_vk_api"
             android:summary="@string/mp3_friendly"
             android:title="@string/use_old_vk_api"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="force_cache"
             android:title="@string/force_cache"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="settings_no_push"
             android:title="@string/settings_no_push"
             app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="keep_longpoll"
             android:summary="@string/settings_keep_longpoll_summary"
             android:title="@string/settings_keep_longpoll_title"
@@ -465,7 +465,7 @@
         android:title="@string/about_settings"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="auto_update"
             android:title="@string/auto_update"
