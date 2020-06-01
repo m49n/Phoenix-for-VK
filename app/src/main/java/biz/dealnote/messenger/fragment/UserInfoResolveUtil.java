@@ -568,18 +568,20 @@ public class UserInfoResolveUtil {
             return null;
         }
 
-        String activityText = "";
+        String activityText;
         if (online)
-            activityText = context.getString(R.string.online) + ", ";
+            activityText = context.getString(R.string.online);
         else
-            activityText = context.getString(R.string.offline) + ", ";
-        String activityTime = AppTextUtils.getDateFromUnixTime(lastSeen);
-        if (sex == VKApiUser.SEX_MAN) {
-            activityText += context.getString(R.string.last_seen_sex_man, activityTime);
-        } else if (sex == VKApiUser.SEX_WOMAN) {
-            activityText += context.getString(R.string.last_seen_sex_woman, activityTime);
-        } else {
-            activityText += context.getString(R.string.last_seen_sex_unknown, activityTime);
+            activityText = context.getString(R.string.offline);
+        if (!online) {
+            String activityTime = AppTextUtils.getDateFromUnixTime(lastSeen);
+            if (sex == VKApiUser.SEX_MAN) {
+                activityText += ", " + context.getString(R.string.last_seen_sex_man, activityTime);
+            } else if (sex == VKApiUser.SEX_WOMAN) {
+                activityText += ", " + context.getString(R.string.last_seen_sex_woman, activityTime);
+            } else {
+                activityText += ", " + context.getString(R.string.last_seen_sex_unknown, activityTime);
+            }
         }
         return activityText;
     }
