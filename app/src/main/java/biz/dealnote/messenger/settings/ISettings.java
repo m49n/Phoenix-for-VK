@@ -183,7 +183,7 @@ public interface ISettings {
 
         int getPhotoRoundMode();
 
-        boolean isGrouping_notifications();
+        boolean isLoad_history_notif();
     }
 
     interface INotificationSettings {

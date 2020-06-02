@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -18,6 +19,7 @@ import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,12 +28,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -89,7 +94,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
     private TextView mCurrentTime;
     // Total time
     private TextView mTotalTime;
-    private TextView mGetLyrics;
+    private ImageView mGetLyrics;
     // Progress
     private SeekBarSamsungFixed mProgress;
     // VK Additional action
@@ -163,6 +168,16 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
                 .subscribe(ignore -> onServiceBindEvent()));
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        BottomSheetDialog dialog = new BottomSheetDialog(requireActivity(), getTheme());
+        BottomSheetBehavior<FrameLayout> behavior = dialog.getBehavior();
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setSkipCollapsed(true);
+        return dialog;
+    }
+
     private void onServiceBindEvent() {
         updatePlaybackControls();
         updateNowPlayingInfo();
@@ -175,7 +190,7 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
                 break;
 
             case R.id.playlist:
-                PlaceFactory.getPlaylistPlace().tryOpenWith(requireActivity());
+                PlaylistFragment.newInstance((ArrayList<Audio>) MusicUtils.getQueue()).show(getChildFragmentManager(), "audio_playlist");
                 break;
             case R.id.copy_track_info:
                 ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -544,11 +559,10 @@ public class AudioPlayerFragment extends BottomSheetDialogFragment implements Se
         String trackName = MusicUtils.getTrackName();
         String coverUrl = MusicUtils.getAlbumCoverBig();
         if (mGetLyrics != null) {
-            if (MusicUtils.getCurrentAudio() != null && MusicUtils.getCurrentAudio().getLyricsId() != 0) {
-                mGetLyrics.setText(R.string.get_lyrics);
+            if (MusicUtils.getCurrentAudio() != null && MusicUtils.getCurrentAudio().getLyricsId() != 0)
                 mGetLyrics.setVisibility(View.VISIBLE);
-            } else
-                mGetLyrics.setVisibility(View.INVISIBLE);
+            else
+                mGetLyrics.setVisibility(View.GONE);
         }
 
         if (tvAlbum != null && MusicUtils.getCurrentAudio() != null) {

@@ -3,7 +3,7 @@
     android:id="@+id/miniplayer_layout"
     android:layout_width="match_parent"
     android:layout_height="53dp"
-    android:background="?attr/message_bubble_color"
+    android:background="?attr/colorSurface"
     android:orientation="horizontal">
 
     <FrameLayout

@@ -138,14 +138,14 @@
 
     <string name="image_number">%1$d из %2$d</string>
 
-    <string name="service_update_chat_photo">%1$s  обновил фотографию беседы</string>
-    <string name="service_remove_chat_photo">%1$s удалил фотографию беседы</string>
-    <string name="service_create_chat">%1$s создал беседу «%2$s»</string>
-    <string name="service_changed_chat_name">%1$s изменил название беседы на «%2$s»</string>
-    <string name="service_return_to_chat">%1$s вернулся в беседу</string>
-    <string name="service_invited">%1$s пригласил %2$s</string>
-    <string name="service_removed">%1$s исключил %2$s</string>
-    <string name="service_left_this_chat">%1$s покинул беседу</string>
+    <string name="service_update_chat_photo">%1$s обновил(а) фотографию беседы</string>
+    <string name="service_remove_chat_photo">%1$s удалил(а) фотографию беседы</string>
+    <string name="service_create_chat">%1$s создал(а) беседу «%2$s»</string>
+    <string name="service_changed_chat_name">%1$s изменил(а) название беседы на «%2$s»</string>
+    <string name="service_return_to_chat">%1$s вернулся(лась) в беседу</string>
+    <string name="service_invited">%1$s пригласил(а) %2$s</string>
+    <string name="service_removed">%1$s исключил(а) %2$s</string>
+    <string name="service_left_this_chat">%1$s покинул(а) беседу</string>
 
     <string name="unknown_first_name">Неизвестный</string>
     <string name="unknown_last_name">пользователь</string>
@@ -757,6 +757,8 @@
     <string name="formatted_date_today">Сегодня в %1$s</string>
     <string name="formatted_date_tomorrow">Завтра в %1$s</string>
     <string name="formatted_date_yesterday">Вчера в %1$s</string>
+    <string name="formatted_date_tomorrow_clean">завтра в %1$s</string>
+    <string name="formatted_date_yesterday_clean">вчера в %1$s</string>
     <string name="owner_s_posts">Записи владельца</string>
     <string name="scheduled">Отложенные</string>
     <string name="all_posts">Все записи</string>
@@ -817,8 +819,8 @@
     <string name="open">Открыть</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
-    <string name="updated_profile_photo_at">обновил фотографию на странице: %1$s</string>
-    <string name="updated_status_at">обновил статус: %1$s</string>
+    <string name="updated_profile_photo_at">обновил(а) фотографию на странице: %1$s</string>
+    <string name="updated_status_at">обновил(а) статус: %1$s</string>
     <string name="messages">Сообщения</string>
     <string name="error_with_message">Ошибка: %1$s</string>
     <string name="gif_player">Gif-плеер</string>
@@ -1346,7 +1348,7 @@
     <string name="wall_attachments">Вложения на стене</string>
     <string name="posts_analized">%1$d постов проверено</string>
     <string name="photo_rounded_view">Скругление краёв изображений</string>
-    <string name="grouping_notifications">Группировать уведомления</string>
+    <string name="load_history_notif">Превью диалога в уведомлениях</string>
     <string name="mp3_friendly">Если не работает скачивание</string>
     <string name="search_stories">Искать истории</string>
     <string name="by_name">По имени</string>

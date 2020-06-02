@@ -17,17 +17,22 @@
 
         <ImageView
             android:id="@+id/item_avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_gravity="center_vertical"
+            android:layout_margin="4dp"
+            android:alpha="0.9"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@android:id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
+            android:ellipsize="marquee"
+            android:padding="2dp"
+            android:singleLine="true"
             android:textSize="16sp"
             tools:text="Share" />
     </LinearLayout>

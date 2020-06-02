@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="?message_bubble_color"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="?message_bubble_color"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout

@@ -10,24 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.activity.ActivityFeatures;
-import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
-import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.model.Audio;
-import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
@@ -39,14 +37,14 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 /**
  * Created by golde on 27.09.2016.
  */
-public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapter.ClickListener,
+public class PlaylistFragment extends BottomSheetDialogFragment implements AudioRecyclerAdapter.ClickListener,
         BackPressCallback {
 
     private RecyclerView mRecyclerView;
-    private View root;
     private AudioRecyclerAdapter mAdapter;
     private ArrayList<Audio> mData;
     private PlaybackStatus mPlaybackStatus;
+    private MaterialToolbar mToolbar;
 
     public static Bundle buildArgs(ArrayList<Audio> playlist) {
         Bundle bundle = new Bundle();
@@ -90,9 +88,9 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_playlist, container, false);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        View root = inflater.inflate(R.layout.fragment_playlist, container, false);
 
+        mToolbar = root.findViewById(R.id.toolbar);
         mRecyclerView = root.findViewById(R.id.list);
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -124,7 +122,7 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new AudioRecyclerAdapter(requireActivity(), mData, false, false);
@@ -139,26 +137,18 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
     @Override
     public void onClick(int position, Audio audio) {
         MusicPlaybackService.startForPlayList(requireActivity(), mData, position, false);
-        if (!Settings.get().other().isShow_mini_player())
-            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(requireActivity());
+        dismissAllowingStateLoss();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Settings.get().ui().notifyPlaceResumed(Place.AUDIO_CURRENT_PLAYLIST);
 
-        ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.playlist);
-            actionBar.setSubtitle(null);
+        if (mToolbar != null) {
+            mToolbar.setTitle(R.string.playlist);
+            mToolbar.setSubtitle(null);
         }
-        new ActivityFeatures.Builder()
-                .begin()
-                .setHideNavigationMenu(false)
-                .setBarsColored(requireActivity(), true)
-                .build()
-                .apply(requireActivity());
+
         this.mPlaybackStatus = new PlaybackStatus();
         final IntentFilter filter = new IntentFilter();
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
@@ -190,10 +180,8 @@ public class PlaylistFragment extends BaseFragment implements AudioRecyclerAdapt
             final String action = intent.getAction();
             if (isNull(action)) return;
 
-            switch (action) {
-                case MusicPlaybackService.PLAYSTATE_CHANGED:
-                    mAdapter.notifyDataSetChanged();
-                    break;
+            if (MusicPlaybackService.PLAYSTATE_CHANGED.equals(action)) {
+                mAdapter.notifyDataSetChanged();
             }
         }
     }

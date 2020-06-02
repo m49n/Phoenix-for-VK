@@ -28,7 +28,6 @@ import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
-import biz.dealnote.messenger.fragment.PlaylistFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
@@ -47,7 +46,6 @@ import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.fragment.search.SingleTabSearchFragment;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.model.AbsModel;
-import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Banned;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Commented;
@@ -73,7 +71,6 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WallEditorAttrs;
-import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
@@ -234,12 +231,6 @@ public class PlaceFactory {
     public static Place getGifPagerPlace(int accountId, @NonNull ArrayList<Document> documents, int index) {
         Place place = new Place(Place.GIF_PAGER);
         place.setArguments(GifPagerFragment.buildArgs(accountId, documents, index));
-        return place;
-    }
-
-    public static Place getPlaylistPlace() {
-        Place place = new Place(Place.AUDIO_CURRENT_PLAYLIST);
-        place.setArguments(PlaylistFragment.buildArgs((ArrayList<Audio>) MusicUtils.getQueue()));
         return place;
     }
 

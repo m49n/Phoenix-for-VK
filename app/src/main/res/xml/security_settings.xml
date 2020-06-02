@@ -20,7 +20,7 @@
         android:title="@string/ask_for_pin_on_application_start_title"
         app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:dependency="use_pin_for_security"
         android:key="allow_fingerprint"
@@ -63,7 +63,7 @@
         android:title="@string/other"
         app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="hide_notif_message_body"
         android:summary="@string/hide_notif_message_body_summary"
         android:title="@string/hide_notif_message_body_title"

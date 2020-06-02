@@ -26,6 +26,11 @@ public class ErrorLocalizer {
             return api().getMessage(context, error.errorCode, error.errorMsg);
         }
 
+        if (throwable instanceof RuntimeException && throwable.getCause() instanceof ApiException) {
+            Error error = ((ApiException) throwable.getCause()).getError();
+            return api().getMessage(context, error.errorCode, error.errorMsg);
+        }
+
         if (throwable instanceof SocketTimeoutException) {
             return context.getString(R.string.error_timeout_message);
         }
@@ -33,6 +38,7 @@ public class ErrorLocalizer {
         if (throwable instanceof NotFoundException) {
             return context.getString(R.string.error_not_found_message);
         }
+        throwable.printStackTrace();
 
         return nonEmpty(throwable.getMessage()) ? throwable.getMessage() : throwable.toString();
     }

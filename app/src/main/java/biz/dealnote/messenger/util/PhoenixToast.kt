@@ -57,7 +57,7 @@ class PhoenixToast private constructor(context: Context, Timage: Bitmap?) {
 
     fun showToastInfo(message: String?) {
         if (M_context == null) return
-        val t = getToast(M_context, message, Color.parseColor("#3F51B5"))
+        val t = getToast(M_context, message, Utils.getThemeColor())
         t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 15)
         t.show()
     }

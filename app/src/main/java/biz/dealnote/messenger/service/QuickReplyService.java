@@ -8,9 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.core.app.RemoteInput;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.domain.IMessagesRepository;
 import biz.dealnote.messenger.domain.Repository;
@@ -65,7 +62,7 @@ public class QuickReplyService extends IntentService {
 
     private void addMessage(int accountId, int peerId, String body, Message msg) {
         final IMessagesRepository messagesInteractor = Repository.INSTANCE.getMessages();
-        SaveMessageBuilder builder = new SaveMessageBuilder(accountId, peerId).setBody(body).setForwardMessages(new ArrayList<>(Collections.singleton(msg)));
+        SaveMessageBuilder builder = new SaveMessageBuilder(accountId, peerId).setBody(body);
 
         Message message = messagesInteractor.put(builder).blockingGet();
 

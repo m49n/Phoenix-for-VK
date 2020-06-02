@@ -53,7 +53,6 @@ public class Place implements Parcelable {
     public static final int CREATE_PHOTO_ALBUM = 43;
     public static final int EDIT_PHOTO_ALBUM = 45;
     public static final int MESSAGE_LOOKUP = 46;
-    public static final int AUDIO_CURRENT_PLAYLIST = 48;
     public static final int GIF_PAGER = 49;
     public static final int SECURITY = 50;
     public static final int CREATE_POLL = 51;

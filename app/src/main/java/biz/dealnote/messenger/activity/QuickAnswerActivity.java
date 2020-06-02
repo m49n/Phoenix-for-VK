@@ -221,7 +221,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
     @SuppressWarnings("unused")
     private void onMessageSaved(Message message) {
-        NotificationHelper.tryCancelNotificationForPeer(this, accountId, msg.getPeerId(), msg.getId());
+        NotificationHelper.tryCancelNotificationForPeer(this, accountId, msg.getPeerId());
         messagesRepository.runSendingQueue();
         finish();
     }

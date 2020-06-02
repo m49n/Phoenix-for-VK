@@ -303,7 +303,7 @@ class OwnersStorage extends AbsStorage implements IOwnersStorage {
                     boolean online = cursor.getInt(cursor.getColumnIndex(UserColumns.ONLINE)) == 1;
                     long lastSeen = cursor.getLong(cursor.getColumnIndex(UserColumns.LAST_SEEN));
                     int sex = cursor.getInt(cursor.getColumnIndex(UserColumns.SEX));
-                    String userActivityLine = UserInfoResolveUtil.getUserActivityLine(getContext(), lastSeen, online, sex);
+                    String userActivityLine = UserInfoResolveUtil.getUserActivityLine(getContext(), lastSeen, online, sex, false);
 
                     if (nonNull(userActivityLine)) {
                         e.onSuccess(userActivityLine);

@@ -64,7 +64,7 @@ public class FriendsRecycleAdapter extends RecyclerView.Adapter<FriendsRecycleAd
 
         holder.name.setText(user.getFullName());
 
-        holder.status.setText(UserInfoResolveUtil.getUserActivityLine(context, user));
+        holder.status.setText(UserInfoResolveUtil.getUserActivityLine(context, user, true));
         holder.status.setTextColor(user.isOnline() ? CurrentTheme.getColorPrimary(context) : STATUS_COLOR_OFFLINE);
 
         holder.online.setVisibility(user.isOnline() ? View.VISIBLE : View.GONE);

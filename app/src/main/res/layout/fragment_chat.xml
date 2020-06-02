@@ -99,7 +99,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?message_bubble_color"
+            android:background="?attr/colorSurface"
             android:padding="4dp">
 
             <ImageView

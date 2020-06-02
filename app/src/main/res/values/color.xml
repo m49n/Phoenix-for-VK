@@ -2,6 +2,7 @@
 <resources>
 
     <color name="white">#ffffff</color>
+    <color name="night">#ff1e1e1e</color>
     <color name="default_message_status">#36638D</color>
     <color name="ic_launcher_background">#202020</color>
 

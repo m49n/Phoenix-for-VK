@@ -95,7 +95,6 @@ import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
 import biz.dealnote.messenger.fragment.NewsfeedMentionsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
-import biz.dealnote.messenger.fragment.PlaylistFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
@@ -1277,10 +1276,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.MESSAGE_LOOKUP:
                 attachToFront(MessagesLookFragment.newInstance(args));
-                break;
-
-            case Place.AUDIO_CURRENT_PLAYLIST:
-                attachToFront(PlaylistFragment.newInstance(args));
                 break;
 
             case Place.GIF_PAGER:

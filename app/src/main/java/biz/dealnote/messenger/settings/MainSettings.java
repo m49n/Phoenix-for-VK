@@ -140,7 +140,7 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
-    public boolean isGrouping_notifications() {
-        return getDefaultPreferences().getBoolean("grouping_notifications", true);
+    public boolean isLoad_history_notif() {
+        return getDefaultPreferences().getBoolean("load_history_notif", true);
     }
 }

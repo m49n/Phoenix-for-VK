@@ -61,8 +61,9 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="grouping_notifications"
-            android:title="@string/grouping_notifications"
+            android:key="load_history_notif"
+            android:summary="@string/load_history_notif"
+            android:title="@string/load_history_notif"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference

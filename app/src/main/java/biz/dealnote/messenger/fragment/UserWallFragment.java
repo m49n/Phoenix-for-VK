@@ -68,7 +68,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         if (isNull(mHeaderHolder)) return;
 
         mHeaderHolder.tvName.setText(user.getFullName());
-        mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user));
+        mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user, true));
 
         if (!user.getCanWritePrivateMessage())
             mHeaderHolder.fabMessage.setImageResource(R.drawable.close);

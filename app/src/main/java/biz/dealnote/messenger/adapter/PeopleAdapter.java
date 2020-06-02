@@ -90,7 +90,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private void bindUserHolder(PeopleHolder holder, final User user) {
         holder.name.setText(user.getFullName());
 
-        holder.subtitle.setText(UserInfoResolveUtil.getUserActivityLine(mContext, user));
+        holder.subtitle.setText(UserInfoResolveUtil.getUserActivityLine(mContext, user, true));
         holder.subtitle.setTextColor(user.isOnline() ? CurrentTheme.getColorPrimary(mContext) : STATUS_COLOR_OFFLINE);
 
         holder.online.setVisibility(user.isOnline() ? View.VISIBLE : View.GONE);

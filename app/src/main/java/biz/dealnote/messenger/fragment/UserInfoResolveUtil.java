@@ -356,7 +356,6 @@ public class UserInfoResolveUtil {
     /**
      * Найти текущее место деятельности пользователя (школа, компания или ВУЗ)
      *
-     * @param apiUser пользователь
      * @return место активности
      *//*
     private static IUserActivityPoint findCurrentActivityPoint(VKApiUser apiUser) {
@@ -559,11 +558,11 @@ public class UserInfoResolveUtil {
     }
 
     */
-    public static String getUserActivityLine(Context context, User user) {
-        return getUserActivityLine(context, user.getLastSeen(), user.isOnline(), user.getSex());
+    public static String getUserActivityLine(Context context, User user, boolean force_last_seen) {
+        return getUserActivityLine(context, user.getLastSeen(), user.isOnline(), user.getSex(), force_last_seen);
     }
 
-    public static String getUserActivityLine(Context context, long lastSeen, boolean online, int sex) {
+    public static String getUserActivityLine(Context context, long lastSeen, boolean online, int sex, boolean force_last_seen) {
         if (!online && lastSeen == 0) {
             return null;
         }
@@ -573,8 +572,8 @@ public class UserInfoResolveUtil {
             activityText = context.getString(R.string.online);
         else
             activityText = context.getString(R.string.offline);
-        if (!online) {
-            String activityTime = AppTextUtils.getDateFromUnixTime(lastSeen);
+        if (!online || force_last_seen) {
+            String activityTime = AppTextUtils.getDateFromUnixTimeShorted(context, lastSeen);
             if (sex == VKApiUser.SEX_MAN) {
                 activityText += ", " + context.getString(R.string.last_seen_sex_man, activityTime);
             } else if (sex == VKApiUser.SEX_WOMAN) {

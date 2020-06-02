@@ -34,8 +34,8 @@
             android:layout_height="@dimen/avatar_size_small"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            android:layout_marginEnd="2dp" />
+            android:layout_marginEnd="2dp"
+            android:visibility="gone" />
 
         <biz.dealnote.messenger.view.OnlineView
             android:id="@+id/item_message_important"
@@ -53,8 +53,8 @@
             android:id="@+id/item_message_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:gravity="end"
             android:orientation="vertical"

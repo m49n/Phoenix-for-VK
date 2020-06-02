@@ -35,7 +35,6 @@ import static biz.dealnote.messenger.api.model.VkApiPostSource.Data.PROFILE_PHOT
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.intValueIn;
-import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeAllIsEmpty;
 

@@ -968,6 +968,38 @@ public class Utils {
         return bitmap;
     }
 
+    public static int getThemeColor() {
+        switch (biz.dealnote.messenger.settings.Settings.get().ui().getMainThemeKey()) {
+            case "fire":
+            case "yellow_violet":
+                return Color.parseColor("#FF9800");
+            case "old_ice":
+            case "blue_red":
+            case "blue_yellow":
+            case "blue_violet":
+            case "ice":
+            case "ice_green":
+                return Color.parseColor("#4d7198");
+            case "red":
+            case "red_violet":
+                return Color.parseColor("#F44336");
+            case "violet":
+            case "violet_red":
+                return Color.parseColor("#9800ff");
+            case "violet_green":
+            case "violet_yellow":
+                return Color.parseColor("#8500ff");
+            case "green_violet":
+                return Color.parseColor("#268000");
+            case "gray":
+                return Color.parseColor("#444444");
+            case "yellow_red":
+                return Color.parseColor("#F8DF00");
+            default:
+                return 0xff11acfa;
+        }
+    }
+
     public interface SimpleFunction<F, S> {
         S apply(F orig);
     }

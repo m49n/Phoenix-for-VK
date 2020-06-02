@@ -20,7 +20,6 @@ import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.News;
-import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Utils;
