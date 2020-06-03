@@ -298,13 +298,6 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                     }
                 });
                 return true;
-            case R.id.action_open_url:
-                final ClipboardManager clipBoard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
-                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                    LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
-                }
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
