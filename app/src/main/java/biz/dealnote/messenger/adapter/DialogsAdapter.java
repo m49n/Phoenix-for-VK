@@ -210,14 +210,12 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
 
         DATE.setTime(lastMessageJavaTime);
         if (lastMessageJavaTime < mStartOfToday) {
-            holder.tvDate.setTextColor(CurrentTheme.getPrimaryTextColorCode(mContext));
             if (getStatus(lastMessageJavaTime) == DIV_YESTERDAY)
                 holder.tvDate.setText(DF_TODAY.format(DATE));
             else
                 holder.tvDate.setText(DF_OLD.format(DATE));
         } else {
             holder.tvDate.setText(DF_TODAY.format(DATE));
-            holder.tvDate.setTextColor(CurrentTheme.getColorPrimary(mContext));
         }
 
         if (dialog.getImageUrl() != null) {
