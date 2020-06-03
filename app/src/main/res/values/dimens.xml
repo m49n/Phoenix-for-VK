@@ -32,7 +32,7 @@
     <bool name="is_tablet">false</bool>
 
     <dimen name="message_author_avatar_size">38dp</dimen>
-    <dimen name="message_bubble_corner_radius">4dp</dimen>
+    <dimen name="message_bubble_corner_radius">10dp</dimen>
 
     <!-- Audio player -->
     <dimen name="audio_player_controls_end_button_width">50.0dip</dimen>
@@ -60,8 +60,8 @@
     <dimen name="avatar_size_big">100dp</dimen>
     <dimen name="avatar_size_chat">60dp</dimen>
     <dimen name="avatar_size_usual">48dp</dimen>
-    <dimen name="avatar_size_small">40dp</dimen>
-    <dimen name="avatar_size_tiny">32dp</dimen>
+    <dimen name="avatar_size_small">36dp</dimen>
+    <dimen name="avatar_size_tiny">28dp</dimen>
     <dimen name="avatar_size_min">24dp</dimen>
 
     <dimen name="online_dot_size">16dp</dimen>
