@@ -78,7 +78,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/video"
+            android:src="@drawable/ic_outline_video_library"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
@@ -88,7 +88,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/music"
+            android:src="@drawable/ic_outline_library_music"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
@@ -98,7 +98,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/book"
+            android:src="@drawable/ic_outline_library_books"
             app:tint="?attr/colorOnSurface" />
 
         <ImageButton
