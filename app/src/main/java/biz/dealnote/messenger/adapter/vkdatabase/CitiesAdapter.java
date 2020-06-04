@@ -63,7 +63,7 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.Holder> {
         void onClick(City country);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView title;
         TextView area;

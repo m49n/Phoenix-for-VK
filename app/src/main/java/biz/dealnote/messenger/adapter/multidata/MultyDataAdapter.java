@@ -26,7 +26,7 @@ public abstract class MultyDataAdapter<T, VH extends RecyclerView.ViewHolder> ex
     @Override
     public int getItemCount() {
         int count = 0;
-        for (DataWrapper pair : fullData) {
+        for (DataWrapper<T> pair : fullData) {
             if (!pair.isEnabled()) {
                 continue;
             }
@@ -91,7 +91,7 @@ public abstract class MultyDataAdapter<T, VH extends RecyclerView.ViewHolder> ex
     }
 
     @Deprecated
-    protected ItemInfo get(int adapterPosition) {
+    protected ItemInfo<T> get(int adapterPosition) {
         ItemInfo<T> info = new ItemInfo<>();
         this.get(adapterPosition, info);
         return info;
