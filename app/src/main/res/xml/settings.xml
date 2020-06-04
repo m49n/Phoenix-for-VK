@@ -62,7 +62,7 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="load_history_notif"
-            android:summary="@string/load_history_notif"
+            android:summary="@string/load_history_notif_summary"
             android:title="@string/load_history_notif"
             app:iconSpaceReserved="false" />
 
@@ -283,6 +283,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
+            android:defaultValue="true"
+            android:key="enable_last_read"
+            android:title="@string/enable_last_read"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
             android:defaultValue="false"
             android:key="be_online"
             android:title="@string/be_online"
@@ -292,12 +298,6 @@
             android:defaultValue="true"
             android:key="info_reading"
             android:title="@string/info_reading"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="enable_last_read"
-            android:title="@string/enable_last_read"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

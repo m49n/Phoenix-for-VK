@@ -1349,6 +1349,7 @@
     <string name="posts_analized">%1$d постов проверено</string>
     <string name="photo_rounded_view">Скругление краёв изображений</string>
     <string name="load_history_notif">Превью диалога в уведомлениях</string>
+    <string name="load_history_notif_summary">Отображать последние 5 сообщений из чата</string>
     <string name="mp3_friendly">Если не работает скачивание</string>
     <string name="search_stories">Искать истории</string>
     <string name="by_name">По имени</string>
