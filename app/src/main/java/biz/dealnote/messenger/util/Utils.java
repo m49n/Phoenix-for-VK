@@ -37,6 +37,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -48,12 +50,16 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.api.model.Identificable;
 import biz.dealnote.messenger.model.ISelectable;
 import biz.dealnote.messenger.model.ISomeones;
+import biz.dealnote.messenger.model.ProxyConfig;
 import io.reactivex.disposables.Disposable;
+import okhttp3.OkHttpClient;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
@@ -998,6 +1004,19 @@ public class Utils {
             default:
                 return 0xff11acfa;
         }
+    }
+
+    public static OkHttpDataSourceFactory getExoPlayerFactory(String userAgent, ProxyConfig proxyConfig) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS);
+
+        if (Objects.nonNull(proxyConfig)) {
+            ProxyUtil.applyProxyConfig(builder, proxyConfig);
+        }
+
+        return new OkHttpDataSourceFactory(builder.build(), userAgent);
     }
 
     public interface SimpleFunction<F, S> {

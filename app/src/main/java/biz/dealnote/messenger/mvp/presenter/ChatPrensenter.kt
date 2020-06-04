@@ -85,7 +85,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     private var conversation: Conversation? = null
 
     fun getConversation(): Conversation? {
-        return conversation;
+        return conversation
     }
 
     private var HronoType = false
@@ -513,7 +513,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             readAllUnreadMessagesIfExists()
 
         if (!isCache) {
-            var need = false;
+            var need = false
             for (i: Message in data) {
                 if (i.status == MessageStatus.ERROR) {
                     need = true

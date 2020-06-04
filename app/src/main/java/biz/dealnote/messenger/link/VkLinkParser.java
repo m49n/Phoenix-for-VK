@@ -40,6 +40,7 @@ public class VkLinkParser {
     private static final Pattern PATTERN_PROFILE_ID = Pattern.compile("(m\\.)?vk\\.com/id(\\d+)$"); //+
     private static final Pattern PATTERN_DOMAIN = Pattern.compile("vk\\.com/([\\w.]+)");
     private static final Pattern PATTERN_WALL_POST = Pattern.compile("vk.com/(?:[\\w.\\d]+\\?(?:[\\w=&]+)?w=)?wall(-?\\d*)_(\\d*)");
+    private static final Pattern PATTERN_WALL_POST_NOTIFICATION = Pattern.compile("vk\\.com/feed\\?\\S*scroll_to=wall(-?\\d*)_(\\d*)");
     private static final Pattern PATTERN_AWAY = Pattern.compile("vk\\.com/away(\\.php)?\\?(.*)");
     private static final Pattern PATTERN_DIALOG = Pattern.compile("vk\\.com/im\\?sel=(c?)(-?\\d+)");
     private static final Pattern PATTERN_ALBUMS = Pattern.compile("vk\\.com/albums(-?\\d+)");
@@ -91,7 +92,7 @@ public class VkLinkParser {
             return null;
         }
 
-        if (string.contains("vk.com/feed") && !string.contains("?z=photo") && !string.contains("w=wall") && !string.contains("?w=page") && !string.contains("?q=")) {
+        if (string.contains("vk.com/feed") && !string.contains("?z=photo") && !string.contains("w=wall") && !string.contains("?w=page") && !string.contains("?q=") && !string.contains("scroll_to=wall")) {
             return null;
         }
 
@@ -197,6 +198,11 @@ public class VkLinkParser {
             return vkLink;
         }
 
+        vkLink = parseWallPostNotif(string);
+        if (vkLink != null) {
+            return vkLink;
+        }
+
     /*    vkLink = VkLinkParser.parseAway(string);
         if (vkLink != null) {
             return vkLink;
@@ -256,11 +262,7 @@ public class VkLinkParser {
         }
 
         vkLink = parseDomain(string);
-        if (vkLink != null) {
-            return vkLink;
-        }
-
-        return null;
+        return vkLink;
     }
 
     private static AbsLink parseBoard(String string) {
@@ -521,6 +523,15 @@ public class VkLinkParser {
 
     private static AbsLink parseWallPost(String string) {
         Matcher matcher = PATTERN_WALL_POST.matcher(string);
+        if (!matcher.find()) {
+            return null;
+        }
+
+        return new WallPostLink(parseInt(matcher.group(1)), parseInt(matcher.group(2)));
+    }
+
+    private static AbsLink parseWallPostNotif(String string) {
+        Matcher matcher = PATTERN_WALL_POST_NOTIFICATION.matcher(string);
         if (!matcher.find()) {
             return null;
         }

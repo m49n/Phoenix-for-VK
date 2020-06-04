@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -44,7 +43,6 @@ public class PlaylistFragment extends BottomSheetDialogFragment implements Audio
     private AudioRecyclerAdapter mAdapter;
     private ArrayList<Audio> mData;
     private PlaybackStatus mPlaybackStatus;
-    private MaterialToolbar mToolbar;
 
     public static Bundle buildArgs(ArrayList<Audio> playlist) {
         Bundle bundle = new Bundle();
@@ -90,7 +88,6 @@ public class PlaylistFragment extends BottomSheetDialogFragment implements Audio
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_playlist, container, false);
 
-        mToolbar = root.findViewById(R.id.toolbar);
         mRecyclerView = root.findViewById(R.id.list);
         LinearLayoutManager manager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -143,11 +140,6 @@ public class PlaylistFragment extends BottomSheetDialogFragment implements Audio
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mToolbar != null) {
-            mToolbar.setTitle(R.string.playlist);
-            mToolbar.setSubtitle(null);
-        }
 
         this.mPlaybackStatus = new PlaybackStatus();
         final IntentFilter filter = new IntentFilter();

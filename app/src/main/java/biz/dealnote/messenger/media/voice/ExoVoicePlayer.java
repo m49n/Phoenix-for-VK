@@ -18,13 +18,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-
 import biz.dealnote.messenger.Constants;
-import biz.dealnote.messenger.api.ProxyUtil;
-import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.ProxyConfig;
@@ -33,6 +27,7 @@ import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Optional;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -151,25 +146,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
         // DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
         // DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(App.getInstance(), Util.getUserAgent(App.getInstance(), "exoplayer2example"), bandwidthMeterA);
 
-        Proxy proxy = null;
-        if (nonNull(proxyConfig)) {
-            proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
-            if (proxyConfig.isAuthEnabled()) {
-                Authenticator authenticator = new Authenticator() {
-                    @Override
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
-                    }
-                };
-
-                Authenticator.setDefault(authenticator);
-            } else {
-                Authenticator.setDefault(null);
-            }
-        }
-
         String userAgent = Constants.USER_AGENT(null);
-        CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:
@@ -178,7 +155,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
         String url = playingEntry.getAudio().getLinkMp3();
 
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(Utils.getExoPlayerFactory(userAgent, proxyConfig)).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override

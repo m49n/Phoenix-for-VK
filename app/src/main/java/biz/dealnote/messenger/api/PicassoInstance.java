@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.StatFs;
@@ -27,12 +28,14 @@ import okhttp3.Request;
 public class PicassoInstance {
 
     private static final String TAG = PicassoInstance.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static PicassoInstance instance;
     private final IProxySettings proxySettings;
     private final Context app;
     private Cache cache_data;
     private volatile Picasso singleton;
 
+    @SuppressLint("CheckResult")
     private PicassoInstance(Context app, IProxySettings proxySettings) {
         this.app = app;
         this.proxySettings = proxySettings;
@@ -114,22 +117,6 @@ public class PicassoInstance {
 
         if (Objects.nonNull(config)) {
             ProxyUtil.applyProxyConfig(builder, config);
-            /*Authenticator authenticator = null;
-            if (config.isAuthEnabled()) {
-                authenticator = (route, response) -> {
-                    String credential = Credentials.basic(config.getUser(), config.getPass());
-                    return response.request().newBuilder()
-                            .header("Proxy-Authorization", credential)
-                            .build();
-                };
-            }
-
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getAddress(), config.getPort()));
-            builder.proxy(proxy);
-
-            if (Objects.nonNull(authenticator)) {
-                builder.proxyAuthenticator(authenticator);
-            }*/
         }
 
         OkHttp3Downloader downloader = new OkHttp3Downloader(builder.build());
@@ -139,7 +126,5 @@ public class PicassoInstance {
                 .addRequestHandler(new LocalPhotoRequestHandler(app))
                 .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
                 .build();
-
-        //Picasso.setSingletonInstance(picasso);
     }
 }

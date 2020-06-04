@@ -165,28 +165,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         headerStoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
         mStoryAdapter.setListener((item, pos) -> {
-            if (item.getVideo() != null) {
-                if (item.getOwner() != null)
-                    item.getVideo().setTitle(item.getOwner().getFullName());
-                openHistoryVideo(Settings.get().accounts().getCurrent(), item.getVideo());
-            } else if (item.getPhoto() != null) {
-                ArrayList<Story> photos_story = new ArrayList<>();
-                ArrayList<Photo> tmp = new ArrayList<>();
-                List<Story> st = getPresenter().getStories();
-                for (Story i : st) {
-                    if (i.getPhoto() != null)
-                        photos_story.add(i);
-                }
-                for (Story i : photos_story) {
-                    if (i.getPhoto() != null) {
-                        if (item.getOwner() != null)
-                            i.getPhoto().setText(i.getOwner().getFullName());
-                        tmp.add(i.getPhoto());
-                    }
-                }
-                int indx = photos_story.indexOf(item);
-                openSimplePhotoGalleryHistory(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
-            }
+            openHistoryVideo(Settings.get().accounts().getCurrent(), new ArrayList<>(getPresenter().getStories()), pos);
         });
         headerStoryRecyclerView.setAdapter(mStoryAdapter);
 
@@ -298,6 +277,13 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                     }
                 });
                 return true;
+            case R.id.action_open_url:
+                final ClipboardManager clipBoard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
+                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                    LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -307,6 +293,8 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_wall, menu);
+        menu.findItem(R.id.action_open_url).setVisible(Settings.get().other().isDebug_mode());
+        menu.findItem(R.id.search_stories).setVisible(Settings.get().other().isDebug_mode());
     }
 
     @Override

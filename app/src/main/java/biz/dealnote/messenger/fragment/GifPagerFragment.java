@@ -144,6 +144,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<GifPagerPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -152,11 +153,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
             ArrayList<Document> documents = requireArguments().getParcelableArrayList(Extra.DOCS);
             AssertUtils.requireNonNull(documents);
-
-            // todo TEMP SOLUTION !!! FIX IT
-            if (documents.size() > 50) {
-                requireArguments().remove(Extra.DOCS);
-            }
 
             return new GifPagerPresenter(aid, documents, index, saveInstanceState);
         };

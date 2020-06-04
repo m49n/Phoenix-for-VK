@@ -148,7 +148,7 @@ public class SearchOptionsAdapter extends RecyclerBindableAdapter<BaseOption, Re
     }
 
     private void bindSimpleTextHolder(final SimpleTextOption option, final NormalHolder holder) {
-        holder.value.setText(option.value == null ? null : String.valueOf(option.value));
+        holder.value.setText(option.value);
         holder.title.setText(option.title);
 
         holder.delete.setVisibility(TextUtils.isEmpty(option.value) ? View.INVISIBLE : View.VISIBLE);

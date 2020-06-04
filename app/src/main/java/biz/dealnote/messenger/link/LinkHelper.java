@@ -216,7 +216,8 @@ public class LinkHelper {
         CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
         intentBuilder.setToolbarColor(CurrentTheme.getColorPrimary(context));
         CustomTabsIntent customTabsIntent = intentBuilder.build();
-        if (getCustomTabsPackages(context) != null && !getCustomTabsPackages(context).isEmpty()) {
+        getCustomTabsPackages(context);
+        if (!getCustomTabsPackages(context).isEmpty()) {
             customTabsIntent.intent.setPackage(getCustomTabsPackages(context).get(0).resolvePackageName);
         }
         customTabsIntent.launchUrl(context, Uri.parse(url));

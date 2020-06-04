@@ -8,6 +8,7 @@
         <item>Печеньки</item>
         <item>Линии</item>
         <item>Руны</item>
+        <item>Свой…</item>
     </string-array>
 
     <string-array name="array_chat_background_items" translatable="false">
@@ -15,6 +16,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
 
     <string-array name="preview_preview_size" translatable="false">
@@ -108,6 +110,7 @@
     <string name="last_seen_sex_unknown">был(-а): %1$s</string>
     <string name="online">Онлайн</string>
     <string name="offline">Не в сети</string>
+    <string name="offline_hidden">Не в сети: скрыто</string>
     <string name="thank_you">На вашей стене создан пост с информацией о приложении. Спасибо большое за поддержку!</string>
 
 
@@ -751,7 +754,7 @@
     <string name="other_notifications_types">Типы уведомлений</string>
     <string name="reply_notification">Ответы в комментариях</string>
     <string name="wall_publish_notification">Опубликована предложенная Вами запись</string>
-    <string name="set_default">Сбросить настройки цветов</string>
+    <string name="set_default">Удалить фон (фото)</string>
     <string name="sidebar_settings">Всплывающее меню</string>
     <string name="custom_chat">Чаты</string>
     <string name="formatted_date_today">Сегодня в %1$s</string>
@@ -1355,4 +1358,5 @@
     <string name="by_name">По имени</string>
     <string name="by_owner">По владельцу</string>
     <string name="notif_sticker">Стикер</string>
+    <string name="debug_mode">Режим отладки</string>
 </resources>

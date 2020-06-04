@@ -27,6 +27,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
@@ -177,8 +178,8 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
-    public void openHistoryVideo(int accountId, @NonNull Video apiVideo) {
-        PlaceFactory.getHistoryVideoPreviewPlace(accountId, apiVideo).tryOpenWith(requireActivity());
+    public void openHistoryVideo(int accountId, @NonNull ArrayList<Story> stories, int index) {
+        PlaceFactory.getHistoryVideoPreviewPlace(accountId, stories, index).tryOpenWith(requireActivity());
     }
 
     @Override

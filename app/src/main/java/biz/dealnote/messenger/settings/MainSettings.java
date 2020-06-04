@@ -49,7 +49,7 @@ class MainSettings implements ISettings.IMainSettings {
 
     @Override
     public boolean isAudio_round_icon() {
-        return getDefaultPreferences().getBoolean("audio_round_icon", false);
+        return getDefaultPreferences().getBoolean("audio_round_icon", true);
     }
 
     @Override

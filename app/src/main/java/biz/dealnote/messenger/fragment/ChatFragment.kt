@@ -177,7 +177,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
 
 
-        if (!Settings.get().other().isEnable_last_read())
+        if (!Settings.get().other().isEnable_last_read)
             goto_button?.visibility = View.GONE
         else
             goto_button?.visibility = View.VISIBLE
@@ -394,11 +394,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun displayToolbarTitle(text: String?) {
-        Title?.setText(text)
+        Title?.text = text
     }
 
     override fun displayToolbarSubtitle(text: String?) {
-        SubTitle?.setText(text)
+        SubTitle?.text = text
     }
 
     override fun displayToolbarAvatar(peer: Peer?) {
@@ -414,7 +414,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             var name: String = peer!!.title
             if (name.length > 2) name = name.substring(0, 2)
             name = name.trim { it <= ' ' }
-            EmptyAvatar?.setText(name)
+            EmptyAvatar?.text = name
             Avatar?.setImageBitmap(RoundTransformation().transform(Utils.createGradientChatImage(200, 200, peer.id)))
         }
     }
@@ -860,7 +860,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         if (activity is OnSectionResumeCallback) {
             (activity as OnSectionResumeCallback).onChatResume(accountId, peerId, title, image)
         }
-        Title?.setText(title)
+        Title?.text = title
         resolveLeftButton(peerId)
     }
 
@@ -1012,7 +1012,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun ScrollTo(position: Int) {
-        recyclerView?.scrollToPosition(position);
+        recyclerView?.scrollToPosition(position)
     }
 
     fun OptionsItemSelected(item: MenuItem): Boolean {
@@ -1022,7 +1022,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
             R.id.action_refresh -> {
-                recyclerView?.scrollToPosition(0);
+                recyclerView?.scrollToPosition(0)
                 presenter?.reset_Hrono()
                 presenter?.fireRefreshClick()
                 return true
@@ -1032,7 +1032,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
             R.id.change_hrono_history -> {
-                recyclerView?.scrollToPosition(0);
+                recyclerView?.scrollToPosition(0)
                 presenter?.invert_Hrono()
                 presenter?.fireRefreshClick()
                 return true

@@ -4,6 +4,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/toolbar_semitransparent"
     android:clipToPadding="true"
     android:theme="@style/Theme.Toolbar.Photo"
     app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"

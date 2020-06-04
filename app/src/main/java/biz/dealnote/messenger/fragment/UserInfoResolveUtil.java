@@ -564,7 +564,7 @@ public class UserInfoResolveUtil {
 
     public static String getUserActivityLine(Context context, long lastSeen, boolean online, int sex, boolean force_last_seen) {
         if (!online && lastSeen == 0) {
-            return null;
+            return context.getString(R.string.offline_hidden);
         }
 
         String activityText;

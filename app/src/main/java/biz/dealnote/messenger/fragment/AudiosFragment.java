@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -35,6 +36,7 @@ import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
+import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
@@ -65,7 +67,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     private boolean inTabsContainer;
     private boolean doAudioLoadTabs;
     private boolean isSelectMode;
-    private boolean isAlbum;
     private View headerPlaylist;
     private HorizontalPlaylistAdapter mPlaylistAdapter;
 
@@ -98,7 +99,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         super.onCreate(savedInstanceState);
         inTabsContainer = requireArguments().getBoolean(EXTRA_IN_TABS_CONTAINER);
         isSelectMode = requireArguments().getBoolean(ACTION_SELECT);
-        isAlbum = requireArguments().getInt(Extra.ALBUM) == 1;
     }
 
     @Override
@@ -119,6 +119,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onScrollToLastElement() {

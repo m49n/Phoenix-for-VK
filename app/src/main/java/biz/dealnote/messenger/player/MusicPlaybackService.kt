@@ -31,15 +31,16 @@ import biz.dealnote.messenger.api.PicassoInstance
 import biz.dealnote.messenger.api.ProxyUtil
 import biz.dealnote.messenger.domain.IAudioInteractor
 import biz.dealnote.messenger.domain.InteractorFactory
-import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory
 import biz.dealnote.messenger.media.exo.ExoEventAdapter
 import biz.dealnote.messenger.media.exo.ExoUtil
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.IdPair
 import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
-import biz.dealnote.messenger.util.*
-import biz.dealnote.messenger.util.Objects
+import biz.dealnote.messenger.util.DownloadUtil
+import biz.dealnote.messenger.util.Logger
+import biz.dealnote.messenger.util.RxUtils
+import biz.dealnote.messenger.util.Utils
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
@@ -58,9 +59,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.ref.WeakReference
-import java.net.Authenticator
-import java.net.PasswordAuthentication
-import java.net.Proxy
 import java.net.URLEncoder
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -78,7 +76,7 @@ class MusicPlaybackService : Service() {
     /**
      * Used to track what type of audio focus loss caused the playback to pause
      */
-    private var ErrorsCount = 0;
+    private var ErrorsCount = 0
     private var OnceCloseMiniPlayer = false
     private var SuperCloseMiniPlayer = MusicUtils.SuperCloseMiniPlayer
     private var mAnyActivityInForeground = false
@@ -145,7 +143,7 @@ class MusicPlaybackService : Service() {
 
     @Suppress("DEPRECATION")
     private fun setUpRemoteControlClient() {
-        mMediaSession = MediaSessionCompat(application, "TAG", null, null)
+        mMediaSession = MediaSessionCompat(application, resources.getString(R.string.app_name), null, null)
         val playbackStateCompat = PlaybackStateCompat.Builder()
                 .setActions(
                         PlaybackStateCompat.ACTION_SEEK_TO or
@@ -300,7 +298,7 @@ class MusicPlaybackService : Service() {
      */
     private fun updateNotification() {
         mNotificationHelper!!.buildNotification(this, artistName,
-                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(getResources(), R.drawable.generic_audio_nowplaying_service)), mMediaSession!!.sessionToken)
+                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(resources, R.drawable.generic_audio_nowplaying_service)), mMediaSession!!.sessionToken)
     }
 
     private fun scheduleDelayedShutdown() {
@@ -504,10 +502,10 @@ class MusicPlaybackService : Service() {
                     try {
                         val obj = JSONObject(response.body!!.string())
                         if (obj.has("image")) {
-                            CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image");
+                            CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image")
                         }
                         if (obj.has("album")) {
-                            AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album");
+                            AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album")
                         }
                         val uiHandler = Handler(this@MusicPlaybackService.mainLooper)
                         uiHandler.post {
@@ -535,7 +533,7 @@ class MusicPlaybackService : Service() {
             }
 
             if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio))
-                audio.setUrl(DownloadUtil.GetLocalTrackLink(audio))
+                audio.url = DownloadUtil.GetLocalTrackLink(audio)
             if (UpdateMeta) {
                 ErrorsCount = 0
                 CoverAudio = null
@@ -876,22 +874,8 @@ class MusicPlaybackService : Service() {
             isPaused = false
             isPreparing = true
             val url = Utils.firstNonEmptyString(remoteUrl, "https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/audio_error.mp3")
-            var proxy: Proxy? = null
-            if (Objects.nonNull(Injection.provideProxySettings().activeProxy)) {
-                proxy = Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(Injection.provideProxySettings().activeProxy))
-                if (Injection.provideProxySettings().activeProxy.isAuthEnabled) {
-                    val authenticator: Authenticator = object : Authenticator() {
-                        public override fun getPasswordAuthentication(): PasswordAuthentication {
-                            return PasswordAuthentication(Injection.provideProxySettings().activeProxy.user, Injection.provideProxySettings().activeProxy.pass.toCharArray())
-                        }
-                    }
-                    Authenticator.setDefault(authenticator)
-                } else {
-                    Authenticator.setDefault(null)
-                }
-            }
             val userAgent = Constants.USER_AGENT(null)
-            val factory = CustomHttpDataSourceFactory(userAgent, proxy)
+            val factory = Utils.getExoPlayerFactory(userAgent, Injection.provideProxySettings().activeProxy)
             val mediaSource: MediaSource
             mediaSource = if (url.contains("file://")) {
                 ProgressiveMediaSource.Factory(DefaultDataSourceFactory(
@@ -1050,7 +1034,7 @@ class MusicPlaybackService : Service() {
         }
 
         override fun closeMiniPlayer() {
-            mService.get()!!.OnceCloseMiniPlayer = true;
+            mService.get()!!.OnceCloseMiniPlayer = true
         }
 
         override fun refresh() {

@@ -173,8 +173,10 @@ public class OwnersRepository implements IOwnersRepository {
                         dtos.addAll(listEmptyIfNull(itst.stories));
                         dtos.addAll(listEmptyIfNull(itst.app_grouped_stories));
                         dtos.addAll(listEmptyIfNull(itst.community_grouped_stories));
-                        dtos.addAll(listEmptyIfNull(itst.live_active));
-                        dtos.addAll(listEmptyIfNull(itst.live_finished));
+                        if (itst.live_active != null)
+                            dtos.add(itst.live_active);
+                        if (itst.live_finished != null)
+                            dtos.add(itst.live_finished);
                         dtos.addAll(listEmptyIfNull(itst.promo_stories));
                     }
                     List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);
@@ -205,8 +207,10 @@ public class OwnersRepository implements IOwnersRepository {
                         dtos.addAll(listEmptyIfNull(itst.stories));
                         dtos.addAll(listEmptyIfNull(itst.app_grouped_stories));
                         dtos.addAll(listEmptyIfNull(itst.community_grouped_stories));
-                        dtos.addAll(listEmptyIfNull(itst.live_active));
-                        dtos.addAll(listEmptyIfNull(itst.live_finished));
+                        if (itst.live_active != null)
+                            dtos.add(itst.live_active);
+                        if (itst.live_finished != null)
+                            dtos.add(itst.live_finished);
                         dtos.addAll(listEmptyIfNull(itst.promo_stories));
                     }
                     List<Owner> owners = Dto2Model.transformOwners(story.profiles, story.groups);

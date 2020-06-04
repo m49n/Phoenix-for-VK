@@ -196,6 +196,11 @@
             android:title="@string/chat_dark_background"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:key="reset_chat_background"
+            android:title="@string/set_default"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="custom_chat_color_usage"
@@ -265,11 +270,6 @@
             android:title="@string/display_writing"
             app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="reset_chat_background"
-            android:title="@string/set_default"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -307,7 +307,7 @@
         app:iconSpaceReserved="false">
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="audio_round_icon"
             android:title="@string/audio_round_icon"
             app:iconSpaceReserved="false" />
@@ -417,6 +417,12 @@
         android:key="dev"
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="debug_mode"
+            android:title="@string/debug_mode"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="show_audio_cover"

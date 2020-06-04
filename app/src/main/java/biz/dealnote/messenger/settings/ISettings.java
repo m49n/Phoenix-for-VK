@@ -67,6 +67,8 @@ public interface ISettings {
 
         boolean isDisable_history();
 
+        boolean isDebug_mode();
+
         boolean isForce_cache();
 
         boolean isKeepLongpoll();
@@ -298,6 +300,8 @@ public interface ISettings {
         int getMainTheme();
 
         void setMainTheme(String key);
+
+        void switchNightMode(@NightMode int key);
 
         String getMainThemeKey();
 

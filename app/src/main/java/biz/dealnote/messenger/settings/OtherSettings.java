@@ -122,6 +122,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isDebug_mode() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("debug_mode", false);
+    }
+
+    @Override
     public boolean isForce_cache() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_cache", false);
     }

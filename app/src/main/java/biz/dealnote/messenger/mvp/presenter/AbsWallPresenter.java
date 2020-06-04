@@ -439,7 +439,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
             dlgAlert.setIcon(R.drawable.qr_code);
             final View view = LayoutInflater.from(context).inflate(R.layout.qr, null);
             dlgAlert.setTitle(R.string.show_qr);
-            ImageView imageView = (ImageView) view.findViewById(R.id.qr);
+            ImageView imageView = view.findViewById(R.id.qr);
             imageView.setImageBitmap(qr);
             dlgAlert.setView(view);
             dlgAlert.show();

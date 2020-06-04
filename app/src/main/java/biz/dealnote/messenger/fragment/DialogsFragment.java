@@ -24,6 +24,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,7 +81,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         int scrollMinOffset = 0;
 
         @Override
-        public void onScrolled(RecyclerView view, int dx, int dy) {
+        public void onScrolled(@NotNull RecyclerView view, int dx, int dy) {
             if (scrollMinOffset == 0) {
                 // one-time-init
                 scrollMinOffset = (int) Utils.dpToPx(2, view.getContext());

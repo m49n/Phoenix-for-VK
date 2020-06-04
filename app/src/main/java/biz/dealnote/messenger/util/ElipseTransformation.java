@@ -8,7 +8,7 @@ public class ElipseTransformation implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
-        return ImageHelper.getElipsedBitmap(source);
+        return ImageHelper.getElipsedBitmap(source, true);
     }
 
     @Override

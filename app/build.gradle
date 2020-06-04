@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'io.fabric'
 
 android {
     packagingOptions {
@@ -41,14 +40,14 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            multiDexEnabled false
+            multiDexEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         debug {
             minifyEnabled false
-            multiDexEnabled false
+            multiDexEnabled true
         }
     }
 }
@@ -116,6 +115,7 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation project(path: ':mvpcore')
     implementation project(path: ':touchview')
+    implementation project(path: ':material-popup-menu')
     implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitLibraryVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitLibraryVersion"
@@ -124,10 +124,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-database:19.2.0'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.4'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.4'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.4'
+    implementation('com.google.android.exoplayer:extension-okhttp:2.11.4') {
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+        exclude group: "com.squareup.okhttp3", module: "logging-interceptor"
+    }
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'androidx.biometric:biometric:1.0.1'
@@ -135,6 +137,7 @@ dependencies {
     implementation 'com.github.TutorialsAndroid:FilePicker:v8.0.19'
     implementation "com.github.skydoves:colorpickerpreference:2.0.0"
     implementation 'com.google.zxing:core:3.4.0'
+    implementation 'androidx.media:media:1.2.0-alpha02'
 }
 
 apply plugin: 'com.google.gms.google-services'

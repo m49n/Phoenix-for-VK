@@ -15,10 +15,10 @@ public class StoryBlockResponce {
     public List<VKApiStory> stories;
 
     @SerializedName("live_active")
-    public List<VKApiStory> live_active;
+    public VKApiStory live_active;
 
     @SerializedName("live_finished")
-    public List<VKApiStory> live_finished;
+    public VKApiStory live_finished;
 
     @SerializedName("community_grouped_stories")
     public List<VKApiStory> community_grouped_stories;

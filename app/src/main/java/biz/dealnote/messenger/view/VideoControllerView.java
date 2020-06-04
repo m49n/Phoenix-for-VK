@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -7,7 +8,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,10 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -73,7 +77,7 @@ public class VideoControllerView extends FrameLayout {
     private boolean mListenersSet;
     private OnClickListener mNextListener, mPrevListener;
 
-    private ImageButton mPauseButton;
+    private FloatingActionButton mPauseButton;
     private ImageButton mFfwdButton;
     private ImageButton mRewButton;
     private ImageButton mNextButton;
@@ -236,8 +240,7 @@ public class VideoControllerView extends FrameLayout {
      * @hide This doesn't work as advertised
      */
     protected View makeControllerView() {
-        LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mRoot = inflate.inflate(R.layout.video_media_controller, null);
+        mRoot = View.inflate(mContext, R.layout.video_media_controller, null);
 
         initControllerView(mRoot);
 
@@ -285,10 +288,8 @@ public class VideoControllerView extends FrameLayout {
 
         mProgress = (SeekBar) v.findViewById(R.id.mediacontroller_progress);
         if (mProgress != null) {
-            if (mProgress instanceof SeekBar) {
-                SeekBar seeker = (SeekBar) mProgress;
-                seeker.setOnSeekBarChangeListener(mSeekListener);
-            }
+            SeekBar seeker = (SeekBar) mProgress;
+            seeker.setOnSeekBarChangeListener(mSeekListener);
             mProgress.setMax(1000);
         }
 
@@ -440,6 +441,7 @@ public class VideoControllerView extends FrameLayout {
         return position;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         show(sDefaultTimeout);
@@ -641,7 +643,7 @@ public class VideoControllerView extends FrameLayout {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             VideoControllerView view = mView.get();
             if (view == null || view.mPlayer == null) {
                 return;

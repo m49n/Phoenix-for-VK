@@ -8,11 +8,11 @@ public class PolyTransformation implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
-        return ImageHelper.getPolyBitmap(source);
+        return ImageHelper.getPolyBitmap(source, true);
     }
 
     @Override
     public String key() {
-        return "elipse()";
+        return "poly()";
     }
 }

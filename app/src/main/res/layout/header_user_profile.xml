@@ -126,10 +126,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/email"
-                    app:borderWidth="1dp"
-                    app:elevation="1dp"
-                    app:fabSize="mini"
-                    app:pressedTranslationZ="3dp" />
+                    app:elevation="3dp"
+                    app:fabSize="mini" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/info_btn"
@@ -139,10 +137,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/about_writed"
-                    app:borderWidth="1dp"
-                    app:elevation="1dp"
-                    app:fabSize="mini"
-                    app:pressedTranslationZ="3dp" />
+                    app:elevation="3dp"
+                    app:fabSize="mini" />
 
             </LinearLayout>
 

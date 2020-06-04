@@ -99,6 +99,7 @@ import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
 import biz.dealnote.messenger.fragment.SecurityPreferencesFragment;
+import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.ThemeFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.UserBannedFragment;
@@ -1044,6 +1045,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 attachToFront(VideoPreviewFragment.newInstance(args));
                 break;
 
+            case Place.STORY_PLAYER:
+                attachToFront(StoryPagerFragment.newInstance(args));
+                break;
+
             case Place.FRIENDS_AND_FOLLOWERS:
                 attachToFront(FriendsTabsFragment.newInstance(args));
                 break;
@@ -1083,8 +1088,9 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.PLAYER:
-                if (getSupportFragmentManager().findFragmentByTag("audio_player") instanceof AudioPlayerFragment)
-                    break;
+                Fragment player = getSupportFragmentManager().findFragmentByTag("audio_player");
+                if (player instanceof AudioPlayerFragment)
+                    ((AudioPlayerFragment) player).dismiss();
                 AudioPlayerFragment.newInstance(args).show(getSupportFragmentManager(), "audio_player");
                 break;
 

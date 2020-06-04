@@ -1,10 +1,6 @@
 package biz.dealnote.messenger.mvp.presenter;
 
-import android.app.DownloadManager;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +17,7 @@ import biz.dealnote.messenger.model.VideoSize;
 import biz.dealnote.messenger.mvp.view.IGifPagerView;
 import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.AssertUtils;
+import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
@@ -233,13 +230,7 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
 
     private void downloadImpl() {
         Document document = mDocuments.get(mCurrentIndex);
-
-        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(document.getUrl()));
-        req.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, document.getTitle());
-        req.allowScanningByMediaScanner();
-        req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        DownloadManager dm = (DownloadManager) App.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
-        dm.enqueue(req);
+        DownloadUtil.downloadDocs(App.getInstance(), document, document.getUrl());
     }
 
     @Override

@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -75,6 +74,8 @@ import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.domain.Repository;
 import biz.dealnote.messenger.fragment.base.BaseFragment;
 import biz.dealnote.messenger.longpoll.LongpollInstance;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.Account;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.Settings;
@@ -205,7 +206,6 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         properties.root = Environment.getExternalStorageDirectory();
         properties.error_dir = Environment.getExternalStorageDirectory();
         properties.offset = Environment.getExternalStorageDirectory();
-        ;
         properties.extensions = null;
         properties.show_hidden_files = true;
         FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);
@@ -474,34 +474,29 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                 .accounts()
                 .getCurrent();
 
-        String[] items;
-
+        ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
         if (account.getId() > 0) {
-            if (idCurrent) {
-                items = new String[]{getString(R.string.delete), getString(R.string.add_to_home_screen)};
-            } else {
-                items = new String[]{getString(R.string.delete), getString(R.string.add_to_home_screen), getString(R.string.set_as_active)};
+            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(1, getString(R.string.add_to_home_screen), R.drawable.plus));
+            if (!idCurrent) {
+                menus.add(new OptionRequest(2, getString(R.string.set_as_active), R.drawable.account_circle));
             }
-        } else {
-            items = new String[]{getString(R.string.delete)};
-        }
-
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(account.getDisplayName())
-                .setItems(items, (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            delete(account);
-                            break;
-                        case 1:
-                            createShortcut(account);
-                            break;
-                        case 2:
-                            setAsActive(account);
-                            break;
-                    }
-                })
-                .show();
+        } else
+            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete));
+        menus.header(account.getDisplayName(), R.drawable.account_circle, account.getOwner() != null ? account.getOwner().getMaxSquareAvatar() : null);
+        menus.show(getChildFragmentManager(), "account_options", option -> {
+            switch (option.getId()) {
+                case 0:
+                    delete(account);
+                    break;
+                case 1:
+                    createShortcut(account);
+                    break;
+                case 2:
+                    setAsActive(account);
+                    break;
+            }
+        });
     }
 
     private VKApiUser getByID(List<VKApiUser> Users, int user_id) {
@@ -598,7 +593,6 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
             properties.root = Environment.getExternalStorageDirectory();
             properties.error_dir = Environment.getExternalStorageDirectory();
             properties.offset = Environment.getExternalStorageDirectory();
-            ;
             properties.extensions = new String[]{"json"};
             properties.show_hidden_files = true;
             FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties);

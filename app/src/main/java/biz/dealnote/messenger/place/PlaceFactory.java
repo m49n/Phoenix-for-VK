@@ -30,6 +30,7 @@ import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
+import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.fragment.VideoPreviewFragment;
@@ -66,6 +67,7 @@ import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoAlbumEditor;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.TmpSource;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
@@ -386,9 +388,9 @@ public class PlaceFactory {
                 .setArguments(VideoPreviewFragment.buildArgs(accountId, video.getOwnerId(), video.getId(), video));
     }
 
-    public static Place getHistoryVideoPreviewPlace(int accountId, @NonNull Video video) {
-        return new Place(Place.VIDEO_PREVIEW)
-                .setArguments(VideoPreviewFragment.buildArgsStory(accountId, video.getOwnerId(), video.getId(), video));
+    public static Place getHistoryVideoPreviewPlace(int accountId, @NonNull ArrayList<Story> stories, int index) {
+        return new Place(Place.STORY_PLAYER)
+                .setArguments(StoryPagerFragment.buildArgs(accountId, stories, index));
     }
 
     public static Place getVideoPreviewPlace(int accountId, int ownerId, int videoId, @Nullable Video video) {

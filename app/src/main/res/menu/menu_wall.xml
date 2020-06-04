@@ -15,6 +15,9 @@
     <item
         android:id="@+id/action_copy_url"
         android:title="@string/copy_url" />
+    <item
+        android:id="@+id/action_open_url"
+        android:title="@string/open_clipboard_url" />
 
     <item
         android:id="@+id/search_stories"

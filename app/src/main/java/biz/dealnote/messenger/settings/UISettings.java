@@ -99,6 +99,12 @@ class UISettings implements ISettings.IUISettings {
     }
 
     @Override
+    public void switchNightMode(@NightMode int key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        preferences.edit().putString("night_switch", String.valueOf(key)).apply();
+    }
+
+    @Override
     public boolean isDarkModeEnabled(Context context) {
         int nightMode = context.getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;

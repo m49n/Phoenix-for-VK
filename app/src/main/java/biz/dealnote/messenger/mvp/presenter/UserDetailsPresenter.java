@@ -307,7 +307,7 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
 
             for (Career c : details.getCareers()) {
                 Icon icon = isNull(c.getGroup()) ? Icon.fromResources(R.drawable.ic_career) : Icon.fromUrl(c.getGroup().get100photoOrSmaller());
-                String term = String.valueOf(c.getFrom()) + " - " + (c.getUntil() == 0 ? getString(R.string.activity_until_now) : String.valueOf(c.getUntil()));
+                String term = c.getFrom() + " - " + (c.getUntil() == 0 ? getString(R.string.activity_until_now) : String.valueOf(c.getUntil()));
                 String company = isNull(c.getGroup()) ? c.getCompany() : c.getGroup().getFullName();
                 String title = isEmpty(c.getPosition()) ? company : c.getPosition() + ", " + company;
 
@@ -323,7 +323,7 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
             Section section = new Section(new Text(R.string.military_service));
 
             for (Military m : details.getMilitaries()) {
-                String term = String.valueOf(m.getFrom()) + " - " + (m.getUntil() == 0 ? getString(R.string.activity_until_now) : String.valueOf(m.getUntil()));
+                String term = m.getFrom() + " - " + (m.getUntil() == 0 ? getString(R.string.activity_until_now) : String.valueOf(m.getUntil()));
                 items.add(new AdvancedItem(10, new Text(m.getUnit()))
                         .setSubtitle(new Text(term))
                         .setIcon(R.drawable.ic_military)
@@ -352,7 +352,7 @@ public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetail
                     Text term;
 
                     if (s.getFrom() > 0) {
-                        term = new Text(String.valueOf(s.getFrom()) + " - " + (s.getTo() == 0
+                        term = new Text(s.getFrom() + " - " + (s.getTo() == 0
                                 ? getString(R.string.activity_until_now) : String.valueOf(s.getTo())));
                     } else {
                         term = null;

@@ -16,6 +16,7 @@ import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 
@@ -49,7 +50,7 @@ public interface IAttachmentsPlacesView {
 
     void openVideo(int accountId, @NonNull Video apiVideo);
 
-    void openHistoryVideo(int accountId, @NonNull Video apiVideo);
+    void openHistoryVideo(int accountId, @NonNull ArrayList<Story> stories, int index);
 
     void openPoll(int accoountId, @NonNull Poll apiPoll);
 

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,7 @@ import biz.dealnote.messenger.model.drawer.SectionMenuItem;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.ISettings;
+import biz.dealnote.messenger.settings.NightMode;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
@@ -91,7 +93,6 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
     private NavigationDrawerCallbacks mCallbacks;
     private BottomSheetBehavior mBottomSheetBehavior;
 
-    private ViewGroup vgProfileContainer;
     private ImageView ivHeaderAvatar;
     private TextView tvUserName;
     private TextView tvDomain;
@@ -179,7 +180,7 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
 
-        vgProfileContainer = root.findViewById(R.id.content_root);
+        ViewGroup vgProfileContainer = root.findViewById(R.id.content_root);
         if (!Settings.get().ui().isShow_profile_in_additional_page())
             vgProfileContainer.setVisibility(View.GONE);
         else
@@ -187,6 +188,22 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
         ivHeaderAvatar = root.findViewById(R.id.header_navi_menu_avatar);
         tvUserName = root.findViewById(R.id.header_navi_menu_username);
         tvDomain = root.findViewById(R.id.header_navi_menu_usernick);
+        ImageView ivHeaderDayNight = root.findViewById(R.id.header_navi_menu_day_night);
+
+        ivHeaderDayNight.setOnClickListener(v -> {
+            if (Settings.get().ui().getNightMode() == NightMode.ENABLE || Settings.get().ui().getNightMode() == NightMode.AUTO ||
+                    Settings.get().ui().getNightMode() == NightMode.FOLLOW_SYSTEM) {
+                Settings.get().ui().switchNightMode(NightMode.DISABLE);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                Settings.get().ui().switchNightMode(NightMode.ENABLE);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            requireActivity().recreate();
+        });
+
+        ivHeaderDayNight.setImageResource((Settings.get().ui().getNightMode() == NightMode.ENABLE || Settings.get().ui().getNightMode() == NightMode.AUTO ||
+                Settings.get().ui().getNightMode() == NightMode.FOLLOW_SYSTEM) ? R.drawable.day : R.drawable.night);
 
         mAdapter = new MenuListAdapter(requireActivity(), mDrawerItems, this);
 

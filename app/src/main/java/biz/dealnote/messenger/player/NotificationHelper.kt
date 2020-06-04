@@ -62,7 +62,7 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                         context.resources.getString(R.string.next),
                         retreivePlaybackActions(ACTION_NEXT)))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH;
+            mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH
         else
             mNotificationBuilder?.priority = Notification.PRIORITY_MAX
         if (isPlaying) {
@@ -95,7 +95,7 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
     private fun getOpenIntent(context: Context): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)
         intent.action = MainActivity.ACTION_OPEN_AUDIO_PLAYER
-        return PendingIntent.getActivity(mService, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        return PendingIntent.getActivity(mService, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun retreivePlaybackActions(which: Int): PendingIntent? {

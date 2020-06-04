@@ -42,6 +42,7 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
+import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 import static biz.dealnote.messenger.util.Utils.hasFlag;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
@@ -195,7 +196,7 @@ public class NotificationHelper {
         }
 
         //Our quickreply
-        Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, message, text.toString(), peer.getAvaUrl(), peer.getTitle());
+        Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, message, firstNonEmptyString(" ", text.toString()), peer.getAvaUrl(), peer.getTitle());
         PendingIntent quickPendingIntent = PendingIntent.getActivity(context, message.getId(), intentQuick, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action actionCustomReply = new NotificationCompat.Action(R.drawable.reply, context.getString(R.string.quick_answer_title), quickPendingIntent);
 
@@ -271,7 +272,7 @@ public class NotificationHelper {
                     .subscribe(bitmap -> {
                         if (bitmap != null) {
                             builder.setStyle(new NotificationCompat.BigPictureStyle()
-                                    .setBigContentTitle(text)
+                                    .setBigContentTitle(message.getSender().getFullName() + ": " + text)
                                     .setSummaryText(context.getString(R.string.notif_photos, message.getAttachments().getPhotos().size()))
                                     .bigPicture(bitmap));
                             nManager.notify(createPeerTagFor(accountId, message.getPeerId()), NOTIFICATION_MESSAGE, builder.build());
@@ -297,7 +298,7 @@ public class NotificationHelper {
         }
 
         if (Settings.get().notifications().isQuickReplyImmediately()) {
-            Intent startQuickReply = QuickAnswerActivity.forStart(context, accountId, message, text.toString(), peer.getAvaUrl(), peer.getTitle());
+            Intent startQuickReply = QuickAnswerActivity.forStart(context, accountId, message, firstNonEmptyString(" ", text.toString()), peer.getAvaUrl(), peer.getTitle());
             startQuickReply.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startQuickReply.putExtra(QuickAnswerActivity.EXTRA_FOCUS_TO_FIELD, false);
             startQuickReply.putExtra(QuickAnswerActivity.EXTRA_LIVE_DELAY, true);
