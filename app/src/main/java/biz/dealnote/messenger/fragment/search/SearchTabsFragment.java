@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -16,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
+import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.place.Place;
@@ -62,6 +64,7 @@ public class SearchTabsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search_tabs, container, false);
         ViewPager2 mViewPager = root.findViewById(R.id.viewpager);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         Adapter mAdapter = new Adapter(this);
         mViewPager.setAdapter(mAdapter);
@@ -113,6 +116,9 @@ public class SearchTabsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Settings.get().ui().notifyPlaceResumed(Place.SEARCH);
+
+        ActivityUtils.setToolbarTitle(this, R.string.search);
+        ActivityUtils.setToolbarSubtitle(this, null); //
 
         new ActivityFeatures.Builder()
                 .begin()
