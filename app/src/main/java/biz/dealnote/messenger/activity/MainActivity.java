@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
                         Handler uiHandler = new Handler(MainActivity.this.getMainLooper());
                         uiHandler.post(() -> {
-                            String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/blob/5.x/VKPhoenix.apk\">Скачать с github.com</a></i>";
+                            String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/releases/latest\">Скачать с github.com</a></i>";
                             res += ("<p>Изменения: " + Chenges_log + "</p>");
 
                             AlertDialog dlg = new MaterialAlertDialogBuilder(MainActivity.this)
