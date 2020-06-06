@@ -774,7 +774,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
     /**
      * Used to update the current time string
      */
-    private class TimeHandler internal constructor(player: AudioPlayerFragment) : Handler() {
+    private class TimeHandler(player: AudioPlayerFragment) : Handler() {
         private val mAudioPlayer: WeakReference<AudioPlayerFragment> = WeakReference(player)
         override fun handleMessage(msg: Message) {
             if (msg.what == REFRESH_TIME) {

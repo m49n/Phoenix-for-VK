@@ -42,7 +42,7 @@ public final class UploadUtils {
 
         Bitmap target = null;
 
-        try (FileOutputStream ostream = new FileOutputStream(tempFile)) {
+        try {
             if (tempFile.exists()) {
                 if (!tempFile.delete()) {
                     throw new IOException("Unable to delete old image file");
@@ -52,9 +52,11 @@ public final class UploadUtils {
             if (!tempFile.createNewFile()) {
                 throw new IOException("Unable to create new file");
             }
-
+            FileOutputStream ostream = new FileOutputStream(tempFile);
             target = scaleDown(bitmap, size, true);
             target.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            ostream.flush();
+            ostream.close();
             return new FileInputStream(tempFile);
         } finally {
             IOUtils.recycleBitmapQuietly(bitmap);

@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
@@ -58,6 +59,7 @@ import biz.dealnote.messenger.view.emoji.EmojiconsPopup
 import biz.dealnote.mvp.core.IPresenterFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -649,6 +651,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }.show()
     }
 
+    override fun showSnackbar(@StringRes res: Int, isLong: Boolean) {
+        val view = super.getView()
+        if (Objects.nonNull(view)) {
+            Snackbar.make(view!!, res, if (isLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
     private class EditAttachmentsHolder(rootView: View, fragment: ChatFragment, attachments: MutableList<AttachmenEntry>) : AttachmentsBottomSheetAdapter.ActionListener, View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
@@ -1039,6 +1048,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             }
             R.id.action_leave_chat -> {
                 presenter?.fireLeaveChatClick()
+                return true
+            }
+            R.id.delete_chat -> {
+                presenter?.removeDialog()
                 return true
             }
             R.id.action_change_chat_title -> {

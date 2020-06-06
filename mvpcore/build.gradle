@@ -26,5 +26,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 repositories {
+    maven { url 'https://kotlin.bintray.com/kotlin-dev' }
     mavenCentral()
 }

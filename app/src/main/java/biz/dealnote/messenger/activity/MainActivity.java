@@ -99,6 +99,7 @@ import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
 import biz.dealnote.messenger.fragment.SecurityPreferencesFragment;
+import biz.dealnote.messenger.fragment.SinglePhotoFragment;
 import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.ThemeFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
@@ -463,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 mToolbar.setNavigationOnClickListener(v -> {
 
                     ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.view));
+                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline));
                     menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
                     menus.show(getSupportFragmentManager(), "left_options", option -> {
                         switch (option.getId()) {
@@ -1342,6 +1343,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             case Place.SETTINGS_THEME:
                 ThemeFragment themes = ThemeFragment.newInstance();
                 attachToFront(themes);
+                if (getNavigationFragment().isSheetOpen()) {
+                    getNavigationFragment().closeSheet();
+                    return;
+                }
                 break;
 
             case Place.COMMUNITY_BAN_EDIT:
@@ -1387,6 +1392,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.DRAWER_EDIT:
                 attachToFront(DrawerEditFragment.newInstance());
+                break;
+
+            case Place.SINGLE_PHOTO:
+                attachToFront(SinglePhotoFragment.newInstance(args));
                 break;
 
             case Place.USER_DETAILS:

@@ -855,7 +855,7 @@ class MusicPlaybackService : Service() {
         }
     }
 
-    private class MultiPlayer internal constructor(service: MusicPlaybackService) {
+    private class MultiPlayer(service: MusicPlaybackService) {
         val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
         var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(service).build()
         var isInitialized = false

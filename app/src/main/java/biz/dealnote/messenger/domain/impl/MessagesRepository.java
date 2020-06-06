@@ -1420,10 +1420,8 @@ public class MessagesRepository implements IMessagesRepository {
 
         @Override
         public void handleMessage(@NonNull MessagesRepository repository, @NonNull android.os.Message msg) {
-            switch (msg.what) {
-                case SEND:
-                    repository.send();
-                    break;
+            if (msg.what == SEND) {
+                repository.send();
             }
         }
     }

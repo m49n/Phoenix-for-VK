@@ -84,6 +84,16 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
+    public void setUploadImageSize(Integer size) {
+        getDefaultPreferences().edit().putString(KEY_IMAGE_SIZE, String.valueOf(size)).apply();
+    }
+
+    @Override
+    public int getUploadImageSizePref() {
+        return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString(KEY_IMAGE_SIZE, "0")));
+    }
+
+    @Override
     public int getPrefPreviewImageSize() {
         if (prefferedPhotoPreviewSize.isEmpty()) {
             prefferedPhotoPreviewSize = Optional.wrap(restorePhotoPreviewSize());
@@ -142,5 +152,15 @@ class MainSettings implements ISettings.IMainSettings {
     @Override
     public boolean isLoad_history_notif() {
         return getDefaultPreferences().getBoolean("load_history_notif", true);
+    }
+
+    @Override
+    public boolean isDont_write() {
+        return getDefaultPreferences().getBoolean("dont_write", false);
+    }
+
+    @Override
+    public boolean isOver_ten_attach() {
+        return getDefaultPreferences().getBoolean("over_ten_attach", false);
     }
 }

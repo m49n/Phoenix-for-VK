@@ -27,6 +27,10 @@
         android:title="@string/group_chat_leave" />
 
     <item
+        android:id="@+id/delete_chat"
+        android:title="@string/delete_chat" />
+
+    <item
         android:id="@+id/action_change_chat_title"
         android:title="@string/change_chat_title" />
 

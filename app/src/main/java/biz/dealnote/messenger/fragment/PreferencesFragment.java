@@ -400,9 +400,16 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("picture_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
-
                     try {
                         PicassoInstance.clear_cache();
+                        File cache = new File(requireActivity().getCacheDir(), "notif-cache");
+                        if (cache.exists() && cache.isDirectory()) {
+                            String[] children = cache.list();
+                            assert children != null;
+                            for (String child : children) {
+                                new File(cache, child).delete();
+                            }
+                        }
                         PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -416,6 +423,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
                     try {
                         PicassoInstance.clear_cache();
+                        File cache = new File(requireActivity().getCacheDir(), "notif-cache");
+                        if (cache.exists() && cache.isDirectory()) {
+                            String[] children = cache.list();
+                            assert children != null;
+                            for (String child : children) {
+                                new File(cache, child).delete();
+                            }
+                        }
                         PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -517,11 +532,15 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void openAboutUs() {
+    private void ShowDialogInfo() {
         View view = View.inflate(requireActivity(), R.layout.dialog_about_us, null);
         new MaterialAlertDialogBuilder(requireActivity())
                 .setView(view)
                 .show();
+    }
+
+    private void openAboutUs() {
+        ShowDialogInfo();
     }
 
     private void resolveAvatarStyleViews(int style, ImageView circle, ImageView oval) {

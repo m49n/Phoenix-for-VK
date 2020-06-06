@@ -3,7 +3,7 @@ package biz.dealnote.messenger.mvp.view;
 import androidx.annotation.StringRes;
 
 import biz.dealnote.messenger.media.gif.IGifPlayer;
-import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
@@ -19,7 +19,7 @@ public interface IStoryPagerView extends IMvpView, IErrorView, IToastView, IAcco
 
     void setToolbarTitle(@StringRes int titleRes, Object... params);
 
-    void setToolbarSubtitle(Owner own);
+    void setToolbarSubtitle(Story story);
 
     void configHolder(int adapterPosition, boolean progress, int aspectRatioW, int aspectRatioH);
 

@@ -182,9 +182,9 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
 
         ViewGroup vgProfileContainer = root.findViewById(R.id.content_root);
         if (!Settings.get().ui().isShow_profile_in_additional_page())
-            vgProfileContainer.setVisibility(View.GONE);
+            root.findViewById(R.id.profile_view).setVisibility(View.GONE);
         else
-            vgProfileContainer.setVisibility(View.VISIBLE);
+            root.findViewById(R.id.profile_view).setVisibility(View.VISIBLE);
         ivHeaderAvatar = root.findViewById(R.id.header_navi_menu_avatar);
         tvUserName = root.findViewById(R.id.header_navi_menu_username);
         tvDomain = root.findViewById(R.id.header_navi_menu_usernick);
@@ -200,6 +200,11 @@ public class AdditionalNavigationFragment extends BaseFragment implements MenuLi
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
             requireActivity().recreate();
+        });
+
+        ivHeaderDayNight.setOnLongClickListener(v -> {
+            PlaceFactory.getSettingsThemePlace().tryOpenWith(requireActivity());
+            return true;
         });
 
         ivHeaderDayNight.setImageResource((Settings.get().ui().getNightMode() == NightMode.ENABLE || Settings.get().ui().getNightMode() == NightMode.AUTO ||

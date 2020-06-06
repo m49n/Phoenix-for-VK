@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -87,11 +88,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     .transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
-
-        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
-            downloadAvatar(user);
-            return true;
-        });
 
         Integer onlineIcon = ViewUtils.getOnlineIcon(true, user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
         if (!user.isOnline())
@@ -284,9 +280,9 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     public void showAvatarContextMenu(boolean canUploadAvatar) {
         String[] items;
         if (canUploadAvatar) {
-            items = new String[]{getString(R.string.open_photo_album), getString(R.string.upload_new_photo)};
+            items = new String[]{getString(R.string.open_photo_album), getString(R.string.open_photo), getString(R.string.upload_new_photo)};
         } else {
-            items = new String[]{getString(R.string.open_photo_album)};
+            items = new String[]{getString(R.string.open_photo_album), getString(R.string.open_photo)};
         }
 
         new MaterialAlertDialogBuilder(requireActivity()).setItems(items, (dialogInterface, i) -> {
@@ -295,6 +291,10 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     getPresenter().fireOpenAvatarsPhotoAlbum();
                     break;
                 case 1:
+                    User usr = Objects.requireNonNull(getPresenter()).getUser();
+                    PlaceFactory.getSingleURLPhotoPlace(usr.getOriginalAvatar(), usr.getFullName(), "id" + usr.getId()).tryOpenWith(requireActivity());
+                    break;
+                case 2:
                     Intent attachPhotoIntent = new Intent(requireActivity(), PhotosActivity.class);
                     attachPhotoIntent.putExtra(PhotosActivity.EXTRA_MAX_SELECTION_COUNT, 1);
                     startActivityForResult(attachPhotoIntent, REQUEST_UPLOAD_AVATAR);

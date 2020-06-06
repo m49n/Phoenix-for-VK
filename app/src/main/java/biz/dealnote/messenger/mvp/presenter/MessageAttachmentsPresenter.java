@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.db.AttachToType;
 import biz.dealnote.messenger.domain.IAttachmentsRepository;
 import biz.dealnote.messenger.model.AbsModel;
@@ -372,6 +376,18 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         } else {
             getView().requestCameraPermission();
         }
+    }
+
+    public void fireCompressSettings(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(context.getString(R.string.select_image_size_title))
+                .setSingleChoiceItems(R.array.array_image_sizes_settings_names_tool, Settings.get().main().getUploadImageSizePref(), (dialogInterface, j) -> {
+                    Settings.get().main().setUploadImageSize(j);
+                    dialogInterface.dismiss();
+                })
+                .setCancelable(true)
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
     private void makePhotoInternal() {

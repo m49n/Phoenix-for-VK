@@ -3,4 +3,7 @@
     <external-path
         name="Captured"
         path="Pictures/Phoenix" />
+    <cache-path
+        name="notif-cache"
+        path="notif-cache" />
 </paths>

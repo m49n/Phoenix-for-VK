@@ -995,7 +995,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
      * DoubleTapZoom calls a series of runnables which apply
      * an animated zoom in/out graphic to the image.
      */
-    private inner class DoubleTapZoom internal constructor(targetZoom: Float, focusX: Float, focusY: Float, stretchImageToSuper: Boolean) : Runnable {
+    private inner class DoubleTapZoom(targetZoom: Float, focusX: Float, focusY: Float, stretchImageToSuper: Boolean) : Runnable {
         private val startTime: Long
         private val startZoom: Float
         private val targetZoom: Float
@@ -1126,7 +1126,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
      * the fling graphic to the image. The values for the translation
      * are interpolated by the Scroller.
      */
-    private inner class Fling internal constructor(velocityX: Int, velocityY: Int) : Runnable {
+    private inner class Fling(velocityX: Int, velocityY: Int) : Runnable {
         var scroller: CompatScroller?
         var currX: Int
         var currY: Int
@@ -1196,7 +1196,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     @TargetApi(VERSION_CODES.GINGERBREAD)
-    private inner class CompatScroller internal constructor(context: Context?) {
+    private inner class CompatScroller(context: Context?) {
         var overScroller: OverScroller
         fun fling(startX: Int, startY: Int, velocityX: Int, velocityY: Int, minX: Int, maxX: Int, minY: Int, maxY: Int) {
             overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY)
@@ -1234,7 +1234,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    private inner class ZoomVariables internal constructor(var scale: Float, var focusX: Float, var focusY: Float, var scaleType: ScaleType?)
+    private inner class ZoomVariables(var scale: Float, var focusX: Float, var focusY: Float, var scaleType: ScaleType?)
 
     interface OnZoomFinishedListener {
         fun onZoomFinished()
@@ -1279,7 +1279,7 @@ class TouchImageView @JvmOverloads constructor(context: Context, attrs: Attribut
      * AnimatedZoom calls a series of runnables which apply
      * an animated zoom to the specified target focus at the specified zoom level.
      */
-    private inner class AnimatedZoom internal constructor(targetZoom: Float, focus: PointF, zoomTimeMillis: Int) : Runnable {
+    private inner class AnimatedZoom(targetZoom: Float, focus: PointF, zoomTimeMillis: Int) : Runnable {
         private val zoomTimeMillis: Int
         private val startTime: Long
         private val startZoom: Float

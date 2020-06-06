@@ -125,6 +125,19 @@ public class PlaylistFragment extends BottomSheetDialogFragment implements Audio
         mAdapter = new AudioRecyclerAdapter(requireActivity(), mData, false, false);
         mAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
+        Audio my = MusicUtils.getCurrentAudio();
+        if (my != null) {
+            int index = 0;
+            int o = 0;
+            for (Audio i : mData) {
+                if (i == my) {
+                    index = o;
+                    break;
+                }
+                o++;
+            }
+            mRecyclerView.scrollToPosition(index);
+        }
     }
 
     private void restoreFromSavedInstanceState(@NonNull Bundle state) {
@@ -134,7 +147,6 @@ public class PlaylistFragment extends BottomSheetDialogFragment implements Audio
     @Override
     public void onClick(int position, Audio audio) {
         MusicPlaybackService.startForPlayList(requireActivity(), mData, position, false);
-        dismissAllowingStateLoss();
     }
 
     @Override

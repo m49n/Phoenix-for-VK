@@ -171,6 +171,10 @@ public interface ISettings {
         @Nullable
         Integer getUploadImageSize();
 
+        void setUploadImageSize(Integer size);
+
+        int getUploadImageSizePref();
+
         @PhotoSize
         int getPrefPreviewImageSize();
 
@@ -186,6 +190,10 @@ public interface ISettings {
         int getPhotoRoundMode();
 
         boolean isLoad_history_notif();
+
+        boolean isDont_write();
+
+        boolean isOver_ten_attach();
     }
 
     interface INotificationSettings {

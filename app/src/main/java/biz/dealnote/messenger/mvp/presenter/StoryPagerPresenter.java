@@ -160,7 +160,7 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
     @OnGuiCreated
     private void resolveToolbarSubtitle() {
         if (isGuiReady()) {
-            getView().setToolbarSubtitle(mStories.get(mCurrentIndex).getOwner());
+            getView().setToolbarSubtitle(mStories.get(mCurrentIndex));
         }
     }
 

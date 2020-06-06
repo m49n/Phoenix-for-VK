@@ -96,6 +96,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             }
         }
     };
+    private LinearLayoutManager lnr;
 
     public static DialogsFragment newInstance(int accountId, int dialogsOwnerId, @Nullable String subtitle, int Offset) {
         DialogsFragment fragment = new DialogsFragment();
@@ -126,7 +127,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         });
 
         mRecyclerView = root.findViewById(R.id.recycleView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        lnr = new LinearLayoutManager(requireActivity());
+        mRecyclerView.setLayoutManager(lnr);
         mRecyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(DialogsAdapter.PICASSO_TAG));
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -251,7 +253,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             toolbar.setNavigationIcon(tr);
             toolbar.setNavigationOnClickListener(v -> {
                 ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-                menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.view));
+                menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline));
                 menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
                 menus.show(getChildFragmentManager(), "left_options", option -> getPresenter().fireDialogOptions(requireActivity(), option));
             });
@@ -315,7 +317,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void scroll_pos(int pos) {
         if (nonNull(mRecyclerView)) {
-            mRecyclerView.scrollToPosition(pos);
+            lnr.scrollToPositionWithOffset(pos, 60);
         }
     }
 

@@ -272,6 +272,21 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
+    fun removeDialog() {
+        appendDisposable(messagesRepository.deleteDialog(accountId, peerId)
+                .compose(applyCompletableIOToMainSchedulers())
+                .subscribe({ onDialogRemovedSuccessfully(accountId) }, { t: Throwable? -> showError(view, t) }))
+    }
+
+    private fun onDialogRemovedSuccessfully(oldaccountId: Int) {
+        view?.showSnackbar(R.string.deleted, true)
+        if (accountId != oldaccountId) {
+            return
+        }
+        data.clear()
+        view?.notifyDataChanged()
+    }
+
     private fun onPeerUpdate(updates: List<PeerUpdate>) {
         var requireListUpdate = false
 
@@ -612,9 +627,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             resolvePrimaryButton()
         }
 
-        readAllUnreadMessagesIfExists()
-
-        textingNotifier.notifyAboutTyping(peerId)
+        if (Settings.get().accounts().getType(Settings.get().accounts().current) != "hacked" && !Settings.get().main().isDont_write) {
+            readAllUnreadMessagesIfExists()
+            textingNotifier.notifyAboutTyping(peerId)
+        }
     }
 
     fun fireSendClick() {
@@ -679,8 +695,19 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     private fun sendMessage(builder: SaveMessageBuilder) {
         messagesRepository.put(builder)
                 .fromIOToMain()
-                .doOnSuccess { startSendService() }
-                .subscribe(WeakConsumer(messageSavedConsumer), WeakConsumer(messageSaveFailConsumer))
+                .doOnSuccess {
+                    if (Settings.get().main().isOver_ten_attach && it.isHasAttachments && it.attachments.size() > 10) {
+                        val temp = it.attachments.toList()
+                        val att: ArrayList<AbsModel> = ArrayList()
+                        for (i in 10 until temp.size - 1) {
+                            att.add(temp[i])
+                        }
+                        outConfig.appendAll(att)
+                        resolveAttachmentsCounter()
+                        resolvePrimaryButton()
+                    }
+                    startSendService()
+                }.subscribe(WeakConsumer(messageSavedConsumer), WeakConsumer(messageSaveFailConsumer))
     }
 
     private val messageSavedConsumer: Consumer<Message> = Consumer { onMessageSaveSuccess(it) }
@@ -1801,7 +1828,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
-    private class ToolbarSubtitleHandler internal constructor(prensenter: ChatPrensenter) : Handler(Looper.getMainLooper()) {
+    private class ToolbarSubtitleHandler(prensenter: ChatPrensenter) : Handler(Looper.getMainLooper()) {
 
         var reference: WeakReference<ChatPrensenter> = WeakReference(prensenter)
 

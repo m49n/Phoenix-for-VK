@@ -57,7 +57,7 @@
             android:id="@+id/selected"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/check"
+            android:src="@drawable/theme_select"
             android:visibility="gone" />
 
     </RelativeLayout>

@@ -17,7 +17,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -883,7 +882,7 @@ public class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
         } else {
-            dr.setColorFilter(Color, PorterDuff.Mode.MULTIPLY);
+            dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MULTIPLY));
         }
     }
 

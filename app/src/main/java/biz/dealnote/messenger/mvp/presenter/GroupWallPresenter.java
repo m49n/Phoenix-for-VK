@@ -70,6 +70,10 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         refreshInfo();
     }
 
+    public Community getCommunity() {
+        return community;
+    }
+
     @OnGuiCreated
     private void resolveBaseCommunityViews() {
         if (isGuiReady()) {

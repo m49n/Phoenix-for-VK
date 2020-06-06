@@ -95,6 +95,10 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 .subscribe(this::onUploadFinished, RxUtils.ignore()));
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     protected void onRefresh() {
         requestActualFullInfo();
@@ -521,11 +525,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     }
 
     public void fireAvatarClick() {
-        if (getAccountId() != ownerId) {
-            prepareUserAvatarsAndShow();
-            return;
-        }
-
         getView().showAvatarContextMenu(isMyWall());
     }
 

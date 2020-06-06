@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
@@ -44,7 +46,6 @@ import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.media.gif.IGifPlayer;
-import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.presenter.StoryPagerPresenter;
@@ -55,8 +56,10 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.AlternativeAspectRatioFrameLayout;
+import biz.dealnote.messenger.view.CircleCounterButton;
 import biz.dealnote.messenger.view.FlingRelativeLayout;
 import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
 import biz.dealnote.messenger.view.pager.GoBackCallback;
@@ -79,9 +82,10 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
     private static final int REQUEST_WRITE_PERMISSION = 160;
     private ViewPager2 mViewPager;
     private Toolbar mToolbar;
-    private View mButtonsRoot;
     private ImageView Avatar;
+    private TextView mExp;
     private Transformation transformation;
+    private CircleCounterButton mDownload;
     private boolean mFullscreen;
     private SparseArray<WeakReference<MultiHolder>> mHolderSparseArray = new SparseArray<>();
     private WeakGoBackAnimationAdapter mGoBackAnimationAdapter = new WeakGoBackAnimationAdapter(this);
@@ -122,12 +126,10 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
         mToolbar = root.findViewById(R.id.toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
 
-        mButtonsRoot = root.findViewById(R.id.buttons);
-
         Avatar = root.findViewById(R.id.toolbar_avatar);
-
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
+        mExp = root.findViewById(R.id.item_story_expires);
 
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -137,8 +139,8 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
             }
         });
 
-        root.findViewById(R.id.button_download).setOnClickListener(v -> getPresenter().fireDownloadButtonClick());
-
+        mDownload = root.findViewById(R.id.button_download);
+        mDownload.setOnClickListener(v -> getPresenter().fireDownloadButtonClick());
 
         resolveFullscreenViews();
         return root;
@@ -194,8 +196,8 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
             mToolbar.setVisibility(mFullscreen ? View.GONE : View.VISIBLE);
         }
 
-        if (Objects.nonNull(mButtonsRoot)) {
-            mButtonsRoot.setVisibility(mFullscreen ? View.GONE : View.VISIBLE);
+        if (Objects.nonNull(mDownload)) {
+            mDownload.setVisibility(mFullscreen ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -271,13 +273,23 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
     }
 
     @Override
-    public void setToolbarSubtitle(Owner own) {
+    public void setToolbarSubtitle(Story story) {
         ActionBar actionBar = ActivityUtils.supportToolbarFor(this);
         if (Objects.nonNull(actionBar)) {
-            actionBar.setSubtitle(own.getFullName());
+            actionBar.setSubtitle(story.getOwner().getFullName());
         }
-        Avatar.setOnClickListener(v -> PlaceFactory.getOwnerWallPlace(getPresenter().getAccountId(), own).tryOpenWith(requireActivity()));
-        ViewUtils.displayAvatar(Avatar, transformation, own.getMaxSquareAvatar(), Constants.PICASSO_TAG);
+        Avatar.setOnClickListener(v -> PlaceFactory.getOwnerWallPlace(getPresenter().getAccountId(), story.getOwner()).tryOpenWith(requireActivity()));
+        ViewUtils.displayAvatar(Avatar, transformation, story.getOwner().getMaxSquareAvatar(), Constants.PICASSO_TAG);
+
+        if (Objects.nonNull(mExp)) {
+            if (story.getExpires() <= 0)
+                mExp.setVisibility(View.GONE);
+            else {
+                mExp.setVisibility(View.VISIBLE);
+                Long exp = (story.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
+                mExp.setText(getString(R.string.expires, String.valueOf(exp), getString(Utils.declOfNum(exp, new int[]{R.string.hour, R.string.hour_sec, R.string.hours}))));
+            }
+        }
     }
 
     @Override

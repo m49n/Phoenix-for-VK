@@ -73,12 +73,9 @@
     <string name="settings">Настройки</string>
 
     <string name="general_settings">Общие</string>
-    <string name="other_settings">Другие</string>
     <string name="about_settings">О приложении</string>
     <string name="account_cache_cleaner">Очистить кэш для данного аккаунта</string>
     <string name="picture_cache_cleaner">Очистить кэш изображений</string>
-    <string name="share_text">Поделиться приложением с друзьями</string>
-    <string name="rate_text">Оценить приложение в Google Play</string>
     <!-- Quick Reply-->
     <string name="go_to_dialog">К диалогу</string>
     <string name="send">Отправить</string>
@@ -111,7 +108,6 @@
     <string name="online">Онлайн</string>
     <string name="offline">Не в сети</string>
     <string name="offline_hidden">Не в сети: скрыто</string>
-    <string name="thank_you">На вашей стене создан пост с информацией о приложении. Спасибо большое за поддержку!</string>
 
 
     <string name="notif_setting_title">Уведомления</string>
@@ -166,9 +162,6 @@
 
     <string name="refresh">Обновить</string>
 
-    <string name="pref_join_app_group_title">Посетить группу приложения</string>
-    <string name="pref_join_app_group_summary">В группе Phoenix for VK Вы сможете наблюдать за развитием приложения, оставить свои замечания или идеи</string>
-
     <string name="set_groupchat_title">Укажите тему беседы</string>
 
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
@@ -202,6 +195,13 @@
         <item>Спрашивать каждый раз</item>
     </string-array>
 
+    <string-array name="array_image_sizes_settings_names_tool">
+        <item>Спрашивать каждый раз</item>
+        <item>Маленький (800 px)</item>
+        <item>Средний (1200 px)</item>
+        <item>Оригинал</item>
+    </string-array>
+
     <string-array name="array_image_sizes_settings_values" translatable="false">
         <item>1</item>
         <item>2</item>
@@ -225,7 +225,6 @@
 
     <string name="chat_empty_text">Здесь будет выводиться история переписки.</string>
 
-    <string name="emojis_type_summary">Если включено, будут использоваться системные смайлы</string>
     <string name="emojis_type_title">Использовать системные смайлы</string>
     <string name="emojis_recents">Показывать последние стикеры</string>
     <string name="appearance_settings">Внешний вид</string>
@@ -266,7 +265,6 @@
 
     <string name="saved">Сохранено</string>
     <string name="tag_modified">MP3 теги обновлены!</string>
-    <string name="please_download_track">Сначала скачайте MP3!</string>
     <string name="save_to_drive">Сохранить на накопитель</string>
 
     <string name="reply">Ответить</string>
@@ -342,7 +340,6 @@
     <string name="videos_albums_videos_counter">%1$d видео</string>
 
     <string name="view_count">просмотров: %1$d</string>
-    <string name="message_was_deleted">Сообщение было удалено</string>
     <string name="edit">Редактировать</string>
     <string name="added">Добавлено</string>
 
@@ -357,10 +354,6 @@
     <string name="drawer_feedback">Уведомления</string>
 
     <string name="mentioned_in_post">упомянул Вас в записи</string>
-
-    <string name="commented_to_post">прокомментировал Вашу запись</string>
-    <string name="commented_to_photo">прокомментировал Вашу фотографию</string>
-    <string name="commented_to_video">прокомментировал Вашу видеозапись</string>
 
     <string name="liked_comment">оценил Ваш комментарий</string>
 
@@ -533,7 +526,6 @@
     <string name="dislike">Мне не нравится</string>
     <string name="copied_url">Ссылка скопирована</string>
     <string name="copy_url">Копировать ссылку</string>
-    <string name="copy_original_url">Прямая ссылка</string>
     <string name="goto_user">Открыть владельца</string>
     <string name="goto_community">Открыть сообщество</string>
 
@@ -581,6 +573,7 @@
     <string name="topic_comments_counter">последнее обновление: %1$s | %2$d комментариев</string>
     <string name="topics">Обсуждения</string>
     <string name="group_chat_leave">Покинуть беседу</string>
+    <string name="delete_chat">Удалить чат</string>
     <string name="post_from_group">От имени группы</string>
 
     <string name="for_friends_only">Только для друзей</string>
@@ -609,11 +602,11 @@
     <string name="avatar_style_title">Стиль аватарок</string>
 
     <string name="save_changes_question">Сохранить изменения ?</string>
-    <string name="developer">Разработчики</string>
-    <string name="ruslan_kolbasa" translatable="false">Ruslan Kolbasa</string>
-    <string name="emin_guliev" translatable="false">Emin Guliev</string>
+    <string name="developer">Разработчики:</string>
+    <string name="umerov_artem">Умеров Артём</string>
+    <string name="daniluk_dmitry">Данилюк Дмитрий</string>
+    <string name="fork_phoenix">Форк Phoenix</string>
     <string name="comment">Комментарий</string>
-    <string name="up">Вверх</string>
     <string name="search">Поиск</string>
     <string name="input">Ввод</string>
     <string name="bookmarks">Закладки</string>
@@ -621,7 +614,6 @@
     <string name="people">Люди</string>
     <string name="links">Ссылки</string>
     <string name="posts">Записи</string>
-    <string name="fave_groups">Сообщества</string>
     <string name="loading_owner_photo_album">Загрузка фотоальбома</string>
     <string name="no_photos_found">Фотографии не найдены</string>
     <string name="please_wait">Пожалуйста, подождите</string>
@@ -643,8 +635,6 @@
     <string name="deleted">Удалено</string>
     <string name="remove_confirm">Подтвердите удаление</string>
     <string name="doc_remove_confirm_message">Вы действительно хотите удалить этот документ ? Это действие нельзя отменить.</string>
-    <string name="kate_import">Импорт из Kate Mobile</string>
-    <string name="development">DEV</string>
 
     <!-- Do not translate. Duration format for duration < 1 hour -->
     <string name="durationformatshort" translatable="false"><xliff:g id="format">%2$d:%3$02d</xliff:g></string>
@@ -784,10 +774,6 @@
     <string name="from_list">Из списка</string>
     <string name="photo_size">Размер фото</string>
     <string name="button_go">Перейти</string>
-    <string name="later">Позже</string>
-    <string name="never">Никогда</string>
-    <string name="app_community_invite_title">Спасибо, что Вы с нами!</string>
-    <string name="app_community_invite_message">Приглашаем Вас вступить в группу приложения и чат в Telegram. Там Вы можете найти полезную информацию о приложении, узнать нововведения и задать нам вопросы</string>
     <string name="additional_settings">Дополнительные параметры</string>
     <string name="button_continue">Продолжить</string>
     <string name="create_album">Создать новый альбом</string>
@@ -817,7 +803,6 @@
     <string name="who_is_not_allowed_to_comment_this_album">Кому комментирование этого альбома запрещено?</string>
     <string name="copy_data">Копировать</string>
     <string name="forward">Переслать</string>
-    <string name="answer">Ответить</string>
     <string name="read">Прочесть</string>
     <string name="open">Открыть</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
@@ -970,7 +955,6 @@
     <string name="send_short">Отпр.</string>
     <string name="message_attachment_empty_text">Вложений пока нет (лимит 10)</string>
     <string name="button_add_photo">Добавить фото/видео</string>
-    <string name="button_add_photo_video">фото/видео</string>
     <string name="log_type_error" translatable="false">Исключения</string>
     <string name="settings_show_logs_title" translatable="false">Логи</string>
     <string name="application_logs" translatable="false">Логи приложения</string>
@@ -989,10 +973,6 @@
     <string name="doc_filter_books">Книги</string>
     <string name="doc_filter_other">Другие</string>
     <string name="files_tab_title">Файлы</string>
-    <string name="error_fingerprint_failed">Авторизация не удалась</string>
-    <string name="error_fingerprint_not_blocked">Защита по отпечатку пальца не установлена. Для использования опции добавьте отпечаток пальца в настройках аппарата.</string>
-    <string name="error_fingerprint_not_supported">Защита по отпечатку пальца не поддерживается устройством</string>
-    <string name="message_fingerprint_touch_sensor">Коснитесь сенсора для авторизации</string>
     <string name="add_to_launcer_shortcuts">Добавить в ярлыки приложения</string>
     <string name="wall_text_hint">Введите текст новости</string>
     <string name="document_short">Док</string>
@@ -1141,7 +1121,6 @@
     <string name="login_phone_or_email_hint">Телефон или email</string>
     <string name="login_title">ВХОД | ВК</string>
     <string name="button_login_via_web">Через Web</string>
-    <string name="button_dev_mode">Dev</string>
     <string name="button_login">Войти</string>
     <string name="drawer_edit_title">Всплывающее меню</string>
     <string name="theme_edit_title">Выбор цветового оформления</string>
@@ -1150,9 +1129,6 @@
     <string name="button_validate_web">Не пришёл код</string>
     <string name="sms_fail">ВК может не отправить вам код, сразу нажмите \"Не пришёл код\"</string>
     <string name="error_not_found_message">Объект не найден</string>
-    <string name="audios_disabled_summary_message">16 декабря 2016 года администрация \"ВКонтакте\" отключила доступ к своему музыкальному API для сторонних приложений</string>
-    <string name="audios_disabled_title">Доступ закрыт :(</string>
-    <string name="button_details">Подробнее</string>
     <string name="my_communities_title">Мои сообщества</string>
     <string name="quick_search_title">Быстрый поиск</string>
     <string name="countries_title">Страны</string>
@@ -1175,8 +1151,6 @@
     <string name="api_error_921">Невозможно переслать выбранные сообщения</string>
     <string name="allow_fingerprint_title">Разрешить отпечаток пальца</string>
     <string name="error_login_by_fingerprint_not_allowed">Вход с помощью отпечатка пальца не разрешен</string>
-    <string name="source_code_title" translatable="false">Source code</string>
-    <string name="source_code_link" translatable="false">https://github.com/PhoenixDevTeam/Phoenix-for-VK</string>
     <string name="birthdays">Дни рождения</string>
     <string name="error_key_exchange_invalid_session_state">Недопустимый статус сессии. Обмен ключами не удался.</string>
     <string name="error_key_exchange_cancelled_by_user">Обмен ключами был отменен пользователем</string>
@@ -1248,13 +1222,11 @@
     <string name="classical">Классика</string>
     <string name="dance" translatable="false">Dance</string>
     <string name="drum_and_bass" translatable="false">Drum\'n\'bass</string>
-    <string name="dubstep" translatable="false">Dubstep</string>
     <string name="easy_listening">Легкое</string>
     <string name="disco">Диско</string>
     <string name="ethnic">Этническое</string>
     <string name="indie_pop">Инди-поп</string>
     <string name="instrumental">Инстурметальное</string>
-    <string name="jazz">Джаз</string>
     <string name="metal">Метал</string>
     <string name="pop">Поп</string>
     <string name="reggae">Рэгги</string>
@@ -1330,17 +1302,19 @@
     <string name="download_peer_html">Скачать переписку в HTML</string>
     <string name="usages">Использованные</string>
     <string name="is_player_support_volume">Переключатель громкости в плеере</string>
-    <string name="notif_photos">%1$d Фото</string>
+    <string name="notif_photos">%1$d фото</string>
+    <string name="notif_videos">%1$d видео</string>
     <string name="notif_attach">(%1$d %2$s)</string>
-    <string name="notif_forward">(%1$d Пересланных)</string>
+    <string name="notif_forward">(%1$d пересланных)</string>
     <string name="sticker">[стикер]</string>
+    <string name="voice">[голосовое сообщение]</string>
     <string name="auto_read">Читать сообщения автоматически</string>
     <string name="hours">Часов</string>
     <string name="hour">Час</string>
     <string name="hour_sec">Часа</string>
     <string name="attachments_notif">вложений</string>
     <string name="attachment_notif">вложение</string>
-    <string name="attacment_sec_notif">Вложения</string>
+    <string name="attacment_sec_notif">вложения</string>
     <string name="for_wear">Для Wear OS</string>
     <string name="music_enable_toolbar">Включить тулбар для списка музыки</string>
     <string name="read_article">Читать</string>
@@ -1358,5 +1332,12 @@
     <string name="by_name">По имени</string>
     <string name="by_owner">По владельцу</string>
     <string name="notif_sticker">Стикер</string>
+    <string name="notif_voice">Голосовое сообщение</string>
     <string name="debug_mode">Режим отладки</string>
+    <string name="dont_write">Не показывать написание</string>
+    <string name="over_ten_attach">Отправлять больше 10 вложений</string>
+    <string name="repo">Репозиторий: https://github.com/umerov1999/Phoenix-for-VK</string>
+    <string name="donate">Донат: 5599005042882048</string>
+    <string name="telegram">Телеграм-канал: https://t.me/phoenixvk_mod</string>
+    <string name="open_photo">Открыть фото</string>
 </resources>

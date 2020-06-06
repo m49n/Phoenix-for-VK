@@ -98,6 +98,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         view.findViewById(R.id.button_audio).setOnClickListener(v -> getPresenter().fireButtonAudioClick());
         view.findViewById(R.id.button_doc).setOnClickListener(v -> getPresenter().fireButtonDocClick());
         view.findViewById(R.id.button_camera).setOnClickListener(v -> getPresenter().fireButtonCameraClick());
+        view.findViewById(R.id.button_photo_settings).setOnClickListener(v -> getPresenter().fireCompressSettings(requireActivity()));
 
         dialog.setContentView(view);
         fireViewCreated();

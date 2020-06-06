@@ -80,9 +80,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             tools:text="Video title" />
 
-        <include
-            android:id="@+id/bottom_divider"
-            layout="@layout/line_divider" />
+        <include layout="@layout/line_divider" />
 
         <include
             android:id="@+id/comment_root"

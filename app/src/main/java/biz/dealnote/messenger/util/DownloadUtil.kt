@@ -238,7 +238,7 @@ object DownloadUtil {
         return aid.toString() + "_" + peerId
     }
 
-    private class VideoInternalDownloader internal constructor(private val context: Context, video: Video, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "video_" + createPeerTagFor(video.id, video.ownerId), true) {
+    private class VideoInternalDownloader(private val context: Context, video: Video, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "video_" + createPeerTagFor(video.id, video.ownerId), true) {
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
@@ -250,7 +250,7 @@ object DownloadUtil {
 
     }
 
-    private class DocsInternalDownloader internal constructor(private val context: Context, doc: Document, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "doc_" + createPeerTagFor(doc.id, doc.ownerId), true) {
+    private class DocsInternalDownloader(private val context: Context, doc: Document, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "doc_" + createPeerTagFor(doc.id, doc.ownerId), true) {
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
@@ -262,7 +262,7 @@ object DownloadUtil {
 
     }
 
-    private class VoiceInternalDownloader internal constructor(private val context: Context, doc: VoiceMessage, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "voice_" + createPeerTagFor(doc.id, doc.ownerId), true) {
+    private class VoiceInternalDownloader(private val context: Context, doc: VoiceMessage, URL: String?, file: String?) : DownloadImageTask(context, URL, file, "voice_" + createPeerTagFor(doc.id, doc.ownerId), true) {
         @SuppressLint("CheckResult")
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
@@ -274,7 +274,7 @@ object DownloadUtil {
 
     }
 
-    private class AudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Audio.getMp3FromM3u8(audio.url), file, "audio_" + createPeerTagFor(audio.id, audio.ownerId), true) {
+    private class AudioInternalDownloader(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Audio.getMp3FromM3u8(audio.url), file, "audio_" + createPeerTagFor(audio.id, audio.ownerId), true) {
         @SuppressLint("CheckResult")
         private val current_audio = audio
         private val ctx = context
@@ -293,7 +293,7 @@ object DownloadUtil {
 
     }
 
-    private class TagAudioInternalDownloader internal constructor(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file, "cover_" + createPeerTagFor(audio.id, audio.ownerId), false) {
+    private class TagAudioInternalDownloader(private val context: Context, audio: Audio, file: String?) : DownloadImageTask(context, Utils.firstNonEmptyString(audio.thumb_image_very_big, audio.thumb_image_little), file, "cover_" + createPeerTagFor(audio.id, audio.ownerId), false) {
         private val current_audio = audio
         private val ctx = context
         private fun FlushAudio(Cover: File, audioFile: AudioFile, Flaudio: File, lst: Long) {

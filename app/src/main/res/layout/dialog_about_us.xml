@@ -28,16 +28,26 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:text="@string/fork_phoenix"
+        android:textSize="12sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -55,14 +65,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="@string/ruslan_kolbasa"
+                    android:text="@string/umerov_artem"
                     android:textSize="@dimen/font_size_subtitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="@string/emin_guliev"
+                    android:text="@string/daniluk_dmitry"
                     android:textSize="@dimen/font_size_subtitle" />
 
             </LinearLayout>
@@ -70,16 +80,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/mod_developer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="Mod Developer:"
-                android:textSize="@dimen/font_size_subtitle" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -89,16 +91,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:padding="4dp"
-                    android:text="Umerov Artem"
+                    android:text="@string/donate"
                     android:textSize="@dimen/font_size_subtitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autoLink="web"
                     android:padding="4dp"
-                    android:text="Донат: 5599005042882048"
-                    android:textSize="@dimen/font_size_subtitle" />
+                    android:text="@string/repo"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autoLink="web"
+                    android:padding="4dp"
+                    android:text="@string/telegram"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

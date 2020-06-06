@@ -140,12 +140,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
         safeNotifyDataSetChanged();
 
-        if (offset > 0) {
-            safeScroll(offset);
-            offset = 0;
-        }
-
-
         try {
             appendDisposable(InteractorFactory.createStickersInteractor()
                     .getAndStore(getAccountId())
@@ -153,6 +147,11 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
                     .subscribe(dummy(), ignore()));
         } catch (Exception ignored) {
             /*ignore*/
+        }
+
+        if (offset > 0) {
+            safeScroll(offset);
+            offset = 0;
         }
     }
 

@@ -171,6 +171,18 @@
             android:title="@string/send_on_enter_title"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="dont_write"
+            android:title="@string/dont_write"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="over_ten_attach"
+            android:title="@string/over_ten_attach"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -206,6 +218,7 @@
             android:key="custom_chat_color_usage"
             android:summary="@string/custom_chat_color_summary"
             android:title="@string/use_custom_chat_color"
+            app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference
@@ -423,10 +436,24 @@
             android:title="@string/debug_mode"
             app:icon="@drawable/debug_mode"
             app:iconSpaceReserved="false" />
+        <Preference
+            android:dependency="debug_mode"
+            android:key="request_executor"
+            android:title="@string/request_executor_title"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:dependency="debug_mode"
+            android:key="show_logs"
+            android:title="@string/settings_show_logs_title"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:defaultValue="true"
             android:key="show_audio_cover"
             android:title="@string/show_audio_cover"
+            app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
         <SwitchPreference
             android:defaultValue="true"
@@ -445,24 +472,12 @@
         <SwitchPreference
             android:key="settings_no_push"
             android:title="@string/settings_no_push"
-            app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
         <SwitchPreference
             android:key="keep_longpoll"
             android:summary="@string/settings_keep_longpoll_summary"
             android:title="@string/settings_keep_longpoll_title"
             app:iconSpaceReserved="false" />
-        <Preference
-            android:key="show_logs"
-            android:title="@string/settings_show_logs_title"
-            app:allowDividerAbove="true"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="request_executor"
-            android:title="@string/request_executor_title"
-            app:iconSpaceReserved="false" />
-
         <Preference
             android:key="account_cache_cleaner"
             android:title="@string/account_cache_cleaner"

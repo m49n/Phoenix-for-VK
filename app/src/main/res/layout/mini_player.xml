@@ -61,11 +61,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
-        android:contentDescription="@string/open_full_player"
         android:backgroundTint="?colorSurface"
-        android:src="@drawable/ic_outline_keyboard_arrow_up"
+        android:contentDescription="@string/open_full_player"
         android:padding="10dp"
         android:scaleType="centerInside"
+        android:src="@drawable/ic_outline_keyboard_arrow_up"
         android:tint="?colorPrimary" />
 
     <ImageButton
@@ -75,8 +75,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="4dp"
         android:backgroundTint="?colorSurface"
-        android:src="@drawable/ic_outline_keyboard_arrow_down"
         android:contentDescription="@string/close"
         android:scaleType="centerInside"
+        android:src="@drawable/ic_outline_keyboard_arrow_down"
         android:tint="?colorPrimary" />
 </LinearLayout>

@@ -30,6 +30,7 @@ import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
+import biz.dealnote.messenger.fragment.SinglePhotoFragment;
 import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
@@ -396,6 +397,11 @@ public class PlaceFactory {
     public static Place getVideoPreviewPlace(int accountId, int ownerId, int videoId, @Nullable Video video) {
         return new Place(Place.VIDEO_PREVIEW)
                 .setArguments(VideoPreviewFragment.buildArgs(accountId, ownerId, videoId, video));
+    }
+
+    public static Place getSingleURLPhotoPlace(String url, String prefix, String photo_prefix) {
+        return new Place(Place.SINGLE_PHOTO)
+                .setArguments(SinglePhotoFragment.buildArgs(url, prefix, photo_prefix));
     }
 
     public static Place getLikesCopiesPlace(int accountId, String type, int ownerId, int itemId, String filter) {
