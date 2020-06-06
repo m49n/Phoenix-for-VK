@@ -102,7 +102,7 @@ public class AppNotificationChannels {
         String channelName = context.getString(R.string.downloading);
         NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
-        channel.enableVibration(true);
+        channel.enableVibration(false);
         return channel;
     }
 
