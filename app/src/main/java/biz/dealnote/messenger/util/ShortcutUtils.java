@@ -10,6 +10,8 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
@@ -36,7 +38,7 @@ public class ShortcutUtils {
     private static final int MAX_DYNAMIC_COUNT = 5;
 
     private static int getLauncherIconSize(Context context) {
-        return context.getDrawable(R.mipmap.ic_launcher).getIntrinsicWidth();
+        return ContextCompat.getDrawable(context, R.mipmap.ic_launcher).getIntrinsicWidth();
     }
 
     public static void createAccountShurtcut(Context context, int accountId, String title, String url) throws IOException {

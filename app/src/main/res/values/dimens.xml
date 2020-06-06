@@ -60,8 +60,8 @@
     <dimen name="avatar_size_big">100dp</dimen>
     <dimen name="avatar_size_chat">60dp</dimen>
     <dimen name="avatar_size_usual">48dp</dimen>
-    <dimen name="avatar_size_small">40dp</dimen>
-    <dimen name="avatar_size_tiny">32dp</dimen>
+    <dimen name="avatar_size_small">36dp</dimen>
+    <dimen name="avatar_size_tiny">28dp</dimen>
     <dimen name="avatar_size_min">24dp</dimen>
 
     <dimen name="online_dot_size">16dp</dimen>

@@ -982,15 +982,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
 
         if (Utils.hasMarshmallow()) {
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
             if (invertIcons) {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                getWindow().getDecorView().setSystemUiVisibility(flags);
             } else {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                getWindow().getDecorView().setSystemUiVisibility(flags);
             }
+            getWindow().getDecorView().setSystemUiVisibility(flags);
 
             StatusbarUtil.setCustomStatusbarDarkMode(this, invertIcons);
         }

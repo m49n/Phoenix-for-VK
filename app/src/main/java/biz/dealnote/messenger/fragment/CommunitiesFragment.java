@@ -57,7 +57,6 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CommunitiesAdapter mAdapter;
     private MySearchView mSearchView;
-    private FragmentManager.OnBackStackChangedListener backStackChangedListener = this::resolveLeftButton;
 
     public static CommunitiesFragment newInstance(int accountId, int userId) {
         Bundle args = new Bundle();
@@ -72,7 +71,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_communities, container, false);
-        //((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
@@ -97,36 +96,17 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         mSearchView.setRightButtonVisibility(false);
         mSearchView.setOnQueryTextListener(this);
 
-        resolveLeftButton();
+        mSearchView.setLeftIcon(R.drawable.magnify);
         return root;
-    }
-
-    private void resolveLeftButton() {
-        FragmentActivity activity = requireActivity();
-
-        try {
-            if (nonNull(mSearchView)) {
-                int count = activity.getSupportFragmentManager().getBackStackEntryCount();
-                Drawable tr = AppCompatResources.getDrawable(requireActivity(), count == 1 && activity instanceof AppStyleable ?
-                        R.drawable.phoenix_round : R.drawable.arrow_left);
-                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
-                mSearchView.setLeftIcon(tr);
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
-        if (context instanceof AppCompatActivity) {
-            ((AppCompatActivity) context).getSupportFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
-        }
     }
 
     @Override
     public void onDetach() {
-        requireActivity().getSupportFragmentManager().removeOnBackStackChangedListener(backStackChangedListener);
         super.onDetach();
     }
 

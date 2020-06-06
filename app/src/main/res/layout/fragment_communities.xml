@@ -11,6 +11,8 @@
         android:background="?android:colorBackground"
         app:elevation="0dp">
 
+        <include layout="@layout/toolbar_no_card" />
+
         <biz.dealnote.messenger.view.MySearchView
             android:id="@+id/searchview"
             android:layout_width="match_parent"

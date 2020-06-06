@@ -35,15 +35,13 @@ public class PhotoAlbumsActivity extends NoMainActivity implements PlaceProvider
 
     @Override
     public void openPlace(Place place) {
-        switch (place.type) {
-            case Place.VK_PHOTO_ALBUM:
-                VKPhotosFragment fragment = VKPhotosFragment.newInstance(place.getArgs());
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment, fragment)
-                        .addToBackStack("photos")
-                        .commit();
-                break;
+        if (place.type == Place.VK_PHOTO_ALBUM) {
+            VKPhotosFragment fragment = VKPhotosFragment.newInstance(place.getArgs());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragment)
+                    .addToBackStack("photos")
+                    .commit();
         }
     }
 }

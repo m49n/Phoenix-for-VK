@@ -875,7 +875,7 @@ public class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MODULATE));
         } else {
-            dr.setColorFilter(Color, PorterDuff.Mode.MULTIPLY);
+            dr.setColorFilter(new BlendModeColorFilter(Color, BlendMode.MULTIPLY));
         }
     }
 

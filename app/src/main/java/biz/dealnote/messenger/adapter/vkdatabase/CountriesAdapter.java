@@ -59,7 +59,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Hold
         void onClick(Country country);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
 
