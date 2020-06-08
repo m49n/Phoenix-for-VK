@@ -325,6 +325,7 @@ public class AttachmentsViewBinder {
         } else {
             PicassoInstance.with()
                     .load(image.getUrl())
+                    .tag(Constants.PICASSO_TAG)
                     .into(imageView);
         }
         stickersContainer.setOnClickListener(e -> openSticker(sticker));
@@ -843,9 +844,10 @@ public class AttachmentsViewBinder {
                     ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
                     menus.add(new OptionRequest(AudioItem.play_item_audio, mContext.getString(R.string.play), R.drawable.play));
-                    if (audio.getOwnerId() != Settings.get().accounts().getCurrent())
+                    if (audio.getOwnerId() != Settings.get().accounts().getCurrent()) {
                         menus.add(new OptionRequest(AudioItem.add_item_audio, mContext.getString(R.string.action_add), R.drawable.list_add));
-                    else
+                        menus.add(new OptionRequest(AudioItem.add_and_download_button, mContext.getString(R.string.add_and_download_button), R.drawable.add_download));
+                    } else
                         menus.add(new OptionRequest(AudioItem.add_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
                     menus.add(new OptionRequest(AudioItem.share_button, mContext.getString(R.string.share), R.drawable.ic_outline_share));
                     menus.add(new OptionRequest(AudioItem.save_item_audio, mContext.getString(R.string.save), R.drawable.save));
@@ -898,6 +900,9 @@ public class AttachmentsViewBinder {
                                     PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
                                 }
                                 break;
+                            case AudioItem.add_and_download_button:
+                                addTrack(Settings.get().accounts().getCurrent(), audio);
+                                PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
                             case AudioItem.save_item_audio:
                                 if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
                                     AppPerms.requestReadWriteStoragePermission((Activity) mContext);

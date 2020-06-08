@@ -875,6 +875,7 @@ public class MessagesRepository implements IMessagesRepository {
                     final MessageEditEntity patch = new MessageEditEntity(status, accountId);
 
                     patch.setEncrypted(builder.isRequireEncryption());
+                    patch.setPayload(builder.getPayload());
                     patch.setDate(Unixtime.now());
                     patch.setRead(false);
                     patch.setOut(true);
@@ -1262,7 +1263,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (isEmpty(dbo.getExtras()) && isEmpty(dbo.getAttachments()) && dbo.getForwardCount() == 0) {
             return networker.vkDefault(accountId)
                     .messages()
-                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null, null);
+                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null, dbo.getPayload());
         }
 
         final Collection<IAttachmentToken> attachments = new LinkedList<>();

@@ -118,49 +118,49 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
 
     @Override
     protected void onBindItemViewHolder(AudioHolder holder, int position, int type) {
-        final Audio item = getItem(position);
+        final Audio audio = getItem(position);
 
         holder.cancelSelectionAnimation();
-        if (item.isAnimationNow()) {
+        if (audio.isAnimationNow()) {
             holder.startSelectionAnimation();
-            item.setAnimationNow(false);
+            audio.setAnimationNow(false);
         }
 
-        holder.artist.setText(item.getArtist());
-        if (!item.isHLS()) {
+        holder.artist.setText(audio.getArtist());
+        if (!audio.isHLS()) {
             holder.quality.setVisibility(View.VISIBLE);
-            if (item.getIsHq())
+            if (audio.getIsHq())
                 holder.quality.setImageResource(R.drawable.high_quality);
             else
                 holder.quality.setImageResource(R.drawable.low_quality);
         } else
             holder.quality.setVisibility(View.GONE);
 
-        holder.title.setText(item.getTitle());
-        if (item.getDuration() <= 0)
+        holder.title.setText(audio.getTitle());
+        if (audio.getDuration() <= 0)
             holder.time.setVisibility(View.GONE);
         else {
             holder.time.setVisibility(View.VISIBLE);
-            holder.time.setText(AppTextUtils.getDurationString(item.getDuration()));
+            holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
         }
 
-        holder.lyric.setVisibility(item.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
-        holder.isSelectedView.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
+        holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
+        holder.isSelectedView.setVisibility(audio.isSelected() ? View.VISIBLE : View.GONE);
 
         if (not_show_my)
             holder.my.setVisibility(View.GONE);
         else
-            holder.my.setVisibility(item.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
+            holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
-        holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(item) ? View.VISIBLE : View.GONE);
+        holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.GONE);
 
-        holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(item) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(item) ? R.drawable.paused : (isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+        holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
         Utils.doAnimate(holder.play_icon.getDrawable(), true);
 
         if (Settings.get().other().isShow_audio_cover()) {
-            if (!isNullOrEmptyString(item.getThumb_image_little())) {
+            if (!isNullOrEmptyString(audio.getThumb_image_little())) {
                 PicassoInstance.with()
-                        .load(item.getThumb_image_little())
+                        .load(audio.getThumb_image_little())
                         .placeholder(Objects.requireNonNull(ResourcesCompat.getDrawable(mContext.getResources(), getAudioCoverSimple(), mContext.getTheme())))
                         .transform(TransformCover())
                         .tag(Constants.PICASSO_TAG)
@@ -172,9 +172,9 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         }
 
         holder.play.setOnClickListener(v -> {
-            if (MusicUtils.isNowPlayingOrPreparingOrPaused(item)) {
+            if (MusicUtils.isNowPlayingOrPreparingOrPaused(audio)) {
                 if (!Settings.get().other().isUse_stop_audio()) {
-                    if (!MusicUtils.isNowPaused(item))
+                    if (!MusicUtils.isNowPaused(audio))
                         holder.play_icon.setImageResource(R.drawable.paused);
                     else {
                         holder.play_icon.setImageResource(R.drawable.voice_state_animation);
@@ -182,14 +182,14 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                     }
                     MusicUtils.playOrPause();
                 } else {
-                    holder.play_icon.setImageResource(isNullOrEmptyString(item.getUrl()) ? R.drawable.audio_died : R.drawable.song);
+                    holder.play_icon.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
                     MusicUtils.stop();
                 }
             } else {
                 if (mClickListener != null) {
                     holder.play_icon.setImageResource(R.drawable.voice_state_animation);
                     Utils.doAnimate(holder.play_icon.getDrawable(), true);
-                    mClickListener.onClick(position, item);
+                    mClickListener.onClick(position, audio);
                 }
             }
         });
@@ -201,7 +201,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                     return false;
                 }
                 holder.saved.setVisibility(View.VISIBLE);
-                int ret = DownloadUtil.downloadTrack(mContext, item, false);
+                int ret = DownloadUtil.downloadTrack(mContext, audio, false);
                 if (ret == 0)
                     PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                 else if (ret == 1) {
@@ -209,7 +209,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                     new MaterialAlertDialogBuilder(mContext)
                             .setTitle(R.string.error)
                             .setMessage(R.string.audio_force_download)
-                            .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, item, true))
+                            .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 } else {
@@ -225,71 +225,75 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
                 menus.add(new OptionRequest(AudioItem.play_item_audio, mContext.getString(R.string.play), R.drawable.play));
-                if (item.getOwnerId() != Settings.get().accounts().getCurrent())
+                if (audio.getOwnerId() != Settings.get().accounts().getCurrent()) {
                     menus.add(new OptionRequest(AudioItem.add_item_audio, mContext.getString(R.string.action_add), R.drawable.list_add));
-                else
+                    menus.add(new OptionRequest(AudioItem.add_and_download_button, mContext.getString(R.string.add_and_download_button), R.drawable.add_download));
+                } else
                     menus.add(new OptionRequest(AudioItem.add_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
                 menus.add(new OptionRequest(AudioItem.share_button, mContext.getString(R.string.share), R.drawable.ic_outline_share));
                 menus.add(new OptionRequest(AudioItem.save_item_audio, mContext.getString(R.string.save), R.drawable.save));
-                if (item.getAlbumId() != 0)
+                if (audio.getAlbumId() != 0)
                     menus.add(new OptionRequest(AudioItem.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));
                 menus.add(new OptionRequest(AudioItem.get_recommendation_by_audio, mContext.getString(R.string.get_recommendation_by_audio), R.drawable.music_mic));
-                if (item.getLyricsId() != 0)
+                if (audio.getLyricsId() != 0)
                     menus.add(new OptionRequest(AudioItem.get_lyrics_menu, mContext.getString(R.string.get_lyrics_menu), R.drawable.lyric));
                 menus.add(new OptionRequest(AudioItem.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
                 menus.add(new OptionRequest(AudioItem.search_by_artist, mContext.getString(R.string.search_by_artist), R.drawable.magnify));
                 menus.add(new OptionRequest(AudioItem.copy_url, mContext.getString(R.string.copy_url), R.drawable.content_copy));
 
 
-                menus.header(Utils.firstNonEmptyString(item.getArtist(), " ") + " - " + item.getTitle(), R.drawable.song, item.getThumb_image_little());
+                menus.header(Utils.firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle(), R.drawable.song, audio.getThumb_image_little());
                 menus.columns(2);
                 menus.show(((FragmentActivity) mContext).getSupportFragmentManager(), "audio_options", option -> {
                     switch (option.getId()) {
                         case AudioItem.play_item_audio:
                             if (mClickListener != null) {
-                                mClickListener.onClick(position, item);
+                                mClickListener.onClick(position, audio);
                                 if (Settings.get().other().isShow_mini_player())
                                     PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
                             }
                             break;
                         case AudioItem.share_button:
-                            SendAttachmentsActivity.startForSendAttachments(mContext, Settings.get().accounts().getCurrent(), item);
+                            SendAttachmentsActivity.startForSendAttachments(mContext, Settings.get().accounts().getCurrent(), audio);
                             break;
                         case AudioItem.search_by_artist:
-                            PlaceFactory.getSingleTabSearchPlace(Settings.get().accounts().getCurrent(), SearchContentType.AUDIOS, new AudioSearchCriteria(item.getArtist(), true, false)).tryOpenWith(mContext);
+                            PlaceFactory.getSingleTabSearchPlace(Settings.get().accounts().getCurrent(), SearchContentType.AUDIOS, new AudioSearchCriteria(audio.getArtist(), true, false)).tryOpenWith(mContext);
                             break;
                         case AudioItem.get_lyrics_menu:
-                            get_lyrics(item);
+                            get_lyrics(audio);
                             break;
                         case AudioItem.get_recommendation_by_audio:
-                            PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), item.getOwnerId(), item.getId()).tryOpenWith(mContext);
+                            PlaceFactory.SearchByAudioPlace(Settings.get().accounts().getCurrent(), audio.getOwnerId(), audio.getId()).tryOpenWith(mContext);
                             break;
                         case AudioItem.open_album:
-                            PlaceFactory.getAudiosInAlbumPlace(Settings.get().accounts().getCurrent(), item.getAlbum_owner_id(), item.getAlbumId(), item.getAlbum_access_key()).tryOpenWith(mContext);
+                            PlaceFactory.getAudiosInAlbumPlace(Settings.get().accounts().getCurrent(), audio.getAlbum_owner_id(), audio.getAlbumId(), audio.getAlbum_access_key()).tryOpenWith(mContext);
                             break;
                         case AudioItem.copy_url:
                             ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("response", item.getUrl());
+                            ClipData clip = ClipData.newPlainText("response", audio.getUrl());
                             clipboard.setPrimaryClip(clip);
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.copied);
                             break;
                         case AudioItem.add_item_audio:
-                            boolean myAudio = item.getOwnerId() == Settings.get().accounts().getCurrent();
+                            boolean myAudio = audio.getOwnerId() == Settings.get().accounts().getCurrent();
                             if (myAudio) {
-                                deleteTrack(Settings.get().accounts().getCurrent(), item);
+                                deleteTrack(Settings.get().accounts().getCurrent(), audio);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.deleted);
                             } else {
-                                addTrack(Settings.get().accounts().getCurrent(), item);
+                                addTrack(Settings.get().accounts().getCurrent(), audio);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
                             }
                             break;
+                        case AudioItem.add_and_download_button:
+                            addTrack(Settings.get().accounts().getCurrent(), audio);
+                            PhoenixToast.CreatePhoenixToast(mContext).showToast(R.string.added);
                         case AudioItem.save_item_audio:
                             if (!AppPerms.hasReadWriteStoragePermision(mContext)) {
                                 AppPerms.requestReadWriteStoragePermission((Activity) mContext);
                                 break;
                             }
                             holder.saved.setVisibility(View.VISIBLE);
-                            int ret = DownloadUtil.downloadTrack(mContext, item, false);
+                            int ret = DownloadUtil.downloadTrack(mContext, audio, false);
                             if (ret == 0)
                                 PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                             else if (ret == 1) {
@@ -297,7 +301,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                                 new MaterialAlertDialogBuilder(mContext)
                                         .setTitle(R.string.error)
                                         .setMessage(R.string.audio_force_download)
-                                        .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, item, true))
+                                        .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
                                         .setNegativeButton(R.string.cancel, null)
                                         .show();
                             } else {
@@ -307,7 +311,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                             break;
                         case AudioItem.bitrate_item_audio:
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                            retriever.setDataSource(Audio.getMp3FromM3u8(item.getUrl()), new HashMap<>());
+                            retriever.setDataSource(Audio.getMp3FromM3u8(audio.getUrl()), new HashMap<>());
                             String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
                             break;
@@ -316,8 +320,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
             });
         } else {
             holder.Track.setOnClickListener(view -> {
-                item.setIsSelected(!item.isSelected());
-                holder.isSelectedView.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
+                audio.setIsSelected(!audio.isSelected());
+                holder.isSelectedView.setVisibility(audio.isSelected() ? View.VISIBLE : View.GONE);
             });
         }
     }

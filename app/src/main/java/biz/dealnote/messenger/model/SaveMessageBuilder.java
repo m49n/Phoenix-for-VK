@@ -24,6 +24,7 @@ public class SaveMessageBuilder {
     private boolean requireEncryption;
 
     private Integer draftMessageId;
+    private String payload;
 
     @KeyLocationPolicy
     private int keyLocationPolicy;
@@ -119,6 +120,15 @@ public class SaveMessageBuilder {
 
     public SaveMessageBuilder setKeyLocationPolicy(int keyLocationPolicy) {
         this.keyLocationPolicy = keyLocationPolicy;
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public SaveMessageBuilder setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 }

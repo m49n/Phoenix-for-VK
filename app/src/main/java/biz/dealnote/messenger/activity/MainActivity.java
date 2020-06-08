@@ -314,6 +314,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             } else {
                 MusicUtils.PlaceToAudioCache(this);
                 CheckUpdate();
+
+                if (Settings.get().other().isDelete_cache_images()) {
+                    PreferencesFragment.CleanImageCache(this, false);
+                }
+
                 UpdateNotificationCount(mAccountId);
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);

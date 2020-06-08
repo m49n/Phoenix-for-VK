@@ -83,7 +83,7 @@ public interface IMessagesApi {
     @CheckResult
     Single<Integer> send(Integer randomId, Integer peerId, String domain, String message,
                          Double latitude, Double longitude, Collection<IAttachmentToken> attachments,
-                         Collection<Integer> forwardMessages, Integer stickerId, Collection<Integer> users);
+                         Collection<Integer> forwardMessages, Integer stickerId, String payload);
 
     @CheckResult
     Single<DialogsResponse> getDialogs(Integer offset, Integer count, Integer startMessageId, Boolean extended, String fields);

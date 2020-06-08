@@ -77,7 +77,8 @@ public class Model2Entity {
                 .setExtras(message.getExtras())
                 .setAttachments(nonNull(message.getAttachments()) ? buildEntityAttachments(message.getAttachments()) : null)
                 .setForwardMessages(mapAll(message.getFwd(), Model2Entity::buildMessageEntity, false))
-                .setUpdateTime(message.getUpdateTime());
+                .setUpdateTime(message.getUpdateTime())
+                .setPayload(message.getPayload());
     }
 
     public static List<Entity> buildEntityAttachments(Attachments attachments) {

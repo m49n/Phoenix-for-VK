@@ -22,6 +22,7 @@ public class MessageEditEntity {
     private List<MessageEntity> forward;
     private List<Entity> attachments;
     private boolean read;
+    private String payload;
 
     private String body;
 
@@ -119,6 +120,15 @@ public class MessageEditEntity {
 
     public MessageEditEntity setAttachments(List<Entity> attachments) {
         this.attachments = attachments;
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public MessageEditEntity setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 

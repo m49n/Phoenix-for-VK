@@ -966,7 +966,8 @@ public class Dto2Entity {
                 .setPhoto100(dto.action_photo_100)
                 .setPhoto200(dto.action_photo_200)
                 .setRandomId(randomId)
-                .setUpdateTime(dto.update_time);
+                .setUpdateTime(dto.update_time)
+                .setPayload(dto.payload);
 
         if (entity.isHasAttachmens()) {
             entity.setAttachments(mapAttachemntsList(dto.attachments));

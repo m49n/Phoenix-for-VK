@@ -109,7 +109,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:defaultValue="ice"
+            android:defaultValue="violet_red"
             android:key="app_theme"
             android:title="@string/choose_theme_title"
             app:iconSpaceReserved="false" />
@@ -486,6 +486,12 @@
         <Preference
             android:key="picture_cache_cleaner"
             android:title="@string/picture_cache_cleaner"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:key="delete_cache_images"
+            android:summary="@string/delete_cache_images"
+            android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

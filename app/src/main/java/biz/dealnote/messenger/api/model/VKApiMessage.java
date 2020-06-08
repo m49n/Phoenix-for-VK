@@ -104,7 +104,7 @@ public class VKApiMessage {
     /**
      * is edited?
      */
-    //public String payload; // "payload":"null"
+    public String payload; // "payload":"null"
 
     public int conversation_message_id;
     public long update_time;

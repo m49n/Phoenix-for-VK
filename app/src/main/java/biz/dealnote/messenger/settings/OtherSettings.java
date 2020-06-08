@@ -265,4 +265,9 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isPhoto_to_user_dir() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("photo_to_user_dir", true);
     }
+
+    @Override
+    public boolean isDelete_cache_images() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("delete_cache_images", false);
+    }
 }

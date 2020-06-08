@@ -118,6 +118,8 @@ public interface ISettings {
         String getDocDir();
 
         boolean isPhoto_to_user_dir();
+
+        boolean isDelete_cache_images();
     }
 
     interface IAccountsSettings {

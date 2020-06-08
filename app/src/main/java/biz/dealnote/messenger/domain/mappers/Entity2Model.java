@@ -435,7 +435,8 @@ public class Entity2Model {
                 .setPhoto200(dbo.getPhoto200())
                 .setSender(owners.getById(dbo.getFromId()))
                 .setRandomId(dbo.getRandomId())
-                .setUpdateTime(dbo.getUpdateTime());
+                .setUpdateTime(dbo.getUpdateTime())
+                .setPayload(dbo.getPayload());
 
         if (dbo.getActionMemberId() != 0) {
             message.setActionUser(owners.getById(dbo.getActionMemberId()));

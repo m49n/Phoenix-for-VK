@@ -96,6 +96,26 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
     }
 
+    public static void CleanImageCache(Context context, boolean notify) {
+        try {
+            PicassoInstance.clear_cache();
+            File cache = new File(context.getCacheDir(), "notif-cache");
+            if (cache.exists() && cache.isDirectory()) {
+                String[] children = cache.list();
+                assert children != null;
+                for (String child : children) {
+                    new File(cache, child).delete();
+                }
+            }
+            if (notify)
+                PhoenixToast.CreatePhoenixToast(context).showToast(R.string.success);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (notify)
+                PhoenixToast.CreatePhoenixToast(context).showToastError(e.getLocalizedMessage());
+        }
+    }
+
     private void selectLocalImage(int requestCode) {
         if (!AppPerms.hasReadStoragePermision(getActivity())) {
             AppPerms.requestReadExternalStoragePermission(getActivity());
@@ -400,43 +420,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("picture_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
-                    try {
-                        PicassoInstance.clear_cache();
-                        File cache = new File(requireActivity().getCacheDir(), "notif-cache");
-                        if (cache.exists() && cache.isDirectory()) {
-                            String[] children = cache.list();
-                            assert children != null;
-                            for (String child : children) {
-                                new File(cache, child).delete();
-                            }
-                        }
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
-                    }
+                    CleanImageCache(requireActivity(), true);
                     return true;
                 });
 
         findPreference("account_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
                     DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
-                    try {
-                        PicassoInstance.clear_cache();
-                        File cache = new File(requireActivity().getCacheDir(), "notif-cache");
-                        if (cache.exists() && cache.isDirectory()) {
-                            String[] children = cache.list();
-                            assert children != null;
-                            for (String child : children) {
-                                new File(cache, child).delete();
-                            }
-                        }
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
-                    }
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
+                    CleanImageCache(requireActivity(), true);
                     return true;
                 });
 

@@ -52,6 +52,7 @@ public class PicassoInstance {
     }
 
     public static void clear_cache() throws IOException {
+        instance.getCache_data();
         instance.cache_data.evictAll();
     }
 
@@ -96,17 +97,21 @@ public class PicassoInstance {
         return singleton;
     }
 
+    private void getCache_data() {
+        if (cache_data == null) {
+            File cache = new File(app.getCacheDir(), "picasso-cache");
+
+            if (!cache.exists()) {
+                cache.mkdirs();
+            }
+
+            cache_data = new Cache(cache, calculateDiskCacheSize(cache));
+        }
+    }
+
     private Picasso create() {
         Logger.d(TAG, "Picasso singleton creation");
-
-        File cache = new File(app.getCacheDir(), "picasso-cache");
-
-        if (!cache.exists()) {
-            cache.mkdirs();
-        }
-
-        cache_data = new Cache(cache, calculateDiskCacheSize(cache));
-
+        getCache_data();
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .cache(cache_data).addInterceptor(chain -> {
                     Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();

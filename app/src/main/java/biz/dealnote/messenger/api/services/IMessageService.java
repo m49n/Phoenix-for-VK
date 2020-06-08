@@ -301,7 +301,7 @@ public interface IMessageService {
                                        @Field("attachment") String attachment,
                                        @Field("forward_messages") String forwardMessages,
                                        @Field("sticker_id") Integer stickerId,
-                                       @Field("user_ids") String user_ids);
+                                       @Field("payload") String payload);
 
     /**
      * Returns messages by their IDs.

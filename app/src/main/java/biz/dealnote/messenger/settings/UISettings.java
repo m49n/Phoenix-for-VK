@@ -43,13 +43,13 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public String getMainThemeKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        return preferences.getString("app_theme", "ice");
+        return preferences.getString("app_theme", "violet_red");
     }
 
     @Override
     public int getMainTheme() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        String theme = preferences.getString("app_theme", "ice");
+        String theme = preferences.getString("app_theme", "violet_red");
         boolean Amoled = Settings.get().main().isAmoledTheme();
         if (theme == null)
             return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;

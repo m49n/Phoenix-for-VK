@@ -63,6 +63,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/album_cover"
             android:scaleType="fitStart"
+            android:stateListAnimator="@animator/clicked"
             app:aspectRatioEnabled="true"
             app:aspectRatioH="1"
             app:aspectRatioW="1" />

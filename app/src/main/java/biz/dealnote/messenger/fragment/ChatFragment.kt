@@ -16,7 +16,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.annotation.AttrRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
@@ -999,7 +999,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         encryptionStatusItem.isVisible = encryptionStatusVisible
 
         if (encryptionStatusVisible) {
-            @AttrRes
+            @DrawableRes
             var drawableRes = R.drawable.ic_outline_lock_open
 
             if (optionMenuSettings.get(ENCRYPTION_ENABLED, false)) {
@@ -1051,7 +1051,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
             R.id.delete_chat -> {
-                presenter?.removeDialog()
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.delete_chat)
+                        .setPositiveButton(R.string.button_yes) { _: DialogInterface?, _: Int -> presenter?.removeDialog() }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
                 return true
             }
             R.id.action_change_chat_title -> {

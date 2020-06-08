@@ -357,7 +357,8 @@ public class Dto2Model {
                 .setPhoto50(message.action_photo_50)
                 .setPhoto100(message.action_photo_100)
                 .setPhoto200(message.action_photo_200)
-                .setSender(owners.getById(message.from_id));
+                .setSender(owners.getById(message.from_id))
+                .setPayload(message.payload);
 
         if (message.action_mid != 0) {
             appMessage.setActionUser(owners.getById(message.action_mid));

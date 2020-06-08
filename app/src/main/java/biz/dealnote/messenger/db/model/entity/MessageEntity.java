@@ -66,6 +66,8 @@ public class MessageEntity extends Entity {
 
     private List<MessageEntity> forwardMessages;
 
+    private String payload;
+
     private long updateTime;
 
     public MessageEntity(int id, int peerId, int fromId) {
@@ -296,6 +298,15 @@ public class MessageEntity extends Entity {
 
     public MessageEntity setAttachments(List<Entity> attachments) {
         this.attachments = EntitiesWrapper.wrap(attachments);
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public MessageEntity setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 }

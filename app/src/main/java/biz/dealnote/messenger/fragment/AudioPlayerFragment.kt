@@ -192,6 +192,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
                     iconColor = CurrentTheme.getColorSecondary(requireActivity())
                     callback = {
                         PlaceFactory.getSingleTabSearchPlace(mAccountId, SearchContentType.AUDIOS, AudioSearchCriteria(MusicUtils.getCurrentAudio().artist, true, false)).tryOpenWith(requireActivity())
+                        dismissAllowingStateLoss()
                     }
                 }
             }
@@ -207,6 +208,14 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
         tvSubtitle = root.findViewById(R.id.audio_player_subtitle)
         mGetLyrics = root.findViewById(R.id.audio_player_get_lyrics)
         mGetLyrics?.setOnClickListener { onLyrics() }
+
+        ivCover?.setOnClickListener {
+            MusicUtils.next()
+        }
+        ivCover?.setOnLongClickListener {
+            MusicUtils.previous(requireActivity())
+            true
+        }
 
         //to animate running text
         tvTitle?.isSelected = true

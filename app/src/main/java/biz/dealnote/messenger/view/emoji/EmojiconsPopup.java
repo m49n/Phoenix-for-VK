@@ -28,8 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.domain.InteractorFactory;
+import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Sticker;
 import biz.dealnote.messenger.model.StickerSet;
 import biz.dealnote.messenger.settings.CurrentTheme;
@@ -415,7 +417,7 @@ public class EmojiconsPopup {
                     break;
                 default:
                     RecyclerView recyclerView = holder.itemView.findViewById(R.id.grid_stickers);
-
+                    recyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
                     StickersAdapter mAdaptert = new StickersAdapter(holder.itemView.getContext(), stickersGridViews.get(position - 7));
                     mAdaptert.setStickerClickedListener(stickerId -> {
                         if (mEmojiconPopup.getOnStickerClickedListener() != null) {

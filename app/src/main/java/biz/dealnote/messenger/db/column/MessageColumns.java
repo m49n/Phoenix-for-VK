@@ -21,6 +21,7 @@ public final class MessageColumns implements BaseColumns {
     public static final String ATTACH_TO = "attach_to";
     public static final String ORIGINAL_ID = "original_id";
     public static final String UPDATE_TIME = "update_time";
+    public static final String PAYLOAD = "payload";
     //chat_columns
     public static final String ACTION = "action";
     public static final String ACTION_MID = "action_mid";
@@ -57,6 +58,7 @@ public final class MessageColumns implements BaseColumns {
     public static final String FULL_PHOTO_200 = TABLENAME + "." + PHOTO_200;
     public static final String FULL_RANDOM_ID = TABLENAME + "." + RANDOM_ID;
     public static final String FULL_EXTRAS = TABLENAME + "." + EXTRAS;
+    public static final String FULL_PAYLOAD = TABLENAME + "." + PAYLOAD;
 
     private MessageColumns() {
     }
