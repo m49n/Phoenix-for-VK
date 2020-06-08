@@ -63,7 +63,7 @@
                         android:id="@+id/fragment_user_profile_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         tools:text="Emin Guliev" />
@@ -72,7 +72,7 @@
                         android:id="@+id/fragment_user_profile_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                         tools:text="\@ezorrio" />
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:textSize="@dimen/font_size_subtitle" />
 
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:ellipsize="end"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:maxLines="6"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -182,14 +182,14 @@
                         android:id="@+id/fragment_user_profile_bfriends"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_friends"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -209,13 +209,13 @@
                         android:id="@+id/fragment_user_profile_bgroups"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/counter_groups"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
@@ -236,13 +236,13 @@
                         android:id="@+id/fragment_user_profile_bphotos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_photos"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -263,13 +263,13 @@
                         android:id="@+id/fragment_user_profile_baudios"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_audios"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -290,13 +290,13 @@
                         android:id="@+id/fragment_user_profile_bvideos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_videos"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />

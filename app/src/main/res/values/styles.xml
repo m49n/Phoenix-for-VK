@@ -2,7 +2,7 @@
 
     <style name="Base.App.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?dividerColor</item>-->
-        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">?attr/colorPrimary</item>
         <item name="statusbarNonColoredColor">#000</item>
@@ -307,6 +307,7 @@
     </style>
 
     <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">sans-serif-light</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -331,7 +332,7 @@
     </style>
 
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">sans-serif-light</item>
     </style>
 
     <style name="Theme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">

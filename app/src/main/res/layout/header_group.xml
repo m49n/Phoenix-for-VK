@@ -45,7 +45,7 @@
                         android:id="@+id/header_group_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
@@ -53,7 +53,7 @@
                         android:id="@+id/header_group_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:maxLines="6"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -65,7 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="end"
                         android:maxLines="6"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -149,13 +149,13 @@
                         android:id="@+id/header_group_bmembers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_followers"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -176,13 +176,13 @@
                         android:id="@+id/header_group_btopics"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_topics"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -203,13 +203,13 @@
                         android:id="@+id/header_group_bdocuments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_documents"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -230,13 +230,13 @@
                         android:id="@+id/header_group_baudios"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_audios"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -257,13 +257,13 @@
                         android:id="@+id/header_group_bphotos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_photos"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -284,13 +284,13 @@
                         android:id="@+id/header_group_bvideos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/counter_videos"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -316,7 +316,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/community_managers_contacts"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -342,7 +342,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_light"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="@string/links"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
