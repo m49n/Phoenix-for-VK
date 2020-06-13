@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.domain.mappers;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
@@ -26,6 +28,7 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.GiftItem;
@@ -277,7 +280,8 @@ public class Model2Entity {
                 .setLinkOgg(message.getLinkOgg())
                 .setLinkMp3(message.getLinkMp3())
                 .setDuration(message.getDuration())
-                .setAccessKey(message.getAccessKey());
+                .setAccessKey(message.getAccessKey())
+                .setTranscript(message.getTranscript());
     }
 
     public static DocumentEntity buildDocumentDbo(Document document) {
@@ -330,6 +334,21 @@ public class Model2Entity {
                 .setThumb_image_little(audio.getThumb_image_little())
                 .setThumb_image_very_big(audio.getThumb_image_very_big())
                 .setIsHq(audio.getIsHq());
+    }
+
+    public static AudioPlaylistEntity buildAudioPlaylistEntity(@NonNull AudioPlaylist dto) {
+        return new AudioPlaylistEntity()
+                .setId(dto.getId())
+                .setOwnerId(dto.getOwnerId())
+                .setAccess_key(dto.getAccess_key())
+                .setArtist_name(dto.getArtist_name())
+                .setCount(dto.getCount())
+                .setDescription(dto.getDescription())
+                .setGenre(dto.getGenre())
+                .setYear(dto.getYear())
+                .setTitle(dto.getTitle())
+                .setThumb_image(dto.getThumb_image())
+                .setUpdate_time(dto.getUpdate_time());
     }
 
     public static PhotoEntity buildPhotoEntity(Photo photo) {

@@ -36,4 +36,7 @@ public class LoginResponse {
 
     @SerializedName("phone_mask")
     public String phoneMask;
+
+    @SerializedName("validation_sid")
+    public String validation_sid;
 }

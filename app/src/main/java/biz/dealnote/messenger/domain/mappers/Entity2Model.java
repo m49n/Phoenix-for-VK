@@ -10,6 +10,7 @@ import java.util.List;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
 import biz.dealnote.messenger.db.model.entity.CityEntity;
 import biz.dealnote.messenger.db.model.entity.CommentEntity;
@@ -45,6 +46,7 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Career;
 import biz.dealnote.messenger.model.City;
 import biz.dealnote.messenger.model.Comment;
@@ -543,6 +545,21 @@ public class Entity2Model {
                 .setIsHq(dbo.getIsHq());
     }
 
+    public static AudioPlaylist buildAudioPlaylistFromDbo(@NonNull AudioPlaylistEntity dto) {
+        return new AudioPlaylist()
+                .setId(dto.getId())
+                .setOwnerId(dto.getOwnerId())
+                .setAccess_key(dto.getAccess_key())
+                .setArtist_name(dto.getArtist_name())
+                .setCount(dto.getCount())
+                .setDescription(dto.getDescription())
+                .setGenre(dto.getGenre())
+                .setYear(dto.getYear())
+                .setTitle(dto.getTitle())
+                .setThumb_image(dto.getThumb_image())
+                .setUpdate_time(dto.getUpdate_time());
+    }
+
     public static Gift buildGiftFromDbo(GiftEntity entity) {
         return new Gift(entity.getId())
                 .setFromId(entity.getFromId())
@@ -593,7 +610,8 @@ public class Entity2Model {
                 .setDuration(entity.getDuration())
                 .setLinkMp3(entity.getLinkMp3())
                 .setLinkOgg(entity.getLinkOgg())
-                .setWaveform(entity.getWaveform());
+                .setWaveform(entity.getWaveform())
+                .setTranscript(entity.getTranscript());
     }
 
     public static Document buildDocumentFromDbo(DocumentEntity dbo) {

@@ -41,24 +41,21 @@ public class LoadMoreFooterHelper {
 
         switch (state) {
             case LoadMoreState.LOADING:
-                holder.tvEndOfList.setVisibility(View.GONE);
-                holder.bLoadMore.setVisibility(View.GONE);
+                holder.tvEndOfList.setVisibility(View.INVISIBLE);
+                holder.bLoadMore.setVisibility(View.INVISIBLE);
                 holder.progress.setVisibility(View.VISIBLE);
                 break;
             case LoadMoreState.END_OF_LIST:
-                holder.progress.setVisibility(View.GONE);
-                holder.bLoadMore.setVisibility(View.GONE);
+                holder.progress.setVisibility(View.INVISIBLE);
+                holder.bLoadMore.setVisibility(View.INVISIBLE);
                 holder.tvEndOfList.setVisibility(View.VISIBLE);
                 break;
             case LoadMoreState.CAN_LOAD_MORE:
-                holder.tvEndOfList.setVisibility(View.GONE);
-                holder.progress.setVisibility(View.GONE);
+                holder.tvEndOfList.setVisibility(View.INVISIBLE);
+                holder.progress.setVisibility(View.INVISIBLE);
                 holder.bLoadMore.setVisibility(View.VISIBLE);
                 break;
             case LoadMoreState.INVISIBLE:
-                holder.tvEndOfList.setVisibility(View.GONE);
-                holder.progress.setVisibility(View.GONE);
-                holder.bLoadMore.setVisibility(View.GONE);
                 break;
         }
     }

@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.domain.mappers;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +12,7 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VKApiCareer;
 import biz.dealnote.messenger.api.model.VKApiCity;
 import biz.dealnote.messenger.api.model.VKApiComment;
@@ -59,6 +62,7 @@ import biz.dealnote.messenger.db.model.IdPairEntity;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
 import biz.dealnote.messenger.db.model.entity.CityEntity;
 import biz.dealnote.messenger.db.model.entity.CommentEntity;
@@ -905,7 +909,8 @@ public class Dto2Entity {
                 .setDuration(dto.duration)
                 .setLinkMp3(dto.linkMp3)
                 .setLinkOgg(dto.linkOgg)
-                .setWaveform(dto.waveform);
+                .setWaveform(dto.waveform)
+                .setTranscript(dto.transcript);
     }
 
     public static DocumentEntity mapDoc(VkApiDoc dto) {
@@ -1039,6 +1044,21 @@ public class Dto2Entity {
                 .setDate(dto.date)
                 .setGiftItem(mapGiftItem(dto.giftItem))
                 .setPrivacy(dto.privacy);
+    }
+
+    public static AudioPlaylistEntity mapAudioPlaylist(@NonNull VKApiAudioPlaylist dto) {
+        return new AudioPlaylistEntity()
+                .setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setArtist_name(dto.artist_name)
+                .setCount(dto.count)
+                .setDescription(dto.description)
+                .setGenre(dto.genre)
+                .setYear(dto.Year)
+                .setTitle(dto.title)
+                .setThumb_image(dto.thumb_image)
+                .setUpdate_time(dto.update_time);
     }
 
     public static GiftItemEntity mapGiftItem(VKApiGiftItem dto) {

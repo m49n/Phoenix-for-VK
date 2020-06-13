@@ -3,9 +3,9 @@ package biz.dealnote.messenger.domain;
 import java.util.Collection;
 import java.util.List;
 
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.IdPair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -38,11 +38,11 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> search(int accountId, AudioSearchCriteria criteria, int offset);
 
-    Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset);
+    Single<List<AudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset);
 
-    Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey);
+    Single<AudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey);
 
-    Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey);
+    Single<AudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey);
 
     Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId);
 }

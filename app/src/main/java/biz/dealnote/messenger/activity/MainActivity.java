@@ -41,15 +41,21 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.stream.JsonReader;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.Constants;
@@ -313,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 startAccountsActivity();
             } else {
                 MusicUtils.PlaceToAudioCache(this);
+                CheckMusicInPC();
                 CheckUpdate();
 
                 if (Settings.get().other().isDelete_cache_images()) {
@@ -335,6 +342,23 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 .subscribe(this::updateNotificationsBagde, t -> removeNotificationsBagde()));
     }
 
+    private void CheckMusicInPC() {
+        if (!AppPerms.hasReadWriteStoragePermision(this))
+            return;
+        File audios = new File(Settings.get().other().getMusicDir(), "audio_downloads.json");
+        if (!audios.exists())
+            return;
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(audios), StandardCharsets.UTF_8));
+            reader.beginArray();
+            while (reader.hasNext()) {
+                MusicUtils.RemoteAudios.add(reader.nextString());
+            }
+        } catch (IOException ignore) {
+            PhoenixToast.CreatePhoenixToast(this).showToastError(R.string.remote_audio_error);
+        }
+    }
+
     private void CheckUpdate() {
         if (!Constants.NEED_CHECK_UPDATE || !Settings.get().other().isAuto_update())
             return;
@@ -350,17 +374,17 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         builder.build().newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call th, IOException e) {
+            public void onFailure(@NotNull Call th, @NotNull IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call th, Response response) throws IOException {
+            public void onResponse(@NotNull Call th, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     try {
                         int APK_VERS = Constants.VERSION_APK;
                         String Chngs = "";
-                        JSONObject obj = new JSONObject(response.body().string());
+                        JSONObject obj = new JSONObject(Objects.requireNonNull(response.body()).string());
                         if (obj.has("apk_version"))
                             APK_VERS = obj.getInt("apk_version");
                         if (obj.has("changes"))

@@ -306,8 +306,7 @@
         <item name="tint">?colorOnSurface</item>
     </style>
 
-    <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">sans-serif-light</item>
+    <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -332,6 +331,14 @@
     </style>
 
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProfileText" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProfileSubText" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">sans-serif-light</item>
     </style>
 

@@ -16,8 +16,8 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="android:colorBackground">@color/night</item>
 
-        <item name="colorOnBackground">#EB2B2B2B</item>
-        <item name="colorSurface">#EB2B2B2B</item>
+        <item name="colorOnBackground">#F01E1E1E</item>
+        <item name="colorSurface">#F01E1E1E</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent
         </item>
@@ -105,7 +105,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -117,7 +117,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -129,7 +129,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -141,7 +141,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -153,7 +153,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -165,7 +165,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -177,7 +177,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -189,7 +189,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -201,7 +201,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -213,7 +213,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -225,7 +225,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -237,7 +237,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -249,7 +249,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -261,7 +261,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -273,7 +273,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -285,7 +285,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
@@ -297,7 +297,7 @@
         <item name="chat_background_lines">@drawable/lines_black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
-        <item name="colorSurface">#ee000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
         <item name="message_bubble_color">#D4000000</item>
     </style>
 

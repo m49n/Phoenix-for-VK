@@ -20,11 +20,14 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import androidx.collection.ArraySet;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import biz.dealnote.messenger.R;
@@ -47,7 +50,8 @@ public final class MusicUtils {
     public static IAudioPlayerService mService = null;
     public static HashMap<Integer, ArrayList<Audio>> Audios = new HashMap<>();
     public static boolean SuperCloseMiniPlayer = false;
-    public static List<String> CachedAudios = new ArrayList<>();
+    public static Set<String> CachedAudios = new ArraySet<>();
+    public static Set<String> RemoteAudios = new ArraySet<>();
     private static int sForegroundActivities = 0;
 
     static {

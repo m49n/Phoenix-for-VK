@@ -227,7 +227,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         });
 
         holder.commentAttachmentRoot.setVisibility(comment.hasAttachments() ? View.VISIBLE : View.GONE);
-        attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.commentAttachmentHolder, true);
+        attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.commentAttachmentHolder, true, null);
 
         displayAvatar(holder.commentAvatar, transformation, comment.getMaxAuthorAvaUrl(), Constants.PICASSO_TAG);
 
@@ -249,7 +249,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         NewsfeedComment comment = data.get(position);
         Post post = (Post) comment.getModel();
 
-        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.postAttachmentsHolder, false);
+        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.postAttachmentsHolder, false, null);
         attachmentsViewBinder.displayCopyHistory(post.getCopyHierarchy(), holder.postAttachmentsHolder.getVgPosts(), true, R.layout.item_copy_history_post);
 
         holder.ownerName.setText(post.getAuthorName());

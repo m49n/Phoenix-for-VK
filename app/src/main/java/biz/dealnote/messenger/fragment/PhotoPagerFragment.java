@@ -645,7 +645,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 loadImage(url);
             } else {
                 PicassoInstance.with().cancelRequest(photo);
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.empty_url);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.empty_url);
             }
 
         }

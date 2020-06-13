@@ -5,17 +5,20 @@ import java.util.Collection;
 import java.util.List;
 
 import biz.dealnote.messenger.api.interfaces.INetworker;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.domain.IAudioInteractor;
+import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.fragment.search.options.SpinnerOption;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
+import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
 /**
  * Created by admin on 07.10.2017.
@@ -45,7 +48,7 @@ public class AudioInteractor implements IAudioInteractor {
                 sb.append(delimiter);
             }
 
-            sb.append(pair.ownerId + "_" + pair.id);
+            sb.append(pair.ownerId).append("_").append(pair.id);
         }
 
         return sb.toString();
@@ -59,24 +62,10 @@ public class AudioInteractor implements IAudioInteractor {
                 .map(resultId -> {
                     final int targetOwnerId = Objects.nonNull(groupId) ? -groupId : accountId;
                     //clone
-                    return new Audio()
+                    return orig
                             .setId(resultId)
                             .setOwnerId(targetOwnerId)
-                            .setAccessKey(orig.getAccessKey())
-                            .setAlbumId(Objects.nonNull(albumId) ? albumId : 0)
-                            .setAlbum_owner_id(orig.getAlbum_owner_id())
-                            .setAlbum_access_key(orig.getAlbum_access_key())
-                            .setArtist(orig.getArtist())
-                            .setTitle(orig.getTitle())
-                            .setUrl(orig.getUrl())
-                            .setLyricsId(orig.getLyricsId())
-                            .setGenre(orig.getGenre())
-                            .setDuration(orig.getDuration())
-                            .setThumb_image_little(orig.getThumb_image_little())
-                            .setThumb_image_big(orig.getThumb_image_big())
-                            .setAlbum_title(orig.getAlbum_title())
-                            .setThumb_image_very_big(orig.getThumb_image_very_big())
-                            .setIsHq(orig.getIsHq());
+                            .setAlbumId(Objects.nonNull(albumId) ? albumId : 0);
                 });
     }
 
@@ -109,27 +98,12 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .get(album_id, ownerId, offset, accessKey).map(out -> {
+                .get(album_id, ownerId, offset, accessKey)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for (int i = 0; i < out.items.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.items.get(i).id)
-                                .setOwnerId(out.items.get(i).owner_id)
-                                .setAlbumId(out.items.get(i).album_id)
-                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
-                                .setAlbum_access_key(out.items.get(i).album_access_key)
-                                .setAccessKey(out.items.get(i).access_key)
-                                .setArtist(out.items.get(i).artist)
-                                .setTitle(out.items.get(i).title)
-                                .setUrl(out.items.get(i).url)
-                                .setLyricsId(out.items.get(i).lyrics_id)
-                                .setGenre(out.items.get(i).genre_id)
-                                .setDuration(out.items.get(i).duration)
-                                .setThumb_image_little(out.items.get(i).thumb_image_little)
-                                .setThumb_image_big(out.items.get(i).thumb_image_big)
-                                .setAlbum_title(out.items.get(i).album_title)
-                                .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
-                                .setIsHq(out.items.get(i).isHq));
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }
@@ -138,27 +112,12 @@ public class AudioInteractor implements IAudioInteractor {
     public Single<List<Audio>> getById(List<IdPair> audios) {
         return networker.vkDefault(AccountId)
                 .audio()
-                .getById(join(audios, ",")).map(out -> {
+                .getById(join(audios, ","))
+                .map(Utils::listEmptyIfNull)
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.get(i).id)
-                                .setOwnerId(out.get(i).owner_id)
-                                .setAlbumId(out.get(i).album_id)
-                                .setAlbum_owner_id(out.get(i).album_owner_id)
-                                .setAlbum_access_key(out.get(i).album_access_key)
-                                .setAccessKey(out.get(i).access_key)
-                                .setArtist(out.get(i).artist)
-                                .setTitle(out.get(i).title)
-                                .setUrl(out.get(i).url)
-                                .setLyricsId(out.get(i).lyrics_id)
-                                .setGenre(out.get(i).genre_id)
-                                .setDuration(out.get(i).duration)
-                                .setThumb_image_little(out.get(i).thumb_image_little)
-                                .setThumb_image_big(out.get(i).thumb_image_big)
-                                .setAlbum_title(out.get(i).album_title)
-                                .setThumb_image_very_big(out.get(i).thumb_image_very_big)
-                                .setIsHq(out.get(i).isHq));
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }
@@ -174,27 +133,12 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .getPopular(foreign, genre).map(out -> {
+                .getPopular(foreign, genre)
+                .map(Utils::listEmptyIfNull)
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.get(i).id)
-                                .setOwnerId(out.get(i).owner_id)
-                                .setAlbumId(out.get(i).album_id)
-                                .setAlbum_owner_id(out.get(i).album_owner_id)
-                                .setAlbum_access_key(out.get(i).album_access_key)
-                                .setAccessKey(out.get(i).access_key)
-                                .setArtist(out.get(i).artist)
-                                .setTitle(out.get(i).title)
-                                .setUrl(out.get(i).url)
-                                .setLyricsId(out.get(i).lyrics_id)
-                                .setGenre(out.get(i).genre_id)
-                                .setDuration(out.get(i).duration)
-                                .setThumb_image_little(out.get(i).thumb_image_little)
-                                .setThumb_image_big(out.get(i).thumb_image_big)
-                                .setAlbum_title(out.get(i).album_title)
-                                .setThumb_image_very_big(out.get(i).thumb_image_very_big)
-                                .setIsHq(out.get(i).isHq));
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }
@@ -203,27 +147,12 @@ public class AudioInteractor implements IAudioInteractor {
     public Single<List<Audio>> getRecommendations(int accountId, int audioOwnerId) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getRecommendations(audioOwnerId).map(out -> {
+                .getRecommendations(audioOwnerId)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for (int i = 0; i < out.items.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.items.get(i).id)
-                                .setOwnerId(out.items.get(i).owner_id)
-                                .setAlbumId(out.items.get(i).album_id)
-                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
-                                .setAlbum_access_key(out.items.get(i).album_access_key)
-                                .setAccessKey(out.items.get(i).access_key)
-                                .setArtist(out.items.get(i).artist)
-                                .setTitle(out.items.get(i).title)
-                                .setUrl(out.items.get(i).url)
-                                .setLyricsId(out.items.get(i).lyrics_id)
-                                .setGenre(out.items.get(i).genre_id)
-                                .setDuration(out.items.get(i).duration)
-                                .setThumb_image_little(out.items.get(i).thumb_image_little)
-                                .setThumb_image_big(out.items.get(i).thumb_image_big)
-                                .setAlbum_title(out.items.get(i).album_title)
-                                .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
-                                .setIsHq(out.items.get(i).isHq));
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }
@@ -232,52 +161,44 @@ public class AudioInteractor implements IAudioInteractor {
     public Single<List<Audio>> getRecommendationsByAudio(int accountId, String audio) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getRecommendationsByAudio(audio).map(out -> {
+                .getRecommendationsByAudio(audio)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for (int i = 0; i < out.items.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.items.get(i).id)
-                                .setOwnerId(out.items.get(i).owner_id)
-                                .setAlbumId(out.items.get(i).album_id)
-                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
-                                .setAlbum_access_key(out.items.get(i).album_access_key)
-                                .setAccessKey(out.items.get(i).access_key)
-                                .setArtist(out.items.get(i).artist)
-                                .setTitle(out.items.get(i).title)
-                                .setUrl(out.items.get(i).url)
-                                .setLyricsId(out.items.get(i).lyrics_id)
-                                .setGenre(out.items.get(i).genre_id)
-                                .setDuration(out.items.get(i).duration)
-                                .setThumb_image_little(out.items.get(i).thumb_image_little)
-                                .setThumb_image_big(out.items.get(i).thumb_image_big)
-                                .setAlbum_title(out.items.get(i).album_title)
-                                .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
-                                .setIsHq(out.items.get(i).isHq));
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }
 
     @Override
-    public Single<List<VKApiAudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset) {
+    public Single<List<AudioPlaylist>> getPlaylists(int accountId, int owner_id, int offset) {
         return networker.vkDefault(accountId)
                 .audio()
-                .getPlaylists(owner_id, offset).map(out -> out.items);
+                .getPlaylists(owner_id, offset)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
+                    List<AudioPlaylist> ret = new ArrayList<>();
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
+                    return ret;
+                });
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey) {
+    public Single<AudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey) {
         return networker.vkDefault(accountId)
                 .audio()
                 .followPlaylist(playlist_id, ownerId, accessKey)
-                .map(resultId -> resultId);
+                .map(Dto2Model::transform);
     }
 
     @Override
-    public Single<VKApiAudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey) {
+    public Single<AudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey) {
         return networker.vkDefault(accountId)
                 .audio()
                 .getPlaylistById(playlist_id, ownerId, accessKey)
-                .map(resultId -> resultId);
+                .map(Dto2Model::transform);
     }
 
     @Override
@@ -299,27 +220,12 @@ public class AudioInteractor implements IAudioInteractor {
 
         return networker.vkDefault(accountId)
                 .audio()
-                .search(criteria.getQuery(), isautocmp, islyrics, isbyArtist, sort, isMyAudio, offset).map(out -> {
+                .search(criteria.getQuery(), isautocmp, islyrics, isbyArtist, sort, isMyAudio, offset)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
                     List<Audio> ret = new ArrayList<>();
-                    for (int i = 0; i < out.items.size(); i++)
-                        ret.add(new Audio()
-                                .setId(out.items.get(i).id)
-                                .setOwnerId(out.items.get(i).owner_id)
-                                .setAlbumId(out.items.get(i).album_id)
-                                .setAlbum_owner_id(out.items.get(i).album_owner_id)
-                                .setAlbum_access_key(out.items.get(i).album_access_key)
-                                .setAccessKey(out.items.get(i).access_key)
-                                .setArtist(out.items.get(i).artist)
-                                .setTitle(out.items.get(i).title)
-                                .setUrl(out.items.get(i).url)
-                                .setLyricsId(out.items.get(i).lyrics_id)
-                                .setGenre(out.items.get(i).genre_id)
-                                .setDuration(out.items.get(i).duration)
-                                .setThumb_image_little(out.items.get(i).thumb_image_little)
-                                .setThumb_image_big(out.items.get(i).thumb_image_big)
-                                .setAlbum_title(out.items.get(i).album_title)
-                                .setThumb_image_very_big(out.items.get(i).thumb_image_very_big)
-                                .setIsHq(out.items.get(i).isHq));
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
     }

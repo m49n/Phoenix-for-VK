@@ -20,24 +20,24 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
     public VKApiAudio deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject root = json.getAsJsonObject();
         VKApiAudio dto = new VKApiAudio();
-        dto.id = root.has("id") ? root.get("id").getAsInt() : 0;
-        dto.owner_id = root.has("owner_id") ? root.get("owner_id").getAsInt() : 0;
-        dto.artist = root.has("artist") ? root.get("artist").getAsString() : null;
-        dto.title = root.has("title") ? root.get("title").getAsString() : null;
-        dto.duration = root.has("duration") ? root.get("duration").getAsInt() : 0;
-        dto.url = root.has("url") ? root.get("url").getAsString() : null;
-        dto.lyrics_id = root.has("lyrics_id") ? root.get("lyrics_id").getAsInt() : 0;
-        dto.genre_id = root.has("genre_id") ? root.get("genre_id").getAsInt() : 0;
-        dto.access_key = root.has("access_key") ? root.get("access_key").getAsString() : null;
-        dto.isHq = root.has("is_hq") && root.get("is_hq").getAsBoolean();
+        dto.id = optInt(root, "id");
+        dto.owner_id = optInt(root, "owner_id");
+        dto.artist = optString(root, "artist");
+        dto.title = optString(root, "title");
+        dto.duration = optInt(root, "duration");
+        dto.url = optString(root, "url");
+        dto.lyrics_id = optInt(root, "lyrics_id");
+        dto.genre_id = optInt(root, "genre_id");
+        dto.access_key = optString(root, "access_key");
+        dto.isHq = optBoolean(root, "is_hq");
 
         if (root.has("album")) {
             JsonObject thmb = root.getAsJsonObject("album");
-            dto.album_id = thmb.has("id") ? thmb.get("id").getAsInt() : 0;
-            dto.album_owner_id = thmb.has("owner_id") ? thmb.get("owner_id").getAsInt() : 0;
-            dto.album_access_key = thmb.has("access_key") ? thmb.get("access_key").getAsString() : null;
-            if (root.has("title"))
-                dto.album_title = thmb.get("title").getAsString();
+            dto.album_id = optInt(thmb, "id");
+            dto.album_owner_id = optInt(thmb, "owner_id");
+            dto.album_access_key = optString(thmb, "access_key");
+            dto.album_title = optString(thmb, "title");
+
             if (thmb.has("thumb")) {
                 thmb = thmb.getAsJsonObject("thumb");
                 if (thmb.has("photo_135"))

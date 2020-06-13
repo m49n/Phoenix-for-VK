@@ -118,8 +118,8 @@
                     android:id="@+id/item_message_status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="time"
-                    android:textSize="@dimen/font_size_additional" />
+                    android:textSize="@dimen/font_size_additional"
+                    tools:text="time" />
 
                 <ImageView
                     android:id="@+id/item_message_encrypted"

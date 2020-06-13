@@ -16,6 +16,8 @@ public class AudioMessageEntity extends Entity {
 
     private String accessKey;
 
+    private String transcript;
+
     public AudioMessageEntity(int id, int ownerId) {
         this.id = id;
         this.ownerId = ownerId;
@@ -62,6 +64,15 @@ public class AudioMessageEntity extends Entity {
 
     public AudioMessageEntity setLinkMp3(String linkMp3) {
         this.linkMp3 = linkMp3;
+        return this;
+    }
+
+    public String getTranscript() {
+        return transcript;
+    }
+
+    public AudioMessageEntity setTranscript(String transcript) {
+        this.transcript = transcript;
         return this;
     }
 

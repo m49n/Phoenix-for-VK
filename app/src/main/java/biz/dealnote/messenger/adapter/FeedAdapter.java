@@ -64,7 +64,7 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
     protected void onBindItemViewHolder(final PostHolder holder, int position, int type) {
         final News item = getItem(position);
 
-        attachmentsViewBinder.displayAttachments(item.getAttachments(), holder.attachmentsHolder, false);
+        attachmentsViewBinder.displayAttachments(item.getAttachments(), holder.attachmentsHolder, false, null);
         attachmentsViewBinder.displayCopyHistory(item.getCopyHistory(), holder.attachmentsHolder.getVgPosts(), true, R.layout.item_copy_history_post);
 
         holder.tvOwnerName.setText(item.getOwnerName());

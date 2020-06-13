@@ -33,6 +33,7 @@
             android:ellipsize="marquee"
             android:padding="2dp"
             android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             android:textSize="16sp"
             tools:text="Share" />
     </LinearLayout>

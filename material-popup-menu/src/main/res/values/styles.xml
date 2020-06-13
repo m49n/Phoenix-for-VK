@@ -3,8 +3,6 @@
     <style name="Widget.MPM.Menu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@drawable/popupmenu_background</item>
         <item name="android:colorBackground">@color/mpm_material_grey_50</item>
-        <item name="mpm_primaryTextColor">?android:textColorPrimary</item>
-        <item name="mpm_secondaryTextColor">?android:textColorSecondary</item>
         <item name="mpm_activeIconColor">@color/mpm_black_54_opacity</item>
         <item name="mpm_separatorColor">@color/mpm_black_12_opacity</item>
         <item name="mpm_paddingBottom">@dimen/mpm_popup_menu_vertical_padding</item>

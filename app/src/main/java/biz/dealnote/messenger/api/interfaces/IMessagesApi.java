@@ -105,4 +105,6 @@ public interface IMessagesApi {
     Completable pin(int peerId, int messageId);
 
     Completable unpin(int peerId);
+
+    Single<Integer> recogniseAudioMessage(Integer message_id, String audio_message_id);
 }

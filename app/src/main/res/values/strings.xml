@@ -1126,8 +1126,6 @@
     <string name="theme_edit_title">Выбор цветового оформления</string>
     <string name="login_app_code_hint">Код подтверждения</string>
     <string name="button_login_send_code_via_sms">Отправить код через SMS</string>
-    <string name="button_validate_web">Не пришёл код</string>
-    <string name="sms_fail">ВК может не отправить вам код, сразу нажмите \"Не пришёл код\"</string>
     <string name="error_not_found_message">Объект не найден</string>
     <string name="my_communities_title">Мои сообщества</string>
     <string name="quick_search_title">Быстрый поиск</string>
@@ -1271,7 +1269,7 @@
     <string name="null_audio">Нет проигрываемых аудио</string>
     <string name="audio_not_found">Аудио не найдено в списке</string>
     <string name="load_saved_audios">Ошибка сети! Загрузить из загрузок?</string>
-    <string name="audio_force_download">Данный трек уже скачен. Всё равно скачать?</string>
+    <string name="audio_force_download">Уже скачен. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
     <string name="use_old_vk_api">Аудио с VK API 5.90</string>
     <string name="expires">%1$s %2$s</string>
@@ -1342,4 +1340,8 @@
     <string name="open_photo">Открыть фото</string>
     <string name="add_and_download_button">Скачать и добавить</string>
     <string name="delete_cache_images">Стирать кэш изображений при входе</string>
+    <string name="click_next_track">Клик по обложке - следущий трек</string>
+    <string name="click_next_track_summary">Длинное нажатие - предыдущий трек. Иначе длинное нажатие по обложке - следущий трек</string>
+    <string name="voice_click">Ab</string>
+    <string name="remote_audio_error">Ошибка получения списка сохранённых аудио на пк</string>
 </resources>

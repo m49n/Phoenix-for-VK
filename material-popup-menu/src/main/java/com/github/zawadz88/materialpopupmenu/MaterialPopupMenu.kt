@@ -72,7 +72,7 @@ internal constructor(
      *
      * @param listener Listener that is called when this popup window is dismissed.
      */
-    fun setOnDismissListener(listener: (() -> Unit)?) {
+    private fun setOnDismissListener(listener: (() -> Unit)?) {
         this.dismissListener = listener
         this.popupWindow?.setOnDismissListener(listener)
     }

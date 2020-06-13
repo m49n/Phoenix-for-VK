@@ -12,6 +12,7 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
@@ -46,6 +47,7 @@ import biz.dealnote.messenger.crypt.MessageType;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Chat;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Commented;
@@ -644,6 +646,21 @@ public class Dto2Model {
                 .setIsHq(dto.isHq);
     }
 
+    public static AudioPlaylist transform(@NonNull VKApiAudioPlaylist dto) {
+        return new AudioPlaylist()
+                .setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setArtist_name(dto.artist_name)
+                .setCount(dto.count)
+                .setDescription(dto.description)
+                .setGenre(dto.genre)
+                .setYear(dto.Year)
+                .setTitle(dto.title)
+                .setThumb_image(dto.thumb_image)
+                .setUpdate_time(dto.update_time);
+    }
+
     public static Link transform(@NonNull VKApiLink link) {
         return new Link()
                 .setUrl(link.url)
@@ -690,7 +707,8 @@ public class Dto2Model {
                 .setWaveform(dto.waveform)
                 .setLinkOgg(dto.linkOgg)
                 .setLinkMp3(dto.linkMp3)
-                .setAccessKey(dto.access_key);
+                .setAccessKey(dto.access_key)
+                .setTranscript(dto.transcript);
     }
 
     public static Document transform(@NonNull VkApiDoc dto) {

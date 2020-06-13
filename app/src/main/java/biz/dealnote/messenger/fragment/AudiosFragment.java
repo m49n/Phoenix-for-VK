@@ -32,12 +32,12 @@ import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
 import biz.dealnote.messenger.adapter.horizontal.HorizontalPlaylistAdapter;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
@@ -180,9 +180,9 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
-    public void updatePlaylists(List<VKApiAudioPlaylist> stories) {
+    public void updatePlaylists(List<AudioPlaylist> playlists) {
         if (nonNull(mPlaylistAdapter)) {
-            mPlaylistAdapter.setItems(stories);
+            mPlaylistAdapter.setItems(playlists);
             mPlaylistAdapter.notifyDataSetChanged();
             mAudioRecyclerAdapter.addHeader(headerPlaylist);
         }
@@ -286,8 +286,8 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
-    public void onPlayListClick(VKApiAudioPlaylist item, int pos) {
-        if (item.owner_id == Settings.get().accounts().getCurrent())
+    public void onPlayListClick(AudioPlaylist item, int pos) {
+        if (item.getOwnerId() == Settings.get().accounts().getCurrent())
             getPresenter().onDelete(item);
         else
             getPresenter().onAdd(item);

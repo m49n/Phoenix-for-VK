@@ -365,4 +365,9 @@ public interface IMessageService {
     Single<BaseResponse<SearchDialogsResponse>> searchDialogs(@Field("q") String q,
                                                               @Field("limit") Integer limit,
                                                               @Field("fields") String fileds);
+
+    @FormUrlEncoded
+    @POST("messages.recogniseAudioMessage")
+    Single<BaseResponse<Integer>> recogniseAudioMessage(@Field("message_id") Integer message_id,
+                                                        @Field("audio_message_id") String audio_message_id);
 }

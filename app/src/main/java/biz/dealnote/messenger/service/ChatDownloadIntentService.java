@@ -47,7 +47,6 @@ import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
-import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
 public class ChatDownloadIntentService extends IntentService {
@@ -88,7 +87,7 @@ public class ChatDownloadIntentService extends IntentService {
 
     private String getTitle(Owner owner, int owner_id, String chat_title) {
         if (owner_id < VKApiMessage.CHAT_PEER) {
-            if (owner == null || Objects.isNullOrEmptyString(owner.getFullName()))
+            if (owner == null || Utils.isEmpty(owner.getFullName()))
                 return "dialog_" + owner_id;
             else
                 return owner.getFullName();
@@ -263,7 +262,7 @@ public class ChatDownloadIntentService extends IntentService {
         int owner_id = intent.getIntExtra(Extra.OWNER_ID, 0);
         int account_id = intent.getIntExtra(Extra.ACCOUNT_ID, 0);
         String chat_title = intent.getStringExtra(Extra.TITLE);
-        if (Objects.isNullOrEmptyString(chat_title))
+        if (Utils.isEmpty(chat_title))
             chat_title = getString(R.string.chat) + " " + owner_id;
         if (owner_id == 0 || account_id == 0)
             return;

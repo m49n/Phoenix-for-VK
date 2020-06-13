@@ -11,8 +11,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="@string/load_more"
-        android:textAllCaps="true"
-        android:textColor="?colorAccent" />
+        android:textAllCaps="true" />
 
     <ProgressBar
         android:id="@+id/footer_load_more_progress"

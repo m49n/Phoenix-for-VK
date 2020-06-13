@@ -1,10 +1,8 @@
 package androidx.appcompat.widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.os.Build
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.zawadz88.materialpopupmenu.R
 import com.github.zawadz88.materialpopupmenu.internal.PopupMenuAdapter
-import java.lang.reflect.Method
+import kotlin.math.ceil
 
-/**
- * A more Material version of [ListPopupWindow] based on [RecyclerView].
- *
- * Its width is a multiple of 56dp units with a minimum of 112dp and a maximum of 280dp
- * as stated in the <a href="https://material.io/guidelines/components/menus.html#menus-simple-menus">Material documentation</a>
- *
- * @see ListPopupWindow
- */
-@SuppressLint("PrivateResource,RestrictedApi")
+
 internal class MaterialRecyclerViewPopupWindow(
         private val context: Context,
         private var dropDownGravity: Int,
@@ -40,26 +30,6 @@ internal class MaterialRecyclerViewPopupWindow(
         private const val TAG = "MaterialRVPopupWindow"
         private const val DEFAULT_BACKGROUND_DIM_AMOUNT = 0.3f
 
-        private var sClipToWindowEnabledMethod: Method? = null
-        private var sGetMaxAvailableHeightMethod: Method? = null
-
-        init {
-            try {
-                sClipToWindowEnabledMethod = PopupWindow::class.java.getDeclaredMethod(
-                        "setClipToScreenEnabled", Boolean::class.javaPrimitiveType
-                )
-            } catch (e: NoSuchMethodException) {
-                Log.i(TAG, "Could not find method setClipToScreenEnabled() on PopupWindow. Oh well.")
-            }
-
-            try {
-                sGetMaxAvailableHeightMethod = PopupWindow::class.java.getDeclaredMethod(
-                        "getMaxAvailableHeight", View::class.java, Int::class.javaPrimitiveType, Boolean::class.javaPrimitiveType
-                )
-            } catch (e: NoSuchMethodException) {
-                Log.i(TAG, "Could not find method getMaxAvailableHeight(View, int, boolean)" + " on PopupWindow. Oh well.")
-            }
-        }
     }
 
     /**
@@ -176,7 +146,6 @@ internal class MaterialRecyclerViewPopupWindow(
         } else {
             popup.width = widthSpec
             popup.height = height
-            setPopupClipToScreenEnabled(true)
 
             // use outside touchable to dismiss drop down when touching outside of it, so
             // only set this if the dropdown is not always visible
@@ -266,11 +235,8 @@ internal class MaterialRecyclerViewPopupWindow(
             dropDownVerticalOffset += anchorView!!.height
         }
 
-        // Max height available on the screen for a popupMenu.
-        val ignoreBottomDecorations = popup.inputMethodMode == PopupWindow.INPUT_METHOD_NOT_NEEDED
         val maxHeight = getMaxAvailableHeight(
-                anchorView!!, dropDownVerticalOffset,
-                ignoreBottomDecorations
+                anchorView!!, dropDownVerticalOffset
         )
 
         val listContent = measureHeightOfChildrenCompat(maxHeight - otherHeights)
@@ -359,33 +325,10 @@ internal class MaterialRecyclerViewPopupWindow(
         )
     }
 
-    private fun setPopupClipToScreenEnabled(clip: Boolean) {
-        sClipToWindowEnabledMethod?.let {
-            try {
-                it.invoke(popup, clip)
-            } catch (e: Exception) {
-                Log.i(TAG, "Could not call setClipToScreenEnabled() on PopupWindow. Oh well.")
-            }
-        }
-    }
-
-    private fun getMaxAvailableHeight(anchor: View, yOffset: Int, ignoreBottomDecorations: Boolean): Int {
-        sGetMaxAvailableHeightMethod?.let {
-            try {
-                return it.invoke(
-                        popup, anchor, yOffset,
-                        ignoreBottomDecorations
-                ) as Int
-            } catch (e: Exception) {
-                Log.i(TAG, "Could not call getMaxAvailableHeightMethod(View, int, boolean)" + " on PopupWindow. Using the public version.")
-            }
-        }
+    private fun getMaxAvailableHeight(anchor: View, yOffset: Int): Int {
         return popup.getMaxAvailableHeight(anchor, yOffset)
     }
 
-    /**
-     * @see android.support.v7.view.menu.MenuPopup.measureIndividualMenuWidth
-     */
     private fun measureMenuSizeAndGetWidth(adapter: PopupMenuAdapter): Int {
         adapter.setupIndices()
         val parent = FrameLayout(context)
@@ -410,7 +353,7 @@ internal class MaterialRecyclerViewPopupWindow(
             }
         }
 
-        menuWidth = Math.ceil(menuWidth.toDouble() / popupWidthUnit).toInt() * popupWidthUnit
+        menuWidth = ceil(menuWidth.toDouble() / popupWidthUnit).toInt() * popupWidthUnit
 
         return menuWidth
     }

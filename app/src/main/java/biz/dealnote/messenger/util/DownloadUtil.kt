@@ -81,6 +81,8 @@ object DownloadUtil {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
             }
+            if (TrackIsDownloaded(audio) == 2)
+                return 1
         } while (false)
         try {
             AudioInternalDownloader(context, audio, Settings.get().other().musicDir + "/" + audioName).doDownload()
@@ -117,13 +119,17 @@ object DownloadUtil {
 
     @Suppress("DEPRECATION")
     @JvmStatic
-    fun TrackIsDownloaded(audio: Audio): Boolean {
+    fun TrackIsDownloaded(audio: Audio): Int {
         val audioName = makeLegalFilename(audio.artist + " - " + audio.title, "mp3")
+        for (i in MusicUtils.RemoteAudios) {
+            if (i.equals(audioName, true))
+                return 2
+        }
         for (i in MusicUtils.CachedAudios) {
             if (i.equals(audioName, true))
-                return true
+                return 1
         }
-        return false
+        return 0
     }
 
     @Suppress("DEPRECATION")
@@ -281,7 +287,7 @@ object DownloadUtil {
         override fun onPostExecute(s: String?) {
             if (Objects.isNull(s)) {
                 CreatePhoenixToast(context).showToastBottom(R.string.saved)
-                if (!Objects.isNullOrEmptyString(current_audio.thumb_image_very_big) || !Objects.isNullOrEmptyString(current_audio.thumb_image_little))
+                if (!Utils.isEmpty(current_audio.thumb_image_very_big) || !Utils.isEmpty(current_audio.thumb_image_little))
                     TagAudioInternalDownloader(context, current_audio, file.replace(".mp3", ".jpg")).doDownload()
                 else
                     MusicUtils.PlaceToAudioCache(ctx)
@@ -319,11 +325,11 @@ object DownloadUtil {
                         val Cover = File(file!!)
                         val newartwork = ArtworkFactory.createArtworkFromFile(Cover)
                         tag.setArtwork(newartwork)
-                        if (!Objects.isNullOrEmptyString(current_audio.artist))
+                        if (!Utils.isEmpty(current_audio.artist))
                             tag.setField(FieldKey.ARTIST, current_audio.artist)
-                        if (!Objects.isNullOrEmptyString(current_audio.title))
+                        if (!Utils.isEmpty(current_audio.title))
                             tag.setField(FieldKey.TITLE, current_audio.title)
-                        if (!Objects.isNullOrEmptyString(current_audio.album_title))
+                        if (!Utils.isEmpty(current_audio.album_title))
                             tag.setField(FieldKey.ALBUM, current_audio.album_title)
                         if (current_audio.lyricsId != 0) {
                             val mAudioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor()

@@ -13,7 +13,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?message_bubble_color"
         android:orientation="vertical">
 
         <biz.dealnote.messenger.view.AspectRatioImageView
@@ -21,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:alpha="0.95"
             android:scaleType="centerCrop"
             app:aspectRatioEnabled="true"
             app:aspectRatioH="1"
@@ -40,8 +40,6 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:maxLines="2"
-                android:minLines="2"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp"
                 android:paddingEnd="8dp"
@@ -56,8 +54,6 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:maxLines="2"
-                android:minLines="2"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"

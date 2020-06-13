@@ -192,4 +192,9 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
     public void onVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage) {
         getPresenter().fireVoicePlayButtonClick(voiceHolderId, voiceMessageId, voiceMessage);
     }
+
+    @Override
+    public void onTranscript(String voiceMessageId, int messageId) {
+        getPresenter().fireTranscript(voiceMessageId, messageId);
+    }
 }

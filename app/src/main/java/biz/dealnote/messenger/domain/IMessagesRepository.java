@@ -139,6 +139,8 @@ public interface IMessagesRepository {
 
     Single<Integer> createGroupChat(int accountId, Collection<Integer> users, String title);
 
+    Single<Integer> recogniseAudioMessage(int accountId, Integer message_id, String audio_message_id);
+
     Completable markAsRead(int accountId, int peerId, int toId);
 
     Completable pin(int accountId, int peerId, @Nullable Message message);

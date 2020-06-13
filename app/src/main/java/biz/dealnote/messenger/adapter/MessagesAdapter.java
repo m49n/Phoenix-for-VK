@@ -314,7 +314,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
 
         if (hasAttachments) {
-            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true);
+            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true, message.getId());
             attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
         }
     }
@@ -347,7 +347,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             }
             return true;
         });
-        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true);
+        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true, message.getId());
     }
 
     @Override

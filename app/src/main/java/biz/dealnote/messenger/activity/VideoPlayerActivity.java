@@ -32,7 +32,6 @@ import biz.dealnote.messenger.model.VideoSize;
 import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.AlternativeAspectRatioFrameLayout;
@@ -94,7 +93,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
                         ImageView av = findViewById(R.id.toolbar_avatar);
                         av.setImageBitmap(userInfo.getAvatar());
                         av.setOnClickListener(v -> onOpen());
-                        if (Objects.isNullOrEmptyString(video.getDescription()))
+                        if (Utils.isEmpty(video.getDescription()))
                             toolbar.setSubtitle(userInfo.getOwner().getFullName());
                     }, throwable -> {
                     }));

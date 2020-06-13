@@ -19,6 +19,7 @@ import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
@@ -58,19 +59,19 @@ public class LinksAdapter extends RecyclerBindableAdapter<Link, LinksAdapter.Lin
     protected void onBindItemViewHolder(LinkViewHolder holder, int position, int type) {
         Link item = getItem(position);
 
-        if (Objects.isNullOrEmptyString(item.getTitle()))
+        if (Utils.isEmpty(item.getTitle()))
             holder.tvTitle.setVisibility(View.GONE);
         else {
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(item.getTitle());
         }
-        if (Objects.isNullOrEmptyString(item.getDescription()))
+        if (Utils.isEmpty(item.getDescription()))
             holder.tvDescription.setVisibility(View.GONE);
         else {
             holder.tvDescription.setVisibility(View.VISIBLE);
             holder.tvDescription.setText(item.getDescription());
         }
-        if (Objects.isNullOrEmptyString(item.getUrl()))
+        if (Utils.isEmpty(item.getUrl()))
             holder.tvURL.setVisibility(View.GONE);
         else {
             holder.tvURL.setVisibility(View.VISIBLE);

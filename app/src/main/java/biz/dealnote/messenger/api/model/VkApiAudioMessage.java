@@ -24,6 +24,9 @@ public class VkApiAudioMessage implements VKApiAttachment {
     @SerializedName("access_key")
     public String access_key;
 
+    @SerializedName("transcript")
+    public String transcript;
+
     @Override
     public String getType() {
         return TYPE_AUDIO_MESSAGE;

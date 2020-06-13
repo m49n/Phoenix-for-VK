@@ -379,7 +379,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
             mSignerRootView.setOnClickListener(v -> onOpenOwner(post.getSignerId()));
         }
 
-        attachmentsViewBinder.displayAttachments(post.getAttachments(), mAttachmentsViews, false);
+        attachmentsViewBinder.displayAttachments(post.getAttachments(), mAttachmentsViews, false, null);
         attachmentsViewBinder.displayCopyHistory(post.getCopyHierarchy(), mAttachmentsViews.getVgPosts(),
                 false, R.layout.item_copy_history_post);
     }

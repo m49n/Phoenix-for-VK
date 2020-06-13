@@ -272,6 +272,12 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
+    fun fireTranscript(voiceMessageId: String, messageId: Int) {
+        appendDisposable(messagesRepository.recogniseAudioMessage(accountId, messageId, voiceMessageId)
+                .compose(applySingleIOToMainSchedulers())
+                .subscribe({ }, { t: Throwable? -> showError(view, t) }))
+    }
+
     fun removeDialog() {
         appendDisposable(messagesRepository.deleteDialog(accountId, peerId)
                 .compose(applyCompletableIOToMainSchedulers())

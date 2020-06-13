@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Objects;
 
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.domain.IAudioInteractor;
 import biz.dealnote.messenger.domain.InteractorFactory;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -41,7 +41,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private int isAlbum;
     private boolean LoadFromCache;
     private boolean iSSelectMode;
-    private List<VKApiAudioPlaylist> Curr;
+    private List<AudioPlaylist> Curr;
     private String accessKey;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
     private boolean loadingNow;
@@ -70,8 +70,8 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         }
     }
 
-    private void loadedPlaylist(VKApiAudioPlaylist t) {
-        List<VKApiAudioPlaylist> ret = new ArrayList<>(1);
+    private void loadedPlaylist(AudioPlaylist t) {
+        List<AudioPlaylist> ret = new ArrayList<>(1);
         ret.add(t);
         Objects.requireNonNull(getView()).updatePlaylists(ret);
         Curr = ret;
@@ -285,17 +285,17 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         }
     }
 
-    public void onDelete(VKApiAudioPlaylist album) {
+    public void onDelete(AudioPlaylist album) {
         final int accountId = super.getAccountId();
-        audioListDisposable.add(audioInteractor.deletePlaylist(accountId, album.id, album.owner_id)
+        audioListDisposable.add(audioInteractor.deletePlaylist(accountId, album.getId(), album.getOwnerId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable ->
                         getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage())));
     }
 
-    public void onAdd(VKApiAudioPlaylist album) {
+    public void onAdd(AudioPlaylist album) {
         final int accountId = super.getAccountId();
-        audioListDisposable.add(audioInteractor.followPlaylist(accountId, album.id, album.owner_id, album.access_key)
+        audioListDisposable.add(audioInteractor.followPlaylist(accountId, album.getId(), album.getOwnerId(), album.getAccess_key())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable ->
                         getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage())));

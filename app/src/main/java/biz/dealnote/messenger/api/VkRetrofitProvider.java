@@ -40,7 +40,7 @@ import biz.dealnote.messenger.api.adapters.PrivacyDtoAdapter;
 import biz.dealnote.messenger.api.adapters.SchoolClazzDtoAdapter;
 import biz.dealnote.messenger.api.adapters.SearchDialogsResponseAdapter;
 import biz.dealnote.messenger.api.adapters.StoryDtoAdapter;
-import biz.dealnote.messenger.api.adapters.ToticDtoAdapter;
+import biz.dealnote.messenger.api.adapters.TopicDtoAdapter;
 import biz.dealnote.messenger.api.adapters.UserDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoAlbumDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoDtoAdapter;
@@ -124,7 +124,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(LikesListResponse.class, new LikesListAdapter())
             .registerTypeAdapter(SearchDialogsResponse.class, new SearchDialogsResponseAdapter())
             .registerTypeAdapter(NewsfeedCommentsResponse.Dto.class, new NewsfeedCommentDtoAdapter())
-            .registerTypeAdapter(VKApiTopic.class, new ToticDtoAdapter())
+            .registerTypeAdapter(VKApiTopic.class, new TopicDtoAdapter())
             .registerTypeAdapter(GroupSettingsDto.class, new GroupSettingsAdapter())
             .registerTypeAdapter(CustomCommentsResponse.class, new CustomCommentsResponseAdapter())
             .registerTypeAdapter(VKApiAudioPlaylist.class, new AudioPlaylistDtoAdapter())

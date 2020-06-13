@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Transformation;
 
 import java.util.HashMap;
@@ -51,8 +53,6 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.WeakViewAnimatorAdapter;
 import io.reactivex.disposables.CompositeDisposable;
-
-import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 
 public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRecyclerAdapter.AudioHolder> {
 
@@ -152,13 +152,18 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         else
             holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
 
-        holder.saved.setVisibility(DownloadUtil.TrackIsDownloaded(audio) ? View.VISIBLE : View.GONE);
+        int Status = DownloadUtil.TrackIsDownloaded(audio);
+        holder.saved.setVisibility(Status != 0 ? View.VISIBLE : View.GONE);
+        if (Status == 1)
+            holder.saved.setImageResource(R.drawable.save);
+        else if (Status == 2)
+            holder.saved.setImageResource(R.drawable.remote_cloud);
 
-        holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
+        holder.play_icon.setImageResource(MusicUtils.isNowPlayingOrPreparing(audio) ? R.drawable.voice_state_animation : (MusicUtils.isNowPaused(audio) ? R.drawable.paused : (Utils.isEmpty(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song)));
         Utils.doAnimate(holder.play_icon.getDrawable(), true);
 
         if (Settings.get().other().isShow_audio_cover()) {
-            if (!isNullOrEmptyString(audio.getThumb_image_little())) {
+            if (!Utils.isEmpty(audio.getThumb_image_little())) {
                 PicassoInstance.with()
                         .load(audio.getThumb_image_little())
                         .placeholder(Objects.requireNonNull(ResourcesCompat.getDrawable(mContext.getResources(), getAudioCoverSimple(), mContext.getTheme())))
@@ -182,7 +187,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                     }
                     MusicUtils.playOrPause();
                 } else {
-                    holder.play_icon.setImageResource(isNullOrEmptyString(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
+                    holder.play_icon.setImageResource(Utils.isEmpty(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
                     MusicUtils.stop();
                 }
             } else {
@@ -205,13 +210,11 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 if (ret == 0)
                     PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                 else if (ret == 1) {
-                    PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
-                    new MaterialAlertDialogBuilder(mContext)
-                            .setTitle(R.string.error)
-                            .setMessage(R.string.audio_force_download)
-                            .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
+                    Snackbar.make(v, R.string.audio_force_download, Snackbar.LENGTH_LONG).setAction(R.string.button_yes,
+                            v1 -> DownloadUtil.downloadTrack(mContext, audio, true))
+                            .setBackgroundTint(CurrentTheme.getColorPrimary(mContext)).setActionTextColor(Utils.isColorDark(CurrentTheme.getColorPrimary(mContext))
+                            ? Color.parseColor("#ffffff") : Color.parseColor("#000000")).setTextColor(Utils.isColorDark(CurrentTheme.getColorPrimary(mContext))
+                            ? Color.parseColor("#ffffff") : Color.parseColor("#000000")).show();
                 } else {
                     holder.saved.setVisibility(View.GONE);
                     PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.error_audio);
@@ -297,13 +300,11 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                             if (ret == 0)
                                 PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.saved_audio);
                             else if (ret == 1) {
-                                PhoenixToast.CreatePhoenixToast(mContext).showToastError(R.string.exist_audio);
-                                new MaterialAlertDialogBuilder(mContext)
-                                        .setTitle(R.string.error)
-                                        .setMessage(R.string.audio_force_download)
-                                        .setPositiveButton(R.string.button_yes, (dialog_save, which_save) -> DownloadUtil.downloadTrack(mContext, audio, true))
-                                        .setNegativeButton(R.string.cancel, null)
-                                        .show();
+                                Snackbar.make(view, R.string.audio_force_download, Snackbar.LENGTH_LONG).setAction(R.string.button_yes,
+                                        v1 -> DownloadUtil.downloadTrack(mContext, audio, true))
+                                        .setBackgroundTint(CurrentTheme.getColorPrimary(mContext)).setActionTextColor(Utils.isColorDark(CurrentTheme.getColorPrimary(mContext))
+                                        ? Color.parseColor("#ffffff") : Color.parseColor("#000000")).setTextColor(Utils.isColorDark(CurrentTheme.getColorPrimary(mContext))
+                                        ? Color.parseColor("#ffffff") : Color.parseColor("#000000")).show();
                             } else {
                                 holder.saved.setVisibility(View.GONE);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToastBottom(R.string.error_audio);

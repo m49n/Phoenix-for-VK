@@ -129,6 +129,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         adapter.set(final_options)
     }
 
+    @SuppressLint("RestrictedApi")
     private fun inflate(menuRes: Int, options: MutableList<Option>) {
         val menu = MenuBuilder(context)
         menuInflater.inflate(menuRes, menu)

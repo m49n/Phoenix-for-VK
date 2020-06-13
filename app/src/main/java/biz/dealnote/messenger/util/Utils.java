@@ -36,6 +36,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.graphics.ColorUtils;
 
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 
@@ -1017,6 +1018,10 @@ public class Utils {
         }
 
         return new OkHttpDataSourceFactory(builder.build(), userAgent);
+    }
+
+    public static boolean isColorDark(int color) {
+        return ColorUtils.calculateLuminance(color) < 0.5;
     }
 
     public interface SimpleFunction<F, S> {

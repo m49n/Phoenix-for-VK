@@ -34,7 +34,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:textAlignment="viewStart"
-        android:textColor="?attr/mpm_primaryTextColor"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         android:textSize="@dimen/mpm_popup_menu_item_label_text_size"
         tools:text="Preview" />
 

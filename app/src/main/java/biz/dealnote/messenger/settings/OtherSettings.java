@@ -10,6 +10,7 @@ import java.io.File;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 
 /**
  * Created by ruslan.kolbasa on 02.12.2016.
@@ -224,7 +225,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getMusicDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("music_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("music_dir", ret).apply();
         }
@@ -234,7 +235,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getPhotoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("photo_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.PHOTOS_PATH;
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("photo_dir", ret).apply();
         }
@@ -244,7 +245,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getVideoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("video_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("video_dir", ret).apply();
         }
@@ -254,7 +255,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getDocDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("docs_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("docs_dir", ret).apply();
         }
@@ -269,5 +270,10 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isDelete_cache_images() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("delete_cache_images", false);
+    }
+
+    @Override
+    public boolean isClick_next_track() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("click_next_track", true);
     }
 }

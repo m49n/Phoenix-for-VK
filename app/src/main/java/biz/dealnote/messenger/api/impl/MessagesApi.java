@@ -107,6 +107,14 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     }
 
     @Override
+    public Single<Integer> recogniseAudioMessage(Integer message_id, String audio_message_id) {
+        return serviceRx(TokenType.USER)
+                .flatMap(service -> service
+                        .recogniseAudioMessage(message_id, audio_message_id)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
     public Single<ConversationDeleteResult> deleteDialog(int peerId) {
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service

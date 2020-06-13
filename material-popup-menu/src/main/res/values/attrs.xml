@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="mpm_primaryTextColor" format="color|reference" />
-
-    <attr name="mpm_secondaryTextColor" format="color|reference" />
-
     <attr name="mpm_activeIconColor" format="color|reference" />
 
     <attr name="mpm_separatorColor" format="color|reference" />

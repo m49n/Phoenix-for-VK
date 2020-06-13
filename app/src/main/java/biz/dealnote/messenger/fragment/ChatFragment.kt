@@ -480,6 +480,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         presenter?.fireVoicePlayButtonClick(voiceHolderId, voiceMessageId, voiceMessage)
     }
 
+    override fun onTranscript(voiceMessageId: String, messageId: Int) {
+        presenter?.fireTranscript(voiceMessageId, messageId)
+    }
+
     override fun onStickerClick(sticker: Sticker) {
         presenter?.fireStickerSendClick(sticker)
     }

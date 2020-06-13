@@ -2,6 +2,7 @@ package biz.dealnote.messenger.fragment
 
 import android.app.Dialog
 import android.content.*
+import android.graphics.Color
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
 import android.os.Bundle
@@ -28,7 +29,6 @@ import biz.dealnote.messenger.fragment.search.SearchContentType
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.place.PlaceFactory
-import biz.dealnote.messenger.player.IAudioPlayerService
 import biz.dealnote.messenger.player.MusicPlaybackService
 import biz.dealnote.messenger.player.ui.PlayPauseButton
 import biz.dealnote.messenger.player.ui.RepeatButton
@@ -44,6 +44,7 @@ import biz.dealnote.messenger.util.Objects
 import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
 import biz.dealnote.messenger.util.RxUtils
 import biz.dealnote.messenger.util.Utils
+import biz.dealnote.messenger.util.Utils.isEmpty
 import biz.dealnote.messenger.view.CircleCounterButton
 import biz.dealnote.messenger.view.SeekBarSamsungFixed
 import com.github.zawadz88.materialpopupmenu.MaterialPopupMenuBuilder
@@ -51,6 +52,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.lang.ref.WeakReference
@@ -209,12 +211,19 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
         mGetLyrics = root.findViewById(R.id.audio_player_get_lyrics)
         mGetLyrics?.setOnClickListener { onLyrics() }
 
-        ivCover?.setOnClickListener {
-            MusicUtils.next()
-        }
-        ivCover?.setOnLongClickListener {
-            MusicUtils.previous(requireActivity())
-            true
+        if (Settings.get().other().isClick_next_track) {
+            ivCover?.setOnClickListener {
+                MusicUtils.next()
+            }
+            ivCover?.setOnLongClickListener {
+                MusicUtils.previous(requireActivity())
+                true
+            }
+        } else {
+            ivCover?.setOnLongClickListener {
+                MusicUtils.next()
+                true
+            }
         }
 
         //to animate running text
@@ -225,7 +234,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
         mNextButton.setRepeatListener(mFastForwardListener)
         mProgress?.setOnSeekBarChangeListener(this)
         ivSave = root.findViewById(R.id.audio_save)
-        ivSave?.setOnClickListener { onSaveButtonClick() }
+        ivSave?.setOnClickListener { onSaveButtonClick(it) }
         ivAdd = root.findViewById(R.id.audio_add)
         if (Settings.get().main().isPlayer_support_volume) {
             ivAdd?.setIcon(R.drawable.volume_minus)
@@ -270,7 +279,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
                 .other()
                 .isAudioBroadcastActive
 
-    private fun onSaveButtonClick() {
+    private fun onSaveButtonClick(v: View) {
         val audio = MusicUtils.getCurrentAudio() ?: return
         if (!AppPerms.hasReadWriteStoragePermision(context)) {
             AppPerms.requestReadWriteStoragePermission(requireActivity())
@@ -282,13 +291,10 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
                 ivSave!!.setImageResource(R.drawable.succ)
             }
             1 -> {
-                CreatePhoenixToast(requireActivity()).showToastError(R.string.exist_audio)
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.error)
-                        .setMessage(R.string.audio_force_download)
-                        .setPositiveButton(R.string.button_yes) { _: DialogInterface?, _: Int -> downloadTrack(requireContext(), audio, true) }
-                        .setNegativeButton(R.string.cancel, null)
-                        .show()
+                Snackbar.make(v, R.string.audio_force_download, Snackbar.LENGTH_LONG).setAction(R.string.button_yes
+                ) { downloadTrack(requireActivity(), audio, true) }
+                        .setBackgroundTint(CurrentTheme.getColorPrimary(requireActivity())).setActionTextColor(if (Utils.isColorDark(CurrentTheme.getColorPrimary(requireActivity()))) Color.parseColor("#ffffff") else Color.parseColor("#000000"))
+                        .setTextColor(if (Utils.isColorDark(CurrentTheme.getColorPrimary(requireActivity()))) Color.parseColor("#ffffff") else Color.parseColor("#000000")).show()
             }
             else -> CreatePhoenixToast(requireActivity()).showToastBottom(R.string.error_audio)
         }
@@ -509,10 +515,13 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
         val current = MusicUtils.getCurrentAudio()
         if (current != null) {
             when {
-                TrackIsDownloaded(current) -> {
+                TrackIsDownloaded(current) == 1 -> {
                     ivSave!!.setImageResource(R.drawable.succ)
                 }
-                Objects.isNullOrEmptyString(current.url) -> {
+                TrackIsDownloaded(current) == 2 -> {
+                    ivSave!!.setImageResource(R.drawable.remote_cloud)
+                }
+                isEmpty(current.url) -> {
                     ivSave!!.setImageResource(R.drawable.audio_died)
                 }
                 else -> ivSave!!.setImageResource(R.drawable.save)

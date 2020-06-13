@@ -39,7 +39,6 @@ import biz.dealnote.messenger.util.Utils;
 import static biz.dealnote.messenger.player.util.MusicUtils.mService;
 import static biz.dealnote.messenger.player.util.MusicUtils.observeServiceBinding;
 import static biz.dealnote.messenger.util.Objects.isNull;
-import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
@@ -135,7 +134,7 @@ public class MiniPlayerFragment extends BaseFragment implements SeekBar.OnSeekBa
         }
         if (nonNull(play_cover) && nonNull(play_icon)) {
             Audio audio = MusicUtils.getCurrentAudio();
-            if (audio != null && !isNullOrEmptyString(audio.getThumb_image_little())) {
+            if (audio != null && !Utils.isEmpty(audio.getThumb_image_little())) {
                 PicassoInstance.with()
                         .load(audio.getThumb_image_little())
                         .placeholder(Objects.requireNonNull(ResourcesCompat.getDrawable(getResources(), R.drawable.audio_button_material, requireActivity().getTheme())))

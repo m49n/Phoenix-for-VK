@@ -2,7 +2,7 @@ package biz.dealnote.messenger.mvp.view;
 
 import java.util.List;
 
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
@@ -11,7 +11,7 @@ import biz.dealnote.mvp.core.IMvpView;
  * phoenix
  */
 public interface IAudioPlaylistsView extends IAccountDependencyView, IMvpView, IErrorView {
-    void displayData(List<VKApiAudioPlaylist> pages);
+    void displayData(List<AudioPlaylist> pages);
 
     void notifyDataSetChanged();
 

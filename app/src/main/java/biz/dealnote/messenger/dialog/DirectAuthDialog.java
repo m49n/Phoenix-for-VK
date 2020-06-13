@@ -96,8 +96,10 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
             }
         });
 
+        /*
         this.mValidate = view.findViewById(R.id.button_validate_web);
         this.mValidate.setOnClickListener(view1 -> onValidate(getPresenter().GetRedirectUrl(), getPresenter().GetLogin(), getPresenter().GetPassword()));
+         */
 
         view.findViewById(R.id.button_send_code_via_sms).setOnClickListener(view1 -> getPresenter().fireButtonSendCodeViaSmsClick());
 

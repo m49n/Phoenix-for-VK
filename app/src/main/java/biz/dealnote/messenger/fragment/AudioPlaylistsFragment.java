@@ -20,10 +20,10 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.AudioPlaylistsAdapter;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.presenter.AudioPlaylistsPresenter;
 import biz.dealnote.messenger.mvp.view.IAudioPlaylistsView;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -95,7 +95,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     }
 
     @Override
-    public void displayData(List<VKApiAudioPlaylist> users) {
+    public void displayData(List<AudioPlaylist> users) {
         if (nonNull(mAdapter)) {
             mAdapter.setData(users);
             resolveEmptyText();
@@ -135,17 +135,17 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     }
 
     @Override
-    public void onAlbumClick(int index, VKApiAudioPlaylist album) {
-        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), getPresenter().getOwner_id(), album.id, album.access_key).tryOpenWith(requireActivity());
+    public void onAlbumClick(int index, AudioPlaylist album) {
+        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), album.getOwnerId(), album.getId(), album.getAccess_key()).tryOpenWith(requireActivity());
     }
 
     @Override
-    public void onDelete(int index, VKApiAudioPlaylist album) {
+    public void onDelete(int index, AudioPlaylist album) {
         getPresenter().onDelete(album);
     }
 
     @Override
-    public void onAdd(int index, VKApiAudioPlaylist album) {
+    public void onAdd(int index, AudioPlaylist album) {
         getPresenter().onAdd(album);
     }
 }

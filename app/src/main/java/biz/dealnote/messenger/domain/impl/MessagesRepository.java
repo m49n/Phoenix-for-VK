@@ -1227,6 +1227,13 @@ public class MessagesRepository implements IMessagesRepository {
     }
 
     @Override
+    public Single<Integer> recogniseAudioMessage(int accountId, Integer message_id, String audio_message_id) {
+        return networker.vkDefault(accountId)
+                .messages()
+                .recogniseAudioMessage(message_id, audio_message_id);
+    }
+
+    @Override
     public Completable markAsRead(int accountId, int peerId, int toId) {
         PeerPatch patch = new PeerPatch(peerId).withInRead(toId).withUnreadCount(0);
         return networker.vkDefault(accountId)

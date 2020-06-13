@@ -100,7 +100,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             holder.vAttachmentsRoot.setVisibility(View.GONE);
         } else {
             holder.vAttachmentsRoot.setVisibility(View.VISIBLE);
-            attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.attachmentContainers, true);
+            attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.attachmentContainers, true, null);
         }
 
         holder.tvOwnerName.setText(comment.getFullAuthorName());

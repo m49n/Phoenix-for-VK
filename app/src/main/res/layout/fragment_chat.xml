@@ -19,7 +19,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:clipToPadding="true"
                 android:theme="@style/Theme.Toolbar.Surface"
                 app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
@@ -45,7 +45,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:text="Aa"
+                        android:text="@string/voice_click"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/white"
                         android:textSize="14sp"

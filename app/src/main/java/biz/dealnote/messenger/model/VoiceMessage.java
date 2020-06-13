@@ -27,6 +27,7 @@ public class VoiceMessage extends AbsModel implements Parcelable {
     private String linkOgg;
     private String linkMp3;
     private String accessKey;
+    private String transcript;
 
     public VoiceMessage(int id, int ownerId) {
         this.id = id;
@@ -42,6 +43,7 @@ public class VoiceMessage extends AbsModel implements Parcelable {
         linkOgg = in.readString();
         linkMp3 = in.readString();
         accessKey = in.readString();
+        transcript = in.readString();
     }
 
     public int getId() {
@@ -97,6 +99,15 @@ public class VoiceMessage extends AbsModel implements Parcelable {
         return this;
     }
 
+    public String getTranscript() {
+        return transcript;
+    }
+
+    public VoiceMessage setTranscript(String transcript) {
+        this.transcript = transcript;
+        return this;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -112,5 +123,6 @@ public class VoiceMessage extends AbsModel implements Parcelable {
         parcel.writeString(linkOgg);
         parcel.writeString(linkMp3);
         parcel.writeString(accessKey);
+        parcel.writeString(transcript);
     }
 }

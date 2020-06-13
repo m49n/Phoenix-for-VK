@@ -47,6 +47,11 @@ public class Networker implements INetworker {
     }
 
     @Override
+    public IAuthApi vkAuth() {
+        return new AuthApi(() -> otherVkRetrofitProvider.provideAuthServiceRetrofit().map(wrapper -> wrapper.create(IAuthService.class)));
+    }
+
+    @Override
     public ILongpollApi longpoll() {
         return new LongpollApi(otherVkRetrofitProvider);
     }

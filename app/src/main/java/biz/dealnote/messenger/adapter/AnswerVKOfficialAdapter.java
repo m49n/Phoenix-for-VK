@@ -153,7 +153,7 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
 
 
         holder.small.setVisibility(View.INVISIBLE);
-        if (Page.header != null) {
+        if (!Utils.isEmpty(Page.header)) {
             holder.name.setVisibility(View.VISIBLE);
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.header));
             holder.name.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
@@ -188,14 +188,14 @@ public class AnswerVKOfficialAdapter extends RecyclerView.Adapter<AnswerVKOffici
             holder.name.setVisibility(View.GONE);
             LoadIcon(holder, Page, false);
         }
-        if (Page.text != null) {
+        if (!Utils.isEmpty(Page.text)) {
             holder.description.setVisibility(View.VISIBLE);
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.text));
             holder.description.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);
         } else
             holder.description.setVisibility(View.GONE);
 
-        if (Page.footer != null) {
+        if (!Utils.isEmpty(Page.footer)) {
             holder.footer.setVisibility(View.VISIBLE);
             SpannableStringBuilder replace = new SpannableStringBuilder(Html.fromHtml(Page.footer));
             holder.footer.setText(LinkParser.parseLinks(context, replace), TextView.BufferType.SPANNABLE);

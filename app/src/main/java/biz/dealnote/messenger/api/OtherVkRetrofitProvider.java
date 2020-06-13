@@ -55,12 +55,9 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .readTimeout(30, TimeUnit.SECONDS)
-                    .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(Chain chain) throws IOException {
-                            Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
-                            return chain.proceed(request);
-                        }
+                    .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
                     });
 
             ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
@@ -68,6 +65,31 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
 
             final Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://oauth.vk.com/")
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(builder.build())
+                    .build();
+
+            return RetrofitWrapper.wrap(retrofit, false);
+        });
+    }
+
+    @Override
+    public Single<RetrofitWrapper> provideAuthServiceRetrofit() {
+        return Single.fromCallable(() -> {
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
+                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
+                        return chain.proceed(request);
+                    });
+
+            ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
+            Gson gson = new GsonBuilder().create();
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://api.vk.com/method/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(builder.build())

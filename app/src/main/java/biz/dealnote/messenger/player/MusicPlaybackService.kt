@@ -532,7 +532,7 @@ class MusicPlaybackService : Service() {
                 return
             }
 
-            if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio))
+            if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio) == 1)
                 audio.url = DownloadUtil.GetLocalTrackLink(audio)
             if (UpdateMeta) {
                 ErrorsCount = 0

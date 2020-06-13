@@ -99,6 +99,7 @@ internal class PopupMenuAdapter(
 
         private var nestedIcon: AppCompatImageView = itemView.findViewById(R.id.mpm_popup_menu_item_nested_icon)
 
+        @SuppressLint("RestrictedApi")
         override fun bindItem(popupMenuItem: MaterialPopupMenu.AbstractPopupMenuItem) {
             val castedPopupMenuItem = popupMenuItem as MaterialPopupMenu.PopupMenuItem
             if (castedPopupMenuItem.label != null) {

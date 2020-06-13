@@ -122,7 +122,7 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
     }
 
     private void configNormalPost(final AbsPostHolder holder, final Post post) {
-        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.attachmentContainers, false);
+        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.attachmentContainers, false, null);
         attachmentsViewBinder.displayCopyHistory(post.getCopyHierarchy(), holder.attachmentContainers.getVgPosts(), true, R.layout.item_copy_history_post);
 
         holder.tvOwnerName.setText(post.getAuthorName());

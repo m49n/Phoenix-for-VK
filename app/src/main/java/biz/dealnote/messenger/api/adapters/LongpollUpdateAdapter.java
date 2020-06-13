@@ -59,6 +59,7 @@ public class LongpollUpdateAdapter extends AbsAdapter implements JsonDeserialize
     @Nullable
     private AbsLongpollEvent deserialize(int action, JsonArray array) {
         switch (action) {
+            case AbsLongpollEvent.ACTION_MESSAGE_EDITED:
             case AbsLongpollEvent.ACTION_MESSAGE_ADDED:
                 return deserializeAddMessageUpdate(array);
 

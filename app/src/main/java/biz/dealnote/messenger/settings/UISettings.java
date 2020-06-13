@@ -43,13 +43,13 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public String getMainThemeKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        return preferences.getString("app_theme", "violet_red");
+        return preferences.getString("app_theme", "ice");
     }
 
     @Override
     public int getMainTheme() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        String theme = preferences.getString("app_theme", "violet_red");
+        String theme = preferences.getString("app_theme", "ice");
         boolean Amoled = Settings.get().main().isAmoledTheme();
         if (theme == null)
             return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
@@ -204,7 +204,7 @@ class UISettings implements ISettings.IUISettings {
 
     @Override
     public boolean isSystemEmoji() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", true);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", false);
     }
 
     @Override

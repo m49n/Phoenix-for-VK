@@ -12,6 +12,8 @@ public interface INetworker {
 
     IAuthApi vkDirectAuth();
 
+    IAuthApi vkAuth();
+
     ILongpollApi longpoll();
 
     IUploadApi uploads();

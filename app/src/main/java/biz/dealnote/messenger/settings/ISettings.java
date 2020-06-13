@@ -120,6 +120,8 @@ public interface ISettings {
         boolean isPhoto_to_user_dir();
 
         boolean isDelete_cache_images();
+
+        boolean isClick_next_track();
     }
 
     interface IAccountsSettings {
