@@ -202,8 +202,9 @@
 
             <ImageView
                 android:id="@+id/writingava"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/avatar_size_small"
+                android:layout_height="@dimen/avatar_size_small"
+                android:layout_marginEnd="4dp"
                 android:padding="8dp" />
 
             <TextView
@@ -212,16 +213,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/writingava"
-                android:maxLines="2"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 tools:text="@string/user_type_message" />
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/avatar_size_small"
+                android:layout_height="@dimen/avatar_size_small"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/writing"
                 android:src="@drawable/pencil"
+                android:padding="10dp"
                 app:tint="?android:attr/textColorPrimary" />
 
         </RelativeLayout>

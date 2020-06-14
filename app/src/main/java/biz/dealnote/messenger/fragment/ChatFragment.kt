@@ -208,7 +208,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     @SuppressLint("SetTextI18n")
     override fun displayWriting(owner: Owner) {
-        Writing_msg?.text = owner.fullName + "... "
+        Writing_msg?.text = owner.fullName + " "
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
     }
