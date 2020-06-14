@@ -807,7 +807,7 @@
     <string name="open">Открыть</string>
     <string name="enter_captcha_text">Введите текст с картинки</string>
     <string name="from_camera">Сделать фото</string>
-    <string name="updated_profile_photo_at">обновил(а) фотографию на странице: %1$s</string>
+    <string name="updated_profile_photo_at">%1$s обновил(а) фотографию на странице</string>
     <string name="updated_status_at">обновил(а) статус: %1$s</string>
     <string name="messages">Сообщения</string>
     <string name="error_with_message">Ошибка: %1$s</string>
