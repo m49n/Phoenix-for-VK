@@ -12,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="72dp"
         android:layout_toStartOf="@+id/item_user_remove"
+        android:layout_marginStart="16dp"
         android:orientation="vertical"
+        android:layout_toEndOf="@id/item_friend_avatar_container"
         android:paddingStart="0dp"
         android:paddingEnd="8dp">
 
@@ -23,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             tools:text="Name" />
 
@@ -30,7 +32,8 @@
             android:id="@+id/item_user_invited_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             tools:text="Time" />
 

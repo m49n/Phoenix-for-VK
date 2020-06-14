@@ -497,7 +497,6 @@
 
         <SwitchPreference
             android:key="delete_cache_images"
-            android:summary="@string/delete_cache_images"
             android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
