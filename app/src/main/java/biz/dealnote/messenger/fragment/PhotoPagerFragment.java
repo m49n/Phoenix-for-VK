@@ -74,7 +74,6 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
-import biz.dealnote.messenger.view.ViewPagerTransformers;
 import biz.dealnote.messenger.view.pager.GoBackCallback;
 import biz.dealnote.messenger.view.pager.WeakGoBackAnimationAdapter;
 import biz.dealnote.messenger.view.pager.WeakPicassoLoadCallback;
@@ -215,7 +214,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setPageTransformer(ViewPagerTransformers.ZOOM_OUT);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -597,7 +595,12 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
     @Override
     public boolean onBackPressed() {
-        ObjectAnimator objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", -600);
+        ObjectAnimator objectAnimatorPosition;
+        if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom()) {
+            objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", 600);
+        } else {
+            objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", -600);
+        }
         ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(getView(), View.ALPHA, 1, 0);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(objectAnimatorPosition, objectAnimatorAlpha);
