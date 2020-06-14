@@ -35,8 +35,6 @@ public class ActivityFeatures {
                 styleable.setStatusbarColored(true, statusBarInvertIconsOption);
                 break;
             case (StatusbarColorFeature.STATUSBAR_COLOR_NON_COLORED):
-                styleable.setStatusbarColored(false, statusBarInvertIconsOption);
-                break;
             default:
                 styleable.setStatusbarColored(false, statusBarInvertIconsOption);
                 break;

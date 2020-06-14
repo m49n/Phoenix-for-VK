@@ -180,11 +180,9 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
             }
 
             if (post.getSource().getPlatform() != null) {
-                switch (post.getSource().getPlatform()) {
-                    case "instagram":
-                        holder.ivPlatform.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.instagram));
-                        holder.ivPlatform.setVisibility(View.VISIBLE);
-                        break;
+                if ("instagram".equals(post.getSource().getPlatform())) {
+                    holder.ivPlatform.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.instagram));
+                    holder.ivPlatform.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -280,7 +278,7 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         void onLikeClick(Post post);
     }
 
-    private class DeletedHolder extends RecyclerView.ViewHolder {
+    private static class DeletedHolder extends RecyclerView.ViewHolder {
 
         Button bRestore;
 
