@@ -208,7 +208,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     @SuppressLint("SetTextI18n")
     override fun displayWriting(owner: Owner) {
-        Writing_msg?.text = owner.fullName + "... "
+        Writing_msg?.text = owner.fullName + " "
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
     }
@@ -513,8 +513,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     private fun onEditLocalPhotosSelected(photos: List<LocalPhoto>) {
-        val defaultSize = Settings.get().main().uploadImageSize
-        when (defaultSize) {
+        when (val defaultSize = Settings.get().main().uploadImageSize) {
             null -> {
                 ImageSizeAlertDialog.Builder(activity)
                         .setOnSelectedCallback { size -> presenter?.fireEditLocalPhotosSelected(photos, size) }
@@ -529,8 +528,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     private fun onEditLocalFileSelected(file: String) {
-        val defaultSize = Settings.get().main().uploadImageSize
-        when (defaultSize) {
+        when (val defaultSize = Settings.get().main().uploadImageSize) {
             null -> {
                 ImageSizeAlertDialog.Builder(activity)
                         .setOnSelectedCallback { size -> presenter?.fireFileForUploadSelected(file, size) }
@@ -583,8 +581,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
 
         if (requestCode == REQUEST_PHOTO_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
-            val defaultSize = Settings.get().main().uploadImageSize
-            when (defaultSize) {
+            when (val defaultSize = Settings.get().main().uploadImageSize) {
                 null -> {
                     ImageSizeAlertDialog.Builder(activity)
                             .setOnSelectedCallback { size -> presenter?.fireEditPhotoMaked(size) }
@@ -595,8 +592,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
-    override fun goToMessageAttachmentsEditor(accountId: Int, messageOwnerId: Int, destination: UploadDestination,
-                                              body: String?, attachments: ModelsBundle?) {
+    override fun goToMessageAttachmentsEditor(
+            accountId: Int, messageOwnerId: Int, destination: UploadDestination,
+            body: String?, attachments: ModelsBundle?,
+    ) {
         val fragment = MessageAttachmentsFragment.newInstance(accountId, messageOwnerId, destination.id, attachments)
         fragment.setTargetFragment(this, REQUEST_EDIT_MESSAGE)
         fragment.show(parentFragmentManager, "message-attachments")
@@ -794,8 +793,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
-    override fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean) {
+    override fun configOptionMenu(
+            canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
+            encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean,
+    ) {
         optionMenuSettings.put(LEAVE_CHAT_VISIBLE, canLeaveChat)
         optionMenuSettings.put(CHANGE_CHAT_TITLE_VISIBLE, canChangeTitle)
         optionMenuSettings.put(CHAT_MEMBERS_VISIBLE, canShowMembers)

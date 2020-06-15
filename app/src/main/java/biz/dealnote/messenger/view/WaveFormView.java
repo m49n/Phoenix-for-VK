@@ -132,7 +132,7 @@ public class WaveFormView extends View {
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, PROGRESS_PROPERTY, progress);
         mAnimator = new WeakReference<>(animator);
 
-        animator.setDuration(750);
+        animator.setDuration(500);
         //animator.setInterpolator(new AccelerateInterpolator(1.75f));
         animator.start();
     }
@@ -180,7 +180,7 @@ public class WaveFormView extends View {
     }
 
     private float calculateSectionWidth() {
-        int count = mWaveForm.length * 3 - 1;
+        int count = (int) (mWaveForm.length * 3.5 - 1);
         return (float) getWidth() / (float) count;
     }
 
