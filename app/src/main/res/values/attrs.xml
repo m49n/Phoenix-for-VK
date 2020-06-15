@@ -61,8 +61,6 @@
     <attr name="buttonAddPhotoBackground" format="reference" />
     <attr name="dividerColor" format="color" />
 
-    <attr name="oval_avatar_background" format="reference" />
-
     <attr name="toolbarElevation" format="reference" />
     <attr name="statusbarNonColoredColor" format="color" />
 

@@ -400,6 +400,8 @@
 
     <string name="playlist_empty_text">Здесь Вы будете видеть аудио плейлисты</string>
 
+    <string name="audio_catalog_empty_text">Здесь Вы будете видеть аудио каталог</string>
+
     <string name="end_of_list">Конец списка</string>
 
     <string name="open_full_player">Открыть плеер</string>
@@ -744,7 +746,8 @@
     <string name="other_notifications_types">Типы уведомлений</string>
     <string name="reply_notification">Ответы в комментариях</string>
     <string name="wall_publish_notification">Опубликована предложенная Вами запись</string>
-    <string name="set_default">Удалить фон (фото)</string>
+    <string name="delete_chats_photo">Удалить фон (фото)</string>
+    <string name="set_default">Сбросить</string>
     <string name="sidebar_settings">Всплывающее меню</string>
     <string name="custom_chat">Чаты</string>
     <string name="formatted_date_today">Сегодня в %1$s</string>
@@ -1284,7 +1287,6 @@
     <string name="last_read">Последнее прочитанное</string>
     <string name="enable_last_read">Быстрый переход к последнему прочитанному сообщению</string>
     <string name="show_profile_in_additional_page">Показывать профиль в всплывающем меню</string>
-    <string name="restart_needed">Требуется перезапуск</string>
     <string name="disable_swipes_chat">Отключить свайпы для чатов</string>
     <string name="chat_users_count">%1$d участников</string>
     <string name="display_writing">Показывать набор сообщения собеседником</string>
@@ -1344,4 +1346,8 @@
     <string name="click_next_track_summary">Длинное нажатие - предыдущий трек. Иначе длинное нажатие по обложке - следущий трек</string>
     <string name="voice_click">Ab</string>
     <string name="remote_audio_error">Ошибка получения списка сохранённых аудио на пк</string>
+    <string name="audio_catalog">Каталог</string>
+    <string name="audio_goto_artist">Перейти к певцу</string>
+    <string name="hide_dialog">Скрыть</string>
+    <string name="set_no_hide_dialog">Снять ограничения</string>
 </resources>

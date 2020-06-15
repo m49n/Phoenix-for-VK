@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.util;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -22,6 +24,8 @@ import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -48,6 +52,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1022,6 +1027,72 @@ public class Utils {
 
     public static boolean isColorDark(int color) {
         return ColorUtils.calculateLuminance(color) < 0.5;
+    }
+
+    public static Animator getAnimator(View view) {
+        return ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+    }
+
+    public static <K extends Parcelable, V extends Parcelable> void writeParcelableMap(
+            Parcel parcel, int flags, Map<K, V> map) {
+        if (isEmpty(map)) {
+            parcel.writeInt(0);
+            return;
+        }
+        parcel.writeInt(map.size());
+        for (Map.Entry<K, V> e : map.entrySet()) {
+            parcel.writeParcelable(e.getKey(), flags);
+            parcel.writeParcelable(e.getValue(), flags);
+        }
+    }
+
+    public static <K extends Parcelable, V extends Parcelable> Map<K, V> readParcelableMap(
+            Parcel parcel, Class<K> kClass, Class<V> vClass) {
+        int size = parcel.readInt();
+        if (size == 0)
+            return null;
+        Map<K, V> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(kClass.cast(parcel.readParcelable(kClass.getClassLoader())),
+                    vClass.cast(parcel.readParcelable(vClass.getClassLoader())));
+        }
+        return map;
+    }
+
+    public static void writeStringMap(Parcel parcel, Map<String, String> map) {
+        if (isEmpty(map)) {
+            parcel.writeInt(0);
+            return;
+        }
+        parcel.writeInt(map.size());
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            parcel.writeString(e.getKey());
+            parcel.writeString(e.getValue());
+        }
+    }
+
+    public static Map<String, String> readStringMap(Parcel parcel) {
+        int size = parcel.readInt();
+        if (size == 0)
+            return null;
+        Map<String, String> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(parcel.readString(), parcel.readString());
+        }
+        return map;
+    }
+
+    public static String[][] getArrayFromHash(Map<String, String> data) {
+        String[][] str;
+
+        Object[] keys = data.keySet().toArray();
+        Object[] values = data.values().toArray();
+        str = new String[2][values.length];
+        for (int i = 0; i < keys.length; i++) {
+            str[0][i] = (String) keys[i];
+            str[1][i] = (String) values[i];
+        }
+        return str;
     }
 
     public interface SimpleFunction<F, S> {

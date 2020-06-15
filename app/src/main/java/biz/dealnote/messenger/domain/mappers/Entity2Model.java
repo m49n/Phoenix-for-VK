@@ -542,7 +542,8 @@ public class Entity2Model {
                 .setThumb_image_big(dbo.getThumb_image_big())
                 .setThumb_image_little(dbo.getThumb_image_little())
                 .setThumb_image_very_big(dbo.getThumb_image_very_big())
-                .setIsHq(dbo.getIsHq());
+                .setIsHq(dbo.getIsHq())
+                .setMain_artists(dbo.getMain_artists());
     }
 
     public static AudioPlaylist buildAudioPlaylistFromDbo(@NonNull AudioPlaylistEntity dto) {
@@ -557,7 +558,10 @@ public class Entity2Model {
                 .setYear(dto.getYear())
                 .setTitle(dto.getTitle())
                 .setThumb_image(dto.getThumb_image())
-                .setUpdate_time(dto.getUpdate_time());
+                .setUpdate_time(dto.getUpdate_time())
+                .setOriginal_access_key(dto.getOriginal_access_key())
+                .setOriginal_id(dto.getOriginal_id())
+                .setOriginal_owner_id(dto.getOriginal_owner_id());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {

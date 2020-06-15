@@ -81,7 +81,7 @@ object DownloadUtil {
                 Temp.setLastModified(Calendar.getInstance().time.time)
                 return 1
             }
-            if (TrackIsDownloaded(audio) == 2)
+            if (TrackIsDownloaded(audio) == 2 && !Force)
                 return 1
         } while (false)
         try {

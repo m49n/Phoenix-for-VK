@@ -170,7 +170,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         buttonUnpin?.setOnClickListener { presenter?.fireUnpinClick() }
 
         goto_button = root.findViewById(R.id.goto_button)
-        if (Settings.get().accounts().getType(Settings.get().accounts().current).equals("hacked")) {
+        if (Settings.get().accounts().getType(presenter!!.accountId) == "hacked") {
             goto_button?.setImageResource(R.drawable.attachment)
             goto_button?.setOnClickListener { presenter?.fireDialogAttachmentsClick() }
         } else {

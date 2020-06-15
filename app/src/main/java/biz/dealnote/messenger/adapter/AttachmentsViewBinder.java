@@ -874,6 +874,10 @@ public class AttachmentsViewBinder {
                     if (audio.getAlbumId() != 0)
                         menus.add(new OptionRequest(AudioItem.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));
                     menus.add(new OptionRequest(AudioItem.get_recommendation_by_audio, mContext.getString(R.string.get_recommendation_by_audio), R.drawable.music_mic));
+
+                    if (audio.getAlbumId() != 0)
+                        menus.add(new OptionRequest(AudioItem.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));
+
                     if (audio.getLyricsId() != 0)
                         menus.add(new OptionRequest(AudioItem.get_lyrics_menu, mContext.getString(R.string.get_lyrics_menu), R.drawable.lyric));
                     menus.add(new OptionRequest(AudioItem.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
@@ -948,6 +952,16 @@ public class AttachmentsViewBinder {
                                 retriever.setDataSource(Audio.getMp3FromM3u8(audio.getUrl()), new HashMap<>());
                                 String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
                                 PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
+                                break;
+
+                            case AudioItem.goto_artist:
+                                String[][] artists = Utils.getArrayFromHash(audio.getMain_artists());
+                                if (audio.getMain_artists().keySet().size() > 1) {
+                                    new MaterialAlertDialogBuilder(mContext)
+                                            .setItems(artists[1], (dialog, which) -> PlaceFactory.getArtistPlace(Settings.get().accounts().getCurrent(), artists[0][which], false).tryOpenWith(mContext)).show();
+                                } else {
+                                    PlaceFactory.getArtistPlace(Settings.get().accounts().getCurrent(), artists[0][0], false).tryOpenWith(mContext);
+                                }
                                 break;
                         }
                     });

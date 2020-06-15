@@ -864,7 +864,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             edited?.run {
                 view?.setupPrimaryButtonAsEditing(canSave)
             } ?: run {
-                view?.setupPrimaryButtonAsRegular(canSendNormalMessage(), true)
+                view?.setupPrimaryButtonAsRegular(canSendNormalMessage(), Settings.get().accounts().getType(accountId) != "hacked")
             }
         }
     }

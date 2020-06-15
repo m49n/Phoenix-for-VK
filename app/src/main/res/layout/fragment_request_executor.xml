@@ -164,7 +164,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/backgroud_rectangle_border"
-                        android:fontFamily="monospace"
                         android:gravity="top"
                         android:inputType="text|textMultiLine|textLongMessage|textNoSuggestions"
                         android:minHeight="200dp"

@@ -43,7 +43,7 @@ public class CaptchaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
         super.onCreate(savedInstanceState);
         setFinishOnTouchOutside(false);
 

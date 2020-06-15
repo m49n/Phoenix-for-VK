@@ -44,6 +44,10 @@ public class VideoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer
                 if (album.image == null)
                     album.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
             }
+        } else if (root.has("photo_800")) {
+            album.image = optString(root, "photo_800");
+        } else if (root.has("photo_320")) {
+            album.image = optString(root, "photo_320");
         }
         return album;
     }

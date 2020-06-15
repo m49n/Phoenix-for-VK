@@ -125,7 +125,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     private void onDialogsFisrtResponse(List<Dialog> data) {
-        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(getAccountId()).equals("hacked")) {
             netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(t -> {
@@ -230,7 +230,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     private void onNextDialogsResponse(List<Dialog> data) {
-        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+        if (!Settings.get().other().isBe_online() || Settings.get().accounts().getType(getAccountId()).equals("hacked")) {
             netDisposable.add(Injection.provideNetworkInterfaces().vkDefault(dialogsOwnerId).account().setOffline()
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(t -> {
@@ -550,11 +550,13 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
                 .subscribe(() -> safeShowToast(getView(), R.string.success, false), Analytics::logUnexpectedError));
     }
 
-    public void fireContextViewCreated(IDialogsView.IContextView contextView) {
+    public void fireContextViewCreated(IDialogsView.IContextView contextView, final Dialog dialog) {
+        boolean isHide = Settings.get().security().ContainsValueInSet(dialog.getId(), "hidden_dialogs");
         contextView.setCanDelete(true);
-        contextView.setCanAddToHomescreen(dialogsOwnerId > 0);
-        contextView.setCanAddToShortcuts(dialogsOwnerId > 0);
+        contextView.setCanAddToHomescreen(dialogsOwnerId > 0 && !isHide);
+        contextView.setCanAddToShortcuts(dialogsOwnerId > 0 && !isHide);
         contextView.setCanConfigNotifications(dialogsOwnerId > 0);
+        contextView.setIsHidden(isHide);
     }
 
     public void fireOptionViewCreated(IDialogsView.IOptionView view) {

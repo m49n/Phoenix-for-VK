@@ -210,7 +210,7 @@
 
         <Preference
             android:key="reset_chat_background"
-            android:title="@string/set_default"
+            android:title="@string/delete_chats_photo"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
@@ -334,7 +334,6 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="show_mini_player"
-            android:summary="@string/restart_needed"
             android:title="@string/show_mini_player"
             app:iconSpaceReserved="false" />
 
@@ -346,7 +345,7 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="show_audio_top"
             android:title="@string/show_audio_top"
             app:iconSpaceReserved="false" />
@@ -373,7 +372,6 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="show_profile_in_additional_page"
-            android:summary="@string/restart_needed"
             android:title="@string/show_profile_in_additional_page"
             app:iconSpaceReserved="false" />
 
@@ -393,7 +391,6 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="show_recent_dialogs"
-            android:summary="@string/restart_needed"
             android:title="@string/show_recent_dialogs"
             app:iconSpaceReserved="false" />
 

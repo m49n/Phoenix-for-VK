@@ -109,6 +109,14 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
             }
         }
 
+        if (dto.image == null) {
+            if (root.has("photo_800")) {
+                dto.image = optString(root, "photo_800");
+            } else if (root.has("photo_320")) {
+                dto.image = optString(root, "photo_320");
+            }
+        }
+
         dto.platform = optString(root, "platform");
 
         dto.can_edit = optIntAsBoolean(root, "can_edit");

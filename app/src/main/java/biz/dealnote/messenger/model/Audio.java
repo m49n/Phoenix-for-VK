@@ -3,15 +3,14 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import biz.dealnote.messenger.util.Utils;
+
 import static biz.dealnote.messenger.util.Utils.stringEmptyIfNull;
 
-/**
- * Created by admin on 22.11.2016.
- * phoenix
- */
 public class Audio extends AbsModel implements Parcelable {
 
     public static final Creator<Audio> CREATOR = new Creator<Audio>() {
@@ -42,6 +41,7 @@ public class Audio extends AbsModel implements Parcelable {
     private String thumb_image_big;
     private String thumb_image_very_big;
     private String album_title;
+    private Map<String, String> main_artists;
     private boolean animationNow;
     private boolean isSelected;
     private boolean isHq;
@@ -72,6 +72,7 @@ public class Audio extends AbsModel implements Parcelable {
         animationNow = in.readInt() != 0;
         isSelected = in.readInt() != 0;
         isHq = in.readInt() != 0;
+        main_artists = Utils.readStringMap(in);
     }
 
     public static String getMp3FromM3u8(String url) {
@@ -91,8 +92,7 @@ public class Audio extends AbsModel implements Parcelable {
 
             final Pattern pattern = Pattern.compile(regex);
             final Matcher matcher = pattern.matcher(url);
-            String rt = matcher.replaceFirst(subst);
-            return rt;
+            return matcher.replaceFirst(subst);
         }
     }
 
@@ -119,6 +119,7 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeInt(animationNow ? 1 : 0);
         dest.writeInt(isSelected ? 1 : 0);
         dest.writeInt(isHq ? 1 : 0);
+        Utils.writeStringMap(dest, main_artists);
     }
 
     public boolean isAnimationNow() {
@@ -292,6 +293,15 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setAccessKey(String accessKey) {
         this.accessKey = accessKey;
+        return this;
+    }
+
+    public Map<String, String> getMain_artists() {
+        return main_artists;
+    }
+
+    public Audio setMain_artists(Map<String, String> main_artists) {
+        this.main_artists = main_artists;
         return this;
     }
 

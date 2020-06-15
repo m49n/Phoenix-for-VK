@@ -41,7 +41,6 @@
 
         <item name="messages_background_color">#151515</item>
         <item name="my_messages_bubble_color">#D4151515</item>
-        <item name="oval_avatar_background">@drawable/sel_button_round_4</item>
         <item name="message_unread_color">#f564b5f6</item>
 
         <item name="message_bubble_color">#313131</item>
@@ -301,21 +300,21 @@
         <item name="message_bubble_color">#D4000000</item>
     </style>
 
-    <style name="QuickReply.Amoled" parent="Theme.MaterialComponents.Dialog">
-        <item name="android:background">#1F2226</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="oval_avatar_background">@drawable/sel_button_round_4</item>
-        <item name="message_bubble_color">#D4000000</item>
-        <item name="quick_reply_icon_color">#FFF</item>
+    <style name="QuickReply.Amoled" parent="QuickReply">
+        <item name="message_bubble_color">#F20B0B0B</item>
     </style>
 
-    <style name="QuickReply" parent="Theme.MaterialComponents.Dialog">
+    <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorControlNormal">#448AFF</item>
+        <item name="colorSecondary">#82B1FF</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="android:colorBackground">@color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="message_bubble_color">#ECECEC</item>
-        <item name="oval_avatar_background">@drawable/sel_button_round_4_white</item>
-        <item name="quick_reply_icon_color">#151515</item>
+        <item name="message_bubble_color">#F01E1E1E</item>
+        <item name="quick_reply_icon_color">#FFF</item>
     </style>
 
     <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">

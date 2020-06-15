@@ -214,7 +214,7 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public boolean isEnable_show_audio_top() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", true);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", false);
     }
 
     @Override

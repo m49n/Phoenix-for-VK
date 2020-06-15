@@ -9,6 +9,7 @@ import androidx.annotation.StyleRes;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import biz.dealnote.messenger.crypt.KeyLocationPolicy;
 import biz.dealnote.messenger.model.PhotoSize;
@@ -305,6 +306,22 @@ public interface ISettings {
         int getPinHistoryDepth();
 
         boolean needHideMessagesBodyForNotif();
+
+        boolean AddValueToSet(int value, String arrayName);
+
+        boolean RemoveValueFromSet(int value, String arrayName);
+
+        int getSetSize(String arrayName);
+
+        Set<Integer> loadSet(String arrayName);
+
+        boolean ContainsValuesInSet(int[] values, String arrayName);
+
+        boolean ContainsValueInSet(int value, String arrayName);
+
+        boolean getShowHiddenDialogs();
+
+        void setShowHiddenDialogs(boolean showHiddenDialogs);
     }
 
     interface IUISettings {

@@ -35,7 +35,8 @@
                     <ImageView
                         android:id="@+id/toolbar_avatar"
                         android:layout_width="40dp"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:stateListAnimator="@animator/clicked" />
 
                     <TextView
                         android:id="@+id/empty_avatar_text"
@@ -223,8 +224,8 @@
                 android:layout_height="@dimen/avatar_size_small"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/writing"
-                android:src="@drawable/pencil"
                 android:padding="10dp"
+                android:src="@drawable/pencil"
                 app:tint="?android:attr/textColorPrimary" />
 
         </RelativeLayout>

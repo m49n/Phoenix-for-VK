@@ -22,6 +22,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -53,9 +55,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Audio is not supported :-(
- */
 public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView>
         implements IAudiosView, HorizontalPlaylistAdapter.Listener {
 
@@ -164,7 +163,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             }
         });
 
-        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio(), isSelectMode);
+        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio(), isSelectMode, 0);
 
 
         headerPlaylist = inflater.inflate(R.layout.header_audio_playlist, recyclerView, false);
@@ -174,7 +173,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         mPlaylistAdapter.setListener(this);
         headerPlaylistRecyclerView.setAdapter(mPlaylistAdapter);
 
-        mAudioRecyclerAdapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
+        mAudioRecyclerAdapter.setClickListener((position, catalog, audio) -> getPresenter().playAudio(requireActivity(), position));
         recyclerView.setAdapter(mAudioRecyclerAdapter);
         return root;
     }
@@ -225,6 +224,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         requireActivity().registerReceiver(mPlaybackStatus, filter);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<AudiosPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudiosPresenter(
@@ -299,10 +299,8 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             final String action = intent.getAction();
             if (isNull(action)) return;
 
-            switch (action) {
-                case MusicPlaybackService.PLAYSTATE_CHANGED:
-                    notifyListChanged();
-                    break;
+            if (MusicPlaybackService.PLAYSTATE_CHANGED.equals(action)) {
+                notifyListChanged();
             }
         }
     }

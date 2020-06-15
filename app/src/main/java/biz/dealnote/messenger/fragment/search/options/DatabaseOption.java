@@ -3,6 +3,10 @@ package biz.dealnote.messenger.fragment.search.options;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 public class DatabaseOption extends BaseOption implements Parcelable {
 
     public static final int TYPE_COUNTRY = 1;
@@ -64,9 +68,10 @@ public class DatabaseOption extends BaseOption implements Parcelable {
 
         DatabaseOption that = (DatabaseOption) o;
         return type == that.type
-                && (value != null ? value.equals(that.value) : that.value == null);
+                && (Objects.equals(value, that.value));
     }
 
+    @NotNull
     @Override
     public DatabaseOption clone() throws CloneNotSupportedException {
         DatabaseOption clone = (DatabaseOption) super.clone();
@@ -138,6 +143,7 @@ public class DatabaseOption extends BaseOption implements Parcelable {
             dest.writeString(title);
         }
 
+        @NotNull
         @Override
         protected Entry clone() throws CloneNotSupportedException {
             return (Entry) super.clone();

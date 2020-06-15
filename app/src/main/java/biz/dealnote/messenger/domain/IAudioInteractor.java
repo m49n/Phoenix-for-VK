@@ -5,7 +5,9 @@ import java.util.List;
 
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioCatalog;
 import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.CatalogBlock;
 import biz.dealnote.messenger.model.IdPair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -45,4 +47,8 @@ public interface IAudioInteractor {
     Single<AudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey);
 
     Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId);
+
+    Single<List<AudioCatalog>> getCatalog(int accountId, String artist_id);
+
+    Single<CatalogBlock> getCatalogBlockById(int accountId, String block_id, String start_from);
 }

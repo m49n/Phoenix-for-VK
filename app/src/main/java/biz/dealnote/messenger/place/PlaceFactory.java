@@ -13,6 +13,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.activity.VideoPlayerActivity;
 import biz.dealnote.messenger.dialog.ResolveDomainDialog;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
+import biz.dealnote.messenger.fragment.AudioCatalogFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
 import biz.dealnote.messenger.fragment.ChatUsersFragment;
@@ -359,6 +360,18 @@ public class PlaceFactory {
         return new Place(Place.AUDIOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
 
+    public static Place getAudiosInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_AUDIOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
+    public static Place getPlaylistsInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_PLAYLISTS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
+    public static Place getVideosInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_VIDEOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
     public static Place getMentionsPlace(int accountId, int ownerId) {
         return new Place(Place.MENTIONS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
@@ -496,5 +509,10 @@ public class PlaceFactory {
     public static Place getCommentsThreadPlace(int accountId, Commented commented, Integer focusToCommentId, Integer commemtId) {
         return new Place(Place.COMMENTS)
                 .setArguments(CommentsFragment.buildArgs(accountId, commented, focusToCommentId, commemtId));
+    }
+
+    public static Place getArtistPlace(int accountId, String id, boolean isHideToolbar) {
+        return new Place(Place.ARTIST)
+                .setArguments(AudioCatalogFragment.buildArgs(accountId, id, isHideToolbar));
     }
 }

@@ -8,8 +8,10 @@ import biz.dealnote.messenger.api.interfaces.IAudioApi;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
+import biz.dealnote.messenger.api.model.response.CatalogResponse;
 import biz.dealnote.messenger.api.services.IAudioService;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
@@ -103,6 +105,21 @@ class AudioApi extends AbsApi implements IAudioApi {
     }
 
     @Override
+    public Single<Items<VKApiAudioCatalog>> getCatalog(String artist_id) {
+        if (Settings.get().other().isUse_old_vk_api()) {
+            return provideService(IAudioService.class)
+                    .flatMap(service -> service
+                            .getCatalogOld(artist_id, "5.90")
+                            .map(extractResponseWithErrorHandling()));
+        } else {
+            return provideService(IAudioService.class)
+                    .flatMap(service -> service
+                            .getCatalog(artist_id)
+                            .map(extractResponseWithErrorHandling()));
+        }
+    }
+
+    @Override
     public Single<Items<VKApiAudio>> get(Integer album_id, Integer ownerId, Integer offset, String accessKey) {
         if (Settings.get().other().isUse_old_vk_api())
             return provideService(IAudioService.class).flatMap(service -> service.getOld(album_id, ownerId, offset, 100, "5.90", accessKey).map(extractResponseWithErrorHandling()));
@@ -178,5 +195,20 @@ class AudioApi extends AbsApi implements IAudioApi {
                 .flatMap(service -> service
                         .getLyrics(lyrics_id)
                         .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<CatalogResponse> getCatalogBlockById(String block_id, String start_from) {
+        if (Settings.get().other().isUse_old_vk_api()) {
+            return provideService(IAudioService.class)
+                    .flatMap(service -> service
+                            .getCatalogBlockByIdOld(block_id, start_from, "5.90")
+                            .map(extractBlockResponseWithErrorHandling()));
+        } else {
+            return provideService(IAudioService.class)
+                    .flatMap(service -> service
+                            .getCatalogBlockById(block_id, start_from)
+                            .map(extractBlockResponseWithErrorHandling()));
+        }
     }
 }

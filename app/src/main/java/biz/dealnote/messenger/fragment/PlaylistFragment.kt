@@ -90,7 +90,7 @@ class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.Click
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = AudioRecyclerAdapter(requireActivity(), mData, false, false)
+        mAdapter = AudioRecyclerAdapter(requireActivity(), mData, false, false, 0)
         mAdapter!!.setClickListener(this)
         mRecyclerView!!.adapter = mAdapter
         val my = MusicUtils.getCurrentAudio()
@@ -108,7 +108,7 @@ class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.Click
         }
     }
 
-    override fun onClick(position: Int, audio: Audio) {
+    override fun onClick(position: Int, catalog: Int, audio: Audio) {
         startForPlayList(requireActivity(), mData!!, position, false)
     }
 

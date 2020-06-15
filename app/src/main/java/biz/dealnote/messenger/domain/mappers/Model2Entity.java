@@ -333,7 +333,8 @@ public class Model2Entity {
                 .setThumb_image_big(audio.getThumb_image_big())
                 .setThumb_image_little(audio.getThumb_image_little())
                 .setThumb_image_very_big(audio.getThumb_image_very_big())
-                .setIsHq(audio.getIsHq());
+                .setIsHq(audio.getIsHq())
+                .setMain_artists(audio.getMain_artists());
     }
 
     public static AudioPlaylistEntity buildAudioPlaylistEntity(@NonNull AudioPlaylist dto) {
@@ -348,7 +349,10 @@ public class Model2Entity {
                 .setYear(dto.getYear())
                 .setTitle(dto.getTitle())
                 .setThumb_image(dto.getThumb_image())
-                .setUpdate_time(dto.getUpdate_time());
+                .setUpdate_time(dto.getUpdate_time())
+                .setOriginal_access_key(dto.getOriginal_access_key())
+                .setOriginal_id(dto.getOriginal_id())
+                .setOriginal_owner_id(dto.getOriginal_owner_id());
     }
 
     public static PhotoEntity buildPhotoEntity(Photo photo) {

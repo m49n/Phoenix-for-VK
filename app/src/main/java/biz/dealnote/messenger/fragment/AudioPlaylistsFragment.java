@@ -95,9 +95,9 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     }
 
     @Override
-    public void displayData(List<AudioPlaylist> users) {
+    public void displayData(List<AudioPlaylist> playlists) {
         if (nonNull(mAdapter)) {
-            mAdapter.setData(users);
+            mAdapter.setData(playlists);
             resolveEmptyText();
         }
     }
@@ -141,7 +141,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
 
     @Override
     public void onDelete(int index, AudioPlaylist album) {
-        getPresenter().onDelete(album);
+        getPresenter().onDelete(index, album);
     }
 
     @Override

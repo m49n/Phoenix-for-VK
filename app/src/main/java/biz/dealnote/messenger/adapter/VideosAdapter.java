@@ -53,6 +53,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.Holder> {
                     .load(photoUrl)
                     .tag(Constants.PICASSO_TAG)
                     .into(holder.image);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.image);
         }
 
         Integer serviceIcon = VideoServiceIcons.getIconByType(video.getPlatform());

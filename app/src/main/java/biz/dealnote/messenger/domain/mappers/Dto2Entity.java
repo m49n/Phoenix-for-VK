@@ -776,7 +776,8 @@ public class Dto2Entity {
                 .setThumb_image_big(dto.thumb_image_big)
                 .setThumb_image_little(dto.thumb_image_little)
                 .setThumb_image_very_big(dto.thumb_image_very_big)
-                .setIsHq(dto.isHq);
+                .setIsHq(dto.isHq)
+                .setArtist(dto.artist);
     }
 
     public static PollEntity.Answer mapPollAnswer(VKApiPoll.Answer dto) {
@@ -1058,7 +1059,10 @@ public class Dto2Entity {
                 .setYear(dto.Year)
                 .setTitle(dto.title)
                 .setThumb_image(dto.thumb_image)
-                .setUpdate_time(dto.update_time);
+                .setUpdate_time(dto.update_time)
+                .setOriginal_access_key(dto.original_access_key)
+                .setOriginal_id(dto.original_id)
+                .setOriginal_owner_id(dto.original_owner_id);
     }
 
     public static GiftItemEntity mapGiftItem(VKApiGiftItem dto) {

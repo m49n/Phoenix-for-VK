@@ -60,15 +60,17 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
     private IAudioInteractor mAudioInteractor;
     private boolean not_show_my;
     private boolean iSSelectMode;
+    private int iCatalogBlock;
     private CompositeDisposable audioListDisposable = new CompositeDisposable();
     private ClickListener mClickListener;
 
-    public AudioRecyclerAdapter(Context context, List<Audio> data, boolean not_show_my, boolean iSSelectMode) {
+    public AudioRecyclerAdapter(Context context, List<Audio> data, boolean not_show_my, boolean iSSelectMode, int iCatalogBlock) {
         super(data);
         this.mAudioInteractor = InteractorFactory.createAudioInteractor();
         this.mContext = context;
         this.not_show_my = not_show_my;
         this.iSSelectMode = iSSelectMode;
+        this.iCatalogBlock = iCatalogBlock;
     }
 
     private void deleteTrack(final int accoutnId, Audio audio) {
@@ -194,7 +196,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 if (mClickListener != null) {
                     holder.play_icon.setImageResource(R.drawable.voice_state_animation);
                     Utils.doAnimate(holder.play_icon.getDrawable(), true);
-                    mClickListener.onClick(position, audio);
+                    mClickListener.onClick(position, iCatalogBlock, audio);
                 }
             }
         });
@@ -238,6 +240,10 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 if (audio.getAlbumId() != 0)
                     menus.add(new OptionRequest(AudioItem.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));
                 menus.add(new OptionRequest(AudioItem.get_recommendation_by_audio, mContext.getString(R.string.get_recommendation_by_audio), R.drawable.music_mic));
+
+                if (!Utils.isEmpty(audio.getMain_artists()))
+                    menus.add(new OptionRequest(AudioItem.goto_artist, mContext.getString(R.string.audio_goto_artist), R.drawable.account_circle));
+
                 if (audio.getLyricsId() != 0)
                     menus.add(new OptionRequest(AudioItem.get_lyrics_menu, mContext.getString(R.string.get_lyrics_menu), R.drawable.lyric));
                 menus.add(new OptionRequest(AudioItem.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
@@ -251,7 +257,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                     switch (option.getId()) {
                         case AudioItem.play_item_audio:
                             if (mClickListener != null) {
-                                mClickListener.onClick(position, audio);
+                                mClickListener.onClick(position, iCatalogBlock, audio);
                                 if (Settings.get().other().isShow_mini_player())
                                     PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(mContext);
                             }
@@ -316,6 +322,15 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                             String bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
                             PhoenixToast.CreatePhoenixToast(mContext).showToast(mContext.getResources().getString(R.string.bitrate) + " " + (Long.parseLong(bitrate) / 1000) + " bit");
                             break;
+                        case AudioItem.goto_artist:
+                            String[][] artists = Utils.getArrayFromHash(audio.getMain_artists());
+                            if (audio.getMain_artists().keySet().size() > 1) {
+                                new MaterialAlertDialogBuilder(mContext)
+                                        .setItems(artists[1], (dialog, which) -> PlaceFactory.getArtistPlace(Settings.get().accounts().getCurrent(), artists[0][which], false).tryOpenWith(mContext)).show();
+                            } else {
+                                PlaceFactory.getArtistPlace(Settings.get().accounts().getCurrent(), artists[0][0], false).tryOpenWith(mContext);
+                            }
+                            break;
                     }
                 });
             });
@@ -346,7 +361,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
     }
 
     public interface ClickListener {
-        void onClick(int position, Audio audio);
+        void onClick(int position, int catalog, Audio audio);
     }
 
     class AudioHolder extends RecyclerView.ViewHolder {

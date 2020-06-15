@@ -196,9 +196,9 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                         List<String> trimmed = new ArrayList<>();
 
                         for (String line : lines) {
-                            if (trimmed.size() > 2000) {
+                            if (trimmed.size() > 1500) {
                                 trimmed.add("\n");
-                                trimmed.add("... and more " + (lines.length - 2000) + " lines");
+                                trimmed.add("... and more " + (lines.length - 1500) + " lines");
                                 break;
                             }
 

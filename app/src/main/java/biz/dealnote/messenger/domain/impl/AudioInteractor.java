@@ -10,7 +10,9 @@ import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.fragment.search.criteria.AudioSearchCriteria;
 import biz.dealnote.messenger.fragment.search.options.SpinnerOption;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioCatalog;
 import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.CatalogBlock;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
@@ -186,6 +188,20 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
+    public Single<List<AudioCatalog>> getCatalog(int accountId, String artist_id) {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getCatalog(artist_id)
+                .map(items -> listEmptyIfNull(items.getItems()))
+                .map(out -> {
+                    List<AudioCatalog> ret = new ArrayList<>();
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
+                    return ret;
+                });
+    }
+
+    @Override
     public Single<AudioPlaylist> followPlaylist(int accountId, int playlist_id, int ownerId, String accessKey) {
         return networker.vkDefault(accountId)
                 .audio()
@@ -228,5 +244,13 @@ public class AudioInteractor implements IAudioInteractor {
                         ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
                 });
+    }
+
+    @Override
+    public Single<CatalogBlock> getCatalogBlockById(int accountId, String block_id, String start_from) {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getCatalogBlockById(block_id, start_from)
+                .map(Dto2Model::transform);
     }
 }

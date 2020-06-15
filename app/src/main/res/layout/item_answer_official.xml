@@ -52,7 +52,8 @@
                 android:id="@+id/item_friend_avatar"
                 android:layout_width="@dimen/avatar_size_usual"
                 android:layout_height="@dimen/avatar_size_usual"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:stateListAnimator="@animator/clicked" />
 
             <ImageView
                 android:id="@+id/item_icon"
@@ -78,21 +79,21 @@
                 android:id="@+id/item_friend_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="Name" />
 
             <TextView
                 android:id="@+id/item_additional_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="comment for post..." />
 
             <TextView
                 android:id="@+id/item_friend_footer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="Footer" />
 
             <TextView

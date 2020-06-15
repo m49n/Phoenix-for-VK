@@ -87,6 +87,10 @@ public class Place implements Parcelable {
     public static final int CHAT_DUAL = 76;
     public static final int STORY_PLAYER = 77;
     public static final int SINGLE_PHOTO = 78;
+    public static final int ARTIST = 79;
+    public static final int CATALOG_BLOCK_AUDIOS = 80;
+    public static final int CATALOG_BLOCK_PLAYLISTS = 81;
+    public static final int CATALOG_BLOCK_VIDEOS = 82;
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
         public Place createFromParcel(Parcel in) {

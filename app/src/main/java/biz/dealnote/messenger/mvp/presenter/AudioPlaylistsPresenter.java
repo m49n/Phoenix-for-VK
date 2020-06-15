@@ -20,10 +20,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
 public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPlaylistsView> {
 
     private final List<AudioPlaylist> pages;
@@ -122,11 +118,15 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         return true;
     }
 
-    public void onDelete(AudioPlaylist album) {
+    public void onDelete(int index, AudioPlaylist album) {
         final int accountId = super.getAccountId();
         actualDataDisposable.add(fInteractor.deletePlaylist(accountId, album.getId(), album.getOwnerId())
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> getView().getPhoenixToast().showToast(R.string.success), throwable ->
+                .subscribe(data -> {
+                    pages.remove(index);
+                    callView(view -> view.notifyDataSetChanged());
+                    getView().getPhoenixToast().showToast(R.string.success);
+                }, throwable ->
                         getView().getPhoenixToast().showToastError(throwable.getLocalizedMessage())));
     }
 

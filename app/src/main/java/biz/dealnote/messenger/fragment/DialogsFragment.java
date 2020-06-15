@@ -33,6 +33,7 @@ import java.util.List;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
+import biz.dealnote.messenger.activity.EnterPinActivity;
 import biz.dealnote.messenger.activity.SelectProfilesActivity;
 import biz.dealnote.messenger.adapter.DialogsAdapter;
 import biz.dealnote.messenger.dialog.DialogNotifOptionsDialog;
@@ -71,6 +72,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         implements IDialogsView, DialogsAdapter.ClickListener {
 
     private static final int REQUEST_CODE_SELECT_USERS_FOR_CHAT = 114;
+    private static final int REQUEST_SHOW_CHAT_FOR_SECURITY = 128;
     private RecyclerView mRecyclerView;
     private DialogsAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -109,6 +111,32 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         return fragment;
     }
 
+    private void onSecurityClick() {
+        if (Settings.get().security().isUsePinForSecurity()) {
+            startActivityForResult(new Intent(requireActivity(), EnterPinActivity.class), REQUEST_SHOW_CHAT_FOR_SECURITY);
+        } else {
+            Settings.get().security().setShowHiddenDialogs(true);
+            ReconfigureOptionsToolbar();
+            notifyDataSetChanged();
+        }
+    }
+
+    private void ReconfigureOptionsToolbar() {
+        if (!nonNull(toolbar))
+            return;
+
+        boolean isShowHidden = Settings.get().security().getShowHiddenDialogs();
+        if (Settings.get().security().getSetSize("hidden_dialogs") <= 0) {
+            toolbar.getMenu().findItem(R.id.action_set_no_hide_dialog).setVisible(false);
+            toolbar.getMenu().findItem(R.id.action_hide_dialog).setVisible(false);
+            Settings.get().security().setShowHiddenDialogs(false);
+            return;
+        }
+
+        toolbar.getMenu().findItem(R.id.action_set_no_hide_dialog).setVisible(!isShowHidden);
+        toolbar.getMenu().findItem(R.id.action_hide_dialog).setVisible(isShowHidden);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dialogs, container, false);
@@ -119,9 +147,17 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         OptionView optionView = new OptionView();
         getPresenter().fireOptionViewCreated(optionView);
         toolbar.getMenu().findItem(R.id.action_search).setVisible(optionView.canSearch);
+        ReconfigureOptionsToolbar();
+
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_search) {
                 getPresenter().fireSearchClick();
+            } else if (item.getItemId() == R.id.action_hide_dialog) {
+                Settings.get().security().setShowHiddenDialogs(false);
+                ReconfigureOptionsToolbar();
+                notifyDataSetChanged();
+            } else if (item.getItemId() == R.id.action_set_no_hide_dialog) {
+                onSecurityClick();
             }
             return true;
         });
@@ -173,6 +209,10 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             AssertUtils.requireNonNull(users);
 
             getPresenter().fireUsersForChatSelected(users);
+        } else if (requestCode == REQUEST_SHOW_CHAT_FOR_SECURITY && resultCode == Activity.RESULT_OK) {
+            Settings.get().security().setShowHiddenDialogs(true);
+            ReconfigureOptionsToolbar();
+            notifyDataSetChanged();
         }
     }
 
@@ -186,12 +226,15 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         List<String> options = new ArrayList<>();
 
         ContextView contextView = new ContextView();
-        getPresenter().fireContextViewCreated(contextView);
+        getPresenter().fireContextViewCreated(contextView, dialog);
 
         final String delete = getString(R.string.delete);
         final String addToHomeScreen = getString(R.string.add_to_home_screen);
         final String notificationSettings = getString(R.string.peer_notification_settings);
         final String addToShortcuts = getString(R.string.add_to_launcer_shortcuts);
+
+        final String setHide = getString(R.string.hide_dialog);
+        final String setShow = getString(R.string.set_no_hide_dialog);
 
         if (contextView.canDelete) {
             options.add(delete);
@@ -209,6 +252,14 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             options.add(addToShortcuts);
         }
 
+        if (!contextView.isHidden) {
+            options.add(setHide);
+        }
+
+        if (contextView.isHidden && Settings.get().security().getShowHiddenDialogs()) {
+            options.add(setShow);
+        }
+
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(dialog.getDisplayTitle(requireActivity()))
                 .setItems(options.toArray(new String[options.size()]), (dialogInterface, which) -> {
@@ -221,6 +272,14 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                         getPresenter().fireNotificationsSettingsClick(dialog);
                     } else if (selected.equals(addToShortcuts)) {
                         getPresenter().fireAddToLauncherShortcuts(dialog);
+                    } else if (selected.equals(setHide)) {
+                        Settings.get().security().AddValueToSet(dialog.getId(), "hidden_dialogs");
+                        ReconfigureOptionsToolbar();
+                        notifyDataSetChanged();
+                    } else if (selected.equals(setShow)) {
+                        Settings.get().security().RemoveValueFromSet(dialog.getId(), "hidden_dialogs");
+                        ReconfigureOptionsToolbar();
+                        notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, null)
@@ -310,6 +369,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void notifyDataSetChanged() {
         if (nonNull(mAdapter)) {
+            mAdapter.updateHidden(Settings.get().security().loadSet("hidden_dialogs"));
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -324,6 +384,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void notifyDataAdded(int position, int count) {
         if (nonNull(mAdapter)) {
+            mAdapter.updateHidden(Settings.get().security().loadSet("hidden_dialogs"));
             mAdapter.notifyItemRangeInserted(position, count);
         }
     }
@@ -403,6 +464,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         boolean canAddToHomescreen;
         boolean canConfigNotifications;
         boolean canAddToShortcuts;
+        boolean isHidden;
 
         @Override
         public void setCanDelete(boolean can) {
@@ -422,6 +484,11 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         @Override
         public void setCanAddToShortcuts(boolean can) {
             this.canAddToShortcuts = can;
+        }
+
+        @Override
+        public void setIsHidden(boolean can) {
+            this.isHidden = can;
         }
     }
 }

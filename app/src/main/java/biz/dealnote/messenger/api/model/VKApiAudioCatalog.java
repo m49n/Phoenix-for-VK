@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
-public class AudioCatalogDto {
+public class VKApiAudioCatalog {
 
     @SerializedName("id")
     public String id;
@@ -33,4 +33,28 @@ public class AudioCatalogDto {
 
     @SerializedName("playlists")
     public List<VKApiAudioPlaylist> playlists;
+
+    @SerializedName("videos")
+    public List<VKApiVideo> videos;
+
+    @SerializedName("artist")
+    public VKApiArtistBlock artist;
+
+    public static class VKApiArtistBlock {
+        @SerializedName("name")
+        public String name;
+        @SerializedName("photo")
+        public List<Image> images;
+    }
+
+    public static final class Image {
+        @SerializedName("url")
+        public String url;
+
+        @SerializedName("width")
+        public int width;
+
+        @SerializedName("height")
+        public int height;
+    }
 }

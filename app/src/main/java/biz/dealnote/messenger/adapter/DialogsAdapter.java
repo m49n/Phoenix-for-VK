@@ -18,11 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EventListener;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
@@ -32,6 +36,7 @@ import biz.dealnote.messenger.model.Dialog;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserPlatform;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
@@ -60,6 +65,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
     private long mStartOfToday;
     private RecyclerView.AdapterDataObserver mDataObserver;
     private ClickListener mClickListener;
+    private Set<Integer> hidden;
 
     public DialogsAdapter(Context context, @NonNull List<Dialog> dialogs) {
         this.mContext = context;
@@ -72,6 +78,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
                 initStartOfTodayDate();
             }
         };
+        hidden = new HashSet<>();
 
         registerAdapterDataObserver(mDataObserver);
         initStartOfTodayDate();
@@ -93,9 +100,22 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
                 .inflate(R.layout.item_dialog, parent, false));
     }
 
+    public void updateHidden(Set<Integer> hidden) {
+        this.hidden.clear();
+        this.hidden.addAll(hidden);
+    }
+
     @Override
-    public void onBindViewHolder(DialogViewHolder holder, int position) {
+    public void onBindViewHolder(@NotNull DialogViewHolder holder, int position) {
         final Dialog dialog = mDialogs.get(position);
+
+        boolean isHide = hidden.contains(dialog.getId()) && !Settings.get().security().getShowHiddenDialogs();
+
+        if (isHide)
+            holder.mDialogContentRoot.setVisibility(View.INVISIBLE);
+        else
+            holder.mDialogContentRoot.setVisibility(View.VISIBLE);
+
         Dialog previous = position == 0 ? null : mDialogs.get(position - 1);
 
         holder.mDialogTitle.setText(dialog.getDisplayTitle(mContext));
@@ -225,33 +245,39 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             holder.tvDate.setTextColor(CurrentTheme.getColorPrimary(mContext));
         }
 
-        if (dialog.getImageUrl() != null) {
-            holder.EmptyAvatar.setVisibility(View.INVISIBLE);
-            ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
-        } else {
+        if (isHide) {
             PicassoInstance.with().cancelRequest(holder.ivAvatar);
             holder.EmptyAvatar.setVisibility(View.VISIBLE);
-            String name = dialog.getTitle();
-            if (name.length() > 2)
-                name = name.substring(0, 2);
-            name = name.trim();
-            holder.EmptyAvatar.setText(name);
+            holder.EmptyAvatar.setText("@");
             holder.ivAvatar.setImageBitmap(mTransformation.transform(Utils.createGradientChatImage(200, 200, dialog.getId())));
+        } else {
+            if (dialog.getImageUrl() != null) {
+                holder.EmptyAvatar.setVisibility(View.INVISIBLE);
+                ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
+            } else {
+                PicassoInstance.with().cancelRequest(holder.ivAvatar);
+                holder.EmptyAvatar.setVisibility(View.VISIBLE);
+                String name = dialog.getTitle();
+                if (name.length() > 2)
+                    name = name.substring(0, 2);
+                name = name.trim();
+                holder.EmptyAvatar.setText(name);
+                holder.ivAvatar.setImageBitmap(mTransformation.transform(Utils.createGradientChatImage(200, 200, dialog.getId())));
+            }
         }
 
         holder.mContentRoot.setOnClickListener(v -> {
-            if (mClickListener != null) {
+            if (mClickListener != null && !isHide) {
                 mClickListener.onDialogClick(dialog, position);
+            }
+        });
+        holder.ivAvatar.setOnClickListener(view -> {
+            if (Objects.nonNull(mClickListener) && !isHide) {
+                mClickListener.onAvatarClick(dialog, position);
             }
         });
 
         holder.mContentRoot.setOnLongClickListener(v -> mClickListener != null && mClickListener.onDialogLongClick(dialog));
-
-        holder.ivAvatar.setOnClickListener(view -> {
-            if (Objects.nonNull(mClickListener)) {
-                mClickListener.onAvatarClick(dialog, position);
-            }
-        });
     }
 
     private int getTextStyle(boolean out, boolean read) {
@@ -323,6 +349,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
         OnlineView ivOnline;
         TextView tvDate;
         View mHeaderRoot;
+        View mDialogContentRoot;
         TextView mHeaderTitle;
         TextView EmptyAvatar;
 
@@ -340,6 +367,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogVi
             mHeaderRoot = view.findViewById(R.id.header_root);
             mHeaderTitle = view.findViewById(R.id.header_title);
             EmptyAvatar = view.findViewById(R.id.empty_avatar_text);
+            mDialogContentRoot = view.findViewById(R.id.dialog_content);
         }
     }
 }

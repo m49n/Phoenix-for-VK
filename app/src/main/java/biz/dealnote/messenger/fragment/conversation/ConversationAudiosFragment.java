@@ -35,13 +35,13 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
 
     @Override
     public RecyclerView.Adapter createAdapter() {
-        AudioRecyclerAdapter audioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), false, false);
+        AudioRecyclerAdapter audioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), false, false, 0);
         audioRecyclerAdapter.setClickListener(this);
         return audioRecyclerAdapter;
     }
 
     @Override
-    public void onClick(int position, Audio audio) {
+    public void onClick(int position, int catalog, Audio audio) {
         getPresenter().fireAudioPlayClick(position, audio);
     }
 
@@ -88,10 +88,8 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
             final String action = intent.getAction();
             if (isNull(action)) return;
 
-            switch (action) {
-                case MusicPlaybackService.PLAYSTATE_CHANGED:
-                    getAdapter().notifyDataSetChanged();
-                    break;
+            if (MusicPlaybackService.PLAYSTATE_CHANGED.equals(action)) {
+                getAdapter().notifyDataSetChanged();
             }
         }
     }

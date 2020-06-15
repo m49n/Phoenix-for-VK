@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api.adapters;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -7,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import biz.dealnote.messenger.api.model.VKApiAudio;
 
@@ -30,6 +32,15 @@ public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
         dto.genre_id = optInt(root, "genre_id");
         dto.access_key = optString(root, "access_key");
         dto.isHq = optBoolean(root, "is_hq");
+        if (root.has("main_artists") && root.size() > 0) {
+            JsonArray arr = root.getAsJsonArray("main_artists");
+            dto.main_artists = new HashMap<>();
+            for (JsonElement i : arr) {
+                String name = optString(i.getAsJsonObject(), "name");
+                String id = optString(i.getAsJsonObject(), "id");
+                dto.main_artists.put(id, name);
+            }
+        }
 
         if (root.has("album")) {
             JsonObject thmb = root.getAsJsonObject("album");

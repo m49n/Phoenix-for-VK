@@ -4,9 +4,12 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
+import biz.dealnote.messenger.api.model.response.BlockResponse;
+import biz.dealnote.messenger.api.model.response.CatalogResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -158,5 +161,23 @@ public interface IAudioService {
                                                              @Field("owner_id") int ownerId,
                                                              @Field("access_key") String accessKey);
 
+    @FormUrlEncoded
+    @POST("audio.getCatalog")
+    Single<BaseResponse<Items<VKApiAudioCatalog>>> getCatalog(@Field("artist_id") String artist_id);
 
+    @FormUrlEncoded
+    @POST("audio.getCatalog")
+    Single<BaseResponse<Items<VKApiAudioCatalog>>> getCatalogOld(@Field("artist_id") String artist_id,
+                                                                 @Field("v") String version);
+
+    @FormUrlEncoded
+    @POST("audio.getCatalogBlockById")
+    Single<BaseResponse<BlockResponse<CatalogResponse>>> getCatalogBlockById(@Field("block_id") String block_id,
+                                                                             @Field("start_from") String start_from);
+
+    @FormUrlEncoded
+    @POST("audio.getCatalogBlockById")
+    Single<BaseResponse<BlockResponse<CatalogResponse>>> getCatalogBlockByIdOld(@Field("block_id") String block_id,
+                                                                                @Field("start_from") String start_from,
+                                                                                @Field("v") String version);
 }

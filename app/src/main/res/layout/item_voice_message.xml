@@ -12,8 +12,8 @@
         android:gravity="end"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textColor="?attr/icon_color_active"
-        android:textStyle="bold"
         android:textSize="11sp"
+        android:textStyle="bold"
         tools:ignore="SmallSp"
         tools:text="00:15" />
 

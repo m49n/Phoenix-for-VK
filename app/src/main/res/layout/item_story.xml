@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:foreground="?android:attr/selectableItemBackground"
+    android:stateListAnimator="@animator/clicked"
     app:contentPadding="8dp"
     tools:ignore="UnusedAttribute">
 

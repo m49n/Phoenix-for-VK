@@ -187,6 +187,24 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        SwitchPreference prefMiniplayer = findPreference("show_mini_player");
+        prefMiniplayer.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
+        SwitchPreference prefshow_profile_in_additional_page = findPreference("show_profile_in_additional_page");
+        prefshow_profile_in_additional_page.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
+        SwitchPreference prefshow_recent_dialogs = findPreference("show_recent_dialogs");
+        prefshow_recent_dialogs.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
         ListPreference prefPhotoPreview = findPreference("photo_preview_size");
         prefPhotoPreview.setOnPreferenceChangeListener((preference, newValue) -> {
             Settings.get().main().notifyPrefPreviewSizeChanged();

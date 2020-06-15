@@ -23,10 +23,6 @@ import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 1/4/2018.
- * Phoenix-for-VK
- */
 public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, AudioSearchCriteria, Audio, IntNextFrom> {
 
     private final IAudioInteractor audioInteractor;

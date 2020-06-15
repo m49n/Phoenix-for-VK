@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.Map;
+
 import biz.dealnote.messenger.R;
 
 /**
@@ -67,6 +69,8 @@ public class VKApiAudio implements VKApiAttachment {
     public String thumb_image_very_big;
 
     public String album_title;
+
+    public Map<String, String> main_artists;
 
     public boolean isHq;
 

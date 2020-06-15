@@ -27,10 +27,6 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 1/4/2018.
- * Phoenix-for-VK
- */
 public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
 
     private final IAudioInteractor audioInteractor;
@@ -152,7 +148,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     public void playAudio(Context context, int position) {
         MusicPlaybackService.startForPlayList(context, audios, position, false);
         if (!Settings.get().other().isShow_mini_player())
-            PlaceFactory.getPlayerPlace(Settings.get().accounts().getCurrent()).tryOpenWith(context);
+            PlaceFactory.getPlayerPlace(getAccountId()).tryOpenWith(context);
     }
 
     public void getListByGenre(boolean foreign, int genre) {

@@ -28,6 +28,10 @@ public class AudioPlaylist extends AbsModel implements Parcelable {
     private String thumb_image;
     private String access_key;
 
+    private String original_access_key;
+    private int original_id;
+    private int original_owner_id;
+
     public AudioPlaylist() {
 
     }
@@ -45,6 +49,9 @@ public class AudioPlaylist extends AbsModel implements Parcelable {
         description = in.readString();
         thumb_image = in.readString();
         access_key = in.readString();
+        original_access_key = in.readString();
+        original_id = in.readInt();
+        original_owner_id = in.readInt();
     }
 
     @Override
@@ -61,6 +68,9 @@ public class AudioPlaylist extends AbsModel implements Parcelable {
         dest.writeString(description);
         dest.writeString(thumb_image);
         dest.writeString(access_key);
+        dest.writeString(original_access_key);
+        dest.writeInt(original_id);
+        dest.writeInt(original_owner_id);
     }
 
     public int getId() {
@@ -159,6 +169,33 @@ public class AudioPlaylist extends AbsModel implements Parcelable {
 
     public AudioPlaylist setAccess_key(String access_key) {
         this.access_key = access_key;
+        return this;
+    }
+
+    public String getOriginal_access_key() {
+        return original_access_key;
+    }
+
+    public AudioPlaylist setOriginal_access_key(String original_access_key) {
+        this.original_access_key = original_access_key;
+        return this;
+    }
+
+    public int getOriginal_id() {
+        return original_id;
+    }
+
+    public AudioPlaylist setOriginal_id(int original_id) {
+        this.original_id = original_id;
+        return this;
+    }
+
+    public int getOriginal_owner_id() {
+        return original_owner_id;
+    }
+
+    public AudioPlaylist setOriginal_owner_id(int original_owner_id) {
+        this.original_owner_id = original_owner_id;
         return this;
     }
 

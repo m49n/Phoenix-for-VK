@@ -34,7 +34,8 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:alpha="0.8" />
+                android:alpha="0.8"
+                android:stateListAnimator="@animator/clicked" />
 
             <TextView
                 android:id="@+id/item_story_expires"

@@ -242,7 +242,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.vkphoto_menu, menu);
     }
@@ -276,7 +276,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (!Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
@@ -518,15 +518,15 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
-                                String tmp = finalRes;
-                                tmp += ("<p><b>" + requireContext().getString(R.string.has_tags) + ":</b></p>" + photo.getText());
+                                StringBuilder tmp = new StringBuilder(finalRes);
+                                tmp.append("<p><b>").append(requireContext().getString(R.string.has_tags)).append(":</b></p>").append(photo.getText());
                                 for (VKApiPhotoTags i : userInfo) {
                                     if (i.user_id != 0)
-                                        tmp += ("<i><a href=\"https://vk.com/id" + i.user_id + "\">" + (i.tagged_name != null ? i.tagged_name : "") + "</a></i>" + " ");
+                                        tmp.append("<i><a href=\"https://vk.com/id").append(i.user_id).append("\">").append(i.tagged_name != null ? i.tagged_name : "").append("</a></i>").append(" ");
                                     else
-                                        tmp += ((i.tagged_name != null ? i.tagged_name : "") + " ");
+                                        tmp.append(i.tagged_name != null ? i.tagged_name : "").append(" ");
                                 }
-                                dlg.setMessage(Html.fromHtml(tmp));
+                                dlg.setMessage(Html.fromHtml(tmp.toString()));
                                 dlg.show();
                                 try {
                                     TextView tv = dlg.findViewById(android.R.id.message);
@@ -552,7 +552,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         try {
             TextView tv = dlg.findViewById(android.R.id.message);
             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

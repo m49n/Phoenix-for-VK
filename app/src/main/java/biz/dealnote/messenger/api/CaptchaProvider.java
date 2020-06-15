@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -45,6 +46,7 @@ public class CaptchaProvider implements ICaptchaProvider {
         startCapthaActivity(app, sid, captcha);
     }
 
+    @SuppressLint("CheckResult")
     private void startCapthaActivity(final Context context, String sid, Captcha captcha) {
         Completable.complete()
                 .observeOn(uiScheduler)

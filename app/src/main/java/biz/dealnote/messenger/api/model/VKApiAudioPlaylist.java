@@ -37,4 +37,8 @@ public class VKApiAudioPlaylist {
     public String description;
     public String thumb_image;
     public String access_key;
+
+    public String original_access_key;
+    public int original_id;
+    public int original_owner_id;
 }

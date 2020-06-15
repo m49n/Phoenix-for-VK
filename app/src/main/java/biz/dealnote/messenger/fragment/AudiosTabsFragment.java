@@ -17,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import biz.dealnote.messenger.settings.Settings;
 
 public class AudiosTabsFragment extends BaseFragment {
 
+    public static final int CATALOG = -4;
     public static final int PLAYLISTS = -3;
     public static final int MY_RECOMENDATIONS = -2;
     public static final int MY_AUDIO = -1;
@@ -95,9 +98,22 @@ public class AudiosTabsFragment extends BaseFragment {
                 tab.setText(getString(R.string.recommendation));
             else if (fid == TOP_ALL)
                 tab.setText(getString(R.string.top));
+            else if (fid == CATALOG)
+                tab.setText(getString(R.string.audio_catalog));
             else
                 tab.setText(VKApiAudio.Genre.getTitleByGenre(requireActivity(), fid));
         }).attach();
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Integer fid = adapter.mFragments.get(position);
+                if (fid == CATALOG)
+                    viewPager.setUserInputEnabled(false);
+                else
+                    viewPager.setUserInputEnabled(true);
+            }
+        });
     }
 
     public int getAccountId() {
@@ -107,6 +123,8 @@ public class AudiosTabsFragment extends BaseFragment {
     private Fragment CreateAudiosFragment(int option_menu) {
         if (option_menu == PLAYLISTS)
             return AudioPlaylistsFragment.newInstance(getAccountId(), ownerId);
+        else if (option_menu == CATALOG)
+            return AudioCatalogFragment.newInstance(getAccountId(), null, true);
         else {
             AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0, null);
             fragment.requireArguments().putBoolean(AudiosFragment.EXTRA_IN_TABS_CONTAINER, true);
@@ -117,8 +135,11 @@ public class AudiosTabsFragment extends BaseFragment {
     private void setupViewPager(ViewPager2 viewPager, Adapter adapter) {
         adapter.addFragment(MY_AUDIO);
         adapter.addFragment(PLAYLISTS);
-        if (ownerId >= 0)
+        if (ownerId >= 0) {
+            if (getAccountId() == ownerId)
+                adapter.addFragment(CATALOG);
             adapter.addFragment(MY_RECOMENDATIONS);
+        }
         if (getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
             adapter.addFragment(TOP_ALL);
             adapter.addFragment(VKApiAudio.Genre.ETHNIC);
@@ -166,18 +187,17 @@ public class AudiosTabsFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                AudioSearchCriteria criteria = new AudioSearchCriteria("", false, true);
-                PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.AUDIOS, criteria).tryOpenWith(requireActivity());
-                return true;
+        if (item.getItemId() == R.id.action_search) {
+            AudioSearchCriteria criteria = new AudioSearchCriteria("", false, true);
+            PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.AUDIOS, criteria).tryOpenWith(requireActivity());
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_audio_main, menu);
     }

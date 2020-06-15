@@ -32,6 +32,7 @@
             android:layout_width="@dimen/avatar_size_small"
             android:layout_height="@dimen/avatar_size_small"
             android:layout_marginStart="4dp"
+            android:stateListAnimator="@animator/clicked"
             android:visibility="gone" />
 
         <biz.dealnote.messenger.view.OnlineView

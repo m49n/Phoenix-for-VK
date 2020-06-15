@@ -40,6 +40,7 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     private String mPinHash;
     private List<Long> mPinEnterHistory;
     private boolean mKeyEncryptionPolicyAccepted;
+    private boolean isShowHiddenDialogs;
 
     SecuritySettings(Context context) {
         mApplication = context.getApplicationContext();
@@ -75,6 +76,14 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException();
         }
+    }
+
+    public boolean getShowHiddenDialogs() {
+        return isShowHiddenDialogs;
+    }
+
+    public void setShowHiddenDialogs(boolean showHiddenDialogs) {
+        isShowHiddenDialogs = showHiddenDialogs;
     }
 
     private String getPinHash() {
@@ -199,5 +208,57 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         this.mPrefs.edit()
                 .putBoolean(KEY_ENCRYPTION_POLICY_ACCEPTED, accepted)
                 .apply();
+    }
+
+    public boolean saveSet(Set<Integer> array, String arrayName) {
+        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(arrayName + "_size", array.size());
+        int s = 0;
+        for (Integer i : array) {
+            editor.putInt(arrayName + "_" + s, i);
+            s++;
+        }
+        return editor.commit();
+    }
+
+    public boolean AddValueToSet(int value, String arrayName) {
+        Set<Integer> itr = loadSet(arrayName);
+        itr.add(value);
+        return saveSet(itr, arrayName);
+    }
+
+    public boolean ContainsValueInSet(int value, String arrayName) {
+        Set<Integer> itr = loadSet(arrayName);
+        return itr.contains(value);
+    }
+
+    public boolean ContainsValuesInSet(int[] values, String arrayName) {
+        Set<Integer> itr = loadSet(arrayName);
+        for (Integer i : values) {
+            if (!itr.contains(i))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean RemoveValueFromSet(int value, String arrayName) {
+        Set<Integer> itr = loadSet(arrayName);
+        itr.remove(value);
+        return saveSet(itr, arrayName);
+    }
+
+    public int getSetSize(String arrayName) {
+        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
+        return prefs.getInt(arrayName + "_size", 0);
+    }
+
+    public Set<Integer> loadSet(String arrayName) {
+        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
+        int size = prefs.getInt(arrayName + "_size", 0);
+        Set<Integer> array = new HashSet<>(size);
+        for (int i = 0; i < size; i++)
+            array.add(prefs.getInt(arrayName + "_" + i, 0));
+        return array;
     }
 }

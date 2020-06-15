@@ -30,14 +30,10 @@ public class ActivityFeatures {
         AppStyleable styleable = (AppStyleable) activity;
         styleable.hideMenu(hideMenu);
 
-        switch (statusBarColorOption) {
-            case (StatusbarColorFeature.STATUSBAR_COLOR_COLORED):
-                styleable.setStatusbarColored(true, statusBarInvertIconsOption);
-                break;
-            case (StatusbarColorFeature.STATUSBAR_COLOR_NON_COLORED):
-            default:
-                styleable.setStatusbarColored(false, statusBarInvertIconsOption);
-                break;
+        if (statusBarColorOption == StatusbarColorFeature.STATUSBAR_COLOR_COLORED) {
+            styleable.setStatusbarColored(true, statusBarInvertIconsOption);
+        } else {
+            styleable.setStatusbarColored(false, statusBarInvertIconsOption);
         }
     }
 

@@ -70,8 +70,10 @@ import biz.dealnote.messenger.domain.impl.CountersInteractor;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
 import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
 import biz.dealnote.messenger.fragment.AnswerVKOfficialFragment;
+import biz.dealnote.messenger.fragment.AudioCatalogFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.AudiosFragment;
+import biz.dealnote.messenger.fragment.AudiosInCatalogFragment;
 import biz.dealnote.messenger.fragment.AudiosTabsFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
 import biz.dealnote.messenger.fragment.ChatFragment;
@@ -101,6 +103,7 @@ import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
 import biz.dealnote.messenger.fragment.NewsfeedMentionsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
+import biz.dealnote.messenger.fragment.PlaylistsInCatalogFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
@@ -115,6 +118,7 @@ import biz.dealnote.messenger.fragment.VKPhotoAlbumsFragment;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.fragment.VideoPreviewFragment;
 import biz.dealnote.messenger.fragment.VideosFragment;
+import biz.dealnote.messenger.fragment.VideosInCatalogFragment;
 import biz.dealnote.messenger.fragment.VideosTabsFragment;
 import biz.dealnote.messenger.fragment.WallPostFragment;
 import biz.dealnote.messenger.fragment.attachments.CommentCreateFragment;
@@ -1271,7 +1275,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.NOTIFICATIONS:
-                if (Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+                if (Settings.get().accounts().getType(mAccountId).equals("vkofficial") || Settings.get().accounts().getType(mAccountId).equals("hacked")) {
                     attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
                     break;
                 }
@@ -1425,6 +1429,22 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.SINGLE_PHOTO:
                 attachToFront(SinglePhotoFragment.newInstance(args));
+                break;
+
+            case Place.ARTIST:
+                attachToFront(AudioCatalogFragment.newInstance(args));
+                break;
+
+            case Place.CATALOG_BLOCK_AUDIOS:
+                attachToFront(AudiosInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_PLAYLISTS:
+                attachToFront(PlaylistsInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_VIDEOS:
+                attachToFront(VideosInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
                 break;
 
             case Place.USER_DETAILS:

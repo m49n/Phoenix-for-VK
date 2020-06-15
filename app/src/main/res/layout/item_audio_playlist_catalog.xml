@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlist_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:contentPadding="0dp">
+
+    <LinearLayout
+        android:id="@+id/content_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/item_thumb"
+            android:layout_width="@dimen/avatar_size_big"
+            android:layout_height="@dimen/avatar_size_big"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/item_additional_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textColor="?colorPrimary"
+                android:textSize="14sp"
+                tools:text="Name" />
+
+            <TextView
+                android:id="@+id/item_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textSize="12sp"
+                tools:text="Artist" />
+
+            <TextView
+                android:id="@+id/item_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                tools:text="year" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
