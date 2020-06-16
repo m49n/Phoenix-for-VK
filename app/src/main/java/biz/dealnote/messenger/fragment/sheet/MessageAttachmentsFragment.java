@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +129,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MessageAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

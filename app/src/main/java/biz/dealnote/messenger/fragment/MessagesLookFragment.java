@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,6 +215,7 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
         SendAttachmentsActivity.startForSendAttachments(requireActivity(), accountId, new FwdMessages(messages));
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MessagesLookPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

@@ -1169,7 +1169,6 @@
     <string name="facebook" translatable="false">Facebook</string>
     <string name="force_hls">Принудительно потоковое аудио</string>
     <string name="force_cache">Принудительно слушать из загрузок</string>
-    <string name="audio_from_cache">Восстановление аудио из загрузок</string>
     <string name="player_live" translatable="false">Live</string>
     <string name="activity_until_now">текущее время</string>
     <string name="direction">Направление</string>
@@ -1271,7 +1270,6 @@
     <string name="do_upload_video">Загрузить видео из локального хранилища?</string>
     <string name="null_audio">Нет проигрываемых аудио</string>
     <string name="audio_not_found">Аудио не найдено в списке</string>
-    <string name="load_saved_audios">Ошибка сети! Загрузить из загрузок?</string>
     <string name="audio_force_download">Уже скачен. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
     <string name="use_old_vk_api">Аудио с VK API 5.90</string>
@@ -1350,4 +1348,6 @@
     <string name="audio_goto_artist">Перейти к певцу</string>
     <string name="hide_dialog">Скрыть</string>
     <string name="set_no_hide_dialog">Снять ограничения</string>
+    <string name="local_audios">Скаченные</string>
+    <string name="not_supported">Не поддерживается"</string>
 </resources>

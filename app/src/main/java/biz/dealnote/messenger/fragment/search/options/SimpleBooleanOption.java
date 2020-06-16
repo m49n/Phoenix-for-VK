@@ -3,6 +3,8 @@ package biz.dealnote.messenger.fragment.search.options;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 public class SimpleBooleanOption extends BaseOption implements Parcelable {
 
     public static final Creator<SimpleBooleanOption> CREATOR = new Creator<SimpleBooleanOption>() {
@@ -20,6 +22,11 @@ public class SimpleBooleanOption extends BaseOption implements Parcelable {
 
     public SimpleBooleanOption(int key, int title, boolean active) {
         super(SIMPLE_BOOLEAN, key, title, active);
+    }
+
+    public SimpleBooleanOption(int key, int title, boolean active, boolean checked) {
+        super(SIMPLE_BOOLEAN, key, title, active);
+        this.checked = checked;
     }
 
     protected SimpleBooleanOption(Parcel in) {
@@ -51,6 +58,7 @@ public class SimpleBooleanOption extends BaseOption implements Parcelable {
         return result;
     }
 
+    @NotNull
     @Override
     public SimpleBooleanOption clone() throws CloneNotSupportedException {
         return (SimpleBooleanOption) super.clone();

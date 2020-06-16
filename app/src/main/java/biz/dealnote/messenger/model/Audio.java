@@ -45,6 +45,7 @@ public class Audio extends AbsModel implements Parcelable {
     private boolean animationNow;
     private boolean isSelected;
     private boolean isHq;
+    private boolean is_local;
 
     public Audio() {
 
@@ -73,6 +74,7 @@ public class Audio extends AbsModel implements Parcelable {
         isSelected = in.readInt() != 0;
         isHq = in.readInt() != 0;
         main_artists = Utils.readStringMap(in);
+        is_local = in.readInt() != 0;
     }
 
     public static String getMp3FromM3u8(String url) {
@@ -120,6 +122,7 @@ public class Audio extends AbsModel implements Parcelable {
         dest.writeInt(isSelected ? 1 : 0);
         dest.writeInt(isHq ? 1 : 0);
         Utils.writeStringMap(dest, main_artists);
+        dest.writeInt(is_local ? 1 : 0);
     }
 
     public boolean isAnimationNow() {
@@ -311,6 +314,15 @@ public class Audio extends AbsModel implements Parcelable {
 
     public Audio setDeleted(boolean deleted) {
         this.deleted = deleted;
+        return this;
+    }
+
+    public boolean isLocal() {
+        return is_local;
+    }
+
+    public Audio setIsLocal(boolean is_local) {
+        this.is_local = is_local;
         return this;
     }
 

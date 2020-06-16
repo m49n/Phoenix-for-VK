@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,7 @@ public class PostCreateFragment extends AbsPostEditFragment<PostCreatePresenter,
         setHasOptionsMenu(true);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<PostCreatePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

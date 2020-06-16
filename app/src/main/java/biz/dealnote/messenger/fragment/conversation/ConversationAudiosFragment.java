@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
         ((AudioRecyclerAdapter) getAdapter()).setData(data);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentAudioPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ChatAttachmentAudioPresenter(

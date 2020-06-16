@@ -141,6 +141,14 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                     .load(image.getUrl())
                     .into(holder.sticker);
         }
+
+        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size() > 0);
+        holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
+
+        if (hasAttachments) {
+            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true, message.getId());
+            attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
+        }
     }
 
     public void setItems(List<Message> messages, LastReadId lastReadId) {
@@ -475,9 +483,23 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
         LottieAnimationView sticker;
 
+        View attachmentsRoot;
+        AttachmentsHolder attachmentsHolder;
+        ViewGroup forwardMessagesRoot;
+
         StickerMessageHolder(View itemView) {
             super(itemView);
             this.sticker = itemView.findViewById(R.id.sticker);
+            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
+            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
+            attachmentsHolder = new AttachmentsHolder();
+            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
+                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
+                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
+                    .setVgArticles(attachmentsRoot.findViewById(R.id.articles_attachments))
+                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
+                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
+                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
         }
     }
 

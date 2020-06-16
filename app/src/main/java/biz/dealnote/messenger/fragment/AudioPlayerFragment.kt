@@ -302,6 +302,10 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
 
     private fun onAddButtonClick() {
         val audio = MusicUtils.getCurrentAudio() ?: return
+        if (audio.isLocal) {
+            CreatePhoenixToast(requireActivity()).showToastError(R.string.not_supported)
+            return
+        }
         if (audio.ownerId == mAccountId) {
             if (!audio.isDeleted) {
                 delete(mAccountId, audio)
@@ -594,6 +598,10 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), OnSeekBarChangeListener
 
     private fun shareAudio() {
         val current = MusicUtils.getCurrentAudio() ?: return
+        if (current.isLocal) {
+            CreatePhoenixToast(requireActivity()).showToastError(R.string.not_supported)
+            return
+        }
         SendAttachmentsActivity.startForSendAttachments(requireActivity(), mAccountId, current)
     }
 

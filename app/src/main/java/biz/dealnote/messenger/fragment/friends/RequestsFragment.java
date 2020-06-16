@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -102,6 +104,7 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IAllFri
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<RequestsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new RequestsPresenter(

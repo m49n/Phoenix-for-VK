@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class ConversationPhotosFragment extends AbsChatAttachmentsFragment<Photo
         getPresenter().firePhotoClick(position, photo);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentPhotoPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

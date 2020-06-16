@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -65,6 +67,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ThemePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ThemePresenter(saveInstanceState);

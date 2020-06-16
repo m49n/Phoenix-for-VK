@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -196,6 +198,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         mHeaderHolder.ivAvatar.setOnClickListener(v -> getPresenter().fireAvatarClick());
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<UserWallPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

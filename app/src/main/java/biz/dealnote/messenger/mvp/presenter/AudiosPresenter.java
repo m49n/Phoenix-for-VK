@@ -6,9 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +33,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     private boolean actualReceived;
     private int option_menu_id;
     private int isAlbum;
-    private boolean LoadFromCache;
     private boolean iSSelectMode;
     private List<AudioPlaylist> Curr;
     private String accessKey;
@@ -111,7 +108,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     private void onNextListReceived(List<Audio> next) {
-        LoadFromCache = false;
         audios.addAll(next);
         endOfContent = next.isEmpty();
         setLoadingNow(false);
@@ -122,7 +118,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     private void onListReceived(List<Audio> data) {
-        LoadFromCache = false;
         audios.clear();
         audios.addAll(data);
         endOfContent = data.isEmpty();
@@ -136,7 +131,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     private void onEndlessListReceived(List<Audio> data) {
-        LoadFromCache = false;
         audios.clear();
         audios.addAll(data);
         endOfContent = true;
@@ -177,52 +171,6 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
         super.onDestroyed();
     }
 
-    private ArrayList<Audio> listFiles() {
-
-        File dir = new File(Settings.get().other().getMusicDir());
-        if (dir.listFiles() == null || dir.listFiles().length <= 0)
-            return new ArrayList<>();
-        ArrayList<File> files = new ArrayList<>();
-        int id = 0;
-        for (File file : dir.listFiles()) {
-            if (!file.isDirectory() && file.getName().contains(".mp3")) {
-                files.add(file);
-            }
-        }
-        if (files.isEmpty())
-            return new ArrayList<>();
-        Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-        ArrayList<Audio> audios = new ArrayList<>(files.size());
-        for (File file : files) {
-
-            Audio rt = new Audio().setId(++id).setUrl("file://" + file.getAbsolutePath());
-            String TrackName = file.getName().replace(".mp3", "");
-            String Artist = "";
-            String[] arr = TrackName.split(" - ");
-            if (arr.length > 1) {
-                Artist = arr[0];
-                TrackName = TrackName.replace(Artist + " - ", "");
-            }
-            rt.setArtist(Artist);
-            rt.setTitle(TrackName);
-
-            audios.add(rt);
-        }
-        return audios;
-    }
-
-    public void doLoadCache() {
-        LoadFromCache = true;
-        getView().ProvideReadCachedAudio();
-        audios.clear();
-        audios.addAll(listFiles());
-        endOfContent = true;
-        actualReceived = true;
-        setLoadingNow(false);
-        callView(IAudiosView::notifyListChanged);
-    }
-
     private void onListGetError(Throwable t) {
         setLoadingNow(false);
 
@@ -231,11 +179,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
             return;
         }
         if (isGuiResumed()) {
-            if (!LoadFromCache) {
-                showError(getView(), Utils.getCauseIfRuntime(t));
-                callView(IAudiosView::doesLoadCache);
-            } else
-                doLoadCache();
+            showError(getView(), Utils.getCauseIfRuntime(t));
         }
     }
 
@@ -249,7 +193,7 @@ public class AudiosPresenter extends AccountDependencyPresenter<IAudiosView> {
     }
 
     public int getAudioPos(Audio audio) {
-        if (audios != null && !audios.isEmpty() && audio != null) {
+        if (!Utils.isEmpty(audios) && audio != null) {
             int pos = 0;
             for (final Audio i : audios) {
                 if (i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {

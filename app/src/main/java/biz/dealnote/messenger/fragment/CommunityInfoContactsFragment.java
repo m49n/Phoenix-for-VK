@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -68,6 +70,7 @@ public class CommunityInfoContactsFragment extends BaseMvpFragment<CommunityInfo
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityInfoContactsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityInfoContactsPresenter(

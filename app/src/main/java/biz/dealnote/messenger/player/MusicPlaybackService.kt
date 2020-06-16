@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.audiofx.AudioEffect
 import android.net.Uri
-import android.os.Handler
 import android.os.IBinder
 import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
@@ -26,9 +25,7 @@ import biz.dealnote.messenger.Constants.PICASSO_TAG
 import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.Injection
 import biz.dealnote.messenger.R
-import biz.dealnote.messenger.api.HttpLogger
 import biz.dealnote.messenger.api.PicassoInstance
-import biz.dealnote.messenger.api.ProxyUtil
 import biz.dealnote.messenger.domain.IAudioInteractor
 import biz.dealnote.messenger.domain.InteractorFactory
 import biz.dealnote.messenger.media.exo.ExoEventAdapter
@@ -54,14 +51,8 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
 import java.lang.ref.WeakReference
-import java.net.URLEncoder
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class MusicPlaybackService : Service() {
     val SHUTDOWN = "biz.dealnote.phoenix.player.shutdown"
@@ -91,6 +82,7 @@ class MusicPlaybackService : Service() {
     private var mPlayList: List<Audio>? = null
     private var mNotificationHelper: NotificationHelper? = null
     private var mMediaMetadataCompat: MediaMetadataCompat? = null
+    private val serviceDisposable = CompositeDisposable()
     override fun onBind(intent: Intent): IBinder {
         if (D) Logger.d(TAG, "Service bound, intent = $intent")
         cancelShutdown()
@@ -207,6 +199,7 @@ class MusicPlaybackService : Service() {
         mAlarmManager!!.cancel(mShutdownIntent)
         mPlayer!!.release()
         mMediaSession!!.release()
+        serviceDisposable.dispose()
         mNotificationHelper!!.killNotification()
         unregisterReceiver(mIntentReceiver)
     }
@@ -477,47 +470,15 @@ class MusicPlaybackService : Service() {
         mMediaSession!!.setMetadata(mMediaMetadataCompat)
     }
 
-    @Throws(Exception::class)
     fun GetCoverURL(audio: Audio) {
-        val builder = OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(object : Interceptor {
-                    @Throws(IOException::class)
-                    override fun intercept(chain: Interceptor.Chain): Response {
-                        val request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build()
-                        return chain.proceed(request)
+        serviceDisposable.add(Injection.provideNetworkInterfaces().amazonAudioCover().getAudioCover(audio.title, audio.artist)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe({ remote ->
+                    run {
+                        CoverAudio = remote.image; audio.thumb_image_big = remote.image; audio.thumb_image_very_big = remote.image; audio.thumb_image_little = remote.image
+                        AlbumTitle = remote.album; fetchCoverAndUpdateMetadata(); notifyChange(META_CHANGED)
                     }
-                })
-        ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().activeProxy)
-        val request = Request.Builder()
-                .url("https://axzodu785h.execute-api.us-east-1.amazonaws.com/dev?track=" + URLEncoder.encode(audio.title, "UTF-8") + "&artist=" + URLEncoder.encode(audio.artist, "UTF-8")).build()
-        builder.build().newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    try {
-                        val obj = JSONObject(response.body!!.string())
-                        if (obj.has("image")) {
-                            CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image")
-                        }
-                        if (obj.has("album")) {
-                            AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album")
-                        }
-                        val uiHandler = Handler(this@MusicPlaybackService.mainLooper)
-                        uiHandler.post {
-                            fetchCoverAndUpdateMetadata()
-                            notifyChange(META_CHANGED)
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        })
+                }, {}))
     }
 
     /**

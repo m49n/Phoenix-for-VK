@@ -38,6 +38,10 @@ public class SearchFragmentFactory {
                 return AudiosSearchFragment.newInstance(accountId,
                         criteria instanceof AudioSearchCriteria ? (AudioSearchCriteria) criteria : null);
 
+            case SearchContentType.AUDIOS_SELECT:
+                return AudiosSearchFragment.newInstanceSelect(accountId,
+                        criteria instanceof AudioSearchCriteria ? (AudioSearchCriteria) criteria : null);
+
             case SearchContentType.DOCUMENTS:
                 return DocsSearchFragment.newInstance(accountId,
                         criteria instanceof DocumentSearchCriteria ? (DocumentSearchCriteria) criteria : null);

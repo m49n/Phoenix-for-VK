@@ -12,4 +12,6 @@ public interface IOtherVkRetrofitProvider {
     Single<RetrofitWrapper> provideAuthServiceRetrofit();
 
     Single<RetrofitWrapper> provideLongpollRetrofit();
+
+    Single<RetrofitWrapper> provideAmazonAudioCoverRetrofit();
 }

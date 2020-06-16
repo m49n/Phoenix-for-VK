@@ -164,9 +164,9 @@
         android:layout_alignBottom="@+id/audio_root"
         android:alpha="0.5"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:cardBackgroundColor="?colorPrimary"
         app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
-        app:contentPadding="0dp"
-        tools:visibility="gone" />
+        app:contentPadding="0dp" />
 </RelativeLayout>

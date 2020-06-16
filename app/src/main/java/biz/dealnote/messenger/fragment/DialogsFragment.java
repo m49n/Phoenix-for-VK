@@ -261,7 +261,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         }
 
         new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(dialog.getDisplayTitle(requireActivity()))
+                .setTitle(contextView.isHidden && !Settings.get().security().getShowHiddenDialogs() ? getString(R.string.dialogs) : dialog.getDisplayTitle(requireActivity()))
                 .setItems(options.toArray(new String[options.size()]), (dialogInterface, which) -> {
                     final String selected = options.get(which);
                     if (selected.equals(delete)) {
@@ -438,6 +438,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         PlaceFactory.getOwnerWallPlace(accountId, ownerId, owner).tryOpenWith(requireActivity());
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DialogsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DialogsPresenter(

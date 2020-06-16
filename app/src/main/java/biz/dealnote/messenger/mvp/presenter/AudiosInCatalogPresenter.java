@@ -105,7 +105,7 @@ public class AudiosInCatalogPresenter extends AccountDependencyPresenter<IAudios
     }
 
     public int getAudioPos(Audio audio) {
-        if (audios != null && !audios.isEmpty() && audio != null) {
+        if (!Utils.isEmpty(audios) && audio != null) {
             int pos = 0;
             for (final Audio i : audios) {
                 if (i.getId() == audio.getId() && i.getOwnerId() == audio.getOwnerId()) {

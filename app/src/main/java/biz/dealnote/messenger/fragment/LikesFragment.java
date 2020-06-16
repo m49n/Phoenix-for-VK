@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -55,6 +57,7 @@ public class LikesFragment extends AbsOwnersListFragment<LikesListPresenter, ISi
                 .apply(requireActivity());
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<LikesListPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new LikesListPresenter(

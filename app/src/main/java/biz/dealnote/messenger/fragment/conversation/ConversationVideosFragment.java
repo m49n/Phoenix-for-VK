@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class ConversationVideosFragment extends AbsChatAttachmentsFragment<Video
         adapter.setData(data);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentVideoPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

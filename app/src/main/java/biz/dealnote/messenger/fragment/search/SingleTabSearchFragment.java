@@ -66,6 +66,16 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         return fragment;
     }
 
+    public static SingleTabSearchFragment newInstance(int accountId, @SearchContentType int contentType, @Nullable BaseSearchCriteria criteria) {
+        Bundle args = new Bundle();
+        args.putInt(Extra.TYPE, contentType);
+        args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putParcelable(Extra.CRITERIA, criteria);
+        SingleTabSearchFragment fragment = new SingleTabSearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -120,6 +120,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<GroupWallPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

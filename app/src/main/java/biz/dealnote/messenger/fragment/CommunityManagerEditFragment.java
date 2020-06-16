@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
@@ -180,6 +182,7 @@ public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManag
         menu.findItem(R.id.action_delete).setVisible(mOptionDeleteVisible);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityManagerEditPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

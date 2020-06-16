@@ -20,6 +20,8 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -111,6 +113,7 @@ public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICr
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CreatePollPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CreatePollPresenter(

@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -106,6 +108,7 @@ public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, I
                 .apply(requireActivity());
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<UserDetailsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new UserDetailsPresenter(

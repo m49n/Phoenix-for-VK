@@ -1,7 +1,12 @@
 package biz.dealnote.messenger.domain.impl;
 
+import android.app.Activity;
+import android.content.Context;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.api.interfaces.INetworker;
@@ -14,6 +19,8 @@ import biz.dealnote.messenger.model.AudioCatalog;
 import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.CatalogBlock;
 import biz.dealnote.messenger.model.IdPair;
+import biz.dealnote.messenger.settings.Settings;
+import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Completable;
@@ -252,5 +259,43 @@ public class AudioInteractor implements IAudioInteractor {
                 .audio()
                 .getCatalogBlockById(block_id, start_from)
                 .map(Dto2Model::transform);
+    }
+
+    @Override
+    public Single<List<Audio>> loadLocalAudios(int accountId, Context context) {
+        if (!AppPerms.hasReadWriteStoragePermision(context)) {
+            AppPerms.requestReadWriteStoragePermission((Activity) context);
+            return Single.just(new ArrayList<>());
+        }
+        File dir = new File(Settings.get().other().getMusicDir());
+        if (dir.listFiles() == null || java.util.Objects.requireNonNull(dir.listFiles()).length <= 0)
+            return Single.just(new ArrayList<>());
+        ArrayList<File> files = new ArrayList<>();
+        for (File file : java.util.Objects.requireNonNull(dir.listFiles())) {
+            if (!file.isDirectory() && file.getName().contains(".mp3")) {
+                files.add(file);
+            }
+        }
+        if (files.isEmpty())
+            return Single.just(new ArrayList<>());
+        Collections.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+
+        ArrayList<Audio> audios = new ArrayList<>(files.size());
+        for (File file : files) {
+
+            Audio rt = new Audio().setId(file.getAbsolutePath().hashCode()).setUrl("file://" + file.getAbsolutePath()).setIsLocal(true).setOwnerId(accountId);
+            String TrackName = file.getName().replace(".mp3", "");
+            String Artist = "";
+            String[] arr = TrackName.split(" - ");
+            if (arr.length > 1) {
+                Artist = arr[0];
+                TrackName = TrackName.replace(Artist + " - ", "");
+            }
+            rt.setArtist(Artist);
+            rt.setTitle(TrackName);
+
+            audios.add(rt);
+        }
+        return Single.just(audios);
     }
 }

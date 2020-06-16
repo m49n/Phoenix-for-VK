@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -181,6 +183,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         return false;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

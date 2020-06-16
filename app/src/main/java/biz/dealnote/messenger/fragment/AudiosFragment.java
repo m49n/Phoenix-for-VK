@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +46,6 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -257,23 +255,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         if (nonNull(mSwipeRefreshLayout)) {
             mSwipeRefreshLayout.setRefreshing(refresing);
         }
-    }
-
-    @Override
-    public void ProvideReadCachedAudio() {
-        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
-        if (!AppPerms.hasReadWriteStoragePermision(getContext())) {
-            AppPerms.requestReadWriteStoragePermission(requireActivity());
-        }
-    }
-
-    @Override
-    public void doesLoadCache() {
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.choose_action)
-                .setNegativeButton(R.string.button_cancel, null)
-                .setPositiveButton(R.string.button_go, (dialog, whichButton) -> getPresenter().doLoadCache())
-                .setMessage(R.string.load_saved_audios).show();
     }
 
     @Override

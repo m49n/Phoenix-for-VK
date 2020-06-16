@@ -129,7 +129,7 @@ public class VideosTabsFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
-            VideoSearchCriteria criteria = new VideoSearchCriteria("");
+            VideoSearchCriteria criteria = new VideoSearchCriteria("", true);
             PlaceFactory.getSingleTabSearchPlace(getAccountId(), SearchContentType.VIDEOS, criteria).tryOpenWith(requireActivity());
             return true;
         }

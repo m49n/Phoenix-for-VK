@@ -176,6 +176,9 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 PicassoInstance.with().cancelRequest(holder.play_cover);
                 holder.play_cover.setImageResource(getAudioCoverSimple());
             }
+        } else {
+            PicassoInstance.with().cancelRequest(holder.play_cover);
+            holder.play_cover.setImageResource(getAudioCoverSimple());
         }
 
         holder.play.setOnClickListener(v -> {

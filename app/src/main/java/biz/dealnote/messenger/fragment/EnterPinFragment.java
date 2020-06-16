@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
@@ -60,6 +62,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<EnterPinPresenter> getPresenterFactory(@Nullable final Bundle saveInstanceState) {
         return () -> new EnterPinPresenter(this, saveInstanceState);

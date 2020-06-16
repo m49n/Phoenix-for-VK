@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
  * Created by admin on 02.05.2017.
  * phoenix
  */
-public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresenter, IDialogsSearchView, Object>
+public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresenter, IDialogsSearchView, Object, DialogPreviewAdapter>
         implements IDialogsSearchView, DialogPreviewAdapter.ActionListener {
 
     public static DialogsSearchFragment newInstance(int accountId, DialogsSearchCriteria criteria) {
@@ -31,6 +34,7 @@ public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresen
         return fragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DialogsSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -41,12 +45,17 @@ public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresen
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Object> data) {
-        ((DialogPreviewAdapter) adapter).setData(data);
+    void setAdapterData(DialogPreviewAdapter adapter, List<Object> data) {
+        adapter.setData(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Object> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    DialogPreviewAdapter createAdapter(List<Object> data) {
         return new DialogPreviewAdapter(requireActivity(), data, this);
     }
 

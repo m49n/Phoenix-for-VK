@@ -14,6 +14,8 @@ public interface INetworker {
 
     IAuthApi vkAuth();
 
+    IAudioCoverApi amazonAudioCover();
+
     ILongpollApi longpoll();
 
     IUploadApi uploads();

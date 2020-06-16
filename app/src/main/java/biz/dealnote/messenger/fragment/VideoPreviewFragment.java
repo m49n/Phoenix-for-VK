@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -195,6 +197,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<VideoPreviewPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new VideoPreviewPresenter(

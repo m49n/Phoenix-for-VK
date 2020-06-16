@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -158,6 +160,7 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<LogsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new LogsPresenter(saveInstanceState);

@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -60,6 +62,7 @@ public class CommentCreateFragment extends AbsAttachmentsEditFragment<CommentCre
         return super.onOptionsItemSelected(item);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommentCreatePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

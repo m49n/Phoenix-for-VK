@@ -37,9 +37,10 @@ import biz.dealnote.messenger.settings.Settings;
 
 public class AudiosTabsFragment extends BaseFragment {
 
+    public static final int LOCAL = -5;
     public static final int CATALOG = -4;
     public static final int PLAYLISTS = -3;
-    public static final int MY_RECOMENDATIONS = -2;
+    public static final int MY_RECOMMENDATIONS = -2;
     public static final int MY_AUDIO = -1;
     public static final int TOP_ALL = 0;
     private int accountId;
@@ -94,12 +95,14 @@ public class AudiosTabsFragment extends BaseFragment {
                 tab.setText(getString(R.string.my_saved));
             else if (fid == PLAYLISTS)
                 tab.setText(getString(R.string.playlists));
-            else if (fid == MY_RECOMENDATIONS)
+            else if (fid == MY_RECOMMENDATIONS)
                 tab.setText(getString(R.string.recommendation));
             else if (fid == TOP_ALL)
                 tab.setText(getString(R.string.top));
             else if (fid == CATALOG)
                 tab.setText(getString(R.string.audio_catalog));
+            else if (fid == LOCAL)
+                tab.setText(getString(R.string.local_audios));
             else
                 tab.setText(VKApiAudio.Genre.getTitleByGenre(requireActivity(), fid));
         }).attach();
@@ -125,7 +128,9 @@ public class AudiosTabsFragment extends BaseFragment {
             return AudioPlaylistsFragment.newInstance(getAccountId(), ownerId);
         else if (option_menu == CATALOG)
             return AudioCatalogFragment.newInstance(getAccountId(), null, true);
-        else {
+        else if (option_menu == LOCAL) {
+            return AudiosLocalFragment.newInstance(getAccountId());
+        } else {
             AudiosFragment fragment = AudiosFragment.newInstance(getAccountId(), ownerId, option_menu, 0, null);
             fragment.requireArguments().putBoolean(AudiosFragment.EXTRA_IN_TABS_CONTAINER, true);
             return fragment;
@@ -136,9 +141,11 @@ public class AudiosTabsFragment extends BaseFragment {
         adapter.addFragment(MY_AUDIO);
         adapter.addFragment(PLAYLISTS);
         if (ownerId >= 0) {
-            if (getAccountId() == ownerId)
+            if (getAccountId() == ownerId) {
+                adapter.addFragment(LOCAL);
                 adapter.addFragment(CATALOG);
-            adapter.addFragment(MY_RECOMENDATIONS);
+            }
+            adapter.addFragment(MY_RECOMMENDATIONS);
         }
         if (getAccountId() == ownerId && Settings.get().other().isEnable_show_audio_top()) {
             adapter.addFragment(TOP_ALL);

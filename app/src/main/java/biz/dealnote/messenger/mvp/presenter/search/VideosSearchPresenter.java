@@ -50,7 +50,7 @@ public class VideosSearchPresenter extends AbsSearchPresenter<IVideosSearchView,
 
     @Override
     VideoSearchCriteria instantiateEmptyCriteria() {
-        return new VideoSearchCriteria("");
+        return new VideoSearchCriteria("", false);
     }
 
     @Override

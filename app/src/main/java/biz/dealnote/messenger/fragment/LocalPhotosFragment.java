@@ -21,6 +21,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -172,6 +174,7 @@ public class LocalPhotosFragment extends BaseMvpFragment<LocalPhotosPresenter, I
         if (isAdded()) showError(getString(titleRes, params));
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<LocalPhotosPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

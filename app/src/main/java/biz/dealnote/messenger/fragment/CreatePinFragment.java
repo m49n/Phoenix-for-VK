@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
@@ -107,6 +109,7 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
         requireActivity().finish();
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CreatePinPresenter> getPresenterFactory(@Nullable final Bundle saveInstanceState) {
         return () -> new CreatePinPresenter(saveInstanceState);

@@ -73,8 +73,35 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="time" />
 
+            <LinearLayout
+                android:id="@+id/item_message_attachment_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <biz.dealnote.messenger.view.BubbleLinearLayout
+                    android:id="@+id/item_message_bubble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="end"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="6dp"
+                    app:arrowHeight="0dp"
+                    app:arrowWidth="0dp"
+                    app:bubbleColor="?attr/message_bubble_color">
+
+                    <include
+                        layout="@layout/attachment_links"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </biz.dealnote.messenger.view.BubbleLinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
-
-
     </RelativeLayout>
 </LinearLayout>

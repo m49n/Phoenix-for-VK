@@ -35,13 +35,8 @@ public class AudioSearchCriteria extends BaseSearchCriteria {
         sort.available.add(new SpinnerOption.Entry(2, R.string.by_duration));
         appendOption(sort);
 
-        SimpleBooleanOption byArtist = new SimpleBooleanOption(KEY_SEARCH_BY_ARTIST, R.string.by_artist, true);
-        byArtist.checked = by_artist;
-
-        SimpleBooleanOption byMain = new SimpleBooleanOption(KEY_SEARCH_ADDED, R.string.my_saved, true);
-        byMain.checked = in_main_page;
-        appendOption(byMain);
-        appendOption(byArtist);
+        appendOption(new SimpleBooleanOption(KEY_SEARCH_ADDED, R.string.my_saved, true, in_main_page));
+        appendOption(new SimpleBooleanOption(KEY_SEARCH_BY_ARTIST, R.string.by_artist, true, by_artist));
         appendOption(new SimpleBooleanOption(KEY_SEARCH_AUTOCOMPLETE, R.string.auto_compete, true));
         appendOption(new SimpleBooleanOption(KEY_SEARCH_WITH_LYRICS, R.string.with_lyrics, true));
     }

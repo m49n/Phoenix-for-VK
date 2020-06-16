@@ -56,17 +56,6 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         this.actionHandler.setAction((what, object) -> object.doSearch());
     }
 
-    void LocalSeached(List<T> data, C criteria, N nextFrom) {
-        setLoadingNow(false);
-        this.nextFrom = nextFrom;
-        this.resultsForCriteria = criteria;
-        this.endOfContent = true;
-        this.data.clear();
-        this.data.addAll(data);
-        callView(IBaseSearchView::notifyDataSetChanged);
-        resolveEmptyText();
-    }
-
     @Override
     public void onGuiCreated(@NonNull V view) {
         super.onGuiCreated(view);

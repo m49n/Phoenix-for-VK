@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.domain;
 
+import android.content.Context;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -51,4 +53,6 @@ public interface IAudioInteractor {
     Single<List<AudioCatalog>> getCatalog(int accountId, String artist_id);
 
     Single<CatalogBlock> getCatalogBlockById(int accountId, String block_id, String start_from);
+
+    Single<List<Audio>> loadLocalAudios(int accountId, Context context);
 }

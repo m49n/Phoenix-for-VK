@@ -167,6 +167,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunitiesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunitiesPresenter(

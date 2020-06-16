@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Extra;
@@ -106,6 +108,7 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityOptionsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

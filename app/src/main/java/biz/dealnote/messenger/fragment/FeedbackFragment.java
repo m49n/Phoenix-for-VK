@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -182,6 +184,7 @@ public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter,
         FeedbackLinkDialog.newInstance(accountId, notification).show(getParentFragmentManager(), "feedback_links");
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<FeedbackPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FeedbackPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
