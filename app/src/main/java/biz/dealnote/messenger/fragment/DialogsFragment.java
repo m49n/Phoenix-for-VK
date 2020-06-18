@@ -57,6 +57,7 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
+import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
@@ -116,25 +117,20 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             startActivityForResult(new Intent(requireActivity(), EnterPinActivity.class), REQUEST_SHOW_CHAT_FOR_SECURITY);
         } else {
             Settings.get().security().setShowHiddenDialogs(true);
-            ReconfigureOptionsToolbar();
+            ReconfigureOptionsHide();
             notifyDataSetChanged();
         }
     }
 
-    private void ReconfigureOptionsToolbar() {
-        if (!nonNull(toolbar))
-            return;
-
+    private void ReconfigureOptionsHide() {
         boolean isShowHidden = Settings.get().security().getShowHiddenDialogs();
         if (Settings.get().security().getSetSize("hidden_dialogs") <= 0) {
-            toolbar.getMenu().findItem(R.id.action_set_no_hide_dialog).setVisible(false);
-            toolbar.getMenu().findItem(R.id.action_hide_dialog).setVisible(false);
+            mFab.setImageResource(R.drawable.pencil);
             Settings.get().security().setShowHiddenDialogs(false);
             return;
         }
 
-        toolbar.getMenu().findItem(R.id.action_set_no_hide_dialog).setVisible(!isShowHidden);
-        toolbar.getMenu().findItem(R.id.action_hide_dialog).setVisible(isShowHidden);
+        mFab.setImageResource(isShowHidden ? R.drawable.offline : R.drawable.pencil);
     }
 
     @Override
@@ -147,16 +143,20 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         OptionView optionView = new OptionView();
         getPresenter().fireOptionViewCreated(optionView);
         toolbar.getMenu().findItem(R.id.action_search).setVisible(optionView.canSearch);
-        ReconfigureOptionsToolbar();
 
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_search) {
-                getPresenter().fireSearchClick();
-            } else if (item.getItemId() == R.id.action_hide_dialog) {
+        mFab = root.findViewById(R.id.fab);
+        ReconfigureOptionsHide();
+        mFab.setOnClickListener(v -> {
+            if (Settings.get().security().getShowHiddenDialogs()) {
                 Settings.get().security().setShowHiddenDialogs(false);
-                ReconfigureOptionsToolbar();
+                ReconfigureOptionsHide();
                 notifyDataSetChanged();
-            } else if (item.getItemId() == R.id.action_set_no_hide_dialog) {
+            } else
+                createGroupChat();
+        });
+
+        mFab.setOnLongClickListener(v -> {
+            if (!Settings.get().security().getShowHiddenDialogs() && Settings.get().security().getSetSize("hidden_dialogs") > 0) {
                 onSecurityClick();
             }
             return true;
@@ -177,9 +177,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
 
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
-
-        mFab = root.findViewById(R.id.fab);
-        mFab.setOnClickListener(v -> createGroupChat());
 
         mAdapter = new DialogsAdapter(requireActivity(), Collections.emptyList());
         mAdapter.setClickListener(this);
@@ -211,7 +208,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             getPresenter().fireUsersForChatSelected(users);
         } else if (requestCode == REQUEST_SHOW_CHAT_FOR_SECURITY && resultCode == Activity.RESULT_OK) {
             Settings.get().security().setShowHiddenDialogs(true);
-            ReconfigureOptionsToolbar();
+            ReconfigureOptionsHide();
             notifyDataSetChanged();
         }
     }
@@ -273,12 +270,17 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                     } else if (selected.equals(addToShortcuts)) {
                         getPresenter().fireAddToLauncherShortcuts(dialog);
                     } else if (selected.equals(setHide)) {
-                        Settings.get().security().AddValueToSet(dialog.getId(), "hidden_dialogs");
-                        ReconfigureOptionsToolbar();
-                        notifyDataSetChanged();
+                        if (!Settings.get().security().isUsePinForSecurity()) {
+                            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.not_supported_hide);
+                            PlaceFactory.getSecuritySettingsPlace().tryOpenWith(requireActivity());
+                        } else {
+                            Settings.get().security().AddValueToSet(dialog.getId(), "hidden_dialogs");
+                            ReconfigureOptionsHide();
+                            notifyDataSetChanged();
+                        }
                     } else if (selected.equals(setShow)) {
                         Settings.get().security().RemoveValueFromSet(dialog.getId(), "hidden_dialogs");
-                        ReconfigureOptionsToolbar();
+                        ReconfigureOptionsHide();
                         notifyDataSetChanged();
                     }
                 })

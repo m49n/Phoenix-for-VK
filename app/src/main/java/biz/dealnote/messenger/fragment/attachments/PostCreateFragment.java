@@ -78,9 +78,12 @@ public class PostCreateFragment extends AbsPostEditFragment<PostCreatePresenter,
             WallEditorAttrs attrs = requireArguments().getParcelable(Extra.ATTRS);
             AssertUtils.requireNonNull(attrs);
 
+            String links = requireArguments().getString(Extra.BODY);
+
             ArrayList<Uri> streams = requireArguments().getParcelableArrayList(EXTRA_STREAMS);
             requireArguments().remove(EXTRA_STREAMS); // only first start
-            return new PostCreatePresenter(accountId, ownerId, type, bundle, attrs, streams, saveInstanceState);
+            requireArguments().remove(Extra.BODY);
+            return new PostCreatePresenter(accountId, ownerId, type, bundle, attrs, streams, links, saveInstanceState);
         };
     }
 

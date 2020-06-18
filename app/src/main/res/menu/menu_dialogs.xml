@@ -3,20 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_hide_dialog"
-        android:icon="@drawable/offline"
-        android:title="@string/hide_dialog"
-        app:iconTint="?colorOnSurface"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_set_no_hide_dialog"
-        android:icon="@drawable/view"
-        android:title="@string/set_no_hide_dialog"
-        app:iconTint="?colorOnSurface"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_search"
         android:icon="@drawable/magnify"
         android:title="@string/search"

@@ -470,7 +470,7 @@ class MusicPlaybackService : Service() {
         mMediaSession!!.setMetadata(mMediaMetadataCompat)
     }
 
-    fun GetCoverURL(audio: Audio) {
+    private fun GetCoverURL(audio: Audio) {
         serviceDisposable.add(Injection.provideNetworkInterfaces().amazonAudioCover().getAudioCover(audio.title, audio.artist)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe({ remote ->
@@ -503,7 +503,7 @@ class MusicPlaybackService : Service() {
                 OnceCloseMiniPlayer = false
             }
             mPlayer!!.setDataSource(audio.ownerId, audio.id, audio.url)
-            if (UpdateMeta && Settings.get().accounts().getType(Settings.get().accounts().current) == "kate") {
+            if (UpdateMeta && (Settings.get().accounts().getType(Settings.get().accounts().current) == "kate" || audio.isLocal)) {
                 try {
                     GetCoverURL(audio)
                 } catch (e: Exception) {

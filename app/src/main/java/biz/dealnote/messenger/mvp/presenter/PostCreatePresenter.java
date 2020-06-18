@@ -54,6 +54,7 @@ import static biz.dealnote.messenger.util.RxUtils.subscribeOnIOAndIgnore;
 import static biz.dealnote.messenger.util.Utils.copyToArrayListWithPredicate;
 import static biz.dealnote.messenger.util.Utils.findInfoByPredicate;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
 /**
@@ -75,9 +76,10 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
     private boolean postPublished;
     private Optional<ArrayList<Uri>> upload;
     private boolean publishingNow;
+    private String links;
 
     public PostCreatePresenter(int accountId, int ownerId, @EditingPostType int editingType,
-                               ModelsBundle bundle, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable Bundle savedInstanceState) {
+                               ModelsBundle bundle, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable String links, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.upload = Optional.wrap(streams);
         this.attachmentsRepository = Injection.provideAttachmentsRepository();
@@ -86,6 +88,9 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         this.attrs = attrs;
         this.ownerId = ownerId;
         this.editingType = editingType;
+
+        if (!isEmpty(links))
+            this.links = links;
 
         if (isNull(savedInstanceState) && nonNull(bundle)) {
             for (AbsModel i : bundle) {
@@ -281,6 +286,11 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         setTimerValue(postpone ? post.getDate() : null);
 
         setTextBody(post.getText());
+
+        if (!isEmpty(links)) {
+            setTextBody(links);
+            links = null;
+        }
 
         restoreEditingAttachmentsAsync(post.getDbid());
     }

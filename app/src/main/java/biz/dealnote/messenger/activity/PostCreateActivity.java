@@ -23,11 +23,12 @@ import biz.dealnote.messenger.util.Objects;
  */
 public class PostCreateActivity extends NoMainActivity {
 
-    public static Intent newIntent(@NonNull Context context, int accountId, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams) {
+    public static Intent newIntent(@NonNull Context context, int accountId, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable String links) {
         return new Intent(context, PostCreateActivity.class)
                 .putExtra(Extra.ACCOUNT_ID, accountId)
                 .putParcelableArrayListExtra("streams", streams)
-                .putExtra("attrs", attrs);
+                .putExtra("attrs", attrs)
+                .putExtra("links", links);
     }
 
     @Override
@@ -40,8 +41,9 @@ public class PostCreateActivity extends NoMainActivity {
             int accountId = getIntent().getExtras().getInt(Extra.ACCOUNT_ID);
             ArrayList<Uri> streams = getIntent().getParcelableArrayListExtra("streams");
             WallEditorAttrs attrs = getIntent().getParcelableExtra("attrs");
+            String links = getIntent().getStringExtra("links");
 
-            Bundle args = PostCreateFragment.buildArgs(accountId, attrs.getOwner().getOwnerId(), EditingPostType.TEMP, null, attrs, streams, null);
+            Bundle args = PostCreateFragment.buildArgs(accountId, attrs.getOwner().getOwnerId(), EditingPostType.TEMP, null, attrs, streams, links);
 
             PostCreateFragment fragment = PostCreateFragment.newInstance(args);
             getSupportFragmentManager()

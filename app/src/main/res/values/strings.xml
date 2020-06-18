@@ -1350,4 +1350,5 @@
     <string name="set_no_hide_dialog">Снять ограничения</string>
     <string name="local_audios">Скаченные</string>
     <string name="not_supported">Не поддерживается"</string>
+    <string name="not_supported_hide">Установите пин-код в настройках!!!"</string>
 </resources>
