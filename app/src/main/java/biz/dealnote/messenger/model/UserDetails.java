@@ -7,10 +7,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.model.database.Country;
 
-/**
- * Created by ruslan.kolbasa on 25.11.2016.
- * phoenix
- */
 public final class UserDetails implements Parcelable {
 
     public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {

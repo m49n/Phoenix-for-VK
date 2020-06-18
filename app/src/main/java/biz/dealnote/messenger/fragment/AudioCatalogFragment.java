@@ -223,6 +223,8 @@ public class AudioCatalogFragment extends BaseMvpFragment<AudioCatalogPresenter,
             PlaceFactory.getPlaylistsInCatalogBlock(getPresenter().getAccountId(), value.getId(), value.getTitle()).tryOpenWith(requireActivity());
         } else if (!Utils.isEmpty(value.getVideos())) {
             PlaceFactory.getVideosInCatalogBlock(getPresenter().getAccountId(), value.getId(), value.getTitle()).tryOpenWith(requireActivity());
+        } else if (!Utils.isEmpty(value.getLinks())) {
+            PlaceFactory.getLinksInCatalogBlock(getPresenter().getAccountId(), value.getId(), value.getTitle()).tryOpenWith(requireActivity());
         }
     }
 

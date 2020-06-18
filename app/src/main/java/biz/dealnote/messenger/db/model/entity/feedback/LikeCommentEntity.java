@@ -4,10 +4,6 @@ import biz.dealnote.messenger.db.model.entity.CommentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.EntityWrapper;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public class LikeCommentEntity extends FeedbackEntity {
 
     private int[] likesOwnerIds;

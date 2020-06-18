@@ -143,6 +143,12 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         OptionView optionView = new OptionView();
         getPresenter().fireOptionViewCreated(optionView);
         toolbar.getMenu().findItem(R.id.action_search).setVisible(optionView.canSearch);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_search) {
+                getPresenter().fireSearchClick();
+            }
+            return true;
+        });
 
         mFab = root.findViewById(R.id.fab);
         ReconfigureOptionsHide();

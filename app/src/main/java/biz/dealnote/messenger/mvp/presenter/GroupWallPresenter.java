@@ -33,10 +33,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 23.01.2017.
- * phoenix
- */
 public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
 
     private final ISettings.IAccountsSettings settings;

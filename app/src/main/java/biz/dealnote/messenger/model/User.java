@@ -7,10 +7,6 @@ import biz.dealnote.messenger.api.model.Identificable;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
-/**
- * Created by ruslan.kolbasa on 25.11.2016.
- * phoenix
- */
 public class User extends Owner implements Parcelable, Identificable {
 
     public static final Creator<User> CREATOR = new Creator<User>() {

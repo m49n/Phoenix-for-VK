@@ -10,10 +10,6 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class BooleanAdapter implements JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
 
     @Override

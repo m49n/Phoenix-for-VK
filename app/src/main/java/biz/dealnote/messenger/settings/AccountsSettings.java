@@ -25,10 +25,6 @@ import io.reactivex.processors.PublishProcessor;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 02.12.2016.
- * phoenix
- */
 class AccountsSettings implements ISettings.IAccountsSettings {
 
     private static final String KEY_ACCOUNT_UIDS = "account_uids";

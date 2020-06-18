@@ -11,10 +11,6 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 20.10.2016.
- * phoenix
- */
 public interface IKeysStorage extends IStorage {
     @CheckResult
     Completable saveKeyPair(@NonNull AesKeyPair pair);

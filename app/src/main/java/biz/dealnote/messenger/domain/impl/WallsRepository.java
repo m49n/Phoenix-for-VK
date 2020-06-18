@@ -43,10 +43,6 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 20.03.2017.
- * phoenix
- */
 public class WallsRepository implements IWallsRepository {
 
     private final INetworker networker;

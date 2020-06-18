@@ -8,10 +8,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.crypt.KeyLocationPolicy;
 
-/**
- * Created by ruslan.kolbasa on 06.10.2016.
- * phoenix
- */
 public class SaveMessageBuilder {
 
     private int accountId;

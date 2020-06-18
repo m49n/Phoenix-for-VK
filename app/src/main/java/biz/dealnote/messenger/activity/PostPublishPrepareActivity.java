@@ -32,11 +32,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
-/**
- * Created by admin on 3/27/2018.
- * Phoenix-for-VK
- * Запускается при публикации изображений/текста из других приложений
- */
 public class PostPublishPrepareActivity extends AppCompatActivity implements RecyclerMenuAdapter.ActionListener {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();

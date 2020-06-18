@@ -10,11 +10,6 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.ParcelableModelWrapper;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- * base class for types [copy_post, copy_photo, copy_video]
- */
 public final class CopyFeedback extends Feedback implements Parcelable {
 
     public static final Creator<CopyFeedback> CREATOR = new Creator<CopyFeedback>() {

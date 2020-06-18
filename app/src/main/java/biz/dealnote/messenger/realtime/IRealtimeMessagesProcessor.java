@@ -6,10 +6,6 @@ import biz.dealnote.messenger.api.model.longpoll.AddMessageUpdate;
 import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Observable;
 
-/**
- * Created by admin on 11.04.2017.
- * phoenix
- */
 public interface IRealtimeMessagesProcessor {
 
     Observable<TmpResult> observeResults();

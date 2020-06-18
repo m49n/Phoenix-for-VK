@@ -21,10 +21,6 @@ import biz.dealnote.messenger.mvp.view.search.IMessagesSearchView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 28.06.2016.
- * phoenix
- */
 public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPresenter, IMessagesSearchView, Message, MessagesAdapter>
         implements MessagesAdapter.OnMessageActionListener, IMessagesSearchView {
 

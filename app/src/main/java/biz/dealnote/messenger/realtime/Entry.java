@@ -5,10 +5,6 @@ import biz.dealnote.messenger.longpoll.FullAndNonFullUpdates;
 
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 11.04.2017.
- * phoenix
- */
 public final class Entry {
 
     private final int id;

@@ -17,10 +17,6 @@ import biz.dealnote.messenger.api.services.IAudioCoverService;
 import biz.dealnote.messenger.api.services.IAuthService;
 import biz.dealnote.messenger.settings.IProxySettings;
 
-/**
- * Created by ruslan.kolbasa on 30.12.2016.
- * phoenix
- */
 public class Networker implements INetworker {
 
     private final IOtherVkRetrofitProvider otherVkRetrofitProvider;

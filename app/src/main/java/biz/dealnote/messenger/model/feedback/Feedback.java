@@ -7,10 +7,6 @@ import androidx.annotation.CallSuper;
 
 import biz.dealnote.messenger.model.Comment;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public abstract class Feedback implements Parcelable {
 
     @FeedbackType

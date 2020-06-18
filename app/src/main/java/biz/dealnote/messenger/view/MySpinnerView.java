@@ -14,10 +14,6 @@ import androidx.annotation.ColorInt;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 14.06.2017.
- * phoenix
- */
 public class MySpinnerView extends RelativeLayout {
 
     private String mHintText;

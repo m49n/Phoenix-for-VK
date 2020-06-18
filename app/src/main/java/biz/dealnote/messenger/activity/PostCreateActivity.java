@@ -17,10 +17,6 @@ import biz.dealnote.messenger.model.WallEditorAttrs;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by admin on 3/26/2018.
- * Phoenix-for-VK
- */
 public class PostCreateActivity extends NoMainActivity {
 
     public static Intent newIntent(@NonNull Context context, int accountId, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable String links) {

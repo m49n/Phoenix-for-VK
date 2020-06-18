@@ -63,10 +63,6 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.intValueNotIn;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupportPresenter<V> {
 
     private static final int COUNT = 20;

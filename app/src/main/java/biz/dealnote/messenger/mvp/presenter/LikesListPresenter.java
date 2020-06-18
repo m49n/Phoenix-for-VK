@@ -14,10 +14,6 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 03.10.2017.
- * phoenix
- */
 public class LikesListPresenter extends SimpleOwnersPresenter<ISimpleOwnersView> {
 
     private final String type;

@@ -2,10 +2,6 @@ package biz.dealnote.messenger.util;
 
 import android.os.Handler;
 
-/**
- * Created by ruslan.kolbasa on 04.10.2016.
- * phoenix
- */
 public class Lookup {
 
     private static final int LOOKUP = 1540;

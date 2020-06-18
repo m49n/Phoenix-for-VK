@@ -17,10 +17,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
 public abstract class NoMainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;

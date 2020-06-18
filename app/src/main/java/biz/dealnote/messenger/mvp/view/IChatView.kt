@@ -6,10 +6,6 @@ import biz.dealnote.messenger.crypt.KeyLocationPolicy
 import biz.dealnote.messenger.model.*
 import biz.dealnote.messenger.upload.UploadDestination
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 interface IChatView : IBasicMessageListView, IErrorView {
 
     fun setupLoadUpHeaderState(@LoadMoreState state: Int)

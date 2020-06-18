@@ -15,10 +15,6 @@ import biz.dealnote.messenger.util.Optional;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 03-Jun-16.
- * phoenix
- */
 public interface IWallStorage extends IStorage {
 
     @CheckResult

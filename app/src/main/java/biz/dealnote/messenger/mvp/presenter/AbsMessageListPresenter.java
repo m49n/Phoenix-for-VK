@@ -32,10 +32,6 @@ import static biz.dealnote.messenger.util.Utils.countOfSelection;
 import static biz.dealnote.messenger.util.Utils.getSelected;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by ruslan.kolbasa on 03.10.2016.
- * phoenix
- */
 public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> extends
         PlaceSupportPresenter<V> implements IVoicePlayer.IPlayerStatusListener {
 

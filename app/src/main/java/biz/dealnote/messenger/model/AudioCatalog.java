@@ -28,6 +28,7 @@ public class AudioCatalog extends AbsModel implements Parcelable {
     private List<Audio> audios;
     private List<AudioPlaylist> playlists;
     private List<Video> videos;
+    private List<Link> links;
     private ArtistBlock artist;
 
     public AudioCatalog() {
@@ -46,6 +47,7 @@ public class AudioCatalog extends AbsModel implements Parcelable {
         audios = in.createTypedArrayList(Audio.CREATOR);
         playlists = in.createTypedArrayList(AudioPlaylist.CREATOR);
         videos = in.createTypedArrayList(Video.CREATOR);
+        links = in.createTypedArrayList(Link.CREATOR);
         artist = in.readParcelable(ArtistBlock.class.getClassLoader());
     }
 
@@ -62,6 +64,7 @@ public class AudioCatalog extends AbsModel implements Parcelable {
         dest.writeTypedList(audios);
         dest.writeTypedList(playlists);
         dest.writeTypedList(videos);
+        dest.writeTypedList(links);
         dest.writeParcelable(artist, flags);
     }
 
@@ -152,6 +155,15 @@ public class AudioCatalog extends AbsModel implements Parcelable {
 
     public AudioCatalog setVideos(List<Video> videos) {
         this.videos = videos;
+        return this;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public AudioCatalog setLinks(List<Link> links) {
+        this.links = links;
         return this;
     }
 

@@ -3,10 +3,6 @@ package biz.dealnote.messenger.push;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by ruslan.kolbasa on 10.01.2017.
- * phoenix
- */
 public class VkPlace {
 
     //+ wall_comment26632922_4630

@@ -307,6 +307,22 @@ public class Attachments implements Parcelable, Cloneable {
         );
     }
 
+    public int size_no_stickers() {
+        return Utils.safeCountOfMultiple(
+                audios,
+                photos,
+                docs,
+                videos,
+                posts,
+                links,
+                articles,
+                polls,
+                pages,
+                voiceMessages,
+                gifts
+        );
+    }
+
     public boolean isEmpty() {
         return size() == 0;
     }

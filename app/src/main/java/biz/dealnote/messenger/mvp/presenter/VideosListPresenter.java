@@ -37,10 +37,6 @@ import static biz.dealnote.messenger.Injection.provideMainThreadScheduler;
 import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
 public class VideosListPresenter extends AccountDependencyPresenter<IVideosListView> {
 
     private static final int COUNT = 50;

@@ -28,10 +28,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
 public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommunityBanEditView> {
 
     private static final String TAG = CommunityBanEditPresenter.class.getSimpleName();

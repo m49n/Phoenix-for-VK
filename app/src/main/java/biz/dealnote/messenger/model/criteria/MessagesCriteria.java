@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.model.criteria;
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 public class MessagesCriteria extends Criteria {
 
     private final int accountId;

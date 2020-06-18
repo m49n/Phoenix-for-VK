@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import biz.dealnote.messenger.api.model.Identificable;
 
-/**
- * Created by ruslan.kolbasa on 29.11.2016.
- * phoenix
- */
 public class PhotoAlbum extends AbsModel implements Parcelable, Identificable, ISomeones {
 
     public static final Creator<PhotoAlbum> CREATOR = new Creator<PhotoAlbum>() {

@@ -50,10 +50,6 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
     private final List<PostFilter> filters;

@@ -14,6 +14,7 @@ import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCatalogLink;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
@@ -95,10 +96,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 13-Jun-16.
- * phoenix
- */
 public class Dto2Model {
 
     public static FriendList transform(VkApiFriendList dto) {
@@ -166,6 +163,10 @@ public class Dto2Model {
     }
 
     public static List<AudioPlaylist> transformAudioPlaylists(List<VKApiAudioPlaylist> dto) {
+        return mapAll(dto, Dto2Model::transform);
+    }
+
+    public static List<Link> transformCatalogLinks(List<VKApiCatalogLink> dto) {
         return mapAll(dto, Dto2Model::transform);
     }
 
@@ -705,6 +706,7 @@ public class Dto2Model {
                 .setAudios(transformAudios(dto.audios))
                 .setPlaylists(transformAudioPlaylists(dto.playlists))
                 .setVideos(transformVideos(dto.videos))
+                .setLinks(transformCatalogLinks(dto.items))
                 .setNext_from(dto.nextFrom);
     }
 
@@ -720,6 +722,7 @@ public class Dto2Model {
                 .setAudios(transformAudios(dto.audios))
                 .setPlaylists(transformAudioPlaylists(dto.playlists))
                 .setVideos(transformVideos(dto.videos))
+                .setLinks(transformCatalogLinks(dto.items))
                 .setArtist(dto.artist != null ? transform(dto.artist) : null);
     }
 
@@ -731,6 +734,15 @@ public class Dto2Model {
                 .setDescription(link.description)
                 .setPreviewPhoto(link.preview_photo)
                 .setPhoto(Objects.isNull(link.photo) ? null : transform(link.photo));
+    }
+
+    public static Link transform(@NonNull VKApiCatalogLink link) {
+        return new Link()
+                .setUrl(link.url)
+                .setTitle(link.title)
+                .setDescription(link.subtitle)
+                .setPreviewPhoto(link.preview_photo)
+                .setPhoto(null);
     }
 
     public static Article transform(@NonNull VKApiArticle article) {

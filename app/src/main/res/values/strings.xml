@@ -209,6 +209,16 @@
         <item>0</item>
     </string-array>
 
+    <string-array name="crypt_version_names">
+        <item>1 (RSA-128, AES-256)</item>
+        <item>2 (RSA-512, AES-2048) Dev</item>
+    </string-array>
+
+    <string-array name="crypt_version_list" translatable="false">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="high_notif_priority_title">Высокий приоритет уведомлений</string>
     <string name="high_notif_priority_summary">Уведомления из приложения будут располагаться выше по отношению к другим уведомлениям. Для Android версии 5.0 и выше данная опция также включает всплывающие уведомления</string>
     <string name="night_mode_title">Ночной режим</string>
@@ -1350,5 +1360,7 @@
     <string name="set_no_hide_dialog">Снять ограничения</string>
     <string name="local_audios">Скаченные</string>
     <string name="not_supported">Не поддерживается"</string>
+    <string name="crypt_version">Версия шифрования"</string>
     <string name="not_supported_hide">Установите пин-код в настройках!!!"</string>
+    <string name="disable_encryption">Отключить шифрование"</string>
 </resources>

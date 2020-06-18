@@ -25,10 +25,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.MySearchView;
 
-/**
- * Created by admin on 01.05.2017.
- * phoenix
- */
 public class SingleTabSearchFragment extends Fragment implements MySearchView.OnQueryTextListener, MySearchView.OnAdditionalButtonClickListener {
 
     @SearchContentType

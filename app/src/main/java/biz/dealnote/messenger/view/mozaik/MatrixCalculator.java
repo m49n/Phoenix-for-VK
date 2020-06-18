@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.view.mozaik;
 
-/**
- * Created by admin on 16.01.2017.
- * JavaRushHomeWork
- */
 public class MatrixCalculator {
 
     private final Libra libra;

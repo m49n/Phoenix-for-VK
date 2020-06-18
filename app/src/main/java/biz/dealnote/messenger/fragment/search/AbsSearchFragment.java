@@ -29,10 +29,6 @@ import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>, V extends IBaseSearchView<T>, T, A extends RecyclerView.Adapter>
         extends PlaceSupportMvpFragment<P, V> implements IBaseSearchView<T> {
 

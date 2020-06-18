@@ -97,6 +97,7 @@ import biz.dealnote.messenger.fragment.FeedbackFragment;
 import biz.dealnote.messenger.fragment.FwdsFragment;
 import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
+import biz.dealnote.messenger.fragment.LinksInCatalogFragment;
 import biz.dealnote.messenger.fragment.LogsFragement;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
@@ -1445,6 +1446,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.CATALOG_BLOCK_VIDEOS:
                 attachToFront(VideosInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_LINKS:
+                attachToFront(LinksInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
                 break;
 
             case Place.USER_DETAILS:

@@ -33,10 +33,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by ruslan.kolbasa on 29.11.2016.
- * phoenix
- */
 public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbumsView> {
 
     private final IPhotosInteractor photosInteractor;

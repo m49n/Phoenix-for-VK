@@ -14,10 +14,6 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class PhotoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiPhotoAlbum> {
 
     @Override

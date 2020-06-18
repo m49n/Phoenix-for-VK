@@ -57,10 +57,6 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 20.01.2017.
- * phoenix
- */
 public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
 
     private static final String TAG = PostCreatePresenter.class.getSimpleName();

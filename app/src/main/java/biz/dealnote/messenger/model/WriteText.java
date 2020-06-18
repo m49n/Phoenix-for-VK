@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by ruslan.kolbasa on 22.11.2016.
- * phoenix
- */
 public class WriteText {
 
     private final int accountId;

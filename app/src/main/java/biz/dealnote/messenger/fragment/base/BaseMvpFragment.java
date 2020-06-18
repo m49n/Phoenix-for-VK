@@ -26,10 +26,6 @@ import biz.dealnote.mvp.core.IMvpView;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpView>
         extends AbsMvpFragment<P, V> implements IMvpView, IAccountDependencyView, IProgressView, IErrorView, IToastView, IToolbarView {
 

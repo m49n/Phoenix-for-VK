@@ -16,10 +16,6 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 28.11.2016.
- * phoenix
- */
 public interface ICommentsStorage extends IStorage {
 
     Single<int[]> insert(int accountId, int sourceId, int sourceOwnerId, int sourceType, List<CommentEntity> dbos, OwnerEntities owners, boolean clearBefore);

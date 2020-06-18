@@ -42,10 +42,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, ICommunitiesView>
         implements ICommunitiesView, MySearchView.OnQueryTextListener, CommunitiesAdapter.ActionListener, BackPressCallback, MySearchView.OnBackButtonClickListener {
 

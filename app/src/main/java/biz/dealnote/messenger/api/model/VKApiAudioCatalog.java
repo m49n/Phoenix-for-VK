@@ -37,6 +37,9 @@ public class VKApiAudioCatalog {
     @SerializedName("videos")
     public List<VKApiVideo> videos;
 
+    @SerializedName("items")
+    public List<VKApiCatalogLink> items;
+
     @SerializedName("artist")
     public VKApiArtistBlock artist;
 

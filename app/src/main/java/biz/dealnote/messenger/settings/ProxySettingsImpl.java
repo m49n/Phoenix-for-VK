@@ -18,10 +18,6 @@ import io.reactivex.subjects.PublishSubject;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
 public class ProxySettingsImpl implements IProxySettings {
 
     private static final String PREF_NAME = "proxy_settings";

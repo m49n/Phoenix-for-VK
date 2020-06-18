@@ -19,10 +19,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-/**
- * Created by ruslan.kolbasa on 26.12.2016.
- * phoenix
- */
 public interface IPhotosService {
 
     //https://vk.com/dev/photos.deleteAlbum

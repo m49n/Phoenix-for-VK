@@ -38,10 +38,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.intValueIn;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class VkApies implements IAccountApis {
 
     @SuppressLint("UseSparseArrays")

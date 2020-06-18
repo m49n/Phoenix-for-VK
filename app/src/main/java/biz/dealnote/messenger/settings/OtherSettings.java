@@ -12,10 +12,6 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 02.12.2016.
- * phoenix
- */
 class OtherSettings implements ISettings.IOtherSettings {
 
     private static final String KEY_JSON_STATE = "json_list_state";
@@ -275,5 +271,10 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isClick_next_track() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("click_next_track", true);
+    }
+
+    @Override
+    public boolean isDisabled_encryption() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_encryption", false);
     }
 }

@@ -20,10 +20,6 @@ import biz.dealnote.messenger.view.CircleRoadProgress;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 15.05.2017.
- * phoenix
- */
 public class DocsUploadAdapter extends RecyclerView.Adapter<DocsUploadAdapter.Holder> {
 
     private static final int ERROR_COLOR = Color.parseColor("#ff0000");

@@ -23,10 +23,6 @@ import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 13.08.2017.
- * phoenix
- */
 public class ExoGifPlayer implements IGifPlayer {
 
     private final String url;

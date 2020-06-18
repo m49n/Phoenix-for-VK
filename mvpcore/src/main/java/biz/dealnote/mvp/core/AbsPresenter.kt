@@ -7,10 +7,6 @@ import java.lang.ref.WeakReference
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * Created by admin on 11.07.2016.
- * mvpcore
- */
 abstract class AbsPresenter<V : IMvpView>(savedInstanceState: Bundle?) : IPresenter<V> {
 
     /**

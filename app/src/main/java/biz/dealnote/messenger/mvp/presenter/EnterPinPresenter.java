@@ -27,10 +27,6 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
 
     private static final String SAVE_VALUE = "save_value";

@@ -14,10 +14,6 @@ import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public interface IWallView extends IAttachmentsPlacesView,
         IAccountDependencyView, IMvpView, ISnackbarView, IErrorView, IToastView {
 

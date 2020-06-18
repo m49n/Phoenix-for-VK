@@ -5,10 +5,6 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
 @IntDef({SessionState.INITIATOR_EMPTY, SessionState.NO_INITIATOR_EMPTY, SessionState.INITIATOR_STATE_1, SessionState.NO_INITIATOR_STATE_1, SessionState.INITIATOR_STATE_2,
         SessionState.INITIATOR_FINISHED, SessionState.NO_INITIATOR_FINISHED, SessionState.FAILED, SessionState.CLOSED})
 @Retention(RetentionPolicy.SOURCE)

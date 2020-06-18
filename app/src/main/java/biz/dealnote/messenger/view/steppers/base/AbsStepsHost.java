@@ -8,10 +8,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
-/**
- * Created by ruslan.kolbasa on 09.08.2016.
- * mobilebankingandroid
- */
 public abstract class AbsStepsHost<T extends AbsStepsHost.AbsState> {
 
     protected int currentStep;

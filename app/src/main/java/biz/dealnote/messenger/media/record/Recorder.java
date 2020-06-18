@@ -8,11 +8,6 @@ import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
-
 public class Recorder {
 
     private String mFilePath;

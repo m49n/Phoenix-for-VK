@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.util.VKStringUtils;
+import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiMessage> {
 
     @Override
@@ -37,6 +34,14 @@ public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
 
         if (root.has("attachments")) {
             dto.attachments = context.deserialize(root.get("attachments"), VkApiAttachments.class);
+            JsonArray att = root.get("attachments").getAsJsonArray();
+            for (JsonElement i : att) {
+                if (i.getAsJsonObject().has("call")) {
+                    if (Utils.isEmpty(dto.body))
+                        dto.body = "Звонок";
+                    break;
+                }
+            }
         }
 
         if (root.has("fwd_messages")) {

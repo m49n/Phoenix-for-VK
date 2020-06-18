@@ -12,10 +12,6 @@ import biz.dealnote.messenger.exception.NotFoundException;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 02.07.2016.
- * phoenix
- */
 public class ErrorLocalizer {
 
     private static ApiLocalizer sApiLocalizer = new ApiLocalizer();

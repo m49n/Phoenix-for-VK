@@ -11,10 +11,6 @@ import biz.dealnote.messenger.model.PhotoAlbumEditor;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 29.11.2016.
- * phoenix
- */
 public interface IPhotoAlbumsView extends IMvpView, IAccountDependencyView, IErrorView {
 
     void displayData(@NonNull List<PhotoAlbum> data);

@@ -15,10 +15,6 @@ import androidx.annotation.Nullable;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.06.2017.
- * phoenix
- */
 public class YoutubeButton extends LinearLayout {
 
     public YoutubeButton(Context context) {

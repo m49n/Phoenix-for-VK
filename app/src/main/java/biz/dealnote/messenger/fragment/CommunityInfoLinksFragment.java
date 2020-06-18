@@ -31,10 +31,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityInfoLinksFragment extends BaseMvpFragment<CommunityInfoLinksPresenter, ICommunityInfoLinksView>
         implements ICommunityInfoLinksView, CommunityInfoLinksAdapter.ActionListener {
 

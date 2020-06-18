@@ -12,10 +12,6 @@ import java.lang.reflect.Type;
 import biz.dealnote.messenger.api.model.VKApiVideoAlbum;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class VideoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiVideoAlbum> {
 
     @Override

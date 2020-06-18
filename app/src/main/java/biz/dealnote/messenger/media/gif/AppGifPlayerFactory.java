@@ -6,10 +6,6 @@ import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.settings.ISettings;
 
-/**
- * Created by admin on 13.08.2017.
- * phoenix
- */
 public class AppGifPlayerFactory implements IGifPlayerFactory {
 
     private final IProxySettings proxySettings;

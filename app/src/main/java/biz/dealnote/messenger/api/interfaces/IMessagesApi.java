@@ -23,10 +23,6 @@ import biz.dealnote.messenger.api.model.response.SearchDialogsResponse;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 public interface IMessagesApi {
 
     @CheckResult

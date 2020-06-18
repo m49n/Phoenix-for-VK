@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import biz.dealnote.messenger.util.ParcelUtils;
 
-/**
- * Created by admin on 28.06.2016.
- * phoenix
- */
 public final class MessageSeachCriteria extends BaseSearchCriteria implements Parcelable {
 
     public static final Creator<MessageSeachCriteria> CREATOR = new Creator<MessageSeachCriteria>() {

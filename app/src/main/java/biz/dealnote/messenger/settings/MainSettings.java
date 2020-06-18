@@ -12,10 +12,6 @@ import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.messenger.util.Optional;
 
-/**
- * Created by ruslan.kolbasa on 02.12.2016.
- * phoenix
- */
 class MainSettings implements ISettings.IMainSettings {
 
     private static final String KEY_IMAGE_SIZE = "image_size";
@@ -100,6 +96,15 @@ class MainSettings implements ISettings.IMainSettings {
         }
 
         return prefferedPhotoPreviewSize.get();
+    }
+
+    @Override
+    public int cryptVersion() {
+        try {
+            return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("crypt_version", "1")));
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
     @PhotoSize

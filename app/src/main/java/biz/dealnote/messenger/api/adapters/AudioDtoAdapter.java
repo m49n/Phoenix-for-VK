@@ -12,10 +12,6 @@ import java.util.HashMap;
 
 import biz.dealnote.messenger.api.model.VKApiAudio;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class AudioDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiAudio> {
 
     @Override

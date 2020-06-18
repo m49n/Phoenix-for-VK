@@ -21,10 +21,6 @@ import biz.dealnote.messenger.util.DownloadUtil;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> implements IGifPlayer.IStatusChangeListener, IGifPlayer.IVideoSizeChangeListener {
 
     private static final String SAVE_PAGER_INDEX = "save_pager_index";

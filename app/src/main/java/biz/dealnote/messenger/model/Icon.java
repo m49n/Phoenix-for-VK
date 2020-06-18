@@ -7,10 +7,6 @@ import androidx.annotation.DrawableRes;
 
 import biz.dealnote.messenger.util.ParcelUtils;
 
-/**
- * Created by ruslan.kolbasa on 14.12.2016.
- * phoenix
- */
 public final class Icon implements Parcelable {
 
     public static final Creator<Icon> CREATOR = new Creator<Icon>() {

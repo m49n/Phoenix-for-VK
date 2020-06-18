@@ -19,10 +19,6 @@ import io.reactivex.SingleTransformer;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 05.09.2017.
- * phoenix
- */
 public class MessagesDecryptor implements IMessagesDecryptor {
 
     private final IStorages store;

@@ -7,10 +7,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-/**
- * Created by ruslan.kolbasa on 20.12.2016.
- * phoenix
- */
 public class LocalVideo implements Parcelable, Comparable<LocalVideo>, ISelectable {
 
     public static final Creator<LocalVideo> CREATOR = new Creator<LocalVideo>() {

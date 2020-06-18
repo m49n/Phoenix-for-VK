@@ -35,10 +35,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 13-Jun-16.
- * phoenix
- */
 class FeedbackStorage extends AbsStorage implements IFeedbackStorage {
 
     private static final int LIKE = 1;

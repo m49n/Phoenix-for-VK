@@ -53,10 +53,6 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                      initialPeer: Peer,
                      config: ChatConfig, savedInstanceState: Bundle?) : AbsMessageListPresenter<IChatView>(accountId, savedInstanceState) {
@@ -118,7 +114,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private val isEncryptionSupport: Boolean
-        get() = Peer.isUser(peerId) && peerId != messagesOwnerId
+        get() = Peer.isUser(peerId) && peerId != messagesOwnerId && !Settings.get().other().isDisabled_encryption
 
     private val isEncryptionEnabled: Boolean
         get() = Settings.get()

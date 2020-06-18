@@ -5,10 +5,6 @@ import androidx.annotation.DrawableRes;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.VideoPlatform;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class VideoServiceIcons {
 
     @DrawableRes

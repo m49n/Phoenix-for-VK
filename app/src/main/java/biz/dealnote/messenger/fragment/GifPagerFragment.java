@@ -39,10 +39,6 @@ import biz.dealnote.messenger.view.FlingRelativeLayout;
 import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresenter, IGifPagerView>
         implements IGifPagerView {
 

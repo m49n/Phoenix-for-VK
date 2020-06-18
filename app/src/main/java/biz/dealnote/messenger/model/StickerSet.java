@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
 public class StickerSet {
 
     private final String title;

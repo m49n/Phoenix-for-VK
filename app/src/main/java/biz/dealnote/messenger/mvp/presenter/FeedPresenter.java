@@ -32,10 +32,6 @@ import static biz.dealnote.messenger.util.RxUtils.ignore;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 14.12.2016.
- * phoenix
- */
 public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
 
     private final IFeedInteractor feedInteractor;

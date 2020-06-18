@@ -43,10 +43,6 @@ import static biz.dealnote.messenger.util.Utils.collectIds;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.removeIf;
 
-/**
- * Created by admin on 11.04.2017.
- * phoenix
- */
 class RealtimeMessagesProcessor implements IRealtimeMessagesProcessor {
 
     @SuppressWarnings("unused")

@@ -13,10 +13,6 @@ import biz.dealnote.mvp.compat.ViewHostDelegate;
 import biz.dealnote.mvp.core.IMvpView;
 import biz.dealnote.mvp.core.IPresenter;
 
-/**
- * Created by admin on 14.04.2017.
- * phoenix
- */
 public abstract class AbsPresenterBottomSheetFragment<P extends IPresenter<V>, V extends IMvpView>
         extends BottomSheetDialogFragment implements ViewHostDelegate.IFactoryProvider<P, V> {
 

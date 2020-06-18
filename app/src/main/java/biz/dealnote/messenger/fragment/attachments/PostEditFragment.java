@@ -22,10 +22,6 @@ import biz.dealnote.messenger.mvp.view.IPostEditView;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 21.01.2017.
- * phoenix
- */
 public class PostEditFragment extends AbsPostEditFragment<PostEditPresenter, IPostEditView>
         implements IPostEditView {
 

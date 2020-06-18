@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
@@ -37,6 +39,7 @@ public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesA
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
     }
 
+    @NotNull
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int position) {
         return new Holder(LayoutInflater.from(viewGroup.getContext())

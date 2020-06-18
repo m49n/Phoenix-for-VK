@@ -15,10 +15,6 @@ import biz.dealnote.messenger.util.Logger;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 23.12.2016.
- * phoenix
- */
 public class LongpollUpdatesAdapter extends AbsAdapter implements JsonDeserializer<VkApiLongpollUpdates> {
 
     private static final String TAG = LongpollUpdatesAdapter.class.getSimpleName();

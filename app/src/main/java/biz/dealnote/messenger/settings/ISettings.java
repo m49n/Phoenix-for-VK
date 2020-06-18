@@ -19,10 +19,6 @@ import biz.dealnote.messenger.place.Place;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 public interface ISettings {
 
     IRecentChats recentChats();
@@ -123,6 +119,8 @@ public interface ISettings {
         boolean isDelete_cache_images();
 
         boolean isClick_next_track();
+
+        boolean isDisabled_encryption();
     }
 
     interface IAccountsSettings {
@@ -199,6 +197,8 @@ public interface ISettings {
         boolean isDont_write();
 
         boolean isOver_ten_attach();
+
+        int cryptVersion();
     }
 
     interface INotificationSettings {

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -19,10 +20,12 @@ import java.util.List;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
+import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.AudioCatalog;
 import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
@@ -32,7 +35,7 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
 public class AudioCatalogAdapter extends RecyclerView.Adapter<AudioCatalogAdapter.ViewHolder> implements AudioPlaylistsCatalogAdapter.ClickListener,
-        AudioRecyclerAdapter.ClickListener, VideosAdapter.VideoOnClickListener {
+        AudioRecyclerAdapter.ClickListener, VideosAdapter.VideoOnClickListener, CatalogLinksAdapter.ActionListener {
 
     private List<AudioCatalog> data;
     private Context mContext;
@@ -124,6 +127,13 @@ public class AudioCatalogAdapter extends RecyclerView.Adapter<AudioCatalogAdapte
             holder.list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
             holder.list.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
             holder.list.setAdapter(adapter);
+        } else if (!Utils.isEmpty(category.getLinks())) {
+            CatalogLinksAdapter adapter = new CatalogLinksAdapter(category.getLinks(), mContext);
+            adapter.setActionListner(this);
+            holder.list.setVisibility(View.VISIBLE);
+            holder.list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            holder.list.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
+            holder.list.setAdapter(adapter);
         } else
             holder.list.setVisibility(View.GONE);
     }
@@ -172,6 +182,11 @@ public class AudioCatalogAdapter extends RecyclerView.Adapter<AudioCatalogAdapte
     @Override
     public void onVideoClick(int position, Video video) {
         PlaceFactory.getVideoPreviewPlace(account_id, video).tryOpenWith(mContext);
+    }
+
+    @Override
+    public void onLinkClick(int index, @NonNull Link doc) {
+        LinkHelper.openLinkInBrowser(mContext, doc.getUrl());
     }
 
     public interface ClickListener {

@@ -20,10 +20,6 @@ import biz.dealnote.messenger.util.AeSimpleSHA1;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 20.10.2016.
- * phoenix
- */
 public class SecuritySettings implements ISettings.ISecuritySettings {
 
     public static final String KEY_USE_PIN_FOR_SECURITY = "use_pin_for_security";

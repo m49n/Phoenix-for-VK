@@ -8,10 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import biz.dealnote.messenger.util.ParcelUtils;
 
-/**
- * Created by admin on 19.10.2016.
- * phoenix
- */
 public class ExchangeMessage implements Parcelable {
 
     public static final Creator<ExchangeMessage> CREATOR = new Creator<ExchangeMessage>() {

@@ -4,10 +4,6 @@ import java.lang.ref.WeakReference;
 
 import io.reactivex.functions.Consumer;
 
-/**
- * Created by ruslan.kolbasa on 13.02.2017.
- * phoenix
- */
 public class WeakConsumer<T> implements Consumer<T> {
 
     private final WeakReference<Consumer<T>> ref;

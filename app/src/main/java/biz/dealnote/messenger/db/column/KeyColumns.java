@@ -2,10 +2,6 @@ package biz.dealnote.messenger.db.column;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by ruslan.kolbasa on 20.10.2016.
- * phoenix
- */
 public class KeyColumns implements BaseColumns {
 
     public static final String TABLENAME = "keys";

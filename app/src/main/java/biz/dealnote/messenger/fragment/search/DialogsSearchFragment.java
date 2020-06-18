@@ -18,10 +18,6 @@ import biz.dealnote.messenger.mvp.presenter.search.DialogsSearchPresenter;
 import biz.dealnote.messenger.mvp.view.search.IDialogsSearchView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresenter, IDialogsSearchView, Object, DialogPreviewAdapter>
         implements IDialogsSearchView, DialogPreviewAdapter.ActionListener {
 

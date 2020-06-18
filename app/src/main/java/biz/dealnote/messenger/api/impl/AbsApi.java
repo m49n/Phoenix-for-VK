@@ -15,10 +15,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class AbsApi {
 
     private final IServiceProvider retrofitProvider;

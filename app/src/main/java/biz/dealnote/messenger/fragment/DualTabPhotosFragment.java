@@ -36,10 +36,6 @@ import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 15.04.2017.
- * phoenix
- */
 public class DualTabPhotosFragment extends BaseFragment implements BackPressCallback {
 
     private Sources mSources;

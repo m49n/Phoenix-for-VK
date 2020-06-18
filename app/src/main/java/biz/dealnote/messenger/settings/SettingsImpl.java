@@ -4,10 +4,6 @@ import android.content.Context;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 public class SettingsImpl implements ISettings {
 
     private static volatile SettingsImpl instance;

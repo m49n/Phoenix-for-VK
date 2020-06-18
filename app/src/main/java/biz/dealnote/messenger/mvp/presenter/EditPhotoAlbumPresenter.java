@@ -23,10 +23,6 @@ import biz.dealnote.messenger.view.steppers.impl.CreatePhotoAlbumStepsHost;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by ruslan.kolbasa on 30.11.2016.
- * phoenix
- */
 public class EditPhotoAlbumPresenter extends AccountDependencyPresenter<IEditPhotoAlbumView> {
 
     private final INetworker networker;

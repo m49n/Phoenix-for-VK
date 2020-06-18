@@ -13,10 +13,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Url;
 
-/**
- * Created by ruslan.kolbasa on 26.12.2016.
- * phoenix
- */
 public interface IUploadService {
 
     @Multipart

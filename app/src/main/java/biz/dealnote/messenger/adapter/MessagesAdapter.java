@@ -142,7 +142,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                     .into(holder.sticker);
         }
 
-        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size() > 0);
+        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size_no_stickers() > 0);
         holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
 
         if (hasAttachments) {

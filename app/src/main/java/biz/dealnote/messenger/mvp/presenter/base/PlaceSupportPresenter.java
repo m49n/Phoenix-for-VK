@@ -24,10 +24,6 @@ import biz.dealnote.messenger.mvp.view.IAttachmentsPlacesView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 04.10.2016.
- * phoenix
- */
 public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPlacesView & IAccountDependencyView>
         extends AccountDependencyPresenter<V> {
 

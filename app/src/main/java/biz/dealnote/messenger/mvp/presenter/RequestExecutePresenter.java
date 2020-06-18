@@ -92,7 +92,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
                     String value = parts[1];
                     value = value.replaceAll("\"", "");
 
-                    if (name.equals("user_id") || name.equals("owner_id") && (value.equalsIgnoreCase("my") || value.equalsIgnoreCase("я")))
+                    if ((name.equals("user_id") || name.equals("peer_id") || name.equals("owner_id")) && (value.equalsIgnoreCase("my") || value.equalsIgnoreCase("я")))
                         value = String.valueOf(accountId);
                     params.put(name, value);
                 }

@@ -9,10 +9,6 @@ import biz.dealnote.messenger.mvp.presenter.base.RxSupportPresenter;
 import biz.dealnote.messenger.mvp.view.ICreatePinView;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
-/**
- * Created by ruslan.kolbasa on 10-Jun-16.
- * mobilebankingandroid
- */
 public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
 
     private static final int LAST_CIRCLE_VISIBILITY_DELAY = 200;

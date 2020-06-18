@@ -11,10 +11,6 @@ import biz.dealnote.messenger.util.Optional;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 29.11.2016.
- * phoenix
- */
 public interface IPhotoAlbumsStorage extends IStorage {
 
     @CheckResult

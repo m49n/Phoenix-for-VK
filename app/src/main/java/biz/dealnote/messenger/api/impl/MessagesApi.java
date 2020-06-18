@@ -29,10 +29,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class MessagesApi extends AbsApi implements IMessagesApi {
 
     MessagesApi(int accountId, IServiceProvider provider) {

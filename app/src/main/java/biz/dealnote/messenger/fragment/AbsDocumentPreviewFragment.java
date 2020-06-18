@@ -18,10 +18,6 @@ import biz.dealnote.messenger.mvp.view.IBasicDocumentView;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public abstract class AbsDocumentPreviewFragment<P extends BaseDocumentPresenter<V>, V
         extends IBasicDocumentView> extends BaseMvpFragment<P, V> implements IBasicDocumentView {
 

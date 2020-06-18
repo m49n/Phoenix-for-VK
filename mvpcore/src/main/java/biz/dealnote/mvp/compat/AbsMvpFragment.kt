@@ -7,10 +7,6 @@ import biz.dealnote.mvp.core.IMvpView
 import biz.dealnote.mvp.core.IPresenter
 import biz.dealnote.mvp.core.PresenterAction
 
-/**
- * Created by ruslan.kolbasa on 08.09.2016.
- * mvpcore
- */
 abstract class AbsMvpFragment<P : IPresenter<V>, V : IMvpView> : androidx.fragment.app.Fragment(), ViewHostDelegate.IFactoryProvider<P, V> {
 
     private val delegate = ViewHostDelegate<P, V>()

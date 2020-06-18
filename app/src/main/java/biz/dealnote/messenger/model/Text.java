@@ -10,10 +10,6 @@ import androidx.annotation.StringRes;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ParcelUtils;
 
-/**
- * Created by ruslan.kolbasa on 14.12.2016.
- * phoenix
- */
 public final class Text implements Parcelable {
 
     public static final Creator<Text> CREATOR = new Creator<Text>() {

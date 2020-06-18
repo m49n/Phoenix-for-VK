@@ -22,6 +22,7 @@ public class CatalogBlock extends AbsModel implements Parcelable {
     private List<Audio> audios;
     private List<AudioPlaylist> playlists;
     private List<Video> videos;
+    private List<Link> links;
 
     public CatalogBlock() {
 
@@ -33,6 +34,7 @@ public class CatalogBlock extends AbsModel implements Parcelable {
         audios = in.createTypedArrayList(Audio.CREATOR);
         playlists = in.createTypedArrayList(AudioPlaylist.CREATOR);
         videos = in.createTypedArrayList(Video.CREATOR);
+        links = in.createTypedArrayList(Link.CREATOR);
     }
 
     @Override
@@ -42,6 +44,7 @@ public class CatalogBlock extends AbsModel implements Parcelable {
         dest.writeTypedList(audios);
         dest.writeTypedList(playlists);
         dest.writeTypedList(videos);
+        dest.writeTypedList(links);
     }
 
     public String getNext_from() {
@@ -77,6 +80,15 @@ public class CatalogBlock extends AbsModel implements Parcelable {
 
     public CatalogBlock setVideos(List<Video> videos) {
         this.videos = videos;
+        return this;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public CatalogBlock setLinks(List<Link> links) {
+        this.links = links;
         return this;
     }
 

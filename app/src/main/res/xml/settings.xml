@@ -189,6 +189,12 @@
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="disable_encryption"
+            android:title="@string/disable_encryption"
+            app:iconSpaceReserved="false" />
+
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/array_chat_background_names"
@@ -482,6 +488,16 @@
             android:summary="@string/settings_keep_longpoll_summary"
             android:title="@string/settings_keep_longpoll_title"
             app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/crypt_version_names"
+            android:entryValues="@array/crypt_version_list"
+            android:key="crypt_version"
+            android:title="@string/crypt_version"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             android:key="account_cache_cleaner"
             android:title="@string/account_cache_cleaner"

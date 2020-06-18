@@ -63,10 +63,6 @@ import com.google.android.material.snackbar.Snackbar
 import java.lang.ref.WeakReference
 import java.util.*
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChatView, InputViewController.OnInputActionCallback,
         BackPressCallback, MessagesAdapter.OnMessageActionListener, InputViewController.RecordActionsCallback,
         AttachmentsViewBinder.VoiceActionListener, EmojiconsPopup.OnStickerClickedListener,

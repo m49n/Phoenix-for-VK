@@ -32,10 +32,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.MySpinnerView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPresenter, ICommunityOptionsView>
         implements ICommunityOptionsView {
 

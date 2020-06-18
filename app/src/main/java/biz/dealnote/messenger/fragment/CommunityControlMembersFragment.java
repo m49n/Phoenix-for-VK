@@ -12,10 +12,6 @@ import biz.dealnote.messenger.mvp.presenter.CommunityMembersPresenter;
 import biz.dealnote.messenger.mvp.view.ICommunityMembersView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityControlMembersFragment extends BaseMvpFragment<CommunityMembersPresenter, ICommunityMembersView>
         implements ICommunityMembersView {
 

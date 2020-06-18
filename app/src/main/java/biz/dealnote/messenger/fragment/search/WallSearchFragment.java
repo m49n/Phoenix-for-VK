@@ -21,10 +21,6 @@ import biz.dealnote.messenger.mvp.view.search.IWallSearchView;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, IWallSearchView, Post, WallAdapter>
         implements IWallSearchView, WallAdapter.ClickListener {
 

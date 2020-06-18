@@ -15,10 +15,6 @@ import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiVideo> {
 
     @Override

@@ -14,10 +14,6 @@ import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 class UISettings implements ISettings.IUISettings {
 
     private final Context app;
