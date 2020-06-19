@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by Ruslan Kolbasa on 20.09.2017.
- * phoenix
- */
+
 public class CountryEntity extends Entity {
 
     private final int id;

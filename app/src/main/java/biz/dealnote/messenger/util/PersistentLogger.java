@@ -12,10 +12,7 @@ import biz.dealnote.messenger.settings.Settings;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class PersistentLogger {
 
     @SuppressLint("CheckResult")

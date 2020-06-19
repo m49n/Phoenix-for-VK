@@ -47,10 +47,6 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.ViewUtils.displayAvatar;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedCommentsAdapter.AbsHolder> {
 
     private static final int VTYPE_POST = 1;

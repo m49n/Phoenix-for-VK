@@ -5,10 +5,7 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
+
 @IntDef({FeedbackType.FOLLOW, FeedbackType.FRIEND_ACCEPTED, FeedbackType.MENTION, FeedbackType.MENTION_COMMENT_POST,
         FeedbackType.WALL, FeedbackType.WALL_PUBLISH, FeedbackType.COMMENT_POST, FeedbackType.COMMENT_PHOTO,
         FeedbackType.COMMENT_VIDEO, FeedbackType.REPLY_COMMENT, FeedbackType.REPLY_COMMENT_PHOTO,

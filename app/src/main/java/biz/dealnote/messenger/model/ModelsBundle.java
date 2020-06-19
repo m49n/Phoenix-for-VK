@@ -10,10 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by admin on 20.04.2017.
- * phoenix
- */
+
 public final class ModelsBundle implements Parcelable, Iterable<AbsModel> {
 
     public static final Creator<ModelsBundle> CREATOR = new Creator<ModelsBundle>() {

@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by Ruslan Kolbasa on 30.06.2017.
- * phoenix
- */
+
 public class SectionCounters {
 
     private int friends;

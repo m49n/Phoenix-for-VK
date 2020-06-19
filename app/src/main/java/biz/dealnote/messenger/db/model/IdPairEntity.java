@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
+
 public class IdPairEntity {
 
     private final int id;

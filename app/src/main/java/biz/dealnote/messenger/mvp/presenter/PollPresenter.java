@@ -17,10 +17,7 @@ import biz.dealnote.messenger.mvp.view.IPollView;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
-/**
- * Created by admin on 19.12.2016.
- * phoenix
- */
+
 public class PollPresenter extends AccountDependencyPresenter<IPollView> {
 
     private final IPollInteractor pollInteractor;

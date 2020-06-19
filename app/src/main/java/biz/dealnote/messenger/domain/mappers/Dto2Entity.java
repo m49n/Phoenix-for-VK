@@ -13,6 +13,7 @@ import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiCareer;
 import biz.dealnote.messenger.api.model.VKApiCity;
 import biz.dealnote.messenger.api.model.VKApiComment;
@@ -31,6 +32,7 @@ import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSchool;
 import biz.dealnote.messenger.api.model.VKApiSticker;
 import biz.dealnote.messenger.api.model.VKApiStickerSet;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUniversity;
 import biz.dealnote.messenger.api.model.VKApiUser;
@@ -63,6 +65,7 @@ import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
 import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
+import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
 import biz.dealnote.messenger.db.model.entity.CityEntity;
 import biz.dealnote.messenger.db.model.entity.CommentEntity;
@@ -91,6 +94,7 @@ import biz.dealnote.messenger.db.model.entity.SchoolEntity;
 import biz.dealnote.messenger.db.model.entity.SimpleDialogEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
 import biz.dealnote.messenger.db.model.entity.StickerSetEntity;
+import biz.dealnote.messenger.db.model.entity.StoryEntity;
 import biz.dealnote.messenger.db.model.entity.TopicEntity;
 import biz.dealnote.messenger.db.model.entity.UniversityEntity;
 import biz.dealnote.messenger.db.model.entity.UserDetailsEntity;
@@ -120,10 +124,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public class Dto2Entity {
 
     public static FeedbackEntity buildFeedbackDbo(VkApiBaseFeedback feedback) {
@@ -728,6 +729,14 @@ public class Dto2Entity {
             return mapArticle((VKApiArticle) dto);
         }
 
+        if (dto instanceof VKApiStory) {
+            return mapStory((VKApiStory) dto);
+        }
+
+        if (dto instanceof VKApiCall) {
+            return mapCall((VKApiCall) dto);
+        }
+
         if (dto instanceof VKApiWikiPage) {
             return mapWikiPage((VKApiWikiPage) dto);
         }
@@ -902,6 +911,24 @@ public class Dto2Entity {
                 .setTitle(article.title)
                 .setSubTitle(article.subtitle)
                 .setURL(article.url);
+    }
+
+    public static StoryEntity mapStory(@NonNull VKApiStory dto) {
+        return new StoryEntity().setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setDate(dto.date)
+                .setExpires(dto.expires_at)
+                .setIs_expired(dto.is_expired)
+                .setAccessKey(dto.access_key)
+                .setPhoto(dto.photo != null ? mapPhoto(dto.photo) : null)
+                .setVideo(dto.video != null ? mapVideo(dto.video) : null);
+    }
+
+    public static CallEntity mapCall(@NonNull VKApiCall dto) {
+        return new CallEntity().setInitiator_id(dto.initiator_id)
+                .setReceiver_id(dto.receiver_id)
+                .setState(dto.state)
+                .setTime(dto.time);
     }
 
     public static AudioMessageEntity mapAudioMessage(VkApiAudioMessage dto) {

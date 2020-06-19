@@ -15,10 +15,7 @@ import biz.dealnote.messenger.api.model.response.SearchVideoResponse;
 import biz.dealnote.messenger.api.services.IVideoService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class VideoApi extends AbsApi implements IVideoApi {
 
     VideoApi(int accountId, IServiceProvider provider) {

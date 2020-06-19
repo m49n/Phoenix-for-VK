@@ -11,10 +11,7 @@ import biz.dealnote.messenger.api.model.response.TopicsResponse;
 import biz.dealnote.messenger.api.services.IBoardService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class BoardApi extends AbsApi implements IBoardApi {
 
     BoardApi(int accountId, IServiceProvider provider) {

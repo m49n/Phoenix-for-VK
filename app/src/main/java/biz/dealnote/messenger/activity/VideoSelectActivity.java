@@ -17,10 +17,6 @@ import biz.dealnote.messenger.place.PlaceProvider;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by Ruslan Kolbasa on 17.08.2017.
- * phoenix
- */
 public class VideoSelectActivity extends NoMainActivity implements PlaceProvider {
 
     /**

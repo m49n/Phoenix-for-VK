@@ -12,10 +12,7 @@ import biz.dealnote.messenger.api.model.server.VkApiDocsUploadServer;
 import biz.dealnote.messenger.api.model.server.VkApiVideosUploadServer;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 02.01.2017.
- * phoenix
- */
+
 public interface IDocsApi {
 
     @CheckResult

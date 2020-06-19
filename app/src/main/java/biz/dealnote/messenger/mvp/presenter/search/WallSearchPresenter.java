@@ -24,10 +24,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class WallSearchPresenter extends AbsSearchPresenter<IWallSearchView, WallSearchCriteria, Post, IntNextFrom> {
 
     private static final int COUNT = 30;

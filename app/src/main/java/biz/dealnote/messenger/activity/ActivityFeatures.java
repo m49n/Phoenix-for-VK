@@ -8,10 +8,6 @@ import androidx.annotation.NonNull;
 import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.settings.Settings;
 
-/**
- * Created by hp-dv6 on 31.05.2016.
- * VKMessenger
- */
 public class ActivityFeatures {
 
     private boolean hideMenu;

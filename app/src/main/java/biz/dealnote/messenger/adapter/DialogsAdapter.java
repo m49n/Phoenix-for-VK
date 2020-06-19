@@ -43,10 +43,6 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 
-/**
- * Created by hp-dv6 on 05.06.2016.
- * VKMessenger
- */
 public class DialogsAdapter extends RecyclerView.Adapter<DialogsAdapter.DialogViewHolder> {
 
     public static final String PICASSO_TAG = "dialogs.adapter.tag";

@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public final class FriendsCounters implements Parcelable {
 
     public static final Creator<FriendsCounters> CREATOR = new Creator<FriendsCounters>() {

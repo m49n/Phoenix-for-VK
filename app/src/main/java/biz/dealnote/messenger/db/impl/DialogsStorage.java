@@ -43,10 +43,6 @@ import static biz.dealnote.messenger.util.Utils.join;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by hp-dv6 on 04.06.2016.
- * VKMessenger
- */
 class DialogsStorage extends AbsStorage implements IDialogsStorage {
 
     private PublishSubject<Pair<Integer, Integer>> unreadDialogsCounter;

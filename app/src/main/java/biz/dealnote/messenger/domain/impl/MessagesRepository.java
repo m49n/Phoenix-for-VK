@@ -135,10 +135,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 import static biz.dealnote.messenger.util.Utils.safelyClose;
 
-/**
- * Created by admin on 03.09.2017.
- * В этом классе сосредоточена вся бизнес-логика для работы с сообщениями
- */
 public class MessagesRepository implements IMessagesRepository {
 
     private static final SingleTransformer<List<VKApiMessage>, List<MessageEntity>> DTO_TO_DBO = single -> single

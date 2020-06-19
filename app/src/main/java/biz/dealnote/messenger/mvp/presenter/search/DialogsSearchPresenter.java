@@ -19,10 +19,6 @@ import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class DialogsSearchPresenter extends AbsSearchPresenter<IDialogsSearchView, DialogsSearchCriteria, Object, IntNextFrom> {
 
     private final IMessagesRepository messagesInteractor;

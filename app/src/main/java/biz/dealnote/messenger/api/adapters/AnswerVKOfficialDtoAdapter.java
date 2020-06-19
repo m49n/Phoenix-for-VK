@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import biz.dealnote.messenger.model.AnswerVKOfficial;
 import biz.dealnote.messenger.model.AnswerVKOfficialList;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class AnswerVKOfficialDtoAdapter extends AbsAdapter implements JsonDeserializer<AnswerVKOfficialList> {
 
     @Override

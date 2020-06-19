@@ -20,10 +20,7 @@ import static biz.dealnote.messenger.util.RxUtils.ignore;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
+
 public class AnswerVKOfficialPresenter extends AccountDependencyPresenter<IAnswerVKOfficialView> {
 
     private final AnswerVKOfficialList pages;

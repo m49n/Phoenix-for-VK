@@ -14,6 +14,7 @@ import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiCatalogLink;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
@@ -52,6 +53,7 @@ import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.AudioCatalog;
 import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.CatalogBlock;
 import biz.dealnote.messenger.model.Chat;
 import biz.dealnote.messenger.model.Comment;
@@ -635,9 +637,18 @@ public class Dto2Model {
                 .setOwnerId(dto.owner_id)
                 .setDate(dto.date)
                 .setExpires(dto.expires_at)
+                .setIs_expired(dto.is_expired)
+                .setAccessKey(dto.access_key)
                 .setPhoto(dto.photo != null ? transform(dto.photo) : null)
                 .setVideo(dto.video != null ? transform(dto.video) : null)
                 .setOwner(owners.getById(dto.owner_id));
+    }
+
+    public static Call transform(@NonNull VKApiCall dto) {
+        return new Call().setInitiator_id(dto.initiator_id)
+                .setReceiver_id(dto.receiver_id)
+                .setState(dto.state)
+                .setTime(dto.time);
     }
 
     public static Photo transform(@NonNull VKApiPhoto dto) {
@@ -944,6 +955,12 @@ public class Dto2Model {
                     break;
                 case VKApiAttachment.TYPE_ARTICLE:
                     attachments.prepareArticles().add(transform((VKApiArticle) attachment));
+                    break;
+                case VKApiAttachment.TYPE_STORY:
+                    attachments.prepareStories().add(transformStory((VKApiStory) attachment, owners));
+                    break;
+                case VKApiAttachment.TYPE_CALL:
+                    attachments.prepareCalls().add(transform((VKApiCall) attachment));
                     break;
                 case VKApiAttachment.TYPE_POLL:
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));

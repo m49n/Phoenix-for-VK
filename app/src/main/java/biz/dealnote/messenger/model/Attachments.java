@@ -3,6 +3,8 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.adapter.DocLink;
@@ -38,6 +40,8 @@ public class Attachments implements Parcelable, Cloneable {
     private ArrayList<Post> posts;
     private ArrayList<Link> links;
     private ArrayList<Article> articles;
+    private ArrayList<Story> stories;
+    private ArrayList<Call> calls;
     private ArrayList<Poll> polls;
     private ArrayList<WikiPage> pages;
     private ArrayList<VoiceMessage> voiceMessages;
@@ -59,6 +63,8 @@ public class Attachments implements Parcelable, Cloneable {
         pages = in.createTypedArrayList(WikiPage.CREATOR);
         voiceMessages = in.createTypedArrayList(VoiceMessage.CREATOR);
         gifts = in.createTypedArrayList(GiftItem.CREATOR);
+        stories = in.createTypedArrayList(Story.CREATOR);
+        calls = in.createTypedArrayList(Call.CREATOR);
     }
 
     public ArrayList<VoiceMessage> getVoiceMessages() {
@@ -79,6 +85,8 @@ public class Attachments implements Parcelable, Cloneable {
         dest.writeTypedList(pages);
         dest.writeTypedList(voiceMessages);
         dest.writeTypedList(gifts);
+        dest.writeTypedList(stories);
+        dest.writeTypedList(calls);
     }
 
     public void add(AbsModel model) {
@@ -124,6 +132,16 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (model instanceof Article) {
             prepareArticles().add((Article) model);
+            return;
+        }
+
+        if (model instanceof Story) {
+            prepareStories().add((Story) model);
+            return;
+        }
+
+        if (model instanceof Call) {
+            prepareCalls().add((Call) model);
             return;
         }
 
@@ -177,6 +195,14 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(articles)) {
             result.addAll(articles);
+        }
+
+        if (nonEmpty(stories)) {
+            result.addAll(stories);
+        }
+
+        if (nonEmpty(calls)) {
+            result.addAll(calls);
         }
 
         if (nonEmpty(polls)) {
@@ -242,6 +268,22 @@ public class Attachments implements Parcelable, Cloneable {
         return articles;
     }
 
+    public ArrayList<Story> prepareStories() {
+        if (stories == null) {
+            stories = new ArrayList<>(1);
+        }
+
+        return stories;
+    }
+
+    public ArrayList<Call> prepareCalls() {
+        if (calls == null) {
+            calls = new ArrayList<>(1);
+        }
+
+        return calls;
+    }
+
     public ArrayList<Document> prepareDocs() {
         if (docs == null) {
             docs = new ArrayList<>(1);
@@ -300,6 +342,8 @@ public class Attachments implements Parcelable, Cloneable {
                 posts,
                 links,
                 articles,
+                stories,
+                calls,
                 polls,
                 pages,
                 voiceMessages,
@@ -316,6 +360,8 @@ public class Attachments implements Parcelable, Cloneable {
                 posts,
                 links,
                 articles,
+                stories,
+                calls,
                 polls,
                 pages,
                 voiceMessages,
@@ -349,6 +395,8 @@ public class Attachments implements Parcelable, Cloneable {
                 safeIsEmpty(posts) &&
                 safeIsEmpty(links) &&
                 safeIsEmpty(articles) &&
+                safeIsEmpty(stories) &&
+                safeIsEmpty(calls) &&
                 safeIsEmpty(pages) &&
                 safeIsEmpty(polls) &&
                 safeIsEmpty(voiceMessages) &&
@@ -427,9 +475,22 @@ public class Attachments implements Parcelable, Cloneable {
             }
         }
 
+        if (stories != null) {
+            for (Story story : stories) {
+                result.add(new DocLink(story));
+            }
+        }
+
+        if (calls != null) {
+            for (Call call : calls) {
+                result.add(new DocLink(call));
+            }
+        }
+
         return result;
     }
 
+    @NotNull
     @Override
     public Attachments clone() throws CloneNotSupportedException {
         Attachments clone = (Attachments) super.clone();
@@ -441,12 +502,15 @@ public class Attachments implements Parcelable, Cloneable {
         clone.posts = cloneListAsArrayList(this.posts);
         clone.links = cloneListAsArrayList(this.links);
         clone.articles = cloneListAsArrayList(this.articles);
+        clone.stories = cloneListAsArrayList(this.stories);
+        clone.calls = cloneListAsArrayList(this.calls);
         clone.polls = cloneListAsArrayList(this.polls);
         clone.pages = cloneListAsArrayList(this.pages);
         clone.voiceMessages = cloneListAsArrayList(this.voiceMessages);
         return clone;
     }
 
+    @NotNull
     @Override
     public String toString() {
         String line = "";
@@ -480,6 +544,14 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonNull(articles)) {
             line = line + " articles=" + safeCountOf(articles);
+        }
+
+        if (nonNull(stories)) {
+            line = line + " stories=" + safeCountOf(stories);
+        }
+
+        if (nonNull(calls)) {
+            line = line + " calls=" + safeCountOf(calls);
         }
 
         if (nonNull(polls)) {
@@ -535,6 +607,14 @@ public class Attachments implements Parcelable, Cloneable {
 
     public ArrayList<Article> getArticles() {
         return articles;
+    }
+
+    public ArrayList<Story> getStories() {
+        return stories;
+    }
+
+    public ArrayList<Call> getCalls() {
+        return calls;
     }
 
     public ArrayList<Poll> getPolls() {

@@ -37,10 +37,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 14.07.2017.
- * phoenix
- */
+
 public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
 
     private static final String SAVE_POST = "save-post";

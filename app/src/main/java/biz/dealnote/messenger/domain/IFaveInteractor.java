@@ -11,10 +11,6 @@ import biz.dealnote.messenger.model.Video;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 14.07.2017.
- * phoenix
- */
 public interface IFaveInteractor {
     Single<List<Post>> getPosts(int accountId, int count, int offset);
 

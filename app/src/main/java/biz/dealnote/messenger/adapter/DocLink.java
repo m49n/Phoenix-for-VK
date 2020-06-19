@@ -3,18 +3,23 @@ package biz.dealnote.messenger.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.util.Calendar;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 
 public class DocLink {
 
@@ -49,6 +54,14 @@ public class DocLink {
             return Types.WIKI_PAGE;
         }
 
+        if (model instanceof Story) {
+            return Types.STORY;
+        }
+
+        if (model instanceof Call) {
+            return Types.CALL;
+        }
+
         throw new IllegalArgumentException();
     }
 
@@ -64,6 +77,9 @@ public class DocLink {
 
             case Types.POST:
                 return ((Post) attachment).getAuthorPhoto();
+
+            case Types.STORY:
+                return ((Story) attachment).getOwner().getMaxSquareAvatar();
 
             case Types.LINK:
                 Link link = (Link) attachment;
@@ -102,13 +118,20 @@ public class DocLink {
                 Poll poll = (Poll) attachment;
                 return context.getString(poll.isAnonymous() ? R.string.anonymous_poll : R.string.open_poll);
 
+            case Types.STORY:
+                return ((Story) attachment).getOwner().getFullName();
+
             case Types.WIKI_PAGE:
                 return context.getString(R.string.wiki_page);
+
+            case Types.CALL:
+                int initiator = ((Call) attachment).getInitiator_id();
+                return initiator == Settings.get().accounts().getCurrent() ? context.getString(R.string.input_call) : context.getString(R.string.output_call);
         }
         return null;
     }
 
-    public String getExt() {
+    public String getExt(Context context) {
         switch (type) {
             case Types.DOC:
                 return ((Document) attachment).getExt();
@@ -118,6 +141,8 @@ public class DocLink {
                 return URL;
             case Types.WIKI_PAGE:
                 return W;
+            case Types.STORY:
+                return context.getString(R.string.story);
         }
         return null;
     }
@@ -139,6 +164,23 @@ public class DocLink {
 
             case Types.WIKI_PAGE:
                 return ((WikiPage) attachment).getTitle();
+
+            case Types.CALL:
+                return ((Call) attachment).getState();
+
+            case Types.STORY: {
+                Story item = ((Story) attachment);
+                if (item.getExpires() <= 0)
+                    return null;
+                else {
+                    if (item.isIs_expired()) {
+                        return context.getString(R.string.is_expired);
+                    } else {
+                        Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
+                        return (context.getString(R.string.expires, String.valueOf(exp), context.getString(Utils.declOfNum(exp, new int[]{R.string.hour, R.string.hour_sec, R.string.hours}))));
+                    }
+                }
+            }
         }
         return null;
     }

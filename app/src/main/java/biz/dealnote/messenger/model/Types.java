@@ -39,4 +39,6 @@ public class Types {
     public static final int COPIES_ARRAY = 131072;
 
     public static final int VOICE_MESSAGE = 262144;
+    public static final int STORY = 524288;
+    public static final int CALL = 1048576;
 }

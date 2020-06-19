@@ -9,10 +9,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public interface IAccountService {
 
     @POST("account.banUser")

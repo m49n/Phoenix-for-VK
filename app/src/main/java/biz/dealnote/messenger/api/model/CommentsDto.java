@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by admin on 07.05.2017.
- * phoenix
- */
+
 public final class CommentsDto {
 
     @SerializedName("count")

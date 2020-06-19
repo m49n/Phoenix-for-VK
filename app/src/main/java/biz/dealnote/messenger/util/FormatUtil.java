@@ -9,10 +9,7 @@ import java.util.Date;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
+
 public class FormatUtil {
 
     public static Spannable formatCommunityBanInfo(Context context, int adminId, String adminName,

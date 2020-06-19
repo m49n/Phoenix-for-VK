@@ -13,10 +13,7 @@ import biz.dealnote.messenger.api.model.response.DefaultCommentsResponse;
 import biz.dealnote.messenger.api.model.response.SearchVideoResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 public interface IVideoApi {
 
     @CheckResult

@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public class Video extends AbsModel implements Parcelable {
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {

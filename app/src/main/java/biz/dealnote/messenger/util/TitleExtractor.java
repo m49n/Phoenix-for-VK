@@ -10,11 +10,6 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Ruslan Kolbasa on 27.06.2017.
- * phoenix
- * https://stackoverflow.com/questions/24237036/how-to-get-name-of-website-from-any-string-url
- */
 public class TitleExtractor {
 
     /* the CASE_INSENSITIVE flag accounts for

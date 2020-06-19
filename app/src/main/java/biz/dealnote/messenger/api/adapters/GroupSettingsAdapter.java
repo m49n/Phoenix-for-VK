@@ -11,10 +11,6 @@ import java.util.Collections;
 
 import biz.dealnote.messenger.api.model.GroupSettingsDto;
 
-/**
- * Created by Ruslan Kolbasa on 15.06.2017.
- * phoenix
- */
 public class GroupSettingsAdapter extends AbsAdapter implements JsonDeserializer<GroupSettingsDto> {
 
     @Override

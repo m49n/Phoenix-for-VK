@@ -7,10 +7,7 @@ import biz.dealnote.messenger.api.model.VKApiWikiPage;
 import biz.dealnote.messenger.api.services.IPagesService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 class PagesApi extends AbsApi implements IPagesApi {
 
     PagesApi(int accountId, IServiceProvider provider) {

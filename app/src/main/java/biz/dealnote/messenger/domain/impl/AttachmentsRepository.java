@@ -20,10 +20,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
 public class AttachmentsRepository implements IAttachmentsRepository {
 
     private final PublishSubject<IAddEvent> addPublishSubject;

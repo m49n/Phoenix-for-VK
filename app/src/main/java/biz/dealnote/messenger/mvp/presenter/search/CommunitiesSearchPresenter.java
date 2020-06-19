@@ -18,10 +18,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public class CommunitiesSearchPresenter extends AbsSearchPresenter<ICommunitiesSearchView,
         GroupSearchCriteria, Community, IntNextFrom> {
 

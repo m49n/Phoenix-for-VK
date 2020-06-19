@@ -10,10 +10,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.response.CustomCommentsResponse;
 
-/**
- * Created by Ruslan Kolbasa on 26.06.2017.
- * phoenix
- */
 public class CustomCommentsResponseAdapter implements JsonDeserializer<CustomCommentsResponse> {
 
     @Override

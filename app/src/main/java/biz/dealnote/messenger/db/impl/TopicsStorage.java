@@ -26,10 +26,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 13.12.2016.
- * phoenix
- */
+
 class TopicsStorage extends AbsStorage implements ITopicsStore {
 
     TopicsStorage(@NonNull AppStorages base) {

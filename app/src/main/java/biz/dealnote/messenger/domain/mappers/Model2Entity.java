@@ -11,6 +11,7 @@ import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
 import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
+import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
@@ -23,12 +24,14 @@ import biz.dealnote.messenger.db.model.entity.PollEntity;
 import biz.dealnote.messenger.db.model.entity.PostEntity;
 import biz.dealnote.messenger.db.model.entity.PrivacyEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
+import biz.dealnote.messenger.db.model.entity.StoryEntity;
 import biz.dealnote.messenger.db.model.entity.VideoEntity;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.GiftItem;
@@ -41,6 +44,7 @@ import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.PostSource;
 import biz.dealnote.messenger.model.SimplePrivacy;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.model.WikiPage;
@@ -50,10 +54,7 @@ import static biz.dealnote.messenger.domain.mappers.MapUtil.mapAndAdd;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
+
 public class Model2Entity {
 
     public static MessageEntity buildMessageEntity(Message message) {
@@ -95,6 +96,8 @@ public class Model2Entity {
         mapAndAdd(attachments.getPosts(), Model2Entity::buildPostDbo, entities);
         mapAndAdd(attachments.getLinks(), Model2Entity::buildLinkDbo, entities);
         mapAndAdd(attachments.getArticles(), Model2Entity::buildArticleDbo, entities);
+        mapAndAdd(attachments.getStories(), Model2Entity::buildStoryDbo, entities);
+        mapAndAdd(attachments.getCalls(), Model2Entity::buildCallDbo, entities);
         mapAndAdd(attachments.getPolls(), Model2Entity::buildPollDbo, entities);
         mapAndAdd(attachments.getPages(), Model2Entity::buildPageEntity, entities);
         mapAndAdd(attachments.getGifts(), Model2Entity::buildGiftItemEntity, entities);
@@ -121,6 +124,10 @@ public class Model2Entity {
                 entities.add(buildLinkDbo((Link) model));
             } else if (model instanceof Article) {
                 entities.add(buildArticleDbo((Article) model));
+            } else if (model instanceof Story) {
+                entities.add(buildStoryDbo((Story) model));
+            } else if (model instanceof Call) {
+                entities.add(buildCallDbo((Call) model));
             } else if (model instanceof Poll) {
                 entities.add(buildPollDbo((Poll) model));
             } else if (model instanceof WikiPage) {
@@ -194,6 +201,24 @@ public class Model2Entity {
                 .setTitle(dbo.getTitle())
                 .setSubTitle(dbo.getSubTitle())
                 .setURL(dbo.getURL());
+    }
+
+    public static StoryEntity buildStoryDbo(Story dbo) {
+        return new StoryEntity().setId(dbo.getId())
+                .setOwnerId(dbo.getOwnerId())
+                .setDate(dbo.getDate())
+                .setExpires(dbo.getExpires())
+                .setIs_expired(dbo.isIs_expired())
+                .setAccessKey(dbo.getAccessKey())
+                .setPhoto(isNull(dbo.getPhoto()) ? null : buildPhotoEntity(dbo.getPhoto()))
+                .setVideo(dbo.getVideo() != null ? buildVideoDbo(dbo.getVideo()) : null);
+    }
+
+    public static CallEntity buildCallDbo(Call dbo) {
+        return new CallEntity().setInitiator_id(dbo.getInitiator_id())
+                .setReceiver_id(dbo.getReceiver_id())
+                .setState(dbo.getState())
+                .setTime(dbo.getTime());
     }
 
     public static PostEntity buildPostDbo(Post post) {

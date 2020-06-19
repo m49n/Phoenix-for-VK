@@ -23,10 +23,7 @@ import retrofit2.HttpException;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
+
 public class AuthApi implements IAuthApi {
 
     private static final Gson BASE_RESPONSE_GSON = new Gson();

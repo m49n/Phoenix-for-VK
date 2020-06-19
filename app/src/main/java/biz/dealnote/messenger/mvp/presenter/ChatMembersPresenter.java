@@ -19,10 +19,7 @@ import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by Ruslan Kolbasa on 19.09.2017.
- * phoenix
- */
+
 public class ChatMembersPresenter extends AccountDependencyPresenter<IChatMembersView> {
 
     private final int chatId;

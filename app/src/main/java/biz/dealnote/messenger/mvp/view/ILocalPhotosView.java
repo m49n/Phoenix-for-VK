@@ -8,10 +8,7 @@ import java.util.List;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public interface ILocalPhotosView extends IMvpView, IErrorView {
     void displayData(@NonNull List<LocalPhoto> data);
 

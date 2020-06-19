@@ -8,10 +8,7 @@ import biz.dealnote.messenger.model.VideoAlbum;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public interface IVideoAlbumsView extends IMvpView, IAccountDependencyView, IErrorView {
 
     void displayData(@NonNull List<VideoAlbum> data);

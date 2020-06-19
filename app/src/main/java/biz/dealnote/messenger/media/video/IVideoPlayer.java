@@ -6,10 +6,7 @@ import androidx.annotation.NonNull;
 
 import biz.dealnote.messenger.model.VideoSize;
 
-/**
- * Created by Ruslan Kolbasa on 14.08.2017.
- * phoenix
- */
+
 public interface IVideoPlayer {
     void play();
 

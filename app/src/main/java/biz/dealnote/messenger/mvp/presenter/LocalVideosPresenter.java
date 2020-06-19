@@ -17,10 +17,7 @@ import biz.dealnote.messenger.mvp.view.ILocalVideosView;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
 
     private static final String TAG = LocalVideosPresenter.class.getSimpleName();

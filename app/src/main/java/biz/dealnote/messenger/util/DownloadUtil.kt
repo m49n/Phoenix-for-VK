@@ -26,10 +26,6 @@ import ealvatag.tag.images.ArtworkFactory
 import java.io.File
 import java.util.*
 
-
-/**
- * Created by maartenvangiel on 28/09/16.
- */
 object DownloadUtil {
     /*
     @Suppress("DEPRECATION")

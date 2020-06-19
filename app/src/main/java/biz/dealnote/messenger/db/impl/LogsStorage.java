@@ -13,10 +13,7 @@ import biz.dealnote.messenger.db.interfaces.ILogsStorage;
 import biz.dealnote.messenger.model.LogEvent;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class LogsStorage implements ILogsStorage {
 
     private static final String[] PROJECTION = {LogColumns._ID, LogColumns.TYPE, LogColumns.DATE, LogColumns.TAG, LogColumns.BODY};

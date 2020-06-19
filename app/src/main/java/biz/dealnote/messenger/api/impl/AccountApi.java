@@ -8,10 +8,7 @@ import biz.dealnote.messenger.api.model.response.AccountsBannedResponce;
 import biz.dealnote.messenger.api.services.IAccountService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 class AccountApi extends AbsApi implements IAccountApi {
 
     AccountApi(int accountId, IServiceProvider provider) {

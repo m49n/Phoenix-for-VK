@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.util;
 
-/**
- * Created by Ruslan Kolbasa on 03.07.2017.
- * phoenix
- */
+
 public class Optional<T> {
 
     private final T value;

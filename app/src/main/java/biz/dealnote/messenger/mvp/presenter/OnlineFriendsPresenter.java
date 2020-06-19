@@ -15,10 +15,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class OnlineFriendsPresenter extends SimpleOwnersPresenter<ISimpleOwnersView> {
 
     private final int userId;

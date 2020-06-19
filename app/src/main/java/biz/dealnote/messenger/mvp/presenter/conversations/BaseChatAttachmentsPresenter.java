@@ -20,10 +20,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by admin on 29.03.2017.
- * phoenix
- */
 public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachmentsView<T>>
         extends PlaceSupportPresenter<V> {
 

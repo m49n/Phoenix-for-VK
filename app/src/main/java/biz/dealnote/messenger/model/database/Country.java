@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model.database;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 17.09.2017.
- * phoenix
- */
+
 public final class Country implements Parcelable {
 
     public static final Creator<Country> CREATOR = new Creator<Country>() {

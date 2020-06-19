@@ -15,10 +15,6 @@ import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public class ChatDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiChat> {
 
     @Override

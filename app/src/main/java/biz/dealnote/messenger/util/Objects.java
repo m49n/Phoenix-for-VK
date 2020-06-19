@@ -2,10 +2,7 @@ package biz.dealnote.messenger.util;
 
 import androidx.annotation.Nullable;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
+
 public class Objects {
 
     private Objects() {

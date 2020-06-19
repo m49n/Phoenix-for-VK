@@ -19,6 +19,8 @@ public class Story extends AbsModel implements Parcelable {
     private int owner_id;
     private long date;
     private long expires_at;
+    private boolean is_expired;
+    private String access_key;
     private Photo photo;
     private Video video;
     private Owner author;
@@ -33,6 +35,8 @@ public class Story extends AbsModel implements Parcelable {
         owner_id = in.readInt();
         date = in.readLong();
         expires_at = in.readLong();
+        is_expired = in.readInt() != 0;
+        access_key = in.readString();
         video = in.readParcelable(Video.class.getClassLoader());
         photo = in.readParcelable(Photo.class.getClassLoader());
         author = ParcelableOwnerWrapper.readOwner(in);
@@ -45,6 +49,8 @@ public class Story extends AbsModel implements Parcelable {
         dest.writeInt(owner_id);
         dest.writeLong(date);
         dest.writeLong(expires_at);
+        dest.writeInt(is_expired ? 1 : 0);
+        dest.writeString(access_key);
         dest.writeParcelable(video, flags);
         dest.writeParcelable(photo, flags);
         ParcelableOwnerWrapper.writeOwner(dest, flags, author);
@@ -101,6 +107,24 @@ public class Story extends AbsModel implements Parcelable {
 
     public Story setExpires(long expires_at) {
         this.expires_at = expires_at;
+        return this;
+    }
+
+    public boolean isIs_expired() {
+        return is_expired;
+    }
+
+    public Story setIs_expired(boolean is_expired) {
+        this.is_expired = is_expired;
+        return this;
+    }
+
+    public String getAccessKey() {
+        return access_key;
+    }
+
+    public Story setAccessKey(String access_key) {
+        this.access_key = access_key;
         return this;
     }
 

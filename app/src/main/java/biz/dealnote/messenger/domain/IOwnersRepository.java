@@ -23,10 +23,7 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.02.2017.
- * phoenix
- */
+
 public interface IOwnersRepository {
 
     int MODE_ANY = 1;

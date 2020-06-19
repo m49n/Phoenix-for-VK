@@ -8,10 +8,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
+
 public class SparseArrayOwnersBundle implements IOwnersBundle {
 
     private final SparseArray<Owner> data;

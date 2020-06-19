@@ -17,10 +17,7 @@ import java.lang.ref.WeakReference;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Exestime;
 
-/**
- * Created by admin on 09.10.2016.
- * phoenix
- */
+
 public class WaveFormView extends View {
 
     private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG

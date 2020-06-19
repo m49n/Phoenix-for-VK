@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.view.emoji.section;
 
-/**
- * Created by golde on 04.02.2017.
- * phoenix
- */
 public class Emojicon {
 
     private String emoji;

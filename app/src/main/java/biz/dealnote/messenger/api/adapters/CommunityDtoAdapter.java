@@ -47,10 +47,6 @@ import static biz.dealnote.messenger.api.model.VKApiCommunity.TYPE_PAGE;
 import static biz.dealnote.messenger.api.model.VKApiCommunity.VERIFIED;
 import static biz.dealnote.messenger.api.model.VKApiCommunity.WIKI_PAGE;
 
-/**
- * Created by admin on 28.12.2016.
- * phoenix
- */
 public class CommunityDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiCommunity> {
 
     @Override

@@ -7,7 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
@@ -103,6 +106,16 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void onWikiPageOpen(@NonNull WikiPage page) {
         getPresenter().fireWikiPageClick(page);
+    }
+
+    @Override
+    public void onStoryOpen(@NotNull Story story) {
+        getPresenter().fireStoryClick(story);
+    }
+
+    @Override
+    public void openStory(int accountId, @NotNull Story story) {
+        PlaceFactory.getHistoryVideoPreviewPlace(accountId, new ArrayList<>(Collections.singleton(story)), 0).tryOpenWith(requireActivity());
     }
 
     @Override

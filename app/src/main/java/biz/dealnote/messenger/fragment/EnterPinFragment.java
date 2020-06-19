@@ -25,10 +25,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.KeyboardView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterPinView>
         implements IEnterPinView, KeyboardView.OnKeyboardClickListener {
 

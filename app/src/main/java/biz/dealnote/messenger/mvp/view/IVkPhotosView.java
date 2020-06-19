@@ -9,10 +9,7 @@ import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by Ruslan Kolbasa on 13.07.2017.
- * phoenix
- */
+
 public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorView, IToolbarView {
     String ACTION_SHOW_PHOTOS = "biz.dealnote.messenger.ACTION_SHOW_PHOTOS";
     String ACTION_SELECT_PHOTOS = "biz.dealnote.messenger.ACTION_SELECT_PHOTOS";

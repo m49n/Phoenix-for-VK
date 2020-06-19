@@ -49,10 +49,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.findIndexByPredicate;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 14.04.2017.
- * phoenix
- */
+
 public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAttachmentsView> {
 
     private static final String SAVE_CAMERA_FILE_URI = "save_camera_file_uri";

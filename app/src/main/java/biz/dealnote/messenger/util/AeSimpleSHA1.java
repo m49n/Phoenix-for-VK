@@ -4,10 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by admin on 20.10.2016.
- * phoenix
- */
+
 public class AeSimpleSHA1 {
 
     private static String convertToHex(byte[] data) {

@@ -436,6 +436,12 @@ public class StoryPagerFragment extends BaseMvpFragment<StoryPagerPresenter, ISt
 
         @Override
         public void bindTo(@NonNull Story story) {
+            if (story.isIs_expired()) {
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.is_expired);
+                mLoadingNow = false;
+                resolveProgressVisibility();
+                return;
+            }
             if (story.getPhoto() == null)
                 return;
             String url = story.getPhoto().getUrlForSize(PhotoSize.W, true);

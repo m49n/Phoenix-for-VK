@@ -6,18 +6,17 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.AttachmentsTokenCreator;
 import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
 public class Model2Dto {
 
     /*public static List<IAttachmentToken> createTokens(Attachments attachments){
@@ -75,6 +74,21 @@ public class Model2Dto {
         if (model instanceof Video) {
             Video video = (Video) model;
             return AttachmentsTokenCreator.ofVideo(video.getId(), video.getOwnerId(), video.getAccessKey());
+        }
+
+        if (model instanceof Article) {
+            Article article = (Article) model;
+            return AttachmentsTokenCreator.ofArticle(article.getId(), article.getOwnerId(), article.getAccessKey());
+        }
+
+        if (model instanceof Story) {
+            Story story = (Story) model;
+            return AttachmentsTokenCreator.ofStory(story.getId(), story.getOwnerId(), story.getAccessKey());
+        }
+
+        if (model instanceof Call) {
+            Call call = (Call) model;
+            return AttachmentsTokenCreator.ofCall(call.getInitiator_id(), call.getReceiver_id(), call.getState(), call.getTime());
         }
 
         throw new UnsupportedOperationException("Token for class " + model.getClass() + " not supported");

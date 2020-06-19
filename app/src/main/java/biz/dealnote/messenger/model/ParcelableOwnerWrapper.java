@@ -6,10 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 24.01.2017.
- * phoenix
- */
+
 public final class ParcelableOwnerWrapper implements Parcelable {
 
     public static final Creator<ParcelableOwnerWrapper> CREATOR = new Creator<ParcelableOwnerWrapper>() {

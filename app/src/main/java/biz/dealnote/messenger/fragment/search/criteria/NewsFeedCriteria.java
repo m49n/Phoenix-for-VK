@@ -3,10 +3,6 @@ package biz.dealnote.messenger.fragment.search.criteria;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by hp-dv6 on 08.06.2016 with Core i7 2670QM.
- * VKMessenger
- */
 public final class NewsFeedCriteria extends BaseSearchCriteria implements Parcelable {
 
     public static final Creator<NewsFeedCriteria> CREATOR = new Creator<NewsFeedCriteria>() {

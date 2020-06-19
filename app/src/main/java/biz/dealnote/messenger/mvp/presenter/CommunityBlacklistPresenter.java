@@ -27,10 +27,7 @@ import biz.dealnote.messenger.util.Utils;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
+
 public class CommunityBlacklistPresenter extends AccountDependencyPresenter<ICommunityBlacklistView> {
 
     private static final int COUNT = 20;

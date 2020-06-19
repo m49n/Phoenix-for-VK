@@ -3,6 +3,7 @@ package biz.dealnote.messenger.db.model;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
@@ -12,13 +13,11 @@ import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.db.model.entity.PollEntity;
 import biz.dealnote.messenger.db.model.entity.PostEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
+import biz.dealnote.messenger.db.model.entity.StoryEntity;
 import biz.dealnote.messenger.db.model.entity.TopicEntity;
 import biz.dealnote.messenger.db.model.entity.VideoEntity;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public final class AttachmentsTypes {
 
     public static final int GIFT = 32768;
@@ -30,6 +29,8 @@ public final class AttachmentsTypes {
     public static final int POST = 16;
     public static final int ARTICLE = 32;
     public static final int LINK = 64;
+    public static final int STORY = 128;
+    public static final int CALL = 256;
     public static final int POLL = 512;
     public static final int PAGE = 1024;
     public static final int STICKER = 4096;
@@ -66,6 +67,10 @@ public final class AttachmentsTypes {
             return GIFT;
         } else if (entity instanceof ArticleEntity) {
             return ARTICLE;
+        } else if (entity instanceof StoryEntity) {
+            return STORY;
+        } else if (entity instanceof CallEntity) {
+            return CALL;
         }
 
         throw new UnsupportedOperationException("Unsupported type: " + entity.getClass());
@@ -99,6 +104,10 @@ public final class AttachmentsTypes {
                 return GiftItemEntity.class;
             case ARTICLE:
                 return ArticleEntity.class;
+            case STORY:
+                return StoryEntity.class;
+            case CALL:
+                return CallEntity.class;
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }

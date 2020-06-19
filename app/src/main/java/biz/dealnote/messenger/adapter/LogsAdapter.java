@@ -16,10 +16,6 @@ import biz.dealnote.messenger.util.AppTextUtils;
 
 import static biz.dealnote.messenger.util.Utils.safeLenghtOf;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
 public class LogsAdapter extends RecyclerBindableAdapter<LogEventWrapper, LogsAdapter.Holder> {
 
     private static final int MAX_BODY_LENGHT = 400;

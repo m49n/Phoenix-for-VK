@@ -8,10 +8,7 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
+
 public class WallResponse {
 
     @SerializedName("count")

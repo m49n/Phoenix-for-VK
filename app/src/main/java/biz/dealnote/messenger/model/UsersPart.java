@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class UsersPart {
 
     public ArrayList<User> users;

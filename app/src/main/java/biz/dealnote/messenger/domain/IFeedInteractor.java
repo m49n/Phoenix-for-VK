@@ -9,10 +9,6 @@ import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 06.09.2017.
- * phoenix
- */
 public interface IFeedInteractor {
     Single<List<News>> getCachedFeed(int accountId);
 

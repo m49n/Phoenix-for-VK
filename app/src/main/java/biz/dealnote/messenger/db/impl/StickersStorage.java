@@ -31,10 +31,7 @@ import static biz.dealnote.messenger.db.column.StikerSetColumns.TITLE;
 import static biz.dealnote.messenger.db.column.StikerSetColumns._ID;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 class StickersStorage extends AbsStorage implements IStickersStorage {
 
     private static final String[] COLUMNS = {

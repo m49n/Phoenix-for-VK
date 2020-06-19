@@ -23,10 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
 
     private final IProxySettings proxySettings;

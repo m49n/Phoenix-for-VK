@@ -21,6 +21,7 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
 import biz.dealnote.messenger.model.Link;
@@ -28,6 +29,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;
@@ -37,10 +39,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 01.06.2017.
- * phoenix
- */
 public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEntry, AttchmentsEditorAdapter.ViewHolder> {
 
     private static final int ERROR_COLOR = Color.parseColor("#ff0000");
@@ -183,6 +181,28 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         }
     }
 
+    private void bindStory(ViewHolder holder, Story story) {
+        holder.tvTitle.setText(R.string.story);
+
+        String photoLink = nonNull(story.getOwner()) ? story.getOwner().getMaxSquareAvatar() : null;
+
+        if (nonEmpty(photoLink)) {
+            PicassoInstance.with()
+                    .load(photoLink)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.background_gray);
+        }
+    }
+
+    private void bindCall(ViewHolder holder, Call call) {
+        holder.tvTitle.setText(R.string.call);
+        PicassoInstance.with().cancelRequest(holder.photoImageView);
+        holder.photoImageView.setImageResource(R.drawable.phone_call_color);
+    }
+
     private void bindPhoto(ViewHolder holder, Photo photo) {
         holder.tvTitle.setText(R.string.photo);
 
@@ -310,6 +330,10 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
             bindLink(holder, (Link) model);
         } else if (model instanceof Article) {
             bindArticle(holder, (Article) model);
+        } else if (model instanceof Story) {
+            bindStory(holder, (Story) model);
+        } else if (model instanceof Call) {
+            bindCall(holder, (Call) model);
         } else {
             throw new UnsupportedOperationException("Type " + model.getClass() + " in not supported");
         }

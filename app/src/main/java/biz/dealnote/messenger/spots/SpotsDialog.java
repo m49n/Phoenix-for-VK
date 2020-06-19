@@ -16,10 +16,6 @@ import java.util.Objects;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by Maxim Dybarsky | maxim.dybarskyy@gmail.com
- * on 13.01.15 at 14:22
- */
 public class SpotsDialog extends AlertDialog {
 
     private static final int DELAY = 150;

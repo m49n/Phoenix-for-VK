@@ -8,10 +8,6 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by hp-dv6 on 08.06.2016 with Core i7 2670QM.
- * VKMessenger
- */
 public class NewsfeedSearchResponse {
 
     @SerializedName("items")

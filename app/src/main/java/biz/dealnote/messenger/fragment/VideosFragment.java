@@ -52,10 +52,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
 public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideosListView>
         implements IVideosListView, DocsUploadAdapter.ActionListener, VideosAdapter.VideoOnClickListener {
 

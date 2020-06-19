@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
+
 public class CommentsBundle {
 
     private final List<Comment> comments;

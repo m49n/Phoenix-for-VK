@@ -14,12 +14,14 @@ import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPoll;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSticker;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 import biz.dealnote.messenger.api.model.VKApiWikiPage;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
@@ -27,10 +29,6 @@ import biz.dealnote.messenger.api.model.VkApiAudioMessage;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserializer<VkApiAttachments> {
 
     @Override
@@ -103,11 +101,10 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             graph.images_with_background.add(img);
             return graph;
 
-        } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
-            if (o.getAsJsonObject().has("photo"))
-                return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);
-            else if (o.getAsJsonObject().has("video"))
-                return context.deserialize(o.getAsJsonObject().get("video"), VKApiVideo.class);
+        } else if (VKApiAttachment.TYPE_STORY.equals(type)) {
+            return context.deserialize(o, VKApiStory.class);
+        } else if (VKApiAttachment.TYPE_CALL.equals(type)) {
+            return context.deserialize(o, VKApiCall.class);
         } else if (VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)) {
             VKApiLink ret = new VKApiLink();
             VKApiAudioPlaylist pl = context.deserialize(o, VKApiAudioPlaylist.class);

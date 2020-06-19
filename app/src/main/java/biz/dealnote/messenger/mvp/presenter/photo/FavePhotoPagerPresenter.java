@@ -16,10 +16,6 @@ import biz.dealnote.messenger.util.RxUtils;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 28.09.2016.
- * phoenix
- */
 public class FavePhotoPagerPresenter extends PhotoPagerPresenter {
 
     private static final String SAVE_UPDATED = "save_updated";

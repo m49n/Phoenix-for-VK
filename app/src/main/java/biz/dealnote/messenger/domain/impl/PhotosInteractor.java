@@ -30,10 +30,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.domain.mappers.MapUtil.mapAll;
 
-/**
- * Created by Ruslan Kolbasa on 13.07.2017.
- * phoenix
- */
 public class PhotosInteractor implements IPhotosInteractor {
 
     private final INetworker networker;

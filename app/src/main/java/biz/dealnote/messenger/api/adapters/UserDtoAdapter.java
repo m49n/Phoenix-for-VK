@@ -59,10 +59,6 @@ import static biz.dealnote.messenger.api.model.VKApiUser.Field.UNIVERSITIES;
 import static biz.dealnote.messenger.api.model.VKApiUser.Field.VERIFIED;
 import static biz.dealnote.messenger.api.model.VKApiUser.Field.WALL_DEFAULT;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class UserDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiUser> {
 
     @Override

@@ -18,10 +18,7 @@ import biz.dealnote.messenger.settings.ISettings;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.mvp.core.AbsPresenter;
 
-/**
- * Created by Ruslan Kolbasa on 20.07.2017.
- * phoenix
- */
+
 public class DrawerEditPresenter extends AbsPresenter<IDrawerEditView> {
 
     private final List<DrawerCategory> data;

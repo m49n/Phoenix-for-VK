@@ -35,10 +35,6 @@ import io.reactivex.Completable;
 import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
 public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerView> {
 
     private static final String TAG = PhotoPagerPresenter.class.getSimpleName();

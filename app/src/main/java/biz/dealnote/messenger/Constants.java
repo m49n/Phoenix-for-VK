@@ -15,7 +15,7 @@ public class Constants {
     public static final boolean NEED_CHECK_UPDATE = true;
 
     public static final String API_VERSION = "5.116";
-    public static final int DATABASE_VERSION = 190;
+    public static final int DATABASE_VERSION = 191;
     public static final int VERSION_APK = BuildConfig.VERSION_CODE;
     public static final String APK_ID = BuildConfig.APPLICATION_ID;
 

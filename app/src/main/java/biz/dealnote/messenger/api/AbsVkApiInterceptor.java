@@ -27,10 +27,7 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 21.12.2016.
- * phoenix
- */
+
 abstract class AbsVkApiInterceptor implements Interceptor {
 
     private static final Random RANDOM = new Random();

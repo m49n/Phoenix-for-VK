@@ -9,10 +9,6 @@ import biz.dealnote.messenger.model.User;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
 public interface IAccountsInteractor {
     Single<BannedPart> getBanned(int accountId, int count, int offset);
 

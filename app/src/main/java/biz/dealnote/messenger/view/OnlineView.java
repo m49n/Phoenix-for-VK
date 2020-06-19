@@ -15,10 +15,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by golde on 04.02.2017.
- * phoenix
- */
 public class OnlineView extends AppCompatImageView {
 
     private static final Paint PAINT = new Paint();

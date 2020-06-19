@@ -5,12 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-/**
- * Created by admin on 04.06.2017.
- * phoenix
- * Представляет из себя набор информации для проверки различных прав доступа
- * для публикации поста
- */
 public final class WallEditorAttrs implements Parcelable {
 
     public static final Creator<WallEditorAttrs> CREATOR = new Creator<WallEditorAttrs>() {

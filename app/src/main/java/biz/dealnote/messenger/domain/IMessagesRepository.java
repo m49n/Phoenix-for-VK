@@ -29,10 +29,6 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.09.2017.
- * phoenix
- */
 public interface IMessagesRepository {
     Flowable<Throwable> observeMessagesSendErrors();
 

@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
+
 public class TopicEntity extends Entity {
 
     private final int id;

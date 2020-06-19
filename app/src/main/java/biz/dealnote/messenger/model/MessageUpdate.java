@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by admin on 15.11.2016.
- * phoenix
- */
+
 public class MessageUpdate {
 
     private final int accountId;

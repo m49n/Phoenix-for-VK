@@ -2,10 +2,7 @@ package biz.dealnote.messenger.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
+
 public class LoginResponse {
 
     // {"error":"need_captcha","captcha_sid":"665120559674","captcha_img":"https:\/\/api.vk.com\/captcha.php?sid=665120559674"}

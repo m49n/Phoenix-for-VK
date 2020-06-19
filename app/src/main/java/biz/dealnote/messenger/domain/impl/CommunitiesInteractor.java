@@ -18,10 +18,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
+
 public class CommunitiesInteractor implements ICommunitiesInteractor {
 
     private final INetworker networker;

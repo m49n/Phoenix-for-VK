@@ -13,10 +13,7 @@ import biz.dealnote.messenger.util.ValidationUtil;
 
 import static biz.dealnote.messenger.util.Utils.trimmedIsEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 11.07.2017.
- * phoenix
- */
+
 public class AddProxyPresenter extends RxSupportPresenter<IAddProxyView> {
 
     private final IProxySettings settings;

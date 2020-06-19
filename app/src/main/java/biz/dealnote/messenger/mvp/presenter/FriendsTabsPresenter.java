@@ -16,10 +16,7 @@ import biz.dealnote.messenger.mvp.view.IFriendsTabsView;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class FriendsTabsPresenter extends AccountDependencyPresenter<IFriendsTabsView> {
 
     private static final String SAVE_COUNTERS = "save_counters";

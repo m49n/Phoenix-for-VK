@@ -24,10 +24,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesAdapter.Holder> {
 
     private static final ItemInfo<Community> INFO = new ItemInfo<>();

@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
+
 public class BlockReason {
     public static final int OTHER = 0;
     public static final int SPAM = 1;

@@ -52,7 +52,7 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
     }
 
     public boolean isStoryIsVideo(int pos) {
-        return mStories.get(pos).getPhoto() == null;
+        return mStories.get(pos).getPhoto() == null && mStories.get(pos).getVideo() != null;
     }
 
     public Story getStory(int pos) {

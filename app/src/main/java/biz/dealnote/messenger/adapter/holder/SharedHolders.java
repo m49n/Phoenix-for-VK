@@ -12,10 +12,6 @@ import java.util.Set;
 
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by ruslan.kolbasa on 10.10.2016.
- * phoenix
- */
 public class SharedHolders<T extends IdentificableHolder> {
 
     //private static final String TAG = SharedHolders.class.getSimpleName();

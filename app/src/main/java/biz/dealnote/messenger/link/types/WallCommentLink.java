@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.link.types;
 
-/**
- * Created by Ruslan Kolbasa on 03.07.2017.
- * phoenix
- */
 public class WallCommentLink extends AbsLink {
 
     private final int ownerId;

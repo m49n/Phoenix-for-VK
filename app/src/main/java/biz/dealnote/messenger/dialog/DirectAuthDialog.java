@@ -32,10 +32,6 @@ import biz.dealnote.messenger.mvp.view.IDirectAuthView;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
 public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter, IDirectAuthView> implements IDirectAuthView {
 
     public static final String ACTION_LOGIN_COMPLETE = "ACTION_LOGIN_COMPLETE";

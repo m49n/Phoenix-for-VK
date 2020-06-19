@@ -15,10 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class OtherApi implements IOtherApi {
 
     private static final String API_METHOD_URL = "https://api.vk.com/method/";

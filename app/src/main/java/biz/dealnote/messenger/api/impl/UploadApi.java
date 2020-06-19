@@ -20,10 +20,7 @@ import io.reactivex.Single;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class UploadApi implements IUploadApi {
 
     private final IUploadRetrofitProvider provider;

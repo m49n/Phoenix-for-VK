@@ -12,10 +12,6 @@ import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
-/**
- * Created by hp-dv6 on 04.06.2016 with Core i7 2670QM.
- * VKMessenger
- */
 public class Dialog implements Identificable, Parcelable {
 
     public static final Creator<Dialog> CREATOR = new Creator<Dialog>() {

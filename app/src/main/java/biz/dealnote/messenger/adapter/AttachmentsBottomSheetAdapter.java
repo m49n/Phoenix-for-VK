@@ -20,13 +20,16 @@ import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;
@@ -35,10 +38,6 @@ import biz.dealnote.messenger.view.CircleRoadProgress;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 15.04.2017.
- * phoenix
- */
 public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ERROR_COLOR = Color.parseColor("#ff0000");
@@ -105,6 +104,12 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindDoc(holder, (Document) model);
         } else if (model instanceof Audio) {
             bindAudio(holder, (Audio) model);
+        } else if (model instanceof Article) {
+            bindArticle(holder, (Article) model);
+        } else if (model instanceof Story) {
+            bindStory(holder, (Story) model);
+        } else if (model instanceof Call) {
+            bindCall(holder, (Call) model);
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
@@ -144,6 +149,33 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
                     .placeholder(R.drawable.background_gray)
                     .into(holder.image);
         }
+    }
+
+    private void bindArticle(EntryHolder holder, Article link) {
+        holder.title.setText(R.string.article);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = nonNull(link.getPhoto()) ? link.getPhoto().getUrlForSize(PhotoSize.X, false) : null;
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindStory(EntryHolder holder, Story story) {
+        holder.title.setText(R.string.story);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = nonNull(story.getOwner()) ? story.getOwner().getMaxSquareAvatar() : null;
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindCall(EntryHolder holder, Call call) {
+        holder.title.setText(R.string.call);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        PicassoInstance.with().cancelRequest(holder.image);
+        holder.image.setImageResource(R.drawable.phone_call_color);
     }
 
     private void bindAudio(EntryHolder holder, Audio audio) {

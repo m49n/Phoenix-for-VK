@@ -6,10 +6,7 @@ import java.util.Map;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
+
 public class MessageEditEntity {
 
     private final int status;

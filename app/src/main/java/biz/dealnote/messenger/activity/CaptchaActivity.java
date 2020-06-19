@@ -22,10 +22,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.RxUtils.ignore;
 
-/**
- * Created by ruslan.kolbasa on 27.10.2016.
- * phoenix
- */
 public class CaptchaActivity extends AppCompatActivity {
 
     private EditText mTextField;

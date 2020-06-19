@@ -11,10 +11,6 @@ import biz.dealnote.messenger.api.model.response.NewsfeedResponse;
 import biz.dealnote.messenger.api.model.response.NewsfeedSearchResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
 public interface INewsfeedApi {
 
     @CheckResult

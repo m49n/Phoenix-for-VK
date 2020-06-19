@@ -13,10 +13,7 @@ import biz.dealnote.messenger.api.model.response.WallResponse;
 import biz.dealnote.messenger.api.model.response.WallSearchResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 public interface IWallApi {
 
     Single<WallSearchResponse> search(int ownerId, String query, Boolean ownersOnly,

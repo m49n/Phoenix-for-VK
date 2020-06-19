@@ -23,10 +23,7 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
+
 public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
 
     private final INetworker networker;

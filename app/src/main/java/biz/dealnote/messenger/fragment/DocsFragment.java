@@ -58,10 +58,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
 public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListView>
         implements IDocListView, DocsAdapter.ActionListener, DocsUploadAdapter.ActionListener, DocsAsImagesAdapter.ActionListener {
 

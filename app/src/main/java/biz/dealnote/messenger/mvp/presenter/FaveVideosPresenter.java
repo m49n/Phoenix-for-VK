@@ -17,10 +17,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosView> {
 
     private static final String TAG = FaveVideosPresenter.class.getSimpleName();

@@ -6,10 +6,7 @@ import java.util.List;
 import biz.dealnote.messenger.util.AssertUtils;
 import io.reactivex.annotations.NonNull;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public class PostEntity extends Entity {
 
     private static final int NO_STORED = -1;

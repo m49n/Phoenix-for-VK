@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 19.04.2017.
- * phoenix
- */
 public final class ParcelableModelWrapper implements Parcelable {
 
     public static final Creator<ParcelableModelWrapper> CREATOR = new Creator<ParcelableModelWrapper>() {
@@ -37,6 +33,8 @@ public final class ParcelableModelWrapper implements Parcelable {
         TYPES.add(Poll.class);
         TYPES.add(Link.class);
         TYPES.add(Article.class);
+        TYPES.add(Story.class);
+        TYPES.add(Call.class);
         TYPES.add(Comment.class);
     }
 

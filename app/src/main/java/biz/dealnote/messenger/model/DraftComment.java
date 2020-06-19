@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by admin on 04.06.2017.
- * phoenix
- */
+
 public class DraftComment {
 
     private final int id;

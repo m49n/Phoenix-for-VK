@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.CallSuper;
 
-/**
- * Created by Ruslan Kolbasa on 16.08.2017.
- * phoenix
- */
+
 public abstract class AbsSelectableSource implements Parcelable {
 
     @Types

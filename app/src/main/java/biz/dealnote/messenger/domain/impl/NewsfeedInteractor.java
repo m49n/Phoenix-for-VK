@@ -34,10 +34,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class NewsfeedInteractor implements INewsfeedInteractor {
 
     private final INetworker networker;

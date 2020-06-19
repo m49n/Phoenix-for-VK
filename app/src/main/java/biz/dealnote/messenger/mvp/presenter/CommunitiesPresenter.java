@@ -28,10 +28,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedIsEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
+
 public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitiesView> {
 
     private final int userId;

@@ -12,10 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 12.07.2017.
- * phoenix
- */
 public class FirebaseSessionIdGenerator implements ISessionIdGenerator {
 
     @Override

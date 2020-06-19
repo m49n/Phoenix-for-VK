@@ -85,10 +85,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.stringJoin;
 import static java.util.Collections.singletonList;
 
-/**
- * Created by ruslan.kolbasa on 01.02.2017.
- * phoenix
- */
 public class OwnersRepository implements IOwnersRepository {
 
     private static final String FIELDS_GROUPS_ALL = stringJoin(",", IS_FAVORITE,

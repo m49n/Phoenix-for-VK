@@ -11,10 +11,7 @@ import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 05.12.2016.
- * phoenix
- */
+
 public interface IBaseAttachmentsEditView extends IMvpView, IAccountDependencyView, IErrorView {
 
     void displayInitialModels(@NonNull List<AttachmenEntry> models);

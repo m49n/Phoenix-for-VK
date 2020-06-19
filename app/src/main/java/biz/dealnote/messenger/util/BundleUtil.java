@@ -11,11 +11,6 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-/**
- * Created by r.kolbasa on 18.12.2017.
- * Phoenix-for-VK
- * https://gist.github.com/aprock/2037883
- */
 public class BundleUtil {
 
     public static String serializeBundle(final Bundle bundle) {

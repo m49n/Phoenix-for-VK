@@ -28,10 +28,7 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 15.11.2016.
- * phoenix
- */
+
 class AttachmentsStorage extends AbsStorage implements IAttachmentsStorage {
 
     AttachmentsStorage(@NonNull AppStorages base) {

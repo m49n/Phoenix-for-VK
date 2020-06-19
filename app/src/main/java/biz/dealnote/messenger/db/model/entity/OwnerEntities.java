@@ -4,10 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class OwnerEntities {
 
     private final List<UserEntity> userEntities;

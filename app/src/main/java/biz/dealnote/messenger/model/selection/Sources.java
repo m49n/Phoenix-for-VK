@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ruslan Kolbasa on 16.08.2017.
- * phoenix
- */
+
 public class Sources implements Parcelable {
 
     public static final Creator<Sources> CREATOR = new Creator<Sources>() {

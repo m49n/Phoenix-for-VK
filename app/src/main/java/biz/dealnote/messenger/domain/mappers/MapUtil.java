@@ -12,10 +12,6 @@ import io.reactivex.annotations.Nullable;
 
 import static biz.dealnote.messenger.util.Utils.addFlagIf;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class MapUtil {
 
     static int calculateConversationAcl(VkApiConversation conversation) {

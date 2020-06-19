@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by Ruslan Kolbasa on 04.10.2017.
- * phoenix
- */
+
 public class SentMsg {
 
     private final int dbid;

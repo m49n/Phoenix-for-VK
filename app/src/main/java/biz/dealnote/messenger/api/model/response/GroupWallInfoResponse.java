@@ -6,10 +6,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.VKApiCommunity;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
 public class GroupWallInfoResponse {
 
     @SerializedName("group_info")

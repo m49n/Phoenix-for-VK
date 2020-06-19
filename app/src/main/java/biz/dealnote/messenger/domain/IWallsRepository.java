@@ -14,10 +14,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 20.03.2017.
- * phoenix
- */
+
 public interface IWallsRepository {
 
     @CheckResult

@@ -23,10 +23,7 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 21.06.2017.
- * phoenix
- */
+
 public class CommunityManagerEditPresenter extends AccountDependencyPresenter<ICommunityManagerEditView> {
 
     private static final String TAG = CommunityManagerEditPresenter.class.getSimpleName();

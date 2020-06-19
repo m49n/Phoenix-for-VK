@@ -25,10 +25,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 
-/**
- * Created by admin on 14.06.2017.
- * phoenix
- */
 public class CommunityManagersAdapter extends RecyclerView.Adapter<CommunityManagersAdapter.Holder> {
 
     private static final Map<String, Integer> roleTextResources = new HashMap<>(4);

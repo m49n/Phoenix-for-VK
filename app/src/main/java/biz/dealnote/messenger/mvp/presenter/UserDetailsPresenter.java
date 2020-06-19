@@ -35,10 +35,6 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.joinNonEmptyStrings;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class UserDetailsPresenter extends AccountDependencyPresenter<IUserDetailsView> {
 
     private final User user;

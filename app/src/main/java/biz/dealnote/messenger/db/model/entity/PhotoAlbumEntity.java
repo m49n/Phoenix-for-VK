@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by Ruslan Kolbasa on 18.09.2017.
- * phoenix
- */
+
 public class PhotoAlbumEntity extends Entity {
 
     private final int id;

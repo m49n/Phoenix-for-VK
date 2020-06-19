@@ -7,10 +7,7 @@ import biz.dealnote.messenger.api.model.longpoll.VkApiLongpollUpdates;
 import biz.dealnote.messenger.api.services.ILongpollUpdatesService;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class LongpollApi implements ILongpollApi {
 
     private final IOtherVkRetrofitProvider provider;

@@ -11,10 +11,6 @@ import java.lang.reflect.Type;
 import biz.dealnote.messenger.api.model.ChatUserDto;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public class ChatUserDtoAdapter extends AbsAdapter implements JsonDeserializer<ChatUserDto> {
 
     @Override

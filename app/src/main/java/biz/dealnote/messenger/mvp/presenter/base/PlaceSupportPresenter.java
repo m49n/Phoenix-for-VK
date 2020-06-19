@@ -18,6 +18,7 @@ import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.mvp.view.IAttachmentsPlacesView;
@@ -41,6 +42,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
 
     public void fireWikiPageClick(@NonNull WikiPage page) {
         getView().openWikiPage(getAccountId(), page);
+    }
+
+    public void fireStoryClick(@NonNull Story story) {
+        getView().openStory(getAccountId(), story);
     }
 
     public void firePhotoClick(@NonNull ArrayList<Photo> photos, int index) {

@@ -7,10 +7,7 @@ import biz.dealnote.messenger.mvp.view.IErrorView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 29.03.2017.
- * phoenix
- */
+
 public interface IBaseChatAttachmentsView<T> extends IMvpView, IAccountDependencyView,
         IAttachmentsPlacesView, IErrorView {
 

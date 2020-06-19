@@ -20,10 +20,7 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 20.09.2017.
- * phoenix
- */
+
 public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
 
     private final int accountId;

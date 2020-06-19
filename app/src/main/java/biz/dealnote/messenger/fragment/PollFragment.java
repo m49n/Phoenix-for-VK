@@ -36,10 +36,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 19.12.2016.
- * phoenix
- */
 public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
         implements IPollView, PollAnswersAdapter.OnAnswerChangedCallback {
 

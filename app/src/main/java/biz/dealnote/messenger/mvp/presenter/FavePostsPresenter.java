@@ -26,10 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 14.07.2017.
- * phoenix
- */
+
 public class FavePostsPresenter extends PlaceSupportPresenter<IFavePostsView> {
 
     private static final int COUNT = 50;

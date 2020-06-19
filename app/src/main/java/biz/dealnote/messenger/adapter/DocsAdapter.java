@@ -24,10 +24,6 @@ import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
 public class DocsAdapter extends RecyclerBindableAdapter<Document, DocsAdapter.DocViewHolder> {
 
     private ActionListener mActionListner;

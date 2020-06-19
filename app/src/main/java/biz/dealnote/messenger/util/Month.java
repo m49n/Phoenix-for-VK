@@ -6,10 +6,7 @@ import java.util.Calendar;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
+
 public class Month {
 
     @StringRes

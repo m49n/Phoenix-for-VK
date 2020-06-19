@@ -21,10 +21,7 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by admin on 20.12.2016.
- * phoenix
- */
+
 public class CreatePollPresenter extends AccountDependencyPresenter<ICreatePollView> {
 
     private final IPollInteractor pollInteractor;

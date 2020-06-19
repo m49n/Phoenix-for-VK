@@ -30,10 +30,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
 public class ProxyManagerFrgament extends BaseMvpFragment<ProxyManagerPresenter, IProxyManagerView>
         implements IProxyManagerView, ProxiesAdapter.ActionListener {
 

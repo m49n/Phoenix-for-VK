@@ -7,10 +7,7 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by Ruslan Kolbasa on 19.09.2017.
- * phoenix
- */
+
 public interface IChatMembersView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<AppChatUser> users);
 

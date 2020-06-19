@@ -42,6 +42,7 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.Settings;
@@ -206,6 +207,22 @@ public class ChatDownloadIntentService extends IntentService {
                     String atcontent = Image;
                     atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", att.getURL(), atcontent);
                     atcontent = Apply("<#IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.Y, false), atcontent);
+                    Attachments.append(atcontent);
+                }
+            }
+
+            if (!Utils.isEmpty(i.getAttachments().getStories())) {
+                for (Story att : i.getAttachments().getStories()) {
+                    if (att.getPhoto() == null && att.getVideo() == null)
+                        continue;
+                    String atcontent = Image;
+                    if (att.getPhoto() != null) {
+                        atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.W, false), atcontent);
+                        atcontent = Apply("<#IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.Y, false), atcontent);
+                    } else if (att.getVideo() != null) {
+                        atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", "https://vk.com/video" + att.getVideo().getOwnerId() + "_" + att.getVideo().getId(), atcontent);
+                        atcontent = Apply("<#IMAGE_LINK#>", att.getVideo().getImage(), atcontent);
+                    }
                     Attachments.append(atcontent);
                 }
             }

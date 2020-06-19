@@ -20,10 +20,6 @@ import biz.dealnote.messenger.model.PhotoSize;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
 public class DocsAsImagesAdapter extends RecyclerBindableAdapter<Document, DocsAsImagesAdapter.DocViewHolder> {
 
     private ActionListener mActionListner;

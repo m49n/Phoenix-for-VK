@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 18.06.2017.
- * phoenix
- */
+
 public final class SelectProfileCriteria implements Parcelable {
 
     public static final Creator<SelectProfileCriteria> CREATOR = new Creator<SelectProfileCriteria>() {

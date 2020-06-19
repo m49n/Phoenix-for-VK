@@ -17,10 +17,7 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 30.10.2016.
- * phoenix
- */
+
 class KeysRamStorage implements IKeysStorage {
 
     private SparseArray<List<AesKeyPair>> mData = new SparseArray<>();

@@ -3,6 +3,8 @@ package biz.dealnote.messenger.mvp.view;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.fragment.search.SearchContentType;
@@ -20,10 +22,7 @@ import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public interface IAttachmentsPlacesView {
 
     void openChatWith(int accountId, int messagesOwnerId, @NonNull Peer peer);
@@ -63,4 +62,6 @@ public interface IAttachmentsPlacesView {
     void goToReposts(int accountId, String type, int ownerId, int id);
 
     void repostPost(int accountId, @NonNull Post post);
+
+    void openStory(int accountId, @NotNull Story story);
 }

@@ -7,10 +7,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.SingleTransformer;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Created by Ruslan Kolbasa on 07.07.2017.
- * phoenix
- */
 public class NotificationScheduler {
 
     public static final Scheduler INSTANCE = Schedulers.from(Executors.newFixedThreadPool(1));

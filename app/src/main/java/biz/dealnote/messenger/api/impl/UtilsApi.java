@@ -7,10 +7,7 @@ import biz.dealnote.messenger.api.model.response.ResolveDomailResponse;
 import biz.dealnote.messenger.api.services.IUtilsService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 class UtilsApi extends AbsApi implements IUtilsApi {
 
     UtilsApi(int accountId, IServiceProvider provider) {

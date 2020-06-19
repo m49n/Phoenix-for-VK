@@ -42,10 +42,7 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.join;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 05.07.2017.
- * phoenix
- */
+
 public class RequestExecutePresenter extends AccountDependencyPresenter<IRequestExecuteView> {
 
     private final INetworker networker;

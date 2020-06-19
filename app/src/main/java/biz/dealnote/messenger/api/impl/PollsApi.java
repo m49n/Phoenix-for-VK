@@ -12,10 +12,7 @@ import biz.dealnote.messenger.api.model.VKApiPoll;
 import biz.dealnote.messenger.api.services.IPollsService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 class PollsApi extends AbsApi implements IPollsApi {
 
     PollsApi(int accountId, IServiceProvider provider) {

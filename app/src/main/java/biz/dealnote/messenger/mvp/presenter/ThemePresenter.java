@@ -12,10 +12,7 @@ import biz.dealnote.messenger.model.ThemeValue;
 import biz.dealnote.messenger.mvp.view.IThemeView;
 import biz.dealnote.mvp.core.AbsPresenter;
 
-/**
- * Created by Ruslan Kolbasa on 20.07.2017.
- * phoenix
- */
+
 public class ThemePresenter extends AbsPresenter<IThemeView> {
 
     private final List<ThemeValue> data;

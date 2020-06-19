@@ -11,10 +11,7 @@ import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.StoryResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 public interface IUsersApi {
 
     @CheckResult

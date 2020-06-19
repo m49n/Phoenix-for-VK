@@ -7,10 +7,6 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
 public interface IRelationshipInteractor {
     int FRIEND_ADD_REQUEST_SENT = 1;
     int FRIEND_ADD_REQUEST_FROM_USER_APPROVED = 2;

@@ -29,10 +29,7 @@ import biz.dealnote.messenger.util.Utils;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
+
 public class CommunityInfoContactsPresenter extends AccountDependencyPresenter<ICommunityInfoContactsView> {
 
     private final Community groupId;

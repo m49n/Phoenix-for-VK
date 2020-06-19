@@ -27,10 +27,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 29.03.2017.
- * phoenix
- */
 public class ChatAttachmentPhotoPresenter extends BaseChatAttachmentsPresenter<Photo, IChatAttachmentPhotosView> {
 
     private DisposableHolder<Void> openGalleryDisposableHolder = new DisposableHolder<>();

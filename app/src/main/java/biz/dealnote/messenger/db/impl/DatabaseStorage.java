@@ -20,10 +20,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by Ruslan Kolbasa on 20.09.2017.
- * phoenix
- */
+
 public class DatabaseStorage extends AbsStorage implements IDatabaseStore {
 
     DatabaseStorage(@NonNull AppStorages base) {

@@ -6,10 +6,6 @@ import androidx.annotation.NonNull;
 
 import biz.dealnote.messenger.model.VideoSize;
 
-/**
- * Created by Ruslan Kolbasa on 13.07.2017.
- * phoenix
- */
 public interface IGifPlayer {
 
     VideoSize getVideoSize();

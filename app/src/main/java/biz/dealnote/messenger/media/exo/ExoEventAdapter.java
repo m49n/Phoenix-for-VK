@@ -7,10 +7,6 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
-/**
- * Created by r.kolbasa on 28.11.2017.
- * Phoenix-for-VK
- */
 public class ExoEventAdapter implements Player.EventListener {
     @Override
     public void onTimelineChanged(Timeline timeline, int reason) {

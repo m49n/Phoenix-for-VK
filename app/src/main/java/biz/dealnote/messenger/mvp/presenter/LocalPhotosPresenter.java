@@ -19,10 +19,6 @@ import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
 public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
     private static final String TAG = LocalPhotosPresenter.class.getSimpleName();

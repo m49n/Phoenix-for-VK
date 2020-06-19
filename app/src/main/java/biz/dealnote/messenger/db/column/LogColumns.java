@@ -2,10 +2,7 @@ package biz.dealnote.messenger.db.column;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class LogColumns implements BaseColumns {
 
     public static final String TABLENAME = "logs";

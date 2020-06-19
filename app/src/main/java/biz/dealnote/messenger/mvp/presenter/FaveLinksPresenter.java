@@ -19,10 +19,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public class FaveLinksPresenter extends AccountDependencyPresenter<IFaveLinksView> {
 
     private final IFaveInteractor faveInteractor;

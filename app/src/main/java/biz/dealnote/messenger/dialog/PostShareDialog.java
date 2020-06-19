@@ -31,10 +31,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.RxUtils.ignore;
 
-/**
- * Created by admin on 3/26/2018.
- * Phoenix-for-VK
- */
 public class PostShareDialog extends DialogFragment {
 
     private static final String EXTRA_METHOD = "share-method";

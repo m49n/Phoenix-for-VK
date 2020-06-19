@@ -17,10 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
 
-/**
- * Created by Ruslan Kolbasa on 06.06.2017.
- * phoenix
- */
+
 public class CaptchaProvider implements ICaptchaProvider {
 
     private static final int MAX_WAIT_DELAY = 15 * 60 * 1000;

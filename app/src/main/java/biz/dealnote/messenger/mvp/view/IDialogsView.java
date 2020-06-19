@@ -11,10 +11,7 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 11.01.2017.
- * phoenix
- */
+
 public interface IDialogsView extends IAccountDependencyView, IMvpView, IErrorView, IToastView {
 
     void displayData(List<Dialog> data);

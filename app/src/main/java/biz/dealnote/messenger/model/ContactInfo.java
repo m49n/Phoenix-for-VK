@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by Ruslan Kolbasa on 21.06.2017.
- * phoenix
- */
+
 public class ContactInfo {
 
     private final int userId;

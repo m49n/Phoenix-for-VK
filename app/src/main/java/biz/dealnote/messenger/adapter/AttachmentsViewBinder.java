@@ -62,9 +62,11 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Types;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
@@ -499,7 +501,7 @@ public class AttachmentsViewBinder {
                 String details = doc.getSecondaryText(mContext);
 
                 String imageUrl = doc.getImageUrl();
-                String ext = doc.getExt() == null ? "" : doc.getExt() + ", ";
+                String ext = doc.getExt(mContext) == null ? "" : doc.getExt(mContext) + ", ";
 
                 String subtitle = ext + details;
 
@@ -546,6 +548,24 @@ public class AttachmentsViewBinder {
                             ivType.setImageResource(R.drawable.file);
                         }
                         break;
+                    case Types.STORY:
+                        backCardT.setVisibility(View.GONE);
+                        ivType.setVisibility(View.GONE);
+                        if (imageUrl != null) {
+                            ivPhoto_Post.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhoto_Post, mAvatarTransformation, imageUrl, Constants.PICASSO_TAG);
+                        } else {
+                            ivPhoto_Post.setVisibility(View.GONE);
+                        }
+                        Story st = (Story) doc.attachment;
+                        String prw = st.getPhoto() != null ? st.getPhoto().getUrlForSize(PhotoSize.X, true) : (st.getVideo() != null ? st.getVideo().getImage() : null);
+                        if (prw != null) {
+                            backCardT.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhotoT, null, prw, Constants.PICASSO_TAG);
+                        } else {
+                            backCardT.setVisibility(View.GONE);
+                        }
+                        break;
                     case Types.POST:
                         backCardT.setVisibility(View.GONE);
                         ivType.setVisibility(View.GONE);
@@ -578,6 +598,12 @@ public class AttachmentsViewBinder {
                         backCardT.setVisibility(View.GONE);
                         Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                         ivType.setImageResource(R.drawable.chart_bar);
+                        break;
+                    case Types.CALL:
+                        ivType.setVisibility(View.VISIBLE);
+                        backCardT.setVisibility(View.GONE);
+                        Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
+                        ivType.setImageResource(R.drawable.phone_call);
                         break;
                     default:
                         ivType.setVisibility(View.GONE);
@@ -684,6 +710,9 @@ public class AttachmentsViewBinder {
                 break;
             case Types.WIKI_PAGE:
                 mAttachmentsActionCallback.onWikiPageOpen((WikiPage) link.attachment);
+                break;
+            case Types.STORY:
+                mAttachmentsActionCallback.onStoryOpen((Story) link.attachment);
                 break;
         }
     }
@@ -1011,6 +1040,8 @@ public class AttachmentsViewBinder {
         void onStickerOpen(@NonNull Sticker sticker);
 
         void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index);
+
+        void onStoryOpen(@NonNull Story story);
     }
 
     private static final class CopyHolder {

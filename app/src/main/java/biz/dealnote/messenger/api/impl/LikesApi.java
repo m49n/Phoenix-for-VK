@@ -7,10 +7,7 @@ import biz.dealnote.messenger.api.model.response.LikesListResponse;
 import biz.dealnote.messenger.api.services.ILikesService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 class LikesApi extends AbsApi implements ILikesApi {
 
     LikesApi(int accountId, IServiceProvider provider) {

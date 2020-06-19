@@ -39,10 +39,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by hp-dv6 on 28.05.2016.
- * VKMessenger
- */
 class FaveStorage extends AbsStorage implements IFaveStorage {
 
     FaveStorage(@NonNull AppStorages mRepositoryContext) {

@@ -16,10 +16,6 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.SearchDialogsResponse;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class SearchDialogsResponseAdapter extends AbsAdapter implements JsonDeserializer<SearchDialogsResponse> {
 
     @Override

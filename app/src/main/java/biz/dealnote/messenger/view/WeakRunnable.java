@@ -4,10 +4,7 @@ import java.lang.ref.WeakReference;
 
 import biz.dealnote.messenger.util.Action;
 
-/**
- * Created by admin on 03.06.2017.
- * phoenix
- */
+
 public class WeakRunnable<T> implements Runnable {
 
     private final WeakReference<T> reference;

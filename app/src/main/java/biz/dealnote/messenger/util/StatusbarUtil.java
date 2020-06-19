@@ -7,10 +7,7 @@ import android.view.WindowManager;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * Created by Ruslan Kolbasa on 12.06.2017.
- * phoenix
- */
+
 public class StatusbarUtil {
 
     private static final String STATUS_BAR_SETUP_TAG = "StatusbarTag";

@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 04.12.2016.
- * phoenix
- */
+
 public class VoiceMessage extends AbsModel implements Parcelable {
 
     public static final Creator<VoiceMessage> CREATOR = new Creator<VoiceMessage>() {

@@ -16,10 +16,7 @@ import java.util.Random;
 
 import biz.dealnote.messenger.Constants;
 
-/**
- * Created by admin on 17.04.2017.
- * phoenix
- */
+
 public class FileUtil {
 
     private static DateFormat PHOTO_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());

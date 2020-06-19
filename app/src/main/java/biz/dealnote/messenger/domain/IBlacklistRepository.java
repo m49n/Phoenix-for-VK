@@ -5,10 +5,6 @@ import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
 public interface IBlacklistRepository {
     Completable fireAdd(int accountId, User user);
 

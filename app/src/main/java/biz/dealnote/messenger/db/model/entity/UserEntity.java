@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class UserEntity {
 
     private final int id;

@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by admin on 05.09.2017.
- * phoenix
- */
+
 public class PostPatch {
 
     private LikePatch likePatch;

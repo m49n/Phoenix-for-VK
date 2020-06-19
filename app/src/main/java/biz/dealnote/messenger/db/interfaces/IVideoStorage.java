@@ -10,10 +10,7 @@ import biz.dealnote.messenger.model.VideoCriteria;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public interface IVideoStorage extends IStorage {
 
     @CheckResult

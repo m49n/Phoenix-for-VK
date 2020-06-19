@@ -6,10 +6,7 @@ import biz.dealnote.messenger.model.NewsfeedComment;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
+
 public interface INewsfeedCommentsView extends IAccountDependencyView, IAttachmentsPlacesView, IMvpView, IErrorView {
     void displayData(List<NewsfeedComment> data);
 

@@ -35,10 +35,6 @@ import biz.dealnote.messenger.util.Utils;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by r.kolbasa on 28.11.2017.
- * Phoenix-for-VK
- */
 public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     private final Context app;

@@ -5,10 +5,7 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
+
 @IntDef({InternalVideoSize.SIZE_240, InternalVideoSize.SIZE_360, InternalVideoSize.SIZE_480,
         InternalVideoSize.SIZE_720, InternalVideoSize.SIZE_1080, InternalVideoSize.SIZE_HLS, InternalVideoSize.SIZE_LIVE})
 @Retention(RetentionPolicy.SOURCE)

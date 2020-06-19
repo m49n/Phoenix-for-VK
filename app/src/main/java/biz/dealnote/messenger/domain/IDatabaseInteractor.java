@@ -11,10 +11,6 @@ import biz.dealnote.messenger.model.database.SchoolClazz;
 import biz.dealnote.messenger.model.database.University;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 20.09.2017.
- * phoenix
- */
 public interface IDatabaseInteractor {
     Single<List<Chair>> getChairs(int accoutnId, int facultyId, int count, int offset);
 

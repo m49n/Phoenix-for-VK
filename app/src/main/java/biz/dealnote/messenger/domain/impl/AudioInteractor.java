@@ -29,10 +29,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public class AudioInteractor implements IAudioInteractor {
 
     private final INetworker networker;

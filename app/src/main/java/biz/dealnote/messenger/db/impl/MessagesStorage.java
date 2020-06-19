@@ -50,10 +50,6 @@ import static biz.dealnote.messenger.util.Utils.join;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by hp-dv6 on 01.06.2016.
- * VKMessenger
- */
 class MessagesStorage extends AbsStorage implements IMessagesStorage {
 
     private static final String ORDER_BY = MessageColumns.FULL_STATUS + ", " + MessageColumns.FULL_ID;

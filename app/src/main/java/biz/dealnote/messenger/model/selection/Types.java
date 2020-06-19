@@ -5,10 +5,7 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
+
 @IntDef({Types.LOCAL_PHOTOS, Types.VK_PHOTOS, Types.FILES, Types.VIDEOS, Types.LOCAL_GALLERY})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Types {

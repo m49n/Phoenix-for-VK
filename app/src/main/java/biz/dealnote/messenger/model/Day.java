@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
+
 public class Day {
 
     private int day;

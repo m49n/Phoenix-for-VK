@@ -8,10 +8,7 @@ import java.util.Set;
 import biz.dealnote.messenger.api.model.VKApiPoll;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public interface IPollsApi {
 
     @CheckResult

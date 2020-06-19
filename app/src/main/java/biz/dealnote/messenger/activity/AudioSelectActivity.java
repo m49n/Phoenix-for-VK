@@ -19,10 +19,6 @@ import biz.dealnote.messenger.place.PlaceProvider;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by Ruslan Kolbasa on 17.08.2017.
- * phoenix
- */
 public class AudioSelectActivity extends NoMainActivity implements PlaceProvider {
 
     /**

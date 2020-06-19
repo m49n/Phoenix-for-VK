@@ -12,10 +12,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
 public interface IAttachmentsRepository {
 
     @CheckResult

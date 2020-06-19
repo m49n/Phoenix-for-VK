@@ -17,10 +17,7 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 class AudioApi extends AbsApi implements IAudioApi {
 
     AudioApi(int accountId, IServiceProvider provider) {

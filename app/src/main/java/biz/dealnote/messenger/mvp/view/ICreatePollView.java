@@ -7,10 +7,7 @@ import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 20.12.2016.
- * phoenix
- */
+
 public interface ICreatePollView extends IAccountDependencyView, IMvpView, IProgressView, IErrorView {
     void displayQuestion(String question);
 

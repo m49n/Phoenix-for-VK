@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by Ruslan Kolbasa on 18.09.2017.
- * phoenix
- */
+
 public class UserPatch {
 
     private final int userId;

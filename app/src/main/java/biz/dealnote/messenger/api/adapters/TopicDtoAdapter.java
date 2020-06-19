@@ -13,10 +13,6 @@ import biz.dealnote.messenger.api.model.VKApiTopic;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 07.05.2017.
- * phoenix
- */
 public class TopicDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiTopic> {
     @Override
     public VKApiTopic deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

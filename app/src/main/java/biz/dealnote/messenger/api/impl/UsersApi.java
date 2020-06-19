@@ -20,10 +20,7 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 class UsersApi extends AbsApi implements IUsersApi {
 
     UsersApi(int accountId, IServiceProvider provider) {

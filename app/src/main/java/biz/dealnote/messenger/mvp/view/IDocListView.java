@@ -11,10 +11,7 @@ import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
+
 public interface IDocListView extends IAccountDependencyView, IMvpView, IErrorView {
 
     void displayData(List<Document> documents, boolean asImages);

@@ -29,9 +29,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
-/**
- * Created by golde on 27.09.2016.
- */
 class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.ClickListener, BackPressCallback {
     private var mRecyclerView: RecyclerView? = null
     private var mAdapter: AudioRecyclerAdapter? = null

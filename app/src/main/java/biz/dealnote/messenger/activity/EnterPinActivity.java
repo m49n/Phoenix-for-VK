@@ -9,10 +9,6 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.EnterPinFragment;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public class EnterPinActivity extends NoMainActivity {
 
     public static Class getClass(Context context) {

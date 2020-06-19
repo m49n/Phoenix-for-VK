@@ -8,10 +8,6 @@ import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by Ruslan Kolbasa on 08.06.2017.
- * phoenix
- */
 public class DefaultCommentsResponse {
 
     @SerializedName("count")

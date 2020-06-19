@@ -11,10 +11,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.database.SchoolClazzDto;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public class SchoolClazzDtoAdapter extends AbsAdapter implements JsonDeserializer<SchoolClazzDto> {
 
     @Override

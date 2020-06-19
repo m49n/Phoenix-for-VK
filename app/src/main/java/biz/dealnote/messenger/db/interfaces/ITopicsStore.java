@@ -12,10 +12,7 @@ import biz.dealnote.messenger.model.criteria.TopicsCriteria;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 13.12.2016.
- * phoenix
- */
+
 public interface ITopicsStore {
 
     @CheckResult

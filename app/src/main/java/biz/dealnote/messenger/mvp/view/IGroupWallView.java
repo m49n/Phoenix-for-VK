@@ -11,10 +11,7 @@ import biz.dealnote.messenger.model.GroupSettings;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.PostFilter;
 
-/**
- * Created by admin on 23.01.2017.
- * phoenix
- */
+
 public interface IGroupWallView extends IWallView {
 
     void displayBaseCommunityData(Community community, CommunityDetails details);

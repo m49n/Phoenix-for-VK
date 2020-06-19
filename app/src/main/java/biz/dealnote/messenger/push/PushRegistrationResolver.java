@@ -27,10 +27,6 @@ import io.reactivex.schedulers.Schedulers;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public class PushRegistrationResolver implements IPushRegistrationResolver {
 
     private static final String TAG = PushRegistrationResolver.class.getSimpleName();

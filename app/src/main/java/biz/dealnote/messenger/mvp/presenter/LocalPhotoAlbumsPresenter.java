@@ -17,10 +17,7 @@ import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public class LocalPhotoAlbumsPresenter extends RxSupportPresenter<ILocalPhotoAlbumsView> {
 
     private boolean permissionRequestedOnce;

@@ -52,10 +52,7 @@ import static biz.dealnote.messenger.util.Utils.indexOf;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by admin on 11.01.2017.
- * phoenix
- */
+
 public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
     private static final int COUNT = 30;

@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/**
- * Created by admin on 07.05.2017.
- * phoenix
- */
+
 public class NewsfeedComment {
 
     private final Object model;

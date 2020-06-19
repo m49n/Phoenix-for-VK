@@ -21,10 +21,7 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
+
 public class NewsfeedCommentsPresenter extends PlaceSupportPresenter<INewsfeedCommentsView> {
 
     private static final String TAG = NewsfeedCommentsPresenter.class.getSimpleName();

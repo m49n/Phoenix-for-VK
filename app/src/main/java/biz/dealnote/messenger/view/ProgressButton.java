@@ -14,10 +14,6 @@ import android.widget.TextView;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by ruslan.kolbasa on 07-Jun-16.
- * mobilebankingandroid
- */
 public class ProgressButton extends FrameLayout {
 
     private ImageView mProgressIcon;

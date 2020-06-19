@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by Ruslan Kolbasa on 19.07.2017.
- * phoenix
- */
+
 public class Captcha {
 
     private final String sid;

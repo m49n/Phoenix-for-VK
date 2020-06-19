@@ -22,10 +22,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by Ruslan Kolbasa on 17.05.2017.
- * phoenix
- */
 public class DocsInteractor implements IDocsInteractor {
 
     private final INetworker networker;

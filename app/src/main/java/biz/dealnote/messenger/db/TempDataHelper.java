@@ -8,10 +8,7 @@ import biz.dealnote.messenger.db.column.TempDataColumns;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
-/**
- * Created by Ruslan Kolbasa on 20.06.2017.
- * phoenix
- */
+
 public class TempDataHelper extends SQLiteOpenHelper {
 
     private static final Object lock = new Object();

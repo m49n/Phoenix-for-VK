@@ -17,10 +17,6 @@ import biz.dealnote.messenger.model.criteria.FaveVideosCriteria;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by hp-dv6 on 28.05.2016.
- * VKMessenger
- */
 public interface IFaveStorage extends IStorage {
 
     @CheckResult

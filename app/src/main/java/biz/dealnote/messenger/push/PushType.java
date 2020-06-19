@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.push;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
 public final class PushType {
     public static final String MSG = "msg";
     public static final String POST = "post";

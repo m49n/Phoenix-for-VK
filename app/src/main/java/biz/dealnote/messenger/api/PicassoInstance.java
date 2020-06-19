@@ -21,10 +21,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-/**
- * Created by Ruslan Kolbasa on 28.07.2017.
- * phoenix
- */
+
 public class PicassoInstance {
 
     private static final String TAG = PicassoInstance.class.getSimpleName();

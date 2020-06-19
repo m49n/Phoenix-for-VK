@@ -14,10 +14,7 @@ import okhttp3.OkHttpClient;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class ProxyUtil {
 
     public static InetSocketAddress obtainAddress(@NonNull ProxyConfig config) {

@@ -7,10 +7,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by hp-dv6 on 08.06.2016 with Core i7 2670QM.
- * VKMessenger
- */
 public class News extends AbsModel implements Parcelable {
 
     public static final Creator<News> CREATOR = new Creator<News>() {

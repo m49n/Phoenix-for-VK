@@ -5,10 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by ruslan.kolbasa on 19.10.2016.
- * phoenix
- */
 public class WeakGoBackAnimationAdapter extends AnimatorListenerAdapter {
 
     private WeakReference<GoBackCallback> mReference;

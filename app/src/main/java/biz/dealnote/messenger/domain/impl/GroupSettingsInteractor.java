@@ -36,10 +36,6 @@ import static biz.dealnote.messenger.util.Utils.findById;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by Ruslan Kolbasa on 15.06.2017.
- * phoenix
- */
 public class GroupSettingsInteractor implements IGroupSettingsInteractor {
 
     private final INetworker networker;

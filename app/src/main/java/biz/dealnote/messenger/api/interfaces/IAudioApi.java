@@ -14,10 +14,7 @@ import biz.dealnote.messenger.api.model.VkApiLyrics;
 import biz.dealnote.messenger.api.model.response.CatalogResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 public interface IAudioApi {
 
     @CheckResult

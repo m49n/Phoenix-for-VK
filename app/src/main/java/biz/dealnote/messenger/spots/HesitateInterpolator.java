@@ -2,10 +2,6 @@ package biz.dealnote.messenger.spots;
 
 import android.view.animation.Interpolator;
 
-/**
- * Created by Maxim Dybarsky | maxim.dybarskyy@gmail.com
- * on 13.01.15 at 14:20
- */
 class HesitateInterpolator implements Interpolator {
 
     private static double POW = 1.0 / 2.0;

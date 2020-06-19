@@ -23,10 +23,7 @@ import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
+
 public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersView> {
 
     private final List<FavePage> pages;

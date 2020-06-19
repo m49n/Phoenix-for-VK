@@ -89,10 +89,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 21.07.2017.
- * phoenix
- */
 public class VkRetrofitProvider implements IVkRetrofitProvider {
 
     private static final String API_METHOD_URL = "https://api.vk.com/method/";

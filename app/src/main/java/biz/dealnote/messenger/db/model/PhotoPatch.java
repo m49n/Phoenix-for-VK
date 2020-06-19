@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by Ruslan Kolbasa on 06.10.2017.
- * Phoenix-for-VK
- */
 public class PhotoPatch {
 
     private Like like;
