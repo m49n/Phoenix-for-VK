@@ -455,6 +455,9 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                         sender.get100photoOrSmaller(), null)
 
                 pinnedTitle?.text = sender.fullName
+                if (Utils.isEmpty(body) && pinned.isHasAttachments) {
+                    body = getString(R.string.attachments)
+                }
                 pinnedSubtitle?.text = body
                 buttonUnpin?.visibility = if (canChange) View.VISIBLE else View.GONE
                 pinnedView?.setOnClickListener { recyclerView?.scrollToPosition(0); presenter?.requestFromNetInMessage(pinned.id); }

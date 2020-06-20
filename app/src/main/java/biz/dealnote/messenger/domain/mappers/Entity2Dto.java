@@ -8,9 +8,11 @@ import biz.dealnote.messenger.api.model.AttachmentsTokenCreator;
 import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
 import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.db.model.entity.PollEntity;
@@ -61,9 +63,19 @@ public class Entity2Dto {
             return AttachmentsTokenCreator.ofStory(story.getId(), story.getOwnerId(), story.getAccessKey());
         }
 
+        if (entity instanceof GraffitiEntity) {
+            GraffitiEntity graffity = (GraffitiEntity) entity;
+            return AttachmentsTokenCreator.ofGraffity(graffity.getId(), graffity.getOwner_id(), graffity.getAccess_key());
+        }
+
         if (entity instanceof CallEntity) {
             CallEntity call = (CallEntity) entity;
             return AttachmentsTokenCreator.ofCall(call.getInitiator_id(), call.getReceiver_id(), call.getState(), call.getTime());
+        }
+
+        if (entity instanceof AudioPlaylistEntity) {
+            AudioPlaylistEntity playlist = (AudioPlaylistEntity) entity;
+            return AttachmentsTokenCreator.ofAudioPlaylist(playlist.getId(), playlist.getOwnerId(), playlist.getAccess_key());
         }
 
         if (entity instanceof PhotoEntity) {

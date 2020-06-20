@@ -123,4 +123,20 @@ public class Article extends AbsModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Graffiti))
+            return false;
+
+        Article article = (Article) o;
+        return id == article.id && owner_id == article.owner_id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + owner_id;
+        return result;
+    }
 }

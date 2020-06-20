@@ -46,6 +46,8 @@ public class Attachments implements Parcelable, Cloneable {
     private ArrayList<WikiPage> pages;
     private ArrayList<VoiceMessage> voiceMessages;
     private ArrayList<GiftItem> gifts;
+    private ArrayList<AudioPlaylist> audio_playlists;
+    private ArrayList<Graffiti> graffity;
 
     public Attachments() {
     }
@@ -65,6 +67,8 @@ public class Attachments implements Parcelable, Cloneable {
         gifts = in.createTypedArrayList(GiftItem.CREATOR);
         stories = in.createTypedArrayList(Story.CREATOR);
         calls = in.createTypedArrayList(Call.CREATOR);
+        audio_playlists = in.createTypedArrayList(AudioPlaylist.CREATOR);
+        graffity = in.createTypedArrayList(Graffiti.CREATOR);
     }
 
     public ArrayList<VoiceMessage> getVoiceMessages() {
@@ -87,6 +91,8 @@ public class Attachments implements Parcelable, Cloneable {
         dest.writeTypedList(gifts);
         dest.writeTypedList(stories);
         dest.writeTypedList(calls);
+        dest.writeTypedList(audio_playlists);
+        dest.writeTypedList(graffity);
     }
 
     public void add(AbsModel model) {
@@ -142,6 +148,16 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (model instanceof Call) {
             prepareCalls().add((Call) model);
+            return;
+        }
+
+        if (model instanceof AudioPlaylist) {
+            prepareAudioPlaylists().add((AudioPlaylist) model);
+            return;
+        }
+
+        if (model instanceof Graffiti) {
+            prepareGraffity().add((Graffiti) model);
             return;
         }
 
@@ -203,6 +219,14 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(calls)) {
             result.addAll(calls);
+        }
+
+        if (nonEmpty(audio_playlists)) {
+            result.addAll(audio_playlists);
+        }
+
+        if (nonEmpty(graffity)) {
+            result.addAll(graffity);
         }
 
         if (nonEmpty(polls)) {
@@ -284,6 +308,22 @@ public class Attachments implements Parcelable, Cloneable {
         return calls;
     }
 
+    public ArrayList<AudioPlaylist> prepareAudioPlaylists() {
+        if (audio_playlists == null) {
+            audio_playlists = new ArrayList<>(1);
+        }
+
+        return audio_playlists;
+    }
+
+    public ArrayList<Graffiti> prepareGraffity() {
+        if (graffity == null) {
+            graffity = new ArrayList<>(1);
+        }
+
+        return graffity;
+    }
+
     public ArrayList<Document> prepareDocs() {
         if (docs == null) {
             docs = new ArrayList<>(1);
@@ -344,6 +384,8 @@ public class Attachments implements Parcelable, Cloneable {
                 articles,
                 stories,
                 calls,
+                audio_playlists,
+                graffity,
                 polls,
                 pages,
                 voiceMessages,
@@ -362,6 +404,8 @@ public class Attachments implements Parcelable, Cloneable {
                 articles,
                 stories,
                 calls,
+                audio_playlists,
+                graffity,
                 polls,
                 pages,
                 voiceMessages,
@@ -397,6 +441,8 @@ public class Attachments implements Parcelable, Cloneable {
                 safeIsEmpty(articles) &&
                 safeIsEmpty(stories) &&
                 safeIsEmpty(calls) &&
+                safeIsEmpty(audio_playlists) &&
+                safeIsEmpty(graffity) &&
                 safeIsEmpty(pages) &&
                 safeIsEmpty(polls) &&
                 safeIsEmpty(voiceMessages) &&
@@ -487,6 +533,18 @@ public class Attachments implements Parcelable, Cloneable {
             }
         }
 
+        if (audio_playlists != null) {
+            for (AudioPlaylist playlist : audio_playlists) {
+                result.add(new DocLink(playlist));
+            }
+        }
+
+        if (graffity != null) {
+            for (Graffiti graff : graffity) {
+                result.add(new DocLink(graff));
+            }
+        }
+
         return result;
     }
 
@@ -504,6 +562,8 @@ public class Attachments implements Parcelable, Cloneable {
         clone.articles = cloneListAsArrayList(this.articles);
         clone.stories = cloneListAsArrayList(this.stories);
         clone.calls = cloneListAsArrayList(this.calls);
+        clone.audio_playlists = cloneListAsArrayList(this.audio_playlists);
+        clone.graffity = cloneListAsArrayList(this.graffity);
         clone.polls = cloneListAsArrayList(this.polls);
         clone.pages = cloneListAsArrayList(this.pages);
         clone.voiceMessages = cloneListAsArrayList(this.voiceMessages);
@@ -552,6 +612,14 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonNull(calls)) {
             line = line + " calls=" + safeCountOf(calls);
+        }
+
+        if (nonNull(audio_playlists)) {
+            line = line + " audio_playlists=" + safeCountOf(audio_playlists);
+        }
+
+        if (nonNull(graffity)) {
+            line = line + " graffity=" + safeCountOf(graffity);
         }
 
         if (nonNull(polls)) {
@@ -615,6 +683,14 @@ public class Attachments implements Parcelable, Cloneable {
 
     public ArrayList<Call> getCalls() {
         return calls;
+    }
+
+    public ArrayList<AudioPlaylist> getAudioPlaylists() {
+        return audio_playlists;
+    }
+
+    public ArrayList<Graffiti> getGraffity() {
+        return graffity;
     }
 
     public ArrayList<Poll> getPolls() {

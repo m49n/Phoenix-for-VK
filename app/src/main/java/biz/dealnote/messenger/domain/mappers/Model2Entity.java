@@ -1,6 +1,5 @@
 package biz.dealnote.messenger.domain.mappers;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.PageEntity;
@@ -35,6 +35,7 @@ import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.GiftItem;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
@@ -98,6 +99,8 @@ public class Model2Entity {
         mapAndAdd(attachments.getArticles(), Model2Entity::buildArticleDbo, entities);
         mapAndAdd(attachments.getStories(), Model2Entity::buildStoryDbo, entities);
         mapAndAdd(attachments.getCalls(), Model2Entity::buildCallDbo, entities);
+        mapAndAdd(attachments.getGraffity(), Model2Entity::buildGraffityDbo, entities);
+        mapAndAdd(attachments.getAudioPlaylists(), Model2Entity::buildAudioPlaylistEntity, entities);
         mapAndAdd(attachments.getPolls(), Model2Entity::buildPollDbo, entities);
         mapAndAdd(attachments.getPages(), Model2Entity::buildPageEntity, entities);
         mapAndAdd(attachments.getGifts(), Model2Entity::buildGiftItemEntity, entities);
@@ -126,8 +129,12 @@ public class Model2Entity {
                 entities.add(buildArticleDbo((Article) model));
             } else if (model instanceof Story) {
                 entities.add(buildStoryDbo((Story) model));
+            } else if (model instanceof AudioPlaylist) {
+                entities.add(buildAudioPlaylistEntity((AudioPlaylist) model));
             } else if (model instanceof Call) {
                 entities.add(buildCallDbo((Call) model));
+            } else if (model instanceof Graffiti) {
+                entities.add(buildGraffityDbo((Graffiti) model));
             } else if (model instanceof Poll) {
                 entities.add(buildPollDbo((Poll) model));
             } else if (model instanceof WikiPage) {
@@ -219,6 +226,15 @@ public class Model2Entity {
                 .setReceiver_id(dbo.getReceiver_id())
                 .setState(dbo.getState())
                 .setTime(dbo.getTime());
+    }
+
+    public static GraffitiEntity buildGraffityDbo(Graffiti dbo) {
+        return new GraffitiEntity().setId(dbo.getId())
+                .setOwner_id(dbo.getOwner_id())
+                .setAccess_key(dbo.getAccess_key())
+                .setHeight(dbo.getHeight())
+                .setWidth(dbo.getWidth())
+                .setUrl(dbo.getUrl());
     }
 
     public static PostEntity buildPostDbo(Post post) {
@@ -362,7 +378,7 @@ public class Model2Entity {
                 .setMain_artists(audio.getMain_artists());
     }
 
-    public static AudioPlaylistEntity buildAudioPlaylistEntity(@NonNull AudioPlaylist dto) {
+    public static AudioPlaylistEntity buildAudioPlaylistEntity(AudioPlaylist dto) {
         return new AudioPlaylistEntity()
                 .setId(dto.getId())
                 .setOwnerId(dto.getOwnerId())

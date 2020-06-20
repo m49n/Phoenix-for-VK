@@ -5,144 +5,240 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:contentPadding="16dp"
-        tools:ignore="UnusedAttribute">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/valknut_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/valknut" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/runes_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="@dimen/card_margin"
+            app:contentPadding="3dp"
+            tools:ignore="UnusedAttribute">
 
-            <RelativeLayout
-                android:id="@+id/profile_data_container"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_des"
+                    android:tint="?colorPrimary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_flam"
+                    android:tint="?colorSecondary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_heg"
+                    android:tint="?colorPrimary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_ley"
+                    android:tint="?colorSecondary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_wis"
+                    android:tint="?colorPrimary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_des"
+                    android:tint="?colorPrimary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_flam"
+                    android:tint="?colorSecondary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_heg"
+                    android:tint="?colorPrimary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_ley"
+                    android:tint="?colorSecondary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_wis"
+                    android:tint="?colorPrimary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/card_margin"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:contentPadding="16dp"
+            tools:ignore="UnusedAttribute">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/fragment_user_profile_avatar_container"
-                    android:layout_width="@dimen/avatar_size_big"
-                    android:layout_height="@dimen/avatar_size_big"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true">
+                    android:id="@+id/profile_data_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/avatar"
+                    <RelativeLayout
+                        android:id="@+id/fragment_user_profile_avatar_container"
                         android:layout_width="@dimen/avatar_size_big"
                         android:layout_height="@dimen/avatar_size_big"
-                        android:background="@drawable/sel_button_round_5_white"
-                        android:padding="1.5dp" />
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true">
 
-                    <biz.dealnote.messenger.view.OnlineView
-                        android:id="@+id/header_navi_menu_online"
-                        android:layout_width="@dimen/online_dot_size_big"
-                        android:layout_height="@dimen/online_dot_size_big"
-                        android:layout_alignStart="@+id/avatar"
-                        android:layout_alignBottom="@+id/avatar"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginBottom="4dp"
-                        android:padding="4dp"
-                        app:circle_color="?icon_color_active" />
+                        <ImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="@dimen/avatar_size_big"
+                            android:layout_height="@dimen/avatar_size_big"
+                            android:background="@drawable/sel_button_round_5_white"
+                            android:padding="1.5dp" />
+
+                        <biz.dealnote.messenger.view.OnlineView
+                            android:id="@+id/header_navi_menu_online"
+                            android:layout_width="@dimen/online_dot_size_big"
+                            android:layout_height="@dimen/online_dot_size_big"
+                            android:layout_alignStart="@+id/avatar"
+                            android:layout_alignBottom="@+id/avatar"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:padding="4dp"
+                            app:circle_color="?icon_color_active" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/fragment_user_profile_avatar_container"
+                        android:layout_toEndOf="@+id/fragment_user_profile_avatar_container"
+                        android:gravity="end|center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/fragment_user_profile_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textAppearance="@style/ProfileText"
+                            tools:text="Emin Guliev" />
+
+                        <TextView
+                            android:id="@+id/fragment_user_profile_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            tools:text="\@ezorrio" />
+
+                        <TextView
+                            android:id="@+id/fragment_user_profile_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="end"
+                            android:textSize="@dimen/font_size_subtitle" />
+
+                        <biz.dealnote.messenger.view.emoji.EmojiconTextView
+                            android:id="@+id/fragment_user_profile_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:gravity="end"
+                            android:maxLines="6"
+                            android:textAppearance="@style/ProfileSubText"
+                            android:visibility="visible"
+                            app:emojiconSize="20sp"
+                            tools:text="It is my status :D" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/fragment_user_profile_avatar_container"
-                    android:layout_toEndOf="@+id/fragment_user_profile_avatar_container"
-                    android:gravity="end|center_vertical"
-                    android:orientation="vertical">
+                    android:layout_marginTop="12dp"
+                    android:baselineAligned="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/fragment_user_profile_name"
+                    <Button
+                        android:id="@+id/subscribe_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/header_user_profile_fab_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:textAppearance="@style/ProfileText"
-                        tools:text="Emin Guliev" />
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/email"
+                        app:elevation="3dp"
+                        app:fabSize="mini" />
 
-                    <TextView
-                        android:id="@+id/fragment_user_profile_id"
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/info_btn"
+                        style="?attr/fab_secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                        tools:text="\@ezorrio" />
-
-                    <TextView
-                        android:id="@+id/fragment_user_profile_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="end"
-                        android:textSize="@dimen/font_size_subtitle" />
-
-                    <biz.dealnote.messenger.view.emoji.EmojiconTextView
-                        android:id="@+id/fragment_user_profile_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:gravity="end"
-                        android:maxLines="6"
-                        android:textAppearance="@style/ProfileSubText"
-                        android:visibility="visible"
-                        app:emojiconSize="20sp"
-                        tools:text="It is my status :D" />
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/about_writed"
+                        app:elevation="3dp"
+                        app:fabSize="mini" />
 
                 </LinearLayout>
 
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:baselineAligned="false"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/subscribe_btn"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/header_user_profile_fab_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/email"
-                    app:elevation="3dp"
-                    app:fabSize="mini" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/info_btn"
-                    style="?attr/fab_secondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/about_writed"
-                    app:elevation="3dp"
-                    app:fabSize="mini" />
-
             </LinearLayout>
 
-        </LinearLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

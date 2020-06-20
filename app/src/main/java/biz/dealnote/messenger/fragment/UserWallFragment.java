@@ -45,6 +45,7 @@ import biz.dealnote.messenger.mvp.presenter.UserWallPresenter;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -192,6 +193,8 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     protected void onHeaderInflated(View headerRootView) {
         mHeaderHolder = new UserHeaderHolder(headerRootView);
         mHeaderHolder.ivAvatar.setOnClickListener(v -> getPresenter().fireAvatarClick());
+        mHeaderHolder.Runes.setVisibility(Settings.get().other().isRunes_show() ? View.VISIBLE : View.GONE);
+        mHeaderHolder.Valknut.setVisibility(Settings.get().other().isRunes_valknut() ? View.VISIBLE : View.GONE);
     }
 
     @NotNull
@@ -378,6 +381,9 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         FloatingActionButton fabMoreInfo;
         Button bPrimaryAction;
 
+        ImageView Valknut;
+        View Runes;
+
         HorizontalOptionsAdapter<PostFilter> mPostFilterAdapter;
 
         UserHeaderHolder(@NonNull View root) {
@@ -396,6 +402,8 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             fabMessage = root.findViewById(R.id.header_user_profile_fab_message);
             fabMoreInfo = root.findViewById(R.id.info_btn);
             bPrimaryAction = root.findViewById(R.id.subscribe_btn);
+            Valknut = root.findViewById(R.id.valknut_icon);
+            Runes = root.findViewById(R.id.runes_icon);
 
             RecyclerView filtersList = root.findViewById(R.id.post_filter_recyclerview);
             filtersList.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));

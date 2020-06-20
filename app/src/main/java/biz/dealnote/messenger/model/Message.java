@@ -571,6 +571,10 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
         return nonNull(attachments) && safeCountOf(attachments.getStickers()) > 0;
     }
 
+    public boolean isGraffity() {
+        return nonNull(attachments) && safeCountOf(attachments.getGraffity()) > 0;
+    }
+
     public boolean isGift() {
         return nonNull(attachments) && safeCountOf(attachments.getGifts()) > 0;
     }

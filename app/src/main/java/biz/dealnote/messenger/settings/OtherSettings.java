@@ -277,4 +277,19 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isDisabled_encryption() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_encryption", false);
     }
+
+    @Override
+    public boolean isDownload_photo_tap() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("download_photo_tap", true);
+    }
+
+    @Override
+    public boolean isRunes_show() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_show", false);
+    }
+
+    @Override
+    public boolean isRunes_valknut() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_valknut", false);
+    }
 }

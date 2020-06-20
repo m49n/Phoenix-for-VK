@@ -212,4 +212,11 @@ public class AudioPlaylist extends AbsModel implements Parcelable {
         AudioPlaylist playlist = (AudioPlaylist) o;
         return id == playlist.id && owner_id == playlist.owner_id;
     }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + owner_id;
+        return result;
+    }
 }

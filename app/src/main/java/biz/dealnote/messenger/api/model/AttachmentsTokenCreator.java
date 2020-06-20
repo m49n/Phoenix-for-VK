@@ -23,6 +23,14 @@ public class AttachmentsTokenCreator {
         return new AttachmentToken("story", id, ownerId, accessKey);
     }
 
+    public static IAttachmentToken ofAudioPlaylist(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("audio_playlist", id, ownerId, accessKey);
+    }
+
+    public static IAttachmentToken ofGraffity(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("graffiti", id, ownerId, accessKey);
+    }
+
     public static IAttachmentToken ofCall(int initiator_id, int receiver_id, String state, long time) {
         return new AttachmentToken("call", initiator_id, receiver_id, state + "_" + time);
     }

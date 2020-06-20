@@ -21,9 +21,11 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
@@ -197,6 +199,38 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         }
     }
 
+    private void bindAudioPlaylist(ViewHolder holder, AudioPlaylist playlist) {
+        holder.tvTitle.setText(playlist.getTitle());
+
+        String photoLink = playlist.getThumb_image();
+
+        if (nonEmpty(photoLink)) {
+            PicassoInstance.with()
+                    .load(photoLink)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.background_gray);
+        }
+    }
+
+    private void bindGraffiti(ViewHolder holder, Graffiti graffiti) {
+        holder.tvTitle.setText(R.string.graffity);
+
+        String photoLink = graffiti.getUrl();
+
+        if (nonEmpty(photoLink)) {
+            PicassoInstance.with()
+                    .load(photoLink)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.background_gray);
+        }
+    }
+
     private void bindCall(ViewHolder holder, Call call) {
         holder.tvTitle.setText(R.string.call);
         PicassoInstance.with().cancelRequest(holder.photoImageView);
@@ -334,6 +368,10 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
             bindStory(holder, (Story) model);
         } else if (model instanceof Call) {
             bindCall(holder, (Call) model);
+        } else if (model instanceof AudioPlaylist) {
+            bindAudioPlaylist(holder, (AudioPlaylist) model);
+        } else if (model instanceof Graffiti) {
+            bindGraffiti(holder, (Graffiti) model);
         } else {
             throw new UnsupportedOperationException("Type " + model.getClass() + " in not supported");
         }

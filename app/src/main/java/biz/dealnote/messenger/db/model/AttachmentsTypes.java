@@ -3,10 +3,12 @@ package biz.dealnote.messenger.db.model;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
 import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.PageEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoEntity;
@@ -19,9 +21,6 @@ import biz.dealnote.messenger.db.model.entity.VideoEntity;
 
 
 public final class AttachmentsTypes {
-
-    public static final int GIFT = 32768;
-
     public static final int PHOTO = 1;
     public static final int VIDEO = 2;
     public static final int AUDIO = 4;
@@ -33,9 +32,12 @@ public final class AttachmentsTypes {
     public static final int CALL = 256;
     public static final int POLL = 512;
     public static final int PAGE = 1024;
+    public static final int AUDIO_PLAYLIST = 2048;
     public static final int STICKER = 4096;
     public static final int TOPIC = 8192;
     public static final int AUDIO_MESSAGE = 16384;
+    public static final int GIFT = 32768;
+    public static final int GRAFFITY = 65536;
 
     private AttachmentsTypes() {
     }
@@ -71,6 +73,10 @@ public final class AttachmentsTypes {
             return STORY;
         } else if (entity instanceof CallEntity) {
             return CALL;
+        } else if (entity instanceof AudioPlaylistEntity) {
+            return AUDIO_PLAYLIST;
+        } else if (entity instanceof GraffitiEntity) {
+            return GRAFFITY;
         }
 
         throw new UnsupportedOperationException("Unsupported type: " + entity.getClass());
@@ -108,6 +114,10 @@ public final class AttachmentsTypes {
                 return StoryEntity.class;
             case CALL:
                 return CallEntity.class;
+            case AUDIO_PLAYLIST:
+                return AudioPlaylistEntity.class;
+            case GRAFFITY:
+                return GraffitiEntity.class;
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }

@@ -11,8 +11,10 @@ import java.lang.reflect.Type;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
@@ -68,6 +70,8 @@ public class AttachmentsEntryDtoAdapter extends AbsAdapter implements JsonDeseri
             //    return context.deserialize(o, VKApiApplicationContent.class);
         } else if (VkApiAttachments.TYPE_STORY.equals(type)) {
             return context.deserialize(o, VKApiStory.class);
+        } else if (VkApiAttachments.TYPE_GRAFFITY.equals(type)) {
+            return context.deserialize(o, VKApiGraffiti.class);
         } else if (VkApiAttachments.TYPE_CALL.equals(type)) {
             return context.deserialize(o, VKApiCall.class);
         } else if (VkApiAttachments.TYPE_ARTICLE.equals(type)) {
@@ -82,6 +86,8 @@ public class AttachmentsEntryDtoAdapter extends AbsAdapter implements JsonDeseri
             return context.deserialize(o, VKApiSticker.class);
         } else if (VkApiAttachments.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
+        } else if (VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)) {
+            return context.deserialize(o, VKApiAudioPlaylist.class);
         }
 
         return null;

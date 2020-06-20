@@ -21,6 +21,7 @@ import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
@@ -116,6 +117,16 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void openStory(int accountId, @NotNull Story story) {
         PlaceFactory.getHistoryVideoPreviewPlace(accountId, new ArrayList<>(Collections.singleton(story)), 0).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onAudioPlaylistOpen(@NotNull AudioPlaylist playlist) {
+        getPresenter().fireAudioPlaylistClick(playlist);
+    }
+
+    @Override
+    public void openAudioPlaylist(int accountId, @NotNull AudioPlaylist playlist) {
+        PlaceFactory.getAudiosInAlbumPlace(accountId, playlist.getOwnerId(), playlist.getId(), playlist.getAccess_key()).tryOpenWith(requireActivity());
     }
 
     @Override

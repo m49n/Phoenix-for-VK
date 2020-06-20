@@ -5,12 +5,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.domain.ILikesInteractor;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.NewsFeedCriteria;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
@@ -74,6 +77,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
 
     public void fireVideoClick(@NonNull Video apiVideo) {
         getView().openVideo(getAccountId(), apiVideo);
+    }
+
+    public void fireAudioPlaylistClick(@NotNull AudioPlaylist playlist) {
+        getView().openAudioPlaylist(getAccountId(), playlist);
     }
 
     public void firePollClick(@NonNull Poll poll) {

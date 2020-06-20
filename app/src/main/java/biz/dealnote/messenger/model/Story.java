@@ -150,4 +150,11 @@ public class Story extends AbsModel implements Parcelable {
         Story story = (Story) o;
         return id == story.id && owner_id == story.owner_id;
     }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + owner_id;
+        return result;
+    }
 }

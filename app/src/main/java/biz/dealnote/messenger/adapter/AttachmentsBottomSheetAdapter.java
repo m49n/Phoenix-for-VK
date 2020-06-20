@@ -23,9 +23,11 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
@@ -110,6 +112,10 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindStory(holder, (Story) model);
         } else if (model instanceof Call) {
             bindCall(holder, (Call) model);
+        } else if (model instanceof AudioPlaylist) {
+            bindAudioPlaylist(holder, (AudioPlaylist) model);
+        } else if (model instanceof Graffiti) {
+            bindGraffiti(holder, (Graffiti) model);
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
@@ -151,12 +157,30 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    private void bindGraffiti(EntryHolder holder, Graffiti graffiti) {
+        holder.title.setText(R.string.graffity);
+        String photoLink = graffiti.getUrl();
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        bindImageView(holder, photoLink);
+    }
+
     private void bindArticle(EntryHolder holder, Article link) {
         holder.title.setText(R.string.article);
         holder.progress.setVisibility(View.INVISIBLE);
         holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         String photoLink = nonNull(link.getPhoto()) ? link.getPhoto().getUrlForSize(PhotoSize.X, false) : null;
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindAudioPlaylist(EntryHolder holder, AudioPlaylist link) {
+        holder.title.setText(link.getTitle());
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = link.getThumb_image();
         bindImageView(holder, photoLink);
     }
 

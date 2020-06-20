@@ -1358,7 +1358,7 @@
     <string name="audio_goto_artist">Перейти к певцу</string>
     <string name="hide_dialog">Скрыть</string>
     <string name="set_no_hide_dialog">Снять ограничения</string>
-    <string name="local_audios">Скаченные</string>
+    <string name="local_audios">Скачанные</string>
     <string name="not_supported">Не поддерживается"</string>
     <string name="crypt_version">Версия шифрования"</string>
     <string name="not_supported_hide">Установите пин-код в настройках!!!"</string>
@@ -1368,4 +1368,9 @@
     <string name="call">Звонок"</string>
     <string name="input_call">Исходящий звонок"</string>
     <string name="output_call">Входящий звонок"</string>
+    <string name="graffity">Граффити"</string>
+    <string name="download_photo_tap">Скачивать фото по долгому нажатию"</string>
+    <string name="wall">Стена"</string>
+    <string name="runes_show">Показывать Руны"</string>
+    <string name="runes_valknut">Показывать Валькнут"</string>
 </resources>

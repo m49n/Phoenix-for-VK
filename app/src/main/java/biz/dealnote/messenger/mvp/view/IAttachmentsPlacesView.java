@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
@@ -64,4 +65,6 @@ public interface IAttachmentsPlacesView {
     void repostPost(int accountId, @NonNull Post post);
 
     void openStory(int accountId, @NotNull Story story);
+
+    void openAudioPlaylist(int accountId, @NotNull AudioPlaylist playlist);
 }

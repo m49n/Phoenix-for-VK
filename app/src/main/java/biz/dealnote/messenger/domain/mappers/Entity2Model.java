@@ -23,6 +23,7 @@ import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.FavePageEntity;
 import biz.dealnote.messenger.db.model.entity.GiftEntity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.MilitaryEntity;
@@ -61,6 +62,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.Gift;
 import biz.dealnote.messenger.model.GiftItem;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.model.Link;
@@ -493,6 +495,14 @@ public class Entity2Model {
             return buildStoryFromDbo((StoryEntity) entity, owners);
         }
 
+        if (entity instanceof GraffitiEntity) {
+            return buildGraffityFromDbo((GraffitiEntity) entity);
+        }
+
+        if (entity instanceof AudioPlaylistEntity) {
+            return buildAudioPlaylistFromDbo((AudioPlaylistEntity) entity);
+        }
+
         if (entity instanceof CallEntity) {
             return buildCallFromDbo((CallEntity) entity);
         }
@@ -555,7 +565,7 @@ public class Entity2Model {
                 .setMain_artists(dbo.getMain_artists());
     }
 
-    public static AudioPlaylist buildAudioPlaylistFromDbo(@NonNull AudioPlaylistEntity dto) {
+    public static AudioPlaylist buildAudioPlaylistFromDbo(AudioPlaylistEntity dto) {
         return new AudioPlaylist()
                 .setId(dto.getId())
                 .setOwnerId(dto.getOwnerId())
@@ -722,6 +732,15 @@ public class Entity2Model {
                 .setOwner(owners.getById(dbo.getOwnerId()))
                 .setPhoto(nonNull(dbo.getPhoto()) ? map(dbo.getPhoto()) : null)
                 .setVideo(dbo.getVideo() != null ? buildVideoFromDbo(dbo.getVideo()) : null);
+    }
+
+    public static Graffiti buildGraffityFromDbo(GraffitiEntity dto) {
+        return new Graffiti().setId(dto.getId())
+                .setOwner_id(dto.getOwner_id())
+                .setAccess_key(dto.getAccess_key())
+                .setHeight(dto.getHeight())
+                .setWidth(dto.getWidth())
+                .setUrl(dto.getUrl());
     }
 
     public static News buildNewsFromDbo(NewsEntity dbo, IOwnersBundle owners) {

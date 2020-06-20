@@ -1,7 +1,7 @@
 package biz.dealnote.messenger.db.model.entity;
 
 
-public class AudioPlaylistEntity {
+public class AudioPlaylistEntity extends Entity {
     private int id;
     private int owner_id;
     private int count;

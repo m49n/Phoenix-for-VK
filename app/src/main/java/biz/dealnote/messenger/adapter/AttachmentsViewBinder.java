@@ -57,6 +57,7 @@ import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.CryptStatus;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
@@ -94,6 +95,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.dpToPx;
+import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 import static biz.dealnote.messenger.util.Utils.safeLenghtOf;
@@ -494,6 +496,7 @@ public class AttachmentsViewBinder {
                 TextView tvDetails = itemView.findViewById(R.id.item_document_ext_size);
                 EmojiconTextView tvPostText = itemView.findViewById(R.id.item_message_text);
                 ImageView ivPhotoT = itemView.findViewById(R.id.item_document_image);
+                ImageView ivGraffity = itemView.findViewById(R.id.item_document_graffity);
                 ImageView ivPhoto_Post = itemView.findViewById(R.id.item_post_avatar_image);
                 ImageView ivType = itemView.findViewById(R.id.item_document_type);
 
@@ -503,9 +506,14 @@ public class AttachmentsViewBinder {
                 String imageUrl = doc.getImageUrl();
                 String ext = doc.getExt(mContext) == null ? "" : doc.getExt(mContext) + ", ";
 
-                String subtitle = ext + details;
+                String subtitle = firstNonEmptyString(ext, " ") + firstNonEmptyString(details, " ");
 
-                tvTitle.setText(title);
+                if (Utils.isEmpty(title)) {
+                    tvTitle.setVisibility(View.GONE);
+                } else {
+                    tvTitle.setText(title);
+                    tvTitle.setVisibility(View.VISIBLE);
+                }
                 if (doc.getType() == Types.POST) {
                     tvDetails.setVisibility(View.GONE);
                     tvPostText.setVisibility(View.VISIBLE);
@@ -518,7 +526,13 @@ public class AttachmentsViewBinder {
                 } else {
                     tvDetails.setVisibility(View.VISIBLE);
                     tvPostText.setVisibility(View.GONE);
-                    tvDetails.setText(subtitle);
+
+                    if (Utils.isEmpty(subtitle)) {
+                        tvDetails.setVisibility(View.GONE);
+                    } else {
+                        tvDetails.setText(subtitle);
+                        tvDetails.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 View attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
@@ -534,6 +548,7 @@ public class AttachmentsViewBinder {
 
                 itemView.setOnClickListener(v -> openDocLink(doc));
                 ivPhoto_Post.setVisibility(View.GONE);
+                ivGraffity.setVisibility(View.GONE);
 
                 switch (doc.getType()) {
                     case Types.DOC:
@@ -546,6 +561,29 @@ public class AttachmentsViewBinder {
                             backCardT.setVisibility(View.GONE);
                             Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
                             ivType.setImageResource(R.drawable.file);
+                        }
+                        break;
+                    case Types.GRAFFITY:
+                        backCardT.setVisibility(View.GONE);
+                        if (imageUrl != null) {
+                            ivType.setVisibility(View.GONE);
+                            ivGraffity.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivGraffity, null, imageUrl, Constants.PICASSO_TAG);
+                        } else {
+                            ivType.setVisibility(View.VISIBLE);
+                            Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
+                            ivType.setImageResource(R.drawable.counter);
+                        }
+                        break;
+                    case Types.AUDIO_PLAYLIST:
+                        if (imageUrl != null) {
+                            ivType.setVisibility(View.VISIBLE);
+                            backCardT.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhotoT, null, imageUrl, Constants.PICASSO_TAG);
+                            Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
+                            ivType.setImageResource(R.drawable.audio_player);
+                        } else {
+                            backCardT.setVisibility(View.GONE);
                         }
                         break;
                     case Types.STORY:
@@ -713,6 +751,9 @@ public class AttachmentsViewBinder {
                 break;
             case Types.STORY:
                 mAttachmentsActionCallback.onStoryOpen((Story) link.attachment);
+                break;
+            case Types.AUDIO_PLAYLIST:
+                mAttachmentsActionCallback.onAudioPlaylistOpen((AudioPlaylist) link.attachment);
                 break;
         }
     }
@@ -1042,6 +1083,8 @@ public class AttachmentsViewBinder {
         void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index);
 
         void onStoryOpen(@NonNull Story story);
+
+        void onAudioPlaylistOpen(@NonNull AudioPlaylist playlist);
     }
 
     private static final class CopyHolder {

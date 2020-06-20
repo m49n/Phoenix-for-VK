@@ -92,6 +92,13 @@
             android:title="@string/use_internal_downloader"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="download_photo_tap"
+            android:summary="@string/download_photo_tap"
+            android:title="@string/download_photo_tap"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -434,6 +441,22 @@
             app:icon="@drawable/dir_groups"
             app:iconSpaceReserved="false" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="wall"
+        android:title="@string/wall"
+        app:iconSpaceReserved="false">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="runes_show"
+            android:title="@string/runes_show"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="runes_valknut"
+            android:title="@string/runes_valknut"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

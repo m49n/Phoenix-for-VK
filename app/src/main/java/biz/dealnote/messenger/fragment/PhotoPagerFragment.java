@@ -737,7 +737,9 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
             });
 
             ret.photo.setOnLongClickListener(v -> {
-                if (isPresenterPrepared()) getPresenter().fireSaveOnDriveClick();
+                if (Settings.get().other().isDownload_photo_tap()) {
+                    if (isPresenterPrepared()) getPresenter().fireSaveOnDriveClick();
+                }
                 return true;
             });
             ret.photo.setOnTouchListener((view, event) -> {

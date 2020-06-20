@@ -121,6 +121,12 @@ public interface ISettings {
         boolean isClick_next_track();
 
         boolean isDisabled_encryption();
+
+        boolean isDownload_photo_tap();
+
+        boolean isRunes_show();
+
+        boolean isRunes_valknut();
     }
 
     interface IAccountsSettings {

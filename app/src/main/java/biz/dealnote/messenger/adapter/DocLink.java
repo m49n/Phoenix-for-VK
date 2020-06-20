@@ -7,8 +7,10 @@ import java.util.Calendar;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Poll;
@@ -62,6 +64,14 @@ public class DocLink {
             return Types.CALL;
         }
 
+        if (model instanceof AudioPlaylist) {
+            return Types.AUDIO_PLAYLIST;
+        }
+
+        if (model instanceof Graffiti) {
+            return Types.GRAFFITY;
+        }
+
         throw new IllegalArgumentException();
     }
 
@@ -78,8 +88,14 @@ public class DocLink {
             case Types.POST:
                 return ((Post) attachment).getAuthorPhoto();
 
+            case Types.GRAFFITY:
+                return ((Graffiti) attachment).getUrl();
+
             case Types.STORY:
                 return ((Story) attachment).getOwner().getMaxSquareAvatar();
+
+            case Types.AUDIO_PLAYLIST:
+                return ((AudioPlaylist) attachment).getThumb_image();
 
             case Types.LINK:
                 Link link = (Link) attachment;
@@ -106,6 +122,9 @@ public class DocLink {
 
             case Types.POST:
                 return ((Post) attachment).getAuthorName();
+
+            case Types.AUDIO_PLAYLIST:
+                return ((AudioPlaylist) attachment).getTitle();
 
             case Types.LINK:
                 title = ((Link) attachment).getTitle();
@@ -143,6 +162,8 @@ public class DocLink {
                 return W;
             case Types.STORY:
                 return context.getString(R.string.story);
+            case Types.AUDIO_PLAYLIST:
+                return context.getString(R.string.playlist);
         }
         return null;
     }
@@ -167,6 +188,10 @@ public class DocLink {
 
             case Types.CALL:
                 return ((Call) attachment).getState();
+
+            case Types.AUDIO_PLAYLIST:
+                return Utils.firstNonEmptyString(((AudioPlaylist) attachment).getArtist_name(), " ") + " " +
+                        ((AudioPlaylist) attachment).getCount() + " " + context.getString(R.string.audios_pattern_count);
 
             case Types.STORY: {
                 Story item = ((Story) attachment);

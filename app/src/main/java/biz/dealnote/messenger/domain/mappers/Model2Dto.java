@@ -8,8 +8,10 @@ import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Poll;
@@ -86,9 +88,19 @@ public class Model2Dto {
             return AttachmentsTokenCreator.ofStory(story.getId(), story.getOwnerId(), story.getAccessKey());
         }
 
+        if (model instanceof Graffiti) {
+            Graffiti graffity = (Graffiti) model;
+            return AttachmentsTokenCreator.ofStory(graffity.getId(), graffity.getOwner_id(), graffity.getAccess_key());
+        }
+
         if (model instanceof Call) {
             Call call = (Call) model;
             return AttachmentsTokenCreator.ofCall(call.getInitiator_id(), call.getReceiver_id(), call.getState(), call.getTime());
+        }
+
+        if (model instanceof AudioPlaylist) {
+            AudioPlaylist playlist = (AudioPlaylist) model;
+            return AttachmentsTokenCreator.ofAudioPlaylist(playlist.getId(), playlist.getOwnerId(), playlist.getAccess_key());
         }
 
         throw new UnsupportedOperationException("Token for class " + model.getClass() + " not supported");

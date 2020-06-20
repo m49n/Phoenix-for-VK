@@ -15,10 +15,12 @@ public class VkApiAttachments {
     public static final String TYPE_LINK = "link";
     public static final String TYPE_NOTE = "note";
     public static final String TYPE_APP = "app";
+    public static final String TYPE_AUDIO_PLAYLIST = "audio_playlist";
     public static final String TYPE_POLL = "poll";
     public static final String TYPE_WIKI_PAGE = "page";
     public static final String TYPE_ARTICLE = "article";
     public static final String TYPE_STORY = "story";
+    public static final String TYPE_GRAFFITY = "graffiti";
     public static final String TYPE_CALL = "call";
     public static final String TYPE_ALBUM = "album";
     public static final String TYPE_STICKER = "sticker";

@@ -19,6 +19,7 @@ import biz.dealnote.messenger.api.model.VKApiCatalogLink;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VKApiNews;
@@ -67,6 +68,7 @@ import biz.dealnote.messenger.model.FaveLink;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.FavePageType;
 import biz.dealnote.messenger.model.FriendList;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
@@ -651,6 +653,15 @@ public class Dto2Model {
                 .setTime(dto.time);
     }
 
+    public static Graffiti transform(@NonNull VKApiGraffiti dto) {
+        return new Graffiti().setId(dto.id)
+                .setOwner_id(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setHeight(dto.height)
+                .setWidth(dto.width)
+                .setUrl(dto.url);
+    }
+
     public static Photo transform(@NonNull VKApiPhoto dto) {
         return new Photo()
                 .setId(dto.id)
@@ -961,6 +972,12 @@ public class Dto2Model {
                     break;
                 case VKApiAttachment.TYPE_CALL:
                     attachments.prepareCalls().add(transform((VKApiCall) attachment));
+                    break;
+                case VKApiAttachment.TYPE_AUDIO_PLAYLIST:
+                    attachments.prepareAudioPlaylists().add(transform((VKApiAudioPlaylist) attachment));
+                    break;
+                case VKApiAttachment.TYPE_GRAFFITY:
+                    attachments.prepareGraffity().add(transform((VKApiGraffiti) attachment));
                     break;
                 case VKApiAttachment.TYPE_POLL:
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));

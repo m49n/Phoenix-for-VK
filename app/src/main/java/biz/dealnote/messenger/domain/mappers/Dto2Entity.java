@@ -21,6 +21,7 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiCountry;
 import biz.dealnote.messenger.api.model.VKApiGift;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VKApiMilitary;
@@ -78,6 +79,7 @@ import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.FavePageEntity;
 import biz.dealnote.messenger.db.model.entity.GiftEntity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.MilitaryEntity;
@@ -729,8 +731,16 @@ public class Dto2Entity {
             return mapArticle((VKApiArticle) dto);
         }
 
+        if (dto instanceof VKApiAudioPlaylist) {
+            return mapAudioPlaylist((VKApiAudioPlaylist) dto);
+        }
+
         if (dto instanceof VKApiStory) {
             return mapStory((VKApiStory) dto);
+        }
+
+        if (dto instanceof VKApiGraffiti) {
+            return mapGraffity((VKApiGraffiti) dto);
         }
 
         if (dto instanceof VKApiCall) {
@@ -922,6 +932,15 @@ public class Dto2Entity {
                 .setAccessKey(dto.access_key)
                 .setPhoto(dto.photo != null ? mapPhoto(dto.photo) : null)
                 .setVideo(dto.video != null ? mapVideo(dto.video) : null);
+    }
+
+    public static GraffitiEntity mapGraffity(@NonNull VKApiGraffiti dto) {
+        return new GraffitiEntity().setId(dto.id)
+                .setOwner_id(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setHeight(dto.height)
+                .setWidth(dto.width)
+                .setUrl(dto.url);
     }
 
     public static CallEntity mapCall(@NonNull VKApiCall dto) {
