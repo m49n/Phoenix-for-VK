@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -98,6 +99,25 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     private TextView empty;
     private RecyclerView mRecyclerView;
     private AccountAdapter mAdapter;
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        public boolean onMove(@NotNull RecyclerView recyclerView,
+                              @NotNull RecyclerView.ViewHolder viewHolder, @NotNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NotNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Utils.vibrate(requireActivity(), 100);
+            mAdapter.notifyDataSetChanged();
+            Account account = mAdapter.getByPosition(viewHolder.getLayoutPosition());
+            boolean idCurrent = account.getId() == Settings.get()
+                    .accounts()
+                    .getCurrent();
+            if (!idCurrent) {
+                setAsActive(account);
+            }
+        }
+    };
     private ArrayList<Account> mData;
     private IOwnersRepository mOwnersInteractor;
     private IAccountsInteractor accountsInteractor;
@@ -124,6 +144,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         empty = root.findViewById(R.id.empty);
         mRecyclerView = root.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
+        new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(mRecyclerView);
 
         root.findViewById(R.id.fab).setOnClickListener(this);
         root.findViewById(R.id.kate_acc).setOnClickListener(this);

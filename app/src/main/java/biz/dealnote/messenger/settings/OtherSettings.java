@@ -292,4 +292,9 @@ class OtherSettings implements ISettings.IOtherSettings {
     public boolean isRunes_valknut() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_valknut", false);
     }
+
+    @Override
+    public boolean isValknut_color_theme() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("valknut_color_theme", false);
+    }
 }

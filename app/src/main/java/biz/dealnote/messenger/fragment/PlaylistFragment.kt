@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import biz.dealnote.messenger.Extra
@@ -23,6 +24,7 @@ import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.util.Objects
 import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
+import biz.dealnote.messenger.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -82,7 +84,21 @@ class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.Click
                 } else CreatePhoenixToast(requireActivity()).showToast(R.string.audio_not_found)
             } else CreatePhoenixToast(requireActivity()).showToastError(R.string.null_audio)
         }
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(mRecyclerView)
         return root
+    }
+
+    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        override fun onMove(recyclerView: RecyclerView,
+                            viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            Utils.vibrate(requireActivity(), 100)
+            mAdapter?.notifyDataSetChanged()
+            startForPlayList(requireActivity(), mData!!, mAdapter!!.getItemRawPosition(viewHolder.layoutPosition), false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

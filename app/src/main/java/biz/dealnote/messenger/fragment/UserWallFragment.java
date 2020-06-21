@@ -194,6 +194,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         mHeaderHolder = new UserHeaderHolder(headerRootView);
         mHeaderHolder.ivAvatar.setOnClickListener(v -> getPresenter().fireAvatarClick());
         mHeaderHolder.Runes.setVisibility(Settings.get().other().isRunes_show() ? View.VISIBLE : View.GONE);
+        mHeaderHolder.Valknut.setImageResource(Settings.get().other().isValknut_color_theme() ? R.drawable.valknut_themed : R.drawable.valknut);
         mHeaderHolder.Valknut.setVisibility(Settings.get().other().isRunes_valknut() ? View.VISIBLE : View.GONE);
     }
 

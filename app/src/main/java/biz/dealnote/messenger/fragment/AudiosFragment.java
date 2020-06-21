@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,6 +48,7 @@ import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -60,6 +62,19 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     public static final String ACTION_SELECT = "AudiosFragment.ACTION_SELECT";
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AudioRecyclerAdapter mAudioRecyclerAdapter;
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        public boolean onMove(@NotNull RecyclerView recyclerView,
+                              @NotNull RecyclerView.ViewHolder viewHolder, @NotNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NotNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Utils.vibrate(requireActivity(), 100);
+            mAudioRecyclerAdapter.notifyDataSetChanged();
+            getPresenter().playAudio(requireActivity(), mAudioRecyclerAdapter.getItemRawPosition(viewHolder.getLayoutPosition()));
+        }
+    };
     private PlaybackStatus mPlaybackStatus;
     private boolean inTabsContainer;
     private boolean doAudioLoadTabs;
@@ -123,6 +138,10 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
                 getPresenter().fireScrollToEnd();
             }
         });
+
+        if (!inTabsContainer) {
+            new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView);
+        }
 
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
         if (isSelectMode)

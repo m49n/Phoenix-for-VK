@@ -20,6 +20,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.activity.*
@@ -145,6 +146,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             })
         }
 
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
+
         headerView = inflater.inflate(R.layout.footer_load_more, recyclerView, false)
 
         loadMoreFooterHelper = LoadMoreFooterHelper.createFrom(headerView) {
@@ -225,6 +228,18 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         })
 
         animator?.setDuration(200)?.start()
+    }
+
+    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            Utils.vibrate(requireActivity(), 100)
+            presenter?.fireResendSwipe(adapter!!.getItemRawPosition(viewHolder.layoutPosition), swipeDir)
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     private class ActionModeHolder(val rootView: View, fragment: ChatFragment) : View.OnClickListener {

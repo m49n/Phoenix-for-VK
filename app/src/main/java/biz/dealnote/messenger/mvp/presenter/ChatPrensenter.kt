@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.api.model.VKApiMessage
 import biz.dealnote.messenger.crypt.AesKeyPair
@@ -266,6 +267,13 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                 }
             }
         }
+    }
+
+    fun fireResendSwipe(position: Int, swipeDir: Int) {
+        if (swipeDir == ItemTouchHelper.LEFT)
+            fireForwardToHereClick(ArrayList(Collections.singleton(data[position])))
+        else if (swipeDir == ItemTouchHelper.RIGHT)
+            fireForwardToAnotherClick(ArrayList(Collections.singleton(data[position])))
     }
 
     fun fireTranscript(voiceMessageId: String, messageId: Int) {

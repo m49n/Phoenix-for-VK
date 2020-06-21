@@ -102,7 +102,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurface"
+            android:background="?android:colorBackground"
             android:padding="4dp">
 
             <ImageView
@@ -124,15 +124,18 @@
 
                 <TextView
                     android:id="@+id/pinned_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                     tools:text="Artem Kolbasa" />
 
                 <TextView
                     android:id="@+id/pinned_subtitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:maxLines="2"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     tools:text="Hi! How are you?" />
@@ -194,9 +197,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pinned_root_view"
         android:layout_centerHorizontal="true"
-        android:layout_margin="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="2dp"
+        app:cardElevation="4dp"
         app:contentPadding="0dp">
 
         <RelativeLayout

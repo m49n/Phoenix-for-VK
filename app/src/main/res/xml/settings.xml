@@ -444,8 +444,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="wall"
-        android:title="@string/wall"
+        android:icon="@drawable/valknut_settings"
+        android:key="wall_themed"
+        android:summary="@string/for_pagan"
+        android:title="@string/wall_themed"
         app:iconSpaceReserved="false">
         <SwitchPreference
             android:defaultValue="false"
@@ -456,6 +458,13 @@
             android:defaultValue="false"
             android:key="runes_valknut"
             android:title="@string/runes_valknut"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="runes_valknut"
+            android:key="valknut_color_theme"
+            android:summary="@string/requare_api_24"
+            android:title="@string/valknut_color_theme"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

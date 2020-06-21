@@ -1370,7 +1370,10 @@
     <string name="output_call">Входящий звонок"</string>
     <string name="graffity">Граффити"</string>
     <string name="download_photo_tap">Скачивать фото по долгому нажатию"</string>
-    <string name="wall">Стена"</string>
+    <string name="wall_themed">Оформление стены"</string>
+    <string name="for_pagan">Для язычников"</string>
     <string name="runes_show">Показывать Руны"</string>
     <string name="runes_valknut">Показывать Валькнут"</string>
+    <string name="valknut_color_theme">Валькнут в цвет темы"</string>
+    <string name="requare_api_24">Требует Android 7.0+"</string>
 </resources>

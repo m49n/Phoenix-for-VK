@@ -127,6 +127,8 @@ public interface ISettings {
         boolean isRunes_show();
 
         boolean isRunes_valknut();
+
+        boolean isValknut_color_theme();
     }
 
     interface IAccountsSettings {

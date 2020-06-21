@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -1093,6 +1094,11 @@ public class Utils {
             str[1][i] = (String) values[i];
         }
         return str;
+    }
+
+    public static void vibrate(Context context, int ms) {
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(ms);
     }
 
     public interface SimpleFunction<F, S> {

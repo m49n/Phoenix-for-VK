@@ -48,6 +48,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         return new Holder(LayoutInflater.from(context).inflate(R.layout.item_account, parent, false));
     }
 
+    @NotNull
+    public Account getByPosition(int position) {
+        return data.get(position);
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NotNull Holder holder, int position) {

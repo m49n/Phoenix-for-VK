@@ -44,6 +44,10 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
         return items.get(position);
     }
 
+    public int getItemRawPosition(int position) {
+        return position - headers.size();
+    }
+
     public void setItems(List<T> items, boolean notifyDatasetChanged) {
         this.items = items;
 

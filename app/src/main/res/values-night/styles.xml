@@ -105,7 +105,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.IceGreen.Amoled" parent="App.DayNight.IceGreen">
@@ -117,7 +118,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce">
@@ -129,7 +131,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed">
@@ -141,7 +144,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.BlueYellow.Amoled" parent="App.DayNight.BlueYellow">
@@ -153,7 +157,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.Fire.Amoled" parent="App.DayNight.Fire">
@@ -165,7 +170,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.Red.Amoled" parent="App.DayNight.Red">
@@ -177,7 +183,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.VioletRed.Amoled" parent="App.DayNight.VioletRed">
@@ -189,7 +196,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.YellowRed.Amoled" parent="App.DayNight.YellowRed">
@@ -201,7 +209,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.RedViolet.Amoled" parent="App.DayNight.RedViolet">
@@ -213,7 +222,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.Violet.Amoled" parent="App.DayNight.Violet">
@@ -225,7 +235,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.BlueViolet.Amoled" parent="App.DayNight.BlueViolet">
@@ -237,7 +248,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.YellowViolet.Amoled" parent="App.DayNight.YellowViolet">
@@ -249,7 +261,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.VioletYellow.Amoled" parent="App.DayNight.VioletYellow">
@@ -261,7 +274,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.VioletGreen.Amoled" parent="App.DayNight.VioletGreen">
@@ -273,7 +287,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.GreenViolet.Amoled" parent="App.DayNight.GreenViolet">
@@ -285,7 +300,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="App.DayNight.Gray.Amoled" parent="App.DayNight.Gray">
@@ -297,7 +313,8 @@
         <item name="android:colorBackground">@android:color/black</item>
         <item name="colorOnBackground">#ee000000</item>
         <item name="colorSurface">#F20B0B0B</item>
-        <item name="message_bubble_color">#D4000000</item>
+        <item name="message_bubble_color">#F20B0B0B</item>
+        <item name="messages_background_color">#A4000000</item>
     </style>
 
     <style name="QuickReply.Amoled" parent="QuickReply">
