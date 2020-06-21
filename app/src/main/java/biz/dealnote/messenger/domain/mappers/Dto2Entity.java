@@ -743,6 +743,10 @@ public class Dto2Entity {
             return mapGraffity((VKApiGraffiti) dto);
         }
 
+        if (dto instanceof VKApiPhotoAlbum) {
+            return buildPhotoAlbumDbo((VKApiPhotoAlbum) dto);
+        }
+
         if (dto instanceof VKApiCall) {
             return mapCall((VKApiCall) dto);
         }

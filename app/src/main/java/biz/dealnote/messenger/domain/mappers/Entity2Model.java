@@ -349,7 +349,7 @@ public class Entity2Model {
                 .setType(entity.getType());
     }
 
-    public static PhotoAlbum map(PhotoAlbumEntity entity) {
+    public static PhotoAlbum mapPhotoAlbum(PhotoAlbumEntity entity) {
         return new PhotoAlbum(entity.getId(), entity.getOwnerId())
                 .setSize(entity.getSize())
                 .setTitle(entity.getTitle())
@@ -493,6 +493,10 @@ public class Entity2Model {
 
         if (entity instanceof StoryEntity) {
             return buildStoryFromDbo((StoryEntity) entity, owners);
+        }
+
+        if (entity instanceof PhotoAlbumEntity) {
+            return mapPhotoAlbum((PhotoAlbumEntity) entity);
         }
 
         if (entity instanceof GraffitiEntity) {

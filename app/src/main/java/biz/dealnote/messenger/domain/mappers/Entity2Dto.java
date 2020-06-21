@@ -14,6 +14,7 @@ import biz.dealnote.messenger.db.model.entity.DocumentEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
+import biz.dealnote.messenger.db.model.entity.PhotoAlbumEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.db.model.entity.PollEntity;
 import biz.dealnote.messenger.db.model.entity.PostEntity;
@@ -61,6 +62,11 @@ public class Entity2Dto {
         if (entity instanceof StoryEntity) {
             StoryEntity story = (StoryEntity) entity;
             return AttachmentsTokenCreator.ofStory(story.getId(), story.getOwnerId(), story.getAccessKey());
+        }
+
+        if (entity instanceof PhotoAlbumEntity) {
+            PhotoAlbumEntity album = (PhotoAlbumEntity) entity;
+            return AttachmentsTokenCreator.ofPhotoAlbum(album.getId(), album.getOwnerId());
         }
 
         if (entity instanceof GraffitiEntity) {

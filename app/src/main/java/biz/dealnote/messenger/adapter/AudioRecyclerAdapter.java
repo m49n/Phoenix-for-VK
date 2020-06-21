@@ -140,7 +140,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
 
         holder.title.setText(audio.getTitle());
         if (audio.getDuration() <= 0)
-            holder.time.setVisibility(View.GONE);
+            holder.time.setVisibility(View.INVISIBLE);
         else {
             holder.time.setVisibility(View.VISIBLE);
             holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));

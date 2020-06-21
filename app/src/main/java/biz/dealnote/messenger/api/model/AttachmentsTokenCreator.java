@@ -23,6 +23,10 @@ public class AttachmentsTokenCreator {
         return new AttachmentToken("story", id, ownerId, accessKey);
     }
 
+    public static IAttachmentToken ofPhotoAlbum(int id, int ownerId) {
+        return new AttachmentToken("album", id, ownerId);
+    }
+
     public static IAttachmentToken ofAudioPlaylist(int id, int ownerId, String accessKey) {
         return new AttachmentToken("audio_playlist", id, ownerId, accessKey);
     }

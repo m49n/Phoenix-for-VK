@@ -63,6 +63,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
@@ -586,6 +587,17 @@ public class AttachmentsViewBinder {
                             backCardT.setVisibility(View.GONE);
                         }
                         break;
+                    case Types.ALBUM:
+                        if (imageUrl != null) {
+                            ivType.setVisibility(View.VISIBLE);
+                            backCardT.setVisibility(View.VISIBLE);
+                            ViewUtils.displayAvatar(ivPhotoT, null, imageUrl, Constants.PICASSO_TAG);
+                            Utils.setColorFilter(ivType.getBackground(), CurrentTheme.getColorPrimary(mContext));
+                            ivType.setImageResource(R.drawable.camera);
+                        } else {
+                            backCardT.setVisibility(View.GONE);
+                        }
+                        break;
                     case Types.STORY:
                         backCardT.setVisibility(View.GONE);
                         ivType.setVisibility(View.GONE);
@@ -755,6 +767,9 @@ public class AttachmentsViewBinder {
             case Types.AUDIO_PLAYLIST:
                 mAttachmentsActionCallback.onAudioPlaylistOpen((AudioPlaylist) link.attachment);
                 break;
+            case Types.ALBUM:
+                mAttachmentsActionCallback.onPhotoAlbumOpen((PhotoAlbum) link.attachment);
+                break;
         }
     }
 
@@ -892,7 +907,7 @@ public class AttachmentsViewBinder {
                     }
                 });
                 if (audio.getDuration() <= 0)
-                    holder.time.setVisibility(View.GONE);
+                    holder.time.setVisibility(View.INVISIBLE);
                 else {
                     holder.time.setVisibility(View.VISIBLE);
                     holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
@@ -1085,6 +1100,8 @@ public class AttachmentsViewBinder {
         void onStoryOpen(@NonNull Story story);
 
         void onAudioPlaylistOpen(@NonNull AudioPlaylist playlist);
+
+        void onPhotoAlbumOpen(@NonNull PhotoAlbum album);
     }
 
     private static final class CopyHolder {

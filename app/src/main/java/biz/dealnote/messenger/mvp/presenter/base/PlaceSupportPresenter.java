@@ -19,6 +19,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Story;
@@ -97,6 +98,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
 
     public void fireCommentsClick(Post post) {
         getView().openComments(getAccountId(), Commented.from(post), null);
+    }
+
+    public void firePhotoAlbumClick(@NotNull PhotoAlbum album) {
+        getView().openPhotoAlbum(getAccountId(), album);
     }
 
     public final void fireCopiesLikesClick(String type, int ownerId, int itemId, String filter) {

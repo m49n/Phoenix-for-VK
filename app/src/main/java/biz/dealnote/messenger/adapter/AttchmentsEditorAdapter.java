@@ -28,6 +28,7 @@ import biz.dealnote.messenger.model.FwdMessages;
 import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
@@ -187,6 +188,22 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
         holder.tvTitle.setText(R.string.story);
 
         String photoLink = nonNull(story.getOwner()) ? story.getOwner().getMaxSquareAvatar() : null;
+
+        if (nonEmpty(photoLink)) {
+            PicassoInstance.with()
+                    .load(photoLink)
+                    .placeholder(R.drawable.background_gray)
+                    .into(holder.photoImageView);
+        } else {
+            PicassoInstance.with().cancelRequest(holder.photoImageView);
+            holder.photoImageView.setImageResource(R.drawable.background_gray);
+        }
+    }
+
+    private void bindPhotoAlbum(ViewHolder holder, PhotoAlbum album) {
+        holder.tvTitle.setText(R.string.photo_album);
+
+        String photoLink = nonNull(album.getSizes()) ? album.getSizes().getUrlForSize(PhotoSize.X, false) : null;
 
         if (nonEmpty(photoLink)) {
             PicassoInstance.with()
@@ -372,6 +389,8 @@ public class AttchmentsEditorAdapter extends RecyclerBindableAdapter<AttachmenEn
             bindAudioPlaylist(holder, (AudioPlaylist) model);
         } else if (model instanceof Graffiti) {
             bindGraffiti(holder, (Graffiti) model);
+        } else if (model instanceof PhotoAlbum) {
+            bindPhotoAlbum(holder, (PhotoAlbum) model);
         } else {
             throw new UnsupportedOperationException("Type " + model.getClass() + " in not supported");
         }

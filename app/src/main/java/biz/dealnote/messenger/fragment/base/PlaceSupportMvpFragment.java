@@ -28,6 +28,7 @@ import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
@@ -132,6 +133,16 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     @Override
     public void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index) {
         getPresenter().firePhotoClick(photos, index);
+    }
+
+    @Override
+    public void openPhotoAlbum(int accountId, @NotNull PhotoAlbum album) {
+        PlaceFactory.getVKPhotosAlbumPlace(accountId, album.getOwnerId(), album.getId(), null).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onPhotoAlbumOpen(@NotNull PhotoAlbum album) {
+        getPresenter().firePhotoAlbumClick(album);
     }
 
     @Override

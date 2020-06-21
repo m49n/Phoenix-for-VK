@@ -17,6 +17,7 @@ import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Story;
@@ -67,4 +68,6 @@ public interface IAttachmentsPlacesView {
     void openStory(int accountId, @NotNull Story story);
 
     void openAudioPlaylist(int accountId, @NotNull AudioPlaylist playlist);
+
+    void openPhotoAlbum(int accountId, @NotNull PhotoAlbum album);
 }

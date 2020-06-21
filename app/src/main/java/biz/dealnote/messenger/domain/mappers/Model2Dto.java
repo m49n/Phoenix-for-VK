@@ -14,6 +14,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Story;
@@ -91,6 +92,11 @@ public class Model2Dto {
         if (model instanceof Graffiti) {
             Graffiti graffity = (Graffiti) model;
             return AttachmentsTokenCreator.ofStory(graffity.getId(), graffity.getOwner_id(), graffity.getAccess_key());
+        }
+
+        if (model instanceof PhotoAlbum) {
+            PhotoAlbum album = (PhotoAlbum) model;
+            return AttachmentsTokenCreator.ofPhotoAlbum(album.getId(), album.getOwnerId());
         }
 
         if (model instanceof Call) {

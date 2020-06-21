@@ -1232,11 +1232,11 @@
     <string name="classical">Классика</string>
     <string name="dance" translatable="false">Dance</string>
     <string name="drum_and_bass" translatable="false">Drum\'n\'bass</string>
-    <string name="easy_listening">Легкое</string>
+    <string name="easy_listening">Лёгкое</string>
     <string name="disco">Диско</string>
-    <string name="ethnic">Этническое</string>
+    <string name="ethnic">Фолк</string>
     <string name="indie_pop">Инди-поп</string>
-    <string name="instrumental">Инстурметальное</string>
+    <string name="instrumental">Инструментальное</string>
     <string name="metal">Метал</string>
     <string name="pop">Поп</string>
     <string name="reggae">Рэгги</string>
@@ -1376,4 +1376,5 @@
     <string name="runes_valknut">Показывать Валькнут"</string>
     <string name="valknut_color_theme">Валькнут в цвет темы"</string>
     <string name="requare_api_24">Требует Android 7.0+"</string>
+    <string name="photo_album">Фото Альбом"</string>
 </resources>

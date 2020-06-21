@@ -11,6 +11,7 @@ import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
 import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.PageEntity;
+import biz.dealnote.messenger.db.model.entity.PhotoAlbumEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.db.model.entity.PollEntity;
 import biz.dealnote.messenger.db.model.entity.PostEntity;
@@ -38,6 +39,7 @@ public final class AttachmentsTypes {
     public static final int AUDIO_MESSAGE = 16384;
     public static final int GIFT = 32768;
     public static final int GRAFFITY = 65536;
+    public static final int ALBUM = 131072;
 
     private AttachmentsTypes() {
     }
@@ -77,6 +79,8 @@ public final class AttachmentsTypes {
             return AUDIO_PLAYLIST;
         } else if (entity instanceof GraffitiEntity) {
             return GRAFFITY;
+        } else if (entity instanceof PhotoAlbumEntity) {
+            return ALBUM;
         }
 
         throw new UnsupportedOperationException("Unsupported type: " + entity.getClass());
@@ -118,6 +122,8 @@ public final class AttachmentsTypes {
                 return AudioPlaylistEntity.class;
             case GRAFFITY:
                 return GraffitiEntity.class;
+            case ALBUM:
+                return PhotoAlbumEntity.class;
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }

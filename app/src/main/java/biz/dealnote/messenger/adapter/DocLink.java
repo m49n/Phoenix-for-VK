@@ -12,6 +12,7 @@ import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
@@ -72,6 +73,10 @@ public class DocLink {
             return Types.GRAFFITY;
         }
 
+        if (model instanceof PhotoAlbum) {
+            return Types.ALBUM;
+        }
+
         throw new IllegalArgumentException();
     }
 
@@ -93,6 +98,14 @@ public class DocLink {
 
             case Types.STORY:
                 return ((Story) attachment).getOwner().getMaxSquareAvatar();
+
+            case Types.ALBUM:
+                PhotoAlbum album = (PhotoAlbum) attachment;
+                if (Objects.nonNull(album.getSizes())) {
+                    PhotoSizes sizes = album.getSizes();
+                    return sizes.getUrlForSize(Settings.get().main().getPrefPreviewImageSize(), true);
+                }
+                return null;
 
             case Types.AUDIO_PLAYLIST:
                 return ((AudioPlaylist) attachment).getThumb_image();
@@ -125,6 +138,9 @@ public class DocLink {
 
             case Types.AUDIO_PLAYLIST:
                 return ((AudioPlaylist) attachment).getTitle();
+
+            case Types.ALBUM:
+                return ((PhotoAlbum) attachment).getTitle();
 
             case Types.LINK:
                 title = ((Link) attachment).getTitle();
@@ -179,6 +195,10 @@ public class DocLink {
 
             case Types.LINK:
                 return ((Link) attachment).getUrl();
+
+            case Types.ALBUM:
+                return Utils.firstNonEmptyString(((PhotoAlbum) attachment).getDescription(), " ") +
+                        " " + context.getString(R.string.photos_count, ((PhotoAlbum) attachment).getSize());
 
             case Types.POLL:
                 return ((Poll) attachment).getQuestion();

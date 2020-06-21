@@ -18,7 +18,6 @@ import biz.dealnote.messenger.util.PhoenixToast.Companion.CreatePhoenixToast
 import ealvatag.audio.AudioFile
 import ealvatag.audio.AudioFileIO
 import ealvatag.tag.FieldKey
-import ealvatag.tag.NullTag
 import ealvatag.tag.Tag
 import ealvatag.tag.id3.ID3v11Tag
 import ealvatag.tag.id3.ID3v1Tag
@@ -314,8 +313,8 @@ object DownloadUtil {
                 if (Flaudio.exists()) {
                     try {
                         val audioFile = AudioFileIO.read(Flaudio)
-                        var tag: Tag = audioFile.tag.or(NullTag.INSTANCE)
-                        if (tag == NullTag.INSTANCE || tag is ID3v1Tag || tag is ID3v11Tag) {
+                        var tag: Tag = audioFile.tagOrSetNewDefault
+                        if (tag is ID3v1Tag || tag is ID3v11Tag) {
                             tag = audioFile.setNewDefaultTag(); }
 
                         val Cover = File(file!!)
@@ -338,6 +337,7 @@ object DownloadUtil {
                         }
                     } catch (e: RuntimeException) {
                         CreatePhoenixToast(context).showToastError(R.string.error_with_message, e.localizedMessage)
+                        e.printStackTrace()
                     }
                 }
             } else {

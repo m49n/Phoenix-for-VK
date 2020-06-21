@@ -18,6 +18,7 @@ import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.PageEntity;
+import biz.dealnote.messenger.db.model.entity.PhotoAlbumEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoEntity;
 import biz.dealnote.messenger.db.model.entity.PhotoSizeEntity;
 import biz.dealnote.messenger.db.model.entity.PollEntity;
@@ -39,6 +40,7 @@ import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSizes;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
@@ -103,6 +105,7 @@ public class Model2Entity {
         mapAndAdd(attachments.getAudioPlaylists(), Model2Entity::buildAudioPlaylistEntity, entities);
         mapAndAdd(attachments.getPolls(), Model2Entity::buildPollDbo, entities);
         mapAndAdd(attachments.getPages(), Model2Entity::buildPageEntity, entities);
+        mapAndAdd(attachments.getPhotoAlbums(), Model2Entity::buildPhotoAlbumEntity, entities);
         mapAndAdd(attachments.getGifts(), Model2Entity::buildGiftItemEntity, entities);
         return entities;
     }
@@ -127,6 +130,8 @@ public class Model2Entity {
                 entities.add(buildLinkDbo((Link) model));
             } else if (model instanceof Article) {
                 entities.add(buildArticleDbo((Article) model));
+            } else if (model instanceof PhotoAlbum) {
+                entities.add(buildPhotoAlbumEntity((PhotoAlbum) model));
             } else if (model instanceof Story) {
                 entities.add(buildStoryDbo((Story) model));
             } else if (model instanceof AudioPlaylist) {
@@ -412,6 +417,21 @@ public class Model2Entity {
                 .setPostId(photo.getPostId())
                 .setDeleted(photo.isDeleted())
                 .setSizes(isNull(photo.getSizes()) ? null : buildPhotoSizeEntity(photo.getSizes()));
+    }
+
+    public static PhotoAlbumEntity buildPhotoAlbumEntity(PhotoAlbum album) {
+        return new PhotoAlbumEntity(album.getId(), album.getOwnerId())
+                .setSize(album.getSize())
+                .setTitle(album.getTitle())
+                .setDescription(album.getDescription())
+                .setCanUpload(album.isCanUpload())
+                .setUpdatedTime(album.getUpdatedTime())
+                .setCreatedTime(album.getCreatedTime())
+                .setSizes(nonNull(album.getSizes()) ? buildPhotoSizeEntity(album.getSizes()) : null)
+                .setPrivacyView(nonNull(album.getPrivacyView()) ? mapPrivacy(album.getPrivacyView()) : null)
+                .setPrivacyComment(nonNull(album.getPrivacyComment()) ? mapPrivacy(album.getPrivacyComment()) : null)
+                .setUploadByAdminsOnly(album.isUploadByAdminsOnly())
+                .setCommentsDisabled(album.isCommentsDisabled());
     }
 
     private static PhotoSizeEntity.Size model2entityNullable(@Nullable PhotoSizes.Size size) {

@@ -29,6 +29,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
 import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Story;
@@ -116,6 +117,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindAudioPlaylist(holder, (AudioPlaylist) model);
         } else if (model instanceof Graffiti) {
             bindGraffiti(holder, (Graffiti) model);
+        } else if (model instanceof PhotoAlbum) {
+            bindPhotoAlbum(holder, (PhotoAlbum) model);
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
@@ -155,6 +158,15 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
                     .placeholder(R.drawable.background_gray)
                     .into(holder.image);
         }
+    }
+
+    private void bindPhotoAlbum(EntryHolder holder, PhotoAlbum album) {
+        holder.title.setText(R.string.photo_album);
+        String photoLink = nonNull(album.getSizes()) ? album.getSizes().getUrlForSize(PhotoSize.X, false) : null;
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        bindImageView(holder, photoLink);
     }
 
     private void bindGraffiti(EntryHolder holder, Graffiti graffiti) {

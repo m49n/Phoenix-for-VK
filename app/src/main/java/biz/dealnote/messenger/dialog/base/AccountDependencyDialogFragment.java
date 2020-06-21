@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,6 +19,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
@@ -166,6 +169,11 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onAudioPlaylistOpen(@NonNull AudioPlaylist playlist) {
         PlaceFactory.getAudiosInAlbumPlace(accountId, playlist.getOwnerId(), playlist.getId(), playlist.getAccess_key()).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onPhotoAlbumOpen(@NotNull PhotoAlbum album) {
+        PlaceFactory.getVKPhotosAlbumPlace(accountId, album.getOwnerId(), album.getId(), null).tryOpenWith(requireActivity());
     }
 
     @Override

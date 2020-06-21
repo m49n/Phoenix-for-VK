@@ -970,6 +970,9 @@ public class Dto2Model {
                 case VKApiAttachment.TYPE_STORY:
                     attachments.prepareStories().add(transformStory((VKApiStory) attachment, owners));
                     break;
+                case VKApiAttachment.TYPE_ALBUM:
+                    attachments.preparePhotoAlbums().add(transformPhotoAlbum((VKApiPhotoAlbum) attachment));
+                    break;
                 case VKApiAttachment.TYPE_CALL:
                     attachments.prepareCalls().add(transform((VKApiCall) attachment));
                     break;
@@ -1123,7 +1126,7 @@ public class Dto2Model {
         }
     }
 
-    public static PhotoAlbum transform(VKApiPhotoAlbum album) {
+    public static PhotoAlbum transformPhotoAlbum(VKApiPhotoAlbum album) {
         return new PhotoAlbum(album.id, album.owner_id)
                 .setTitle(album.title)
                 .setSize(album.size)

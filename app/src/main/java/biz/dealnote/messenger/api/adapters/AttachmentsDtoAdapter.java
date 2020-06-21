@@ -19,6 +19,7 @@ import biz.dealnote.messenger.api.model.VKApiGiftItem;
 import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
+import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
 import biz.dealnote.messenger.api.model.VKApiPoll;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSticker;
@@ -81,8 +82,8 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VKApiPoll.class);
         } else if (VkApiAttachments.TYPE_WIKI_PAGE.equals(type)) {
             return context.deserialize(o, VKApiWikiPage.class);
-            //} else if (VkApiAttachments.TYPE_ALBUM.equals(type)) {
-            //    return context.deserialize(o, VKApiPhotoAlbum.class); // not supported yet
+        } else if (VkApiAttachments.TYPE_ALBUM.equals(type)) {
+            return context.deserialize(o, VKApiPhotoAlbum.class);
         } else if (VkApiAttachments.TYPE_STICKER.equals(type)) {
             return context.deserialize(o, VKApiSticker.class);
         } else if (VKApiAttachment.TYPE_AUDIO_MESSAGE.equals(type)) {

@@ -48,6 +48,7 @@ public class Attachments implements Parcelable, Cloneable {
     private ArrayList<GiftItem> gifts;
     private ArrayList<AudioPlaylist> audio_playlists;
     private ArrayList<Graffiti> graffity;
+    private ArrayList<PhotoAlbum> photo_albums;
 
     public Attachments() {
     }
@@ -69,6 +70,7 @@ public class Attachments implements Parcelable, Cloneable {
         calls = in.createTypedArrayList(Call.CREATOR);
         audio_playlists = in.createTypedArrayList(AudioPlaylist.CREATOR);
         graffity = in.createTypedArrayList(Graffiti.CREATOR);
+        photo_albums = in.createTypedArrayList(PhotoAlbum.CREATOR);
     }
 
     public ArrayList<VoiceMessage> getVoiceMessages() {
@@ -93,6 +95,7 @@ public class Attachments implements Parcelable, Cloneable {
         dest.writeTypedList(calls);
         dest.writeTypedList(audio_playlists);
         dest.writeTypedList(graffity);
+        dest.writeTypedList(photo_albums);
     }
 
     public void add(AbsModel model) {
@@ -103,6 +106,11 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (model instanceof Sticker) {
             prepareStickers().add((Sticker) model);
+            return;
+        }
+
+        if (model instanceof PhotoAlbum) {
+            preparePhotoAlbums().add((PhotoAlbum) model);
             return;
         }
 
@@ -183,6 +191,10 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(stickers)) {
             result.addAll(stickers);
+        }
+
+        if (nonEmpty(photo_albums)) {
+            result.addAll(photo_albums);
         }
 
         if (nonEmpty(photos)) {
@@ -356,6 +368,14 @@ public class Attachments implements Parcelable, Cloneable {
         return stickers;
     }
 
+    public ArrayList<PhotoAlbum> preparePhotoAlbums() {
+        if (photo_albums == null) {
+            photo_albums = new ArrayList<>(1);
+        }
+
+        return photo_albums;
+    }
+
     public ArrayList<Post> preparePosts() {
         if (posts == null) {
             posts = new ArrayList<>(1);
@@ -383,6 +403,7 @@ public class Attachments implements Parcelable, Cloneable {
                 links,
                 articles,
                 stories,
+                photo_albums,
                 calls,
                 audio_playlists,
                 graffity,
@@ -403,6 +424,7 @@ public class Attachments implements Parcelable, Cloneable {
                 links,
                 articles,
                 stories,
+                photo_albums,
                 calls,
                 audio_playlists,
                 graffity,
@@ -440,6 +462,7 @@ public class Attachments implements Parcelable, Cloneable {
                 safeIsEmpty(links) &&
                 safeIsEmpty(articles) &&
                 safeIsEmpty(stories) &&
+                safeIsEmpty(photo_albums) &&
                 safeIsEmpty(calls) &&
                 safeIsEmpty(audio_playlists) &&
                 safeIsEmpty(graffity) &&
@@ -545,6 +568,12 @@ public class Attachments implements Parcelable, Cloneable {
             }
         }
 
+        if (photo_albums != null) {
+            for (PhotoAlbum album : photo_albums) {
+                result.add(new DocLink(album));
+            }
+        }
+
         return result;
     }
 
@@ -561,6 +590,7 @@ public class Attachments implements Parcelable, Cloneable {
         clone.links = cloneListAsArrayList(this.links);
         clone.articles = cloneListAsArrayList(this.articles);
         clone.stories = cloneListAsArrayList(this.stories);
+        clone.photo_albums = cloneListAsArrayList(this.photo_albums);
         clone.calls = cloneListAsArrayList(this.calls);
         clone.audio_playlists = cloneListAsArrayList(this.audio_playlists);
         clone.graffity = cloneListAsArrayList(this.graffity);
@@ -608,6 +638,10 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonNull(stories)) {
             line = line + " stories=" + safeCountOf(stories);
+        }
+
+        if (nonNull(photo_albums)) {
+            line = line + " photo_albums=" + safeCountOf(photo_albums);
         }
 
         if (nonNull(calls)) {
@@ -683,6 +717,10 @@ public class Attachments implements Parcelable, Cloneable {
 
     public ArrayList<Call> getCalls() {
         return calls;
+    }
+
+    public ArrayList<PhotoAlbum> getPhotoAlbums() {
+        return photo_albums;
     }
 
     public ArrayList<AudioPlaylist> getAudioPlaylists() {
