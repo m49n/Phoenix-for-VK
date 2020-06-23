@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.util
 
-/**
- * Created by ruslan.kolbasa on 01.02.2017.
- * phoenix
- */
 class Pair<F, S>(val first: F, val second: S) {
 
     companion object {

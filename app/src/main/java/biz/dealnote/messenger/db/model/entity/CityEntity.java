@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class CityEntity {
 
     private int id;

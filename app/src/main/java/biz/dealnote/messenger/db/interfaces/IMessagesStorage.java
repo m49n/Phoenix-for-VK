@@ -19,10 +19,6 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
-/**
- * Created by hp-dv6 on 01.06.2016.
- * VKMessenger
- */
 public interface IMessagesStorage extends IStorage {
 
     Completable insertPeerDbos(int accountId, int peerId, @NonNull List<MessageEntity> dbos, boolean clearHistory);

@@ -108,7 +108,7 @@ public class ViewUtils {
     }
 
     public static void setupSwipeRefreshLayoutWithCurrentTheme(Activity activity, SwipeRefreshLayout swipeRefreshLayout, boolean needToolbarOffset) {
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(CurrentTheme.getMessageBackgroundSquare(activity));
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(CurrentTheme.getColorSurface(activity));
 
         int primaryColor = CurrentTheme.getColorPrimary(activity);
         int accentColor = CurrentTheme.getColorSecondary(activity);

@@ -10,10 +10,7 @@ import biz.dealnote.messenger.model.criteria.DocsCriteria;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
+
 public interface IDocsStorage extends IStorage {
 
     @CheckResult

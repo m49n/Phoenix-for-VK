@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model.criteria;
 
 import biz.dealnote.messenger.db.DatabaseIdRange;
 
-/**
- * Created by admin on 13.12.2016.
- * phoenix
- */
 public class TopicsCriteria extends Criteria {
 
     private final int accountId;

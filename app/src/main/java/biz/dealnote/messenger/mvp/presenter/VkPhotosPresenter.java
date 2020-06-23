@@ -43,10 +43,7 @@ import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 13.07.2017.
- * phoenix
- */
+
 public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView> {
 
     private static final String SAVE_ALBUM = "save-album";

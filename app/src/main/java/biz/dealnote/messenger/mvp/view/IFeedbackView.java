@@ -9,10 +9,7 @@ import biz.dealnote.messenger.model.feedback.Feedback;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 11.12.2016.
- * phoenix
- */
+
 public interface IFeedbackView extends IAccountDependencyView, IMvpView, IAttachmentsPlacesView, IErrorView {
     void displayData(List<Feedback> data);
 

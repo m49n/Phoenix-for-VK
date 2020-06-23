@@ -7,10 +7,7 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
+
 public interface ICommunityBanEditView extends IMvpView, IAccountDependencyView, IErrorView, IProgressView, IToastView {
     void displayUserInfo(Owner user);
 

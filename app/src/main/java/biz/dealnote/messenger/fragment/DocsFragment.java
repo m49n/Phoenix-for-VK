@@ -19,6 +19,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,10 +58,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
 public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListView>
         implements IDocListView, DocsAdapter.ActionListener, DocsUploadAdapter.ActionListener, DocsAsImagesAdapter.ActionListener {
 
@@ -351,6 +349,7 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
         this.mImagesOnly = imagesOnly;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DocsListPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DocsListPresenter(

@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.StatFs;
@@ -20,19 +21,18 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-/**
- * Created by Ruslan Kolbasa on 28.07.2017.
- * phoenix
- */
+
 public class PicassoInstance {
 
     private static final String TAG = PicassoInstance.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static PicassoInstance instance;
     private final IProxySettings proxySettings;
     private final Context app;
     private Cache cache_data;
     private volatile Picasso singleton;
 
+    @SuppressLint("CheckResult")
     private PicassoInstance(Context app, IProxySettings proxySettings) {
         this.app = app;
         this.proxySettings = proxySettings;
@@ -49,6 +49,7 @@ public class PicassoInstance {
     }
 
     public static void clear_cache() throws IOException {
+        instance.getCache_data();
         instance.cache_data.evictAll();
     }
 
@@ -93,17 +94,21 @@ public class PicassoInstance {
         return singleton;
     }
 
+    private void getCache_data() {
+        if (cache_data == null) {
+            File cache = new File(app.getCacheDir(), "picasso-cache");
+
+            if (!cache.exists()) {
+                cache.mkdirs();
+            }
+
+            cache_data = new Cache(cache, calculateDiskCacheSize(cache));
+        }
+    }
+
     private Picasso create() {
         Logger.d(TAG, "Picasso singleton creation");
-
-        File cache = new File(app.getCacheDir(), "picasso-cache");
-
-        if (!cache.exists()) {
-            cache.mkdirs();
-        }
-
-        cache_data = new Cache(cache, calculateDiskCacheSize(cache));
-
+        getCache_data();
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .cache(cache_data).addInterceptor(chain -> {
                     Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build();
@@ -114,22 +119,6 @@ public class PicassoInstance {
 
         if (Objects.nonNull(config)) {
             ProxyUtil.applyProxyConfig(builder, config);
-            /*Authenticator authenticator = null;
-            if (config.isAuthEnabled()) {
-                authenticator = (route, response) -> {
-                    String credential = Credentials.basic(config.getUser(), config.getPass());
-                    return response.request().newBuilder()
-                            .header("Proxy-Authorization", credential)
-                            .build();
-                };
-            }
-
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getAddress(), config.getPort()));
-            builder.proxy(proxy);
-
-            if (Objects.nonNull(authenticator)) {
-                builder.proxyAuthenticator(authenticator);
-            }*/
         }
 
         OkHttp3Downloader downloader = new OkHttp3Downloader(builder.build());
@@ -139,7 +128,5 @@ public class PicassoInstance {
                 .addRequestHandler(new LocalPhotoRequestHandler(app))
                 .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
                 .build();
-
-        //Picasso.setSingletonInstance(picasso);
     }
 }

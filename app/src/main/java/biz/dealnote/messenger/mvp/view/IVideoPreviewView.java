@@ -5,10 +5,7 @@ import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
+
 public interface IVideoPreviewView extends IAccountDependencyView, IMvpView, IErrorView {
 
     void displayLoading();

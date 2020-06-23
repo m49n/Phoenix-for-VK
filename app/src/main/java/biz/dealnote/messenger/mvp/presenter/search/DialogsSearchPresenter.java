@@ -19,10 +19,6 @@ import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class DialogsSearchPresenter extends AbsSearchPresenter<IDialogsSearchView, DialogsSearchCriteria, Object, IntNextFrom> {
 
     private final IMessagesRepository messagesInteractor;
@@ -45,10 +41,8 @@ public class DialogsSearchPresenter extends AbsSearchPresenter<IDialogsSearchVie
     @Override
     Single<Pair<List<Object>, IntNextFrom>> doSearch(int accountId, DialogsSearchCriteria criteria, IntNextFrom startFrom) {
         return messagesInteractor.searchDialogs(accountId, 20, criteria.getQuery())
-                .map(models -> {
-                    // null because load more not supported
-                    return Pair.Companion.create(models, null);
-                });
+                .map(models -> Pair.Companion.create(models, null));
+        // null because load more not supported
     }
 
     @Override

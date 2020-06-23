@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 
 import biz.dealnote.messenger.model.VoiceMessage;
 
-/**
- * Created by r.kolbasa on 27.11.2017.
- * Phoenix-for-VK
- */
 public class AudioEntry {
 
     private int id;

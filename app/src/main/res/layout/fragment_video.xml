@@ -69,7 +69,8 @@
                                 android:layout_width="56dp"
                                 android:layout_height="56dp"
                                 android:layout_centerInParent="true"
-                                android:background="?attr/selectableItemBackgroundBorderless">
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:stateListAnimator="@animator/clicked">
 
                                 <ImageView
                                     android:layout_width="match_parent"
@@ -114,14 +115,14 @@
                 android:paddingBottom="4dp">
 
                 <biz.dealnote.messenger.view.CircleCounterButton
-                    android:id="@+id/share_button"
+                    android:id="@+id/like_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:active_background_color="?attr/icon_color_active"
                     app:always_counter="false"
-                    app:button_icon="@drawable/share_variant"
+                    app:button_icon="@drawable/heart"
                     app:noactive_icon_color="?attr/colorOnSurface" />
 
                 <biz.dealnote.messenger.view.CircleCounterButton
@@ -137,14 +138,14 @@
                     app:noactive_icon_color="?attr/colorOnSurface" />
 
                 <biz.dealnote.messenger.view.CircleCounterButton
-                    android:id="@+id/like_button"
+                    android:id="@+id/share_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:active_background_color="?attr/icon_color_active"
                     app:always_counter="false"
-                    app:button_icon="@drawable/heart"
+                    app:button_icon="@drawable/ic_outline_share"
                     app:noactive_icon_color="?attr/colorOnSurface" />
 
             </LinearLayout>

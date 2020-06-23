@@ -22,10 +22,6 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.ViewUtils;
 
-/**
- * Created by golde on 02.05.2017.
- * phoenix
- */
 public class DialogPreviewAdapter extends RecyclerView.Adapter<DialogPreviewAdapter.DialogPreviewHolder> {
 
     private final ActionListener actionListener;

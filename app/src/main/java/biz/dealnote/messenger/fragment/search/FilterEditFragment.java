@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,12 +93,11 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
         Toolbar toolbar = root.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_options);
 
-        Drawable dr = getResources().getDrawable(R.drawable.check, requireActivity().getTheme());
+        Drawable dr = ResourcesCompat.getDrawable(getResources(), R.drawable.check, requireActivity().getTheme());
         Utils.setColorFilter(dr, CurrentTheme.getColorPrimary(requireActivity()));
         toolbar.setNavigationIcon(dr);
-        toolbar.setNavigationOnClickListener(menuItem -> {
-            onSaveClick();
-        });
+        toolbar.setNavigationOnClickListener(menuItem ->
+                onSaveClick());
 
         mEmptyText = root.findViewById(R.id.empty_text);
 
@@ -209,7 +209,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_CITY:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int countryId = ((DatabaseOption) dependency).value.id;
                     showCitiesDialog(databaseOption, countryId);
                 } else {
@@ -220,7 +220,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_UNIVERSITY:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int countryId = ((DatabaseOption) dependency).value.id;
                     showUniversitiesDialog(databaseOption, countryId);
                 } else {
@@ -231,7 +231,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_FACULTY:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int universityId = ((DatabaseOption) dependency).value.id;
                     showFacultiesDialog(databaseOption, universityId);
                 } else {
@@ -242,7 +242,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_CHAIR:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int facultyId = ((DatabaseOption) dependency).value.id;
                     showChairsDialog(databaseOption, facultyId);
                 } else {
@@ -253,7 +253,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_SCHOOL:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int cityId = ((DatabaseOption) dependency).value.id;
                     showSchoolsDialog(databaseOption, cityId);
                 } else {
@@ -264,7 +264,7 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
                 break;
 
             case DatabaseOption.TYPE_SCHOOL_CLASS:
-                if (dependency != null && dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
+                if (dependency instanceof DatabaseOption && ((DatabaseOption) dependency).value != null) {
                     int countryId = ((DatabaseOption) dependency).value.id;
                     showSchoolClassesDialog(databaseOption, countryId);
                 } else {

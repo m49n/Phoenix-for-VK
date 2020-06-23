@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.api;
 
-/**
- * Created by Ruslan Kolbasa on 01.08.2017.
- * phoenix
- */
+
 public class AuthException extends Exception {
 
     private final String code;

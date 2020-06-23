@@ -5,10 +5,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.util.AssertUtils;
 
-/**
- * Created by Ruslan Kolbasa on 06.09.2017.
- * phoenix
- */
+
 public class CommentEntity {
 
     private final int sourceId;

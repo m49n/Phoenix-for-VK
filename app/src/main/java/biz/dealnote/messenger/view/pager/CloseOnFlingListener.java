@@ -9,10 +9,6 @@ import biz.dealnote.messenger.view.FlingRelativeLayout;
 
 import static biz.dealnote.messenger.util.Utils.dpToPx;
 
-/**
- * Created by ruslan.kolbasa on 19.10.2016.
- * phoenix
- */
 public abstract class CloseOnFlingListener implements FlingRelativeLayout.OnSingleFlingListener {
 
     private static final int MIN_Y_DP = 80; // минимальная дистанция

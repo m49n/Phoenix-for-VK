@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityUtils;
@@ -88,6 +90,7 @@ public class RepostFragment extends AbsAttachmentsEditFragment<RepostPresenter, 
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<RepostPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

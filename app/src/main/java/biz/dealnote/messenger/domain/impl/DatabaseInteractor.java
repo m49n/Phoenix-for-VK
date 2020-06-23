@@ -24,10 +24,6 @@ import biz.dealnote.messenger.model.database.University;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 20.09.2017.
- * phoenix
- */
 public class DatabaseInteractor implements IDatabaseInteractor {
 
     private final IDatabaseStore cache;
@@ -78,7 +74,7 @@ public class DatabaseInteractor implements IDatabaseInteractor {
 
         return cache.getCountries(accountId)
                 .flatMap(dbos -> {
-                    if (dbos.size() > 0) {
+                    if (!dbos.isEmpty()) {
                         List<Country> countries = new ArrayList<>(dbos.size());
                         for (CountryEntity dbo : dbos) {
                             countries.add(new Country(dbo.getId(), dbo.getTitle()));

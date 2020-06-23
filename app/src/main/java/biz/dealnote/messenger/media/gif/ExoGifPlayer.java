@@ -9,28 +9,20 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.video.VideoListener;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
 import biz.dealnote.messenger.App;
 import biz.dealnote.messenger.Constants;
-import biz.dealnote.messenger.api.ProxyUtil;
-import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.model.VideoSize;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Logger;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 13.08.2017.
- * phoenix
- */
 public class ExoGifPlayer implements IGifPlayer {
 
     private final String url;
@@ -100,36 +92,14 @@ public class ExoGifPlayer implements IGifPlayer {
         internalPlayer = new SimpleExoPlayer.Builder(App.getInstance()).build();
 
 
-        // DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
-        // Produces DataSource instances through which media data is loaded.
-        // DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
-        // DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(App.getInstance(), Util.getUserAgent(App.getInstance(), "exoplayer2example"), bandwidthMeterA);
-
-        Proxy proxy = null;
-        if (nonNull(proxyConfig)) {
-            proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
-
-            if (proxyConfig.isAuthEnabled()) {
-                Authenticator authenticator = new Authenticator() {
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
-                    }
-                };
-
-                Authenticator.setDefault(authenticator);
-            } else {
-                Authenticator.setDefault(null);
-            }
-        }
-
         String userAgent = Constants.USER_AGENT(null);
-        CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:
         // MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
         // FOR LIVESTREAM LINK:
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(Utils.getExoPlayerFactory(userAgent, proxyConfig)).createMediaSource(Uri.parse(url));
         internalPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
         internalPlayer.addListener(new ExoEventAdapter() {
             @Override

@@ -20,6 +20,8 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -33,10 +35,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 20.12.2016.
- * phoenix
- */
 public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICreatePollView> implements ICreatePollView {
 
     private EditText mQuestion;
@@ -111,6 +109,7 @@ public class CreatePollFragment extends BaseMvpFragment<CreatePollPresenter, ICr
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CreatePollPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CreatePollPresenter(

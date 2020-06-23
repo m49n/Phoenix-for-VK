@@ -5,10 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by ruslan.kolbasa on 20.10.2016.
- * phoenix
- */
 public class KeyExchangeSession {
 
     private final long id;

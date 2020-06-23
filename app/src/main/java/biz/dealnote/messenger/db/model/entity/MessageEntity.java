@@ -8,10 +8,7 @@ import java.util.Map;
 import biz.dealnote.messenger.model.ChatAction;
 import biz.dealnote.messenger.model.MessageStatus;
 
-/**
- * Created by admin on 03.09.2017.
- * phoenix
- */
+
 public class MessageEntity extends Entity {
 
     private final int id;
@@ -65,6 +62,8 @@ public class MessageEntity extends Entity {
     private EntitiesWrapper attachments = EntitiesWrapper.EMPTY;
 
     private List<MessageEntity> forwardMessages;
+
+    private String payload;
 
     private long updateTime;
 
@@ -296,6 +295,15 @@ public class MessageEntity extends Entity {
 
     public MessageEntity setAttachments(List<Entity> attachments) {
         this.attachments = EntitiesWrapper.wrap(attachments);
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public MessageEntity setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 }

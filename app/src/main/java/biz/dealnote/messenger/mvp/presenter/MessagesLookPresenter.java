@@ -24,10 +24,6 @@ import static biz.dealnote.messenger.util.Utils.getSelected;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 03.10.2016.
- * phoenix
- */
 public class MessagesLookPresenter extends AbsMessageListPresenter<IMessagesLookView> {
 
     private static final int COUNT = 40;

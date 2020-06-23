@@ -60,6 +60,8 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
 
     private ArrayList<Message> fwd;
 
+    private String payload;
+
     //chat_columns
 
     @ChatAction
@@ -147,6 +149,7 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
         this.forwardMessagesCount = in.readInt();
         this.hasAttachments = in.readInt() == 1;
         this.updateTime = in.readLong();
+        this.payload = in.readString();
     }
 
     @ChatAction
@@ -539,6 +542,7 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
         dest.writeInt(forwardMessagesCount);
         dest.writeInt(hasAttachments ? 1 : 0);
         dest.writeLong(updateTime);
+        dest.writeString(payload);
     }
 
     public long getUpdateTime() {
@@ -565,6 +569,10 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
 
     public boolean isSticker() {
         return nonNull(attachments) && safeCountOf(attachments.getStickers()) > 0;
+    }
+
+    public boolean isGraffity() {
+        return nonNull(attachments) && safeCountOf(attachments.getGraffity()) > 0;
     }
 
     public boolean isGift() {
@@ -604,6 +612,15 @@ public class Message extends AbsModel implements Parcelable, Identificable, ISel
 
     public Message setDecryptedBody(String decryptedBody) {
         this.decryptedBody = decryptedBody;
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public Message setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 

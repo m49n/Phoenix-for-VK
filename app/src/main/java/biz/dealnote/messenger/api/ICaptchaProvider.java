@@ -3,10 +3,6 @@ package biz.dealnote.messenger.api;
 import biz.dealnote.messenger.api.model.Captcha;
 import io.reactivex.Observable;
 
-/**
- * Created by Ruslan Kolbasa on 06.06.2017.
- * phoenix
- */
 public interface ICaptchaProvider {
 
     /**

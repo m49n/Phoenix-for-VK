@@ -18,10 +18,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Created by admin on 19.03.2017.
- * phoenix
- */
+
 public class RxUtils {
 
     private static final Action DUMMMY_ACTION_0 = () -> {

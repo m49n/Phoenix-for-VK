@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
+
 public class VkApiDoc implements VKApiAttachment {
 
     @SerializedName("id")

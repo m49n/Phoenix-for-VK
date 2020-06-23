@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by Ruslan Kolbasa on 19.06.2017.
- * phoenix
- */
+
 public class BanAction {
 
     private final int groupId;

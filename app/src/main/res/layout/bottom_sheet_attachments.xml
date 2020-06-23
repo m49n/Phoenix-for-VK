@@ -62,13 +62,23 @@
         android:padding="8dp">
 
         <ImageView
+            android:id="@+id/button_photo_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            android:src="@drawable/photo_sizes"
+            app:tint="?attr/colorSecondary" />
+
+        <ImageView
             android:id="@+id/button_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/ic_camera_oval_vector"
+            android:src="@drawable/ic_outline_camera"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
@@ -78,7 +88,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/video"
+            android:src="@drawable/ic_outline_video_library"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
@@ -88,7 +98,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/music"
+            android:src="@drawable/ic_outline_library_music"
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
@@ -98,7 +108,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/book"
+            android:src="@drawable/ic_outline_library_books"
             app:tint="?attr/colorOnSurface" />
 
         <ImageButton

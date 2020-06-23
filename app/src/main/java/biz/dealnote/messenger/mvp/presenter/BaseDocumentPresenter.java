@@ -15,10 +15,7 @@ import biz.dealnote.messenger.util.RxUtils;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 27.09.2016.
- * phoenix
- */
+
 public class BaseDocumentPresenter<V extends IBasicDocumentView> extends AccountDependencyPresenter<V> {
 
     private static final String TAG = BaseDocumentPresenter.class.getSimpleName();

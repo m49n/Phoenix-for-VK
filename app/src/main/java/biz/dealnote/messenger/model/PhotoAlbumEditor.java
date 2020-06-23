@@ -3,10 +3,6 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ruslan.kolbasa on 30.11.2016.
- * phoenix
- */
 public class PhotoAlbumEditor implements Parcelable {
 
     public static final Creator<PhotoAlbumEditor> CREATOR = new Creator<PhotoAlbumEditor>() {

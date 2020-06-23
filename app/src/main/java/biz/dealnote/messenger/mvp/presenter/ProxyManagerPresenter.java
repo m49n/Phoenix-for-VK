@@ -14,10 +14,7 @@ import biz.dealnote.messenger.mvp.view.IProxyManagerView;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
+
 public class ProxyManagerPresenter extends RxSupportPresenter<IProxyManagerView> {
 
     private final IProxySettings settings;

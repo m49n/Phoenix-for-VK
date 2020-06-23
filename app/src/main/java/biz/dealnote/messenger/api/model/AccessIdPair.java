@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.api.model;
 
-/**
- * Created by admin on 02.01.2017.
- * phoenix
- */
+
 public class AccessIdPair {
 
     public final int id;

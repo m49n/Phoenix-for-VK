@@ -8,10 +8,7 @@ import biz.dealnote.messenger.api.model.VKApiStickerSet;
 import biz.dealnote.messenger.api.services.IStoreService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 class StoreApi extends AbsApi implements IStoreApi {
 
     StoreApi(int accountId, IServiceProvider provider) {

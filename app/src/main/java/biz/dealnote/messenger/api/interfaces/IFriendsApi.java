@@ -11,10 +11,7 @@ import biz.dealnote.messenger.api.model.response.DeleteFriendResponse;
 import biz.dealnote.messenger.api.model.response.OnlineFriendsResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 30.12.2016.
- * phoenix
- */
+
 public interface IFriendsApi {
 
     @CheckResult

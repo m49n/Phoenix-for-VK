@@ -11,10 +11,7 @@ import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
+
 public abstract class AccountDependencyPresenter<V extends IMvpView & IAccountDependencyView> extends RxSupportPresenter<V> {
 
     private static final String SAVE_ACCOUNT_ID = "save_account_id";

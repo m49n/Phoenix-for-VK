@@ -9,10 +9,7 @@ import biz.dealnote.messenger.model.VideoAlbumCriteria;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public interface IVideoAlbumsStorage extends IStorage {
     Single<List<VideoAlbumEntity>> findByCriteria(@NonNull VideoAlbumCriteria criteria);
 

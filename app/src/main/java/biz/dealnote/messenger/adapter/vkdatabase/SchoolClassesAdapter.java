@@ -54,7 +54,7 @@ public class SchoolClassesAdapter extends RecyclerView.Adapter<SchoolClassesAdap
         void onClick(SchoolClazz schoolClazz);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
 

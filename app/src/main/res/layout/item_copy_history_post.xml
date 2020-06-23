@@ -29,8 +29,9 @@
             android:layout_marginStart="8dp"
             android:layout_toStartOf="@+id/item_copy_history_post_dots"
             android:layout_toEndOf="@+id/item_copy_history_post_avatar"
+            android:ellipsize="marquee"
             android:gravity="center_vertical"
-            android:maxLines="1"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             tools:text="Post owner" />
 

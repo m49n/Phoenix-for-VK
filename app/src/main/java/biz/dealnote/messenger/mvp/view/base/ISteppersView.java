@@ -5,10 +5,6 @@ import androidx.annotation.NonNull;
 import biz.dealnote.messenger.view.steppers.base.AbsStepsHost;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 30.11.2016.
- * phoenix
- */
 public interface ISteppersView<H extends AbsStepsHost> extends IMvpView {
     void updateStepView(int step);
 

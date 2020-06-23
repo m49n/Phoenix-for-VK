@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -28,10 +30,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
 public class ProxyManagerFrgament extends BaseMvpFragment<ProxyManagerPresenter, IProxyManagerView>
         implements IProxyManagerView, ProxiesAdapter.ActionListener {
 
@@ -81,6 +79,7 @@ public class ProxyManagerFrgament extends BaseMvpFragment<ProxyManagerPresenter,
         return super.onOptionsItemSelected(item);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ProxyManagerPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ProxyManagerPresenter(saveInstanceState);

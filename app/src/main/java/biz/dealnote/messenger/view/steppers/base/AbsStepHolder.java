@@ -12,10 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 
-/**
- * Created by ruslan.kolbasa on 09.08.2016.
- * mobilebankingandroid
- */
 public abstract class AbsStepHolder<T extends AbsStepsHost> extends RecyclerView.ViewHolder implements IdentificableHolder {
 
     private static int nextHolderId;

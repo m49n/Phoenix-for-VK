@@ -12,9 +12,14 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
+import biz.dealnote.messenger.api.model.VKApiCatalogLink;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VKApiNews;
@@ -39,6 +44,7 @@ import biz.dealnote.messenger.api.model.VkApiPrivacy;
 import biz.dealnote.messenger.api.model.feedback.Copies;
 import biz.dealnote.messenger.api.model.feedback.UserArray;
 import biz.dealnote.messenger.api.model.longpoll.AddMessageUpdate;
+import biz.dealnote.messenger.api.model.response.CatalogResponse;
 import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 import biz.dealnote.messenger.crypt.CryptHelper;
@@ -46,6 +52,10 @@ import biz.dealnote.messenger.crypt.MessageType;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioCatalog;
+import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Call;
+import biz.dealnote.messenger.model.CatalogBlock;
 import biz.dealnote.messenger.model.Chat;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Commented;
@@ -58,6 +68,7 @@ import biz.dealnote.messenger.model.FaveLink;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.FavePageType;
 import biz.dealnote.messenger.model.FriendList;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
@@ -81,6 +92,7 @@ import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.domain.mappers.MapUtil.mapAll;
 import static biz.dealnote.messenger.util.Objects.isNull;
@@ -88,10 +100,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 13-Jun-16.
- * phoenix
- */
 public class Dto2Model {
 
     public static FriendList transform(VkApiFriendList dto) {
@@ -121,6 +129,24 @@ public class Dto2Model {
                 .setTitle(chat.title);
     }
 
+    public static AudioCatalog.ArtistBlock transform(VKApiAudioCatalog.VKApiArtistBlock block) {
+        if (block == null)
+            return null;
+        String url = null;
+        if (!Utils.isEmpty(block.images)) {
+            int def = 0;
+            for (VKApiAudioCatalog.Image i : block.images) {
+                if (i.width * i.height > def) {
+                    def = i.width * i.height;
+                    url = i.url;
+                }
+            }
+        }
+        return new AudioCatalog.ArtistBlock()
+                .setName(block.name)
+                .setPhoto(url);
+    }
+
     public static Sticker.Image transformStickerImage(VKApiSticker.Image dto) {
         return new Sticker.Image(dto.url, dto.width, dto.height);
     }
@@ -134,6 +160,18 @@ public class Dto2Model {
 
     public static List<Sticker> transformStickers(List<VKApiSticker> dto) {
         return mapAll(dto, Dto2Model::transformSticker);
+    }
+
+    public static List<Audio> transformAudios(List<VKApiAudio> dto) {
+        return mapAll(dto, Dto2Model::transform);
+    }
+
+    public static List<AudioPlaylist> transformAudioPlaylists(List<VKApiAudioPlaylist> dto) {
+        return mapAll(dto, Dto2Model::transform);
+    }
+
+    public static List<Link> transformCatalogLinks(List<VKApiCatalogLink> dto) {
+        return mapAll(dto, Dto2Model::transform);
     }
 
     public static Owner transformOwner(VKApiOwner owner) {
@@ -218,6 +256,10 @@ public class Dto2Model {
 
     public static List<User> transformUsers(List<VKApiUser> dtos) {
         return mapAll(dtos, Dto2Model::transformUser);
+    }
+
+    public static List<Video> transformVideos(List<VKApiVideo> dtos) {
+        return mapAll(dtos, Dto2Model::transform);
     }
 
     public static FavePage transformFaveUser(FavePageResponse favePage) {
@@ -357,7 +399,8 @@ public class Dto2Model {
                 .setPhoto50(message.action_photo_50)
                 .setPhoto100(message.action_photo_100)
                 .setPhoto200(message.action_photo_200)
-                .setSender(owners.getById(message.from_id));
+                .setSender(owners.getById(message.from_id))
+                .setPayload(message.payload);
 
         if (message.action_mid != 0) {
             appMessage.setActionUser(owners.getById(message.action_mid));
@@ -375,7 +418,7 @@ public class Dto2Model {
 
         if (nonEmpty(message.random_id)) {
             try {
-                appMessage.setRandomId(Integer.valueOf(message.random_id));
+                appMessage.setRandomId(Integer.parseInt(message.random_id));
             } catch (NumberFormatException ignored) {
             }
         }
@@ -596,9 +639,27 @@ public class Dto2Model {
                 .setOwnerId(dto.owner_id)
                 .setDate(dto.date)
                 .setExpires(dto.expires_at)
+                .setIs_expired(dto.is_expired)
+                .setAccessKey(dto.access_key)
                 .setPhoto(dto.photo != null ? transform(dto.photo) : null)
                 .setVideo(dto.video != null ? transform(dto.video) : null)
                 .setOwner(owners.getById(dto.owner_id));
+    }
+
+    public static Call transform(@NonNull VKApiCall dto) {
+        return new Call().setInitiator_id(dto.initiator_id)
+                .setReceiver_id(dto.receiver_id)
+                .setState(dto.state)
+                .setTime(dto.time);
+    }
+
+    public static Graffiti transform(@NonNull VKApiGraffiti dto) {
+        return new Graffiti().setId(dto.id)
+                .setOwner_id(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setHeight(dto.height)
+                .setWidth(dto.width)
+                .setUrl(dto.url);
     }
 
     public static Photo transform(@NonNull VKApiPhoto dto) {
@@ -640,7 +701,51 @@ public class Dto2Model {
                 .setThumb_image_big(dto.thumb_image_big)
                 .setThumb_image_little(dto.thumb_image_little)
                 .setThumb_image_very_big(dto.thumb_image_very_big)
-                .setIsHq(dto.isHq);
+                .setIsHq(dto.isHq)
+                .setMain_artists(dto.main_artists);
+    }
+
+    public static AudioPlaylist transform(@NonNull VKApiAudioPlaylist dto) {
+        return new AudioPlaylist()
+                .setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setArtist_name(dto.artist_name)
+                .setCount(dto.count)
+                .setDescription(dto.description)
+                .setGenre(dto.genre)
+                .setYear(dto.Year)
+                .setTitle(dto.title)
+                .setThumb_image(dto.thumb_image)
+                .setUpdate_time(dto.update_time)
+                .setOriginal_access_key(dto.original_access_key)
+                .setOriginal_id(dto.original_id)
+                .setOriginal_owner_id(dto.original_owner_id);
+    }
+
+    public static CatalogBlock transform(@NonNull CatalogResponse dto) {
+        return new CatalogBlock()
+                .setAudios(transformAudios(dto.audios))
+                .setPlaylists(transformAudioPlaylists(dto.playlists))
+                .setVideos(transformVideos(dto.videos))
+                .setLinks(transformCatalogLinks(dto.items))
+                .setNext_from(dto.nextFrom);
+    }
+
+    public static AudioCatalog transform(@NonNull VKApiAudioCatalog dto) {
+        return new AudioCatalog()
+                .setId(dto.id)
+                .setSource(dto.source)
+                .setNext_from(dto.next_from)
+                .setSubtitle(dto.subtitle)
+                .setTitle(dto.title)
+                .setType(dto.type)
+                .setCount(dto.count)
+                .setAudios(transformAudios(dto.audios))
+                .setPlaylists(transformAudioPlaylists(dto.playlists))
+                .setVideos(transformVideos(dto.videos))
+                .setLinks(transformCatalogLinks(dto.items))
+                .setArtist(dto.artist != null ? transform(dto.artist) : null);
     }
 
     public static Link transform(@NonNull VKApiLink link) {
@@ -651,6 +756,15 @@ public class Dto2Model {
                 .setDescription(link.description)
                 .setPreviewPhoto(link.preview_photo)
                 .setPhoto(Objects.isNull(link.photo) ? null : transform(link.photo));
+    }
+
+    public static Link transform(@NonNull VKApiCatalogLink link) {
+        return new Link()
+                .setUrl(link.url)
+                .setTitle(link.title)
+                .setDescription(link.subtitle)
+                .setPreviewPhoto(link.preview_photo)
+                .setPhoto(null);
     }
 
     public static Article transform(@NonNull VKApiArticle article) {
@@ -689,7 +803,8 @@ public class Dto2Model {
                 .setWaveform(dto.waveform)
                 .setLinkOgg(dto.linkOgg)
                 .setLinkMp3(dto.linkMp3)
-                .setAccessKey(dto.access_key);
+                .setAccessKey(dto.access_key)
+                .setTranscript(dto.transcript);
     }
 
     public static Document transform(@NonNull VkApiDoc dto) {
@@ -852,6 +967,21 @@ public class Dto2Model {
                 case VKApiAttachment.TYPE_ARTICLE:
                     attachments.prepareArticles().add(transform((VKApiArticle) attachment));
                     break;
+                case VKApiAttachment.TYPE_STORY:
+                    attachments.prepareStories().add(transformStory((VKApiStory) attachment, owners));
+                    break;
+                case VKApiAttachment.TYPE_ALBUM:
+                    attachments.preparePhotoAlbums().add(transformPhotoAlbum((VKApiPhotoAlbum) attachment));
+                    break;
+                case VKApiAttachment.TYPE_CALL:
+                    attachments.prepareCalls().add(transform((VKApiCall) attachment));
+                    break;
+                case VKApiAttachment.TYPE_AUDIO_PLAYLIST:
+                    attachments.prepareAudioPlaylists().add(transform((VKApiAudioPlaylist) attachment));
+                    break;
+                case VKApiAttachment.TYPE_GRAFFITY:
+                    attachments.prepareGraffity().add(transform((VKApiGraffiti) attachment));
+                    break;
                 case VKApiAttachment.TYPE_POLL:
                     attachments.preparePolls().add(transform((VKApiPoll) attachment));
                     break;
@@ -996,7 +1126,7 @@ public class Dto2Model {
         }
     }
 
-    public static PhotoAlbum transform(VKApiPhotoAlbum album) {
+    public static PhotoAlbum transformPhotoAlbum(VKApiPhotoAlbum album) {
         return new PhotoAlbum(album.id, album.owner_id)
                 .setTitle(album.title)
                 .setSize(album.size)

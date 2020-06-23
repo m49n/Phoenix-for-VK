@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class Community extends Owner implements Parcelable {
 
     public static final Creator<Community> CREATOR = new Creator<Community>() {

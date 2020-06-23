@@ -9,6 +9,7 @@ import androidx.annotation.StyleRes;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import biz.dealnote.messenger.crypt.KeyLocationPolicy;
 import biz.dealnote.messenger.model.PhotoSize;
@@ -18,10 +19,6 @@ import biz.dealnote.messenger.place.Place;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 public interface ISettings {
 
     IRecentChats recentChats();
@@ -67,6 +64,8 @@ public interface ISettings {
 
         boolean isDisable_history();
 
+        boolean isDebug_mode();
+
         boolean isForce_cache();
 
         boolean isKeepLongpoll();
@@ -82,6 +81,8 @@ public interface ISettings {
         boolean isInfo_reading();
 
         boolean isAuto_read();
+
+        boolean isBe_online();
 
         int getColorChat();
 
@@ -114,6 +115,20 @@ public interface ISettings {
         String getDocDir();
 
         boolean isPhoto_to_user_dir();
+
+        boolean isDelete_cache_images();
+
+        boolean isClick_next_track();
+
+        boolean isDisabled_encryption();
+
+        boolean isDownload_photo_tap();
+
+        boolean isRunes_show();
+
+        boolean isRunes_valknut();
+
+        boolean isValknut_color_theme();
     }
 
     interface IAccountsSettings {
@@ -167,6 +182,10 @@ public interface ISettings {
         @Nullable
         Integer getUploadImageSize();
 
+        void setUploadImageSize(Integer size);
+
+        int getUploadImageSizePref();
+
         @PhotoSize
         int getPrefPreviewImageSize();
 
@@ -176,6 +195,18 @@ public interface ISettings {
         int getPrefDisplayImageSize(@PhotoSize int byDefault);
 
         void setPrefDisplayImageSize(@PhotoSize int size);
+
+        boolean isWebview_night_mode();
+
+        int getPhotoRoundMode();
+
+        boolean isLoad_history_notif();
+
+        boolean isDont_write();
+
+        boolean isOver_ten_attach();
+
+        int cryptVersion();
     }
 
     interface INotificationSettings {
@@ -283,6 +314,22 @@ public interface ISettings {
         int getPinHistoryDepth();
 
         boolean needHideMessagesBodyForNotif();
+
+        boolean AddValueToSet(int value, String arrayName);
+
+        boolean RemoveValueFromSet(int value, String arrayName);
+
+        int getSetSize(String arrayName);
+
+        Set<Integer> loadSet(String arrayName);
+
+        boolean ContainsValuesInSet(int[] values, String arrayName);
+
+        boolean ContainsValueInSet(int value, String arrayName);
+
+        boolean getShowHiddenDialogs();
+
+        void setShowHiddenDialogs(boolean showHiddenDialogs);
     }
 
     interface IUISettings {
@@ -290,6 +337,8 @@ public interface ISettings {
         int getMainTheme();
 
         void setMainTheme(String key);
+
+        void switchNightMode(@NightMode int key);
 
         String getMainThemeKey();
 
@@ -313,8 +362,6 @@ public interface ISettings {
         boolean isPhoto_swipe_pos_top_to_bottom();
 
         boolean isShow_profile_in_additional_page();
-
-        boolean isDisable_swipes();
 
         boolean isDisable_swipes_chat();
 

@@ -6,10 +6,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.Error;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public class VkReponse {
 
     @SerializedName("error")

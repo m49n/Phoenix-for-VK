@@ -10,10 +10,6 @@ import biz.dealnote.messenger.model.menu.AdvancedItem;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public interface IUserDetailsView extends IMvpView, IAccountDependencyView, IErrorView {
     void displayData(@NonNull List<AdvancedItem> items);
 

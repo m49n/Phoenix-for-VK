@@ -28,10 +28,7 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public abstract class AbsOwnersListFragment<P extends SimpleOwnersPresenter<V>, V extends ISimpleOwnersView> extends BaseMvpFragment<P, V> implements ISimpleOwnersView {
 
     protected RecyclerView mRecyclerView;

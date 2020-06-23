@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +42,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by ruslan.kolbasa on 03.10.2016.
- * phoenix
- */
 public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPresenter, IMessagesLookView>
         implements IMessagesLookView, MessagesAdapter.OnMessageActionListener {
 
@@ -213,6 +211,7 @@ public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPr
         SendAttachmentsActivity.startForSendAttachments(requireActivity(), accountId, new FwdMessages(messages));
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MessagesLookPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

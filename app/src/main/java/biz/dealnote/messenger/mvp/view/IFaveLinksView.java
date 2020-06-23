@@ -6,10 +6,6 @@ import biz.dealnote.messenger.model.FaveLink;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public interface IFaveLinksView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayLinks(List<FaveLink> links);
 

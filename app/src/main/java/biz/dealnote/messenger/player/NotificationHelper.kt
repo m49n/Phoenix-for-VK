@@ -1,13 +1,3 @@
-/*
- * Copyright (C) 2012 Andrew Neal Licensed under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with the
- * License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- */
 package biz.dealnote.messenger.player
 
 import android.annotation.SuppressLint
@@ -21,13 +11,10 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
-import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.R
 import biz.dealnote.messenger.activity.MainActivity
 import biz.dealnote.messenger.longpoll.AppNotificationChannels
-import biz.dealnote.messenger.place.PlaceFactory
 import biz.dealnote.messenger.player.MusicPlaybackService
-import biz.dealnote.messenger.settings.Settings
 import biz.dealnote.messenger.util.Utils
 
 class NotificationHelper(private val mService: MusicPlaybackService) {
@@ -65,10 +52,12 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
                         context.resources.getString(R.string.next),
                         retreivePlaybackActions(ACTION_NEXT)))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH;
+            mNotificationBuilder?.priority = NotificationManager.IMPORTANCE_HIGH
         else
             mNotificationBuilder?.priority = Notification.PRIORITY_MAX
-        mService.startForeground(PHOENIX_MUSIC_SERVICE, mNotificationBuilder?.build())
+        if (isPlaying) {
+            mService.startForeground(PHOENIX_MUSIC_SERVICE, mNotificationBuilder?.build())
+        }
     }
 
     fun killNotification() {
@@ -94,13 +83,9 @@ class NotificationHelper(private val mService: MusicPlaybackService) {
     }
 
     private fun getOpenIntent(context: Context): PendingIntent {
-        val aid = Settings.get()
-                .accounts()
-                .current
         val intent = Intent(context, MainActivity::class.java)
-        intent.putExtra(Extra.PLACE, PlaceFactory.getPlayerPlace(aid))
-        intent.action = MainActivity.ACTION_OPEN_PLACE
-        return PendingIntent.getActivity(mService, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        intent.action = MainActivity.ACTION_OPEN_AUDIO_PLAYER
+        return PendingIntent.getActivity(mService, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun retreivePlaybackActions(which: Int): PendingIntent? {

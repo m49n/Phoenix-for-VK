@@ -9,10 +9,7 @@ import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 11.06.2017.
- * phoenix
- */
+
 public interface IVideosInteractor {
     Single<List<Video>> get(int accountId, int ownerId, int albumId, int count, int offset);
 

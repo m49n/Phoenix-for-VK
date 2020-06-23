@@ -46,10 +46,7 @@ import static biz.dealnote.messenger.util.RxUtils.applyCompletableIOToMainSchedu
 import static biz.dealnote.messenger.util.Utils.copyToArrayListWithPredicate;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 30.01.2017.
- * phoenix
- */
+
 public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
 
     private static final String TAG = PostEditPresenter.class.getSimpleName();

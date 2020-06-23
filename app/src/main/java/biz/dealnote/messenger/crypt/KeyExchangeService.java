@@ -26,6 +26,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -53,10 +54,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 21.10.2016.
- * phoenix
- */
 public class KeyExchangeService extends Service {
 
     public static final String ACTION_APPLY_EXHANGE = "ACTION_APPLY_EXHANGE";
@@ -120,7 +117,7 @@ public class KeyExchangeService extends Service {
                 .flatMap(o -> Apis.get()
                         .vkDefault(accountId)
                         .messages()
-                        .send((int) Math.random(), peerId, null, message.toString(), null, null, null, null, null));
+                        .send(new Random().nextInt(), peerId, null, message.toString(), null, null, null, null, null, null));
     }
 
     public static void iniciateKeyExchangeSession(@NonNull Context context, int accountId,
@@ -281,7 +278,7 @@ public class KeyExchangeService extends Service {
                         byte[] encodedPublicKey = pair.getPublic().getEncoded();
                         String pulicBase64 = Base64.encodeToString(encodedPublicKey, Base64.DEFAULT);
 
-                        ExchangeMessage message = new ExchangeMessage.Builder(Version.CURRENT, session.getId(), SessionState.INITIATOR_STATE_1)
+                        ExchangeMessage message = new ExchangeMessage.Builder(Version.getCurrentVersion(), session.getId(), SessionState.INITIATOR_STATE_1)
                                 .setPublicKey(pulicBase64)
                                 .setKeyLocationPolicy(keyLocationPolicy)
                                 .create();
@@ -318,7 +315,7 @@ public class KeyExchangeService extends Service {
 
     private void notifyOpponentAboutSessionFail(int accountId, int peerId, long sessionId, int errorCode) {
         Logger.d(TAG, "notifyOpponentAboutSessionFail, sessionId: " + sessionId);
-        ExchangeMessage message = new ExchangeMessage.Builder(Version.CURRENT, sessionId, SessionState.FAILED)
+        ExchangeMessage message = new ExchangeMessage.Builder(Version.getCurrentVersion(), sessionId, SessionState.FAILED)
                 .setErrorCode(errorCode)
                 .create();
         sendMessage(accountId, peerId, message);
@@ -552,7 +549,7 @@ public class KeyExchangeService extends Service {
 
     private void storeKeyToDatabase(int accountId, int peerId, @NonNull KeyExchangeSession session) {
         AesKeyPair pair = new AesKeyPair()
-                .setVersion(Version.CURRENT)
+                .setVersion(Version.getCurrentVersion())
                 .setAccountId(accountId)
                 .setPeerId(peerId)
                 .setDate(Unixtime.now())
@@ -572,7 +569,7 @@ public class KeyExchangeService extends Service {
     }
 
     private void processIniciatorState2(int accountId, int peerId, @NonNull KeyExchangeSession session, @NonNull ExchangeMessage message) {
-        ExchangeMessage m = new ExchangeMessage.Builder(Version.CURRENT, message.getSessionId(), SessionState.INITIATOR_FINISHED)
+        ExchangeMessage m = new ExchangeMessage.Builder(Version.getCurrentVersion(), message.getSessionId(), SessionState.INITIATOR_FINISHED)
                 .create();
         sendMessage(accountId, peerId, m);
 
@@ -598,7 +595,7 @@ public class KeyExchangeService extends Service {
 
             Logger.d(TAG, "processIniciatorState1, myOriginalAesKey: " + myOriginalAesKey + ", hisOriginalAes: " + hisOriginalAes);
 
-            ExchangeMessage m = new ExchangeMessage.Builder(Version.CURRENT, session.getId(), SessionState.INITIATOR_STATE_2)
+            ExchangeMessage m = new ExchangeMessage.Builder(Version.getCurrentVersion(), session.getId(), SessionState.INITIATOR_STATE_2)
                     .setAesKey(myEncodedAesKeyBase64)
                     .create();
             sendMessage(accountId, peerId, m);
@@ -621,7 +618,7 @@ public class KeyExchangeService extends Service {
 
             session.setHisAesKey(hisOriginalAes);
 
-            ExchangeMessage m = new ExchangeMessage.Builder(Version.CURRENT, session.getId(), SessionState.NO_INITIATOR_FINISHED)
+            ExchangeMessage m = new ExchangeMessage.Builder(Version.getCurrentVersion(), session.getId(), SessionState.NO_INITIATOR_FINISHED)
                     .create();
             sendMessage(accountId, peerId, m);
         } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException e) {
@@ -647,7 +644,7 @@ public class KeyExchangeService extends Service {
             byte[] myEncodedPublicKey = myPair.getPublic().getEncoded();
             String myPulicBase64 = Base64.encodeToString(myEncodedPublicKey, Base64.DEFAULT);
 
-            ExchangeMessage m = new ExchangeMessage.Builder(Version.CURRENT, message.getSessionId(), SessionState.NO_INITIATOR_STATE_1)
+            ExchangeMessage m = new ExchangeMessage.Builder(Version.getCurrentVersion(), message.getSessionId(), SessionState.NO_INITIATOR_STATE_1)
                     .setAesKey(encodedAesKeyBase64)
                     .setPublicKey(myPulicBase64)
                     .create();

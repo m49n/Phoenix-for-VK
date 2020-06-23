@@ -17,10 +17,7 @@ import biz.dealnote.messenger.mvp.view.ILocalVideosView;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
 
     private static final String TAG = LocalVideosPresenter.class.getSimpleName();
@@ -88,7 +85,7 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
 
     public void fireFabClick() {
         ArrayList<LocalVideo> localVideos = Utils.getSelected(mLocalVideos);
-        if (localVideos.size() > 0) {
+        if (!localVideos.isEmpty()) {
             getView().returnResultToParent(localVideos);
         } else {
             safeShowError(getView(), R.string.select_attachments);
@@ -103,7 +100,6 @@ public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
             ArrayList<LocalVideo> single = new ArrayList<>(1);
             single.add(video);
             getView().returnResultToParent(single);
-            return;
         }
     }
 

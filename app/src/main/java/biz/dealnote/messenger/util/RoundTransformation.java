@@ -8,7 +8,7 @@ public class RoundTransformation implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
-        return ImageHelper.getRoundedBitmap(source);
+        return ImageHelper.getRoundedBitmap(source, true);
     }
 
     @Override

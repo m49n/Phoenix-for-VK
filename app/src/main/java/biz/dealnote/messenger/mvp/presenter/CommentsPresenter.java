@@ -60,10 +60,7 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
+
 public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
 
     private static final String TAG = CommentsPresenter.class.getSimpleName();

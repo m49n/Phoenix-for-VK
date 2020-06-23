@@ -20,6 +20,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -50,10 +52,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
 public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideosListView>
         implements IVideosListView, DocsUploadAdapter.ActionListener, VideosAdapter.VideoOnClickListener {
 
@@ -94,6 +92,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
         return fragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<VideosListPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -240,9 +239,7 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
                 Add.setVisibility(View.GONE);
             else {
                 Add.setVisibility(View.VISIBLE);
-                Add.setOnClickListener(v -> {
-                    getPresenter().doUpload();
-                });
+                Add.setOnClickListener(v -> getPresenter().doUpload());
             }
         }
 

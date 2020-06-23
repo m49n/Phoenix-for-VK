@@ -9,10 +9,6 @@ import biz.dealnote.messenger.domain.mappers.Dto2Model;
 import biz.dealnote.messenger.model.Poll;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public class PollInteractor implements IPollInteractor {
 
     private final INetworker networker;

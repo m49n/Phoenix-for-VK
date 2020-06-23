@@ -7,10 +7,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 
-/**
- * Created by ruslan.kolbasa on 26.12.2016.
- * phoenix
- */
 public class ProgressRequestBody extends RequestBody {
 
     private static final int DEFAULT_BUFFER_SIZE = 2048;

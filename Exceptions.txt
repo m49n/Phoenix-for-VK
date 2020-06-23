@@ -1,0 +1,85 @@
+ 
+public void showToastInThread(final String str, final Thread.UncaughtExceptionHandler err, Thread t, Throwable e){
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+
+                new MaterialAlertDialogBuilder(App.this)
+                        .setTitle(R.string.error)
+                        .setMessage(str)
+                        .setOnCancelListener(dialog -> err.uncaughtException(t, e))
+                        .show();
+                Looper.loop();
+            }
+        }.start();
+    }
+    
+    
+    @Override
+    public void onCreate() {
+        sInstanse = this;
+        AppCompatDelegate.setDefaultNightMode(Settings.get().ui().getNightMode());
+        TagOptionSingleton.getInstance().setAndroid(true);
+
+        Thread.UncaughtExceptionHandler ehandler = Thread.currentThread().getUncaughtExceptionHandler();
+        Thread.currentThread().setUncaughtExceptionHandler(
+                (thread, e) -> {
+                    String SINGLE_LINE_SEP = "\r\n";
+                    String DOUBLE_LINE_SEP = "\r\n\r\n";
+                    StackTraceElement[] arr = e.getStackTrace();
+                    final StringBuilder report = new StringBuilder(e.toString());
+                    final String lineSeperator = "-------------------------------\n\n";
+                    report.append(DOUBLE_LINE_SEP);
+                    report.append("--------- Stack trace ---------\n\n");
+                    for (StackTraceElement stackTraceElement : arr) {
+                        report.append("    ");
+                        report.append(stackTraceElement.toString());
+                        report.append(SINGLE_LINE_SEP);
+                    }
+                    report.append(lineSeperator);
+                    report.append("--------- Cause ---------\n\n");
+                    Throwable cause = e.getCause();
+                    if (cause != null) {
+                        report.append(cause.toString());
+                        report.append(DOUBLE_LINE_SEP);
+                        arr = cause.getStackTrace();
+                        for (StackTraceElement stackTraceElement : arr) {
+                            report.append("    ");
+                            report.append(stackTraceElement.toString());
+                            report.append(SINGLE_LINE_SEP);
+                        }
+                    }
+                    report.append(lineSeperator);
+                    report.append("--------- Device ---------\n\n");
+                    report.append("Brand: ");
+                    report.append(Build.BRAND);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Device: ");
+                    report.append(Build.DEVICE);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Model: ");
+                    report.append(Build.MODEL);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Id: ");
+                    report.append(Build.ID);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Product: ");
+                    report.append(Build.PRODUCT);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append(lineSeperator);
+                    report.append("--------- Firmware ---------\n\n");
+                    report.append("SDK: ");
+                    report.append(Build.VERSION.SDK_INT);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Release: ");
+                    report.append(Build.VERSION.RELEASE);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append("Incremental: ");
+                    report.append(Build.VERSION.INCREMENTAL);
+                    report.append(SINGLE_LINE_SEP);
+                    report.append(lineSeperator);
+
+                    Log.e("Report ::", report.toString());
+                    showToastInThread(report.toString(), ehandler, thread, e);
+                });

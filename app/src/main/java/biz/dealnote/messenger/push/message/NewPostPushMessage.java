@@ -26,10 +26,6 @@ import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.push.NotificationUtils.configOtherPushNotification;
 
-/**
- * Created by ruslan.kolbasa on 10.01.2017.
- * phoenix
- */
 public class NewPostPushMessage {
 
     //key: image_type, value: user, class: class java.lang.String

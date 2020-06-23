@@ -10,11 +10,8 @@ import java.io.File;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.util.Objects;
+import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 02.12.2016.
- * phoenix
- */
 class OtherSettings implements ISettings.IOtherSettings {
 
     private static final String KEY_JSON_STATE = "json_list_state";
@@ -122,6 +119,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isDebug_mode() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("debug_mode", false);
+    }
+
+    @Override
     public boolean isForce_cache() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("force_cache", false);
     }
@@ -182,6 +184,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isBe_online() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("be_online", false);
+    }
+
+    @Override
     public boolean isUse_stop_audio() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_stop_audio", false);
     }
@@ -203,7 +210,7 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public boolean isEnable_show_audio_top() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", true);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_audio_top", false);
     }
 
     @Override
@@ -214,7 +221,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getMusicDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("music_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("music_dir", ret).apply();
         }
@@ -224,7 +231,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getPhotoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("photo_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.PHOTOS_PATH;
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("photo_dir", ret).apply();
         }
@@ -234,7 +241,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getVideoDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("video_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("video_dir", ret).apply();
         }
@@ -244,7 +251,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public String getDocDir() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("docs_dir", null);
-        if (Objects.isNullOrEmptyString(ret) || !new File(ret).exists()) {
+        if (Utils.isEmpty(ret) || !new File(ret).exists()) {
             ret = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/Phoenix";
             PreferenceManager.getDefaultSharedPreferences(app).edit().putString("docs_dir", ret).apply();
         }
@@ -254,5 +261,40 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isPhoto_to_user_dir() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("photo_to_user_dir", true);
+    }
+
+    @Override
+    public boolean isDelete_cache_images() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("delete_cache_images", false);
+    }
+
+    @Override
+    public boolean isClick_next_track() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("click_next_track", true);
+    }
+
+    @Override
+    public boolean isDisabled_encryption() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_encryption", false);
+    }
+
+    @Override
+    public boolean isDownload_photo_tap() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("download_photo_tap", true);
+    }
+
+    @Override
+    public boolean isRunes_show() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_show", false);
+    }
+
+    @Override
+    public boolean isRunes_valknut() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_valknut", false);
+    }
+
+    @Override
+    public boolean isValknut_color_theme() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("valknut_color_theme", false);
     }
 }

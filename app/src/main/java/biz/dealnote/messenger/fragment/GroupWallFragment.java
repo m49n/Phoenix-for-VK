@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
@@ -59,10 +60,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 23.01.2017.
- * phoenix
- */
 public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWallPresenter> implements IGroupWallView {
 
     private static final int REQUEST_LOGIN_COMMUNITY = 14;
@@ -88,9 +85,9 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .load(photoUrl).transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
-        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
-            downloadAvatar(community);
-            return true;
+        mHeaderHolder.ivAvatar.setOnClickListener(v -> {
+            Community cmt = Objects.requireNonNull(getPresenter()).getCommunity();
+            PlaceFactory.getSingleURLPhotoPlace(cmt.getOriginalAvatar(), cmt.getFullName(), "club" + Math.abs(cmt.getId())).tryOpenWith(requireActivity());
         });
     }
 
@@ -119,6 +116,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<GroupWallPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

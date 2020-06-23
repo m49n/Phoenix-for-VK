@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
@@ -22,10 +24,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesAdapter.Holder> {
 
     private static final ItemInfo<Community> INFO = new ItemInfo<>();
@@ -37,6 +35,7 @@ public class CommunitiesAdapter extends MultyDataAdapter<Community, CommunitiesA
         this.transformation = CurrentTheme.createTransformationForAvatar(context);
     }
 
+    @NotNull
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int position) {
         return new Holder(LayoutInflater.from(viewGroup.getContext())

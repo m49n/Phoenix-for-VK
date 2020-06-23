@@ -13,10 +13,7 @@ import biz.dealnote.messenger.api.model.server.VkApiVideosUploadServer;
 import biz.dealnote.messenger.api.services.IDocsService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 02.01.2017.
- * phoenix
- */
+
 class DocsApi extends AbsApi implements IDocsApi {
 
     DocsApi(int accountId, IServiceProvider provider) {

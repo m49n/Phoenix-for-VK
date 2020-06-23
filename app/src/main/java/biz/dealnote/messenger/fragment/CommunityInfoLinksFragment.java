@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -29,10 +31,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityInfoLinksFragment extends BaseMvpFragment<CommunityInfoLinksPresenter, ICommunityInfoLinksView>
         implements ICommunityInfoLinksView, CommunityInfoLinksAdapter.ActionListener {
 
@@ -69,6 +67,7 @@ public class CommunityInfoLinksFragment extends BaseMvpFragment<CommunityInfoLin
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityInfoLinksPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityInfoLinksPresenter(

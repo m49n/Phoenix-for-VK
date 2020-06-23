@@ -17,23 +17,22 @@ import java.util.List;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.ImageHelper;
 import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
-
-import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
 
 public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAdapter.Holder> {
 
-    private List<VKApiAudioPlaylist> data;
+    private List<AudioPlaylist> data;
     private Context context;
     private RecyclerView recyclerView;
     private ClickListener clickListener;
 
-    public AudioPlaylistsAdapter(List<VKApiAudioPlaylist> data, Context context) {
+    public AudioPlaylistsAdapter(List<AudioPlaylist> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -47,38 +46,38 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int position) {
-        final VKApiAudioPlaylist playlist = data.get(position);
-        if (!isNullOrEmptyString(playlist.thumb_image))
-            ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.thumb_image, Constants.PICASSO_TAG);
+        final AudioPlaylist playlist = data.get(position);
+        if (!Utils.isEmpty(playlist.getThumb_image()))
+            ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.getThumb_image(), Constants.PICASSO_TAG);
         else
-            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light)));
-        holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
-        holder.name.setText(playlist.title);
-        if (isNullOrEmptyString(playlist.description))
+            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light), true));
+        holder.count.setText(playlist.getCount() + " " + context.getString(R.string.audios_pattern_count));
+        holder.name.setText(playlist.getTitle());
+        if (Utils.isEmpty(playlist.getDescription()))
             holder.description.setVisibility(View.GONE);
         else {
             holder.description.setVisibility(View.VISIBLE);
-            holder.description.setText(playlist.description);
+            holder.description.setText(playlist.getDescription());
         }
-        if (isNullOrEmptyString(playlist.artist_name))
+        if (Utils.isEmpty(playlist.getArtist_name()))
             holder.artist.setVisibility(View.GONE);
         else {
             holder.artist.setVisibility(View.VISIBLE);
-            holder.artist.setText(playlist.artist_name);
+            holder.artist.setText(playlist.getArtist_name());
         }
-        if (playlist.Year == 0)
+        if (playlist.getYear() == 0)
             holder.year.setVisibility(View.GONE);
         else {
             holder.year.setVisibility(View.VISIBLE);
-            holder.year.setText(String.valueOf(playlist.Year));
+            holder.year.setText(String.valueOf(playlist.getYear()));
         }
-        if (isNullOrEmptyString(playlist.genre))
+        if (Utils.isEmpty(playlist.getGenre()))
             holder.genre.setVisibility(View.GONE);
         else {
             holder.genre.setVisibility(View.VISIBLE);
-            holder.genre.setText(playlist.genre);
+            holder.genre.setText(playlist.getGenre());
         }
-        holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
+        holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.getUpdate_time()));
         holder.playlist_container.setOnClickListener(v -> {
             if (clickListener != null) {
                 clickListener.onAlbumClick(holder.getBindingAdapterPosition(), playlist);
@@ -91,7 +90,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         return data.size();
     }
 
-    public void setData(List<VKApiAudioPlaylist> data) {
+    public void setData(List<AudioPlaylist> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -113,11 +112,11 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
     }
 
     public interface ClickListener {
-        void onAlbumClick(int index, VKApiAudioPlaylist album);
+        void onAlbumClick(int index, AudioPlaylist album);
 
-        void onDelete(int index, VKApiAudioPlaylist album);
+        void onDelete(int index, AudioPlaylist album);
 
-        void onAdd(int index, VKApiAudioPlaylist album);
+        void onAdd(int index, AudioPlaylist album);
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -149,9 +148,9 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             final int position = recyclerView.getChildAdapterPosition(v);
-            final VKApiAudioPlaylist playlist = data.get(position);
+            final AudioPlaylist playlist = data.get(position);
 
-            if (Settings.get().accounts().getCurrent() == playlist.owner_id) {
+            if (Settings.get().accounts().getCurrent() == playlist.getOwnerId()) {
                 menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
                     if (clickListener != null) {
                         clickListener.onDelete(position, playlist);

@@ -6,6 +6,7 @@ import biz.dealnote.messenger.api.TokenType;
 import biz.dealnote.messenger.api.model.Error;
 import biz.dealnote.messenger.api.model.IAttachmentToken;
 import biz.dealnote.messenger.api.model.response.BaseResponse;
+import biz.dealnote.messenger.api.model.response.BlockResponse;
 import io.reactivex.Single;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
@@ -14,10 +15,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class AbsApi {
 
     private final IServiceProvider retrofitProvider;
@@ -35,6 +32,16 @@ class AbsApi {
             }
 
             return response.response;
+        };
+    }
+
+    static <T> Function<BaseResponse<BlockResponse<T>>, T> extractBlockResponseWithErrorHandling() {
+        return response -> {
+            if (nonNull(response.error)) {
+                throw Exceptions.propagate(new ApiException(response.error));
+            }
+
+            return response.response.block;
         };
     }
 

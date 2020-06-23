@@ -50,10 +50,6 @@ import static biz.dealnote.messenger.util.Utils.join;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by hp-dv6 on 01.06.2016.
- * VKMessenger
- */
 class MessagesStorage extends AbsStorage implements IMessagesStorage {
 
     private static final String ORDER_BY = MessageColumns.FULL_STATUS + ", " + MessageColumns.FULL_ID;
@@ -100,6 +96,7 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
         cv.put(MessageColumns.RANDOM_ID, dbo.getRandomId());
         cv.put(MessageColumns.EXTRAS, isNull(dbo.getExtras()) ? null : GSON.toJson(dbo.getExtras()));
         cv.put(MessageColumns.UPDATE_TIME, dbo.getUpdateTime());
+        cv.put(MessageColumns.PAYLOAD, dbo.getPayload());
 
         Uri uri = MessengerContentProvider.getMessageContentUriFor(accountId);
 
@@ -173,7 +170,9 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
                 .setPhoto100(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_100)))
                 .setPhoto200(cursor.getString(cursor.getColumnIndex(MessageColumns.PHOTO_200)))
                 .setRandomId(cursor.getInt(cursor.getColumnIndex(MessageColumns.RANDOM_ID)))
-                .setUpdateTime(cursor.getLong(cursor.getColumnIndex(MessageColumns.UPDATE_TIME)));
+                .setUpdateTime(cursor.getLong(cursor.getColumnIndex(MessageColumns.UPDATE_TIME)))
+                .setPayload(cursor.getString(cursor.getColumnIndex(MessageColumns.PAYLOAD)));
+
     }
 
     @Override
@@ -342,6 +341,7 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
             cv.put(MessageColumns.STATUS, patch.getStatus());
             cv.put(MessageColumns.ATTACH_TO, MessageColumns.DONT_ATTACH);
             cv.put(MessageColumns.EXTRAS, isNull(patch.getExtras()) ? null : GSON.toJson(patch.getExtras()));
+            cv.put(MessageColumns.PAYLOAD, patch.getPayload());
 
             // Other fileds is NULL
 
@@ -395,6 +395,7 @@ class MessagesStorage extends AbsStorage implements IMessagesStorage {
                             cv.put(MessageColumns.STATUS, patch.getStatus());
                             cv.put(MessageColumns.ATTACH_TO, MessageColumns.DONT_ATTACH);
                             cv.put(MessageColumns.EXTRAS, isNull(patch.getExtras()) ? null : GSON.toJson(patch.getExtras()));
+                            cv.put(MessageColumns.PAYLOAD, patch.getPayload());
 
                             final String where = MessageColumns._ID + " = ?";
                             final String[] args = {String.valueOf(messageId)};

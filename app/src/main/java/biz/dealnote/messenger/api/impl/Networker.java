@@ -8,17 +8,15 @@ import biz.dealnote.messenger.api.UploadRetrofitProvider;
 import biz.dealnote.messenger.api.VkMethodHttpClientFactory;
 import biz.dealnote.messenger.api.VkRetrofitProvider;
 import biz.dealnote.messenger.api.interfaces.IAccountApis;
+import biz.dealnote.messenger.api.interfaces.IAudioCoverApi;
 import biz.dealnote.messenger.api.interfaces.IAuthApi;
 import biz.dealnote.messenger.api.interfaces.ILongpollApi;
 import biz.dealnote.messenger.api.interfaces.INetworker;
 import biz.dealnote.messenger.api.interfaces.IUploadApi;
+import biz.dealnote.messenger.api.services.IAudioCoverService;
 import biz.dealnote.messenger.api.services.IAuthService;
 import biz.dealnote.messenger.settings.IProxySettings;
 
-/**
- * Created by ruslan.kolbasa on 30.12.2016.
- * phoenix
- */
 public class Networker implements INetworker {
 
     private final IOtherVkRetrofitProvider otherVkRetrofitProvider;
@@ -44,6 +42,16 @@ public class Networker implements INetworker {
     @Override
     public IAuthApi vkDirectAuth() {
         return new AuthApi(() -> otherVkRetrofitProvider.provideAuthRetrofit().map(wrapper -> wrapper.create(IAuthService.class)));
+    }
+
+    @Override
+    public IAuthApi vkAuth() {
+        return new AuthApi(() -> otherVkRetrofitProvider.provideAuthServiceRetrofit().map(wrapper -> wrapper.create(IAuthService.class)));
+    }
+
+    @Override
+    public IAudioCoverApi amazonAudioCover() {
+        return new AudioCoverApi(() -> otherVkRetrofitProvider.provideAmazonAudioCoverRetrofit().map(wrapper -> wrapper.create(IAudioCoverService.class)));
     }
 
     @Override

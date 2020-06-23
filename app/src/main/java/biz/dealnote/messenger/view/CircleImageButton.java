@@ -10,10 +10,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by golde on 11.04.2017.
- * phoenix
- */
 public class CircleImageButton extends AppCompatImageView {
 
     public CircleImageButton(Context context) {

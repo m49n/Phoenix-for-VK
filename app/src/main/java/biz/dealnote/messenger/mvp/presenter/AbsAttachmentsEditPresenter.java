@@ -40,10 +40,7 @@ import static biz.dealnote.messenger.util.Utils.findInfoByPredicate;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOfMultiple;
 
-/**
- * Created by admin on 05.12.2016.
- * phoenix
- */
+
 public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEditView>
         extends AccountDependencyPresenter<V> {
 

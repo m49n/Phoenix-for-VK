@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model.database;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 04.10.2017.
- * phoenix
- */
+
 public final class University implements Parcelable {
 
     public static final Creator<University> CREATOR = new Creator<University>() {

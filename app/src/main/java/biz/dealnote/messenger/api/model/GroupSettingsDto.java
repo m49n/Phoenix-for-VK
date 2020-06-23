@@ -4,10 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by Ruslan Kolbasa on 15.06.2017.
- * phoenix
- */
 public class GroupSettingsDto {
 
     public String title;

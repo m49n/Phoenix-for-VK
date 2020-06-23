@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import biz.dealnote.messenger.mvp.view.search.IPeopleSearchView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresenter, IPeopleSearchView, User>
+public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresenter, IPeopleSearchView, User, PeopleAdapter>
         implements PeopleAdapter.ClickListener, IPeopleSearchView {
 
     public static PeopleSearchFragment newInstance(int accountId, @Nullable PeopleSearchCriteria initialCriteria) {
@@ -31,12 +34,17 @@ public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresente
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<User> data) {
-        ((PeopleAdapter) adapter).setItems(data);
+    void setAdapterData(PeopleAdapter adapter, List<User> data) {
+        adapter.setItems(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<User> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    PeopleAdapter createAdapter(List<User> data) {
         PeopleAdapter adapter = new PeopleAdapter(requireActivity(), data);
         adapter.setClickListener(this);
         return adapter;
@@ -47,6 +55,7 @@ public class PeopleSearchFragment extends AbsSearchFragment<PeopleSearchPresente
         return new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<PeopleSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new PeopleSearchPresenter(

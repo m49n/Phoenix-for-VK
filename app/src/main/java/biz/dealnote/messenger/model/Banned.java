@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-/**
- * Created by admin on 14.06.2017.
- * phoenix
- */
 public final class Banned implements Parcelable {
 
     public static final Creator<Banned> CREATOR = new Creator<Banned>() {

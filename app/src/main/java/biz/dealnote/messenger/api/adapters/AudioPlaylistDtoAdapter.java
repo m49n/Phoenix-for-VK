@@ -43,6 +43,14 @@ public class AudioPlaylistDtoAdapter extends AbsAdapter implements JsonDeseriali
             }
             album.genre = build.toString();
         }
+
+        if (root.has("original")) {
+            JsonObject orig = root.getAsJsonObject("original");
+            album.original_id = optInt(orig, "playlist_id");
+            album.original_owner_id = optInt(orig, "owner_id");
+            album.original_access_key = optString(orig, "access_key");
+        }
+
         if (root.has("main_artists") && root.getAsJsonArray("main_artists").size() > 0)
             album.artist_name = optString(root.getAsJsonArray("main_artists").get(0).getAsJsonObject(), "name");
         if (root.getAsJsonObject().has("photo")) {

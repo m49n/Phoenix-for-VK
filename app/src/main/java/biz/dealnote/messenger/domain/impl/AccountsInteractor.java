@@ -23,10 +23,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
 public class AccountsInteractor implements IAccountsInteractor {
 
     private final INetworker networker;

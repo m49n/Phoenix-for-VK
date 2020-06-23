@@ -5,10 +5,6 @@ import androidx.annotation.Nullable;
 import biz.dealnote.messenger.model.VoiceMessage;
 import biz.dealnote.messenger.util.Optional;
 
-/**
- * Created by r.kolbasa on 27.11.2017.
- * Phoenix-for-VK
- */
 public interface IVoicePlayer {
 
     int STATUS_NO_PLAYBACK = 0;

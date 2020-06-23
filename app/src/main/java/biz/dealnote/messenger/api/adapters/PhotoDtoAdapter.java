@@ -14,10 +14,6 @@ import biz.dealnote.messenger.api.model.CommentsDto;
 import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
 
-/**
- * Created by ruslan.kolbasa on 26.12.2016.
- * phoenix
- */
 public class PhotoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiPhoto> {
 
     @Override

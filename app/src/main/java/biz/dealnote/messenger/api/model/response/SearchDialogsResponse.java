@@ -6,10 +6,6 @@ import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiUser;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class SearchDialogsResponse {
 
     private List<AbsChattable> data;

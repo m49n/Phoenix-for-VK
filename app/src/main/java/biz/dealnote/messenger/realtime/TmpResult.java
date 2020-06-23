@@ -11,10 +11,6 @@ import biz.dealnote.messenger.model.Message;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 11.04.2017.
- * phoenix
- */
 public class TmpResult {
 
     private final List<Msg> data;

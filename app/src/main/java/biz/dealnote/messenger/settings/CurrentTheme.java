@@ -30,15 +30,18 @@ public class CurrentTheme {
         return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
     }
 
+    private static Drawable getStatic(Activity activity) {
+        if (Settings.get().other().isCustom_chat_color()) {
+
+            return new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                    new int[]{Settings.get().other().getColorChat(), Settings.get().other().getSecondColorChat()});
+        }
+        int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
+        return new ColorDrawable(color);
+    }
+
     public static Drawable getChatBackground(Activity activity) {
         boolean dark = Settings.get().ui().isDarkModeEnabled(activity);
-        File bitmap = getDrawerBackgroundFile(activity, !dark);
-        if (bitmap.exists()) {
-            Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
-            if (Settings.get().other().isCustom_chat_color())
-                Utils.setColorFilter(d, Settings.get().other().getColorChat());
-            return d;
-        }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String page = preferences.getString(KEY_CHAT_BACKGROUND, "1");
         assert page != null;
@@ -53,14 +56,17 @@ public class CurrentTheme {
             case "3":
                 ret = CurrentTheme.getDrawableFromAttribute(activity, R.attr.chat_background_runes);
                 break;
-            default: //"0
-                if (Settings.get().other().isCustom_chat_color()) {
-
-                    return new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-                            new int[]{Settings.get().other().getColorChat(), Settings.get().other().getSecondColorChat()});
+            case "4":
+                File bitmap = getDrawerBackgroundFile(activity, !dark);
+                if (bitmap.exists()) {
+                    Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                    if (Settings.get().other().isCustom_chat_color())
+                        Utils.setColorFilter(d, Settings.get().other().getColorChat());
+                    return d;
                 }
-                int color = CurrentTheme.getColorFromAttrs(activity, R.attr.messages_background_color, Color.WHITE);
-                return new ColorDrawable(color);
+                return getStatic(activity);
+            default: //"0
+                return getStatic(activity);
         }
         if (Settings.get().other().isCustom_chat_color()) {
             Drawable r1 = ret.mutate();
@@ -79,7 +85,6 @@ public class CurrentTheme {
             case AvatarStyle.OVAL:
                 return new ElipseTransformation();
             case AvatarStyle.CIRCLE:
-                return new RoundTransformation();
             default:
                 return new RoundTransformation();
         }
@@ -87,6 +92,10 @@ public class CurrentTheme {
 
     public static int getColorPrimary(Context context) {
         return getColorFromAttrs(R.attr.colorPrimary, context, "#000000");
+    }
+
+    public static int getColorToast(Context context) {
+        return getColorFromAttrs(R.attr.toast_background, context, "#FFFFFF");
     }
 
     public static int getColorOnPrimary(Context context) {

@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.Extra;
@@ -38,10 +40,7 @@ import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by Ruslan Kolbasa on 21.06.2017.
- * phoenix
- */
+
 public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManagerEditPresenter, ICommunityManagerEditView> implements ICommunityManagerEditView {
 
     private ImageView mAvatar;
@@ -180,6 +179,7 @@ public class CommunityManagerEditFragment extends BaseMvpFragment<CommunityManag
         menu.findItem(R.id.action_delete).setVisible(mOptionDeleteVisible);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityManagerEditPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

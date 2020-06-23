@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/crypt_state"
-        android:icon="@drawable/unlock"
+        android:icon="@drawable/ic_outline_lock_open"
         android:title="@string/encryption_status"
         app:iconTint="?colorOnSurface"
         app:showAsAction="always" />
@@ -25,6 +25,10 @@
     <item
         android:id="@+id/action_leave_chat"
         android:title="@string/group_chat_leave" />
+
+    <item
+        android:id="@+id/delete_chat"
+        android:title="@string/delete_chat" />
 
     <item
         android:id="@+id/action_change_chat_title"

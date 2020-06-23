@@ -32,11 +32,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Utils.firstNonEmptyString;
 
-/**
- * Created by admin on 3/27/2018.
- * Phoenix-for-VK
- * Запускается при публикации изображений/текста из других приложений
- */
 public class PostPublishPrepareActivity extends AppCompatActivity implements RecyclerMenuAdapter.ActionListener {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -46,6 +41,7 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
     private View proressView;
 
     private ArrayList<Uri> streams;
+    private String links;
     private int accountId;
     private boolean loading;
 
@@ -73,6 +69,7 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
             }
 
             streams = ActivityUtils.checkLocalStreams(this);
+            links = ActivityUtils.checkLinks(this);
 
             setLoading(true);
             IOwnersRepository interactor = Repository.INSTANCE.getOwners();
@@ -141,7 +138,7 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
     public void onClick(AdvancedItem item) {
         WallEditorAttrs attrs = (WallEditorAttrs) item.getTag();
 
-        Intent intent = PostCreateActivity.newIntent(this, accountId, attrs, streams);
+        Intent intent = PostCreateActivity.newIntent(this, accountId, attrs, streams, links);
         startActivity(intent);
 
         finish();

@@ -8,11 +8,6 @@ import java.util.List;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- * base class for [follow, friend_accepted, likes]
- */
 public final class UsersFeedback extends Feedback implements Parcelable {
 
     public static final Creator<UsersFeedback> CREATOR = new Creator<UsersFeedback>() {

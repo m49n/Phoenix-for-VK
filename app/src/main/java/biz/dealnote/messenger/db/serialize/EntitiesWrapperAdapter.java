@@ -19,10 +19,7 @@ import biz.dealnote.messenger.db.model.AttachmentsTypes;
 import biz.dealnote.messenger.db.model.entity.EntitiesWrapper;
 import biz.dealnote.messenger.db.model.entity.Entity;
 
-/**
- * Created by Ruslan Kolbasa on 21.09.2017.
- * phoenix
- */
+
 public class EntitiesWrapperAdapter implements JsonSerializer<EntitiesWrapper>, JsonDeserializer<EntitiesWrapper> {
 
     private static final String KEY_NON_NULL = "non_null";

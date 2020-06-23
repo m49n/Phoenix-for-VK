@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by ruslan.kolbasa on 07.10.2016.
- * phoenix
- */
 public class DraftMessage {
 
     private int id;

@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.fragment.AbsOwnersListFragment;
 import biz.dealnote.messenger.mvp.presenter.MutualFriendsPresenter;
@@ -23,6 +25,7 @@ public class MutualFriendsFragment extends AbsOwnersListFragment<MutualFriendsPr
         return friendsFragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MutualFriendsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new MutualFriendsPresenter(

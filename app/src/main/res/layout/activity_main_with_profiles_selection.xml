@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -25,21 +24,20 @@
             android:padding="4dp" />
     </com.google.android.material.card.MaterialCardView>
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation_menu_container"
+        android:layout_above="@id/miniplayer"
         android:layout_below="@id/recycleViewFrame"
         android:clipToPadding="false" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/additional_navigation_menu"
         android:name="biz.dealnote.messenger.fragment.AdditionalNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_navigation_menu_container"
-        tools:ignore="FragmentTagUsage"
+        android:layout_above="@+id/miniplayer"
         tools:layout="@layout/fragment_navigation_drawer" />
 
     <include
@@ -48,6 +46,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/miniplayer"
+        android:name="biz.dealnote.messenger.fragment.MiniPlayerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation_menu_container"
+        tools:layout="@layout/mini_player" />
 
 </RelativeLayout>
 

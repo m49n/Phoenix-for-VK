@@ -14,10 +14,6 @@ import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.util.VKStringUtils;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiMessage> {
 
     @Override
@@ -56,6 +52,7 @@ public class MessageDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         dto.deleted = optIntAsBoolean(root, "deleted");
         dto.important = optBoolean(root, "important");
         dto.random_id = optString(root, "random_id");
+        dto.payload = optString(root, "payload");
         dto.update_time = optLong(root, "update_time");
         dto.conversation_message_id = optInt(root, "conversation_message_id");
 

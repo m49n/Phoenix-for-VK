@@ -91,17 +91,6 @@
                     android:hint="@string/login_sms_code_hint"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/button_validate_web"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:padding="8dp"
-                    android:text="@string/button_validate_web"
-                    android:textColor="?attr/colorAccent"
-                    android:textStyle="bold" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout

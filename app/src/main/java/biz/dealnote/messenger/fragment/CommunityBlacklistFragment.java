@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +41,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlacklistPresenter, ICommunityBlacklistView>
         implements ICommunityBlacklistView, CommunityBannedAdapter.ActionListener {
 
@@ -86,6 +84,7 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityBlacklistPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityBlacklistPresenter(

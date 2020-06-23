@@ -3,10 +3,6 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ruslan.kolbasa on 25.11.2016.
- * phoenix
- */
 public abstract class Owner extends AbsModel implements Parcelable {
 
     @OwnerType

@@ -11,10 +11,6 @@ import java.lang.reflect.Type;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiComment> {
 
     @Override

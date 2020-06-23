@@ -12,10 +12,6 @@ import biz.dealnote.messenger.exception.NotFoundException;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 02.07.2016.
- * phoenix
- */
 public class ErrorLocalizer {
 
     private static ApiLocalizer sApiLocalizer = new ApiLocalizer();
@@ -26,6 +22,11 @@ public class ErrorLocalizer {
             return api().getMessage(context, error.errorCode, error.errorMsg);
         }
 
+        if (throwable instanceof RuntimeException && throwable.getCause() instanceof ApiException) {
+            Error error = ((ApiException) throwable.getCause()).getError();
+            return api().getMessage(context, error.errorCode, error.errorMsg);
+        }
+
         if (throwable instanceof SocketTimeoutException) {
             return context.getString(R.string.error_timeout_message);
         }
@@ -33,6 +34,7 @@ public class ErrorLocalizer {
         if (throwable instanceof NotFoundException) {
             return context.getString(R.string.error_not_found_message);
         }
+        throwable.printStackTrace();
 
         return nonEmpty(throwable.getMessage()) ? throwable.getMessage() : throwable.toString();
     }

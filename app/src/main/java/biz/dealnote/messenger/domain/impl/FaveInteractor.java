@@ -46,10 +46,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by Ruslan Kolbasa on 14.07.2017.
- * phoenix
- */
 public class FaveInteractor implements IFaveInteractor {
 
     private final INetworker networker;

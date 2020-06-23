@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.CallSuper;
 
-/**
- * Created by admin on 22.11.2016.
- * phoenix
- */
+
 public abstract class AbsModel implements Parcelable {
 
     public AbsModel() {

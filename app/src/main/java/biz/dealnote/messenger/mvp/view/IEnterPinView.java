@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public interface IEnterPinView extends IMvpView, IErrorView, IToastView {
     void displayPin(int[] value, int noValue);
 

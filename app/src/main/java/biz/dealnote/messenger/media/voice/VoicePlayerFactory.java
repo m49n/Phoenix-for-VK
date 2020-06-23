@@ -8,10 +8,6 @@ import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.settings.IProxySettings;
 import biz.dealnote.messenger.settings.ISettings;
 
-/**
- * Created by r.kolbasa on 27.11.2017.
- * Phoenix-for-VK
- */
 public class VoicePlayerFactory implements IVoicePlayerFactory {
 
     private final Context app;

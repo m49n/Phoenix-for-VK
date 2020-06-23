@@ -24,10 +24,7 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 11.12.2016.
- * phoenix
- */
+
 public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
 
     private static final String TAG = FeedbackPresenter.class.getSimpleName();

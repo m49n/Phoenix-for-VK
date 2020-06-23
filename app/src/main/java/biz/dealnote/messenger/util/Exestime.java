@@ -5,10 +5,6 @@ import android.util.Log;
 
 import biz.dealnote.messenger.BuildConfig;
 
-/**
- * Created by hp-dv6 on 05.06.2016.
- * VKMessenger
- */
 public class Exestime {
 
     private static final String TAG = Exestime.class.getSimpleName();

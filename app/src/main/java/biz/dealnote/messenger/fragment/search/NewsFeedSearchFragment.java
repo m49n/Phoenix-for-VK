@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ import biz.dealnote.messenger.mvp.view.search.INewsFeedSearchView;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPresenter, INewsFeedSearchView, Post>
+public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPresenter, INewsFeedSearchView, Post, WallAdapter>
         implements WallAdapter.ClickListener, INewsFeedSearchView {
 
     public static NewsFeedSearchFragment newInstance(int accountId, @Nullable NewsFeedCriteria initialCriteria) {
@@ -32,12 +35,17 @@ public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPres
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Post> data) {
-        ((WallAdapter) adapter).setItems(data);
+    void setAdapterData(WallAdapter adapter, List<Post> data) {
+        adapter.setItems(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Post> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    WallAdapter createAdapter(List<Post> data) {
         return new WallAdapter(requireActivity(), data, this, this);
     }
 
@@ -91,6 +99,7 @@ public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPres
         getPresenter().fireLikeClick(post);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<NewsFeedSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new NewsFeedSearchPresenter(

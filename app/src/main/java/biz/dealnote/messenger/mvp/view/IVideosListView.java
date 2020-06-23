@@ -9,10 +9,7 @@ import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.messenger.upload.Upload;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public interface IVideosListView extends IAccountDependencyView, IMvpView, IToolbarView, IErrorView {
 
     String ACTION_SELECT = "VideosFragment.ACTION_SELECT";

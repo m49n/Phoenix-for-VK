@@ -7,10 +7,6 @@ import androidx.annotation.Nullable;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.CreatePinFragment;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public class CreatePinActivity extends NoMainActivity {
 
     @Override

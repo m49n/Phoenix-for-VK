@@ -8,10 +8,6 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
 public class SearchVideoResponse {
 
     @SerializedName("count")

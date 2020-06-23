@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.R;
@@ -31,8 +33,9 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
         this.data = data;
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_video_album, parent, false));
     }
 
@@ -78,7 +81,7 @@ public class VideoAlbumsNewAdapter extends RecyclerView.Adapter<VideoAlbumsNewAd
         void onClick(VideoAlbum album);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPhoto;
         TextView tvCount;
         TextView tvTitle;

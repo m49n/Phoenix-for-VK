@@ -29,10 +29,6 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.09.2017.
- * phoenix
- */
 public interface IMessagesRepository {
     Flowable<Throwable> observeMessagesSendErrors();
 
@@ -138,6 +134,8 @@ public interface IMessagesRepository {
     Completable editChat(int accountId, int chatId, String title);
 
     Single<Integer> createGroupChat(int accountId, Collection<Integer> users, String title);
+
+    Single<Integer> recogniseAudioMessage(int accountId, Integer message_id, String audio_message_id);
 
     Completable markAsRead(int accountId, int peerId, int toId);
 

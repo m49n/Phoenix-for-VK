@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/delete_menu"
-        android:icon="@drawable/delete"
+        android:icon="@drawable/ic_outline_delete"
         android:title="@string/delete"
         app:iconTint="?colorOnSurface"
         app:showAsAction="always" />

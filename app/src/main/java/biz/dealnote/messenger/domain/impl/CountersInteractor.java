@@ -5,10 +5,6 @@ import biz.dealnote.messenger.domain.ICountersInteractor;
 import biz.dealnote.messenger.model.SectionCounters;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 30.06.2017.
- * phoenix
- */
 public class CountersInteractor implements ICountersInteractor {
 
     private final INetworker networker;

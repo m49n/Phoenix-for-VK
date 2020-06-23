@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,11 +21,7 @@ import biz.dealnote.messenger.mvp.view.search.IWallSearchView;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
-public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, IWallSearchView, Post>
+public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, IWallSearchView, Post, WallAdapter>
         implements IWallSearchView, WallAdapter.ClickListener {
 
     public static WallSearchFragment newInstance(int accountId, WallSearchCriteria criteria) {
@@ -34,6 +33,7 @@ public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, I
         return fragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<WallSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -44,8 +44,13 @@ public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, I
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Post> data) {
-        ((WallAdapter) adapter).setItems(data);
+    void setAdapterData(WallAdapter adapter, List<Post> data) {
+        adapter.setItems(data);
+    }
+
+    @Override
+    void postCreate(View root) {
+
     }
 
     @Override
@@ -54,9 +59,8 @@ public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, I
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Post> data) {
-        WallAdapter adapter = new WallAdapter(requireActivity(), data, this, this);
-        return adapter;
+    WallAdapter createAdapter(List<Post> data) {
+        return new WallAdapter(requireActivity(), data, this, this);
     }
 
     @Override

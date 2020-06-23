@@ -47,10 +47,6 @@ import biz.dealnote.messenger.view.MySpinnerView;
 import biz.dealnote.messenger.view.OnlineView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 17.06.2017.
- * phoenix
- */
 public class CommunityBanEditFragment extends BaseMvpFragment<CommunityBanEditPresenter, ICommunityBanEditView>
         implements ICommunityBanEditView {
 

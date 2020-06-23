@@ -12,10 +12,6 @@ import java.io.IOException;
 
 import biz.dealnote.messenger.util.Logger;
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 public class AudioRecordWrapper {
 
     private static final String TEMP_FILE_NAME = "temp_recording";

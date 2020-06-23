@@ -10,10 +10,6 @@ import biz.dealnote.messenger.model.News;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 14.12.2016.
- * phoenix
- */
 public interface IFeedView extends IAccountDependencyView, IAttachmentsPlacesView, IMvpView, IErrorView {
 
     void displayFeedSources(List<FeedSource> sources);

@@ -13,6 +13,7 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.activity.VideoPlayerActivity;
 import biz.dealnote.messenger.dialog.ResolveDomainDialog;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
+import biz.dealnote.messenger.fragment.AudioCatalogFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
 import biz.dealnote.messenger.fragment.ChatUsersFragment;
@@ -28,9 +29,10 @@ import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
-import biz.dealnote.messenger.fragment.PlaylistFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
+import biz.dealnote.messenger.fragment.SinglePhotoFragment;
+import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.fragment.VideoPreviewFragment;
@@ -47,7 +49,6 @@ import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.fragment.search.SingleTabSearchFragment;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.model.AbsModel;
-import biz.dealnote.messenger.model.Audio;
 import biz.dealnote.messenger.model.Banned;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Commented;
@@ -68,12 +69,12 @@ import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoAlbumEditor;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.TmpSource;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WallEditorAttrs;
-import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
@@ -237,10 +238,11 @@ public class PlaceFactory {
         return place;
     }
 
-    public static Place getPlaylistPlace() {
-        Place place = new Place(Place.AUDIO_CURRENT_PLAYLIST);
-        place.setArguments(PlaylistFragment.buildArgs((ArrayList<Audio>) MusicUtils.getQueue()));
-        return place;
+    public static Place getWallAttachmentsPlace(int accountId, int ownerId, String type) {
+        return new Place(Place.WALL_ATTACHMENTS)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withIntExtra(Extra.OWNER_ID, ownerId)
+                .withStringExtra(Extra.TYPE, type);
     }
 
     public static Place getMessagesLookupPlace(int aid, int peerId, int focusMessageId) {
@@ -313,6 +315,14 @@ public class PlaceFactory {
                 .withParcelableExtra(Extra.PEER, peer);
     }
 
+    public static Place getChatDualPlace(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset) {
+        return new Place(Place.CHAT_DUAL)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withIntExtra(Extra.OWNER_ID, messagesOwnerId)
+                .withIntExtra(Extra.OFFSET, Offset)
+                .withParcelableExtra(Extra.PEER, peer);
+    }
+
     public static Place getVKPhotosAlbumPlace(int accountId, int ownerId, int albumId, String action) {
         return new Place(Place.VK_PHOTO_ALBUM).setArguments(VKPhotosFragment.buildArgs(accountId, ownerId, albumId, action));
     }
@@ -350,6 +360,22 @@ public class PlaceFactory {
         return new Place(Place.AUDIOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
 
+    public static Place getAudiosInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_AUDIOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
+    public static Place getPlaylistsInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_PLAYLISTS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
+    public static Place getVideosInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_VIDEOS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
+    public static Place getLinksInCatalogBlock(int accountId, String block_Id, String title) {
+        return new Place(Place.CATALOG_BLOCK_LINKS).withIntExtra(Extra.ACCOUNT_ID, accountId).withStringExtra(Extra.ID, block_Id).withStringExtra(Extra.TITLE, title);
+    }
+
     public static Place getMentionsPlace(int accountId, int ownerId) {
         return new Place(Place.MENTIONS).withIntExtra(Extra.ACCOUNT_ID, accountId).withIntExtra(Extra.OWNER_ID, ownerId);
     }
@@ -380,14 +406,19 @@ public class PlaceFactory {
                 .setArguments(VideoPreviewFragment.buildArgs(accountId, video.getOwnerId(), video.getId(), video));
     }
 
-    public static Place getHistoryVideoPreviewPlace(int accountId, @NonNull Video video) {
-        return new Place(Place.VIDEO_PREVIEW)
-                .setArguments(VideoPreviewFragment.buildArgsStory(accountId, video.getOwnerId(), video.getId(), video));
+    public static Place getHistoryVideoPreviewPlace(int accountId, @NonNull ArrayList<Story> stories, int index) {
+        return new Place(Place.STORY_PLAYER)
+                .setArguments(StoryPagerFragment.buildArgs(accountId, stories, index));
     }
 
     public static Place getVideoPreviewPlace(int accountId, int ownerId, int videoId, @Nullable Video video) {
         return new Place(Place.VIDEO_PREVIEW)
                 .setArguments(VideoPreviewFragment.buildArgs(accountId, ownerId, videoId, video));
+    }
+
+    public static Place getSingleURLPhotoPlace(String url, String prefix, String photo_prefix) {
+        return new Place(Place.SINGLE_PHOTO)
+                .setArguments(SinglePhotoFragment.buildArgs(url, prefix, photo_prefix));
     }
 
     public static Place getLikesCopiesPlace(int accountId, String type, int ownerId, int itemId, String filter) {
@@ -482,5 +513,10 @@ public class PlaceFactory {
     public static Place getCommentsThreadPlace(int accountId, Commented commented, Integer focusToCommentId, Integer commemtId) {
         return new Place(Place.COMMENTS)
                 .setArguments(CommentsFragment.buildArgs(accountId, commented, focusToCommentId, commemtId));
+    }
+
+    public static Place getArtistPlace(int accountId, String id, boolean isHideToolbar) {
+        return new Place(Place.ARTIST)
+                .setArguments(AudioCatalogFragment.buildArgs(accountId, id, isHideToolbar));
     }
 }

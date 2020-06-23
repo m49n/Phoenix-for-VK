@@ -2,10 +2,7 @@ package biz.dealnote.messenger.api;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
+
 public class WeakPercentagePublisher implements PercentagePublisher {
 
     private final WeakReference<PercentagePublisher> ref;

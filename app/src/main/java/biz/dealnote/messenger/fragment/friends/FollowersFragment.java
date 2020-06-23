@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.fragment.AbsOwnersListFragment;
 import biz.dealnote.messenger.mvp.presenter.FollowersPresenter;
@@ -21,6 +23,7 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
         return followersFragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<FollowersPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FollowersPresenter(getArguments().getInt(Extra.ACCOUNT_ID),

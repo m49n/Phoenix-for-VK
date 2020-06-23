@@ -19,10 +19,6 @@ import biz.dealnote.messenger.util.RxUtils;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class NewsfeedMentionsPresenter extends PlaceSupportPresenter<INewsfeedCommentsView> {
 
     private static final String TAG = NewsfeedCommentsPresenter.class.getSimpleName();

@@ -17,10 +17,6 @@ import biz.dealnote.messenger.api.model.VKApiPlace;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
 public class NewsAdapter extends AbsAdapter implements JsonDeserializer<VKApiNews> {
 
     @Override

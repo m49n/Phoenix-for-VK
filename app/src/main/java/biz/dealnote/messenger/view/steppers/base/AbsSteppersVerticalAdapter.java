@@ -14,10 +14,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by ruslan.kolbasa on 09.08.2016.
- * mobilebankingandroid
- */
 public abstract class AbsSteppersVerticalAdapter<H extends AbsStepsHost> extends RecyclerView.Adapter<AbsStepHolder<H>> {
 
     private final H mHost;

@@ -12,10 +12,6 @@ import java.lang.reflect.Type;
 import biz.dealnote.messenger.api.model.VKApiVideoAlbum;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class VideoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiVideoAlbum> {
 
     @Override
@@ -44,6 +40,10 @@ public class VideoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer
                 if (album.image == null)
                     album.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
             }
+        } else if (root.has("photo_800")) {
+            album.image = optString(root, "photo_800");
+        } else if (root.has("photo_320")) {
+            album.image = optString(root, "photo_320");
         }
         return album;
     }

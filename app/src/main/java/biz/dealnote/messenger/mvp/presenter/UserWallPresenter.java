@@ -44,15 +44,12 @@ import biz.dealnote.messenger.upload.UploadIntent;
 import biz.dealnote.messenger.upload.UploadResult;
 import biz.dealnote.messenger.util.Pair;
 import biz.dealnote.messenger.util.RxUtils;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
     private final List<PostFilter> filters;
@@ -92,6 +89,10 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         appendDisposable(uploadManager.observeResults()
                 .observeOn(Injection.provideMainThreadScheduler())
                 .subscribe(this::onUploadFinished, RxUtils.ignore()));
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -520,11 +521,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     }
 
     public void fireAvatarClick() {
-        if (getAccountId() != ownerId) {
-            prepareUserAvatarsAndShow();
-            return;
-        }
-
         getView().showAvatarContextMenu(isMyWall());
     }
 
@@ -600,5 +596,19 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 .setSize(Upload.IMAGE_SIZE_FULL);
 
         uploadManager.enqueue(Collections.singletonList(intent));
+    }
+
+    @Override
+    public void searchStory(boolean ByName) {
+        appendDisposable(ownersRepository.searchStory(getAccountId(), ByName ? user.getFullName() : null, ByName ? null : ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> {
+                    if (!Utils.isEmpty(data)) {
+                        stories.clear();
+                        stories.addAll(data);
+                        getView().updateStory(stories);
+                    }
+                }, t -> {
+                }));
     }
 }

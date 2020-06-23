@@ -56,6 +56,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
     private static final int TYPE_STICKER_FRIEND = 5;
     private static final int TYPE_GIFT_MY = 6;
     private static final int TYPE_GIFT_FRIEND = 7;
+    private static final int TYPE_GRAFFITY_MY = 8;
+    private static final int TYPE_GRAFFITY_FRIEND = 9;
     private static final Date DATE = new Date();
     private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     private Context context;
@@ -99,6 +101,8 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             case TYPE_SERVICE:
                 bindServiceHolder((ServiceMessageHolder) viewHolder, message);
                 break;
+            case TYPE_GRAFFITY_FRIEND:
+            case TYPE_GRAFFITY_MY:
             case TYPE_MY_MESSAGE:
             case TYPE_FRIEND_MESSAGE:
                 bindNormalMessage((MessageHolder) viewHolder, message);
@@ -140,6 +144,14 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             PicassoInstance.with()
                     .load(image.getUrl())
                     .into(holder.sticker);
+        }
+
+        boolean hasAttachments = Utils.nonEmpty(message.getFwd()) || (nonNull(message.getAttachments()) && message.getAttachments().size_no_stickers() > 0);
+        holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
+
+        if (hasAttachments) {
+            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true, message.getId());
+            attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
         }
     }
 
@@ -286,25 +298,27 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 break;
         }
 
-        switch (message.getCryptStatus()) {
-            case CryptStatus.ENCRYPTED:
-            case CryptStatus.DECRYPT_FAILED:
-                holder.bubble.setBubbleColor(Color.parseColor("#D4ff0000"));
-                break;
-            case CryptStatus.NO_ENCRYPTION:
-            case CryptStatus.DECRYPTED:
-                if (message.isOut()) {
-                    if (Settings.get().other().isCustom_MyMessage())
-                        holder.bubble.setBubbleColor(Settings.get().other().getColorMyMessage());
-                    else {
-                        if (Settings.get().main().isMy_message_no_color())
-                            holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
-                        else
-                            holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
-                    }
-                } else
-                    holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
-                break;
+        if (!message.isGraffity()) {
+            switch (message.getCryptStatus()) {
+                case CryptStatus.ENCRYPTED:
+                case CryptStatus.DECRYPT_FAILED:
+                    holder.bubble.setBubbleColor(Color.parseColor("#D4ff0000"));
+                    break;
+                case CryptStatus.NO_ENCRYPTION:
+                case CryptStatus.DECRYPTED:
+                    if (message.isOut()) {
+                        if (Settings.get().other().isCustom_MyMessage())
+                            holder.bubble.setBubbleColor(Settings.get().other().getColorMyMessage());
+                        else {
+                            if (Settings.get().main().isMy_message_no_color())
+                                holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
+                            else
+                                holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.my_messages_bubble_color, context, "#D4ff0000"));
+                        }
+                    } else
+                        holder.bubble.setBubbleColor(CurrentTheme.getColorFromAttrs(R.attr.message_bubble_color, context, "#D4ff0000"));
+                    break;
+            }
         }
 
         holder.body.setText(OwnerLinkSpanFactory.withSpans(displayedBody, true, false, ownerLinkAdapter));
@@ -314,7 +328,7 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
         holder.attachmentsRoot.setVisibility(hasAttachments ? View.VISIBLE : View.GONE);
 
         if (hasAttachments) {
-            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true);
+            attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.attachmentsHolder, true, message.getId());
             attachmentsViewBinder.displayForwards(message.getFwd(), holder.forwardMessagesRoot, context, true);
         }
     }
@@ -347,12 +361,14 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
             }
             return true;
         });
-        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true);
+        attachmentsViewBinder.displayAttachments(message.getAttachments(), holder.mAttachmentsHolder, true, message.getId());
     }
 
     @Override
     protected RecyclerView.ViewHolder viewHolder(View view, int type) {
         switch (type) {
+            case TYPE_GRAFFITY_FRIEND:
+            case TYPE_GRAFFITY_MY:
             case TYPE_MY_MESSAGE:
             case TYPE_FRIEND_MESSAGE:
                 return new MessageHolder(view);
@@ -376,6 +392,10 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
                 return R.layout.item_message_my;
             case TYPE_FRIEND_MESSAGE:
                 return R.layout.item_message_friend;
+            case TYPE_GRAFFITY_MY:
+                return R.layout.item_message_graffity_my;
+            case TYPE_GRAFFITY_FRIEND:
+                return R.layout.item_message_graffity_friend;
             case TYPE_SERVICE:
                 return R.layout.item_service_message;
             case TYPE_STICKER_FRIEND:
@@ -400,6 +420,10 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
         if (m.isSticker()) {
             return m.isOut() ? TYPE_STICKER_MY : TYPE_STICKER_FRIEND;
+        }
+
+        if (m.isGraffity()) {
+            return m.isOut() ? TYPE_GRAFFITY_MY : TYPE_GRAFFITY_FRIEND;
         }
 
         if (m.isGift()) {
@@ -475,9 +499,23 @@ public class MessagesAdapter extends RecyclerBindableAdapter<Message, RecyclerVi
 
         LottieAnimationView sticker;
 
+        View attachmentsRoot;
+        AttachmentsHolder attachmentsHolder;
+        ViewGroup forwardMessagesRoot;
+
         StickerMessageHolder(View itemView) {
             super(itemView);
             this.sticker = itemView.findViewById(R.id.sticker);
+            forwardMessagesRoot = itemView.findViewById(R.id.forward_messages);
+            attachmentsRoot = itemView.findViewById(R.id.item_message_attachment_container);
+            attachmentsHolder = new AttachmentsHolder();
+            attachmentsHolder.setVgAudios(attachmentsRoot.findViewById(R.id.audio_attachments))
+                    .setVgVideos(attachmentsRoot.findViewById(R.id.video_attachments))
+                    .setVgDocs(attachmentsRoot.findViewById(R.id.docs_attachments))
+                    .setVgArticles(attachmentsRoot.findViewById(R.id.articles_attachments))
+                    .setVgPhotos(attachmentsRoot.findViewById(R.id.photo_attachments))
+                    .setVgPosts(attachmentsRoot.findViewById(R.id.posts_attachments))
+                    .setVoiceMessageRoot(attachmentsRoot.findViewById(R.id.voice_message_attachments));
         }
     }
 

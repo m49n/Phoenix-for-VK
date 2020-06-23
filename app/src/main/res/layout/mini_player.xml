@@ -3,15 +3,16 @@
     android:id="@+id/miniplayer_layout"
     android:layout_width="match_parent"
     android:layout_height="53dp"
-    android:background="?attr/message_bubble_color"
+    android:background="?attr/colorSurface"
     android:orientation="horizontal">
 
     <FrameLayout
         android:id="@+id/item_audio_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="5dp">
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:stateListAnimator="@animator/clicked">
 
         <ImageView
             android:id="@+id/item_audio_play_cover"
@@ -39,8 +40,8 @@
             android:id="@+id/mini_artist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -58,22 +59,26 @@
 
     <ImageButton
         android:id="@+id/open_player"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:backgroundTint="?attr/colorSecondary"
+        android:backgroundTint="?colorSurface"
         android:contentDescription="@string/open_full_player"
-        android:padding="10dp"
+        android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/audio_player" />
+        android:src="@drawable/ic_outline_keyboard_arrow_up"
+        android:tint="?colorPrimary" />
 
     <ImageButton
         android:id="@+id/close_player"
-        android:layout_width="40dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:backgroundTint="?colorPrimary"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="?colorSurface"
         android:contentDescription="@string/close"
+        android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/close_mini" />
+        android:src="@drawable/ic_outline_keyboard_arrow_down"
+        android:tint="?colorPrimary" />
 </LinearLayout>

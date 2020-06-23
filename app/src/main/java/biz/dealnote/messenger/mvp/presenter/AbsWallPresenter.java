@@ -63,10 +63,6 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.intValueNotIn;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupportPresenter<V> {
 
     private static final int COUNT = 20;
@@ -152,6 +148,10 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         }
 
         throw new IllegalArgumentException("Unknown filter");
+    }
+
+    public void searchStory(boolean ByName) {
+        throw new IllegalArgumentException("Unknown story search");
     }
 
     public List<Story> getStories() {
@@ -276,7 +276,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         final int nextOffset = offset + COUNT;
         final boolean append = offset > 0;
 
-        netCompositeDisposable.add(walls.getWall(accountId, ownerId, offset, COUNT, wallFilter)
+        netCompositeDisposable.add(walls.getWallNoCache(accountId, ownerId, offset, COUNT, wallFilter)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(posts -> onActualDataReceived(nextOffset, posts, append), this::onActualDataGetError));
     }
@@ -435,7 +435,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
             dlgAlert.setIcon(R.drawable.qr_code);
             final View view = LayoutInflater.from(context).inflate(R.layout.qr, null);
             dlgAlert.setTitle(R.string.show_qr);
-            ImageView imageView = (ImageView) view.findViewById(R.id.qr);
+            ImageView imageView = view.findViewById(R.id.qr);
             imageView.setImageBitmap(qr);
             dlgAlert.setView(view);
             dlgAlert.show();

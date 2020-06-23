@@ -48,6 +48,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         return new Holder(LayoutInflater.from(context).inflate(R.layout.item_account, parent, false));
     }
 
+    @NotNull
+    public Account getByPosition(int position) {
+        return data.get(position);
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NotNull Holder holder, int position) {
@@ -80,7 +85,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
                 .getCurrent();
 
         holder.active.setVisibility(isCurrent ? View.VISIBLE : View.INVISIBLE);
-        holder.itemView.setOnClickListener(v -> callback.onClick(account));
+        holder.account.setOnClickListener(v -> callback.onClick(account));
     }
 
     @Override
@@ -98,6 +103,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
         TextView lastName;
         ImageView avatar;
         ImageView active;
+        View account;
 
         public Holder(View itemView) {
             super(itemView);
@@ -105,6 +111,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
             lastName = itemView.findViewById(R.id.last_name);
             avatar = itemView.findViewById(R.id.avatar);
             active = itemView.findViewById(R.id.active);
+            account = itemView.findViewById(R.id.account_select);
         }
     }
 }

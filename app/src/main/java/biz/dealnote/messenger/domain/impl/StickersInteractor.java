@@ -18,10 +18,7 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.domain.mappers.MapUtil.mapAll;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 20.03.2017.
- * phoenix
- */
+
 public class StickersInteractor implements IStickersInteractor {
 
     private final INetworker networker;

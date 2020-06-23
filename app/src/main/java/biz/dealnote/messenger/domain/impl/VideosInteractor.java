@@ -31,10 +31,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Utils.join;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 11.06.2017.
- * phoenix
- */
 public class VideosInteractor implements IVideosInteractor {
 
     private final INetworker networker;

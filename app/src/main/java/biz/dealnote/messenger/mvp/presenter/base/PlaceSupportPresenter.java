@@ -5,29 +5,30 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.domain.ILikesInteractor;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.NewsFeedCriteria;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.mvp.view.IAttachmentsPlacesView;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 04.10.2016.
- * phoenix
- */
 public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPlacesView & IAccountDependencyView>
         extends AccountDependencyPresenter<V> {
 
@@ -45,6 +46,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
 
     public void fireWikiPageClick(@NonNull WikiPage page) {
         getView().openWikiPage(getAccountId(), page);
+    }
+
+    public void fireStoryClick(@NonNull Story story) {
+        getView().openStory(getAccountId(), story);
     }
 
     public void firePhotoClick(@NonNull ArrayList<Photo> photos, int index) {
@@ -75,6 +80,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
         getView().openVideo(getAccountId(), apiVideo);
     }
 
+    public void fireAudioPlaylistClick(@NotNull AudioPlaylist playlist) {
+        getView().openAudioPlaylist(getAccountId(), playlist);
+    }
+
     public void firePollClick(@NonNull Poll poll) {
         getView().openPoll(getAccountId(), poll);
     }
@@ -89,6 +98,10 @@ public abstract class PlaceSupportPresenter<V extends IMvpView & IAttachmentsPla
 
     public void fireCommentsClick(Post post) {
         getView().openComments(getAccountId(), Commented.from(post), null);
+    }
+
+    public void firePhotoAlbumClick(@NotNull PhotoAlbum album) {
+        getView().openPhotoAlbum(getAccountId(), album);
     }
 
     public final void fireCopiesLikesClick(String type, int ownerId, int itemId, String filter) {

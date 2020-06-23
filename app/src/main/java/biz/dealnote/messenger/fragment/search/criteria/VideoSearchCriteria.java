@@ -34,7 +34,7 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
         }
     };
 
-    public VideoSearchCriteria(String query) {
+    public VideoSearchCriteria(String query, boolean in_main_page) {
         super(query);
 
         SpinnerOption sort = new SpinnerOption(KEY_SORT, R.string.sorting, true);
@@ -52,7 +52,7 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
         appendOption(new SimpleBooleanOption(KEY_SHORT, R.string.short_videos, true));
         appendOption(new SimpleBooleanOption(KEY_LONG, R.string.long_videos, true));
 
-        appendOption(new SimpleBooleanOption(KEY_SEARCH_OWN, R.string.search_in_my_videos, true));
+        appendOption(new SimpleBooleanOption(KEY_SEARCH_OWN, R.string.search_in_my_videos, true, in_main_page));
 
         appendOption(new SimpleNumberOption(KEY_DURATION_FROM, R.string.min_duration, true));
         appendOption(new SimpleNumberOption(KEY_DURATION_TO, R.string.max_duration, true));
@@ -60,11 +60,6 @@ public final class VideoSearchCriteria extends BaseSearchCriteria implements Par
 
     private VideoSearchCriteria(Parcel in) {
         super(in);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
     }
 
     @Override

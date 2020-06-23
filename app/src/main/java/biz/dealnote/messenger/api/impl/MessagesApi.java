@@ -29,10 +29,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class MessagesApi extends AbsApi implements IMessagesApi {
 
     MessagesApi(int accountId, IServiceProvider provider) {
@@ -103,6 +99,14 @@ class MessagesApi extends AbsApi implements IMessagesApi {
         return serviceRx(TokenType.USER)
                 .flatMap(service -> service
                         .createChat(join(userIds, ","), title)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<Integer> recogniseAudioMessage(Integer message_id, String audio_message_id) {
+        return serviceRx(TokenType.USER)
+                .flatMap(service -> service
+                        .recogniseAudioMessage(message_id, audio_message_id)
                         .map(extractResponseWithErrorHandling()));
     }
 
@@ -181,13 +185,13 @@ class MessagesApi extends AbsApi implements IMessagesApi {
     @Override
     public Single<Integer> send(Integer randomId, Integer peerId, String domain, String message,
                                 Double latitude, Double longitude, Collection<IAttachmentToken> attachments,
-                                Collection<Integer> forwardMessages, Integer stickerId) {
+                                Collection<Integer> forwardMessages, Integer stickerId, String payload) {
 
         String atts = join(attachments, ",", AbsApi::formatAttachmentToken);
         return serviceRx(TokenType.USER, TokenType.COMMUNITY)
                 .flatMap(service -> service
                         .send(randomId, peerId, domain, message, latitude, longitude, atts,
-                                join(forwardMessages, ","), stickerId)
+                                join(forwardMessages, ","), stickerId, payload)
                         .map(extractResponseWithErrorHandling()));
     }
 

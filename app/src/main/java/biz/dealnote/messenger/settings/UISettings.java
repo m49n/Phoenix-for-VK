@@ -14,10 +14,6 @@ import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 class UISettings implements ISettings.IUISettings {
 
     private final Context app;
@@ -84,6 +80,8 @@ class UISettings implements ISettings.IUISettings {
                 return Amoled ? R.style.App_DayNight_VioletRed_Amoled : R.style.App_DayNight_VioletRed;
             case "yellow_red":
                 return Amoled ? R.style.App_DayNight_YellowRed_Amoled : R.style.App_DayNight_YellowRed;
+            case "ice_green":
+                return Amoled ? R.style.App_DayNight_IceGreen_Amoled : R.style.App_DayNight_IceGreen;
             case "ice":
             default:
                 return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
@@ -94,6 +92,12 @@ class UISettings implements ISettings.IUISettings {
     public void setMainTheme(String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
         preferences.edit().putString("app_theme", key).apply();
+    }
+
+    @Override
+    public void switchNightMode(@NightMode int key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        preferences.edit().putString("night_switch", String.valueOf(key)).apply();
     }
 
     @Override
@@ -196,7 +200,7 @@ class UISettings implements ISettings.IUISettings {
 
     @Override
     public boolean isSystemEmoji() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", true);
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("emojis_type", false);
     }
 
     @Override
@@ -212,11 +216,6 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public boolean isShow_profile_in_additional_page() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("show_profile_in_additional_page", true);
-    }
-
-    @Override
-    public boolean isDisable_swipes() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_swipes", false);
     }
 
     @Override

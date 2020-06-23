@@ -36,9 +36,7 @@ public class HorizontalOptionsAdapter<T extends Entry> extends RecyclerBindableA
         holder.background.setCardBackgroundColor(item.isActive() ?
                 CurrentTheme.getColorPrimary(context) : CurrentTheme.getColorSurface(context));
 
-        holder.itemView.setOnClickListener(v -> {
-            listener.onOptionClick(item);
-        });
+        holder.itemView.setOnClickListener(v -> listener.onOptionClick(item));
     }
 
     @Override

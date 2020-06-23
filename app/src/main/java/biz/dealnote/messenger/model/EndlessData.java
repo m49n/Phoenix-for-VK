@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by admin on 07.10.2017.
- * Phoenix-for-VK
- */
 public class EndlessData<T> {
 
     private final List<T> data;

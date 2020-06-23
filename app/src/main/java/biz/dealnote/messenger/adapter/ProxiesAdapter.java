@@ -12,10 +12,7 @@ import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
 import biz.dealnote.messenger.model.ProxyConfig;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
+
 public class ProxiesAdapter extends RecyclerBindableAdapter<ProxyConfig, ProxiesAdapter.Holder> {
 
     private final ActionListener actionListener;

@@ -6,10 +6,7 @@ import biz.dealnote.messenger.api.model.response.CustomCommentsResponse;
 import biz.dealnote.messenger.api.services.ICommentsService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class CommentsApi extends AbsApi implements ICommentsApi {
 
     CommentsApi(int accountId, IServiceProvider provider) {

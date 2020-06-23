@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.TextWatcherAdapter;
@@ -20,10 +22,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 11.07.2017.
- * phoenix
- */
 public class AddProxyFragment extends BaseMvpFragment<AddProxyPresenter, IAddProxyView> implements IAddProxyView {
 
     private EditText mAddress;
@@ -107,6 +105,7 @@ public class AddProxyFragment extends BaseMvpFragment<AddProxyPresenter, IAddPro
         requireActivity().onBackPressed();
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<AddProxyPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AddProxyPresenter(saveInstanceState);

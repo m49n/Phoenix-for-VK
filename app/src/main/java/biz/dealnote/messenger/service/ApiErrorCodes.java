@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.service;
 
-/**
- * Created by admin on 02.07.2016.
- * phoenix
- */
 public class ApiErrorCodes {
 
     public static final int TOO_MANY_REQUESTS_PER_SECOND = 6;

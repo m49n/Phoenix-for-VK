@@ -9,10 +9,7 @@ import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.messenger.model.LocalVideo;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 public interface ILocalMediaStorage extends IStorage {
 
     Single<List<LocalPhoto>> getPhotos(long albumId);

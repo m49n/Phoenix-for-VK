@@ -19,10 +19,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosView> {
 
     private static final String TAG = FavePhotosPresenter.class.getSimpleName();

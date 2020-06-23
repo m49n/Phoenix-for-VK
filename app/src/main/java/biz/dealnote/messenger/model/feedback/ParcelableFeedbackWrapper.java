@@ -6,10 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 19.04.2017.
- * phoenix
- */
+
 public final class ParcelableFeedbackWrapper implements Parcelable {
 
     public static final Creator<ParcelableFeedbackWrapper> CREATOR = new Creator<ParcelableFeedbackWrapper>() {

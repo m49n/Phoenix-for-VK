@@ -36,10 +36,6 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 06.05.2017.
- * phoenix
- */
 public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEditView> {
 
     private static final String TAG = CommentEditPresenter.class.getSimpleName();

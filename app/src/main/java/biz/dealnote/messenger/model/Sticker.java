@@ -7,10 +7,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.VKApiStickerSet;
 
-/**
- * Created by admin on 04.12.2016.
- * phoenix
- */
+
 public class Sticker extends AbsModel implements Parcelable {
 
     public static final Creator<Sticker> CREATOR = new Creator<Sticker>() {

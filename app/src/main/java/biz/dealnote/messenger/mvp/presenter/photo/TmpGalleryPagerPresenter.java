@@ -16,10 +16,6 @@ import biz.dealnote.messenger.model.TmpSource;
 import biz.dealnote.messenger.util.Analytics;
 import biz.dealnote.messenger.util.RxUtils;
 
-/**
- * Created by admin on 25.09.2016.
- * phoenix
- */
 public class TmpGalleryPagerPresenter extends PhotoPagerPresenter {
 
     private final TmpSource source;

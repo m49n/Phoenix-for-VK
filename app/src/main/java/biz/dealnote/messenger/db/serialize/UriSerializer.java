@@ -12,10 +12,6 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by ruslan.kolbasa on 30.01.2017.
- * phoenix
- */
 public class UriSerializer implements JsonSerializer<Uri>, JsonDeserializer<Uri> {
     @Override
     public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {

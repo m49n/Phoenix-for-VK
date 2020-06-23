@@ -30,10 +30,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.domain.mappers.MapUtil.mapAll;
 
-/**
- * Created by Ruslan Kolbasa on 13.07.2017.
- * phoenix
- */
 public class PhotosInteractor implements IPhotosInteractor {
 
     private final INetworker networker;
@@ -127,7 +123,7 @@ public class PhotosInteractor implements IPhotosInteractor {
                         throw new NotFoundException();
                     }
 
-                    return Dto2Model.transform(dtos.get(0));
+                    return Dto2Model.transformPhotoAlbum(dtos.get(0));
                 });
     }
 
@@ -137,7 +133,7 @@ public class PhotosInteractor implements IPhotosInteractor {
 
         return cache.photoAlbums()
                 .findAlbumsByCriteria(criteria)
-                .map(entities -> mapAll(entities, Entity2Model::map));
+                .map(entities -> mapAll(entities, Entity2Model::mapPhotoAlbum));
     }
 
     @Override
@@ -181,17 +177,17 @@ public class PhotosInteractor implements IPhotosInteractor {
 
                     if (offset == 0) {
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(Allph));
-                        albums.add(Dto2Model.transform(Allph));
+                        albums.add(Dto2Model.transformPhotoAlbum(Allph));
 
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(usersPh));
-                        albums.add(Dto2Model.transform(usersPh));
+                        albums.add(Dto2Model.transformPhotoAlbum(usersPh));
                     }
 
                     for (VKApiPhotoAlbum dto : dtos) {
                         if (dto.id == -9000)
                             continue;
                         dbos.add(Dto2Entity.buildPhotoAlbumDbo(dto));
-                        albums.add(Dto2Model.transform(dto));
+                        albums.add(Dto2Model.transformPhotoAlbum(dto));
                     }
 
 

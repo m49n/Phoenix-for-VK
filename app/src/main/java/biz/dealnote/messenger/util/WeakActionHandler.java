@@ -5,10 +5,6 @@ import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
 public class WeakActionHandler<T> extends Handler {
 
     private final WeakReference<T> ref;

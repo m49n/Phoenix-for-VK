@@ -38,10 +38,6 @@ import static biz.dealnote.messenger.db.impl.AttachmentsStorage.appendAttachOper
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 28.11.2016.
- * phoenix
- */
 class CommentsStorage extends AbsStorage implements ICommentsStorage {
 
     private final PublishSubject<CommentUpdate> minorUpdatesPublisher;

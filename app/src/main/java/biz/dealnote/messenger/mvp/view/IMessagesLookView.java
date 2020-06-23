@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Message;
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 public interface IMessagesLookView extends IBasicMessageListView, IErrorView {
 
     void focusTo(int index);

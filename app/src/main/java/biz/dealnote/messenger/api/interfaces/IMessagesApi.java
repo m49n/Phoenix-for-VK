@@ -23,10 +23,6 @@ import biz.dealnote.messenger.api.model.response.SearchDialogsResponse;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 public interface IMessagesApi {
 
     @CheckResult
@@ -83,7 +79,7 @@ public interface IMessagesApi {
     @CheckResult
     Single<Integer> send(Integer randomId, Integer peerId, String domain, String message,
                          Double latitude, Double longitude, Collection<IAttachmentToken> attachments,
-                         Collection<Integer> forwardMessages, Integer stickerId);
+                         Collection<Integer> forwardMessages, Integer stickerId, String payload);
 
     @CheckResult
     Single<DialogsResponse> getDialogs(Integer offset, Integer count, Integer startMessageId, Boolean extended, String fields);
@@ -105,4 +101,6 @@ public interface IMessagesApi {
     Completable pin(int peerId, int messageId);
 
     Completable unpin(int peerId);
+
+    Single<Integer> recogniseAudioMessage(Integer message_id, String audio_message_id);
 }

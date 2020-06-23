@@ -6,10 +6,7 @@ import java.util.Map;
 
 import retrofit2.Retrofit;
 
-/**
- * Created by admin on 27.07.2017.
- * phoenix
- */
+
 public class RetrofitWrapper {
 
     private final Retrofit retrofit;

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.Map;
+
 import biz.dealnote.messenger.R;
 
 /**
@@ -68,6 +70,8 @@ public class VKApiAudio implements VKApiAttachment {
 
     public String album_title;
 
+    public Map<String, String> main_artists;
+
     public boolean isHq;
 
     /**
@@ -90,26 +94,26 @@ public class VKApiAudio implements VKApiAttachment {
     /**
      * Audio object genres.
      */
-    public final static class Genre {
+    public static final class Genre {
 
-        public final static int ROCK = 1;
-        public final static int POP = 2;
-        public final static int EASY_LISTENING = 4;
-        public final static int DANCE_AND_HOUSE = 5;
-        public final static int INSTRUMENTAL = 6;
-        public final static int METAL = 7;
-        public final static int DRUM_AND_BASS = 10;
-        public final static int TRANCE = 11;
-        public final static int CHANSON = 12;
-        public final static int ETHNIC = 13;
-        public final static int ACOUSTIC_AND_VOCAL = 14;
-        public final static int REGGAE = 15;
-        public final static int CLASSICAL = 16;
-        public final static int INDIE_POP = 17;
-        public final static int OTHER = 18;
-        public final static int SPEECH = 19;
-        public final static int ALTERNATIVE = 21;
-        public final static int ELECTROPOP_AND_DISCO = 22;
+        public static final int ROCK = 1;
+        public static final int POP = 2;
+        public static final int EASY_LISTENING = 4;
+        public static final int DANCE_AND_HOUSE = 5;
+        public static final int INSTRUMENTAL = 6;
+        public static final int METAL = 7;
+        public static final int DRUM_AND_BASS = 10;
+        public static final int TRANCE = 11;
+        public static final int CHANSON = 12;
+        public static final int ETHNIC = 13;
+        public static final int ACOUSTIC_AND_VOCAL = 14;
+        public static final int REGGAE = 15;
+        public static final int CLASSICAL = 16;
+        public static final int INDIE_POP = 17;
+        public static final int OTHER = 18;
+        public static final int SPEECH = 19;
+        public static final int ALTERNATIVE = 21;
+        public static final int ELECTROPOP_AND_DISCO = 22;
 
         private Genre() {
         }

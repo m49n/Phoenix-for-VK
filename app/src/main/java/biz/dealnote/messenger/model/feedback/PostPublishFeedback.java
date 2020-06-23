@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import biz.dealnote.messenger.model.Post;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public final class PostPublishFeedback extends Feedback implements Parcelable {
 
     public static final Creator<PostPublishFeedback> CREATOR = new Creator<PostPublishFeedback>() {

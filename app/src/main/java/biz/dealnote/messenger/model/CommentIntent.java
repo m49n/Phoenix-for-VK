@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by admin on 07.06.2017.
- * phoenix
- */
+
 public class CommentIntent {
 
     private final int authorId;

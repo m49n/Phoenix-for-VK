@@ -1,10 +1,5 @@
 package biz.dealnote.messenger.db.model.entity.feedback;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- * base class for [follow, friend_accepted]
- */
 public class UsersEntity extends FeedbackEntity {
 
     private int[] ids;

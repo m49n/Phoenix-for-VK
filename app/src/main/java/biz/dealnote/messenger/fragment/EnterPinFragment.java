@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
@@ -23,10 +25,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.KeyboardView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by ruslan.kolbasa on 30-May-16.
- * mobilebankingandroid
- */
 public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterPinView>
         implements IEnterPinView, KeyboardView.OnKeyboardClickListener {
 
@@ -60,6 +58,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<EnterPinPresenter> getPresenterFactory(@Nullable final Bundle saveInstanceState) {
         return () -> new EnterPinPresenter(this, saveInstanceState);

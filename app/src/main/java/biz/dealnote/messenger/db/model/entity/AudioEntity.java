@@ -1,9 +1,7 @@
 package biz.dealnote.messenger.db.model.entity;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+import java.util.Map;
+
 public class AudioEntity extends Entity {
 
     private final int id;
@@ -39,6 +37,8 @@ public class AudioEntity extends Entity {
     private String thumb_image_very_big;
 
     private String album_title;
+
+    private Map<String, String> main_artists;
 
     private boolean isHq;
 
@@ -196,6 +196,15 @@ public class AudioEntity extends Entity {
 
     public AudioEntity setDeleted(boolean deleted) {
         this.deleted = deleted;
+        return this;
+    }
+
+    public Map<String, String> getMain_artists() {
+        return main_artists;
+    }
+
+    public AudioEntity setMain_artists(Map<String, String> main_artists) {
+        this.main_artists = main_artists;
         return this;
     }
 }

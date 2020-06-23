@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -23,10 +25,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 06.05.2017.
- * phoenix
- */
 public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditPresenter, ICommentEditView>
         implements ICommentEditView {
 
@@ -46,6 +44,7 @@ public class CommentEditFragment extends AbsAttachmentsEditFragment<CommentEditP
         setHasOptionsMenu(true);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommentEditPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

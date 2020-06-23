@@ -34,7 +34,9 @@
             android:layout_height="@dimen/avatar_size_small"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="2dp" />
+            android:layout_marginEnd="2dp"
+            android:stateListAnimator="@animator/clicked"
+            android:visibility="gone" />
 
         <biz.dealnote.messenger.view.OnlineView
             android:id="@+id/item_message_important"
@@ -44,6 +46,7 @@
             android:layout_alignBottom="@+id/item_message_avatar"
             android:padding="3dp"
             android:src="@drawable/star"
+            android:visibility="gone"
             app:circle_color="?icon_color_active"
             app:stroke_color="?android:colorBackground" />
 
@@ -51,20 +54,18 @@
         <biz.dealnote.messenger.view.BubbleLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="8dp"
             android:layout_toStartOf="@+id/item_message_avatar"
             android:gravity="end"
             android:orientation="vertical"
             android:paddingStart="10dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            app:angle="@dimen/message_bubble_corner_radius"
-            app:arrowHeight="12dp"
-            app:arrowLocation="right"
-            app:arrowPosition="12dp"
-            app:arrowWidth="8dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            app:arrowHeight="0dp"
+            app:arrowWidth="0dp"
             app:bubbleColor="?message_bubble_color">
 
             <biz.dealnote.messenger.view.emoji.EmojiconTextView

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -15,11 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
@@ -33,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
@@ -61,8 +64,6 @@ import biz.dealnote.messenger.util.RoundTransformation;
 import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
-import static biz.dealnote.messenger.util.Utils.safelyClose;
-import static biz.dealnote.messenger.util.Utils.safelyRecycle;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
@@ -96,6 +97,26 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         return new File(context.getFilesDir(), light ? "chat_light.jpg" : "chat_dark.jpg");
     }
 
+    public static void CleanImageCache(Context context, boolean notify) {
+        try {
+            PicassoInstance.clear_cache();
+            File cache = new File(context.getCacheDir(), "notif-cache");
+            if (cache.exists() && cache.isDirectory()) {
+                String[] children = cache.list();
+                assert children != null;
+                for (String child : children) {
+                    new File(cache, child).delete();
+                }
+            }
+            if (notify)
+                PhoenixToast.CreatePhoenixToast(context).showToast(R.string.success);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (notify)
+                PhoenixToast.CreatePhoenixToast(context).showToastError(e.getLocalizedMessage());
+        }
+    }
+
     private void selectLocalImage(int requestCode) {
         if (!AppPerms.hasReadStoragePermision(getActivity())) {
             AppPerms.requestReadExternalStoragePermission(getActivity());
@@ -105,6 +126,29 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         Intent intent = new Intent(getActivity(), PhotosActivity.class);
         intent.putExtra(PhotosActivity.EXTRA_MAX_SELECTION_COUNT, 1);
         startActivityForResult(intent, requestCode);
+    }
+
+    private void EnableChatPhotoBackground(int index) {
+        boolean bEnable;
+        switch (index) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                bEnable = false;
+                break;
+            default:
+                bEnable = true;
+                break;
+        }
+        Preference prefLightChat = findPreference("chat_light_background");
+        Preference prefDarkChat = findPreference("chat_dark_background");
+        Preference prefResetPhotoChat = findPreference("reset_chat_background");
+        if (prefDarkChat == null || prefLightChat == null || prefResetPhotoChat == null)
+            return;
+        prefDarkChat.setEnabled(bEnable);
+        prefLightChat.setEnabled(bEnable);
+        prefResetPhotoChat.setEnabled(bEnable);
     }
 
     @Override
@@ -133,8 +177,36 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        CheckBoxPreference prefAmoled = findPreference("amoled_theme");
+        SwitchPreference autoupdate = findPreference("auto_update");
+        if (autoupdate != null) {
+            autoupdate.setVisible(Constants.NEED_CHECK_UPDATE);
+        }
+
+        SwitchPreference valknut_themed = findPreference("valknut_color_theme");
+        if (valknut_themed != null) {
+            valknut_themed.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
+        }
+
+        SwitchPreference prefAmoled = findPreference("amoled_theme");
         prefAmoled.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
+        SwitchPreference prefMiniplayer = findPreference("show_mini_player");
+        prefMiniplayer.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
+        SwitchPreference prefshow_profile_in_additional_page = findPreference("show_profile_in_additional_page");
+        prefshow_profile_in_additional_page.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
+        SwitchPreference prefshow_recent_dialogs = findPreference("show_recent_dialogs");
+        prefshow_recent_dialogs.setOnPreferenceChangeListener((preference, newValue) -> {
             requireActivity().recreate();
             return true;
         });
@@ -198,11 +270,22 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         Preference version = findPreference("version");
         if (version != null) {
-            version.setSummary(Utils.getAppVersionName(requireActivity()));
+            version.setSummary(Utils.getAppVersionName(requireActivity()) + ", VK API " + Constants.API_VERSION);
             version.setOnPreferenceClickListener(preference -> {
                 openAboutUs();
                 return true;
             });
+        }
+
+        ListPreference chat_background = findPreference("chat_background");
+        if (chat_background != null) {
+            chat_background.setOnPreferenceChangeListener((preference, newValue) -> {
+                final String val = newValue.toString();
+                int index = Integer.parseInt(val);
+                EnableChatPhotoBackground(index);
+                return true;
+            });
+            EnableChatPhotoBackground(Integer.parseInt(chat_background.getValue()));
         }
 
         Preference lightSideBarPreference = findPreference("chat_light_background");
@@ -211,6 +294,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 selectLocalImage(REQUEST_CHAT_LIGHT_BACKGROUND);
                 return true;
             });
+            File bitmap = getDrawerBackgroundFile(requireActivity(), true);
+            if (bitmap.exists()) {
+                Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                lightSideBarPreference.setIcon(d);
+            } else
+                lightSideBarPreference.setIcon(R.drawable.dir_photo);
         }
 
         Preference darkSideBarPreference = findPreference("chat_dark_background");
@@ -219,6 +308,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 selectLocalImage(REQUEST_CHAT_DARK_BACKGROUND);
                 return true;
             });
+            File bitmap = getDrawerBackgroundFile(requireActivity(), false);
+            if (bitmap.exists()) {
+                Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                darkSideBarPreference.setIcon(d);
+            } else
+                darkSideBarPreference.setIcon(R.drawable.dir_photo);
         }
 
         Preference resetDrawerBackground = findPreference("reset_chat_background");
@@ -232,6 +327,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     tryDeleteFile(chat_dark);
                 } catch (IOException e) {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                if (darkSideBarPreference != null && lightSideBarPreference != null) {
+                    File bitmap = getDrawerBackgroundFile(requireActivity(), true);
+                    if (bitmap.exists()) {
+                        Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                        lightSideBarPreference.setIcon(d);
+                    } else
+                        lightSideBarPreference.setIcon(R.drawable.dir_photo);
+                    bitmap = getDrawerBackgroundFile(requireActivity(), false);
+                    if (bitmap.exists()) {
+                        Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                        darkSideBarPreference.setIcon(d);
+                    } else
+                        darkSideBarPreference.setIcon(R.drawable.dir_photo);
                 }
                 return true;
             });
@@ -335,28 +444,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         findPreference("picture_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
-
-                    try {
-                        PicassoInstance.clear_cache();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
-                    }
+                    CleanImageCache(requireActivity(), true);
                     return true;
                 });
 
         findPreference("account_cache_cleaner")
                 .setOnPreferenceClickListener(preference -> {
                     DBHelper.removeDatabaseFor(requireActivity(), getAccountId());
-                    try {
-                        PicassoInstance.clear_cache();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(e.getLocalizedMessage());
-                    }
-                    PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.success);
+                    CleanImageCache(requireActivity(), true);
                     return true;
                 });
 
@@ -372,7 +467,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     return true;
                 });
 
-        CheckBoxPreference keepLongpoll = findPreference("keep_longpoll");
+        SwitchPreference keepLongpoll = findPreference("keep_longpoll");
         keepLongpoll.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean keep = (boolean) newValue;
             if (keep) {
@@ -429,35 +524,38 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         File file = getDrawerBackgroundFile(requireActivity(), light);
 
-        Bitmap original = null;
-        FileOutputStream fos = null;
+        Bitmap original;
 
-        try {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             original = BitmapFactory.decodeFile(photo.getFullImageUri().getPath());
-
-            tryDeleteFile(file);
-
-            fos = new FileOutputStream(file);
 
             original.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
             fos.flush();
+            Drawable d = Drawable.createFromPath(file.getAbsolutePath());
+            if (light) {
+                Preference lightSideBarPreference = findPreference("chat_light_background");
+                if (lightSideBarPreference != null)
+                    lightSideBarPreference.setIcon(d);
+            } else {
+                Preference darkSideBarPreference = findPreference("chat_dark_background");
+                if (darkSideBarPreference != null)
+                    darkSideBarPreference.setIcon(d);
+            }
         } catch (IOException e) {
-            Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-            return;
-        } finally {
-            safelyRecycle(original);
-            safelyClose(fos);
+            PhoenixToast.CreatePhoenixToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToastError(e.getMessage());
         }
-
-        PicassoInstance.with().invalidate(file);
     }
 
-    private void openAboutUs() {
+    private void ShowDialogInfo() {
         View view = View.inflate(requireActivity(), R.layout.dialog_about_us, null);
         new MaterialAlertDialogBuilder(requireActivity())
                 .setView(view)
                 .show();
+    }
+
+    private void openAboutUs() {
+        ShowDialogInfo();
     }
 
     private void resolveAvatarStyleViews(int style, ImageView circle, ImageView oval) {

@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -15,8 +17,8 @@ import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.fave.FavePhotosAdapter;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.TmpSource;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentPhotoPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentPhotosView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentPhotoPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentPhotosView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
@@ -41,6 +43,7 @@ public class ConversationPhotosFragment extends AbsChatAttachmentsFragment<Photo
         getPresenter().firePhotoClick(position, photo);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentPhotoPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

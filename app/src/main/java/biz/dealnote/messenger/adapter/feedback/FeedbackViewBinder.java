@@ -100,7 +100,7 @@ public class FeedbackViewBinder {
         holder.cChangable.setVisibility(View.GONE);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         setupAttachmentViewWithVideo((Video) notification.getCommentOf(), holder.ivRightAttachment);
 
@@ -170,7 +170,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         setupAttachmentViewWithPhoto((Photo) notification.getCommentOf(), holder.ivRightAttachment);
         solveOwnerOpenByAvatar(holder.cOwnerAvatar, feedback.getFromId());
@@ -217,7 +217,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         holder.ivRightAttachment.setVisibility(View.GONE);
 
@@ -252,7 +252,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         holder.ivRightAttachment.setVisibility(View.GONE);
 
@@ -289,7 +289,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         holder.ivRightAttachment.setVisibility(View.GONE);
 
@@ -330,7 +330,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         holder.ivRightAttachment.setVisibility(View.GONE);
         solveOwnerOpenByAvatar(holder.cOwnerAvatar, feedback.getAuthorId());
@@ -367,7 +367,7 @@ public class FeedbackViewBinder {
         holder.cChangable.setVisibility(View.GONE);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         showUserAvatarOnImageView(feedback.getMaxAuthorAvaUrl(), holder.cOwnerAvatar);
         setupAttachmentViewWithVideo((Video) notification.getCommentOf(), holder.ivRightAttachment);
@@ -403,7 +403,7 @@ public class FeedbackViewBinder {
         holder.cChangable.setVisibility(View.GONE);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         showUserAvatarOnImageView(feedback.getMaxAuthorAvaUrl(), holder.cOwnerAvatar);
         setupAttachmentViewWithPhoto((Photo) notification.getCommentOf(), holder.ivRightAttachment);
@@ -446,7 +446,7 @@ public class FeedbackViewBinder {
         holder.cChangable.setVisibility(View.GONE);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         String postImage = post.findFirstImageCopiesInclude();
         if (TextUtils.isEmpty(postImage)) {
@@ -499,7 +499,7 @@ public class FeedbackViewBinder {
         holder.cOwnerTime.setText(spannable, TextView.BufferType.SPANNABLE);
         holder.cChangable.setVisibility(View.GONE);
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         setupAttachmentViewWithVideo((Video) notification.getCommentsOf(), holder.ivRightAttachment);
 
@@ -546,7 +546,7 @@ public class FeedbackViewBinder {
         holder.cOwnerTime.setText(spannable, TextView.BufferType.SPANNABLE);
         holder.cChangable.setVisibility(View.GONE);
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         showUserAvatarOnImageView(feedback.getMaxAuthorAvaUrl(), holder.cOwnerAvatar);
         solveOwnerOpenByAvatar(holder.cOwnerAvatar, feedback.getFromId());
@@ -570,7 +570,7 @@ public class FeedbackViewBinder {
         holder.cOwnerText.setText(feedBackText);
         holder.cOwnerText.setVisibility(TextUtils.isEmpty(feedBackText) ? View.GONE : View.VISIBLE);
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         String action = getDateFromUnixTime(feedback.getDate());
         action = action + SPACE + context.getString(R.string.in_reply_to_your_message_in_topic);
@@ -640,7 +640,7 @@ public class FeedbackViewBinder {
                 .into(holder.cOwnerAvatar);
 
         AttachmentsHolder containers = AttachmentsHolder.forFeedback(holder.vAttachmentsRoot);
-        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true);
+        attachmentsViewBinder.displayAttachments(feedback.getAttachments(), containers, true, null);
 
         holder.ivRightAttachment.setVisibility(View.GONE);
         solveOwnerOpenByAvatar(holder.cOwnerAvatar, feedback.getFromId());
@@ -685,7 +685,7 @@ public class FeedbackViewBinder {
             ViewUtils.displayAvatar(holder.cReplyOwnerAvatar, transformation, authorAvaUrl, Constants.PICASSO_TAG);
 
             AttachmentsHolder replyContainers = AttachmentsHolder.forFeedback(holder.vReplyAttachmentsRoot);
-            attachmentsViewBinder.displayAttachments(reply.getAttachments(), replyContainers, true);
+            attachmentsViewBinder.displayAttachments(reply.getAttachments(), replyContainers, true, null);
 
             holder.cReplyOwnerAvatar.setOnClickListener(v -> openOwner(reply.getFromId()));
         }
@@ -1189,7 +1189,7 @@ public class FeedbackViewBinder {
      * @param imageView вьюв
      */
     private void showFirstUserAvatarOnImageView(List<Owner> owners, ImageView imageView) {
-        if (owners == null || owners.size() == 0 || TextUtils.isEmpty(owners.get(0).getMaxSquareAvatar())) {
+        if (owners == null || owners.isEmpty() || TextUtils.isEmpty(owners.get(0).getMaxSquareAvatar())) {
             PicassoInstance.with()
                     .load(R.drawable.ic_avatar_unknown)
                     .tag(Constants.PICASSO_TAG)

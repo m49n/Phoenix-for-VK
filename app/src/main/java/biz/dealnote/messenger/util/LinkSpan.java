@@ -9,11 +9,12 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.fragment.app.FragmentActivity;
 
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.link.LinkHelper;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 
@@ -31,15 +32,22 @@ public class LinkSpan extends ClickableSpan {
 
     @Override
     public void onClick(@NonNull View widget) {
-        new MaterialAlertDialogBuilder(context)
-                .setPositiveButton(R.string.open, (dialog, which) -> LinkHelper.openUrl((Activity) context, Settings.get().accounts().getCurrent(), link))
-                .setNegativeButton(R.string.copy_simple, (dialog1, which1) -> {
+        ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+        menus.add(new OptionRequest(R.id.button_ok, context.getString(R.string.open), R.drawable.web));
+        menus.add(new OptionRequest(R.id.button_cancel, context.getString(R.string.copy_simple), R.drawable.content_copy));
+        menus.show(((FragmentActivity) context).getSupportFragmentManager(), "left_options", option -> {
+            switch (option.getId()) {
+                case R.id.button_ok:
+                    LinkHelper.openUrl((Activity) context, Settings.get().accounts().getCurrent(), link);
+                    break;
+                case R.id.button_cancel:
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("response", link);
                     clipboard.setPrimaryClip(clip);
                     PhoenixToast.CreatePhoenixToast(context).showToast(R.string.copied_to_clipboard);
-                })
-                .show();
+                    break;
+            }
+        });
     }
 
     @Override

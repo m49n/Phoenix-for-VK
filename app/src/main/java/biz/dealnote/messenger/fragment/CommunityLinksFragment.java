@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -30,10 +32,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityLinksFragment extends BaseMvpFragment<CommunityLinksPresenter, ICommunityLinksView>
         implements ICommunityLinksView, CommunityLinksAdapter.ActionListener {
 
@@ -70,6 +68,7 @@ public class CommunityLinksFragment extends BaseMvpFragment<CommunityLinksPresen
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityLinksPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityLinksPresenter(

@@ -7,10 +7,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
 public class BlacklistRepository implements IBlacklistRepository {
 
     private final PublishSubject<Pair<Integer, User>> addPublisher;

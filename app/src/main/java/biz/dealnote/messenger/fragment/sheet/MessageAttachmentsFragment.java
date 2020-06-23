@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +52,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 14.04.2017.
- * phoenix
- */
 public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<MessageAttachmentsPresenter,
         IMessageAttachmentsView> implements IMessageAttachmentsView, AttachmentsBottomSheetAdapter.ActionListener {
 
@@ -98,6 +96,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         view.findViewById(R.id.button_audio).setOnClickListener(v -> getPresenter().fireButtonAudioClick());
         view.findViewById(R.id.button_doc).setOnClickListener(v -> getPresenter().fireButtonDocClick());
         view.findViewById(R.id.button_camera).setOnClickListener(v -> getPresenter().fireButtonCameraClick());
+        view.findViewById(R.id.button_photo_settings).setOnClickListener(v -> getPresenter().fireCompressSettings(requireActivity()));
 
         dialog.setContentView(view);
         fireViewCreated();
@@ -126,6 +125,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MessageAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -272,6 +272,11 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     @Override
     public void onButtonRemoveClick(AttachmenEntry entry) {
         getPresenter().fireRemoveClick(entry);
+    }
+
+    @Override
+    public void onButtonRetryClick(AttachmenEntry entry) {
+        getPresenter().fireRetryClick(entry);
     }
 
     @Override

@@ -5,10 +5,6 @@ import androidx.annotation.DrawableRes;
 import biz.dealnote.messenger.model.Icon;
 import biz.dealnote.messenger.model.Text;
 
-/**
- * Created by admin on 11.06.2017.
- * phoenix
- */
 public class AdvancedItem {
 
     private static final int TYPE_DEFAULT = 0;

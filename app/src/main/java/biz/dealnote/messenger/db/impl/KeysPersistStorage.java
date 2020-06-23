@@ -22,10 +22,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 20.10.2016.
- * phoenix
- */
 class KeysPersistStorage extends AbsStorage implements IKeysStorage {
 
     KeysPersistStorage(@NonNull AppStorages context) {

@@ -19,8 +19,8 @@ import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
-import biz.dealnote.messenger.mvp.presenter.history.BaseChatAttachmentsPresenter;
-import biz.dealnote.messenger.mvp.view.IBaseChatAttachmentsView;
+import biz.dealnote.messenger.mvp.presenter.conversations.BaseChatAttachmentsPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IBaseChatAttachmentsView;
 import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;

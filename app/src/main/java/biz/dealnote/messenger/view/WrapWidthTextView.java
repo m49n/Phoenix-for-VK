@@ -9,10 +9,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by ruslan.kolbasa on 06-Jun-16.
- * phoenix
- */
 public class WrapWidthTextView extends AppCompatTextView {
 
     private boolean mFixWrapText;

@@ -8,10 +8,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.crypt.KeyLocationPolicy;
 
-/**
- * Created by ruslan.kolbasa on 06.10.2016.
- * phoenix
- */
 public class SaveMessageBuilder {
 
     private int accountId;
@@ -24,6 +20,7 @@ public class SaveMessageBuilder {
     private boolean requireEncryption;
 
     private Integer draftMessageId;
+    private String payload;
 
     @KeyLocationPolicy
     private int keyLocationPolicy;
@@ -119,6 +116,15 @@ public class SaveMessageBuilder {
 
     public SaveMessageBuilder setKeyLocationPolicy(int keyLocationPolicy) {
         this.keyLocationPolicy = keyLocationPolicy;
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public SaveMessageBuilder setPayload(String payload) {
+        this.payload = payload;
         return this;
     }
 }

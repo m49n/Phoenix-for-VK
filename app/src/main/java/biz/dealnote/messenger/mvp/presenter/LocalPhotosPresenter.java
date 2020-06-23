@@ -19,10 +19,6 @@ import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
 public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
     private static final String TAG = LocalPhotosPresenter.class.getSimpleName();
@@ -116,7 +112,7 @@ public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
     public void fireFabClick() {
         ArrayList<LocalPhoto> localPhotos = Utils.getSelected(mLocalPhotos);
-        if (localPhotos.size() > 0) {
+        if (!localPhotos.isEmpty()) {
             getView().returnResultToParent(localPhotos);
         } else {
             safeShowError(getView(), R.string.select_attachments);

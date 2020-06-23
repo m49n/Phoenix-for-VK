@@ -71,7 +71,7 @@ public class TopicsAdapter extends RecyclerBindableAdapter<Topic, TopicsAdapter.
             return false;
         });
 
-        String avaUrl = Objects.isNull(item.getCreator()) ? null : item.getCreator().getMaxSquareAvatar();
+        String avaUrl = Objects.isNull(item.getUpdater()) ? null : item.getUpdater().getMaxSquareAvatar();
 
         if (isEmpty(avaUrl)) {
             PicassoInstance.with()

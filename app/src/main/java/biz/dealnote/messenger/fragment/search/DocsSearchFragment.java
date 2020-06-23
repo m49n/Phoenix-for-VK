@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ import biz.dealnote.messenger.mvp.presenter.search.DocsSearchPresenter;
 import biz.dealnote.messenger.mvp.view.search.IDocSearchView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class DocsSearchFragment extends AbsSearchFragment<DocsSearchPresenter, IDocSearchView, Document>
+public class DocsSearchFragment extends AbsSearchFragment<DocsSearchPresenter, IDocSearchView, Document, DocsAdapter>
         implements DocsAdapter.ActionListener, IDocSearchView {
 
     public static DocsSearchFragment newInstance(int accountId, @Nullable DocumentSearchCriteria initialCriteria) {
@@ -30,12 +33,17 @@ public class DocsSearchFragment extends AbsSearchFragment<DocsSearchPresenter, I
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Document> data) {
-        ((DocsAdapter) adapter).setItems(data);
+    void setAdapterData(DocsAdapter adapter, List<Document> data) {
+        adapter.setItems(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Document> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    DocsAdapter createAdapter(List<Document> data) {
         DocsAdapter adapter = new DocsAdapter(data);
         adapter.setActionListner(this);
         return adapter;
@@ -56,6 +64,7 @@ public class DocsSearchFragment extends AbsSearchFragment<DocsSearchPresenter, I
         return false;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DocsSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DocsSearchPresenter(

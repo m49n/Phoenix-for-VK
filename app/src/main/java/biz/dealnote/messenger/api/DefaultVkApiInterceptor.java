@@ -4,10 +4,6 @@ import com.google.gson.Gson;
 
 import biz.dealnote.messenger.settings.Settings;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
 public class DefaultVkApiInterceptor extends AbsVkApiInterceptor {
 
     private final int accountId;

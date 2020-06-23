@@ -20,10 +20,7 @@ import biz.dealnote.mvp.reflect.OnGuiCreated;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
+
 public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommunityOptionsView> {
 
     private static final int REQUEST_CATEGORY = 1;

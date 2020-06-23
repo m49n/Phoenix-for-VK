@@ -25,10 +25,6 @@ import biz.dealnote.messenger.view.ColorFilterImageView;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 11.06.2017.
- * phoenix
- */
 public class MenuAdapter extends ArrayAdapter<Item> {
 
     public MenuAdapter(@NonNull Context context, @NonNull List<Item> items) {

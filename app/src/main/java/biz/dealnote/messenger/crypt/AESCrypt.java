@@ -13,10 +13,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Created by Emin on 30.11.2017.
- */
-
 public final class AESCrypt {
 
     private static final String TAG = "AESCrypt";
@@ -52,8 +48,7 @@ public final class AESCrypt {
 
         log("SHA-256 key ", key);
 
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        return secretKeySpec;
+        return new SecretKeySpec(key, "AES");
     }
 
     /**

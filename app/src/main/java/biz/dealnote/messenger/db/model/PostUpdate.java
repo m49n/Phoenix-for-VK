@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.db.model;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public class PostUpdate {
 
     private final int accountId;

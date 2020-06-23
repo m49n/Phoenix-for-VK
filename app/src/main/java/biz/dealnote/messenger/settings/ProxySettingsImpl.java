@@ -18,15 +18,11 @@ import io.reactivex.subjects.PublishSubject;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
 public class ProxySettingsImpl implements IProxySettings {
 
-    private final static String PREF_NAME = "proxy_settings";
-    private final static String KEY_NEXT_ID = "next_id";
-    private final static String KEY_LIST = "list";
+    private static final String PREF_NAME = "proxy_settings";
+    private static final String KEY_NEXT_ID = "next_id";
+    private static final String KEY_LIST = "list";
     private static final String KEY_ACTIVE = "active_proxy";
 
     private static final Gson GSON = new Gson();

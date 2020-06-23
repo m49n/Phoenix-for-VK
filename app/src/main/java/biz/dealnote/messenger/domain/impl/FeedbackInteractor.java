@@ -37,10 +37,6 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.domain.mappers.Entity2Model.fillCommentOwnerIds;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
 public class FeedbackInteractor implements IFeedbackInteractor {
 
     private final IStorages cache;

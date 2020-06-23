@@ -20,10 +20,6 @@ import biz.dealnote.messenger.util.RoundTransformation;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 16.05.2017.
- * phoenix
- */
 public abstract class AbsPostEditFragment<P extends AbsPostEditPresenter<V>, V extends IBasePostEditView>
         extends AbsAttachmentsEditFragment<P, V> implements IBasePostEditView {
 

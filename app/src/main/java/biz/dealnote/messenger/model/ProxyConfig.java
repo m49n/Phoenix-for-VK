@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import biz.dealnote.messenger.api.model.Identificable;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
+
 public class ProxyConfig implements Identificable {
 
     private final int id;

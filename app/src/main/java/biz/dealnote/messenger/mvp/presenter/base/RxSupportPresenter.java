@@ -25,10 +25,6 @@ import io.reactivex.disposables.Disposable;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
 public abstract class RxSupportPresenter<V extends IMvpView> extends AbsPresenter<V> {
 
     private static final String SAVE_INSTANCE_ID = "save_instance_id";

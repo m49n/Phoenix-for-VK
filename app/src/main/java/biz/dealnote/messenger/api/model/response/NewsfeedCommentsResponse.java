@@ -11,10 +11,6 @@ import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 
-/**
- * Created by admin on 07.05.2017.
- * phoenix
- */
 public class NewsfeedCommentsResponse {
 
     @SerializedName("items")
@@ -29,7 +25,7 @@ public class NewsfeedCommentsResponse {
     @SerializedName("next_from")
     public String nextFrom;
 
-    public static abstract class Dto {
+    public abstract static class Dto {
 
     }
 

@@ -12,28 +12,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/videoSurface"
+        <biz.dealnote.messenger.view.AlternativeAspectRatioFrameLayout
+            android:id="@+id/aspect_ratio_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:controller_layout_id="@layout/player_controls" />
+            android:layout_gravity="center">
+
+            <SurfaceView
+                android:id="@+id/videoSurface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </biz.dealnote.messenger.view.AlternativeAspectRatioFrameLayout>
     </FrameLayout>
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:background="@drawable/toolbar_semitransparent"
         android:clipToPadding="true"
         android:theme="@style/Theme.Toolbar.Video"
         app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        app:subtitleTextColor="?colorSecondary">
+        app:subtitleTextColor="?colorSecondary"
+        app:titleTextAppearance="@style/TextAppearance.Toolbar.Title">
 
         <ImageView
             android:id="@+id/toolbar_avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_gravity="end" />
+            android:layout_gravity="end"
+            android:stateListAnimator="@animator/clicked" />
     </com.google.android.material.appbar.MaterialToolbar>
 
 </RelativeLayout>

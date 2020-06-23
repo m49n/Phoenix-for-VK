@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -20,10 +22,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 27.03.2017.
- * phoenix
- */
 public class CommentCreateFragment extends AbsAttachmentsEditFragment<CommentCreatePresenter, ICreateCommentView>
         implements ICreateCommentView {
 
@@ -60,6 +58,7 @@ public class CommentCreateFragment extends AbsAttachmentsEditFragment<CommentCre
         return super.onOptionsItemSelected(item);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommentCreatePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

@@ -25,10 +25,6 @@ import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.model.Community;
 import biz.dealnote.messenger.model.GroupSettings;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityControlFragment extends Fragment {
 
     private Community mCommunity;
@@ -71,9 +67,8 @@ public class CommunityControlFragment extends Fragment {
         Adapter tab_set = new Adapter(tabs, this);
         pager.setAdapter(tab_set);
 
-        new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (TabLayoutMediator.TabConfigurationStrategy) (tab, position) -> {
-            tab.setText(tab_set.tabs.get(position).getTabTitle());
-        }).attach();
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), pager, (tab, position) ->
+                tab.setText(tab_set.tabs.get(position).getTabTitle())).attach();
         return root;
     }
 

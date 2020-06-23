@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,11 +88,13 @@ import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.MessageStatus;
 import biz.dealnote.messenger.model.MessageUpdate;
 import biz.dealnote.messenger.model.Owner;
+import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.PeerDeleting;
 import biz.dealnote.messenger.model.PeerUpdate;
 import biz.dealnote.messenger.model.SaveMessageBuilder;
 import biz.dealnote.messenger.model.SentMsg;
+import biz.dealnote.messenger.model.Sex;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.WriteText;
 import biz.dealnote.messenger.model.criteria.DialogsCriteria;
@@ -120,6 +123,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
 
+import static biz.dealnote.messenger.longpoll.NotificationHelper.tryCancelNotificationForPeer;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.RxUtils.ignore;
@@ -131,10 +135,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 import static biz.dealnote.messenger.util.Utils.safelyClose;
 
-/**
- * Created by admin on 03.09.2017.
- * В этом классе сосредоточена вся бизнес-логика для работы с сообщениями
- */
 public class MessagesRepository implements IMessagesRepository {
 
     private static final SingleTransformer<List<VKApiMessage>, List<MessageEntity>> DTO_TO_DBO = single -> single
@@ -283,7 +283,7 @@ public class MessagesRepository implements IMessagesRepository {
 
         compositeDisposable.add(uploadManager.get(accountId, upload.getDestination())
                 .flatMap(uploads -> {
-                    if (uploads.size() > 0) {
+                    if (!uploads.isEmpty()) {
                         return Single.just(false);
                     }
 
@@ -373,6 +373,22 @@ public class MessagesRepository implements IMessagesRepository {
         });
     }
 
+    @StringRes
+    private int GetTypeUser(OwnerInfo ownr) {
+        if (ownr.getOwner().getOwnerType() == OwnerType.USER) {
+            switch (ownr.getUser().getSex()) {
+                case Sex.MAN:
+                    return R.string.user_readed_yor_message_man;
+                case Sex.WOMAN:
+                    return R.string.user_readed_yor_message_woman;
+                case Sex.UNKNOWN:
+                default:
+                    return R.string.user_readed_yor_message;
+            }
+        }
+        return R.string.user_readed_yor_message;
+    }
+
     @Override
     public Completable handleReadUpdates(int accountId, @Nullable List<OutputMessagesSetReadUpdate> outgoing, @Nullable List<InputMessagesSetReadUpdate> incoming) {
         List<PeerPatch> patches = new ArrayList<>();
@@ -385,7 +401,7 @@ public class MessagesRepository implements IMessagesRepository {
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
                                 Handler handlerMain = new Handler(Looper.getMainLooper());
-                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).setBitmap(userInfo.getAvatar()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(R.string.user_readed_yor_message)));
+                                handlerMain.post(() -> PhoenixToast.CreatePhoenixToast(Injection.provideApplicationContext()).setBitmap(userInfo.getAvatar()).showToastInfo(userInfo.getOwner().getFullName() + " " + Injection.provideApplicationContext().getString(GetTypeUser(userInfo))));
                             }, throwable -> {
                             }));
                 }
@@ -396,6 +412,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (nonEmpty(incoming)) {
             for (InputMessagesSetReadUpdate update : incoming) {
                 patches.add(new PeerPatch(update.peer_id).withInRead(update.local_id).withUnreadCount(update.unread_count));
+                tryCancelNotificationForPeer(Injection.provideApplicationContext(), accountId, update.getPeerId());
             }
         }
 
@@ -854,6 +871,7 @@ public class MessagesRepository implements IMessagesRepository {
                     final MessageEditEntity patch = new MessageEditEntity(status, accountId);
 
                     patch.setEncrypted(builder.isRequireEncryption());
+                    patch.setPayload(builder.getPayload());
                     patch.setDate(Unixtime.now());
                     patch.setRead(false);
                     patch.setOut(true);
@@ -1151,7 +1169,7 @@ public class MessagesRepository implements IMessagesRepository {
             invalidatePeers.add(invalidatePeerLastMessage(pair.accountId, pair.peerId));
         }
 
-        if (invalidatePeers.size() > 0) {
+        if (!invalidatePeers.isEmpty()) {
             afterApply = Completable.merge(invalidatePeers);
         }
 
@@ -1205,6 +1223,13 @@ public class MessagesRepository implements IMessagesRepository {
     }
 
     @Override
+    public Single<Integer> recogniseAudioMessage(int accountId, Integer message_id, String audio_message_id) {
+        return networker.vkDefault(accountId)
+                .messages()
+                .recogniseAudioMessage(message_id, audio_message_id);
+    }
+
+    @Override
     public Completable markAsRead(int accountId, int peerId, int toId) {
         PeerPatch patch = new PeerPatch(peerId).withInRead(toId).withUnreadCount(0);
         return networker.vkDefault(accountId)
@@ -1241,7 +1266,7 @@ public class MessagesRepository implements IMessagesRepository {
         if (isEmpty(dbo.getExtras()) && isEmpty(dbo.getAttachments()) && dbo.getForwardCount() == 0) {
             return networker.vkDefault(accountId)
                     .messages()
-                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null);
+                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, null, null, null, dbo.getPayload());
         }
 
         final Collection<IAttachmentToken> attachments = new LinkedList<>();
@@ -1254,7 +1279,7 @@ public class MessagesRepository implements IMessagesRepository {
 
                         return networker.vkDefault(accountId)
                                 .messages()
-                                .send(dbo.getId(), dbo.getPeerId(), null, null, null, null, null, null, stickerId);
+                                .send(dbo.getId(), dbo.getPeerId(), null, null, null, null, null, null, stickerId, null);
                     }
 
                     attachments.add(Entity2Dto.createToken(a));
@@ -1273,7 +1298,7 @@ public class MessagesRepository implements IMessagesRepository {
                     return checkForwardMessages(accountId, dbo)
                             .flatMap(optionalFwd -> networker.vkDefault(accountId)
                                     .messages()
-                                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, attachments, optionalFwd.get(), null));
+                                    .send(dbo.getId(), dbo.getPeerId(), null, dbo.getBody(), null, null, attachments, optionalFwd.get(), null, null));
                 });
     }
 
@@ -1399,10 +1424,8 @@ public class MessagesRepository implements IMessagesRepository {
 
         @Override
         public void handleMessage(@NonNull MessagesRepository repository, @NonNull android.os.Message msg) {
-            switch (msg.what) {
-                case SEND:
-                    repository.send();
-                    break;
+            if (msg.what == SEND) {
+                repository.send();
             }
         }
     }

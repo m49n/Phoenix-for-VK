@@ -1,6 +1,9 @@
 package biz.dealnote.messenger.media.voice;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,13 +21,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-
 import biz.dealnote.messenger.Constants;
-import biz.dealnote.messenger.api.ProxyUtil;
-import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory;
 import biz.dealnote.messenger.media.exo.ExoEventAdapter;
 import biz.dealnote.messenger.media.exo.ExoUtil;
 import biz.dealnote.messenger.model.ProxyConfig;
@@ -33,14 +30,11 @@ import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.util.Logger;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Optional;
+import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by r.kolbasa on 28.11.2017.
- * Phoenix-for-VK
- */
 public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     private final Context app;
@@ -56,15 +50,18 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
     private boolean isProximityNear;
     private boolean isPlaying;
     private PowerManager.WakeLock proximityWakelock;
+    private MusicIntentReceiver headset;
     private boolean HasPlaying;
 
     private boolean Registered;
     private boolean ProximitRegistered;
+    private boolean isHeadset;
 
     public ExoVoicePlayer(Context context, ProxyConfig config) {
         this.app = context.getApplicationContext();
         this.proxyConfig = config;
         this.status = STATUS_NO_PLAYBACK;
+        this.headset = new MusicIntentReceiver();
 
         sensorManager = (SensorManager) this.app.getSystemService(Context.SENSOR_SERVICE);
         proxym = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -101,8 +98,11 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
                 HasPlaying = true;
             }
             isProximityNear = false;
+            isHeadset = false;
             exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), false);
             sensorManager.registerListener(ExoVoicePlayer.this, proxym, SensorManager.SENSOR_DELAY_NORMAL);
+            IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+            app.registerReceiver(headset, filter);
         } catch (Exception ignored) {
         }
     }
@@ -113,6 +113,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
         try {
             Registered = false;
             sensorManager.unregisterListener(ExoVoicePlayer.this);
+            app.unregisterReceiver(headset);
             if (HasPlaying) {
                 MusicUtils.playOrPause();
                 MusicUtils.notifyForegroundStateChanged(app, false);
@@ -123,6 +124,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
                 proximityWakelock.release();
             }
             isProximityNear = false;
+            isHeadset = false;
             isPlaying = false;
         } catch (Exception ignored) {
         }
@@ -140,6 +142,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     private void preparePlayer() {
         isProximityNear = false;
+        isHeadset = false;
         isPlaying = false;
         setStatus(STATUS_PREPARING);
 
@@ -151,24 +154,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
         // DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
         // DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(App.getInstance(), Util.getUserAgent(App.getInstance(), "exoplayer2example"), bandwidthMeterA);
 
-        Proxy proxy = null;
-        if (nonNull(proxyConfig)) {
-            proxy = new Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(proxyConfig));
-            if (proxyConfig.isAuthEnabled()) {
-                Authenticator authenticator = new Authenticator() {
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(proxyConfig.getUser(), proxyConfig.getPass().toCharArray());
-                    }
-                };
-
-                Authenticator.setDefault(authenticator);
-            } else {
-                Authenticator.setDefault(null);
-            }
-        }
-
         String userAgent = Constants.USER_AGENT(null);
-        CustomHttpDataSourceFactory factory = new CustomHttpDataSourceFactory(userAgent, proxy);
 
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:
@@ -177,7 +163,7 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
         String url = playingEntry.getAudio().getLinkMp3();
 
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(Uri.parse(url));
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(Utils.getExoPlayerFactory(userAgent, proxyConfig)).createMediaSource(Uri.parse(url));
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
         exoPlayer.addListener(new ExoEventAdapter() {
             @Override
@@ -286,6 +272,8 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (isHeadset)
+            return;
         if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
             boolean newIsNear = event.values[0] < Math.min(event.sensor.getMaximumRange(), 3);
             if (newIsNear != isProximityNear) {
@@ -312,5 +300,37 @@ public class ExoVoicePlayer implements IVoicePlayer, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    private class MusicIntentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (java.util.Objects.equals(intent.getAction(), Intent.ACTION_HEADSET_PLUG)) {
+                int state = intent.getIntExtra("state", -1);
+                switch (state) {
+                    case 0:
+                        if (isHeadset) {
+                            isHeadset = false;
+                        }
+                        break;
+                    case 1:
+                        if (!isHeadset) {
+                            isHeadset = true;
+                            isProximityNear = false;
+                            try {
+                                if (ProximitRegistered) {
+                                    ProximitRegistered = false;
+                                    proximityWakelock.release(1); // this is non-public API before L
+                                }
+                                exoPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), false);
+                            } catch (Exception ignored) {
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

@@ -17,10 +17,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public class VideoAlbumsPresenter extends AccountDependencyPresenter<IVideoAlbumsView> {
 
     private static final int COUNT_PER_LOAD = 40;

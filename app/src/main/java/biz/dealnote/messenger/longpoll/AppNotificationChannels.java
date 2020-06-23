@@ -10,9 +10,6 @@ import androidx.annotation.RequiresApi;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by Emin on 10/4/2017.
- */
 public class AppNotificationChannels {
     public static final String CHAT_MESSAGE_CHANNEL_ID = "chat_message_channel";
     public static final String GROUP_CHAT_MESSAGE_CHANNEL_ID = "group_chat_message_channel";
@@ -102,7 +99,7 @@ public class AppNotificationChannels {
         String channelName = context.getString(R.string.downloading);
         NotificationChannel channel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
-        channel.enableVibration(true);
+        channel.enableVibration(false);
         return channel;
     }
 

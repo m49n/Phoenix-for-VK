@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model.criteria;
 
 import biz.dealnote.messenger.db.DatabaseIdRange;
 
-/**
- * Created by ruslan.kolbasa on 06-Jun-16.
- * phoenix
- */
 public class WallCriteria extends Criteria {
 
     public static final int MODE_ALL = 0;

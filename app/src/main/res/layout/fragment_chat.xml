@@ -19,7 +19,9 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:clipToPadding="true"
                 android:theme="@style/Theme.Toolbar.Surface"
                 app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
@@ -34,8 +36,9 @@
 
                     <ImageView
                         android:id="@+id/toolbar_avatar"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp" />
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:stateListAnimator="@animator/clicked" />
 
                     <TextView
                         android:id="@+id/empty_avatar_text"
@@ -45,16 +48,17 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:text="Aa"
+                        android:text="@string/voice_click"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:textAllCaps="true" />
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_toStartOf="@id/avatar_root"
                     android:orientation="vertical">
 
@@ -98,7 +102,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?message_bubble_color"
+            android:background="?android:colorBackground"
             android:padding="4dp">
 
             <ImageView
@@ -120,15 +124,18 @@
 
                 <TextView
                     android:id="@+id/pinned_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                     tools:text="Artem Kolbasa" />
 
                 <TextView
                     android:id="@+id/pinned_subtitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:maxLines="2"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     tools:text="Hi! How are you?" />
@@ -167,7 +174,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:scrollbarSize="2dp"
             android:scrollbars="vertical" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -190,9 +197,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pinned_root_view"
         android:layout_centerHorizontal="true"
-        android:layout_margin="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="2dp"
+        app:cardElevation="4dp"
         app:contentPadding="0dp">
 
         <RelativeLayout
@@ -201,8 +211,9 @@
 
             <ImageView
                 android:id="@+id/writingava"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/avatar_size_small"
+                android:layout_height="@dimen/avatar_size_small"
+                android:layout_marginEnd="4dp"
                 android:padding="8dp" />
 
             <TextView
@@ -211,15 +222,17 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/writingava"
-                android:maxLines="2"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 tools:text="@string/user_type_message" />
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/avatar_size_small"
+                android:layout_height="@dimen/avatar_size_small"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/writing"
+                android:padding="10dp"
                 android:src="@drawable/pencil"
                 app:tint="?android:attr/textColorPrimary" />
 

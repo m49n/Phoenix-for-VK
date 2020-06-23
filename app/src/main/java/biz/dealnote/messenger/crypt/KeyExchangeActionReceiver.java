@@ -11,10 +11,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by ruslan.kolbasa on 21.10.2016.
- * phoenix
- */
 public class KeyExchangeActionReceiver extends BroadcastReceiver {
 
     @Override

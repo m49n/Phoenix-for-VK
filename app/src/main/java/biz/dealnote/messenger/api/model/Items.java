@@ -4,10 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by admin on 21.12.2016.
- * phoenix
- */
 public class Items<I> {
 
     @SerializedName("count")

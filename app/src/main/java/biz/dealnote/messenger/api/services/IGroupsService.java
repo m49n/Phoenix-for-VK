@@ -15,10 +15,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public interface IGroupsService {
 
     @FormUrlEncoded

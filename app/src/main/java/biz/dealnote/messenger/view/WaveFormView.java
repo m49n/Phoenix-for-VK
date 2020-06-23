@@ -17,10 +17,7 @@ import java.lang.ref.WeakReference;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Exestime;
 
-/**
- * Created by admin on 09.10.2016.
- * phoenix
- */
+
 public class WaveFormView extends View {
 
     private static final Paint PAINT = new Paint(Paint.FILTER_BITMAP_FLAG
@@ -132,7 +129,7 @@ public class WaveFormView extends View {
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, PROGRESS_PROPERTY, progress);
         mAnimator = new WeakReference<>(animator);
 
-        animator.setDuration(750);
+        animator.setDuration(500);
         //animator.setInterpolator(new AccelerateInterpolator(1.75f));
         animator.start();
     }
@@ -180,7 +177,7 @@ public class WaveFormView extends View {
     }
 
     private float calculateSectionWidth() {
-        int count = mWaveForm.length * 3 - 1;
+        int count = (int) (mWaveForm.length * 3.5 - 1);
         return (float) getWidth() / (float) count;
     }
 

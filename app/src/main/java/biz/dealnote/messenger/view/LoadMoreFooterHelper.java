@@ -13,7 +13,7 @@ public class LoadMoreFooterHelper {
 
     public Callback callback;
     public Holder holder;
-    public int state;
+    public int state = LoadMoreState.INVISIBLE;
 
     public static LoadMoreFooterHelper createFrom(View view, final Callback callback) {
         LoadMoreFooterHelper helper = new LoadMoreFooterHelper();
@@ -56,9 +56,6 @@ public class LoadMoreFooterHelper {
                 holder.bLoadMore.setVisibility(View.VISIBLE);
                 break;
             case LoadMoreState.INVISIBLE:
-                holder.tvEndOfList.setVisibility(View.GONE);
-                holder.progress.setVisibility(View.GONE);
-                holder.bLoadMore.setVisibility(View.GONE);
                 break;
         }
     }

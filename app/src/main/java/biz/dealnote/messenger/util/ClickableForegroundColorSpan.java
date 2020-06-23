@@ -8,13 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 
-/**
- * Created by danylo.volokh on 12/22/2015.
- * This class is a combination of {@link android.text.style.ForegroundColorSpan}
- * and {@link ClickableSpan}.
- * <p>
- * You can set a color of this span plus set a click listener
- */
 public class ClickableForegroundColorSpan extends ClickableSpan {
 
     private final int mColor;

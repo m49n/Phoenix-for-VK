@@ -3,10 +3,6 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ruslan.kolbasa on 05.12.2016.
- * phoenix
- */
 public class AccessIdPair implements Parcelable {
 
     public static final Creator<AccessIdPair> CREATOR = new Creator<AccessIdPair>() {

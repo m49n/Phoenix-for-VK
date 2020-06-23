@@ -2,10 +2,7 @@ package biz.dealnote.messenger.mvp.view;
 
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
+
 public interface IDirectAuthView extends IMvpView, IErrorView {
     void setLoginButtonEnabled(boolean enabled);
 

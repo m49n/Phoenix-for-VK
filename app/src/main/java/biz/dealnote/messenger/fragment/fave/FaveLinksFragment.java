@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -135,6 +137,7 @@ public class FaveLinksFragment extends BaseMvpFragment<FaveLinksPresenter, IFave
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<FaveLinksPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FaveLinksPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);

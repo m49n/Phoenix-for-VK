@@ -39,10 +39,6 @@ import biz.dealnote.messenger.view.FlingRelativeLayout;
 import biz.dealnote.messenger.view.pager.CloseOnFlingListener;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresenter, IGifPagerView>
         implements IGifPagerView {
 
@@ -144,6 +140,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<GifPagerPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -152,11 +149,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
             ArrayList<Document> documents = requireArguments().getParcelableArrayList(Extra.DOCS);
             AssertUtils.requireNonNull(documents);
-
-            // todo TEMP SOLUTION !!! FIX IT
-            if (documents.size() > 50) {
-                requireArguments().remove(Extra.DOCS);
-            }
 
             return new GifPagerPresenter(aid, documents, index, saveInstanceState);
         };
@@ -198,7 +190,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
     @Override
     public void setupAddRemoveButton(boolean addEnable) {
         if (Objects.nonNull(mButtonAddOrDelete)) {
-            mButtonAddOrDelete.setIcon(addEnable ? R.drawable.plus : R.drawable.delete);
+            mButtonAddOrDelete.setIcon(addEnable ? R.drawable.plus : R.drawable.ic_outline_delete);
         }
     }
 

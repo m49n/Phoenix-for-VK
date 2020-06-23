@@ -3,10 +3,6 @@ package biz.dealnote.messenger.fragment.search.nextfrom;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by hp-dv6 on 08.06.2016 with Core i7 2670QM.
- * VKMessenger
- */
 public class StringNextFrom extends AbsNextFrom implements Parcelable {
 
     public static final Creator<StringNextFrom> CREATOR = new Creator<StringNextFrom>() {

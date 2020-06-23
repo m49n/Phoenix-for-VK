@@ -12,11 +12,6 @@ import android.view.View;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.util.Utils;
 
-/**
- * Project: MobileBanking
- * Created by ruslan.kolbasa on 22-Apr-16.
- * View like saw ^^^^^^^^^^^^^^^^^^^^
- */
 public class SawView extends View {
 
     private static final Paint FILL_PAINT = new Paint();

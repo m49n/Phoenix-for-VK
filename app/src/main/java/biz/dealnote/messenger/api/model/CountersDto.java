@@ -2,10 +2,6 @@ package biz.dealnote.messenger.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Ruslan Kolbasa on 30.06.2017.
- * phoenix
- */
 public class CountersDto {
 
     @SerializedName("friends")

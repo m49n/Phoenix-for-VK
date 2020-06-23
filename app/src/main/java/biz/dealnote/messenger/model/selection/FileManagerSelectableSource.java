@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model.selection;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Ruslan Kolbasa on 16.08.2017.
- * phoenix
- */
+
 public class FileManagerSelectableSource extends AbsSelectableSource implements Parcelable {
 
     public static final Creator<FileManagerSelectableSource> CREATOR = new Creator<FileManagerSelectableSource>() {
@@ -27,11 +24,6 @@ public class FileManagerSelectableSource extends AbsSelectableSource implements 
 
     protected FileManagerSelectableSource(Parcel in) {
         super(in);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
     }
 
     @Override

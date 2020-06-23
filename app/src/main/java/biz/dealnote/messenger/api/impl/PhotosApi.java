@@ -27,10 +27,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 class PhotosApi extends AbsApi implements IPhotosApi {
 
     PhotosApi(int accountId, IServiceProvider provider) {

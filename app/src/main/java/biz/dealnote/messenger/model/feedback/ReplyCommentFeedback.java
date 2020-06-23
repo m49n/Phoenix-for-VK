@@ -7,10 +7,6 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.ParcelableModelWrapper;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public final class ReplyCommentFeedback extends Feedback implements Parcelable {
 
     public static final Creator<ReplyCommentFeedback> CREATOR = new Creator<ReplyCommentFeedback>() {

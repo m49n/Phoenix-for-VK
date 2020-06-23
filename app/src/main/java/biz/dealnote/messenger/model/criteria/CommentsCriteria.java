@@ -3,10 +3,6 @@ package biz.dealnote.messenger.model.criteria;
 import biz.dealnote.messenger.db.DatabaseIdRange;
 import biz.dealnote.messenger.model.Commented;
 
-/**
- * Created by ruslan.kolbasa on 28.11.2016.
- * phoenix
- */
 public class CommentsCriteria {
 
     private final Commented commented;

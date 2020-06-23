@@ -7,10 +7,7 @@ import androidx.annotation.StringRes;
 
 import biz.dealnote.messenger.adapter.horizontal.Entry;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class LogEventType implements Entry {
 
     private final int type;

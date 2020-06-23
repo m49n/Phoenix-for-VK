@@ -35,7 +35,6 @@ import static biz.dealnote.messenger.api.model.VkApiPostSource.Data.PROFILE_PHOT
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.intValueIn;
-import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeAllIsEmpty;
 
@@ -86,19 +85,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         return safeAllIsEmpty(attachments.getPhotos(), attachments.getVideos());
     }
 
-    public static boolean needToShowBottomDivider(Post post) {
-        if (post.getSignerId() > 0 && nonNull(post.getCreator())) {
-            return true;
-        }
-
-        if (isEmpty(post.getCopyHierarchy())) {
-            return isNull(post.getAttachments()) || !post.getAttachments().isPhotosVideosGifsOnly();
-        }
-
-        Post last = post.getCopyHierarchy().get(post.getCopyHierarchy().size() - 1);
-        return isNull(last.getAttachments()) || !last.getAttachments().isPhotosVideosGifsOnly();
-    }
-
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position, int type) {
         Post item = getItem(position);
@@ -136,7 +122,7 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
     }
 
     private void configNormalPost(final AbsPostHolder holder, final Post post) {
-        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.attachmentContainers, false);
+        attachmentsViewBinder.displayAttachments(post.getAttachments(), holder.attachmentContainers, false, null);
         attachmentsViewBinder.displayCopyHistory(post.getCopyHierarchy(), holder.attachmentContainers.getVgPosts(), true, R.layout.item_copy_history_post);
 
         holder.tvOwnerName.setText(post.getAuthorName());
@@ -170,7 +156,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         holder.root.setOnClickListener(v -> clickListener.onPostClick(post));
 
         holder.topDivider.setVisibility(View.GONE);
-        holder.bottomDivider.setVisibility(needToShowBottomDivider(post) ? View.VISIBLE : View.GONE);
 
         if (holder.viewCounterRoot != null) {
             holder.viewCounterRoot.setVisibility(post.getViewCount() > 0 ? View.VISIBLE : View.GONE);
@@ -195,11 +180,9 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
             }
 
             if (post.getSource().getPlatform() != null) {
-                switch (post.getSource().getPlatform()) {
-                    case "instagram":
-                        holder.ivPlatform.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.instagram));
-                        holder.ivPlatform.setVisibility(View.VISIBLE);
-                        break;
+                if ("instagram".equals(post.getSource().getPlatform())) {
+                    holder.ivPlatform.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.instagram));
+                    holder.ivPlatform.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -295,7 +278,7 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         void onLikeClick(Post post);
     }
 
-    private class DeletedHolder extends RecyclerView.ViewHolder {
+    private static class DeletedHolder extends RecyclerView.ViewHolder {
 
         Button bRestore;
 
@@ -321,7 +304,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
         View vSignerRoot;
         ImageView ivSignerIcon;
         TextView tvSignerName;
-        View bottomDivider;
         ImageView ivPlatform;
 
         AttachmentsHolder attachmentContainers;
@@ -337,7 +319,6 @@ public class WallAdapter extends RecyclerBindableAdapter<Post, RecyclerView.View
             tvText.setOnHashTagClickListener(mOnHashTagClickListener);
             tvShowMore = itemView.findViewById(R.id.item_post_show_more);
             tvTime = itemView.findViewById(R.id.item_post_time);
-            bottomDivider = itemView.findViewById(R.id.bottom_divider);
 
             ivFriendOnly = itemView.findViewById(R.id.item_post_friedns_only);
 

@@ -23,10 +23,6 @@ import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 04.06.2018.
- * Phoenix-for-VK
- */
 public class KeepLongpollService extends Service {
 
     private static final String ACTION_STOP = "KeepLongpollService.ACTION_STOP";

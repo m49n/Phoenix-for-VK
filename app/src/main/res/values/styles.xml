@@ -2,7 +2,6 @@
 
     <style name="Base.App.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?dividerColor</item>-->
-        <item name="android:fontFamily">@font/open_sans</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">?attr/colorPrimary</item>
         <item name="statusbarNonColoredColor">#000</item>
@@ -24,6 +23,8 @@
 
         <item name="materialCardViewStyle">@style/Theme.MaterialCardView</item>
         <item name="floatingActionButtonStyle">@style/Theme.FloatingActionButton</item>
+        <item name="fab_secondary">@style/Theme.FloatingActionButtonSecondary</item>
+        <item name="fab_player">@style/Theme.FloatingActionButtonSecondary</item>
 
         <item name="dividerColor">#E1E3E7</item>
 
@@ -35,23 +36,34 @@
 
         <item name="messages_background_color">#ECECEC</item>
         <item name="my_messages_bubble_color">#D4FFFFFF</item>
-        <item name="oval_avatar_background">@drawable/sel_button_round_4_white</item>
 
         <item name="message_bubble_color">#D4FFFFFF</item>
         <item name="navi_menu_color">@android:color/white</item>
-        <item name="toast_background">#EEFFFFFF</item>
+        <item name="toast_background">#3E3E3E</item>
 
         <item name="chat_background_cookies">@drawable/cookies_white</item>
         <item name="chat_background_lines">@drawable/lines_white</item>
         <item name="chat_background_runes">@drawable/runes_white</item>
 
         <item name="buttonAddPhotoBackground">@drawable/background_rectangle_dash_inverse</item>
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
     <style name="App.DayNight.Ice" parent="App.DayNight">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
         <item name="colorSecondary">#1E88E5</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
+        <item name="my_messages_bubble_color">#D490BDFF</item>
+    </style>
+
+    <style name="App.DayNight.IceGreen" parent="App.DayNight">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorControlNormal">#448AFF</item>
+        <item name="colorSecondary">#4CAF50</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA448AFF</item>
@@ -226,6 +238,8 @@
 
     <style name="App.DayNight.Ice.Amoled" parent="App.DayNight.Ice" />
 
+    <style name="App.DayNight.IceGreen.Amoled" parent="App.DayNight.IceGreen" />
+
     <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce" />
 
     <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed" />
@@ -260,22 +274,20 @@
         <item name="cardElevation">3dp</item>
     </style>
 
-    <style name="QuickReply" parent="Theme.MaterialComponents.Dialog">
+    <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorControlNormal">#448AFF</item>
+        <item name="colorSecondary">#82B1FF</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="android:colorBackground">@color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="message_bubble_color">#D4ECECEC</item>
-        <item name="oval_avatar_background">@drawable/sel_button_round_4_white</item>
+        <item name="message_bubble_color">@color/white</item>
         <item name="quick_reply_icon_color">#151515</item>
     </style>
 
     <style name="QuickReply.Amoled" parent="QuickReply" />
-
-    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
 
     <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
         <!--        <item name="android:tint">?colorOnSurface</item>-->
@@ -297,7 +309,7 @@
         <item name="tint">?colorOnSurface</item>
     </style>
 
-    <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
+    <style name="TextAppearance.Toolbar.Title" parent="@style/TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -322,12 +334,30 @@
     </style>
 
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProfileText" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProfileSubText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">sans-serif-light</item>
     </style>
 
     <style name="Theme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">?colorSurface</item>
         <item name="tint">?colorSecondary</item>
+    </style>
+
+    <style name="Theme.FloatingActionButtonSecondary" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?colorSecondary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="Theme.FloatingActionButtonAudio" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/white</item>
+        <item name="tint">?colorSurface</item>
     </style>
 
     <style name="ShapeAppearance.AppTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -347,6 +377,22 @@
 
     <style name="SplashTheme" parent="App.DayNight">
         <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
 </resources>

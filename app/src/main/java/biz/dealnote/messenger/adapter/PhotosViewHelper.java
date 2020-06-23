@@ -47,8 +47,8 @@ public class PhotosViewHelper {
 
     @SuppressLint("SetTextI18n")
     public void displayVideos(final List<PostImage> videos, final ViewGroup container) {
-        container.setVisibility(videos.size() == 0 ? View.GONE : View.VISIBLE);
-        if (videos.size() == 0) {
+        container.setVisibility(videos.isEmpty() ? View.GONE : View.VISIBLE);
+        if (videos.isEmpty()) {
             return;
         }
         int i = videos.size() - container.getChildCount();
@@ -101,16 +101,33 @@ public class PhotosViewHelper {
     }
 
     public void displayPhotos(final List<PostImage> photos, final ViewGroup container) {
-        container.setVisibility(photos.size() == 0 ? View.GONE : View.VISIBLE);
+        container.setVisibility(photos.isEmpty() ? View.GONE : View.VISIBLE);
 
-        if (photos.size() == 0) {
+        if (photos.isEmpty()) {
             return;
         }
+
+        int RoundedMode = Settings.get().main().getPhotoRoundMode();
+
+        if (RoundedMode == 1)
+            container.removeAllViews();
 
         int i = photos.size() - container.getChildCount();
 
         for (int j = 0; j < i; j++) {
-            View root = LayoutInflater.from(context).inflate(R.layout.item_video, container, false);
+            View root;
+            switch (RoundedMode) {
+                case 1:
+                    root = photos.size() > 1 ? LayoutInflater.from(context).inflate(R.layout.item_photo_gif_not_round, container, false) :
+                            LayoutInflater.from(context).inflate(R.layout.item_photo_gif, container, false);
+                    break;
+                case 2:
+                    root = LayoutInflater.from(context).inflate(R.layout.item_photo_gif_not_round, container, false);
+                    break;
+                default:
+                    root = LayoutInflater.from(context).inflate(R.layout.item_photo_gif, container, false);
+                    break;
+            }
             Holder holder = new Holder(root);
             root.setTag(holder);
             Utils.setColorFilter(holder.ivPlay.getBackground(), mIconColorActive);
@@ -118,7 +135,16 @@ public class PhotosViewHelper {
         }
 
         if (container instanceof MozaikLayout) {
-            ((MozaikLayout) container).setPhotos(photos);
+            if (Settings.get().main().isOver_ten_attach()) {
+                if (photos.size() > 10) {
+                    ArrayList<PostImage> images = new ArrayList<>(10);
+                    for (int s = 0; s < 10; s++)
+                        images.add(photos.get(s));
+                    ((MozaikLayout) container).setPhotos(images);
+                } else
+                    ((MozaikLayout) container).setPhotos(photos);
+            } else
+                ((MozaikLayout) container).setPhotos(photos);
         }
 
         for (int g = 0; g < container.getChildCount(); g++) {

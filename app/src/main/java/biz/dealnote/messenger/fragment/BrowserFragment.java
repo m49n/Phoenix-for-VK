@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -24,6 +28,7 @@ import biz.dealnote.messenger.link.types.AbsLink;
 import biz.dealnote.messenger.link.types.AwayLink;
 import biz.dealnote.messenger.link.types.PageLink;
 import biz.dealnote.messenger.listener.BackPressCallback;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Logger;
 
 public class BrowserFragment extends BaseFragment implements BackPressCallback {
@@ -60,6 +65,7 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
         }
     }
 
+    @SuppressLint({"SetJavaScriptEnabled", "RequiresFeature"})
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_browser, container, false);
@@ -78,6 +84,12 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
                 refreshActionBar();
             }
         });
+
+
+        if (Settings.get().main().isWebview_night_mode() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) && Settings.get().ui().isDarkModeEnabled(requireActivity())) {
+            WebSettingsCompat.setForceDark(mWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+        }
+        mWebView.getSettings().setUserAgentString(Constants.USER_AGENT(null));
 
         mWebView.getSettings().setJavaScriptEnabled(true); // из-за этого не срабатывал метод
         // shouldOverrideUrlLoading в WebClient

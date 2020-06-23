@@ -21,10 +21,7 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.VKOwnIds;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 19.09.2017.
- * phoenix
- */
+
 public class BoardInteractor implements IBoardInteractor {
 
     private final INetworker networker;

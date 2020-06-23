@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="mpm_material_grey_50">#fafafa</color>
+
+    <color name="mpm_black_12_opacity">#1F000000</color>
+    <color name="mpm_black_54_opacity">#8A000000</color>
+
+</resources>

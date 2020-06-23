@@ -12,10 +12,7 @@ import biz.dealnote.messenger.api.model.response.FavePageResponse;
 import biz.dealnote.messenger.api.model.response.FavePostsResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public interface IFaveApi {
 
     @CheckResult

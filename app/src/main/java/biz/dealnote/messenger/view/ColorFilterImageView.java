@@ -10,10 +10,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by admin on 26.03.2017.
- * phoenix
- */
 public class ColorFilterImageView extends AppCompatImageView {
 
     private int color;

@@ -19,10 +19,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 03.10.2016.
- * phoenix
- */
+
 class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
 
     private static final String[] PROJECTION = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};

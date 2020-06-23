@@ -4,10 +4,7 @@ import java.util.List;
 
 import biz.dealnote.messenger.db.model.IdPairEntity;
 
-/**
- * Created by admin on 17.09.2017.
- * phoenix
- */
+
 public class UserDetailsEntity {
 
     private IdPairEntity photoId;

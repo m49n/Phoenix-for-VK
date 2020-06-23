@@ -10,10 +10,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.VkApiPostSource;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class PostSourceDtoAdapter extends AbsAdapter implements JsonDeserializer<VkApiPostSource> {
 
     @Override

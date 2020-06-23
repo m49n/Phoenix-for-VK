@@ -12,7 +12,7 @@ public class ImageHelper {
 
     private static final PorterDuffXfermode PORTER_DUFF_XFERMODE = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
 
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
+    public static Bitmap getRoundedBitmap(Bitmap bitmap, boolean bRecycle) {
         if (bitmap == null) {
             return null;
         }
@@ -32,12 +32,13 @@ public class ImageHelper {
         paint.setXfermode(PORTER_DUFF_XFERMODE);
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
-        bitmap.recycle();
+        if (bRecycle)
+            bitmap.recycle();
 
         return output;
     }
 
-    public static Bitmap getElipsedBitmap(Bitmap bitmap) {
+    public static Bitmap getElipsedBitmap(Bitmap bitmap, boolean bRecycle) {
         if (bitmap == null) {
             return null;
         }
@@ -57,12 +58,13 @@ public class ImageHelper {
         paint.setXfermode(PORTER_DUFF_XFERMODE);
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
-        bitmap.recycle();
+        if (bRecycle)
+            bitmap.recycle();
 
         return output;
     }
 
-    public static Bitmap getPolyBitmap(Bitmap bitmap) {
+    public static Bitmap getPolyBitmap(Bitmap bitmap, boolean bRecycle) {
         if (bitmap == null) {
             return null;
         }
@@ -82,7 +84,8 @@ public class ImageHelper {
         paint.setXfermode(PORTER_DUFF_XFERMODE);
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
-        bitmap.recycle();
+        if (bRecycle)
+            bitmap.recycle();
 
         return output;
     }

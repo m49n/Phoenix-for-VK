@@ -4,10 +4,6 @@ import androidx.annotation.StringRes;
 
 import biz.dealnote.messenger.media.gif.IGifPlayer;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public interface IGifPagerView extends IBasicDocumentView, IErrorView {
 
     void displayData(int pageCount, int selectedIndex);

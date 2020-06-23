@@ -20,10 +20,7 @@ import io.reactivex.Single;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 class UsersApi extends AbsApi implements IUsersApi {
 
     UsersApi(int accountId, IServiceProvider provider) {
@@ -125,6 +122,13 @@ class UsersApi extends AbsApi implements IUsersApi {
     public Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields) {
         return provideService(IUsersService.class, TokenType.USER)
                 .flatMap(service -> service.getStory(owner_id, extended, fields)
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<StoryResponse> searchStory(String q, Integer mentioned_id, Integer count, Integer extended, String fields) {
+        return provideService(IUsersService.class, TokenType.USER)
+                .flatMap(service -> service.searchStory(q, mentioned_id, count, extended, fields)
                         .map(extractResponseWithErrorHandling()));
     }
 

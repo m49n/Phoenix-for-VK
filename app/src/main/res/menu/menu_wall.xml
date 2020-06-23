@@ -18,7 +18,12 @@
     <item
         android:id="@+id/action_open_url"
         android:title="@string/open_clipboard_url" />
+
     <item
-        android:id="@+id/action_set_offline"
-        android:title="@string/set_offline" />
+        android:id="@+id/search_stories"
+        android:title="@string/search_stories" />
+
+    <item
+        android:id="@+id/wall_attachments"
+        android:title="@string/wall_attachments" />
 </menu>

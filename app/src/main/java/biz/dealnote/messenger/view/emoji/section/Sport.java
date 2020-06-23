@@ -1,8 +1,5 @@
 package biz.dealnote.messenger.view.emoji.section;
 
-/**
- * Created by sony on 17.06.2016.
- */
 public class Sport {
     public static final Emojicon[] DATA = new Emojicon[]{
 

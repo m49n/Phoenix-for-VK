@@ -36,10 +36,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by Ruslan Kolbasa on 18.09.2017.
- * phoenix
- */
 public class UtilsInteractor implements IUtilsInteractor {
 
     private final INetworker networker;

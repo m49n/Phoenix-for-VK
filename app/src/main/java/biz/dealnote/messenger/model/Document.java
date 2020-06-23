@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by admin on 04.12.2016.
- * phoenix
- */
 public class Document extends AbsModel implements Parcelable {
 
     public static final Creator<Document> CREATOR = new Creator<Document>() {

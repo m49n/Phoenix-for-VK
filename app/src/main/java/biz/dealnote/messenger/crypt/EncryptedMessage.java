@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.crypt;
 
-/**
- * Created by admin on 04.09.2017.
- * phoenix
- */
 public class EncryptedMessage {
 
     private final long sessionId;

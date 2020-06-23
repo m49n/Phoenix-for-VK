@@ -14,10 +14,6 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.util.Optional;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 21.10.2016.
- * phoenix
- */
 public class OwnerInfo {
 
     private final Owner owner;

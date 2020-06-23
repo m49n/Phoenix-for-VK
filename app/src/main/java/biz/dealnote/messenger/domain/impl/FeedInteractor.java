@@ -32,10 +32,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by Ruslan Kolbasa on 06.09.2017.
- * phoenix
- */
+
 public class FeedInteractor implements IFeedInteractor {
 
     private final INetworker networker;

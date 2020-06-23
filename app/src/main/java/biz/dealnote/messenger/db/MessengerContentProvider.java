@@ -380,6 +380,7 @@ public class MessengerContentProvider extends ContentProvider {
         sMessagesProjectionMap.put(MessageColumns.PHOTO_200, MessageColumns.FULL_PHOTO_200);
         sMessagesProjectionMap.put(MessageColumns.RANDOM_ID, MessageColumns.FULL_RANDOM_ID);
         sMessagesProjectionMap.put(MessageColumns.EXTRAS, MessageColumns.FULL_EXTRAS);
+        sMessagesProjectionMap.put(MessageColumns.PAYLOAD, MessageColumns.FULL_PAYLOAD);
 
         sAttachmentsProjectionMap = new HashMap<>();
         sAttachmentsProjectionMap.put(AttachmentsColumns._ID, AttachmentsColumns.FULL_ID);

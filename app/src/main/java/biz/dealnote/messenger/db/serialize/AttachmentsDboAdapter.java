@@ -19,10 +19,7 @@ import biz.dealnote.messenger.db.model.AttachmentsTypes;
 import biz.dealnote.messenger.db.model.entity.AttachmentsEntity;
 import biz.dealnote.messenger.db.model.entity.Entity;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public class AttachmentsDboAdapter implements JsonDeserializer<AttachmentsEntity>, JsonSerializer<AttachmentsEntity> {
 
     private static final String KEY_ENTITY = "entity";

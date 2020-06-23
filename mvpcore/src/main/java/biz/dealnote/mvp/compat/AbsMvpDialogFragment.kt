@@ -5,17 +5,17 @@ import android.view.View
 import androidx.loader.app.LoaderManager
 import biz.dealnote.mvp.core.IMvpView
 import biz.dealnote.mvp.core.IPresenter
+import biz.dealnote.mvp.core.PresenterAction
 
-/**
- * Created by ruslan.kolbasa on 08.09.2016.
- * mvpcore
- */
 abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> : androidx.fragment.app.DialogFragment(), ViewHostDelegate.IFactoryProvider<P, V> {
 
     private val delegate = ViewHostDelegate<P, V>()
 
     protected val presenter: P?
         get() = delegate.presenter
+
+    protected val isPresenterPrepared: Boolean
+        get() = delegate.isPresenterPrepared
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +54,10 @@ abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> : androidx.
     override fun onDestroyView() {
         super.onDestroyView()
         delegate.onDestroyView()
+    }
+
+    fun callPresenter(action: PresenterAction<P, V>) {
+        delegate.callPresenter(action)
     }
 
     override fun onDestroy() {

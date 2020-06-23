@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model.criteria;
 
 import biz.dealnote.messenger.db.DatabaseIdRange;
 
-/**
- * Created by ruslan.kolbasa on 13-Jun-16.
- * phoenix
- */
 public class NotificationsCriteria extends Criteria {
 
     private final int accountId;

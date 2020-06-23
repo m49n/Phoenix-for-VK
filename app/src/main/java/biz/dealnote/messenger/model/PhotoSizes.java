@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import static biz.dealnote.messenger.util.Utils.firstNonNull;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 public class PhotoSizes implements Parcelable {
 
     public static final Creator<PhotoSizes> CREATOR = new Creator<PhotoSizes>() {

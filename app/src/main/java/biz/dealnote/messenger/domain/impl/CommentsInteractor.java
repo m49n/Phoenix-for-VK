@@ -64,10 +64,6 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 import static java.util.Collections.emptyList;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
 public class CommentsInteractor implements ICommentsInteractor {
 
     private final INetworker networker;

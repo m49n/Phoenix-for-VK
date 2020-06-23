@@ -6,10 +6,7 @@ import biz.dealnote.messenger.api.model.response.NotificationsResponse;
 import biz.dealnote.messenger.model.AnswerVKOfficialList;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 public interface INotificationsApi {
 
     @CheckResult

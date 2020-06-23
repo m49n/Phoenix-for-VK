@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -36,10 +38,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isLandscape;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class NewsfeedMentionsFragment extends PlaceSupportMvpFragment<NewsfeedMentionsPresenter, INewsfeedCommentsView>
         implements INewsfeedCommentsView, NewsfeedCommentsAdapter.ActionListener {
 
@@ -90,6 +88,7 @@ public class NewsfeedMentionsFragment extends PlaceSupportMvpFragment<NewsfeedMe
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<NewsfeedMentionsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

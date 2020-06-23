@@ -11,10 +11,7 @@ import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.StoryResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 public interface IUsersApi {
 
     @CheckResult
@@ -45,6 +42,9 @@ public interface IUsersApi {
 
     @CheckResult
     Single<StoryResponse> getStory(Integer owner_id, Integer extended, String fields);
+
+    @CheckResult
+    Single<StoryResponse> searchStory(String q, Integer mentioned_id, Integer count, Integer extended, String fields);
 
     @CheckResult
     Single<Integer> report(Integer userId, String type, String comment);

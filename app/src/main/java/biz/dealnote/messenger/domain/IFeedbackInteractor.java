@@ -8,10 +8,6 @@ import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 11.09.2017.
- * phoenix
- */
 public interface IFeedbackInteractor {
     Single<List<Feedback>> getCachedFeedbacks(int accountId);
 

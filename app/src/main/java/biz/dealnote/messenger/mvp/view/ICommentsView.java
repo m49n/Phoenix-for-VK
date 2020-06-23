@@ -11,10 +11,7 @@ import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
+
 public interface ICommentsView extends IAccountDependencyView, IAttachmentsPlacesView, IMvpView,
         IErrorView, IToolbarView, IProgressView, IToastView {
 

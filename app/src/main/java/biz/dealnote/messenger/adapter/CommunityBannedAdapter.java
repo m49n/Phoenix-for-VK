@@ -29,10 +29,6 @@ import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 
-/**
- * Created by admin on 14.06.2017.
- * phoenix
- */
 public class CommunityBannedAdapter extends RecyclerView.Adapter<CommunityBannedAdapter.Holder> {
 
     private final Transformation transformation;

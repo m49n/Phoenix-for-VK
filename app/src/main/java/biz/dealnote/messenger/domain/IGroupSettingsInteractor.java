@@ -12,10 +12,6 @@ import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 15.06.2017.
- * phoenix
- */
 public interface IGroupSettingsInteractor {
 
     Single<GroupSettings> getGroupSettings(int accountId, int groupId);

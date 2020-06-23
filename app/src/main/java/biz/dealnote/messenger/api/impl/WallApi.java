@@ -17,10 +17,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class WallApi extends AbsApi implements IWallApi {
 
     WallApi(int accountId, IServiceProvider provider) {

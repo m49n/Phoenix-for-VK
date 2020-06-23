@@ -5,10 +5,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Collection;
 
-/**
- * Created by admin on 04.12.2016.
- * phoenix
- */
+
 public interface IOwnersBundle {
 
     @Nullable

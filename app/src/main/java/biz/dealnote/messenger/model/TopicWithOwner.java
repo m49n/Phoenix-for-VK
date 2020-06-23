@@ -2,10 +2,6 @@ package biz.dealnote.messenger.model;
 
 import androidx.annotation.NonNull;
 
-/**
- * Created by admin on 08.05.2017.
- * phoenix
- */
 public class TopicWithOwner {
 
     private final Topic topic;

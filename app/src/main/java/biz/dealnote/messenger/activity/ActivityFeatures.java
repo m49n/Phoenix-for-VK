@@ -8,10 +8,6 @@ import androidx.annotation.NonNull;
 import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.settings.Settings;
 
-/**
- * Created by hp-dv6 on 31.05.2016.
- * VKMessenger
- */
 public class ActivityFeatures {
 
     private boolean hideMenu;
@@ -30,16 +26,10 @@ public class ActivityFeatures {
         AppStyleable styleable = (AppStyleable) activity;
         styleable.hideMenu(hideMenu);
 
-        switch (statusBarColorOption) {
-            case (StatusbarColorFeature.STATUSBAR_COLOR_COLORED):
-                styleable.setStatusbarColored(true, statusBarInvertIconsOption);
-                break;
-            case (StatusbarColorFeature.STATUSBAR_COLOR_NON_COLORED):
-                styleable.setStatusbarColored(false, statusBarInvertIconsOption);
-                break;
-            default:
-                styleable.setStatusbarColored(false, statusBarInvertIconsOption);
-                break;
+        if (statusBarColorOption == StatusbarColorFeature.STATUSBAR_COLOR_COLORED) {
+            styleable.setStatusbarColored(true, statusBarInvertIconsOption);
+        } else {
+            styleable.setStatusbarColored(false, statusBarInvertIconsOption);
         }
     }
 

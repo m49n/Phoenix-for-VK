@@ -258,7 +258,7 @@ public class InputViewController {
         }
     }
 
-    private void switсhModeTo(int mode) {
+    private void switchModeTo(int mode) {
         if (mCurrentMode != mode) {
             mCurrentMode = mode;
             resolveModeViews();
@@ -333,25 +333,25 @@ public class InputViewController {
     }
 
     public void switchModeToEditing(boolean canSave) {
-        switсhModeTo(Mode.EDITING);
+        switchModeTo(Mode.EDITING);
         this.canEditingSave = canSave;
         resolveSendButton();
     }
 
     public void switchModeToNormal(boolean canSend, boolean canStartRecoring) {
-        switсhModeTo(Mode.NORMAL);
+        switchModeTo(Mode.NORMAL);
         this.canNormalSend = canSend;
         this.canStartRecording = canStartRecoring;
         resolveSendButton();
     }
 
     public void switchModeToRecording() {
-        switсhModeTo(Mode.VOICE_RECORD);
+        switchModeTo(Mode.VOICE_RECORD);
         resolveSendButton();
     }
 
     public void switchModeToDisabled() {
-        switсhModeTo(Mode.DISABLED);
+        switchModeTo(Mode.DISABLED);
     }
 
     public void setRecordActionsCallback(RecordActionsCallback recordActionsCallback) {

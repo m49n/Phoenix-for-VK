@@ -22,26 +22,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
-import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.adapter.WallAdapter;
 import biz.dealnote.messenger.adapter.horizontal.HorizontalStoryAdapter;
+import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.fragment.base.PlaceSupportMvpFragment;
 import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.WallSearchCriteria;
@@ -49,10 +44,11 @@ import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.EditingPostType;
 import biz.dealnote.messenger.model.LoadMoreState;
 import biz.dealnote.messenger.model.Owner;
-import biz.dealnote.messenger.model.OwnerType;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.Post;
@@ -62,22 +58,15 @@ import biz.dealnote.messenger.mvp.view.IWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.place.PlaceUtil;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.task.DownloadImageTask;
 import biz.dealnote.messenger.util.AppTextUtils;
-import biz.dealnote.messenger.util.Objects;
-import biz.dealnote.messenger.util.PhoenixToast;
-import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.LoadMoreFooterHelper;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.isLandscape;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPresenter<V>>
         extends PlaceSupportMvpFragment<P, V> implements IWallView, WallAdapter.ClickListener, WallAdapter.NonPublishedPostActionListener {
 
@@ -126,7 +115,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
 
-        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout, true);
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         RecyclerView.LayoutManager manager;
         if (Utils.is600dp(requireActivity())) {
@@ -162,28 +151,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         headerStoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         mStoryAdapter = new HorizontalStoryAdapter(Collections.emptyList());
         mStoryAdapter.setListener((item, pos) -> {
-            if (item.getVideo() != null) {
-                if (item.getOwner() != null)
-                    item.getVideo().setTitle(item.getOwner().getFullName());
-                openHistoryVideo(Settings.get().accounts().getCurrent(), item.getVideo());
-            } else if (item.getPhoto() != null) {
-                ArrayList<Story> photos_story = new ArrayList<>();
-                ArrayList<Photo> tmp = new ArrayList<>();
-                List<Story> st = getPresenter().getStories();
-                for (Story i : st) {
-                    if (i.getPhoto() != null)
-                        photos_story.add(i);
-                }
-                for (Story i : photos_story) {
-                    if (i.getPhoto() != null) {
-                        if (item.getOwner() != null)
-                            i.getPhoto().setText(i.getOwner().getFullName());
-                        tmp.add(i.getPhoto());
-                    }
-                }
-                int indx = photos_story.indexOf(item);
-                openSimplePhotoGalleryHistory(Settings.get().accounts().getCurrent(), tmp, Math.max(indx, 0), false);
-            }
+            openHistoryVideo(Settings.get().accounts().getCurrent(), new ArrayList<>(getPresenter().getStories()), pos);
         });
         headerStoryRecyclerView.setAdapter(mStoryAdapter);
 
@@ -195,40 +163,6 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
         recyclerView.setAdapter(mWallAdapter);
         return root;
-    }
-
-    private String transform_owner(Owner owner) {
-        if (owner.getOwnerType() == OwnerType.COMMUNITY)
-            return "club" + owner.getOwnerId();
-        else
-            return "id" + owner.getOwnerId();
-    }
-
-    void downloadAvatar(Owner user) {
-        File dir = new File(Settings.get().other().getPhotoDir());
-        if (!dir.isDirectory()) {
-            boolean created = dir.mkdirs();
-            if (!created) {
-                return;
-            }
-        } else
-            dir.setLastModified(Calendar.getInstance().getTime().getTime());
-
-        if (user.getFullName() != null && Settings.get().other().isPhoto_to_user_dir()) {
-            File dir_final = new File(dir.getAbsolutePath() + "/" + user.getFullName());
-            if (!dir_final.isDirectory()) {
-                boolean created = dir_final.mkdirs();
-                if (!created) {
-                    return;
-                }
-            } else
-                dir_final.setLastModified(Calendar.getInstance().getTime().getTime());
-            dir = dir_final;
-        }
-        DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String file = dir.getAbsolutePath() + "/" + (user.getFullName() != null ? (user.getFullName() + "_") : "") + transform_owner(user) + ".profile." + DOWNLOAD_DATE_FORMAT.format(new Date()) + ".jpg";
-        String url = user.getOriginalAvatar();
-        new InternalDownloader(requireActivity(), url, file, user).doDownload();
     }
 
     @Override
@@ -255,6 +189,16 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         PlaceFactory.getSingleTabSearchPlace(accountId, SearchContentType.WALL, criteria).tryOpenWith(requireActivity());
     }
 
+    private void goToConversationAttachments() {
+        String[] types = new String[]{VKApiAttachment.TYPE_PHOTO, VKApiAttachment.TYPE_VIDEO, VKApiAttachment.TYPE_DOC, VKApiAttachment.TYPE_AUDIO, VKApiAttachment.TYPE_LINK};
+
+        String[] items = new String[]{getString(R.string.photos), getString(R.string.videos), getString(R.string.documents), getString(R.string.music), getString(R.string.links)};
+
+        new MaterialAlertDialogBuilder(requireActivity()).setItems(items, (dialogInterface, j) -> {
+            PlaceFactory.getWallAttachmentsPlace(getPresenter().getAccountId(), getPresenter().getOwnerId(), types[j]).tryOpenWith(requireActivity());
+        }).show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -267,34 +211,42 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             case R.id.action_search:
                 getPresenter().fireSearchClick();
                 return true;
+            case R.id.wall_attachments:
+                goToConversationAttachments();
+                return true;
+            case R.id.search_stories:
+                ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+                menus.add(new OptionRequest(R.id.button_ok, getString(R.string.by_name), R.drawable.pencil));
+                menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.by_owner), R.drawable.person));
+                menus.show(requireActivity().getSupportFragmentManager(), "search_story_options", option -> {
+                    switch (option.getId()) {
+                        case R.id.button_ok:
+                            getPresenter().searchStory(true);
+                            break;
+                        case R.id.button_cancel:
+                            getPresenter().searchStory(false);
+                            break;
+                    }
+                });
+                return true;
             case R.id.action_open_url:
-                final ClipboardManager clipBoard = (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
+                final ClipboardManager clipBoard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0) {
                     String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
                     LinkHelper.openUrl(getActivity(), getPresenter().getAccountId(), temp);
                 }
-                return true;
-            case R.id.action_set_offline:
-                getPresenter().appendDisposable(Injection.provideNetworkInterfaces().vkDefault(getPresenter().getAccountId()).account().setOffline()
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(this::OnSetOffline, t -> OnSetOffline(false)));
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void OnSetOffline(boolean succ) {
-        if (succ)
-            PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.succ_offline);
-        else
-            PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.err_offline);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_wall, menu);
+        menu.findItem(R.id.action_open_url).setVisible(Settings.get().other().isDebug_mode());
+        menu.findItem(R.id.search_stories).setVisible(Settings.get().other().isDebug_mode());
     }
 
     @Override
@@ -339,7 +291,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
     @Override
     public void updateStory(List<Story> stories) {
-        if (nonNull(mStoryAdapter)) {
+        if (nonNull(mStoryAdapter) && !isEmpty(stories)) {
             mStoryAdapter.setItems(stories);
             mStoryAdapter.notifyDataSetChanged();
         }
@@ -457,20 +409,5 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
     @Override
     public void onButtonRemoveClick(Post post) {
         getPresenter().fireButtonRemoveClick(post);
-    }
-
-    private final class InternalDownloader extends DownloadImageTask {
-        InternalDownloader(Context context, String url, String file, Owner user) {
-            super(context, url, file, "profile_" + user.getOwnerId(), true);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (Objects.isNull(s)) {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastBottom(R.string.saved);
-            } else {
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.error_with_message, s);
-            }
-        }
     }
 }

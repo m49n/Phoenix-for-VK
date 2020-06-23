@@ -13,10 +13,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 public interface IUsersService {
 
     @FormUrlEncoded
@@ -114,6 +111,14 @@ public interface IUsersService {
     Single<BaseResponse<StoryResponse>> getStory(@Field("owner_id") Integer owner_id,
                                                  @Field("extended") Integer extended,
                                                  @Field("fields") String fields);
+
+    @POST("stories.search")
+    @FormUrlEncoded
+    Single<BaseResponse<StoryResponse>> searchStory(@Field("q") String q,
+                                                    @Field("mentioned_id") Integer mentioned_id,
+                                                    @Field("count") Integer count,
+                                                    @Field("extended") Integer extended,
+                                                    @Field("fields") String fields);
 
     @POST("messages.getRecentStickers")
     Single<BaseResponse<Items<VKApiSticker>>> getRecentStickers();

@@ -4,20 +4,26 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.Injection;
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -153,6 +159,21 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index) {
         PlaceFactory.getSimpleGalleryPlace(getAccountId(), photos, index, true).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onStoryOpen(@NonNull Story story) {
+        PlaceFactory.getHistoryVideoPreviewPlace(getAccountId(), new ArrayList<>(Collections.singleton(story)), 0).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onAudioPlaylistOpen(@NonNull AudioPlaylist playlist) {
+        PlaceFactory.getAudiosInAlbumPlace(accountId, playlist.getOwnerId(), playlist.getId(), playlist.getAccess_key()).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onPhotoAlbumOpen(@NotNull PhotoAlbum album) {
+        PlaceFactory.getVKPhotosAlbumPlace(accountId, album.getOwnerId(), album.getId(), null).tryOpenWith(requireActivity());
     }
 
     @Override

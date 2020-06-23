@@ -1,5 +1,6 @@
 package biz.dealnote.messenger.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -16,10 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
 
-/**
- * Created by Ruslan Kolbasa on 06.06.2017.
- * phoenix
- */
+
 public class CaptchaProvider implements ICaptchaProvider {
 
     private static final int MAX_WAIT_DELAY = 15 * 60 * 1000;
@@ -45,6 +43,7 @@ public class CaptchaProvider implements ICaptchaProvider {
         startCapthaActivity(app, sid, captcha);
     }
 
+    @SuppressLint("CheckResult")
     private void startCapthaActivity(final Context context, String sid, Captcha captcha) {
         Completable.complete()
                 .observeOn(uiScheduler)

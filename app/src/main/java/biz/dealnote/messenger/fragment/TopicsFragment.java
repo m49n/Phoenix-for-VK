@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -88,7 +90,7 @@ public class TopicsFragment extends BaseMvpFragment<TopicsPresenter, ITopicsView
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout, true);
+        ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         fabCreate = root.findViewById(R.id.fragment_topics_create);
         fabCreate.setOnClickListener(view -> getPresenter().fireButtonCreateClick());
@@ -170,6 +172,7 @@ public class TopicsFragment extends BaseMvpFragment<TopicsPresenter, ITopicsView
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<TopicsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

@@ -19,10 +19,6 @@ import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.ViewUtils;
 
-/**
- * Created by ruslan.kolbasa on 26.10.2016.
- * phoenix
- */
 public class KeyExchangeCommitActivity extends AppCompatActivity {
 
     public static Intent createIntent(@NonNull Context context, int accountId, int peerId, @NonNull User user, int messageId, @NonNull ExchangeMessage message) {

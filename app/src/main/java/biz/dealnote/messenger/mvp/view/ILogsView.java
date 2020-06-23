@@ -6,10 +6,7 @@ import biz.dealnote.messenger.model.LogEventType;
 import biz.dealnote.messenger.model.LogEventWrapper;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public interface ILogsView extends IMvpView, IErrorView {
 
     void displayTypes(List<LogEventType> types);

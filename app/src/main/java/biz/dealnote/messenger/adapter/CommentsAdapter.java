@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Transformation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Constants;
@@ -98,7 +100,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             holder.vAttachmentsRoot.setVisibility(View.GONE);
         } else {
             holder.vAttachmentsRoot.setVisibility(View.VISIBLE);
-            attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.attachmentContainers, true);
+            attachmentsViewBinder.displayAttachments(comment.getAttachments(), holder.attachmentContainers, true, null);
         }
 
         holder.tvOwnerName.setText(comment.getFullAuthorName());
@@ -210,7 +212,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NotNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
     }

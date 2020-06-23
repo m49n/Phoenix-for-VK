@@ -12,10 +12,6 @@ import biz.dealnote.messenger.model.PostFilter;
 import biz.dealnote.messenger.model.User;
 import biz.dealnote.messenger.model.UserDetails;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public interface IUserWallView extends IWallView, IProgressView, ISnackbarView {
 
     void displayWallFilters(List<PostFilter> filters);

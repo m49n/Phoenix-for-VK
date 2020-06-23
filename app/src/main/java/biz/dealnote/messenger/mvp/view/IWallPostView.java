@@ -6,10 +6,7 @@ import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by Ruslan Kolbasa on 14.07.2017.
- * phoenix
- */
+
 public interface IWallPostView extends IAttachmentsPlacesView, IAccountDependencyView, IMvpView, IErrorView {
 
     int SUBTITLE_NORMAL = 1;

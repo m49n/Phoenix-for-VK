@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -174,6 +176,7 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
         // not supported
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<FwdsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -191,5 +194,10 @@ public class FwdsFragment extends PlaceSupportMvpFragment<FwdsPresenter, IFwdsVi
     @Override
     public void onVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage) {
         getPresenter().fireVoicePlayButtonClick(voiceHolderId, voiceMessageId, voiceMessage);
+    }
+
+    @Override
+    public void onTranscript(String voiceMessageId, int messageId) {
+        getPresenter().fireTranscript(voiceMessageId, messageId);
     }
 }

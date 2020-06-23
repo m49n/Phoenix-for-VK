@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.api.model.VKApiMessage
 import biz.dealnote.messenger.crypt.AesKeyPair
@@ -53,10 +54,6 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                      initialPeer: Peer,
                      config: ChatConfig, savedInstanceState: Bundle?) : AbsMessageListPresenter<IChatView>(accountId, savedInstanceState) {
@@ -85,7 +82,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     private var conversation: Conversation? = null
 
     fun getConversation(): Conversation? {
-        return conversation;
+        return conversation
     }
 
     private var HronoType = false
@@ -118,7 +115,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     }
 
     private val isEncryptionSupport: Boolean
-        get() = Peer.isUser(peerId) && peerId != messagesOwnerId
+        get() = Peer.isUser(peerId) && peerId != messagesOwnerId && !Settings.get().other().isDisabled_encryption
 
     private val isEncryptionEnabled: Boolean
         get() = Settings.get()
@@ -261,7 +258,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             if (update.accountId == accountId && isChatWithUser(update.userId)) {
                 update.online?.run {
                     subtitle = if (isOnline) {
-                        getString(R.string.online) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen));
+                        getString(R.string.online)
                     } else {
                         getString(R.string.offline) + ", " + getString(R.string.last_seen_sex_unknown, AppTextUtils.getDateFromUnixTime(lastSeen))
                     }
@@ -270,6 +267,34 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
                 }
             }
         }
+    }
+
+    fun fireResendSwipe(position: Int, swipeDir: Int) {
+        if (swipeDir == ItemTouchHelper.LEFT)
+            fireForwardToHereClick(ArrayList(Collections.singleton(data[position])))
+        else if (swipeDir == ItemTouchHelper.RIGHT)
+            fireForwardToAnotherClick(ArrayList(Collections.singleton(data[position])))
+    }
+
+    fun fireTranscript(voiceMessageId: String, messageId: Int) {
+        appendDisposable(messagesRepository.recogniseAudioMessage(accountId, messageId, voiceMessageId)
+                .compose(applySingleIOToMainSchedulers())
+                .subscribe({ }, { t: Throwable? -> showError(view, t) }))
+    }
+
+    fun removeDialog() {
+        appendDisposable(messagesRepository.deleteDialog(accountId, peerId)
+                .compose(applyCompletableIOToMainSchedulers())
+                .subscribe({ onDialogRemovedSuccessfully(accountId) }, { t: Throwable? -> showError(view, t) }))
+    }
+
+    private fun onDialogRemovedSuccessfully(oldaccountId: Int) {
+        view?.showSnackbar(R.string.deleted, true)
+        if (accountId != oldaccountId) {
+            return
+        }
+        data.clear()
+        view?.notifyDataChanged()
     }
 
     private fun onPeerUpdate(updates: List<PeerUpdate>) {
@@ -462,7 +487,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
 
     private fun onCachedDataReceived(data: List<Message>) {
         setCacheLoadingNow(false)
-        onAllDataLoaded(data, false)
+        onAllDataLoaded(data, appendToList = false, isCache = true)
     }
 
     private fun onNetDataReceived(messages: List<Message>, startMessageId: Int?) {
@@ -474,10 +499,11 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             endOfContent = true
 
         setNetLoadingNow(false)
-        onAllDataLoaded(messages, startMessageId != null)
+        onAllDataLoaded(messages, startMessageId != null, isCache = false)
     }
 
-    private fun onAllDataLoaded(messages: List<Message>, appendToList: Boolean) {
+    @SuppressLint("CheckResult")
+    private fun onAllDataLoaded(messages: List<Message>, appendToList: Boolean, isCache: Boolean) {
         val all = !appendToList
 
         //сохранение выделенных сообщений
@@ -508,8 +534,20 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
 
         resolveEmptyTextVisibility()
-        if (Settings.get().other().isAuto_read)
+        if (Settings.get().other().isAuto_read && !isCache)
             readAllUnreadMessagesIfExists()
+
+        if (!isCache) {
+            var need = false
+            for (i: Message in data) {
+                if (i.status == MessageStatus.ERROR) {
+                    need = true
+                    messagesRepository.enqueueAgain(messagesOwnerId, i.id).blockingGet()
+                }
+            }
+            if (need)
+                startSendService()
+        }
     }
 
     private fun setCacheLoadingNow(cacheLoadingNow: Boolean) {
@@ -599,9 +637,10 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             resolvePrimaryButton()
         }
 
-        readAllUnreadMessagesIfExists()
-
-        textingNotifier.notifyAboutTyping(peerId)
+        if (Settings.get().accounts().getType(Settings.get().accounts().current) != "hacked" && !Settings.get().main().isDont_write) {
+            readAllUnreadMessagesIfExists()
+            textingNotifier.notifyAboutTyping(peerId)
+        }
     }
 
     fun fireSendClick() {
@@ -666,8 +705,19 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
     private fun sendMessage(builder: SaveMessageBuilder) {
         messagesRepository.put(builder)
                 .fromIOToMain()
-                .doOnSuccess { startSendService() }
-                .subscribe(WeakConsumer(messageSavedConsumer), WeakConsumer(messageSaveFailConsumer))
+                .doOnSuccess {
+                    if (Settings.get().main().isOver_ten_attach && it.isHasAttachments && it.attachments.size() > 10) {
+                        val temp = it.attachments.toList()
+                        val att: ArrayList<AbsModel> = ArrayList()
+                        for (i in 10 until temp.size - 1) {
+                            att.add(temp[i])
+                        }
+                        outConfig.appendAll(att)
+                        resolveAttachmentsCounter()
+                        resolvePrimaryButton()
+                    }
+                    startSendService()
+                }.subscribe(WeakConsumer(messageSavedConsumer), WeakConsumer(messageSaveFailConsumer))
     }
 
     private val messageSavedConsumer: Consumer<Message> = Consumer { onMessageSaveSuccess(it) }
@@ -818,7 +868,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
             edited?.run {
                 view?.setupPrimaryButtonAsEditing(canSave)
             } ?: run {
-                view?.setupPrimaryButtonAsRegular(canSendNormalMessage(), true)
+                view?.setupPrimaryButtonAsRegular(canSendNormalMessage(), Settings.get().accounts().getType(accountId) != "hacked")
             }
         }
     }
@@ -1610,6 +1660,20 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
+    fun fireEditAttachmentRetry(entry: AttachmenEntry) {
+        fireEditAttachmentRemoved(entry)
+        if (entry.attachment is Upload) {
+            val upl = entry.attachment as Upload
+            val intents: MutableList<UploadIntent> = java.util.ArrayList()
+            intents.add(UploadIntent(accountId, upl.destination)
+                    .setSize(upl.size)
+                    .setAutoCommit(upl.isAutoCommit)
+                    .setFileId(upl.fileId)
+                    .setFileUri(upl.fileUri))
+            uploadManager.enqueue(intents)
+        }
+    }
+
     fun fireEditAttachmentRemoved(entry: AttachmenEntry) {
         if (entry.attachment is Upload) {
             uploadManager.cancel((entry.attachment as Upload).id)
@@ -1774,7 +1838,7 @@ class ChatPrensenter(accountId: Int, private val messagesOwnerId: Int,
         }
     }
 
-    private class ToolbarSubtitleHandler internal constructor(prensenter: ChatPrensenter) : Handler(Looper.getMainLooper()) {
+    private class ToolbarSubtitleHandler(prensenter: ChatPrensenter) : Handler(Looper.getMainLooper()) {
 
         var reference: WeakReference<ChatPrensenter> = WeakReference(prensenter)
 

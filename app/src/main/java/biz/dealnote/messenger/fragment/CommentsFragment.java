@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
@@ -26,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,10 +65,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
 public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter, ICommentsView> implements
         ICommentsView, EmojiconsPopup.OnStickerClickedListener, CommentsInputViewController.OnInputActionCallback,
         CommentsAdapter.OnCommentActionListener, EmojiconTextView.OnHashTagClickListener, BackPressCallback {
@@ -123,7 +120,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (RelativeLayout) inflater.inflate(R.layout.fragment_comments, container, false);
+        View root = inflater.inflate(R.layout.fragment_comments, container, false);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         mAuthorAvatar = root.findViewById(R.id.author_avatar);
@@ -182,6 +179,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         return false;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

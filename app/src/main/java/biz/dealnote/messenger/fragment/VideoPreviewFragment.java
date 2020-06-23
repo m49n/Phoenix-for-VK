@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -195,6 +197,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<VideoPreviewPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new VideoPreviewPresenter(
@@ -393,12 +396,10 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                         .setIcon(R.drawable.ic_play_youtube)
                         .setSection(SECTION_PLAY));
 
-            } else if (external.contains("coub")) {
-                if (AppPrefs.isCoubInstalled(requireActivity())) {
-                    items.add(new Item(Menu.COUB, new Text(R.string.title_play_in_coub))
-                            .setIcon(R.drawable.ic_play_coub)
-                            .setSection(SECTION_PLAY));
-                }
+            } else if (external.contains("coub") && AppPrefs.isCoubInstalled(requireActivity())) {
+                items.add(new Item(Menu.COUB, new Text(R.string.title_play_in_coub))
+                        .setIcon(R.drawable.ic_play_coub)
+                        .setSection(SECTION_PLAY));
             }
 
             items.add(new Item(Menu.PLAY_ANOTHER_SOFT, new Text(R.string.title_play_in_another_software))
@@ -662,7 +663,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         }
     }
 
-    private final static class OptionView implements IVideoPreviewView.IOptionView {
+    private static final class OptionView implements IVideoPreviewView.IOptionView {
 
         boolean canAdd;
 

@@ -16,10 +16,7 @@ import biz.dealnote.messenger.api.model.database.UniversityDto;
 import biz.dealnote.messenger.api.services.IDatabaseService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 05.01.2017.
- * phoenix
- */
+
 class DatabaseApi extends AbsApi implements IDatabaseApi {
 
     DatabaseApi(int accountId, IServiceProvider provider) {

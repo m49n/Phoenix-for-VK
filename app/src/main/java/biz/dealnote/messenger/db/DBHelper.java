@@ -61,7 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @NonNull
-    public synchronized static DBHelper getInstance(Context context, int aid) {
+    public static synchronized DBHelper getInstance(Context context, int aid) {
         DBHelper helper = dbHelperMap.get(aid);
         if (helper == null) {
             helper = new DBHelper(context, aid);
@@ -538,7 +538,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + MessageColumns.PHOTO_200 + "] TEXT, " +
                 " [" + MessageColumns.RANDOM_ID + "] INTEGER, " +
                 " [" + MessageColumns.EXTRAS + "] TEXT, " +
-                " [" + MessageColumns.ORIGINAL_ID + "] INTEGER);";
+                " [" + MessageColumns.ORIGINAL_ID + "] INTEGER, " +
+                " [" + MessageColumns.PAYLOAD + "] TEXT);";
 
         String insertZeroRow = "INSERT INTO " + MessageColumns.TABLENAME + " (" + MessageColumns._ID + ") VALUES (0)";
         String insert = "INSERT INTO " + MessageColumns.TABLENAME + " (" + MessageColumns._ID + ") VALUES (1000000000)";

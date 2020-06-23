@@ -4,10 +4,6 @@ import androidx.annotation.DrawableRes;
 
 import biz.dealnote.messenger.model.Text;
 
-/**
- * Created by admin on 11.06.2017.
- * phoenix
- */
 public class Section {
 
     private final Text title;

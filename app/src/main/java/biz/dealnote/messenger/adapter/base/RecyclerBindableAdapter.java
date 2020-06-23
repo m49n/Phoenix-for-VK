@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,10 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
 
     public T getItem(int position) {
         return items.get(position);
+    }
+
+    public int getItemRawPosition(int position) {
+        return position - headers.size();
     }
 
     public void setItems(List<T> items, boolean notifyDatasetChanged) {
@@ -99,7 +105,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
             final T item = items.remove(fromPosition);
             items.add(toPosition, item);
             notifyItemMoved(getHeadersCount() + fromPosition, getHeadersCount() + toPosition);
-            int positionStart = fromPosition < toPosition ? fromPosition : toPosition;
+            int positionStart = Math.min(fromPosition, toPosition);
             int itemCount = Math.abs(fromPosition - toPosition) + 1;
             notifyItemRangeChanged(positionStart + getHeadersCount(), itemCount);
         }
@@ -117,8 +123,9 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
         setItems(items, true);
     }
 
+    @NotNull
     @Override
-    public VH onCreateViewHolder(ViewGroup viewGroup, int type) {
+    public VH onCreateViewHolder(@NotNull ViewGroup viewGroup, int type) {
         //if our position is one of our items (this comes from getItemViewType(int position) below)
         if (type != TYPE_HEADER && type != TYPE_FOOTER) {
             return onCreateItemViewHolder(viewGroup, type);
@@ -135,7 +142,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    final public void onBindViewHolder(final RecyclerView.ViewHolder vh, int position) {
+    public final void onBindViewHolder(@NotNull final RecyclerView.ViewHolder vh, int position) {
         //check what type of view our position is
         if (isHeader(position)) {
             View v = headers.get(position);
@@ -189,7 +196,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    final public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         //check what type our position is, based on the assumption that the order is headers > items > footers
         if (isHeader(position)) {
             return TYPE_HEADER;
@@ -206,7 +213,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NotNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         if (manager == null) {
             setManager(recyclerView.getLayoutManager());
@@ -304,7 +311,7 @@ public abstract class RecyclerBindableAdapter<T, VH extends RecyclerView.ViewHol
         return 0;
     }
 
-    abstract protected void onBindItemViewHolder(VH viewHolder, int position, int type);
+    protected abstract void onBindItemViewHolder(VH viewHolder, int position, int type);
 
     protected abstract VH viewHolder(View view, int type);
 

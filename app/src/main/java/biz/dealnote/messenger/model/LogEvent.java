@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class LogEvent {
 
     private final int id;

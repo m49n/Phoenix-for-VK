@@ -20,10 +20,6 @@ import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityInfoLinksAdapter extends RecyclerView.Adapter<CommunityInfoLinksAdapter.Holder> {
 
     private List<VKApiCommunity.Link> links;

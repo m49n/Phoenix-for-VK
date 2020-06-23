@@ -7,10 +7,6 @@ import biz.dealnote.messenger.model.Document;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 17.05.2017.
- * phoenix
- */
 public interface IDocsInteractor {
     Single<List<Document>> request(int accountId, int ownerId, int filter);
 

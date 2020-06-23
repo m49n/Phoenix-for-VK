@@ -6,10 +6,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-/**
- * Created by admin on 20.01.2017.
- * phoenix
- */
+
 public interface IPostCreateView extends IBasePostEditView, IToolbarView {
     void goBack();
 

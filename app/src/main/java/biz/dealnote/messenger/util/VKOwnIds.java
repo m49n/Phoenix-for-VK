@@ -98,6 +98,8 @@ public class VKOwnIds {
     public VKOwnIds appendAttachmentDto(@NonNull VKApiAttachment attachment) {
         if (attachment instanceof VKApiPost) {
             append((VKApiPost) attachment);
+        } else if (attachment instanceof VKApiStory) {
+            appendStory((VKApiStory) attachment);
         }
 
         return this;
@@ -177,6 +179,8 @@ public class VKOwnIds {
             for (VkApiAttachments.Entry entry : entries) {
                 if (entry.attachment instanceof VKApiPost) {
                     append((VKApiPost) entry.attachment);
+                } else if (entry.attachment instanceof VKApiStory) {
+                    appendStory((VKApiStory) entry.attachment);
                 }
             }
         }

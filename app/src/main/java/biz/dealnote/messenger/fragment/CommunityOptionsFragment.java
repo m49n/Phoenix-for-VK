@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import biz.dealnote.messenger.Extra;
@@ -30,10 +32,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.view.MySpinnerView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPresenter, ICommunityOptionsView>
         implements ICommunityOptionsView {
 
@@ -106,6 +104,7 @@ public class CommunityOptionsFragment extends BaseMvpFragment<CommunityOptionsPr
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityOptionsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

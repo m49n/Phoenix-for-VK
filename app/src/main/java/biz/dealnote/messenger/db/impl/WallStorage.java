@@ -36,10 +36,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 03-Jun-16.
- * phoenix
- */
 class WallStorage extends AbsStorage implements IWallStorage {
 
     /**

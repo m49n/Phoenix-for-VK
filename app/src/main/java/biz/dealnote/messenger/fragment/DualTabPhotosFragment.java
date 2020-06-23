@@ -36,10 +36,6 @@ import biz.dealnote.messenger.util.Objects;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 15.04.2017.
- * phoenix
- */
 public class DualTabPhotosFragment extends BaseFragment implements BackPressCallback {
 
     private Sources mSources;
@@ -91,9 +87,8 @@ public class DualTabPhotosFragment extends BaseFragment implements BackPressCall
             }
         });
 
-        new TabLayoutMediator(root.findViewById(R.id.tablayout), viewPager, (tab, position) -> {
-            tab.setText(mPagerAdapter.getPageTitle(position));
-        }).attach();
+        new TabLayoutMediator(root.findViewById(R.id.tablayout), viewPager, (tab, position) ->
+                tab.setText(mPagerAdapter.getPageTitle(position))).attach();
         return root;
     }
 

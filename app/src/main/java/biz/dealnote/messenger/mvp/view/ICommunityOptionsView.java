@@ -7,10 +7,7 @@ import biz.dealnote.messenger.model.IdOption;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
+
 public interface ICommunityOptionsView extends IMvpView, IAccountDependencyView, IErrorView, IProgressView {
     void displayName(String name);
 

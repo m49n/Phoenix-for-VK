@@ -16,10 +16,6 @@ import biz.dealnote.messenger.model.drawer.RecentChat;
 
 import static biz.dealnote.messenger.util.Utils.safeIsEmpty;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 class RecentChatsSettings implements ISettings.IRecentChats {
 
     private final Context app;

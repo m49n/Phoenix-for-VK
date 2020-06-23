@@ -6,10 +6,6 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by admin on 06.03.2017.
- * mosst-moneytransfer-android
- */
 public abstract class WeakViewAnimatorAdapter<V extends View> extends AnimatorListenerAdapter {
 
     private final WeakReference<V> ref;

@@ -6,10 +6,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
-/**
- * Created by ruslan.kolbasa on 11.10.2016.
- * phoenix
- */
 public class FlingRelativeLayout extends RelativeLayout {
 
     private static int SINGLE_TOUCH = 1;

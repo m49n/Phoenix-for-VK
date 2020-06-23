@@ -39,7 +39,6 @@ public class NotificationUtils {
             try {
                 return PicassoInstance.with()
                         .load(url)
-                        .config(Bitmap.Config.ARGB_8888)
                         .get();
             } catch (IOException e) {
                 return null;
@@ -62,7 +61,6 @@ public class NotificationUtils {
                         .resize(size, size)
                         .centerCrop()
                         .transform(transformation)
-                        .config(Bitmap.Config.RGB_565)
                         .get();
             } catch (IOException e) {
                 return loadRoundedImageFromResources(app, ifErrorOrEmpty, transformation, size);
@@ -84,7 +82,7 @@ public class NotificationUtils {
             e.printStackTrace();
 
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), res);
-            return ImageHelper.getRoundedBitmap(bitmap);
+            return ImageHelper.getRoundedBitmap(bitmap, true);
         }
     }
 

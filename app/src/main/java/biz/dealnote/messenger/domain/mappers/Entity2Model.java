@@ -10,6 +10,8 @@ import java.util.List;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
+import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
 import biz.dealnote.messenger.db.model.entity.CityEntity;
 import biz.dealnote.messenger.db.model.entity.CommentEntity;
@@ -21,6 +23,7 @@ import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.FavePageEntity;
 import biz.dealnote.messenger.db.model.entity.GiftEntity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.MilitaryEntity;
@@ -35,6 +38,7 @@ import biz.dealnote.messenger.db.model.entity.PrivacyEntity;
 import biz.dealnote.messenger.db.model.entity.SchoolEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
 import biz.dealnote.messenger.db.model.entity.StickerSetEntity;
+import biz.dealnote.messenger.db.model.entity.StoryEntity;
 import biz.dealnote.messenger.db.model.entity.TopicEntity;
 import biz.dealnote.messenger.db.model.entity.UniversityEntity;
 import biz.dealnote.messenger.db.model.entity.UserDetailsEntity;
@@ -45,6 +49,8 @@ import biz.dealnote.messenger.model.AbsModel;
 import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.Attachments;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Career;
 import biz.dealnote.messenger.model.City;
 import biz.dealnote.messenger.model.Comment;
@@ -56,6 +62,7 @@ import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FavePage;
 import biz.dealnote.messenger.model.Gift;
 import biz.dealnote.messenger.model.GiftItem;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.IOwnersBundle;
 import biz.dealnote.messenger.model.IdPair;
 import biz.dealnote.messenger.model.Link;
@@ -73,6 +80,7 @@ import biz.dealnote.messenger.model.School;
 import biz.dealnote.messenger.model.SimplePrivacy;
 import biz.dealnote.messenger.model.Sticker;
 import biz.dealnote.messenger.model.StickerSet;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Topic;
 import biz.dealnote.messenger.model.University;
 import biz.dealnote.messenger.model.User;
@@ -90,10 +98,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public class Entity2Model {
 
     public static VideoAlbum buildVideoAlbumFromDbo(VideoAlbumEntity dbo) {
@@ -344,7 +349,7 @@ public class Entity2Model {
                 .setType(entity.getType());
     }
 
-    public static PhotoAlbum map(PhotoAlbumEntity entity) {
+    public static PhotoAlbum mapPhotoAlbum(PhotoAlbumEntity entity) {
         return new PhotoAlbum(entity.getId(), entity.getOwnerId())
                 .setSize(entity.getSize())
                 .setTitle(entity.getTitle())
@@ -435,7 +440,8 @@ public class Entity2Model {
                 .setPhoto200(dbo.getPhoto200())
                 .setSender(owners.getById(dbo.getFromId()))
                 .setRandomId(dbo.getRandomId())
-                .setUpdateTime(dbo.getUpdateTime());
+                .setUpdateTime(dbo.getUpdateTime())
+                .setPayload(dbo.getPayload());
 
         if (dbo.getActionMemberId() != 0) {
             message.setActionUser(owners.getById(dbo.getActionMemberId()));
@@ -483,6 +489,26 @@ public class Entity2Model {
 
         if (entity instanceof ArticleEntity) {
             return buildArticleFromDbo((ArticleEntity) entity);
+        }
+
+        if (entity instanceof StoryEntity) {
+            return buildStoryFromDbo((StoryEntity) entity, owners);
+        }
+
+        if (entity instanceof PhotoAlbumEntity) {
+            return mapPhotoAlbum((PhotoAlbumEntity) entity);
+        }
+
+        if (entity instanceof GraffitiEntity) {
+            return buildGraffityFromDbo((GraffitiEntity) entity);
+        }
+
+        if (entity instanceof AudioPlaylistEntity) {
+            return buildAudioPlaylistFromDbo((AudioPlaylistEntity) entity);
+        }
+
+        if (entity instanceof CallEntity) {
+            return buildCallFromDbo((CallEntity) entity);
         }
 
         if (entity instanceof PollEntity) {
@@ -539,7 +565,26 @@ public class Entity2Model {
                 .setThumb_image_big(dbo.getThumb_image_big())
                 .setThumb_image_little(dbo.getThumb_image_little())
                 .setThumb_image_very_big(dbo.getThumb_image_very_big())
-                .setIsHq(dbo.getIsHq());
+                .setIsHq(dbo.getIsHq())
+                .setMain_artists(dbo.getMain_artists());
+    }
+
+    public static AudioPlaylist buildAudioPlaylistFromDbo(AudioPlaylistEntity dto) {
+        return new AudioPlaylist()
+                .setId(dto.getId())
+                .setOwnerId(dto.getOwnerId())
+                .setAccess_key(dto.getAccess_key())
+                .setArtist_name(dto.getArtist_name())
+                .setCount(dto.getCount())
+                .setDescription(dto.getDescription())
+                .setGenre(dto.getGenre())
+                .setYear(dto.getYear())
+                .setTitle(dto.getTitle())
+                .setThumb_image(dto.getThumb_image())
+                .setUpdate_time(dto.getUpdate_time())
+                .setOriginal_access_key(dto.getOriginal_access_key())
+                .setOriginal_id(dto.getOriginal_id())
+                .setOriginal_owner_id(dto.getOriginal_owner_id());
     }
 
     public static Gift buildGiftFromDbo(GiftEntity entity) {
@@ -592,7 +637,8 @@ public class Entity2Model {
                 .setDuration(entity.getDuration())
                 .setLinkMp3(entity.getLinkMp3())
                 .setLinkOgg(entity.getLinkOgg())
-                .setWaveform(entity.getWaveform());
+                .setWaveform(entity.getWaveform())
+                .setTranscript(entity.getTranscript());
     }
 
     public static Document buildDocumentFromDbo(DocumentEntity dbo) {
@@ -671,6 +717,34 @@ public class Entity2Model {
                 .setTitle(dbo.getTitle())
                 .setSubTitle(dbo.getSubTitle())
                 .setURL(dbo.getURL());
+    }
+
+    public static Call buildCallFromDbo(CallEntity dbo) {
+        return new Call().setInitiator_id(dbo.getInitiator_id())
+                .setReceiver_id(dbo.getReceiver_id())
+                .setState(dbo.getState())
+                .setTime(dbo.getTime());
+    }
+
+    public static Story buildStoryFromDbo(StoryEntity dbo, IOwnersBundle owners) {
+        return new Story().setId(dbo.getId())
+                .setOwnerId(dbo.getOwnerId())
+                .setDate(dbo.getDate())
+                .setExpires(dbo.getExpires())
+                .setIs_expired(dbo.isIs_expired())
+                .setAccessKey(dbo.getAccessKey())
+                .setOwner(owners.getById(dbo.getOwnerId()))
+                .setPhoto(nonNull(dbo.getPhoto()) ? map(dbo.getPhoto()) : null)
+                .setVideo(dbo.getVideo() != null ? buildVideoFromDbo(dbo.getVideo()) : null);
+    }
+
+    public static Graffiti buildGraffityFromDbo(GraffitiEntity dto) {
+        return new Graffiti().setId(dto.getId())
+                .setOwner_id(dto.getOwner_id())
+                .setAccess_key(dto.getAccess_key())
+                .setHeight(dto.getHeight())
+                .setWidth(dto.getWidth())
+                .setUrl(dto.getUrl());
     }
 
     public static News buildNewsFromDbo(NewsEntity dbo, IOwnersBundle owners) {
@@ -872,6 +946,12 @@ public class Entity2Model {
         }
     }
 
+    public static void fillStoryOwnerIds(@NonNull VKOwnIds ids, @Nullable StoryEntity dbo) {
+        if (nonNull(dbo)) {
+            ids.append(dbo.getOwnerId());
+        }
+    }
+
     public static void fillOwnerIds(@NonNull VKOwnIds ids, CommentEntity entity) {
         fillCommentOwnerIds(ids, entity);
     }
@@ -881,6 +961,8 @@ public class Entity2Model {
             fillMessageOwnerIds(ids, (MessageEntity) entity);
         } else if (entity instanceof PostEntity) {
             fillPostOwnerIds(ids, (PostEntity) entity);
+        } else if (entity instanceof StoryEntity) {
+            fillStoryOwnerIds(ids, (StoryEntity) entity);
         }
     }
 

@@ -32,10 +32,6 @@ import biz.dealnote.messenger.api.model.feedback.VkApiUsersFeedback;
 import biz.dealnote.messenger.api.model.feedback.VkApiWallFeedback;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class FeedbackDtoAdapter extends AbsAdapter implements JsonDeserializer<VkApiBaseFeedback> {
 
     private static final BaseMentionCommentParser MENTION_COMMENT_PARSER = new BaseMentionCommentParser();

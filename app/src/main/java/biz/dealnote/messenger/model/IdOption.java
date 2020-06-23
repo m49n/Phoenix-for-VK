@@ -8,11 +8,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.Identificable;
 
-/**
- * Created by admin on 16.06.2017.
- * phoenix
- * Identificable Category
- */
 public final class IdOption implements Parcelable, Identificable {
 
     public static final Creator<IdOption> CREATOR = new Creator<IdOption>() {

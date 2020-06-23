@@ -6,6 +6,7 @@ public class AbsLongpollEvent {
     public static final int ACTION_MESSAGES_FLAGS_SET = 2;
     public static final int ACTION_MESSAGES_FLAGS_RESET = 3;
     public static final int ACTION_MESSAGE_ADDED = 4;
+    public static final int ACTION_MESSAGE_EDITED = 5;
     public static final int ACTION_SET_INPUT_MESSAGES_AS_READ = 6;
     public static final int ACTION_SET_OUTPUT_MESSAGES_AS_READ = 7;
     public static final int ACTION_USER_IS_ONLINE = 8;

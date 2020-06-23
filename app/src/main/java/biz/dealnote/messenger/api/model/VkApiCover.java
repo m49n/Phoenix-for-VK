@@ -4,10 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by Ruslan Kolbasa on 09.10.2017.
- * Phoenix-for-VK
- */
 public class VkApiCover {
 
     @SerializedName("enabled")

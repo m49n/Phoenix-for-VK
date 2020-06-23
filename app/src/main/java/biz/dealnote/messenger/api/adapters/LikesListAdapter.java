@@ -15,10 +15,6 @@ import biz.dealnote.messenger.api.model.VKApiOwner;
 import biz.dealnote.messenger.api.model.VKApiUser;
 import biz.dealnote.messenger.api.model.response.LikesListResponse;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
 public class LikesListAdapter extends AbsAdapter implements JsonDeserializer<LikesListResponse> {
 
     @Override

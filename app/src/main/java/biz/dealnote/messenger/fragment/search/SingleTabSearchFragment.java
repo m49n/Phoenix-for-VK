@@ -25,10 +25,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.MySearchView;
 
-/**
- * Created by admin on 01.05.2017.
- * phoenix
- */
 public class SingleTabSearchFragment extends Fragment implements MySearchView.OnQueryTextListener, MySearchView.OnAdditionalButtonClickListener {
 
     @SearchContentType
@@ -61,6 +57,16 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
         Bundle args = new Bundle();
         args.putInt(Extra.TYPE, contentType);
         args.putInt(Extra.ACCOUNT_ID, accountId);
+        SingleTabSearchFragment fragment = new SingleTabSearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SingleTabSearchFragment newInstance(int accountId, @SearchContentType int contentType, @Nullable BaseSearchCriteria criteria) {
+        Bundle args = new Bundle();
+        args.putInt(Extra.TYPE, contentType);
+        args.putInt(Extra.ACCOUNT_ID, accountId);
+        args.putParcelable(Extra.CRITERIA, criteria);
         SingleTabSearchFragment fragment = new SingleTabSearchFragment();
         fragment.setArguments(args);
         return fragment;

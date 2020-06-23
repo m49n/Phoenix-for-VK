@@ -5,10 +5,6 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by admin on 08.10.2016.
- * phoenix
- */
 @IntDef({DocType.TEXT, DocType.ARCHIVE, DocType.GIF, DocType.IMAGE,
         DocType.AUDIO, DocType.VIDEO, DocType.EBOOK, DocType.UNKNOWN})
 @Retention(RetentionPolicy.SOURCE)

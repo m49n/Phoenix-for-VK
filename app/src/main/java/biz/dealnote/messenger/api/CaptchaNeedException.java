@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.api;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
 public class CaptchaNeedException extends Exception {
 
     private final String sid;

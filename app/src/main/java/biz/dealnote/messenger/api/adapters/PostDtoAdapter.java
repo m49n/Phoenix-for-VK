@@ -16,10 +16,6 @@ import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
 import biz.dealnote.messenger.api.model.VkApiPostSource;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class PostDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiPost> {
 
     @Override

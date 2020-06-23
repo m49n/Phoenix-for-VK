@@ -4,16 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.mvp.presenter.CommunityMembersPresenter;
 import biz.dealnote.messenger.mvp.view.ICommunityMembersView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
 public class CommunityControlMembersFragment extends BaseMvpFragment<CommunityMembersPresenter, ICommunityMembersView>
         implements ICommunityMembersView {
 
@@ -26,6 +24,7 @@ public class CommunityControlMembersFragment extends BaseMvpFragment<CommunityMe
         return fragment;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunityMembersPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityMembersPresenter(

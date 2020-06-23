@@ -11,10 +11,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 19.03.2017.
- * phoenix
- */
 public class DialogsInteractor implements IDialogsInteractor {
 
     private final INetworker networker;

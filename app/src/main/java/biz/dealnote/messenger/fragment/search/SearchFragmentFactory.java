@@ -14,10 +14,6 @@ import biz.dealnote.messenger.fragment.search.criteria.PeopleSearchCriteria;
 import biz.dealnote.messenger.fragment.search.criteria.VideoSearchCriteria;
 import biz.dealnote.messenger.fragment.search.criteria.WallSearchCriteria;
 
-/**
- * Created by admin on 01.05.2017.
- * phoenix
- */
 public class SearchFragmentFactory {
 
     public static Fragment create(@SearchContentType int type, int accountId, @Nullable BaseSearchCriteria criteria) {
@@ -36,6 +32,10 @@ public class SearchFragmentFactory {
 
             case SearchContentType.AUDIOS:
                 return AudiosSearchFragment.newInstance(accountId,
+                        criteria instanceof AudioSearchCriteria ? (AudioSearchCriteria) criteria : null);
+
+            case SearchContentType.AUDIOS_SELECT:
+                return AudiosSearchFragment.newInstanceSelect(accountId,
                         criteria instanceof AudioSearchCriteria ? (AudioSearchCriteria) criteria : null);
 
             case SearchContentType.DOCUMENTS:

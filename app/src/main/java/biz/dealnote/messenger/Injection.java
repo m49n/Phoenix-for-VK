@@ -34,10 +34,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
-/**
- * Created by ruslan.kolbasa on 01.12.2016.
- * phoenix
- */
 public class Injection {
 
     private static final Object UPLOADMANAGERLOCK = new Object();

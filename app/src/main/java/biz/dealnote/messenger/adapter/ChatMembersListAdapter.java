@@ -18,9 +18,12 @@ import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.AppChatUser;
 import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.User;
+import biz.dealnote.messenger.model.UserPlatform;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
+import biz.dealnote.messenger.util.ViewUtils;
+import biz.dealnote.messenger.view.OnlineView;
 
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
@@ -49,7 +52,25 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
         final AppChatUser item = data.get(position);
         final Owner user = item.getMember();
 
-        holder.vOnline.setVisibility(user instanceof User && ((User) user).isOnline() ? View.VISIBLE : View.GONE);
+        boolean online = false;
+        boolean onlineMobile = false;
+
+        @UserPlatform
+        int platform = UserPlatform.UNKNOWN;
+        int app = 0;
+
+        if (user instanceof User) {
+            User interlocuter = (User) user;
+            online = interlocuter.isOnline();
+            onlineMobile = interlocuter.isOnlineMobile();
+            platform = interlocuter.getPlatform();
+            app = interlocuter.getOnlineApp();
+        }
+
+        Integer iconRes = ViewUtils.getOnlineIcon(online, onlineMobile, platform, app);
+        holder.vOnline.setIcon(iconRes != null ? iconRes : 0);
+        holder.vOnline.setVisibility(online ? View.VISIBLE : View.GONE);
+
         String userAvatarUrl = user.getMaxSquareAvatar();
 
         if (isEmpty(userAvatarUrl)) {
@@ -116,7 +137,7 @@ public class ChatMembersListAdapter extends RecyclerView.Adapter<ChatMembersList
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View vOnline;
+        OnlineView vOnline;
         ImageView ivAvatar;
         TextView tvName;
         TextView tvSubline;

@@ -6,10 +6,7 @@ import android.os.Parcelable;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Ruslan Kolbasa on 15.06.2017.
- * phoenix
- */
+
 public final class GroupSettings implements Parcelable {
 
     public static final Creator<GroupSettings> CREATOR = new Creator<GroupSettings>() {

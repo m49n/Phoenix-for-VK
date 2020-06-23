@@ -2,10 +2,6 @@ package biz.dealnote.messenger.db.interfaces;
 
 import biz.dealnote.messenger.crypt.KeyLocationPolicy;
 
-/**
- * Created by ruslan.kolbasa on 25.11.2016.
- * phoenix
- */
 public interface IStorages {
 
     ITempDataStorage tempStore();

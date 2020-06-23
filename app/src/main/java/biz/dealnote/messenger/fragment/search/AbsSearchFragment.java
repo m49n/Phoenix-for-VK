@@ -29,16 +29,12 @@ import biz.dealnote.messenger.util.ViewUtils;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 02.05.2017.
- * phoenix
- */
-public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>, V extends IBaseSearchView<T>, T>
+public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>, V extends IBaseSearchView<T>, T, A extends RecyclerView.Adapter>
         extends PlaceSupportMvpFragment<P, V> implements IBaseSearchView<T> {
 
     public static final String ACTION_QUERY = "action_query";
     private static final int REQUEST_FILTER_EDIT = 19;
-    public RecyclerView.Adapter mAdapter;
+    public A mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mEmptyText;
 
@@ -46,10 +42,14 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
         getPresenter().fireOptionsChanged();
     }
 
+    public View createViewLayout(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        View root = createViewLayout(inflater, container);
 
         RecyclerView recyclerView = root.findViewById(R.id.list);
         RecyclerView.LayoutManager manager = createLayoutManager();
@@ -70,6 +70,7 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
 
         mEmptyText = root.findViewById(R.id.empty);
         mEmptyText.setText(getEmptyText());
+        postCreate(root);
         return root;
     }
 
@@ -163,9 +164,11 @@ public abstract class AbsSearchFragment<P extends AbsSearchPresenter<V, ?, T, ?>
             onSeachOptionsChanged();
     }
 
-    abstract void setAdapterData(RecyclerView.Adapter adapter, List<T> data);
+    abstract void setAdapterData(A adapter, List<T> data);
 
-    abstract RecyclerView.Adapter createAdapter(List<T> data);
+    abstract void postCreate(View root);
+
+    abstract A createAdapter(List<T> data);
 
     abstract RecyclerView.LayoutManager createLayoutManager();
 }

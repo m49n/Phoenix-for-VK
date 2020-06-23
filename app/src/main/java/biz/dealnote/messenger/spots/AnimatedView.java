@@ -3,10 +3,6 @@ package biz.dealnote.messenger.spots;
 import android.content.Context;
 import android.view.View;
 
-/**
- * Created by Maxim Dybarsky | maxim.dybarskyy@gmail.com
- * on 13.01.15 at 14:17
- */
 class AnimatedView extends View {
 
     private int target;

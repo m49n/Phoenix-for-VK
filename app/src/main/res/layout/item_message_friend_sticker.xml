@@ -31,7 +31,8 @@
             android:id="@+id/item_message_avatar"
             android:layout_width="@dimen/avatar_size_small"
             android:layout_height="@dimen/avatar_size_small"
-            android:layout_marginStart="4dp" />
+            android:layout_marginStart="4dp"
+            android:stateListAnimator="@animator/clicked" />
 
         <biz.dealnote.messenger.view.OnlineView
             android:id="@+id/item_message_important"
@@ -53,16 +54,45 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/sticker"
-                android:layout_width="120dp"
-                android:layout_height="120dp" />
+                android:layout_width="128dp"
+                android:layout_height="128dp" />
 
             <TextView
                 android:id="@+id/item_message_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="time" />
+
+            <LinearLayout
+                android:id="@+id/item_message_attachment_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <biz.dealnote.messenger.view.BubbleLinearLayout
+                    android:id="@+id/item_message_bubble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="6dp"
+                    app:arrowHeight="0dp"
+                    app:arrowWidth="0dp"
+                    app:bubbleColor="?message_bubble_color">
+
+                    <include
+                        layout="@layout/attachment_links"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </biz.dealnote.messenger.view.BubbleLinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

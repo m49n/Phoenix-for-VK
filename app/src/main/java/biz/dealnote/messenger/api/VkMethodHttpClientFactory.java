@@ -12,10 +12,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by Ruslan Kolbasa on 28.07.2017.
- * phoenix
- */
 public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
 
     @Override

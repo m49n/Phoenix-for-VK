@@ -18,10 +18,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 class FaveApi extends AbsApi implements IFaveApi {
 
     FaveApi(int accountId, IServiceProvider provider) {

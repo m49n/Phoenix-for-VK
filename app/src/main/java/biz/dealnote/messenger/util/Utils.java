@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.util;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -22,6 +24,9 @@ import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -36,6 +41,9 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.graphics.ColorUtils;
+
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -45,15 +53,20 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.R;
+import biz.dealnote.messenger.api.ProxyUtil;
 import biz.dealnote.messenger.api.model.Identificable;
 import biz.dealnote.messenger.model.ISelectable;
 import biz.dealnote.messenger.model.ISomeones;
+import biz.dealnote.messenger.model.ProxyConfig;
 import io.reactivex.disposables.Disposable;
+import okhttp3.OkHttpClient;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
@@ -226,7 +239,7 @@ public class Utils {
     }
 
     public static boolean isEmpty(Collection<?> data) {
-        return data == null || data.size() == 0;
+        return data == null || data.isEmpty();
     }
 
     public static boolean isEmpty(Map<?, ?> data) {
@@ -397,7 +410,7 @@ public class Utils {
 
         Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
         toast.setView(view);
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15);
         toast.show();
     }
 
@@ -407,7 +420,7 @@ public class Utils {
 
         Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
         toast.setView(view);
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15);
         toast.show();
     }
 
@@ -966,6 +979,126 @@ public class Utils {
         paint2.setShader(gradient);
         canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
         return bitmap;
+    }
+
+    public static int getThemeColor() {
+        switch (biz.dealnote.messenger.settings.Settings.get().ui().getMainThemeKey()) {
+            case "fire":
+            case "yellow_violet":
+                return Color.parseColor("#FF9800");
+            case "old_ice":
+            case "blue_red":
+            case "blue_yellow":
+            case "blue_violet":
+            case "ice":
+            case "ice_green":
+                return Color.parseColor("#4d7198");
+            case "red":
+            case "red_violet":
+                return Color.parseColor("#F44336");
+            case "violet":
+            case "violet_red":
+                return Color.parseColor("#9800ff");
+            case "violet_green":
+            case "violet_yellow":
+                return Color.parseColor("#8500ff");
+            case "green_violet":
+                return Color.parseColor("#268000");
+            case "gray":
+                return Color.parseColor("#444444");
+            case "yellow_red":
+                return Color.parseColor("#F8DF00");
+            default:
+                return 0xff11acfa;
+        }
+    }
+
+    public static OkHttpDataSourceFactory getExoPlayerFactory(String userAgent, ProxyConfig proxyConfig) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS);
+
+        if (Objects.nonNull(proxyConfig)) {
+            ProxyUtil.applyProxyConfig(builder, proxyConfig);
+        }
+
+        return new OkHttpDataSourceFactory(builder.build(), userAgent);
+    }
+
+    public static boolean isColorDark(int color) {
+        return ColorUtils.calculateLuminance(color) < 0.5;
+    }
+
+    public static Animator getAnimator(View view) {
+        return ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+    }
+
+    public static <K extends Parcelable, V extends Parcelable> void writeParcelableMap(
+            Parcel parcel, int flags, Map<K, V> map) {
+        if (isEmpty(map)) {
+            parcel.writeInt(0);
+            return;
+        }
+        parcel.writeInt(map.size());
+        for (Map.Entry<K, V> e : map.entrySet()) {
+            parcel.writeParcelable(e.getKey(), flags);
+            parcel.writeParcelable(e.getValue(), flags);
+        }
+    }
+
+    public static <K extends Parcelable, V extends Parcelable> Map<K, V> readParcelableMap(
+            Parcel parcel, Class<K> kClass, Class<V> vClass) {
+        int size = parcel.readInt();
+        if (size == 0)
+            return null;
+        Map<K, V> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(kClass.cast(parcel.readParcelable(kClass.getClassLoader())),
+                    vClass.cast(parcel.readParcelable(vClass.getClassLoader())));
+        }
+        return map;
+    }
+
+    public static void writeStringMap(Parcel parcel, Map<String, String> map) {
+        if (isEmpty(map)) {
+            parcel.writeInt(0);
+            return;
+        }
+        parcel.writeInt(map.size());
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            parcel.writeString(e.getKey());
+            parcel.writeString(e.getValue());
+        }
+    }
+
+    public static Map<String, String> readStringMap(Parcel parcel) {
+        int size = parcel.readInt();
+        if (size == 0)
+            return null;
+        Map<String, String> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(parcel.readString(), parcel.readString());
+        }
+        return map;
+    }
+
+    public static String[][] getArrayFromHash(Map<String, String> data) {
+        String[][] str;
+
+        Object[] keys = data.keySet().toArray();
+        Object[] values = data.values().toArray();
+        str = new String[2][values.length];
+        for (int i = 0; i < keys.length; i++) {
+            str[0][i] = (String) keys[i];
+            str[1][i] = (String) values[i];
+        }
+        return str;
+    }
+
+    public static void vibrate(Context context, int ms) {
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(ms);
     }
 
     public interface SimpleFunction<F, S> {

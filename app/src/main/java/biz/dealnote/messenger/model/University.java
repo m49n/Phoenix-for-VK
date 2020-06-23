@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.model;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class University {
 
     private int id;

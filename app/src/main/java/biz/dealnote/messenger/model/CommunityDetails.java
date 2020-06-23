@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by admin on 04.10.2017.
- * phoenix
- */
+
 public class CommunityDetails {
 
     private int allWallCount;

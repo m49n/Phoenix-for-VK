@@ -7,45 +7,9 @@
         android:title="@string/general_settings"
         app:iconSpaceReserved="false">
 
-        <ListPreference
-            android:defaultValue="2"
-            android:entries="@array/night_mode_names"
-            android:entryValues="@array/night_mode_values"
-            android:key="night_switch"
-            android:title="@string/night_mode_title"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:key="default_category"
-            android:summary="@string/default_category_summary"
-            android:title="@string/default_category_title"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/array_image_sizes_settings_names"
-            android:entryValues="@array/array_image_sizes_settings_values"
-            android:key="image_size"
-            android:summary="@string/select_image_size_summary"
-            android:title="@string/select_image_size_title"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="3"
-            android:entries="@array/preview_preview_size"
-            android:entryValues="@array/preview_preview_size_values"
-            android:key="photo_preview_size"
-            android:title="@string/photo_preview_size_title"
-            app:iconSpaceReserved="false" />
-
         <Preference
             android:key="proxy"
             android:title="@string/http_proxy"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="notifications"
-            android:title="@string/notif_setting_title"
             app:iconSpaceReserved="false" />
 
         <Preference
@@ -58,38 +22,172 @@
             android:title="@string/user_blacklist_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <Preference
+            android:key="notifications"
+            android:title="@string/notif_setting_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/behaviour_settings"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:key="default_category"
+            android:summary="@string/default_category_summary"
+            android:title="@string/default_category_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/array_image_sizes_settings_names"
+            android:entryValues="@array/array_image_sizes_settings_values"
+            android:key="image_size"
+            android:summary="@string/select_image_size_summary"
+            android:title="@string/select_image_size_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:defaultValue="3"
+            android:entries="@array/preview_preview_size"
+            android:entryValues="@array/preview_preview_size_values"
+            android:key="photo_preview_size"
+            android:title="@string/photo_preview_size_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="load_history_notif"
+            android:summary="@string/load_history_notif_summary"
+            android:title="@string/load_history_notif"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
             android:defaultValue="true"
             android:key="custom_tabs"
             android:title="@string/open_links_in_app"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="double_press_to_exit"
+            android:title="@string/double_press_to_exit"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="photo_swipe_pos_top_to_bottom"
+            android:summary="@string/photo_swipe_pos_top_to_bottom_summary"
+            android:title="@string/photo_swipe_pos_top_to_bottom"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="use_internal_downloader"
+            android:summary="@string/use_internal_downloader_summary"
+            android:title="@string/use_internal_downloader"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="download_photo_tap"
+            android:summary="@string/download_photo_tap"
+            android:title="@string/download_photo_tap"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="group_appearance"
+        android:title="@string/appearance_settings"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/night_mode_names"
+            android:entryValues="@array/night_mode_values"
+            android:key="night_switch"
+            android:title="@string/night_mode_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:defaultValue="ice"
+            android:key="app_theme"
+            android:title="@string/choose_theme_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="amoled_theme"
+            android:title="@string/amoled_theme"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="webview_night_mode"
+            android:summary="@string/webview_summary"
+            android:title="@string/webview_night_mode"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="disable_history"
+            android:title="@string/disable_history"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="avatar_style"
+            android:title="@string/avatar_style_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/array_photo_rounded_names"
+            android:entryValues="@array/array_photo_rounded_items"
+            android:key="photo_rounded_view"
+            android:title="@string/photo_rounded_view"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/input"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
-            android:defaultValue="true"
+        <SwitchPreference
+            android:defaultValue="false"
             android:key="emojis_type"
-            android:summary="@string/emojis_type_summary"
             android:title="@string/emojis_type_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="emojis_recents"
-            android:summary="@string/emojis_recents"
             android:title="@string/emojis_recents"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="send_by_enter"
-            android:summary="@string/send_on_enter_summary"
             android:title="@string/send_on_enter_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="dont_write"
+            android:title="@string/dont_write"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="over_ten_attach"
+            android:title="@string/over_ten_attach"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
@@ -98,42 +196,47 @@
         android:title="@string/custom_chat"
         app:iconSpaceReserved="false">
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="disable_encryption"
+            android:title="@string/disable_encryption"
+            app:iconSpaceReserved="false" />
+
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/array_chat_background_names"
             android:entryValues="@array/array_chat_background_items"
             android:key="chat_background"
             android:title="@string/chat_background"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:key="chat_light_background"
-            android:summary="@string/chat_light_background"
             android:title="@string/chat_light_background"
             app:iconSpaceReserved="false" />
 
         <Preference
             android:key="chat_dark_background"
-            android:summary="@string/chat_dark_background"
             android:title="@string/chat_dark_background"
             app:iconSpaceReserved="false" />
 
         <Preference
             android:key="reset_chat_background"
-            android:summary="@string/set_default"
-            android:title="@string/set_default"
+            android:title="@string/delete_chats_photo"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="custom_chat_color_usage"
             android:summary="@string/custom_chat_color_summary"
-            android:title="@string/custom_chat_color"
+            android:title="@string/use_custom_chat_color"
+            app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference
+            android:dependency="custom_chat_color_usage"
             android:key="custom_chat_color"
-            android:summary="@string/custom_chat_color"
             android:title="@string/custom_chat_color"
             app:default_color="#ffffffff"
             app:iconSpaceReserved="false"
@@ -144,8 +247,8 @@
             app:preference_selector="@drawable/wheel" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference
+            android:dependency="custom_chat_color_usage"
             android:key="custom_chat_color_second"
-            android:summary="@string/custom_chat_color_second"
             android:title="@string/custom_chat_color_second"
             app:default_color="#ffffffff"
             app:iconSpaceReserved="false"
@@ -155,16 +258,23 @@
             app:preference_palette="@drawable/palette"
             app:preference_selector="@drawable/wheel" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="my_message_no_color"
+            android:title="@string/my_message_no_color"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="my_message_no_color"
             android:key="custom_message_color_usage"
-            android:summary="@string/custom_message_color"
-            android:title="@string/custom_message_color"
+            android:title="@string/usage_custom_message_color"
             app:iconSpaceReserved="false" />
 
         <com.skydoves.colorpickerpreference.ColorPickerPreference
+            android:dependency="custom_message_color_usage"
             android:key="custom_message_color"
-            android:summary="@string/custom_message_color"
             android:title="@string/custom_message_color"
             app:default_color="#ffffffff"
             app:iconSpaceReserved="false"
@@ -174,66 +284,83 @@
             app:preference_palette="@drawable/palette"
             app:preference_selector="@drawable/wheel" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="disable_swipes_chat"
+            android:title="@string/disable_swipes_chat"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="display_writing"
+            android:title="@string/display_writing"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/additional_settings"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="auto_update"
-            android:summary="@string/auto_update"
-            android:title="@string/auto_update"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="auto_read"
-            android:summary="@string/auto_read"
             android:title="@string/auto_read"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="info_reading"
-            android:summary="@string/info_reading"
-            android:title="@string/info_reading"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_stop_audio"
-            android:summary="@string/use_stop_audio"
-            android:title="@string/use_stop_audio"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="show_mini_player"
-            android:summary="@string/show_mini_player"
-            android:title="@string/show_mini_player"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="enable_last_read"
-            android:summary="@string/enable_last_read"
             android:title="@string/enable_last_read"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="show_audio_top"
-            android:summary="@string/show_audio_top"
-            android:title="@string/show_audio_top"
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="be_online"
+            android:title="@string/be_online"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="info_reading"
+            android:title="@string/info_reading"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/music_settings"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="audio_round_icon"
+            android:title="@string/audio_round_icon"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
             android:defaultValue="false"
-            android:key="use_internal_downloader"
-            android:summary="@string/use_internal_downloader_summary"
-            android:title="@string/use_internal_downloader"
+            android:key="use_stop_audio"
+            android:title="@string/use_stop_audio"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="show_mini_player"
+            android:title="@string/show_mini_player"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="click_next_track"
+            android:summary="@string/click_next_track_summary"
+            android:title="@string/click_next_track"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="show_audio_top"
+            android:title="@string/show_audio_top"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
@@ -243,89 +370,22 @@
         android:title="@string/for_wear"
         app:iconSpaceReserved="false">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="is_player_support_volume"
-            android:summary="@string/is_player_support_volume"
             android:title="@string/is_player_support_volume"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="music_enable_toolbar"
-            android:summary="@string/music_enable_toolbar"
             android:title="@string/music_enable_toolbar"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="group_appearance"
-        android:title="@string/appearance_settings"
-        app:iconSpaceReserved="false">
-
-        <Preference
-            android:defaultValue="ice"
-            android:key="app_theme"
-            android:title="@string/choose_theme_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="amoled_theme"
-            android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="audio_round_icon"
-            android:title="@string/audio_round_icon"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="avatar_style"
-            android:summary="@string/avatar_style_summary"
-            android:title="@string/avatar_style_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
-            android:key="double_press_to_exit"
-            android:title="@string/double_press_to_exit"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="my_message_no_color"
-            android:title="@string/my_message_no_color"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="display_writing"
-            android:summary="@string/display_writing"
-            android:title="@string/display_writing"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="photo_swipe_pos_top_to_bottom"
-            android:summary="@string/photo_swipe_pos_top_to_bottom"
-            android:title="@string/photo_swipe_pos_top_to_bottom"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="disable_swipes"
-            android:summary="@string/disable_swipes"
-            android:title="@string/disable_swipes"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="disable_swipes_chat"
-            android:summary="@string/disable_swipes_chat"
-            android:title="@string/disable_swipes_chat"
+            android:key="show_profile_in_additional_page"
+            android:title="@string/show_profile_in_additional_page"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
@@ -341,17 +401,9 @@
             android:title="@string/drawer_categories_title"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="show_profile_in_additional_page"
-            android:summary="@string/show_profile_in_additional_page"
-            android:title="@string/show_profile_in_additional_page"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_recent_dialogs"
-            android:summary="@string/show_recent_dialogs"
             android:title="@string/show_recent_dialogs"
             app:iconSpaceReserved="false" />
 
@@ -382,10 +434,9 @@
             app:icon="@drawable/dir_doc"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="photo_to_user_dir"
-            android:summary="@string/photo_to_user_dir"
             android:title="@string/photo_to_user_dir"
             app:icon="@drawable/dir_groups"
             app:iconSpaceReserved="false" />
@@ -393,50 +444,91 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:icon="@drawable/valknut_settings"
+        android:key="wall_themed"
+        android:summary="@string/for_pagan"
+        android:title="@string/wall_themed"
+        app:iconSpaceReserved="false">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="runes_show"
+            android:title="@string/runes_show"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="runes_valknut"
+            android:title="@string/runes_valknut"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="runes_valknut"
+            android:key="valknut_color_theme"
+            android:summary="@string/requare_api_24"
+            android:title="@string/valknut_color_theme"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="dev"
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false">
-        <CheckBoxPreference
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="debug_mode"
+            android:title="@string/debug_mode"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:dependency="debug_mode"
+            android:key="request_executor"
+            android:title="@string/request_executor_title"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:dependency="debug_mode"
+            android:key="show_logs"
+            android:title="@string/settings_show_logs_title"
+            app:icon="@drawable/debug_mode"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
             android:defaultValue="true"
             android:key="show_audio_cover"
             android:title="@string/show_audio_cover"
+            app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="force_hls"
             android:title="@string/force_hls"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="use_old_vk_api"
+            android:summary="@string/mp3_friendly"
             android:title="@string/use_old_vk_api"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
-            android:key="disable_history"
-            android:title="@string/disable_history"
-            app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="force_cache"
             android:title="@string/force_cache"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="settings_no_push"
-            android:summary="@string/settings_no_push"
             android:title="@string/settings_no_push"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="keep_longpoll"
             android:summary="@string/settings_keep_longpoll_summary"
             android:title="@string/settings_keep_longpoll_title"
             app:iconSpaceReserved="false" />
-        <Preference
-            android:key="show_logs"
-            android:title="@string/settings_show_logs_title"
-            app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="request_executor"
-            android:title="@string/request_executor_title"
-            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/crypt_version_names"
+            android:entryValues="@array/crypt_version_list"
+            android:key="crypt_version"
+            android:title="@string/crypt_version"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:key="account_cache_cleaner"
@@ -447,11 +539,23 @@
             android:key="picture_cache_cleaner"
             android:title="@string/picture_cache_cleaner"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:key="delete_cache_images"
+            android:title="@string/delete_cache_images"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/about_settings"
         app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="auto_update"
+            android:title="@string/auto_update"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="version"
             android:title="@string/app_name"

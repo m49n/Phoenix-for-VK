@@ -30,10 +30,7 @@ import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.removeIf;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 27.03.2017.
- * phoenix
- */
+
 public class CommentCreatePresenter extends AbsAttachmentsEditPresenter<ICreateCommentView> {
 
     private static final String TAG = CommentCreatePresenter.class.getSimpleName();

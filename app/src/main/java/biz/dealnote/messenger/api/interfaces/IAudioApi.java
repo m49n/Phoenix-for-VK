@@ -8,14 +8,13 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.IdPair;
 import biz.dealnote.messenger.api.model.Items;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioCatalog;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.api.model.VkApiLyrics;
+import biz.dealnote.messenger.api.model.response.CatalogResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
+
 public interface IAudioApi {
 
     @CheckResult
@@ -67,4 +66,9 @@ public interface IAudioApi {
     @CheckResult
     Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id, int offset);
 
+    @CheckResult
+    Single<Items<VKApiAudioCatalog>> getCatalog(String artist_id);
+
+    @CheckResult
+    Single<CatalogResponse> getCatalogBlockById(String block_id, String start_from);
 }

@@ -1,7 +1,6 @@
 package biz.dealnote.messenger.fragment;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -38,7 +34,6 @@ import biz.dealnote.messenger.mvp.presenter.CommunitiesPresenter;
 import biz.dealnote.messenger.mvp.view.ICommunitiesView;
 import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceFactory;
-import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -47,17 +42,12 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, ICommunitiesView>
         implements ICommunitiesView, MySearchView.OnQueryTextListener, CommunitiesAdapter.ActionListener, BackPressCallback, MySearchView.OnBackButtonClickListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CommunitiesAdapter mAdapter;
     private MySearchView mSearchView;
-    private FragmentManager.OnBackStackChangedListener backStackChangedListener = this::resolveLeftButton;
 
     public static CommunitiesFragment newInstance(int accountId, int userId) {
         Bundle args = new Bundle();
@@ -72,7 +62,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_communities, container, false);
-        //((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         mSwipeRefreshLayout = root.findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(() -> getPresenter().fireRefresh());
@@ -97,36 +87,17 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         mSearchView.setRightButtonVisibility(false);
         mSearchView.setOnQueryTextListener(this);
 
-        resolveLeftButton();
+        mSearchView.setLeftIcon(R.drawable.magnify);
         return root;
-    }
-
-    private void resolveLeftButton() {
-        FragmentActivity activity = requireActivity();
-
-        try {
-            if (nonNull(mSearchView)) {
-                int count = activity.getSupportFragmentManager().getBackStackEntryCount();
-                Drawable tr = AppCompatResources.getDrawable(requireActivity(), count == 1 && activity instanceof AppStyleable ?
-                        R.drawable.phoenix_round : R.drawable.arrow_left);
-                Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(requireActivity()));
-                mSearchView.setLeftIcon(tr);
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
-        if (context instanceof AppCompatActivity) {
-            ((AppCompatActivity) context).getSupportFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
-        }
     }
 
     @Override
     public void onDetach() {
-        requireActivity().getSupportFragmentManager().removeOnBackStackChangedListener(backStackChangedListener);
         super.onDetach();
     }
 
@@ -192,6 +163,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunitiesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunitiesPresenter(

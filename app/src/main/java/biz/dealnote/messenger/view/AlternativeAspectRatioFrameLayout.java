@@ -7,10 +7,7 @@ import android.widget.FrameLayout;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
+
 public class AlternativeAspectRatioFrameLayout extends FrameLayout {
 
     private int mAspectRatioWidth = 16;

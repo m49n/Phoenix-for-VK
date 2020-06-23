@@ -14,10 +14,7 @@ import biz.dealnote.messenger.mvp.view.IRepostView;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
-/**
- * Created by admin on 15.05.2017.
- * phoenix
- */
+
 public class RepostPresenter extends AbsAttachmentsEditPresenter<IRepostView> {
 
     private final Post post;

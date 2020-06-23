@@ -21,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -42,6 +45,7 @@ import biz.dealnote.messenger.mvp.presenter.UserWallPresenter;
 import biz.dealnote.messenger.mvp.view.IUserWallView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.settings.CurrentTheme;
+import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.InputTextDialog;
 import biz.dealnote.messenger.util.ViewUtils;
@@ -52,10 +56,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by ruslan.kolbasa on 23.01.2017.
- * phoenix
- */
 public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPresenter>
         implements IUserWallView {
 
@@ -68,7 +68,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         if (isNull(mHeaderHolder)) return;
 
         mHeaderHolder.tvName.setText(user.getFullName());
-        mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user));
+        mHeaderHolder.tvLastSeen.setText(UserInfoResolveUtil.getUserActivityLine(getContext(), user, true));
 
         if (!user.getCanWritePrivateMessage())
             mHeaderHolder.fabMessage.setImageResource(R.drawable.close);
@@ -87,11 +87,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     .transform(CurrentTheme.createTransformationForAvatar(requireActivity()))
                     .into(mHeaderHolder.ivAvatar);
         }
-
-        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
-            downloadAvatar(user);
-            return true;
-        });
 
         Integer onlineIcon = ViewUtils.getOnlineIcon(true, user.isOnlineMobile(), user.getPlatform(), user.getOnlineApp());
         if (!user.isOnline())
@@ -198,8 +193,12 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     protected void onHeaderInflated(View headerRootView) {
         mHeaderHolder = new UserHeaderHolder(headerRootView);
         mHeaderHolder.ivAvatar.setOnClickListener(v -> getPresenter().fireAvatarClick());
+        mHeaderHolder.Runes.setVisibility(Settings.get().other().isRunes_show() ? View.VISIBLE : View.GONE);
+        mHeaderHolder.Valknut.setImageResource(Settings.get().other().isValknut_color_theme() ? R.drawable.valknut_themed : R.drawable.valknut);
+        mHeaderHolder.Valknut.setVisibility(Settings.get().other().isRunes_valknut() ? View.VISIBLE : View.GONE);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<UserWallPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -284,9 +283,9 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     public void showAvatarContextMenu(boolean canUploadAvatar) {
         String[] items;
         if (canUploadAvatar) {
-            items = new String[]{getString(R.string.open_photo_album), getString(R.string.upload_new_photo)};
+            items = new String[]{getString(R.string.open_photo_album), getString(R.string.open_photo), getString(R.string.upload_new_photo)};
         } else {
-            items = new String[]{getString(R.string.open_photo_album)};
+            items = new String[]{getString(R.string.open_photo_album), getString(R.string.open_photo)};
         }
 
         new MaterialAlertDialogBuilder(requireActivity()).setItems(items, (dialogInterface, i) -> {
@@ -295,6 +294,10 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
                     getPresenter().fireOpenAvatarsPhotoAlbum();
                     break;
                 case 1:
+                    User usr = Objects.requireNonNull(getPresenter()).getUser();
+                    PlaceFactory.getSingleURLPhotoPlace(usr.getOriginalAvatar(), usr.getFullName(), "id" + usr.getId()).tryOpenWith(requireActivity());
+                    break;
+                case 2:
                     Intent attachPhotoIntent = new Intent(requireActivity(), PhotosActivity.class);
                     attachPhotoIntent.putExtra(PhotosActivity.EXTRA_MAX_SELECTION_COUNT, 1);
                     startActivityForResult(attachPhotoIntent, REQUEST_UPLOAD_AVATAR);
@@ -379,6 +382,9 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         FloatingActionButton fabMoreInfo;
         Button bPrimaryAction;
 
+        ImageView Valknut;
+        View Runes;
+
         HorizontalOptionsAdapter<PostFilter> mPostFilterAdapter;
 
         UserHeaderHolder(@NonNull View root) {
@@ -397,6 +403,8 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             fabMessage = root.findViewById(R.id.header_user_profile_fab_message);
             fabMoreInfo = root.findViewById(R.id.info_btn);
             bPrimaryAction = root.findViewById(R.id.subscribe_btn);
+            Valknut = root.findViewById(R.id.valknut_icon);
+            Runes = root.findViewById(R.id.runes_icon);
 
             RecyclerView filtersList = root.findViewById(R.id.post_filter_recyclerview);
             filtersList.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));

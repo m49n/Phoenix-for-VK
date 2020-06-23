@@ -16,64 +16,63 @@ import java.util.List;
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.base.RecyclerBindableAdapter;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.ImageHelper;
 import biz.dealnote.messenger.util.PolyTransformation;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 
-import static biz.dealnote.messenger.util.Objects.isNullOrEmptyString;
-
-public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudioPlaylist, HorizontalPlaylistAdapter.Holder> {
+public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<AudioPlaylist, HorizontalPlaylistAdapter.Holder> {
 
     private Listener listener;
 
-    public HorizontalPlaylistAdapter(List<VKApiAudioPlaylist> data) {
+    public HorizontalPlaylistAdapter(List<AudioPlaylist> data) {
         super(data);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onBindItemViewHolder(Holder holder, int position, int type) {
-        final VKApiAudioPlaylist playlist = getItem(position);
+        final AudioPlaylist playlist = getItem(position);
 
         Context context = holder.itemView.getContext();
 
-        if (!isNullOrEmptyString(playlist.thumb_image))
-            ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.thumb_image, Constants.PICASSO_TAG);
+        if (!Utils.isEmpty(playlist.getThumb_image()))
+            ViewUtils.displayAvatar(holder.thumb, new PolyTransformation(), playlist.getThumb_image(), Constants.PICASSO_TAG);
         else
-            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light)));
-        holder.count.setText(playlist.count + " " + context.getString(R.string.audios_pattern_count));
-        holder.name.setText(playlist.title);
-        if (isNullOrEmptyString(playlist.description))
+            holder.thumb.setImageBitmap(ImageHelper.getPolyBitmap(BitmapFactory.decodeResource(context.getResources(), Settings.get().ui().isDarkModeEnabled(context) ? R.drawable.generic_audio_nowplaying_dark : R.drawable.generic_audio_nowplaying_light), true));
+        holder.count.setText(playlist.getCount() + " " + context.getString(R.string.audios_pattern_count));
+        holder.name.setText(playlist.getTitle());
+        if (Utils.isEmpty(playlist.getDescription()))
             holder.description.setVisibility(View.GONE);
         else {
             holder.description.setVisibility(View.VISIBLE);
-            holder.description.setText(playlist.description);
+            holder.description.setText(playlist.getDescription());
         }
-        if (isNullOrEmptyString(playlist.artist_name))
+        if (Utils.isEmpty(playlist.getArtist_name()))
             holder.artist.setVisibility(View.GONE);
         else {
             holder.artist.setVisibility(View.VISIBLE);
-            holder.artist.setText(playlist.artist_name);
+            holder.artist.setText(playlist.getArtist_name());
         }
-        if (playlist.Year == 0)
+        if (playlist.getYear() == 0)
             holder.year.setVisibility(View.GONE);
         else {
             holder.year.setVisibility(View.VISIBLE);
-            holder.year.setText(String.valueOf(playlist.Year));
+            holder.year.setText(String.valueOf(playlist.getYear()));
         }
-        if (isNullOrEmptyString(playlist.genre))
+        if (Utils.isEmpty(playlist.getGenre()))
             holder.genre.setVisibility(View.GONE);
         else {
             holder.genre.setVisibility(View.VISIBLE);
-            holder.genre.setText(playlist.genre);
+            holder.genre.setText(playlist.getGenre());
         }
-        holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.update_time));
+        holder.update.setText(AppTextUtils.getDateFromUnixTime(context, playlist.getUpdate_time()));
         holder.add.setOnClickListener(v -> listener.onPlayListClick(playlist, position));
-        if (playlist.owner_id == Settings.get().accounts().getCurrent())
-            holder.add.setImageResource(R.drawable.delete);
+        if (playlist.getOwnerId() == Settings.get().accounts().getCurrent())
+            holder.add.setImageResource(R.drawable.ic_outline_delete);
         else
             holder.add.setImageResource(R.drawable.plus);
     }
@@ -93,7 +92,7 @@ public class HorizontalPlaylistAdapter extends RecyclerBindableAdapter<VKApiAudi
     }
 
     public interface Listener {
-        void onPlayListClick(VKApiAudioPlaylist item, int pos);
+        void onPlayListClick(AudioPlaylist item, int pos);
     }
 
     static class Holder extends RecyclerView.ViewHolder {

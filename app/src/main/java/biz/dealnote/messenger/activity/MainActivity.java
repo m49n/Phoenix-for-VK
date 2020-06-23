@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -40,15 +41,21 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.stream.JsonReader;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import biz.dealnote.messenger.Constants;
@@ -63,8 +70,10 @@ import biz.dealnote.messenger.domain.impl.CountersInteractor;
 import biz.dealnote.messenger.fragment.AbsWallFragment;
 import biz.dealnote.messenger.fragment.AdditionalNavigationFragment;
 import biz.dealnote.messenger.fragment.AnswerVKOfficialFragment;
+import biz.dealnote.messenger.fragment.AudioCatalogFragment;
 import biz.dealnote.messenger.fragment.AudioPlayerFragment;
 import biz.dealnote.messenger.fragment.AudiosFragment;
+import biz.dealnote.messenger.fragment.AudiosInCatalogFragment;
 import biz.dealnote.messenger.fragment.AudiosTabsFragment;
 import biz.dealnote.messenger.fragment.BrowserFragment;
 import biz.dealnote.messenger.fragment.ChatFragment;
@@ -88,17 +97,20 @@ import biz.dealnote.messenger.fragment.FeedbackFragment;
 import biz.dealnote.messenger.fragment.FwdsFragment;
 import biz.dealnote.messenger.fragment.GifPagerFragment;
 import biz.dealnote.messenger.fragment.LikesFragment;
+import biz.dealnote.messenger.fragment.LinksInCatalogFragment;
 import biz.dealnote.messenger.fragment.LogsFragement;
 import biz.dealnote.messenger.fragment.MessagesLookFragment;
 import biz.dealnote.messenger.fragment.NewsfeedCommentsFragment;
 import biz.dealnote.messenger.fragment.NewsfeedMentionsFragment;
 import biz.dealnote.messenger.fragment.NotificationPreferencesFragment;
 import biz.dealnote.messenger.fragment.PhotoPagerFragment;
-import biz.dealnote.messenger.fragment.PlaylistFragment;
+import biz.dealnote.messenger.fragment.PlaylistsInCatalogFragment;
 import biz.dealnote.messenger.fragment.PollFragment;
 import biz.dealnote.messenger.fragment.PreferencesFragment;
 import biz.dealnote.messenger.fragment.RequestExecuteFragment;
 import biz.dealnote.messenger.fragment.SecurityPreferencesFragment;
+import biz.dealnote.messenger.fragment.SinglePhotoFragment;
+import biz.dealnote.messenger.fragment.StoryPagerFragment;
 import biz.dealnote.messenger.fragment.ThemeFragment;
 import biz.dealnote.messenger.fragment.TopicsFragment;
 import biz.dealnote.messenger.fragment.UserBannedFragment;
@@ -107,6 +119,7 @@ import biz.dealnote.messenger.fragment.VKPhotoAlbumsFragment;
 import biz.dealnote.messenger.fragment.VKPhotosFragment;
 import biz.dealnote.messenger.fragment.VideoPreviewFragment;
 import biz.dealnote.messenger.fragment.VideosFragment;
+import biz.dealnote.messenger.fragment.VideosInCatalogFragment;
 import biz.dealnote.messenger.fragment.VideosTabsFragment;
 import biz.dealnote.messenger.fragment.WallPostFragment;
 import biz.dealnote.messenger.fragment.attachments.CommentCreateFragment;
@@ -119,10 +132,13 @@ import biz.dealnote.messenger.fragment.fave.FaveTabsFragment;
 import biz.dealnote.messenger.fragment.friends.FriendsTabsFragment;
 import biz.dealnote.messenger.fragment.search.SearchTabsFragment;
 import biz.dealnote.messenger.fragment.search.SingleTabSearchFragment;
+import biz.dealnote.messenger.fragment.wallattachments.WallAttachmentsFragmentFactory;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.listener.AppStyleable;
 import biz.dealnote.messenger.listener.BackPressCallback;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import biz.dealnote.messenger.modalbottomsheetdialogfragment.OptionRequest;
 import biz.dealnote.messenger.model.Banned;
 import biz.dealnote.messenger.model.Comment;
 import biz.dealnote.messenger.model.Document;
@@ -170,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     public static final String ACTION_MAIN = "android.intent.action.MAIN";
     public static final String ACTION_CHAT_FROM_SHORTCUT = "biz.dealnote.messenger.ACTION_CHAT_FROM_SHORTCUT";
     public static final String ACTION_OPEN_PLACE = "biz.dealnote.messenger.activity.MainActivity.openPlace";
+    public static final String ACTION_OPEN_AUDIO_PLAYER = "biz.dealnote.messenger.activity.MainActivity.openAudioPlayer";
     public static final String ACTION_OPEN_FILE = "biz.dealnote.messenger.activity.MainActivity.openFile";
     public static final String ACTION_SEND_ATTACHMENTS = "biz.dealnote.messenger.ACTION_SEND_ATTACHMENTS";
     public static final String ACTION_SWITH_ACCOUNT = "biz.dealnote.messenger.ACTION_SWITH_ACCOUNT";
@@ -220,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         try {
             if (file != null && file.exists()) {
                 String name = file.getName();
-                extension = name.substring(name.lastIndexOf(".") + 1);
+                extension = name.substring(name.lastIndexOf('.') + 1);
             }
         } catch (Exception e) {
             extension = "";
@@ -307,7 +324,13 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 startAccountsActivity();
             } else {
                 MusicUtils.PlaceToAudioCache(this);
+                CheckMusicInPC();
                 CheckUpdate();
+
+                if (Settings.get().other().isDelete_cache_images()) {
+                    PreferencesFragment.CleanImageCache(this, false);
+                }
+
                 UpdateNotificationCount(mAccountId);
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);
@@ -322,6 +345,23 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         mCompositeDisposable.add(new CountersInteractor(Injection.provideNetworkInterfaces()).getApiCounters(account)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::updateNotificationsBagde, t -> removeNotificationsBagde()));
+    }
+
+    private void CheckMusicInPC() {
+        if (!AppPerms.hasReadWriteStoragePermision(this))
+            return;
+        File audios = new File(Settings.get().other().getMusicDir(), "audio_downloads.json");
+        if (!audios.exists())
+            return;
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(audios), StandardCharsets.UTF_8));
+            reader.beginArray();
+            while (reader.hasNext()) {
+                MusicUtils.RemoteAudios.add(reader.nextString());
+            }
+        } catch (IOException ignore) {
+            PhoenixToast.CreatePhoenixToast(this).showToastError(R.string.remote_audio_error);
+        }
     }
 
     private void CheckUpdate() {
@@ -339,17 +379,17 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         builder.build().newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call th, IOException e) {
+            public void onFailure(@NotNull Call th, @NotNull IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call th, Response response) throws IOException {
+            public void onResponse(@NotNull Call th, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     try {
                         int APK_VERS = Constants.VERSION_APK;
                         String Chngs = "";
-                        JSONObject obj = new JSONObject(response.body().string());
+                        JSONObject obj = new JSONObject(Objects.requireNonNull(response.body()).string());
                         if (obj.has("apk_version"))
                             APK_VERS = obj.getInt("apk_version");
                         if (obj.has("changes"))
@@ -366,18 +406,20 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
                         Handler uiHandler = new Handler(MainActivity.this.getMainLooper());
                         uiHandler.post(() -> {
-                            String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/blob/5.x/VKPhoenix.apk\">Скачать с github.com</a></i>";
+                            String res = "<i><a href=\"https://github.com/umerov1999/Phoenix-for-VK/releases/latest\">Скачать с github.com</a></i>";
                             res += ("<p>Изменения: " + Chenges_log + "</p>");
-                            res += ("<p>Донат на энергетик: 5599005042882048 (номер карты скопирован в буфер обмена)</p>");
-
-                            ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("response", "5599005042882048");
-                            clipboard.setPrimaryClip(clip);
 
                             AlertDialog dlg = new MaterialAlertDialogBuilder(MainActivity.this)
                                     .setTitle("Обновление клиента")
                                     .setMessage(Html.fromHtml(res))
-                                    .setPositiveButton("OK", null)
+                                    .setPositiveButton("Закрыть", null)
+                                    .setNegativeButton("Донатнуть", (dialog, which) -> {
+                                        ClipboardManager clipboard = (ClipboardManager) MainActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData clip = ClipData.newPlainText("response", "5599005042882048");
+                                        clipboard.setPrimaryClip(clip);
+                                        PhoenixToast.CreatePhoenixToast(MainActivity.this).setDuration(Toast.LENGTH_LONG).showToast("Номер карты скопирован в буфер");
+                                    })
+
                                     .setCancelable(true)
                                     .create();
                             dlg.show();
@@ -454,20 +496,26 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 Utils.setColorFilter(tr, CurrentTheme.getColorPrimary(this));
                 mToolbar.setNavigationIcon(tr);
                 mToolbar.setNavigationOnClickListener(v -> {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                    builder.setPositiveButton(R.string.set_offline, (dialog, which) ->
-                            mCompositeDisposable.add(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
-                                    .compose(RxUtils.applySingleIOToMainSchedulers())
-                                    .subscribe(this::OnSetOffline, t -> OnSetOffline(false))));
-                    builder.setNegativeButton(R.string.open_clipboard_url, (dialog, which) -> {
-                        final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
-                            String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
-                            LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
+
+                    ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline));
+                    menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
+                    menus.show(getSupportFragmentManager(), "left_options", option -> {
+                        switch (option.getId()) {
+                            case R.id.button_ok:
+                                mCompositeDisposable.add(Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).account().setOffline()
+                                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                                        .subscribe(MainActivity.this::OnSetOffline, t -> OnSetOffline(false)));
+                                break;
+                            case R.id.button_cancel:
+                                final ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                if (clipBoard != null && clipBoard.getPrimaryClip() != null && clipBoard.getPrimaryClip().getItemCount() > 0 && clipBoard.getPrimaryClip().getItemAt(0).getText() != null) {
+                                    String temp = clipBoard.getPrimaryClip().getItemAt(0).getText().toString();
+                                    LinkHelper.openUrl(MainActivity.this, mAccountId, temp);
+                                }
+                                break;
                         }
                     });
-                    builder.setCancelable(true);
-                    builder.create().show();
                 });
             } else {
                 Drawable tr = AppCompatResources.getDrawable(this, R.drawable.arrow_left);
@@ -524,12 +572,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
         Logger.d(TAG, "handleIntent, extras: " + extras + ", action: " + action);
 
-        if (extras != null) {
-            if (ActivityUtils.checkInputExist(this)) {
-                mCurrentFrontSection = AdditionalNavigationFragment.SECTION_ITEM_DIALOGS;
-                openNavigationPage(mCurrentFrontSection);
-                return true;
-            }
+        if (extras != null && ActivityUtils.checkInputExist(this)) {
+            mCurrentFrontSection = AdditionalNavigationFragment.SECTION_ITEM_DIALOGS;
+            openNavigationPage(mCurrentFrontSection);
+            return true;
         }
 
         if (ACTION_SEND_ATTACHMENTS.equals(action)) {
@@ -542,6 +588,11 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             Place place = intent.getParcelableExtra(Extra.PLACE);
             openPlace(place);
             return true;
+        }
+
+        if (ACTION_OPEN_AUDIO_PLAYER.equals(action)) {
+            openPlace(PlaceFactory.getPlayerPlace(mAccountId));
+            return false;
         }
 
         if (ACTION_OPEN_FILE.equals(action)) {
@@ -600,18 +651,19 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         resolveToolbarNavigationIcon();
     }
 
-    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset) {
+    private void openChat(int accountId, int messagesOwnerId, @NonNull Peer peer, int Offset, boolean ChatOnly) {
         if (Settings.get().other().isEnable_show_recent_dialogs()) {
             RecentChat recentChat = new RecentChat(accountId, peer.getId(), peer.getTitle(), peer.getAvaUrl());
             getNavigationFragment().appendRecentChat(recentChat);
             getNavigationFragment().refreshNavigationItems();
             getNavigationFragment().selectPage(recentChat);
         }
-        clearBackStack();
         if (Settings.get().ui().isDisable_swipes_chat()) {
             ChatFragment chatFragment = ChatFragment.Companion.newInstance(accountId, messagesOwnerId, peer);
             attachToFront(chatFragment);
         } else {
+            if (!ChatOnly)
+                clearBackStack();
             DialogsTabsFragment chatFragment = DialogsTabsFragment.newInstance(accountId, messagesOwnerId, peer, Offset);
             attachToFront(chatFragment);
         }
@@ -620,7 +672,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
     private void openRecentChat(RecentChat chat) {
         final int accountId = this.mAccountId;
         final int messagesOwnerId = this.mAccountId;
-        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()), 0);
+        openChat(accountId, messagesOwnerId, new Peer(chat.getPeerId()).setAvaUrl(chat.getIconUrl()).setTitle(chat.getTitle()), 0, true);
     }
 
     private void openTargetPage() {
@@ -860,6 +912,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_FEED);
                 return;
             }
+            if (isChatFragment()) {
+                openNavigationPage(AdditionalNavigationFragment.SECTION_ITEM_DIALOGS);
+                return;
+            }
             if (mLastBackPressedTime < 0
                     || mLastBackPressedTime + DOUBLE_BACK_PRESSED_TIMEOUT > System.currentTimeMillis()
                     || !Settings.get().main().isNeedDoublePressToExit()) {
@@ -868,15 +924,18 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             }
 
             this.mLastBackPressedTime = System.currentTimeMillis();
-            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mViewFragment, getString(R.string.click_back_to_exit), Snackbar.LENGTH_SHORT).setAnchorView(mBottomNavigationContainer).show();
         } else {
             super.onBackPressed();
         }
     }
 
+    private boolean isChatFragment() {
+        return getFrontFragment() instanceof ChatFragment;
+    }
+
     private boolean isFragmentWithoutNavigation() {
-        return getFrontFragment() instanceof ChatFragment ||
-                getFrontFragment() instanceof CommentsFragment ||
+        return getFrontFragment() instanceof CommentsFragment ||
                 getFrontFragment() instanceof PostCreateFragment ||
                 getFrontFragment() instanceof GifPagerFragment;
     }
@@ -958,28 +1017,25 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
         }
 
         if (Utils.hasMarshmallow()) {
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
             if (invertIcons) {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                getWindow().getDecorView().setSystemUiVisibility(flags);
             } else {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                getWindow().getDecorView().setSystemUiVisibility(flags);
             }
+            getWindow().getDecorView().setSystemUiVisibility(flags);
 
             StatusbarUtil.setCustomStatusbarDarkMode(this, invertIcons);
         }
 
         if (Utils.hasOreo()) {
             Window w = getWindow();
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
             if (invertIcons) {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 w.getDecorView().setSystemUiVisibility(flags);
                 w.setNavigationBarColor(Color.WHITE);
             } else {
-                int flags = getWindow().getDecorView().getSystemUiVisibility();
                 flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 w.getDecorView().setSystemUiVisibility(flags);
                 @ColorInt
@@ -1022,6 +1078,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 attachToFront(VideoPreviewFragment.newInstance(args));
                 break;
 
+            case Place.STORY_PLAYER:
+                attachToFront(StoryPagerFragment.newInstance(args));
+                break;
+
             case Place.FRIENDS_AND_FOLLOWERS:
                 attachToFront(FriendsTabsFragment.newInstance(args));
                 break;
@@ -1061,15 +1121,22 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.PLAYER:
-                if (!(getFrontFragment() instanceof AudioPlayerFragment)) {
-                    attachToFront(AudioPlayerFragment.newInstance(args));
-                }
+                Fragment player = getSupportFragmentManager().findFragmentByTag("audio_player");
+                if (player instanceof AudioPlayerFragment)
+                    ((AudioPlayerFragment) player).dismiss();
+                AudioPlayerFragment.newInstance(args).show(getSupportFragmentManager(), "audio_player");
                 break;
 
             case Place.CHAT:
                 final Peer peer = args.getParcelable(Extra.PEER);
                 AssertUtils.requireNonNull(peer);
-                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer, args.getInt(Extra.OFFSET));
+                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer, args.getInt(Extra.OFFSET), true);
+                break;
+
+            case Place.CHAT_DUAL:
+                final Peer peer1 = args.getParcelable(Extra.PEER);
+                AssertUtils.requireNonNull(peer1);
+                openChat(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), peer1, args.getInt(Extra.OFFSET), false);
                 break;
 
             case Place.SEARCH:
@@ -1209,7 +1276,7 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 break;
 
             case Place.NOTIFICATIONS:
-                if (Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("vkofficial") || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
+                if (Settings.get().accounts().getType(mAccountId).equals("vkofficial") || Settings.get().accounts().getType(mAccountId).equals("hacked")) {
                     attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
                     break;
                 }
@@ -1248,10 +1315,6 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
 
             case Place.MESSAGE_LOOKUP:
                 attachToFront(MessagesLookFragment.newInstance(args));
-                break;
-
-            case Place.AUDIO_CURRENT_PLAYLIST:
-                attachToFront(PlaylistFragment.newInstance(args));
                 break;
 
             case Place.GIF_PAGER:
@@ -1314,6 +1377,10 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
             case Place.SETTINGS_THEME:
                 ThemeFragment themes = ThemeFragment.newInstance();
                 attachToFront(themes);
+                if (getNavigationFragment().isSheetOpen()) {
+                    getNavigationFragment().closeSheet();
+                    return;
+                }
                 break;
 
             case Place.COMMUNITY_BAN_EDIT:
@@ -1361,13 +1428,43 @@ public class MainActivity extends AppCompatActivity implements AdditionalNavigat
                 attachToFront(DrawerEditFragment.newInstance());
                 break;
 
+            case Place.SINGLE_PHOTO:
+                attachToFront(SinglePhotoFragment.newInstance(args));
+                break;
+
+            case Place.ARTIST:
+                attachToFront(AudioCatalogFragment.newInstance(args));
+                break;
+
+            case Place.CATALOG_BLOCK_AUDIOS:
+                attachToFront(AudiosInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_PLAYLISTS:
+                attachToFront(PlaylistsInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_VIDEOS:
+                attachToFront(VideosInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
+            case Place.CATALOG_BLOCK_LINKS:
+                attachToFront(LinksInCatalogFragment.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getString(Extra.ID), args.getString(Extra.TITLE)));
+                break;
+
             case Place.USER_DETAILS:
                 int accountId = args.getInt(Extra.ACCOUNT_ID);
                 User user = args.getParcelable(Extra.USER);
                 UserDetails details = args.getParcelable("details");
                 attachToFront(UserDetailsFragment.newInstance(accountId, user, details));
                 break;
-
+            case Place.WALL_ATTACHMENTS:
+                Fragment wall_attachments = WallAttachmentsFragmentFactory.newInstance(args.getInt(Extra.ACCOUNT_ID), args.getInt(Extra.OWNER_ID), args.getString(Extra.TYPE));
+                if (wall_attachments == null) {
+                    throw new IllegalArgumentException("wall_attachments cant bee null");
+                }
+                attachToFront(wall_attachments);
+                break;
             default:
                 throw new IllegalArgumentException("Main activity can't open this place, type: " + place.type);
         }

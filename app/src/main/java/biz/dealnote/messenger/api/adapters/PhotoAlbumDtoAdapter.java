@@ -14,10 +14,6 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
-/**
- * Created by ruslan.kolbasa on 27.12.2016.
- * phoenix
- */
 public class PhotoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiPhotoAlbum> {
 
     @Override
@@ -51,6 +47,21 @@ public class PhotoAlbumDtoAdapter extends AbsAdapter implements JsonDeserializer
 
             for (int i = 0; i < sizesArray.size(); i++) {
                 album.photo.add(context.deserialize(sizesArray.get(i).getAsJsonObject(), PhotoSizeDto.class));
+            }
+        } else if (root.has("thumb")) {
+            JsonObject thumb = root.getAsJsonObject("thumb");
+            if (thumb.has("sizes")) {
+                JsonArray sizesArray = thumb.getAsJsonArray("sizes");
+                album.photo = new ArrayList<>(sizesArray.size());
+
+                for (int i = 0; i < sizesArray.size(); i++) {
+                    album.photo.add(context.deserialize(sizesArray.get(i).getAsJsonObject(), PhotoSizeDto.class));
+                }
+            } else {
+                album.photo = new ArrayList<>(3);
+                album.photo.add(PhotoSizeDto.create(PhotoSizeDto.Type.S, "http://vk.com/images/s_noalbum.png"));
+                album.photo.add(PhotoSizeDto.create(PhotoSizeDto.Type.M, "http://vk.com/images/m_noalbum.png"));
+                album.photo.add(PhotoSizeDto.create(PhotoSizeDto.Type.X, "http://vk.com/images/x_noalbum.png"));
             }
         } else {
             album.photo = new ArrayList<>(3);

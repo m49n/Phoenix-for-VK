@@ -3,10 +3,6 @@ package biz.dealnote.mvp.reflect
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 class EventHandler(private val target: Any, private val method: Method) {
 
     private val hashCode: Int

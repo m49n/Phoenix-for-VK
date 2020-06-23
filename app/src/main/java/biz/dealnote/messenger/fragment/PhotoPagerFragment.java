@@ -74,7 +74,6 @@ import biz.dealnote.messenger.util.PhoenixToast;
 import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.view.CircleCounterButton;
-import biz.dealnote.messenger.view.ViewPagerTransformers;
 import biz.dealnote.messenger.view.pager.GoBackCallback;
 import biz.dealnote.messenger.view.pager.WeakGoBackAnimationAdapter;
 import biz.dealnote.messenger.view.pager.WeakPicassoLoadCallback;
@@ -89,10 +88,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
 public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
         implements IPhotoPagerView, GoBackCallback, BackPressCallback {
 
@@ -215,7 +210,6 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
         mViewPager = root.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setPageTransformer(ViewPagerTransformers.ZOOM_OUT);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -244,7 +238,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.vkphoto_menu, menu);
     }
@@ -278,7 +272,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (!Settings.get().accounts().getType(Settings.get().accounts().getCurrent()).equals("hacked")) {
             menu.findItem(R.id.save_yourself).setVisible(mCanSaveYourself);
@@ -327,6 +321,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<PhotoPagerPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
@@ -520,15 +515,15 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                     Injection.provideNetworkInterfaces().vkDefault(Settings.get().accounts().getCurrent()).photos().getTags(photo.getOwnerId(), photo.getId(), photo.getAccessKey())
                             .compose(RxUtils.applySingleIOToMainSchedulers())
                             .subscribe(userInfo -> {
-                                String tmp = finalRes;
-                                tmp += ("<p><b>" + requireContext().getString(R.string.has_tags) + ":</b></p>" + photo.getText());
+                                StringBuilder tmp = new StringBuilder(finalRes);
+                                tmp.append("<p><b>").append(requireContext().getString(R.string.has_tags)).append(":</b></p>").append(photo.getText());
                                 for (VKApiPhotoTags i : userInfo) {
                                     if (i.user_id != 0)
-                                        tmp += ("<i><a href=\"https://vk.com/id" + i.user_id + "\">" + (i.tagged_name != null ? i.tagged_name : "") + "</a></i>" + " ");
+                                        tmp.append("<i><a href=\"https://vk.com/id").append(i.user_id).append("\">").append(i.tagged_name != null ? i.tagged_name : "").append("</a></i>").append(" ");
                                     else
-                                        tmp += ((i.tagged_name != null ? i.tagged_name : "") + " ");
+                                        tmp.append(i.tagged_name != null ? i.tagged_name : "").append(" ");
                                 }
-                                dlg.setMessage(Html.fromHtml(tmp));
+                                dlg.setMessage(Html.fromHtml(tmp.toString()));
                                 dlg.show();
                                 try {
                                     TextView tv = dlg.findViewById(android.R.id.message);
@@ -554,7 +549,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
         try {
             TextView tv = dlg.findViewById(android.R.id.message);
             if (tv != null) tv.setMovementMethod(LinkMovementMethod.getInstance());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -597,7 +592,12 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
 
     @Override
     public boolean onBackPressed() {
-        ObjectAnimator objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", -600);
+        ObjectAnimator objectAnimatorPosition;
+        if (Settings.get().ui().isPhoto_swipe_pos_top_to_bottom()) {
+            objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", 600);
+        } else {
+            objectAnimatorPosition = ObjectAnimator.ofFloat(getView(), "translationY", -600);
+        }
         ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(getView(), View.ALPHA, 1, 0);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(objectAnimatorPosition, objectAnimatorAlpha);
@@ -645,7 +645,7 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 loadImage(url);
             } else {
                 PicassoInstance.with().cancelRequest(photo);
-                PhoenixToast.CreatePhoenixToast(requireActivity()).showToast(R.string.empty_url);
+                PhoenixToast.CreatePhoenixToast(requireActivity()).showToastError(R.string.empty_url);
             }
 
         }
@@ -736,6 +736,12 @@ public class PhotoPagerFragment extends BaseMvpFragment<PhotoPagerPresenter, IPh
                 }
             });
 
+            ret.photo.setOnLongClickListener(v -> {
+                if (Settings.get().other().isDownload_photo_tap()) {
+                    if (isPresenterPrepared()) getPresenter().fireSaveOnDriveClick();
+                }
+                return true;
+            });
             ret.photo.setOnTouchListener((view, event) -> {
                 if (event.getPointerCount() >= 2 || view.canScrollHorizontally(1) && view.canScrollHorizontally(-1)) {
                     switch (event.getAction()) {

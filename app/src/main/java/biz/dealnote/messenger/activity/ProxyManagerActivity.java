@@ -10,10 +10,6 @@ import biz.dealnote.messenger.place.Place;
 import biz.dealnote.messenger.place.PlaceProvider;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by admin on 10.07.2017.
- * phoenix
- */
 public class ProxyManagerActivity extends NoMainActivity implements PlaceProvider {
 
     @Override

@@ -15,10 +15,6 @@ import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 import biz.dealnote.messenger.api.model.response.NewsfeedCommentsResponse;
 
-/**
- * Created by admin on 07.05.2017.
- * phoenix
- */
 public class NewsfeedCommentDtoAdapter extends AbsAdapter implements JsonDeserializer<NewsfeedCommentsResponse.Dto> {
 
     @Override

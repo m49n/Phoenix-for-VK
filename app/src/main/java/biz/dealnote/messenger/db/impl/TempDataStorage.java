@@ -16,10 +16,7 @@ import biz.dealnote.messenger.util.Exestime;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 20.06.2017.
- * phoenix
- */
+
 public class TempDataStorage implements ITempDataStorage {
 
     private static final String[] PROJECTION = {

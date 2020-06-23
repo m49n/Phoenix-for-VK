@@ -16,10 +16,7 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class NotificationsApi extends AbsApi implements INotificationsApi {
 
     NotificationsApi(int accountId, IServiceProvider provider) {

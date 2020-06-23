@@ -22,6 +22,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -100,14 +102,9 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refresh:
-                getPresenter().fireRefresh();
-                return true;
-            case R.id.up:
-                mRecycleView.stopScroll();
-                mFeedLayoutManager.scrollToPosition(0);
-                return true;
+        if (item.getItemId() == R.id.refresh) {
+            getPresenter().fireRefresh();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -140,9 +137,13 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
         });
 
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
-        Goto.setOnClickListener(v -> mRecycleView.scrollToPosition(0));
+        Goto.setOnClickListener(v -> {
+            mRecycleView.stopScroll();
+            mFeedLayoutManager.scrollToPosition(0);
+        });
         Goto.setOnLongClickListener(v -> {
-            mRecycleView.scrollToPosition(0);
+            mRecycleView.stopScroll();
+            mFeedLayoutManager.scrollToPosition(0);
             getPresenter().fireRefresh();
             return true;
         });
@@ -449,6 +450,7 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<FeedPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FeedPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);

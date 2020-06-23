@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.api.model;
 
-/**
- * Created by ruslan.kolbasa on 10-Jun-16.
- * phoenix
- */
 public class VkApiPostSource {
 
     /**

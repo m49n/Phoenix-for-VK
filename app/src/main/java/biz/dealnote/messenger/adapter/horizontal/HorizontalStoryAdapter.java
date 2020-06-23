@@ -36,11 +36,15 @@ public class HorizontalStoryAdapter extends RecyclerBindableAdapter<Story, Horiz
         Context context = holder.itemView.getContext();
         holder.name.setText(item.getOwner().getFullName());
         if (item.getExpires() <= 0)
-            holder.expires.setVisibility(View.GONE);
+            holder.expires.setVisibility(View.INVISIBLE);
         else {
             holder.expires.setVisibility(View.VISIBLE);
-            Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
-            holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), context.getString(Utils.declOfNum(exp, new int[]{R.string.hour, R.string.hour_sec, R.string.hours}))));
+            if (item.isIs_expired()) {
+                holder.expires.setText(R.string.is_expired);
+            } else {
+                Long exp = (item.getExpires() - Calendar.getInstance().getTime().getTime() / 1000) / 3600;
+                holder.expires.setText(context.getString(R.string.expires, String.valueOf(exp), context.getString(Utils.declOfNum(exp, new int[]{R.string.hour, R.string.hour_sec, R.string.hours}))));
+            }
         }
 
         if (Objects.isNull(item.getOwner())) {

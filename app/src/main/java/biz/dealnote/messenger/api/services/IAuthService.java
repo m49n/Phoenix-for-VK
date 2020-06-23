@@ -1,15 +1,13 @@
 package biz.dealnote.messenger.api.services;
 
 import biz.dealnote.messenger.api.model.LoginResponse;
+import biz.dealnote.messenger.api.model.VkApiValidationResponce;
+import biz.dealnote.messenger.api.model.response.BaseResponse;
 import io.reactivex.Single;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
 public interface IAuthService {
 
     @FormUrlEncoded
@@ -26,7 +24,15 @@ public interface IAuthService {
                                       @Field("captcha_sid") String captchaSid,
                                       @Field("captcha_key") String captchaKey,
                                       @Field("force_sms") Integer forceSms,
-                                      @Field("lang") String lang,
-                                      @Field("device_id") String device_id);
+                                      @Field("device_id") String device_id,
+                                      @Field("libverify_support") Integer libverify_support);
+
+    @FormUrlEncoded
+    @POST("auth.validatePhone")
+    Single<BaseResponse<VkApiValidationResponce>> validatePhone(@Field("api_id") int apiId,
+                                                                @Field("client_id") int clientId,
+                                                                @Field("client_secret") String clientSecret,
+                                                                @Field("sid") String sid,
+                                                                @Field("v") String v);
 
 }

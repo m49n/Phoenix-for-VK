@@ -5,10 +5,7 @@ import java.util.List;
 import biz.dealnote.messenger.model.LogEvent;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public interface ILogsStorage {
 
     Single<LogEvent> add(int type, String tag, String body);

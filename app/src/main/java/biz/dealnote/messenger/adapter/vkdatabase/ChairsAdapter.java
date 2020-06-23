@@ -55,7 +55,7 @@ public class ChairsAdapter extends RecyclerView.Adapter<ChairsAdapter.Holder> {
         void onClick(Chair chair);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView name;
 

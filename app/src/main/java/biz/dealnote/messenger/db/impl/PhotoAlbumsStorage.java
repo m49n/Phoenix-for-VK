@@ -26,10 +26,6 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by ruslan.kolbasa on 29.11.2016.
- * phoenix
- */
 class PhotoAlbumsStorage extends AbsStorage implements IPhotoAlbumsStorage {
 
     PhotoAlbumsStorage(@NonNull AppStorages base) {

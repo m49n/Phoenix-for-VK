@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -38,10 +40,7 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 26.04.2017.
- * phoenix
- */
+
 public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
         implements ILogsView, HorizontalOptionsAdapter.Listener<LogEventType>, LogsAdapter.ActionListener {
 
@@ -158,6 +157,7 @@ public class LogsFragement extends BaseMvpFragment<LogsPresenter, ILogsView>
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<LogsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new LogsPresenter(saveInstanceState);

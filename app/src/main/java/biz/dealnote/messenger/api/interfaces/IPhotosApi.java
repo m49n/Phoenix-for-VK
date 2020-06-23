@@ -21,10 +21,6 @@ import biz.dealnote.messenger.api.model.server.VkApiUploadServer;
 import biz.dealnote.messenger.api.model.server.VkApiWallUploadServer;
 import io.reactivex.Single;
 
-/**
- * Created by ruslan.kolbasa on 29.12.2016.
- * phoenix
- */
 public interface IPhotosApi {
 
     @CheckResult

@@ -22,10 +22,6 @@ import biz.dealnote.messenger.domain.impl.UtilsInteractor;
 import biz.dealnote.messenger.domain.impl.VideosInteractor;
 import biz.dealnote.messenger.settings.Settings;
 
-/**
- * Created by Ruslan Kolbasa on 26.06.2017.
- * phoenix
- */
 public class InteractorFactory {
 
     public static INewsfeedInteractor createNewsfeedInteractor() {

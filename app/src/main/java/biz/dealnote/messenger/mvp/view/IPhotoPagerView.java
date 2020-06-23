@@ -9,10 +9,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
+
 public interface IPhotoPagerView extends IMvpView, IAccountDependencyView, IErrorView, IToastView {
 
     void goToLikesList(int accountId, int ownerId, int photoId);

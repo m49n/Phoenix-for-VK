@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 
 import java.lang.ref.WeakReference;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.Sticker;
@@ -90,7 +90,8 @@ public class StickersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 PicassoInstance.with()
                         .load(url)
-                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        //.networkPolicy(NetworkPolicy.OFFLINE)
+                        .tag(Constants.PICASSO_TAG)
                         .into(normalHolder.image, new LoadOnErrorCallback(normalHolder.image, url));
                 normalHolder.root.setOnClickListener(v -> stickerClickedListener.onStickerClick(item));
                 break;

@@ -9,10 +9,6 @@ import biz.dealnote.mvp.core.PresenterAction
 import java.lang.ref.WeakReference
 import java.util.*
 
-/**
- * Created by ruslan.kolbasa on 08.09.2016.
- * mvpcore
- */
 class ViewHostDelegate<P : IPresenter<V>, V : IMvpView> {
 
     private var lastKnownPresenterState: Bundle? = null

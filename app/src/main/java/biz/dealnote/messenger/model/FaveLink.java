@@ -3,10 +3,6 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ruslan.kolbasa on 05.12.2016.
- * phoenix
- */
 public class FaveLink extends AbsModel implements Parcelable {
 
     public static final Creator<FaveLink> CREATOR = new Creator<FaveLink>() {

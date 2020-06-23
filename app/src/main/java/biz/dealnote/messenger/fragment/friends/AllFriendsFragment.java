@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -102,6 +104,7 @@ public class AllFriendsFragment extends BaseMvpFragment<AllFriendsPresenter, IAl
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<AllFriendsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AllFriendsPresenter(

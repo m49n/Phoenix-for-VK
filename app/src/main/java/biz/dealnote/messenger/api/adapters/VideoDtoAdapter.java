@@ -15,10 +15,6 @@ import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiVideo> {
 
     @Override
@@ -106,6 +102,14 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
                 }
                 if (dto.image == null)
                     dto.image = images.get(images.size() - 1).getAsJsonObject().get("url").getAsString();
+            }
+        }
+
+        if (dto.image == null) {
+            if (root.has("photo_800")) {
+                dto.image = optString(root, "photo_800");
+            } else if (root.has("photo_320")) {
+                dto.image = optString(root, "photo_320");
             }
         }
 

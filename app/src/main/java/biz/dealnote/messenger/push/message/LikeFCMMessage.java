@@ -29,10 +29,6 @@ import biz.dealnote.messenger.util.Utils;
 
 import static biz.dealnote.messenger.push.NotificationUtils.configOtherPushNotification;
 
-/**
- * Created by ruslan.kolbasa on 10.10.2016.
- * phoenix
- */
 public class LikeFCMMessage {
 
 // key: id, value: like_216143660_photo280186075_456239045, class: class java.lang.String

@@ -6,10 +6,7 @@ import biz.dealnote.messenger.db.serialize.ISerializeAdapter;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 20.06.2017.
- * phoenix
- */
+
 public interface ITempDataStorage {
     <T> Single<List<T>> getData(int ownerId, int sourceId, ISerializeAdapter<T> serializer);
 

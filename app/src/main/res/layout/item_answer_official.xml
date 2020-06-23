@@ -43,23 +43,24 @@
 
         <RelativeLayout
             android:id="@+id/item_friend_avatar_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/avatar_size_usual"
+            android:layout_height="@dimen/avatar_size_usual"
             android:layout_alignTop="@+id/relativeLayout"
             android:layout_alignParentStart="true">
 
             <ImageView
                 android:id="@+id/item_friend_avatar"
-                android:layout_width="@dimen/avatar_size_chat"
-                android:layout_height="@dimen/avatar_size_chat"
-                android:layout_centerInParent="true" />
+                android:layout_width="@dimen/avatar_size_usual"
+                android:layout_height="@dimen/avatar_size_usual"
+                android:layout_centerInParent="true"
+                android:stateListAnimator="@animator/clicked" />
 
             <ImageView
                 android:id="@+id/item_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignStart="@+id/item_friend_avatar"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_alignBottom="@+id/item_friend_avatar"
+                android:layout_alignParentEnd="true"
                 android:padding="3dp" />
 
         </RelativeLayout>
@@ -78,15 +79,22 @@
                 android:id="@+id/item_friend_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="Name" />
 
             <TextView
                 android:id="@+id/item_additional_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="comment for post..." />
+
+            <TextView
+                android:id="@+id/item_friend_footer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                tools:text="Footer" />
 
             <TextView
                 android:id="@+id/item_friend_time"
@@ -96,6 +104,22 @@
                 android:maxLines="2"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 tools:text="time" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/additional_image_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:contentPadding="0dp">
+
+                <ImageView
+                    android:id="@+id/additional_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop" />
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

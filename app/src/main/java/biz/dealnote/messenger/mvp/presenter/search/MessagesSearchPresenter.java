@@ -18,10 +18,6 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
 
-/**
- * Created by admin on 01.05.2017.
- * phoenix
- */
 public class MessagesSearchPresenter extends AbsSearchPresenter<IMessagesSearchView, MessageSeachCriteria, Message, IntNextFrom> {
 
     private static final int COUNT = 50;

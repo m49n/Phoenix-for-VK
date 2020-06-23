@@ -12,10 +12,7 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.10.2017.
- * phoenix
- */
+
 public class LikesInteractor implements ILikesInteractor {
 
     private final INetworker networker;

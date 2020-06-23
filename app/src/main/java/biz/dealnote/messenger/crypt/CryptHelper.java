@@ -29,10 +29,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 19.10.2016.
- * phoenix
- */
 public class CryptHelper {
 
     @MessageType
@@ -143,7 +139,7 @@ public class CryptHelper {
     public static String encryptWithAes(String body, String key, String ifError, long sessionId,
                                         @KeyLocationPolicy int keyLocationPolicy) {
         try {
-            return "AES" + String.valueOf(keyLocationPolicy) + String.valueOf(sessionId)
+            return "AES" + keyLocationPolicy + sessionId
                     + ":" + AESCrypt.encrypt(key, body);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -162,7 +158,7 @@ public class CryptHelper {
 
         // AES{$key_location_policy}{$session_id}:{$encrypted_body}
         try {
-            int dividerLocation = body.indexOf(":");
+            int dividerLocation = body.indexOf(':');
 
             @KeyLocationPolicy
             int keyLocationPolicy = Character.getNumericValue(body.charAt(3));

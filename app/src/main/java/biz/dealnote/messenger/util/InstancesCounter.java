@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by Ruslan Kolbasa on 20.06.2017.
- * phoenix
- */
+
 public class InstancesCounter {
 
     private final Map<Class<?>, AtomicInteger> map;

@@ -11,10 +11,6 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.ParcelableModelWrapper;
 import biz.dealnote.messenger.model.ParcelableOwnerWrapper;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public final class LikeCommentFeedback extends Feedback implements Parcelable {
 
     public static final Creator<LikeCommentFeedback> CREATOR = new Creator<LikeCommentFeedback>() {

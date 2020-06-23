@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import biz.dealnote.messenger.mvp.view.search.ICommunitiesSearchView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class GroupsSearchFragment extends AbsSearchFragment<CommunitiesSearchPresenter, ICommunitiesSearchView, Community>
+public class GroupsSearchFragment extends AbsSearchFragment<CommunitiesSearchPresenter, ICommunitiesSearchView, Community, PeopleAdapter>
         implements ICommunitiesSearchView, PeopleAdapter.ClickListener {
 
     public static GroupsSearchFragment newInstance(int accountId, @Nullable GroupSearchCriteria initialCriteria) {
@@ -31,12 +34,17 @@ public class GroupsSearchFragment extends AbsSearchFragment<CommunitiesSearchPre
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Community> data) {
-        ((PeopleAdapter) adapter).setItems(data);
+    void setAdapterData(PeopleAdapter adapter, List<Community> data) {
+        adapter.setItems(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Community> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    PeopleAdapter createAdapter(List<Community> data) {
         PeopleAdapter adapter = new PeopleAdapter(requireActivity(), data);
         adapter.setClickListener(this);
         return adapter;
@@ -47,6 +55,7 @@ public class GroupsSearchFragment extends AbsSearchFragment<CommunitiesSearchPre
         return new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<CommunitiesSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunitiesSearchPresenter(

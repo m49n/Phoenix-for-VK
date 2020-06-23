@@ -1,9 +1,5 @@
 package biz.dealnote.messenger.api.interfaces;
 
-/**
- * Created by ruslan.kolbasa on 30.12.2016.
- * phoenix
- */
 public interface IAccountApis {
 
     IMessagesApi messages();

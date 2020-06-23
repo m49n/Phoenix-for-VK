@@ -19,10 +19,6 @@ import static biz.dealnote.messenger.model.SwitchableCategory.PHOTOS;
 import static biz.dealnote.messenger.model.SwitchableCategory.VIDEOS;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 01.12.2016.
- * phoenix
- */
 class DrawerSettings implements ISettings.IDrawerSettings {
 
     private final Context app;

@@ -15,10 +15,7 @@ import biz.dealnote.messenger.api.model.database.SchoolDto;
 import biz.dealnote.messenger.api.model.database.UniversityDto;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 public interface IDatabaseApi {
 
     @CheckResult

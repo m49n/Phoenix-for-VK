@@ -16,9 +16,11 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.annotation.AttrRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import biz.dealnote.messenger.*
 import biz.dealnote.messenger.activity.*
@@ -58,13 +60,10 @@ import biz.dealnote.messenger.view.emoji.EmojiconsPopup
 import biz.dealnote.mvp.core.IPresenterFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import java.lang.ref.WeakReference
 import java.util.*
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChatView, InputViewController.OnInputActionCallback,
         BackPressCallback, MessagesAdapter.OnMessageActionListener, InputViewController.RecordActionsCallback,
         AttachmentsViewBinder.VoiceActionListener, EmojiconsPopup.OnStickerClickedListener,
@@ -147,6 +146,8 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             })
         }
 
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
+
         headerView = inflater.inflate(R.layout.footer_load_more, recyclerView, false)
 
         loadMoreFooterHelper = LoadMoreFooterHelper.createFrom(headerView) {
@@ -168,7 +169,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         buttonUnpin?.setOnClickListener { presenter?.fireUnpinClick() }
 
         goto_button = root.findViewById(R.id.goto_button)
-        if (Settings.get().accounts().getType(Settings.get().accounts().current).equals("hacked")) {
+        if (Settings.get().accounts().getType(presenter!!.accountId) == "hacked") {
             goto_button?.setImageResource(R.drawable.attachment)
             goto_button?.setOnClickListener { presenter?.fireDialogAttachmentsClick() }
         } else {
@@ -177,7 +178,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
 
 
-        if (!Settings.get().other().isEnable_last_read())
+        if (!Settings.get().other().isEnable_last_read)
             goto_button?.visibility = View.GONE
         else
             goto_button?.visibility = View.VISIBLE
@@ -206,7 +207,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     @SuppressLint("SetTextI18n")
     override fun displayWriting(owner: Owner) {
-        Writing_msg?.text = owner.fullName + "... "
+        Writing_msg?.text = owner.fullName + " "
         ViewUtils.displayAvatar(Writing_msg_Ava!!, CurrentTheme.createTransformationForAvatar(requireContext()),
                 owner.get100photoOrSmaller(), null)
     }
@@ -227,6 +228,18 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         })
 
         animator?.setDuration(200)?.start()
+    }
+
+    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            Utils.vibrate(requireActivity(), 100)
+            presenter?.fireResendSwipe(adapter!!.getItemRawPosition(viewHolder.layoutPosition), swipeDir)
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     private class ActionModeHolder(val rootView: View, fragment: ChatFragment) : View.OnClickListener {
@@ -394,11 +407,11 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun displayToolbarTitle(text: String?) {
-        Title?.setText(text)
+        Title?.text = text
     }
 
     override fun displayToolbarSubtitle(text: String?) {
-        SubTitle?.setText(text)
+        SubTitle?.text = text
     }
 
     override fun displayToolbarAvatar(peer: Peer?) {
@@ -414,7 +427,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
             var name: String = peer!!.title
             if (name.length > 2) name = name.substring(0, 2)
             name = name.trim { it <= ' ' }
-            EmptyAvatar?.setText(name)
+            EmptyAvatar?.text = name
             Avatar?.setImageBitmap(RoundTransformation().transform(Utils.createGradientChatImage(200, 200, peer.id)))
         }
     }
@@ -457,6 +470,9 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                         sender.get100photoOrSmaller(), null)
 
                 pinnedTitle?.text = sender.fullName
+                if (Utils.isEmpty(body) && pinned.isHasAttachments) {
+                    body = getString(R.string.attachments)
+                }
                 pinnedSubtitle?.text = body
                 buttonUnpin?.visibility = if (canChange) View.VISIBLE else View.GONE
                 pinnedView?.setOnClickListener { recyclerView?.scrollToPosition(0); presenter?.requestFromNetInMessage(pinned.id); }
@@ -476,6 +492,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
     override fun onVoicePlayButtonClick(voiceHolderId: Int, voiceMessageId: Int, voiceMessage: VoiceMessage) {
         presenter?.fireVoicePlayButtonClick(voiceHolderId, voiceMessageId, voiceMessage)
+    }
+
+    override fun onTranscript(voiceMessageId: String, messageId: Int) {
+        presenter?.fireTranscript(voiceMessageId, messageId)
     }
 
     override fun onStickerClick(sticker: Sticker) {
@@ -507,8 +527,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     private fun onEditLocalPhotosSelected(photos: List<LocalPhoto>) {
-        val defaultSize = Settings.get().main().uploadImageSize
-        when (defaultSize) {
+        when (val defaultSize = Settings.get().main().uploadImageSize) {
             null -> {
                 ImageSizeAlertDialog.Builder(activity)
                         .setOnSelectedCallback { size -> presenter?.fireEditLocalPhotosSelected(photos, size) }
@@ -523,8 +542,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     private fun onEditLocalFileSelected(file: String) {
-        val defaultSize = Settings.get().main().uploadImageSize
-        when (defaultSize) {
+        when (val defaultSize = Settings.get().main().uploadImageSize) {
             null -> {
                 ImageSizeAlertDialog.Builder(activity)
                         .setOnSelectedCallback { size -> presenter?.fireFileForUploadSelected(file, size) }
@@ -577,8 +595,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
 
         if (requestCode == REQUEST_PHOTO_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
-            val defaultSize = Settings.get().main().uploadImageSize
-            when (defaultSize) {
+            when (val defaultSize = Settings.get().main().uploadImageSize) {
                 null -> {
                     ImageSizeAlertDialog.Builder(activity)
                             .setOnSelectedCallback { size -> presenter?.fireEditPhotoMaked(size) }
@@ -589,8 +606,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
-    override fun goToMessageAttachmentsEditor(accountId: Int, messageOwnerId: Int, destination: UploadDestination,
-                                              body: String?, attachments: ModelsBundle?) {
+    override fun goToMessageAttachmentsEditor(
+            accountId: Int, messageOwnerId: Int, destination: UploadDestination,
+            body: String?, attachments: ModelsBundle?,
+    ) {
         val fragment = MessageAttachmentsFragment.newInstance(accountId, messageOwnerId, destination.id, attachments)
         fragment.setTargetFragment(this, REQUEST_EDIT_MESSAGE)
         fragment.show(parentFragmentManager, "message-attachments")
@@ -649,6 +668,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }.show()
     }
 
+    override fun showSnackbar(@StringRes res: Int, isLong: Boolean) {
+        val view = super.getView()
+        if (Objects.nonNull(view)) {
+            Snackbar.make(view!!, res, if (isLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
     private class EditAttachmentsHolder(rootView: View, fragment: ChatFragment, attachments: MutableList<AttachmenEntry>) : AttachmentsBottomSheetAdapter.ActionListener, View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
@@ -667,6 +693,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
 
         override fun onButtonRemoveClick(entry: AttachmenEntry) {
             reference.get()?.presenter?.fireEditAttachmentRemoved(entry)
+        }
+
+        override fun onButtonRetryClick(entry: AttachmenEntry) {
+            reference.get()?.presenter?.fireEditAttachmentRetry(entry)
         }
 
         val reference = WeakReference(fragment)
@@ -777,8 +807,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         }
     }
 
-    override fun configOptionMenu(canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
-                                  encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean) {
+    override fun configOptionMenu(
+            canLeaveChat: Boolean, canChangeTitle: Boolean, canShowMembers: Boolean,
+            encryptionStatusVisible: Boolean, encryprionEnabled: Boolean, encryptionPlusEnabled: Boolean, keyExchangeVisible: Boolean, HronoVisible: Boolean, ProfileVisible: Boolean,
+    ) {
         optionMenuSettings.put(LEAVE_CHAT_VISIBLE, canLeaveChat)
         optionMenuSettings.put(CHANGE_CHAT_TITLE_VISIBLE, canChangeTitle)
         optionMenuSettings.put(CHAT_MEMBERS_VISIBLE, canShowMembers)
@@ -832,15 +864,19 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 resolveToolbarNavigationIcon()
                 if (peerId < VKApiMessage.CHAT_PEER) {
                     Avatar?.setOnClickListener {
-                        run {
-                            showUserWall(Settings.get().accounts().current, peerId)
-                        }
+                        showUserWall(Settings.get().accounts().current, peerId)
+                    }
+                    Avatar?.setOnLongClickListener {
+                        presenter?.fireLongAvatarClick(peerId)
+                        true
                     }
                 } else {
                     Avatar?.setOnClickListener {
-                        run {
-                            PlaceFactory.getChatMembersPlace(Settings.get().accounts().current, Peer.toChatId(peerId)).tryOpenWith(requireActivity())
-                        }
+                        PlaceFactory.getChatMembersPlace(Settings.get().accounts().current, Peer.toChatId(peerId)).tryOpenWith(requireActivity())
+                    }
+                    Avatar?.setOnLongClickListener {
+                        AppendMessageText("@all,")
+                        true
                     }
                 }
             }
@@ -852,7 +888,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         if (activity is OnSectionResumeCallback) {
             (activity as OnSectionResumeCallback).onChatResume(accountId, peerId, title, image)
         }
-        Title?.setText(title)
+        Title?.text = title
         resolveLeftButton(peerId)
     }
 
@@ -982,14 +1018,14 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
         encryptionStatusItem.isVisible = encryptionStatusVisible
 
         if (encryptionStatusVisible) {
-            @AttrRes
-            var drawableRes = R.drawable.unlock
+            @DrawableRes
+            var drawableRes = R.drawable.ic_outline_lock_open
 
             if (optionMenuSettings.get(ENCRYPTION_ENABLED, false)) {
                 drawableRes = if (optionMenuSettings.get(ENCRYPTION_PLUS_ENABLED, false)) {
                     R.drawable.lock_plus
                 } else {
-                    R.drawable.lock
+                    R.drawable.ic_outline_lock
                 }
             }
 
@@ -1004,7 +1040,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
     }
 
     override fun ScrollTo(position: Int) {
-        recyclerView?.scrollToPosition(position);
+        recyclerView?.scrollToPosition(position)
     }
 
     fun OptionsItemSelected(item: MenuItem): Boolean {
@@ -1014,7 +1050,7 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
             R.id.action_refresh -> {
-                recyclerView?.scrollToPosition(0);
+                recyclerView?.scrollToPosition(0)
                 presenter?.reset_Hrono()
                 presenter?.fireRefreshClick()
                 return true
@@ -1024,13 +1060,21 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPrensenter, IChatView>(), IChat
                 return true
             }
             R.id.change_hrono_history -> {
-                recyclerView?.scrollToPosition(0);
+                recyclerView?.scrollToPosition(0)
                 presenter?.invert_Hrono()
                 presenter?.fireRefreshClick()
                 return true
             }
             R.id.action_leave_chat -> {
                 presenter?.fireLeaveChatClick()
+                return true
+            }
+            R.id.delete_chat -> {
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.delete_chat)
+                        .setPositiveButton(R.string.button_yes) { _: DialogInterface?, _: Int -> presenter?.removeDialog() }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
                 return true
             }
             R.id.action_change_chat_title -> {

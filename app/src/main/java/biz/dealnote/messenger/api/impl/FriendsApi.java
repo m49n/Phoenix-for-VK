@@ -13,10 +13,7 @@ import biz.dealnote.messenger.api.services.IFriendsService;
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 30.12.2016.
- * phoenix
- */
+
 class FriendsApi extends AbsApi implements IFriendsApi {
 
     FriendsApi(int accountId, IServiceProvider provider) {

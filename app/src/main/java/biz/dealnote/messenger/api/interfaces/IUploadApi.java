@@ -13,10 +13,6 @@ import biz.dealnote.messenger.api.model.upload.UploadPhotoToWallDto;
 import biz.dealnote.messenger.api.model.upload.UploadVideoDto;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 31.07.2017.
- * phoenix
- */
 public interface IUploadApi {
     Single<UploadDocDto> uploadDocumentRx(String server, String filename, @NonNull InputStream doc, PercentagePublisher listener);
 

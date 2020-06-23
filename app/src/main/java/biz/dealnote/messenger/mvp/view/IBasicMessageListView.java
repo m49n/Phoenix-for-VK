@@ -9,10 +9,6 @@ import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 03.10.2016.
- * phoenix
- */
 public interface IBasicMessageListView extends IMvpView, IAttachmentsPlacesView, IAccountDependencyView, IToastView {
     void notifyMessagesUpAdded(int position, int count);
 

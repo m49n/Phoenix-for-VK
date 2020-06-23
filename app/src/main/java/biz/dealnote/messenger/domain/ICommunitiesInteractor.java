@@ -6,10 +6,6 @@ import biz.dealnote.messenger.model.Community;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
 public interface ICommunitiesInteractor {
     Single<List<Community>> getCachedData(int accountId, int userId);
 

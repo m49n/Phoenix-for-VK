@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
@@ -23,10 +25,6 @@ import biz.dealnote.messenger.mvp.presenter.RequestExecutePresenter;
 import biz.dealnote.messenger.mvp.view.IRequestExecuteView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by Ruslan Kolbasa on 05.07.2017.
- * phoenix
- */
 public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresenter, IRequestExecuteView> implements IRequestExecuteView {
 
     private static final int REQUEST_PERMISSION_WRITE = 14;
@@ -70,6 +68,7 @@ public class RequestExecuteFragment extends BaseMvpFragment<RequestExecutePresen
         return root;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<RequestExecutePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new RequestExecutePresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);

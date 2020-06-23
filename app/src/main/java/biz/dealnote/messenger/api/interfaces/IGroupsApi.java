@@ -14,10 +14,7 @@ import biz.dealnote.messenger.api.model.response.GroupLongpollServer;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
+
 public interface IGroupsApi {
 
     @CheckResult

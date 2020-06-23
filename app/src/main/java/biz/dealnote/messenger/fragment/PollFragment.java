@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -34,10 +36,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 19.12.2016.
- * phoenix
- */
 public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
         implements IPollView, PollAnswersAdapter.OnAnswerChangedCallback {
 
@@ -137,6 +135,7 @@ public class PollFragment extends BaseMvpFragment<PollPresenter, IPollView>
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<PollPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

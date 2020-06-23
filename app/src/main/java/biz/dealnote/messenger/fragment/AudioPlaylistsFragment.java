@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +22,10 @@ import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.AudioPlaylistsAdapter;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.presenter.AudioPlaylistsPresenter;
 import biz.dealnote.messenger.mvp.view.IAudioPlaylistsView;
 import biz.dealnote.messenger.place.PlaceFactory;
@@ -95,9 +97,9 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     }
 
     @Override
-    public void displayData(List<VKApiAudioPlaylist> users) {
+    public void displayData(List<AudioPlaylist> playlists) {
         if (nonNull(mAdapter)) {
-            mAdapter.setData(users);
+            mAdapter.setData(playlists);
             resolveEmptyText();
         }
     }
@@ -125,6 +127,7 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<AudioPlaylistsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudioPlaylistsPresenter(
@@ -135,17 +138,17 @@ public class AudioPlaylistsFragment extends BaseMvpFragment<AudioPlaylistsPresen
     }
 
     @Override
-    public void onAlbumClick(int index, VKApiAudioPlaylist album) {
-        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), getPresenter().getOwner_id(), album.id, album.access_key).tryOpenWith(requireActivity());
+    public void onAlbumClick(int index, AudioPlaylist album) {
+        PlaceFactory.getAudiosInAlbumPlace(getPresenter().getAccountId(), album.getOwnerId(), album.getId(), album.getAccess_key()).tryOpenWith(requireActivity());
     }
 
     @Override
-    public void onDelete(int index, VKApiAudioPlaylist album) {
-        getPresenter().onDelete(album);
+    public void onDelete(int index, AudioPlaylist album) {
+        getPresenter().onDelete(index, album);
     }
 
     @Override
-    public void onAdd(int index, VKApiAudioPlaylist album) {
+    public void onAdd(int index, AudioPlaylist album) {
         getPresenter().onAdd(album);
     }
 }

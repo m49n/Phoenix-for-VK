@@ -12,10 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
+
 public interface IDocsService {
 
     //https://vk.com/dev/docs.delete

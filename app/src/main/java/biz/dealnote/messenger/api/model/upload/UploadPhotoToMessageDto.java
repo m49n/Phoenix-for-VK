@@ -2,10 +2,6 @@ package biz.dealnote.messenger.api.model.upload;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by ruslan.kolbasa on 26.12.2016.
- * phoenix
- */
 public class UploadPhotoToMessageDto {
 
     @SerializedName("server")

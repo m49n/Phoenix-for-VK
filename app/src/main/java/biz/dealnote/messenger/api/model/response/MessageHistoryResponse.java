@@ -7,10 +7,6 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VkApiConversation;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class MessageHistoryResponse {
 
     @SerializedName("items")

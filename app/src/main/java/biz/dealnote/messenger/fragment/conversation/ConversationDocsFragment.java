@@ -7,14 +7,16 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.adapter.DocsAdapter;
 import biz.dealnote.messenger.model.Document;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentDocsPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentDocsView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentDocsPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentDocsView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class ConversationDocsFragment extends AbsChatAttachmentsFragment<Document, ChatAttachmentDocsPresenter, IChatAttachmentDocsView>
@@ -39,6 +41,7 @@ public class ConversationDocsFragment extends AbsChatAttachmentsFragment<Documen
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentDocsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ChatAttachmentDocsPresenter(

@@ -7,10 +7,7 @@ import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.mvp.view.base.IAccountDependencyView;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 09.01.2017.
- * phoenix
- */
+
 public interface IFavePhotosView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayData(List<Photo> photos);
 

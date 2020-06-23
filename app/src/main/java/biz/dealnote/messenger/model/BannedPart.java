@@ -2,10 +2,7 @@ package biz.dealnote.messenger.model;
 
 import java.util.List;
 
-/**
- * Created by admin on 09.07.2017.
- * phoenix
- */
+
 public class BannedPart {
     private final List<User> users;
 

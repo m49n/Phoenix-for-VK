@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.audiofx.AudioEffect
 import android.net.Uri
-import android.os.Handler
 import android.os.IBinder
 import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
@@ -26,20 +25,19 @@ import biz.dealnote.messenger.Constants.PICASSO_TAG
 import biz.dealnote.messenger.Extra
 import biz.dealnote.messenger.Injection
 import biz.dealnote.messenger.R
-import biz.dealnote.messenger.api.HttpLogger
 import biz.dealnote.messenger.api.PicassoInstance
-import biz.dealnote.messenger.api.ProxyUtil
 import biz.dealnote.messenger.domain.IAudioInteractor
 import biz.dealnote.messenger.domain.InteractorFactory
-import biz.dealnote.messenger.media.exo.CustomHttpDataSourceFactory
 import biz.dealnote.messenger.media.exo.ExoEventAdapter
 import biz.dealnote.messenger.media.exo.ExoUtil
 import biz.dealnote.messenger.model.Audio
 import biz.dealnote.messenger.model.IdPair
 import biz.dealnote.messenger.player.util.MusicUtils
 import biz.dealnote.messenger.settings.Settings
-import biz.dealnote.messenger.util.*
-import biz.dealnote.messenger.util.Objects
+import biz.dealnote.messenger.util.DownloadUtil
+import biz.dealnote.messenger.util.Logger
+import biz.dealnote.messenger.util.RxUtils
+import biz.dealnote.messenger.util.Utils
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
@@ -53,17 +51,8 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
 import java.lang.ref.WeakReference
-import java.net.Authenticator
-import java.net.PasswordAuthentication
-import java.net.Proxy
-import java.net.URLEncoder
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class MusicPlaybackService : Service() {
     val SHUTDOWN = "biz.dealnote.phoenix.player.shutdown"
@@ -78,7 +67,7 @@ class MusicPlaybackService : Service() {
     /**
      * Used to track what type of audio focus loss caused the playback to pause
      */
-    private var ErrorsCount = 0;
+    private var ErrorsCount = 0
     private var OnceCloseMiniPlayer = false
     private var SuperCloseMiniPlayer = MusicUtils.SuperCloseMiniPlayer
     private var mAnyActivityInForeground = false
@@ -93,6 +82,7 @@ class MusicPlaybackService : Service() {
     private var mPlayList: List<Audio>? = null
     private var mNotificationHelper: NotificationHelper? = null
     private var mMediaMetadataCompat: MediaMetadataCompat? = null
+    private val serviceDisposable = CompositeDisposable()
     override fun onBind(intent: Intent): IBinder {
         if (D) Logger.d(TAG, "Service bound, intent = $intent")
         cancelShutdown()
@@ -145,7 +135,7 @@ class MusicPlaybackService : Service() {
 
     @Suppress("DEPRECATION")
     private fun setUpRemoteControlClient() {
-        mMediaSession = MediaSessionCompat(application, "TAG", null, null)
+        mMediaSession = MediaSessionCompat(application, resources.getString(R.string.app_name), null, null)
         val playbackStateCompat = PlaybackStateCompat.Builder()
                 .setActions(
                         PlaybackStateCompat.ACTION_SEEK_TO or
@@ -209,6 +199,7 @@ class MusicPlaybackService : Service() {
         mAlarmManager!!.cancel(mShutdownIntent)
         mPlayer!!.release()
         mMediaSession!!.release()
+        serviceDisposable.dispose()
         mNotificationHelper!!.killNotification()
         unregisterReceiver(mIntentReceiver)
     }
@@ -300,7 +291,7 @@ class MusicPlaybackService : Service() {
      */
     private fun updateNotification() {
         mNotificationHelper!!.buildNotification(this, artistName,
-                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(getResources(), R.drawable.generic_audio_nowplaying_service)), mMediaSession!!.sessionToken)
+                trackName, isPlaying, Utils.firstNonNull(CoverBitmap, BitmapFactory.decodeResource(resources, R.drawable.generic_audio_nowplaying_service)), mMediaSession!!.sessionToken)
     }
 
     private fun scheduleDelayedShutdown() {
@@ -479,47 +470,15 @@ class MusicPlaybackService : Service() {
         mMediaSession!!.setMetadata(mMediaMetadataCompat)
     }
 
-    @Throws(Exception::class)
-    fun GetCoverURL(audio: Audio) {
-        val builder = OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(object : Interceptor {
-                    @Throws(IOException::class)
-                    override fun intercept(chain: Interceptor.Chain): Response {
-                        val request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(null)).build()
-                        return chain.proceed(request)
+    private fun GetCoverURL(audio: Audio) {
+        serviceDisposable.add(Injection.provideNetworkInterfaces().amazonAudioCover().getAudioCover(audio.title, audio.artist)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe({ remote ->
+                    run {
+                        CoverAudio = remote.image; audio.thumb_image_big = remote.image; audio.thumb_image_very_big = remote.image; audio.thumb_image_little = remote.image
+                        AlbumTitle = remote.album; fetchCoverAndUpdateMetadata(); notifyChange(META_CHANGED)
                     }
-                })
-        ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().activeProxy)
-        val request = Request.Builder()
-                .url("https://axzodu785h.execute-api.us-east-1.amazonaws.com/dev?track=" + URLEncoder.encode(audio.title, "UTF-8") + "&artist=" + URLEncoder.encode(audio.artist, "UTF-8")).build()
-        builder.build().newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    try {
-                        val obj = JSONObject(response.body!!.string())
-                        if (obj.has("image")) {
-                            CoverAudio = obj.getString("image"); audio.thumb_image_big = obj.getString("image"); audio.thumb_image_very_big = obj.getString("image"); audio.thumb_image_little = obj.getString("image");
-                        }
-                        if (obj.has("album")) {
-                            AlbumTitle = obj.getString("album"); audio.album_title = obj.getString("album");
-                        }
-                        val uiHandler = Handler(this@MusicPlaybackService.mainLooper)
-                        uiHandler.post {
-                            fetchCoverAndUpdateMetadata()
-                            notifyChange(META_CHANGED)
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        })
+                }, {}))
     }
 
     /**
@@ -534,8 +493,8 @@ class MusicPlaybackService : Service() {
                 return
             }
 
-            if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio))
-                audio.setUrl(DownloadUtil.GetLocalTrackLink(audio))
+            if (Settings.get().other().isForce_cache && DownloadUtil.TrackIsDownloaded(audio) == 1)
+                audio.url = DownloadUtil.GetLocalTrackLink(audio)
             if (UpdateMeta) {
                 ErrorsCount = 0
                 CoverAudio = null
@@ -544,7 +503,7 @@ class MusicPlaybackService : Service() {
                 OnceCloseMiniPlayer = false
             }
             mPlayer!!.setDataSource(audio.ownerId, audio.id, audio.url)
-            if (UpdateMeta && Settings.get().accounts().getType(Settings.get().accounts().current) == "kate") {
+            if (UpdateMeta && (Settings.get().accounts().getType(Settings.get().accounts().current) == "kate" || audio.isLocal)) {
                 try {
                     GetCoverURL(audio)
                 } catch (e: Exception) {
@@ -857,7 +816,7 @@ class MusicPlaybackService : Service() {
         }
     }
 
-    private class MultiPlayer internal constructor(service: MusicPlaybackService) {
+    private class MultiPlayer(service: MusicPlaybackService) {
         val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
         var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(service).build()
         var isInitialized = false
@@ -876,22 +835,8 @@ class MusicPlaybackService : Service() {
             isPaused = false
             isPreparing = true
             val url = Utils.firstNonEmptyString(remoteUrl, "https://raw.githubusercontent.com/umerov1999/Phoenix-for-VK/5.x/audio_error.mp3")
-            var proxy: Proxy? = null
-            if (Objects.nonNull(Injection.provideProxySettings().activeProxy)) {
-                proxy = Proxy(Proxy.Type.HTTP, ProxyUtil.obtainAddress(Injection.provideProxySettings().activeProxy))
-                if (Injection.provideProxySettings().activeProxy.isAuthEnabled) {
-                    val authenticator: Authenticator = object : Authenticator() {
-                        public override fun getPasswordAuthentication(): PasswordAuthentication {
-                            return PasswordAuthentication(Injection.provideProxySettings().activeProxy.user, Injection.provideProxySettings().activeProxy.pass.toCharArray())
-                        }
-                    }
-                    Authenticator.setDefault(authenticator)
-                } else {
-                    Authenticator.setDefault(null)
-                }
-            }
             val userAgent = Constants.USER_AGENT(null)
-            val factory = CustomHttpDataSourceFactory(userAgent, proxy)
+            val factory = Utils.getExoPlayerFactory(userAgent, Injection.provideProxySettings().activeProxy)
             val mediaSource: MediaSource
             mediaSource = if (url.contains("file://")) {
                 ProgressiveMediaSource.Factory(DefaultDataSourceFactory(
@@ -1050,7 +995,7 @@ class MusicPlaybackService : Service() {
         }
 
         override fun closeMiniPlayer() {
-            mService.get()!!.OnceCloseMiniPlayer = true;
+            mService.get()!!.OnceCloseMiniPlayer = true
         }
 
         override fun refresh() {
@@ -1212,10 +1157,13 @@ class MusicPlaybackService : Service() {
             val url = audios[0].url
             val interactor = InteractorFactory.createAudioInteractor()
             if (Utils.isEmpty(url) || "https://vk.com/mp3/audio_api_unavailable.mp3" == url) {
-                audios = interactor
-                        .getById(listToIdPair(audios))
-                        .subscribeOn(Schedulers.io())
-                        .blockingGet() as ArrayList<Audio>
+                try {
+                    audios = interactor
+                            .getById(listToIdPair(audios))
+                            .subscribeOn(Schedulers.io())
+                            .blockingGet() as ArrayList<Audio>
+                } catch (ignore: Throwable) {
+                }
             }
             Logger.d(TAG, "startForPlayList, count: " + audios.size + ", position: " + position)
             val target: ArrayList<Audio>

@@ -7,7 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 import biz.dealnote.messenger.activity.SendAttachmentsActivity;
 import biz.dealnote.messenger.adapter.AttachmentsViewBinder;
@@ -18,15 +21,18 @@ import biz.dealnote.messenger.fragment.search.SearchContentType;
 import biz.dealnote.messenger.fragment.search.criteria.BaseSearchCriteria;
 import biz.dealnote.messenger.link.LinkHelper;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.model.Commented;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.Link;
 import biz.dealnote.messenger.model.Message;
 import biz.dealnote.messenger.model.Peer;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.Poll;
 import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.model.Sticker;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.model.WikiPage;
 import biz.dealnote.messenger.mvp.presenter.base.PlaceSupportPresenter;
@@ -39,10 +45,6 @@ import biz.dealnote.messenger.util.AssertUtils;
 import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by ruslan.kolbasa on 04.10.2016.
- * phoenix
- */
 public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>, V extends IMvpView & IAttachmentsPlacesView & IAccountDependencyView>
         extends BaseMvpFragment<P, V> implements AttachmentsViewBinder.OnAttachmentsActionCallback, IAttachmentsPlacesView, OwnerClickListener {
 
@@ -109,8 +111,38 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
+    public void onStoryOpen(@NotNull Story story) {
+        getPresenter().fireStoryClick(story);
+    }
+
+    @Override
+    public void openStory(int accountId, @NotNull Story story) {
+        PlaceFactory.getHistoryVideoPreviewPlace(accountId, new ArrayList<>(Collections.singleton(story)), 0).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onAudioPlaylistOpen(@NotNull AudioPlaylist playlist) {
+        getPresenter().fireAudioPlaylistClick(playlist);
+    }
+
+    @Override
+    public void openAudioPlaylist(int accountId, @NotNull AudioPlaylist playlist) {
+        PlaceFactory.getAudiosInAlbumPlace(accountId, playlist.getOwnerId(), playlist.getId(), playlist.getAccess_key()).tryOpenWith(requireActivity());
+    }
+
+    @Override
     public void onPhotosOpen(@NonNull ArrayList<Photo> photos, int index) {
         getPresenter().firePhotoClick(photos, index);
+    }
+
+    @Override
+    public void openPhotoAlbum(int accountId, @NotNull PhotoAlbum album) {
+        PlaceFactory.getVKPhotosAlbumPlace(accountId, album.getOwnerId(), album.getId(), null).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void onPhotoAlbumOpen(@NotNull PhotoAlbum album) {
+        getPresenter().firePhotoAlbumClick(album);
     }
 
     @Override
@@ -177,8 +209,8 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
-    public void openHistoryVideo(int accountId, @NonNull Video apiVideo) {
-        PlaceFactory.getHistoryVideoPreviewPlace(accountId, apiVideo).tryOpenWith(requireActivity());
+    public void openHistoryVideo(int accountId, @NonNull ArrayList<Story> stories, int index) {
+        PlaceFactory.getHistoryVideoPreviewPlace(accountId, stories, index).tryOpenWith(requireActivity());
     }
 
     @Override

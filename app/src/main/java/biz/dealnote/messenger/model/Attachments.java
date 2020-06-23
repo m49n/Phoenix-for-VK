@@ -3,6 +3,8 @@ package biz.dealnote.messenger.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import biz.dealnote.messenger.adapter.DocLink;
@@ -38,10 +40,15 @@ public class Attachments implements Parcelable, Cloneable {
     private ArrayList<Post> posts;
     private ArrayList<Link> links;
     private ArrayList<Article> articles;
+    private ArrayList<Story> stories;
+    private ArrayList<Call> calls;
     private ArrayList<Poll> polls;
     private ArrayList<WikiPage> pages;
     private ArrayList<VoiceMessage> voiceMessages;
     private ArrayList<GiftItem> gifts;
+    private ArrayList<AudioPlaylist> audio_playlists;
+    private ArrayList<Graffiti> graffity;
+    private ArrayList<PhotoAlbum> photo_albums;
 
     public Attachments() {
     }
@@ -59,6 +66,11 @@ public class Attachments implements Parcelable, Cloneable {
         pages = in.createTypedArrayList(WikiPage.CREATOR);
         voiceMessages = in.createTypedArrayList(VoiceMessage.CREATOR);
         gifts = in.createTypedArrayList(GiftItem.CREATOR);
+        stories = in.createTypedArrayList(Story.CREATOR);
+        calls = in.createTypedArrayList(Call.CREATOR);
+        audio_playlists = in.createTypedArrayList(AudioPlaylist.CREATOR);
+        graffity = in.createTypedArrayList(Graffiti.CREATOR);
+        photo_albums = in.createTypedArrayList(PhotoAlbum.CREATOR);
     }
 
     public ArrayList<VoiceMessage> getVoiceMessages() {
@@ -79,6 +91,11 @@ public class Attachments implements Parcelable, Cloneable {
         dest.writeTypedList(pages);
         dest.writeTypedList(voiceMessages);
         dest.writeTypedList(gifts);
+        dest.writeTypedList(stories);
+        dest.writeTypedList(calls);
+        dest.writeTypedList(audio_playlists);
+        dest.writeTypedList(graffity);
+        dest.writeTypedList(photo_albums);
     }
 
     public void add(AbsModel model) {
@@ -89,6 +106,11 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (model instanceof Sticker) {
             prepareStickers().add((Sticker) model);
+            return;
+        }
+
+        if (model instanceof PhotoAlbum) {
+            preparePhotoAlbums().add((PhotoAlbum) model);
             return;
         }
 
@@ -127,6 +149,26 @@ public class Attachments implements Parcelable, Cloneable {
             return;
         }
 
+        if (model instanceof Story) {
+            prepareStories().add((Story) model);
+            return;
+        }
+
+        if (model instanceof Call) {
+            prepareCalls().add((Call) model);
+            return;
+        }
+
+        if (model instanceof AudioPlaylist) {
+            prepareAudioPlaylists().add((AudioPlaylist) model);
+            return;
+        }
+
+        if (model instanceof Graffiti) {
+            prepareGraffity().add((Graffiti) model);
+            return;
+        }
+
         if (model instanceof Poll) {
             preparePolls().add((Poll) model);
             return;
@@ -149,6 +191,10 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(stickers)) {
             result.addAll(stickers);
+        }
+
+        if (nonEmpty(photo_albums)) {
+            result.addAll(photo_albums);
         }
 
         if (nonEmpty(photos)) {
@@ -177,6 +223,22 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonEmpty(articles)) {
             result.addAll(articles);
+        }
+
+        if (nonEmpty(stories)) {
+            result.addAll(stories);
+        }
+
+        if (nonEmpty(calls)) {
+            result.addAll(calls);
+        }
+
+        if (nonEmpty(audio_playlists)) {
+            result.addAll(audio_playlists);
+        }
+
+        if (nonEmpty(graffity)) {
+            result.addAll(graffity);
         }
 
         if (nonEmpty(polls)) {
@@ -242,6 +304,38 @@ public class Attachments implements Parcelable, Cloneable {
         return articles;
     }
 
+    public ArrayList<Story> prepareStories() {
+        if (stories == null) {
+            stories = new ArrayList<>(1);
+        }
+
+        return stories;
+    }
+
+    public ArrayList<Call> prepareCalls() {
+        if (calls == null) {
+            calls = new ArrayList<>(1);
+        }
+
+        return calls;
+    }
+
+    public ArrayList<AudioPlaylist> prepareAudioPlaylists() {
+        if (audio_playlists == null) {
+            audio_playlists = new ArrayList<>(1);
+        }
+
+        return audio_playlists;
+    }
+
+    public ArrayList<Graffiti> prepareGraffity() {
+        if (graffity == null) {
+            graffity = new ArrayList<>(1);
+        }
+
+        return graffity;
+    }
+
     public ArrayList<Document> prepareDocs() {
         if (docs == null) {
             docs = new ArrayList<>(1);
@@ -274,6 +368,14 @@ public class Attachments implements Parcelable, Cloneable {
         return stickers;
     }
 
+    public ArrayList<PhotoAlbum> preparePhotoAlbums() {
+        if (photo_albums == null) {
+            photo_albums = new ArrayList<>(1);
+        }
+
+        return photo_albums;
+    }
+
     public ArrayList<Post> preparePosts() {
         if (posts == null) {
             posts = new ArrayList<>(1);
@@ -300,6 +402,32 @@ public class Attachments implements Parcelable, Cloneable {
                 posts,
                 links,
                 articles,
+                stories,
+                photo_albums,
+                calls,
+                audio_playlists,
+                graffity,
+                polls,
+                pages,
+                voiceMessages,
+                gifts
+        );
+    }
+
+    public int size_no_stickers() {
+        return Utils.safeCountOfMultiple(
+                audios,
+                photos,
+                docs,
+                videos,
+                posts,
+                links,
+                articles,
+                stories,
+                photo_albums,
+                calls,
+                audio_playlists,
+                graffity,
                 polls,
                 pages,
                 voiceMessages,
@@ -333,6 +461,11 @@ public class Attachments implements Parcelable, Cloneable {
                 safeIsEmpty(posts) &&
                 safeIsEmpty(links) &&
                 safeIsEmpty(articles) &&
+                safeIsEmpty(stories) &&
+                safeIsEmpty(photo_albums) &&
+                safeIsEmpty(calls) &&
+                safeIsEmpty(audio_playlists) &&
+                safeIsEmpty(graffity) &&
                 safeIsEmpty(pages) &&
                 safeIsEmpty(polls) &&
                 safeIsEmpty(voiceMessages) &&
@@ -411,9 +544,40 @@ public class Attachments implements Parcelable, Cloneable {
             }
         }
 
+        if (stories != null) {
+            for (Story story : stories) {
+                result.add(new DocLink(story));
+            }
+        }
+
+        if (calls != null) {
+            for (Call call : calls) {
+                result.add(new DocLink(call));
+            }
+        }
+
+        if (audio_playlists != null) {
+            for (AudioPlaylist playlist : audio_playlists) {
+                result.add(new DocLink(playlist));
+            }
+        }
+
+        if (graffity != null) {
+            for (Graffiti graff : graffity) {
+                result.add(new DocLink(graff));
+            }
+        }
+
+        if (photo_albums != null) {
+            for (PhotoAlbum album : photo_albums) {
+                result.add(new DocLink(album));
+            }
+        }
+
         return result;
     }
 
+    @NotNull
     @Override
     public Attachments clone() throws CloneNotSupportedException {
         Attachments clone = (Attachments) super.clone();
@@ -425,12 +589,18 @@ public class Attachments implements Parcelable, Cloneable {
         clone.posts = cloneListAsArrayList(this.posts);
         clone.links = cloneListAsArrayList(this.links);
         clone.articles = cloneListAsArrayList(this.articles);
+        clone.stories = cloneListAsArrayList(this.stories);
+        clone.photo_albums = cloneListAsArrayList(this.photo_albums);
+        clone.calls = cloneListAsArrayList(this.calls);
+        clone.audio_playlists = cloneListAsArrayList(this.audio_playlists);
+        clone.graffity = cloneListAsArrayList(this.graffity);
         clone.polls = cloneListAsArrayList(this.polls);
         clone.pages = cloneListAsArrayList(this.pages);
         clone.voiceMessages = cloneListAsArrayList(this.voiceMessages);
         return clone;
     }
 
+    @NotNull
     @Override
     public String toString() {
         String line = "";
@@ -464,6 +634,26 @@ public class Attachments implements Parcelable, Cloneable {
 
         if (nonNull(articles)) {
             line = line + " articles=" + safeCountOf(articles);
+        }
+
+        if (nonNull(stories)) {
+            line = line + " stories=" + safeCountOf(stories);
+        }
+
+        if (nonNull(photo_albums)) {
+            line = line + " photo_albums=" + safeCountOf(photo_albums);
+        }
+
+        if (nonNull(calls)) {
+            line = line + " calls=" + safeCountOf(calls);
+        }
+
+        if (nonNull(audio_playlists)) {
+            line = line + " audio_playlists=" + safeCountOf(audio_playlists);
+        }
+
+        if (nonNull(graffity)) {
+            line = line + " graffity=" + safeCountOf(graffity);
         }
 
         if (nonNull(polls)) {
@@ -519,6 +709,26 @@ public class Attachments implements Parcelable, Cloneable {
 
     public ArrayList<Article> getArticles() {
         return articles;
+    }
+
+    public ArrayList<Story> getStories() {
+        return stories;
+    }
+
+    public ArrayList<Call> getCalls() {
+        return calls;
+    }
+
+    public ArrayList<PhotoAlbum> getPhotoAlbums() {
+        return photo_albums;
+    }
+
+    public ArrayList<AudioPlaylist> getAudioPlaylists() {
+        return audio_playlists;
+    }
+
+    public ArrayList<Graffiti> getGraffity() {
+        return graffity;
     }
 
     public ArrayList<Poll> getPolls() {

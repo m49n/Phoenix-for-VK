@@ -7,6 +7,7 @@ import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_MESSAGES_FLAGS_RESET;
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_MESSAGES_FLAGS_SET;
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_MESSAGE_ADDED;
+import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_MESSAGE_EDITED;
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_SET_INPUT_MESSAGES_AS_READ;
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_SET_OUTPUT_MESSAGES_AS_READ;
 import static biz.dealnote.messenger.api.model.longpoll.AbsLongpollEvent.ACTION_USER_IS_OFFLINE;
@@ -65,6 +66,7 @@ public final class VkApiLongpollUpdates {
                 message_flags_reset_updates = addAndReturn(message_flags_reset_updates, (MessageFlagsResetUpdate) update);
                 break;
 
+            case ACTION_MESSAGE_EDITED:
             case ACTION_MESSAGE_ADDED:
                 add_message_updates = addAndReturn(add_message_updates, (AddMessageUpdate) update);
                 break;

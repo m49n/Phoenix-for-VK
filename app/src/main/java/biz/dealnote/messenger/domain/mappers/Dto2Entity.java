@@ -1,5 +1,7 @@
 package biz.dealnote.messenger.domain.mappers;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +12,8 @@ import biz.dealnote.messenger.api.model.PhotoSizeDto;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
+import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiCareer;
 import biz.dealnote.messenger.api.model.VKApiCity;
 import biz.dealnote.messenger.api.model.VKApiComment;
@@ -17,6 +21,7 @@ import biz.dealnote.messenger.api.model.VKApiCommunity;
 import biz.dealnote.messenger.api.model.VKApiCountry;
 import biz.dealnote.messenger.api.model.VKApiGift;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiMessage;
 import biz.dealnote.messenger.api.model.VKApiMilitary;
@@ -28,6 +33,7 @@ import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSchool;
 import biz.dealnote.messenger.api.model.VKApiSticker;
 import biz.dealnote.messenger.api.model.VKApiStickerSet;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiTopic;
 import biz.dealnote.messenger.api.model.VKApiUniversity;
 import biz.dealnote.messenger.api.model.VKApiUser;
@@ -59,6 +65,8 @@ import biz.dealnote.messenger.db.model.IdPairEntity;
 import biz.dealnote.messenger.db.model.entity.ArticleEntity;
 import biz.dealnote.messenger.db.model.entity.AudioEntity;
 import biz.dealnote.messenger.db.model.entity.AudioMessageEntity;
+import biz.dealnote.messenger.db.model.entity.AudioPlaylistEntity;
+import biz.dealnote.messenger.db.model.entity.CallEntity;
 import biz.dealnote.messenger.db.model.entity.CareerEntity;
 import biz.dealnote.messenger.db.model.entity.CityEntity;
 import biz.dealnote.messenger.db.model.entity.CommentEntity;
@@ -71,6 +79,7 @@ import biz.dealnote.messenger.db.model.entity.Entity;
 import biz.dealnote.messenger.db.model.entity.FavePageEntity;
 import biz.dealnote.messenger.db.model.entity.GiftEntity;
 import biz.dealnote.messenger.db.model.entity.GiftItemEntity;
+import biz.dealnote.messenger.db.model.entity.GraffitiEntity;
 import biz.dealnote.messenger.db.model.entity.LinkEntity;
 import biz.dealnote.messenger.db.model.entity.MessageEntity;
 import biz.dealnote.messenger.db.model.entity.MilitaryEntity;
@@ -87,6 +96,7 @@ import biz.dealnote.messenger.db.model.entity.SchoolEntity;
 import biz.dealnote.messenger.db.model.entity.SimpleDialogEntity;
 import biz.dealnote.messenger.db.model.entity.StickerEntity;
 import biz.dealnote.messenger.db.model.entity.StickerSetEntity;
+import biz.dealnote.messenger.db.model.entity.StoryEntity;
 import biz.dealnote.messenger.db.model.entity.TopicEntity;
 import biz.dealnote.messenger.db.model.entity.UniversityEntity;
 import biz.dealnote.messenger.db.model.entity.UserDetailsEntity;
@@ -116,10 +126,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.listEmptyIfNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 04.09.2017.
- * phoenix
- */
+
 public class Dto2Entity {
 
     public static FeedbackEntity buildFeedbackDbo(VkApiBaseFeedback feedback) {
@@ -428,7 +435,7 @@ public class Dto2Entity {
 
         try {
             if (nonEmpty(user.photo_id)) {
-                int dividerIndex = user.photo_id.indexOf("_");
+                int dividerIndex = user.photo_id.indexOf('_');
                 if (dividerIndex != -1) {
                     int photoId = Integer.parseInt(user.photo_id.substring(dividerIndex + 1));
                     dbo.setPhotoId(new IdPairEntity(photoId, user.id));
@@ -724,6 +731,26 @@ public class Dto2Entity {
             return mapArticle((VKApiArticle) dto);
         }
 
+        if (dto instanceof VKApiAudioPlaylist) {
+            return mapAudioPlaylist((VKApiAudioPlaylist) dto);
+        }
+
+        if (dto instanceof VKApiStory) {
+            return mapStory((VKApiStory) dto);
+        }
+
+        if (dto instanceof VKApiGraffiti) {
+            return mapGraffity((VKApiGraffiti) dto);
+        }
+
+        if (dto instanceof VKApiPhotoAlbum) {
+            return buildPhotoAlbumDbo((VKApiPhotoAlbum) dto);
+        }
+
+        if (dto instanceof VKApiCall) {
+            return mapCall((VKApiCall) dto);
+        }
+
         if (dto instanceof VKApiWikiPage) {
             return mapWikiPage((VKApiWikiPage) dto);
         }
@@ -772,7 +799,8 @@ public class Dto2Entity {
                 .setThumb_image_big(dto.thumb_image_big)
                 .setThumb_image_little(dto.thumb_image_little)
                 .setThumb_image_very_big(dto.thumb_image_very_big)
-                .setIsHq(dto.isHq);
+                .setIsHq(dto.isHq)
+                .setArtist(dto.artist);
     }
 
     public static PollEntity.Answer mapPollAnswer(VKApiPoll.Answer dto) {
@@ -899,13 +927,41 @@ public class Dto2Entity {
                 .setURL(article.url);
     }
 
+    public static StoryEntity mapStory(@NonNull VKApiStory dto) {
+        return new StoryEntity().setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setDate(dto.date)
+                .setExpires(dto.expires_at)
+                .setIs_expired(dto.is_expired)
+                .setAccessKey(dto.access_key)
+                .setPhoto(dto.photo != null ? mapPhoto(dto.photo) : null)
+                .setVideo(dto.video != null ? mapVideo(dto.video) : null);
+    }
+
+    public static GraffitiEntity mapGraffity(@NonNull VKApiGraffiti dto) {
+        return new GraffitiEntity().setId(dto.id)
+                .setOwner_id(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setHeight(dto.height)
+                .setWidth(dto.width)
+                .setUrl(dto.url);
+    }
+
+    public static CallEntity mapCall(@NonNull VKApiCall dto) {
+        return new CallEntity().setInitiator_id(dto.initiator_id)
+                .setReceiver_id(dto.receiver_id)
+                .setState(dto.state)
+                .setTime(dto.time);
+    }
+
     public static AudioMessageEntity mapAudioMessage(VkApiAudioMessage dto) {
         return new AudioMessageEntity(dto.id, dto.owner_id)
                 .setAccessKey(dto.access_key)
                 .setDuration(dto.duration)
                 .setLinkMp3(dto.linkMp3)
                 .setLinkOgg(dto.linkOgg)
-                .setWaveform(dto.waveform);
+                .setWaveform(dto.waveform)
+                .setTranscript(dto.transcript);
     }
 
     public static DocumentEntity mapDoc(VkApiDoc dto) {
@@ -966,7 +1022,8 @@ public class Dto2Entity {
                 .setPhoto100(dto.action_photo_100)
                 .setPhoto200(dto.action_photo_200)
                 .setRandomId(randomId)
-                .setUpdateTime(dto.update_time);
+                .setUpdateTime(dto.update_time)
+                .setPayload(dto.payload);
 
         if (entity.isHasAttachmens()) {
             entity.setAttachments(mapAttachemntsList(dto.attachments));
@@ -1038,6 +1095,24 @@ public class Dto2Entity {
                 .setDate(dto.date)
                 .setGiftItem(mapGiftItem(dto.giftItem))
                 .setPrivacy(dto.privacy);
+    }
+
+    public static AudioPlaylistEntity mapAudioPlaylist(@NonNull VKApiAudioPlaylist dto) {
+        return new AudioPlaylistEntity()
+                .setId(dto.id)
+                .setOwnerId(dto.owner_id)
+                .setAccess_key(dto.access_key)
+                .setArtist_name(dto.artist_name)
+                .setCount(dto.count)
+                .setDescription(dto.description)
+                .setGenre(dto.genre)
+                .setYear(dto.Year)
+                .setTitle(dto.title)
+                .setThumb_image(dto.thumb_image)
+                .setUpdate_time(dto.update_time)
+                .setOriginal_access_key(dto.original_access_key)
+                .setOriginal_id(dto.original_id)
+                .setOriginal_owner_id(dto.original_owner_id);
     }
 
     public static GiftItemEntity mapGiftItem(VKApiGiftItem dto) {

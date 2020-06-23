@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model.selection;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Ruslan Kolbasa on 16.08.2017.
- * phoenix
- */
+
 public class LocalVideosSelectableSource extends AbsSelectableSource implements Parcelable {
 
     public static final Creator<LocalVideosSelectableSource> CREATOR = new Creator<LocalVideosSelectableSource>() {
@@ -27,11 +24,6 @@ public class LocalVideosSelectableSource extends AbsSelectableSource implements 
 
     protected LocalVideosSelectableSource(Parcel in) {
         super(in);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
     }
 
     @Override

@@ -12,10 +12,6 @@ import androidx.annotation.LayoutRes;
 
 import biz.dealnote.messenger.R;
 
-/**
- * Created by ruslan.kolbasa on 10-Jun-16.
- * mobilebankingandroid
- */
 public class KeyboardView extends FrameLayout {
 
     private OnKeyboardClickListener mOnKeyboardClickListener;

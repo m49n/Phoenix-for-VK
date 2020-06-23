@@ -18,10 +18,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-/**
- * Created by hp-dv6 on 04.06.2016.
- * VKMessenger
- */
 public interface IDialogsStorage extends IStorage {
 
     int getUnreadDialogsCount(int accountId);

@@ -13,10 +13,6 @@ import java.util.List;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.response.ChatsInfoResponse;
 
-/**
- * Created by admin on 04.01.2017.
- * phoenix
- */
 public class ChatsInfoAdapter extends AbsAdapter implements JsonDeserializer<ChatsInfoResponse> {
 
     @Override

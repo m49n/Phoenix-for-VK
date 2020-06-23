@@ -47,6 +47,9 @@
     <attr name="icon_color_active" format="color" />
     <attr name="icon_color_inactive" format="color" />
 
+    <attr name="fab_secondary" format="reference" />
+    <attr name="fab_player" format="reference" />
+
     <attr name="navi_menu_color" format="color" />
     <attr name="navi_menu_selector" format="reference" />
     <attr name="messages_background_color" format="color" />
@@ -57,8 +60,6 @@
     <attr name="message_unread_color" format="color" />
     <attr name="buttonAddPhotoBackground" format="reference" />
     <attr name="dividerColor" format="color" />
-
-    <attr name="oval_avatar_background" format="reference" />
 
     <attr name="toolbarElevation" format="reference" />
     <attr name="statusbarNonColoredColor" format="color" />
@@ -152,5 +153,8 @@
             <enum name="width" value="0" />
             <enum name="height" value="1" />
         </attr>
+    </declare-styleable>
+    <declare-styleable name="BottomSheetLayout">
+        <attr name="collapsedHeight" format="dimension" />
     </declare-styleable>
 </resources>

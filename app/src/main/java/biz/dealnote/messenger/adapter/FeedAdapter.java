@@ -20,7 +20,6 @@ import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.link.internal.LinkActionAdapter;
 import biz.dealnote.messenger.link.internal.OwnerLinkSpanFactory;
 import biz.dealnote.messenger.model.News;
-import biz.dealnote.messenger.model.Post;
 import biz.dealnote.messenger.settings.CurrentTheme;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.Utils;
@@ -61,20 +60,11 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         return safeAllIsEmpty(news.getAttachments().getPhotos(), news.getAttachments().getVideos());
     }
 
-    private static boolean needToShowBottomDivider(News news) {
-        if (Utils.safeIsEmpty(news.getCopyHistory())) {
-            return news.getAttachments() == null || !news.getAttachments().isPhotosVideosGifsOnly();
-        }
-
-        Post last = news.getCopyHistory().get(news.getCopyHistory().size() - 1);
-        return last.getAttachments() == null || !last.getAttachments().isPhotosVideosGifsOnly();
-    }
-
     @Override
     protected void onBindItemViewHolder(final PostHolder holder, int position, int type) {
         final News item = getItem(position);
 
-        attachmentsViewBinder.displayAttachments(item.getAttachments(), holder.attachmentsHolder, false);
+        attachmentsViewBinder.displayAttachments(item.getAttachments(), holder.attachmentsHolder, false, null);
         attachmentsViewBinder.displayCopyHistory(item.getCopyHistory(), holder.attachmentsHolder.getVgPosts(), true, R.layout.item_copy_history_post);
 
         holder.tvOwnerName.setText(item.getOwnerName());
@@ -127,7 +117,6 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         });
 
         holder.topDivider.setVisibility(View.GONE);
-        holder.bottomDivider.setVisibility(needToShowBottomDivider(item) ? View.VISIBLE : View.GONE);
 
         holder.viewsCounterRoot.setVisibility(item.getViewCount() > 0 ? View.VISIBLE : View.GONE);
         //holder.viewsCounter.setText(String.valueOf(item.getViewCount()));
@@ -213,7 +202,6 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
         TextView tvText;
         TextView tvShowMore;
         TextView tvTime;
-        View bottomDivider;
         ViewGroup bottomActionsContainer;
         CircleCounterButton likeButton;
         CircleCounterButton shareButton;
@@ -235,7 +223,6 @@ public class FeedAdapter extends RecyclerBindableAdapter<News, FeedAdapter.PostH
             tvText = root.findViewById(R.id.item_post_text);
             tvShowMore = root.findViewById(R.id.item_post_show_more);
             tvTime = root.findViewById(R.id.item_post_time);
-            bottomDivider = root.findViewById(R.id.bottom_divider);
             bottomActionsContainer = root.findViewById(R.id.buttons_bar);
             likeButton = root.findViewById(R.id.like_button);
             commentsButton = root.findViewById(R.id.comments_button);

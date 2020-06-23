@@ -20,13 +20,19 @@ import biz.dealnote.messenger.adapter.holder.IdentificableHolder;
 import biz.dealnote.messenger.adapter.holder.SharedHolders;
 import biz.dealnote.messenger.api.PicassoInstance;
 import biz.dealnote.messenger.model.AbsModel;
+import biz.dealnote.messenger.model.Article;
 import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
+import biz.dealnote.messenger.model.Call;
 import biz.dealnote.messenger.model.Document;
 import biz.dealnote.messenger.model.FwdMessages;
+import biz.dealnote.messenger.model.Graffiti;
 import biz.dealnote.messenger.model.Photo;
+import biz.dealnote.messenger.model.PhotoAlbum;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.upload.Upload;
@@ -35,10 +41,6 @@ import biz.dealnote.messenger.view.CircleRoadProgress;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.isEmpty;
 
-/**
- * Created by admin on 15.04.2017.
- * phoenix
- */
 public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ERROR_COLOR = Color.parseColor("#ff0000");
@@ -105,14 +107,28 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             bindDoc(holder, (Document) model);
         } else if (model instanceof Audio) {
             bindAudio(holder, (Audio) model);
+        } else if (model instanceof Article) {
+            bindArticle(holder, (Article) model);
+        } else if (model instanceof Story) {
+            bindStory(holder, (Story) model);
+        } else if (model instanceof Call) {
+            bindCall(holder, (Call) model);
+        } else if (model instanceof AudioPlaylist) {
+            bindAudioPlaylist(holder, (AudioPlaylist) model);
+        } else if (model instanceof Graffiti) {
+            bindGraffiti(holder, (Graffiti) model);
+        } else if (model instanceof PhotoAlbum) {
+            bindPhotoAlbum(holder, (PhotoAlbum) model);
         }
 
         holder.buttomRemove.setOnClickListener(v -> actionListener.onButtonRemoveClick(entry));
+        holder.Retry.setOnClickListener(v -> actionListener.onButtonRetryClick(entry));
     }
 
     @SuppressWarnings("unused")
     private void bindMessages(EntryHolder holder, FwdMessages messages) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
 
         holder.title.setText(R.string.messages);
@@ -144,16 +160,72 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    private void bindPhotoAlbum(EntryHolder holder, PhotoAlbum album) {
+        holder.title.setText(R.string.photo_album);
+        String photoLink = nonNull(album.getSizes()) ? album.getSizes().getUrlForSize(PhotoSize.X, false) : null;
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindGraffiti(EntryHolder holder, Graffiti graffiti) {
+        holder.title.setText(R.string.graffity);
+        String photoLink = graffiti.getUrl();
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindArticle(EntryHolder holder, Article link) {
+        holder.title.setText(R.string.article);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = nonNull(link.getPhoto()) ? link.getPhoto().getUrlForSize(PhotoSize.X, false) : null;
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindAudioPlaylist(EntryHolder holder, AudioPlaylist link) {
+        holder.title.setText(link.getTitle());
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = link.getThumb_image();
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindStory(EntryHolder holder, Story story) {
+        holder.title.setText(R.string.story);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        String photoLink = nonNull(story.getOwner()) ? story.getOwner().getMaxSquareAvatar() : null;
+        bindImageView(holder, photoLink);
+    }
+
+    private void bindCall(EntryHolder holder, Call call) {
+        holder.title.setText(R.string.call);
+        holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
+        holder.tintView.setVisibility(View.GONE);
+        PicassoInstance.with().cancelRequest(holder.image);
+        holder.image.setImageResource(R.drawable.phone_call_color);
+    }
+
     private void bindAudio(EntryHolder holder, Audio audio) {
         String audiostr = audio.getArtist() + " - " + audio.getTitle();
         holder.title.setText(audiostr);
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         bindImageAudioView(holder, audio.getThumb_image_big());
     }
 
     private void bindVideo(EntryHolder holder, Video video) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(video.getTitle());
 
@@ -162,6 +234,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
 
     private void bindDoc(EntryHolder holder, Document doc) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(doc.getTitle());
 
@@ -172,6 +245,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
 
     private void bindPost(EntryHolder holder, Post post) {
         holder.progress.setVisibility(View.INVISIBLE);
+        holder.Retry.setVisibility(View.GONE);
         holder.tintView.setVisibility(View.GONE);
 
         String title = post.getTextCopiesInclude();
@@ -199,6 +273,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         @ColorInt
         int titleColor = holder.title.getTextColors().getDefaultColor();
 
+        holder.Retry.setVisibility(View.GONE);
         switch (upload.getStatus()) {
             case Upload.STATUS_UPLOADING:
                 String precentText = upload.getProgress() + "%";
@@ -213,6 +288,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             case Upload.STATUS_ERROR:
                 holder.title.setText(R.string.error);
                 titleColor = ERROR_COLOR;
+                holder.Retry.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -246,6 +322,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
     private void bindImageHolder(EntryHolder holder, Photo photo) {
         String url = photo.getUrlForSize(PhotoSize.Q, false);
 
+        holder.Retry.setVisibility(View.GONE);
         holder.progress.setVisibility(View.INVISIBLE);
         holder.tintView.setVisibility(View.GONE);
         holder.title.setText(R.string.photo);
@@ -276,6 +353,8 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         void onAddPhotoButtonClick();
 
         void onButtonRemoveClick(AttachmenEntry entry);
+
+        void onButtonRetryClick(AttachmenEntry entry);
     }
 
     private static class ImagesButtonHolder extends RecyclerView.ViewHolder {
@@ -294,6 +373,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
         TextView title;
         View buttomRemove;
         CircleRoadProgress progress;
+        ImageView Retry;
         View tintView;
 
         EntryHolder(View itemView) {
@@ -303,6 +383,7 @@ public class AttachmentsBottomSheetAdapter extends RecyclerView.Adapter<Recycler
             this.buttomRemove = itemView.findViewById(R.id.progress_root);
             this.progress = itemView.findViewById(R.id.progress_view);
             this.tintView = itemView.findViewById(R.id.tint_view);
+            this.Retry = itemView.findViewById(R.id.retry_upload);
         }
 
         @Override

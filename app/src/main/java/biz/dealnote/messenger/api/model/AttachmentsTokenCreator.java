@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.api.model;
 
-/**
- * Created by Ruslan Kolbasa on 05.09.2017.
- * phoenix
- */
+
 public class AttachmentsTokenCreator {
 
     public static IAttachmentToken ofDocument(int id, int ownerId, String accessKey) {
@@ -20,6 +17,26 @@ public class AttachmentsTokenCreator {
 
     public static IAttachmentToken ofArticle(int id, int ownerId, String accessKey) {
         return new AttachmentToken("article", id, ownerId, accessKey);
+    }
+
+    public static IAttachmentToken ofStory(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("story", id, ownerId, accessKey);
+    }
+
+    public static IAttachmentToken ofPhotoAlbum(int id, int ownerId) {
+        return new AttachmentToken("album", id, ownerId);
+    }
+
+    public static IAttachmentToken ofAudioPlaylist(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("audio_playlist", id, ownerId, accessKey);
+    }
+
+    public static IAttachmentToken ofGraffity(int id, int ownerId, String accessKey) {
+        return new AttachmentToken("graffiti", id, ownerId, accessKey);
+    }
+
+    public static IAttachmentToken ofCall(int initiator_id, int receiver_id, String state, long time) {
+        return new AttachmentToken("call", initiator_id, receiver_id, state + "_" + time);
     }
 
     public static IAttachmentToken ofPhoto(int id, int ownerId, String accessKey) {

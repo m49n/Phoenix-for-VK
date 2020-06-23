@@ -22,10 +22,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 01.05.2017.
- * phoenix
- */
 public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends BaseSearchCriteria, T, N extends AbsNextFrom> extends PlaceSupportPresenter<V> {
 
     private static final String SAVE_CRITERIA = "save_criteria";
@@ -54,17 +50,6 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         this.nextFrom = getInitialNextFrom();
         this.data = new ArrayList<>();
         this.actionHandler.setAction((what, object) -> object.doSearch());
-    }
-
-    void LocalSeached(List<T> data, C criteria, N nextFrom) {
-        setLoadingNow(false);
-        this.nextFrom = nextFrom;
-        this.resultsForCriteria = criteria;
-        this.endOfContent = true;
-        this.data.clear();
-        this.data.addAll(data);
-        callView(IBaseSearchView::notifyDataSetChanged);
-        resolveEmptyText();
     }
 
     @Override

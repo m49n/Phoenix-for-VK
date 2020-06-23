@@ -8,10 +8,7 @@ import androidx.annotation.Nullable;
 import biz.dealnote.messenger.mvp.view.IBasePostEditView;
 import biz.dealnote.messenger.util.BooleanValue;
 
-/**
- * Created by admin on 16.05.2017.
- * phoenix
- */
+
 public abstract class AbsPostEditPresenter<V extends IBasePostEditView> extends AbsAttachmentsEditPresenter<V> {
 
     final BooleanValue fromGroup = new BooleanValue();

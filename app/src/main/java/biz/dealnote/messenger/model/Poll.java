@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-/**
- * Created by admin on 04.12.2016.
- * phoenix
- */
+
 public class Poll extends AbsModel implements Parcelable {
 
     public static final Creator<Poll> CREATOR = new Creator<Poll>() {

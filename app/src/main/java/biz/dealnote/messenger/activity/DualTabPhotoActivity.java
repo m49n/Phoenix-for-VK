@@ -19,10 +19,6 @@ import biz.dealnote.messenger.place.PlaceProvider;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 
-/**
- * Created by admin on 15.04.2017.
- * phoenix
- */
 public class DualTabPhotoActivity extends NoMainActivity implements PlaceProvider {
 
     private int mMaxSelectionCount;

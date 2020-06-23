@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.mvp.presenter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import biz.dealnote.messenger.Injection;
+import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.db.AttachToType;
 import biz.dealnote.messenger.domain.IAttachmentsRepository;
 import biz.dealnote.messenger.model.AbsModel;
@@ -45,10 +49,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.findIndexByPredicate;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 14.04.2017.
- * phoenix
- */
+
 public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAttachmentsView> {
 
     private static final String SAVE_CAMERA_FILE_URI = "save_camera_file_uri";
@@ -315,6 +316,20 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         uploadManager.enqueue(intents);
     }
 
+    public void fireRetryClick(AttachmenEntry entry) {
+        fireRemoveClick(entry);
+        if (entry.getAttachment() instanceof Upload) {
+            Upload upl = ((Upload) entry.getAttachment());
+            List<UploadIntent> intents = new ArrayList<>();
+            intents.add(new UploadIntent(accountId, upl.getDestination())
+                    .setSize(upl.getSize())
+                    .setAutoCommit(upl.isAutoCommit())
+                    .setFileId(upl.getFileId())
+                    .setFileUri(upl.getFileUri()));
+            uploadManager.enqueue(intents);
+        }
+    }
+
     public void fireRemoveClick(AttachmenEntry entry) {
         if (entry.getOptionalId() != 0) {
             RxUtils.subscribeOnIOAndIgnore(attachmentsRepository.remove(messageOwnerId, AttachToType.MESSAGE, messageId, entry.getOptionalId()));
@@ -358,6 +373,18 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         } else {
             getView().requestCameraPermission();
         }
+    }
+
+    public void fireCompressSettings(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(context.getString(R.string.select_image_size_title))
+                .setSingleChoiceItems(R.array.array_image_sizes_settings_names_tool, Settings.get().main().getUploadImageSizePref(), (dialogInterface, j) -> {
+                    Settings.get().main().setUploadImageSize(j);
+                    dialogInterface.dismiss();
+                })
+                .setCancelable(true)
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
     private void makePhotoInternal() {

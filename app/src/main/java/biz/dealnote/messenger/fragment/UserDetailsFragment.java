@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -38,10 +40,6 @@ import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, IUserDetailsView> implements IUserDetailsView, RecyclerMenuAdapter.ActionListener {
 
     private RecyclerMenuAdapter menuAdapter;
@@ -106,6 +104,7 @@ public class UserDetailsFragment extends BaseMvpFragment<UserDetailsPresenter, I
                 .apply(requireActivity());
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<UserDetailsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new UserDetailsPresenter(

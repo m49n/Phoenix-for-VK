@@ -21,13 +21,13 @@ public class AppTextUtils {
     private static final Date DATE = new Date();
     private static final Calendar CALENDAR = Calendar.getInstance();
     private static final String K = "K";
-    private static final String KK = "KK";
     private static final String ZERO = "0";
     private static final String TWO_ZERO = "00";
     private static final String POINT = ".";
     private static final String EMPTY = "";
     private static SimpleDateFormat SHORT_DATE = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private static SimpleDateFormat FULL_DATE = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+    private static SimpleDateFormat FULL_LITTLE_DATE = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault());
 
     public static String safeTrim(String text, @Nullable String ifNull) {
         return text == null ? ifNull : text.trim();
@@ -52,7 +52,7 @@ public class AppTextUtils {
      * @return строка типа "13.6 Mb"
      */
     public static String getSizeString(long size) {
-        Double sizeDouble = ((double) size) / 1024 / 1024;
+        double sizeDouble = ((double) size) / 1024 / 1024;
         double newDouble = new BigDecimal(sizeDouble).setScale(2, RoundingMode.UP).doubleValue();
         return newDouble + " Mb";
     }
@@ -103,6 +103,38 @@ public class AppTextUtils {
         return FULL_DATE.format(DATE);
     }
 
+    /**
+     * Получение строки с датой и временем сообщений
+     *
+     * @param unixTime дата в формате unix-time
+     * @return строка с датой и временем
+     */
+    public static String getDateFromUnixTimeShorted(Context context, long unixTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
+
+        DATE.setTime(unixTime * 1000);
+
+        long startToday = calendar.getTimeInMillis() / 1000;
+        long startTomorrow = startToday + ONE_DAY_SEC;
+        long startOfDayAfterTomorrow = startTomorrow + ONE_DAY_SEC;
+        long startOfYesterday = startToday - ONE_DAY_SEC;
+
+        if (unixTime >= startToday && unixTime < startTomorrow) {
+            return SHORT_DATE.format(DATE);
+        }
+
+        if (unixTime >= startOfYesterday && unixTime < startToday) {
+            return context.getString(R.string.formatted_date_yesterday_clean, SHORT_DATE.format(DATE));
+        }
+
+        if (unixTime >= startTomorrow && unixTime < startOfDayAfterTomorrow) {
+            return context.getString(R.string.formatted_date_tomorrow_clean, SHORT_DATE.format(DATE));
+        }
+
+        return FULL_LITTLE_DATE.format(DATE);
+    }
+
     public static String getDurationString(int seconds) {
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
@@ -115,7 +147,7 @@ public class AppTextUtils {
     }
 
     public static String getDurationStringMS(int ms) {
-        return getDurationString((int) (ms / 1000));
+        return getDurationString(ms / 1000);
     }
 
     private static String twoDigitString(int number) {
@@ -138,9 +170,6 @@ public class AppTextUtils {
         }
         if (num >= 10) {
             return num + K;
-        }
-        if (num >= 1000) {
-            return num + KK;
         }
 
         return String.valueOf(counter);

@@ -42,12 +42,12 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.model.Photo;
 import biz.dealnote.messenger.model.PhotoSize;
 import biz.dealnote.messenger.model.Post;
+import biz.dealnote.messenger.model.Story;
 import biz.dealnote.messenger.model.Video;
 import biz.dealnote.messenger.push.OwnerInfo;
 import biz.dealnote.messenger.settings.Settings;
 import biz.dealnote.messenger.util.AppTextUtils;
 import biz.dealnote.messenger.util.DownloadUtil;
-import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.Utils;
 
 public class ChatDownloadIntentService extends IntentService {
@@ -88,7 +88,7 @@ public class ChatDownloadIntentService extends IntentService {
 
     private String getTitle(Owner owner, int owner_id, String chat_title) {
         if (owner_id < VKApiMessage.CHAT_PEER) {
-            if (owner == null || Objects.isNullOrEmptyString(owner.getFullName()))
+            if (owner == null || Utils.isEmpty(owner.getFullName()))
                 return "dialog_" + owner_id;
             else
                 return owner.getFullName();
@@ -211,6 +211,22 @@ public class ChatDownloadIntentService extends IntentService {
                 }
             }
 
+            if (!Utils.isEmpty(i.getAttachments().getStories())) {
+                for (Story att : i.getAttachments().getStories()) {
+                    if (att.getPhoto() == null && att.getVideo() == null)
+                        continue;
+                    String atcontent = Image;
+                    if (att.getPhoto() != null) {
+                        atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.W, false), atcontent);
+                        atcontent = Apply("<#IMAGE_LINK#>", att.getPhoto().getUrlForSize(PhotoSize.Y, false), atcontent);
+                    } else if (att.getVideo() != null) {
+                        atcontent = Apply("<#ORIGINAL_IMAGE_LINK#>", "https://vk.com/video" + att.getVideo().getOwnerId() + "_" + att.getVideo().getId(), atcontent);
+                        atcontent = Apply("<#IMAGE_LINK#>", att.getVideo().getImage(), atcontent);
+                    }
+                    Attachments.append(atcontent);
+                }
+            }
+
             if (!Utils.isEmpty(i.getAttachments().getPosts())) {
                 for (Post att : i.getAttachments().getPosts()) {
                     if (att.getAuthor() == null || att.getAuthor().getMaxSquareAvatar() == null)
@@ -263,7 +279,7 @@ public class ChatDownloadIntentService extends IntentService {
         int owner_id = intent.getIntExtra(Extra.OWNER_ID, 0);
         int account_id = intent.getIntExtra(Extra.ACCOUNT_ID, 0);
         String chat_title = intent.getStringExtra(Extra.TITLE);
-        if (Objects.isNullOrEmptyString(chat_title))
+        if (Utils.isEmpty(chat_title))
             chat_title = getString(R.string.chat) + " " + owner_id;
         if (owner_id == 0 || account_id == 0)
             return;
@@ -331,6 +347,7 @@ public class ChatDownloadIntentService extends IntentService {
             result_msgs = Apply("<#MESSAGE_LIST#>", msgs.toString(), result_msgs);
             main = Apply("<#MESSAGES#>", result_msgs, main);
 
+            DownloadUtil.CheckDirectory(Settings.get().other().getDocDir());
 
             File html = new File(Settings.get().other().getDocDir(), DownloadUtil.makeLegalFilename(peer_title + "_" + DOWNLOAD_DATE_FORMAT.format(new Date()), "html"));
             OutputStream output = new FileOutputStream(html);

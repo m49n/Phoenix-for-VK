@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Transformation;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -379,7 +381,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
             mSignerRootView.setOnClickListener(v -> onOpenOwner(post.getSignerId()));
         }
 
-        attachmentsViewBinder.displayAttachments(post.getAttachments(), mAttachmentsViews, false);
+        attachmentsViewBinder.displayAttachments(post.getAttachments(), mAttachmentsViews, false, null);
         attachmentsViewBinder.displayCopyHistory(post.getCopyHierarchy(), mAttachmentsViews.getVgPosts(),
                 false, R.layout.item_copy_history_post);
     }
@@ -451,6 +453,7 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
         Toast.makeText(requireActivity(), R.string.wall_post_is_not_yet_initialized, Toast.LENGTH_LONG).show();
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<WallPostPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

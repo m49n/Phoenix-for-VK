@@ -19,10 +19,7 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.RxUtils;
 import io.reactivex.functions.Function;
 
-/**
- * Created by admin on 13.06.2017.
- * phoenix
- */
+
 public class CommunityLinksPresenter extends AccountDependencyPresenter<ICommunityLinksView> {
 
     private static final String TAG = CommunityLinksPresenter.class.getSimpleName();

@@ -7,10 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import biz.dealnote.messenger.db.column.LogColumns;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by ruslan.kolbasa on 27.01.2017.
- * phoenix
- */
 public class LogSqliteHelper extends SQLiteOpenHelper {
 
     private static final int V = 1;

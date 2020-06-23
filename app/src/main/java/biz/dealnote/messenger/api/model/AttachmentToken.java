@@ -1,9 +1,6 @@
 package biz.dealnote.messenger.api.model;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 public class AttachmentToken implements IAttachmentToken {
 
     public final String type;

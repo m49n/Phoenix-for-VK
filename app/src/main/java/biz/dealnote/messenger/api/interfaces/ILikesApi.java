@@ -5,10 +5,6 @@ import androidx.annotation.CheckResult;
 import biz.dealnote.messenger.api.model.response.LikesListResponse;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 08.01.2017.
- * phoenix
- */
 public interface ILikesApi {
 
     @CheckResult

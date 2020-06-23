@@ -14,12 +14,16 @@ import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAttachment;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCall;
 import biz.dealnote.messenger.api.model.VKApiGiftItem;
+import biz.dealnote.messenger.api.model.VKApiGraffiti;
 import biz.dealnote.messenger.api.model.VKApiLink;
 import biz.dealnote.messenger.api.model.VKApiPhoto;
+import biz.dealnote.messenger.api.model.VKApiPhotoAlbum;
 import biz.dealnote.messenger.api.model.VKApiPoll;
 import biz.dealnote.messenger.api.model.VKApiPost;
 import biz.dealnote.messenger.api.model.VKApiSticker;
+import biz.dealnote.messenger.api.model.VKApiStory;
 import biz.dealnote.messenger.api.model.VKApiVideo;
 import biz.dealnote.messenger.api.model.VKApiWikiPage;
 import biz.dealnote.messenger.api.model.VkApiAttachments;
@@ -27,10 +31,6 @@ import biz.dealnote.messenger.api.model.VkApiAudioMessage;
 import biz.dealnote.messenger.api.model.VkApiDoc;
 import biz.dealnote.messenger.util.Objects;
 
-/**
- * Created by admin on 27.12.2016.
- * phoenix
- */
 public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserializer<VkApiAttachments> {
 
     @Override
@@ -82,8 +82,8 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
             return context.deserialize(o, VKApiPoll.class);
         } else if (VkApiAttachments.TYPE_WIKI_PAGE.equals(type)) {
             return context.deserialize(o, VKApiWikiPage.class);
-            //} else if (VkApiAttachments.TYPE_ALBUM.equals(type)) {
-            //    return context.deserialize(o, VKApiPhotoAlbum.class); // not supported yet
+        } else if (VkApiAttachments.TYPE_ALBUM.equals(type)) {
+            return context.deserialize(o, VKApiPhotoAlbum.class);
         } else if (VkApiAttachments.TYPE_STICKER.equals(type)) {
             return context.deserialize(o, VKApiSticker.class);
         } else if (VKApiAttachment.TYPE_AUDIO_MESSAGE.equals(type)) {
@@ -91,34 +91,13 @@ public class AttachmentsDtoAdapter extends AbsAdapter implements JsonDeserialize
         } else if (VKApiAttachment.TYPE_GIFT.equals(type)) {
             return context.deserialize(o, VKApiGiftItem.class);
         } else if (VKApiAttachment.TYPE_GRAFFITY.equals(type)) {
-            VKApiSticker graph = new VKApiSticker();
-            graph.sticker_id = optInt(o.getAsJsonObject(), "id");
-            graph.images = new ArrayList<>();
-            VKApiSticker.Image img = new VKApiSticker.Image();
-            img.url = optString(o.getAsJsonObject(), "url");
-            img.height = optInt(o.getAsJsonObject(), "height");
-            img.width = optInt(o.getAsJsonObject(), "width");
-            graph.images.add(img);
-            graph.images_with_background = new ArrayList<>();
-            graph.images_with_background.add(img);
-            return graph;
-
-        } else if (VKApiAttachment.TYPE_HISTORY.equals(type)) {
-            if (o.getAsJsonObject().has("photo"))
-                return context.deserialize(o.getAsJsonObject().get("photo"), VKApiPhoto.class);
-            else if (o.getAsJsonObject().has("video"))
-                return context.deserialize(o.getAsJsonObject().get("video"), VKApiVideo.class);
+            return context.deserialize(o, VKApiGraffiti.class);
+        } else if (VKApiAttachment.TYPE_STORY.equals(type)) {
+            return context.deserialize(o, VKApiStory.class);
+        } else if (VKApiAttachment.TYPE_CALL.equals(type)) {
+            return context.deserialize(o, VKApiCall.class);
         } else if (VKApiAttachment.TYPE_AUDIO_PLAYLIST.equals(type)) {
-            VKApiLink ret = new VKApiLink();
-            VKApiAudioPlaylist pl = context.deserialize(o, VKApiAudioPlaylist.class);
-            ret.url = "https://vk.com/music/album/" + pl.owner_id + "_" + pl.id;
-            if (pl.access_key != null)
-                ret.url += "_" + pl.access_key;
-            ret.caption = pl.title;
-            ret.description = pl.description;
-            ret.title = pl.title;
-            ret.preview_photo = pl.thumb_image;
-            return ret;
+            return context.deserialize(o, VKApiAudioPlaylist.class);
         }
 
         return null;

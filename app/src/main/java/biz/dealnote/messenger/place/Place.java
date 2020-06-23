@@ -53,7 +53,6 @@ public class Place implements Parcelable {
     public static final int CREATE_PHOTO_ALBUM = 43;
     public static final int EDIT_PHOTO_ALBUM = 45;
     public static final int MESSAGE_LOOKUP = 46;
-    public static final int AUDIO_CURRENT_PLAYLIST = 48;
     public static final int GIF_PAGER = 49;
     public static final int SECURITY = 50;
     public static final int CREATE_POLL = 51;
@@ -84,6 +83,15 @@ public class Place implements Parcelable {
     public static final int SEARCH_BY_AUDIO = 72;
     public static final int MENTIONS = 73;
     public static final int DIALOGS_TUBS_TOUCH = 74;
+    public static final int WALL_ATTACHMENTS = 75;
+    public static final int CHAT_DUAL = 76;
+    public static final int STORY_PLAYER = 77;
+    public static final int SINGLE_PHOTO = 78;
+    public static final int ARTIST = 79;
+    public static final int CATALOG_BLOCK_AUDIOS = 80;
+    public static final int CATALOG_BLOCK_PLAYLISTS = 81;
+    public static final int CATALOG_BLOCK_VIDEOS = 82;
+    public static final int CATALOG_BLOCK_LINKS = 83;
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
         public Place createFromParcel(Parcel in) {

@@ -28,10 +28,6 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.messenger.util.Utils;
 import io.reactivex.disposables.Disposable;
 
-/**
- * Created by admin on 03.06.2017.
- * phoenix
- */
 public class PlaceUtil {
 
     public static void goToPostEditor(@NonNull Activity activity, final int accountId, final Post post) {

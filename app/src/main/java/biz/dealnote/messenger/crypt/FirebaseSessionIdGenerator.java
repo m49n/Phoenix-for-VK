@@ -7,18 +7,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.util.Objects;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 12.07.2017.
- * phoenix
- */
 public class FirebaseSessionIdGenerator implements ISessionIdGenerator {
 
     @Override
     public Single<Long> generateNextId() {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance("https://phoenix-for-vk.firebaseio.com/");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance("https://phoenix-vk-freya.firebaseio.com/");
         final DatabaseReference ref = database.getReference();
         final DatabaseReference databaseCounter = ref.child("key_exchange_session_counter");
 
@@ -27,8 +25,9 @@ public class FirebaseSessionIdGenerator implements ISessionIdGenerator {
 
             long nextValue;
 
+            @NotNull
             @Override
-            public Transaction.Result doTransaction(final MutableData currentData) {
+            public Transaction.Result doTransaction(@NotNull final MutableData currentData) {
                 if (currentData.getValue() == null) {
                     nextValue = 1;
                 } else {

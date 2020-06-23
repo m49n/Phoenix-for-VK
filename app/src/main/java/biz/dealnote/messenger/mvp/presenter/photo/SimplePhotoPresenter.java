@@ -17,10 +17,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
 public class SimplePhotoPresenter extends PhotoPagerPresenter {
 
     private static final String SAVE_DATA_REFRESH_RESULT = "save-data-refresh-result";

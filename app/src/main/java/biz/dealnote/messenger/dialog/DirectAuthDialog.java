@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
@@ -30,10 +32,6 @@ import biz.dealnote.messenger.mvp.view.IDirectAuthView;
 import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
 public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter, IDirectAuthView> implements IDirectAuthView {
 
     public static final String ACTION_LOGIN_COMPLETE = "ACTION_LOGIN_COMPLETE";
@@ -96,8 +94,10 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
             }
         });
 
+        /*
         this.mValidate = view.findViewById(R.id.button_validate_web);
         this.mValidate.setOnClickListener(view1 -> onValidate(getPresenter().GetRedirectUrl(), getPresenter().GetLogin(), getPresenter().GetPassword()));
+         */
 
         view.findViewById(R.id.button_send_code_via_sms).setOnClickListener(view1 -> getPresenter().fireButtonSendCodeViaSmsClick());
 
@@ -136,6 +136,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         return dialog;
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DirectAuthPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DirectAuthPresenter(saveInstanceState);

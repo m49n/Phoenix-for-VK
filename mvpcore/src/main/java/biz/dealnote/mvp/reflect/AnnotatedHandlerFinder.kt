@@ -3,10 +3,6 @@ package biz.dealnote.mvp.reflect
 import java.lang.reflect.Method
 import java.util.*
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 object AnnotatedHandlerFinder {
 
     /**

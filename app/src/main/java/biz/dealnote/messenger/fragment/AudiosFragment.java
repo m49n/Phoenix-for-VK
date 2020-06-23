@@ -15,27 +15,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
+import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.activity.ActivityFeatures;
 import biz.dealnote.messenger.activity.ActivityUtils;
 import biz.dealnote.messenger.adapter.AudioRecyclerAdapter;
 import biz.dealnote.messenger.adapter.horizontal.HorizontalPlaylistAdapter;
-import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
 import biz.dealnote.messenger.fragment.base.BaseMvpFragment;
 import biz.dealnote.messenger.listener.EndlessRecyclerOnScrollListener;
 import biz.dealnote.messenger.listener.OnSectionResumeCallback;
+import biz.dealnote.messenger.listener.PicassoPauseOnScrollListener;
 import biz.dealnote.messenger.model.Audio;
+import biz.dealnote.messenger.model.AudioPlaylist;
 import biz.dealnote.messenger.mvp.presenter.AudiosPresenter;
 import biz.dealnote.messenger.mvp.view.IAudiosView;
 import biz.dealnote.messenger.place.Place;
@@ -43,17 +47,14 @@ import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.messenger.player.MusicPlaybackService;
 import biz.dealnote.messenger.player.util.MusicUtils;
 import biz.dealnote.messenger.settings.Settings;
-import biz.dealnote.messenger.util.AppPerms;
 import biz.dealnote.messenger.util.PhoenixToast;
+import biz.dealnote.messenger.util.Utils;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Audio is not supported :-(
- */
 public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView>
         implements IAudiosView, HorizontalPlaylistAdapter.Listener {
 
@@ -61,11 +62,23 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     public static final String ACTION_SELECT = "AudiosFragment.ACTION_SELECT";
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AudioRecyclerAdapter mAudioRecyclerAdapter;
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        public boolean onMove(@NotNull RecyclerView recyclerView,
+                              @NotNull RecyclerView.ViewHolder viewHolder, @NotNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NotNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Utils.vibrate(requireActivity(), 100);
+            mAudioRecyclerAdapter.notifyDataSetChanged();
+            getPresenter().playAudio(requireActivity(), mAudioRecyclerAdapter.getItemRawPosition(viewHolder.getLayoutPosition()));
+        }
+    };
     private PlaybackStatus mPlaybackStatus;
     private boolean inTabsContainer;
     private boolean doAudioLoadTabs;
     private boolean isSelectMode;
-    private boolean isAlbum;
     private View headerPlaylist;
     private HorizontalPlaylistAdapter mPlaylistAdapter;
 
@@ -98,7 +111,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         super.onCreate(savedInstanceState);
         inTabsContainer = requireArguments().getBoolean(EXTRA_IN_TABS_CONTAINER);
         isSelectMode = requireArguments().getBoolean(ACTION_SELECT);
-        isAlbum = requireArguments().getInt(Extra.ALBUM) == 1;
     }
 
     @Override
@@ -119,12 +131,17 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onScrollToLastElement() {
                 getPresenter().fireScrollToEnd();
             }
         });
+
+        if (!inTabsContainer) {
+            new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView);
+        }
 
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
         if (isSelectMode)
@@ -163,7 +180,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             }
         });
 
-        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio(), isSelectMode);
+        mAudioRecyclerAdapter = new AudioRecyclerAdapter(requireActivity(), Collections.emptyList(), getPresenter().isMyAudio(), isSelectMode, 0);
 
 
         headerPlaylist = inflater.inflate(R.layout.header_audio_playlist, recyclerView, false);
@@ -173,15 +190,15 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         mPlaylistAdapter.setListener(this);
         headerPlaylistRecyclerView.setAdapter(mPlaylistAdapter);
 
-        mAudioRecyclerAdapter.setClickListener((position, audio) -> getPresenter().playAudio(requireActivity(), position));
+        mAudioRecyclerAdapter.setClickListener((position, catalog, audio) -> getPresenter().playAudio(requireActivity(), position));
         recyclerView.setAdapter(mAudioRecyclerAdapter);
         return root;
     }
 
     @Override
-    public void updatePlaylists(List<VKApiAudioPlaylist> stories) {
+    public void updatePlaylists(List<AudioPlaylist> playlists) {
         if (nonNull(mPlaylistAdapter)) {
-            mPlaylistAdapter.setItems(stories);
+            mPlaylistAdapter.setItems(playlists);
             mPlaylistAdapter.notifyDataSetChanged();
             mAudioRecyclerAdapter.addHeader(headerPlaylist);
         }
@@ -224,6 +241,7 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         requireActivity().registerReceiver(mPlaybackStatus, filter);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<AudiosPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudiosPresenter(
@@ -259,23 +277,6 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
-    public void ProvideReadCachedAudio() {
-        PhoenixToast.CreatePhoenixToast(requireActivity()).showToastInfo(R.string.audio_from_cache);
-        if (!AppPerms.hasReadWriteStoragePermision(getContext())) {
-            AppPerms.requestReadWriteStoragePermission(requireActivity());
-        }
-    }
-
-    @Override
-    public void doesLoadCache() {
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.choose_action)
-                .setNegativeButton(R.string.button_cancel, null)
-                .setPositiveButton(R.string.button_go, (dialog, whichButton) -> getPresenter().doLoadCache())
-                .setMessage(R.string.load_saved_audios).show();
-    }
-
-    @Override
     public void onPause() {
         try {
             requireActivity().unregisterReceiver(mPlaybackStatus);
@@ -285,8 +286,8 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
     }
 
     @Override
-    public void onPlayListClick(VKApiAudioPlaylist item, int pos) {
-        if (item.owner_id == Settings.get().accounts().getCurrent())
+    public void onPlayListClick(AudioPlaylist item, int pos) {
+        if (item.getOwnerId() == Settings.get().accounts().getCurrent())
             getPresenter().onDelete(item);
         else
             getPresenter().onAdd(item);
@@ -298,10 +299,8 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
             final String action = intent.getAction();
             if (isNull(action)) return;
 
-            switch (action) {
-                case MusicPlaybackService.PLAYSTATE_CHANGED:
-                    notifyListChanged();
-                    break;
+            if (MusicPlaybackService.PLAYSTATE_CHANGED.equals(action)) {
+                notifyListChanged();
             }
         }
     }

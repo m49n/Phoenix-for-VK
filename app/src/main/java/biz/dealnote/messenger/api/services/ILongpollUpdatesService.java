@@ -7,10 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
-/**
- * Created by ruslan.kolbasa on 23.12.2016.
- * phoenix
- */
 public interface ILongpollUpdatesService {
 
     @GET

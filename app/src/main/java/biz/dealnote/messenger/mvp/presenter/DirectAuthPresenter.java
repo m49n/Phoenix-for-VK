@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 
 import biz.dealnote.messenger.Constants;
 import biz.dealnote.messenger.Injection;
-import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.api.Auth;
 import biz.dealnote.messenger.api.CaptchaNeedException;
 import biz.dealnote.messenger.api.NeedValidationException;
@@ -20,13 +19,11 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedNonEmpty;
 
-/**
- * Created by admin on 16.07.2017.
- * phoenix
- */
+
 public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
 
     private final INetworker networker;
@@ -81,8 +78,6 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
     }
 
     private void onLoginError(Throwable t) {
-        t.printStackTrace();
-
         setLoginNow(false);
 
         this.requieredCaptcha = null;
@@ -95,14 +90,23 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
             this.requieredCaptcha = new Captcha(sid, img);
         } else if (t instanceof NeedValidationException) {
             String type = ((NeedValidationException) t).getValidationType();
+            String sid = ((NeedValidationException) t).getSid();
 
-            if ("2fa_sms".equalsIgnoreCase(type)) {
+            if ("2fa_sms".equalsIgnoreCase(type) || "2fa_libverify".equalsIgnoreCase(type)) {
                 requireSmsCode = true;
                 RedirectUrl = ((NeedValidationException) t).getValidationURL();
             } else if ("2fa_app".equalsIgnoreCase(type)) {
                 requireAppCode = true;
             }
+            if (!isEmpty(sid)) {
+                appendDisposable(networker.vkAuth()
+                        .validatePhone(Constants.API_ID, Constants.API_ID, Constants.SECRET, sid, Constants.API_VERSION)
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                        .subscribe(result -> {
+                        }, ex -> showError(getView(), getCauseIfRuntime(t))));
+            }
         } else {
+            t.printStackTrace();
             showError(getView(), t);
         }
 
@@ -114,7 +118,6 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         if (Objects.nonNull(requieredCaptcha)) {
             callView(IDirectAuthView::moveFocusToCaptcha);
         } else if (requireSmsCode) {
-            getView().getPhoenixToast().showToast(R.string.sms_fail);
             callView(IDirectAuthView::moveFocusToSmsCode);
         } else if (requireAppCode) {
             callView(IDirectAuthView::moveFocusToAppCode);

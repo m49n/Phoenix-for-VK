@@ -3,10 +3,7 @@ package biz.dealnote.messenger.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 19.09.2017.
- * phoenix
- */
+
 public class DataWrapper<T> {
 
     private final List<T> data;

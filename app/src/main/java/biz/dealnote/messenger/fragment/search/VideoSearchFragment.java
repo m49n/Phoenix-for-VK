@@ -1,10 +1,13 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ import biz.dealnote.messenger.mvp.presenter.search.VideosSearchPresenter;
 import biz.dealnote.messenger.mvp.view.search.IVideosSearchView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter, IVideosSearchView, Video>
+public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter, IVideosSearchView, Video, VideosAdapter>
         implements VideosAdapter.VideoOnClickListener {
 
     public static VideoSearchFragment newInstance(int accountId, @Nullable VideoSearchCriteria initialCriteria) {
@@ -30,12 +33,17 @@ public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Video> data) {
-        ((VideosAdapter) adapter).setData(data);
+    void setAdapterData(VideosAdapter adapter, List<Video> data) {
+        adapter.setData(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Video> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    VideosAdapter createAdapter(List<Video> data) {
         VideosAdapter adapter = new VideosAdapter(requireActivity(), data);
         adapter.setVideoOnClickListener(this);
         return adapter;
@@ -52,6 +60,7 @@ public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter
         getPresenter().fireVideoClick(video);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<VideosSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new VideosSearchPresenter(

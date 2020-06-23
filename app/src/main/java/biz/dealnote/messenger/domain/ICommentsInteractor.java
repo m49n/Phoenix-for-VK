@@ -15,10 +15,6 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
-/**
- * Created by Ruslan Kolbasa on 07.06.2017.
- * phoenix
- */
 public interface ICommentsInteractor {
 
     Single<List<Comment>> getAllCachedData(int accounrId, @NonNull Commented commented);

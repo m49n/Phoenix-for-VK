@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -123,6 +125,7 @@ public class DrawerEditFragment extends AbsMvpFragment<DrawerEditPresenter, IDra
         }
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<DrawerEditPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new DrawerEditPresenter(saveInstanceState);

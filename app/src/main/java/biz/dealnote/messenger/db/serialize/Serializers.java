@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 
 import biz.dealnote.messenger.model.Photo;
 
-/**
- * Created by Ruslan Kolbasa on 20.06.2017.
- * phoenix
- */
+
 public class Serializers {
 
     private static final Gson GSON = new Gson();

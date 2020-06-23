@@ -27,10 +27,7 @@ import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.trimmedIsEmpty;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsView> {
 
     private static final int ALL = 0;

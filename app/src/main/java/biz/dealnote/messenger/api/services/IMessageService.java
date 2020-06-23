@@ -22,10 +22,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by ruslan.kolbasa on 23.12.2016.
- * phoenix
- */
 public interface IMessageService {
 
     @FormUrlEncoded
@@ -300,7 +296,8 @@ public interface IMessageService {
                                        @Field("long") Double longitude,
                                        @Field("attachment") String attachment,
                                        @Field("forward_messages") String forwardMessages,
-                                       @Field("sticker_id") Integer stickerId);
+                                       @Field("sticker_id") Integer stickerId,
+                                       @Field("payload") String payload);
 
     /**
      * Returns messages by their IDs.
@@ -364,4 +361,9 @@ public interface IMessageService {
     Single<BaseResponse<SearchDialogsResponse>> searchDialogs(@Field("q") String q,
                                                               @Field("limit") Integer limit,
                                                               @Field("fields") String fileds);
+
+    @FormUrlEncoded
+    @POST("messages.recogniseAudioMessage")
+    Single<BaseResponse<Integer>> recogniseAudioMessage(@Field("message_id") Integer message_id,
+                                                        @Field("audio_message_id") String audio_message_id);
 }

@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -13,8 +15,8 @@ import biz.dealnote.messenger.Extra;
 import biz.dealnote.messenger.R;
 import biz.dealnote.messenger.adapter.VideosAdapter;
 import biz.dealnote.messenger.model.Video;
-import biz.dealnote.messenger.mvp.presenter.history.ChatAttachmentVideoPresenter;
-import biz.dealnote.messenger.mvp.view.IChatAttachmentVideoView;
+import biz.dealnote.messenger.mvp.presenter.conversations.ChatAttachmentVideoPresenter;
+import biz.dealnote.messenger.mvp.view.conversations.IChatAttachmentVideoView;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
 public class ConversationVideosFragment extends AbsChatAttachmentsFragment<Video, ChatAttachmentVideoPresenter, IChatAttachmentVideoView>
@@ -44,6 +46,7 @@ public class ConversationVideosFragment extends AbsChatAttachmentsFragment<Video
         adapter.setData(data);
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<ChatAttachmentVideoPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

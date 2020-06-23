@@ -10,10 +10,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.VkApiDoc;
 
-/**
- * Created by admin on 29.03.2017.
- * phoenix
- */
 public class DocsEntryDtoAdapter extends AbsAdapter implements JsonDeserializer<VkApiDoc.Entry> {
 
     @Override

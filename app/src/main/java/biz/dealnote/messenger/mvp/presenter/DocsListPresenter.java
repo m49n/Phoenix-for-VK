@@ -37,10 +37,7 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Utils.findIndexById;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 25.12.2016.
- * phoenix
- */
+
 public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> {
 
     public static final String ACTION_SELECT = "biz.dealnote.messenger.select.docs";

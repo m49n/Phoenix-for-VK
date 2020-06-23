@@ -14,10 +14,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 20.03.2017.
- * phoenix
- */
+
 public interface IWallsRepository {
 
     @CheckResult
@@ -36,6 +33,8 @@ public interface IWallsRepository {
     Single<Integer> like(int accountId, int ownerId, int postId, boolean add);
 
     Single<List<Post>> getWall(int accountId, int ownerId, int offset, int count, int wallFilter);
+
+    Single<List<Post>> getWallNoCache(int accountId, int ownerId, int offset, int count, int wallFilter);
 
     Single<List<Post>> getCachedWall(int accountId, int ownerId, int wallFilter);
 

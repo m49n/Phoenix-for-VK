@@ -7,10 +7,7 @@ import androidx.annotation.StringRes;
 
 import biz.dealnote.messenger.adapter.horizontal.Entry;
 
-/**
- * Created by Ruslan Kolbasa on 17.05.2017.
- * phoenix
- */
+
 public class DocFilter implements Entry {
 
     private final int type;

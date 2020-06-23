@@ -33,10 +33,6 @@ import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
 
-/**
- * Created by admin on 23.01.2017.
- * phoenix
- */
 public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
 
     private final ISettings.IAccountsSettings settings;
@@ -68,6 +64,10 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         syncFilterCounters();
 
         refreshInfo();
+    }
+
+    public Community getCommunity() {
+        return community;
     }
 
     @OnGuiCreated
@@ -486,4 +486,19 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         final int accountId = super.getAccountId();
         getView().openChatWith(accountId, accountId, peer);
     }
+
+    @Override
+    public void searchStory(boolean ByName) {
+        appendDisposable(ownersRepository.searchStory(getAccountId(), ByName ? community.getFullName() : null, ByName ? null : ownerId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(data -> {
+                    if (!Utils.isEmpty(data)) {
+                        stories.clear();
+                        stories.addAll(data);
+                        getView().updateStory(stories);
+                    }
+                }, t -> {
+                }));
+    }
+
 }

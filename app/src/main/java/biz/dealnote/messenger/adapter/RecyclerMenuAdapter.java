@@ -25,10 +25,6 @@ import biz.dealnote.messenger.view.ColorFilterImageView;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 3/19/2018.
- * Phoenix-for-VK
- */
 public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapter.MenuItemHolder> {
 
     @LayoutRes

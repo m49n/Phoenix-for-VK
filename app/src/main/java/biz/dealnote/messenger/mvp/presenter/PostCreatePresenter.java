@@ -54,12 +54,9 @@ import static biz.dealnote.messenger.util.RxUtils.subscribeOnIOAndIgnore;
 import static biz.dealnote.messenger.util.Utils.copyToArrayListWithPredicate;
 import static biz.dealnote.messenger.util.Utils.findInfoByPredicate;
 import static biz.dealnote.messenger.util.Utils.getCauseIfRuntime;
+import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 
-/**
- * Created by admin on 20.01.2017.
- * phoenix
- */
 public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
 
     private static final String TAG = PostCreatePresenter.class.getSimpleName();
@@ -75,9 +72,10 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
     private boolean postPublished;
     private Optional<ArrayList<Uri>> upload;
     private boolean publishingNow;
+    private String links;
 
     public PostCreatePresenter(int accountId, int ownerId, @EditingPostType int editingType,
-                               ModelsBundle bundle, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable Bundle savedInstanceState) {
+                               ModelsBundle bundle, @NonNull WallEditorAttrs attrs, @Nullable ArrayList<Uri> streams, @Nullable String links, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
         this.upload = Optional.wrap(streams);
         this.attachmentsRepository = Injection.provideAttachmentsRepository();
@@ -87,11 +85,12 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         this.ownerId = ownerId;
         this.editingType = editingType;
 
-        if (isNull(savedInstanceState)) {
-            if (nonNull(bundle)) {
-                for (AbsModel i : bundle) {
-                    getData().add(new AttachmenEntry(false, i));
-                }
+        if (!isEmpty(links))
+            this.links = links;
+
+        if (isNull(savedInstanceState) && nonNull(bundle)) {
+            for (AbsModel i : bundle) {
+                getData().add(new AttachmenEntry(false, i));
             }
         }
 
@@ -178,14 +177,8 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         if (isGuiReady()) {
             boolean visible = false;
 
-            if (isGroup()) {
-                if (!isEditorOrHigher()) {
-                    visible = true;
-                } else if (!fromGroup.get()) {
-                    visible = true;
-                } else if (addSignature.get()) {
-                    visible = true;
-                }
+            if (isGroup() && !isEditorOrHigher() || !fromGroup.get() || addSignature.get()) {
+                visible = true;
             }
 
             if (isCommunity() && isEditorOrHigher()) {
@@ -289,6 +282,11 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         setTimerValue(postpone ? post.getDate() : null);
 
         setTextBody(post.getText());
+
+        if (!isEmpty(links)) {
+            setTextBody(links);
+            links = null;
+        }
 
         restoreEditingAttachmentsAsync(post.getDbid());
     }

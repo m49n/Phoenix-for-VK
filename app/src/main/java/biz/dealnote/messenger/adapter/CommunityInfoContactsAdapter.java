@@ -23,10 +23,6 @@ import biz.dealnote.messenger.util.Objects;
 import biz.dealnote.messenger.util.ViewUtils;
 import biz.dealnote.messenger.view.OnlineView;
 
-/**
- * Created by admin on 14.06.2017.
- * phoenix
- */
 public class CommunityInfoContactsAdapter extends RecyclerView.Adapter<CommunityInfoContactsAdapter.Holder> {
 
     private List<Manager> users;

@@ -1,14 +1,11 @@
 package biz.dealnote.messenger.mvp.view
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import biz.dealnote.messenger.crypt.KeyLocationPolicy
 import biz.dealnote.messenger.model.*
 import biz.dealnote.messenger.upload.UploadDestination
 
-/**
- * Created by ruslan.kolbasa on 05.10.2016.
- * phoenix
- */
 interface IChatView : IBasicMessageListView, IErrorView {
 
     fun setupLoadUpHeaderState(@LoadMoreState state: Int)
@@ -73,4 +70,5 @@ interface IChatView : IBasicMessageListView, IErrorView {
     fun startCamera(fileUri: Uri)
     fun showDeleteForAllDialog(ids: ArrayList<Int>)
     fun ScrollTo(position: Int)
+    fun showSnackbar(@StringRes res: Int, isLong: Boolean)
 }

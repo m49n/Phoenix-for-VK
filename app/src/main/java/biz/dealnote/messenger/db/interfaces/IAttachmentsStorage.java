@@ -10,10 +10,7 @@ import biz.dealnote.messenger.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 15.11.2016.
- * phoenix
- */
+
 public interface IAttachmentsStorage extends IStorage {
 
     Completable remove(int accountId, @AttachToType int attachToType, int attachToDbid, int generatedAttachmentId);

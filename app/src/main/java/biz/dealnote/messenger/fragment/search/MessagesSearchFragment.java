@@ -1,11 +1,14 @@
 package biz.dealnote.messenger.fragment.search;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,11 +21,7 @@ import biz.dealnote.messenger.mvp.view.search.IMessagesSearchView;
 import biz.dealnote.messenger.place.PlaceFactory;
 import biz.dealnote.mvp.core.IPresenterFactory;
 
-/**
- * Created by admin on 28.06.2016.
- * phoenix
- */
-public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPresenter, IMessagesSearchView, Message>
+public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPresenter, IMessagesSearchView, Message, MessagesAdapter>
         implements MessagesAdapter.OnMessageActionListener, IMessagesSearchView {
 
     public static MessagesSearchFragment newInstance(int accountId, @Nullable MessageSeachCriteria initialCriteria) {
@@ -35,12 +34,17 @@ public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPres
     }
 
     @Override
-    void setAdapterData(RecyclerView.Adapter adapter, List<Message> data) {
-        ((MessagesAdapter) adapter).setItems(data);
+    void setAdapterData(MessagesAdapter adapter, List<Message> data) {
+        adapter.setItems(data);
     }
 
     @Override
-    RecyclerView.Adapter createAdapter(List<Message> data) {
+    void postCreate(View root) {
+
+    }
+
+    @Override
+    MessagesAdapter createAdapter(List<Message> data) {
         MessagesAdapter adapter = new MessagesAdapter(requireActivity(), data, this);
         //adapter.setOnHashTagClickListener(this);
         adapter.setOnMessageActionListener(this);
@@ -82,6 +86,7 @@ public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPres
 
     }
 
+    @NotNull
     @Override
     public IPresenterFactory<MessagesSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {

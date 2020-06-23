@@ -7,10 +7,6 @@ import java.util.List;
 
 import biz.dealnote.messenger.api.model.VkApiPrivacy;
 
-/**
- * Created by ruslan.kolbasa on 30.11.2016.
- * phoenix
- */
 public class SimplePrivacy implements Parcelable {
 
     public static final Creator<SimplePrivacy> CREATOR = new Creator<SimplePrivacy>() {

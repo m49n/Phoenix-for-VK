@@ -10,10 +10,7 @@ import biz.dealnote.messenger.model.AttachmenEntry;
 import biz.dealnote.messenger.model.LocalPhoto;
 import biz.dealnote.mvp.core.IMvpView;
 
-/**
- * Created by admin on 14.04.2017.
- * phoenix
- */
+
 public interface IMessageEditView extends IMvpView, IErrorView {
 
     void displayAttachments(List<AttachmenEntry> entries);

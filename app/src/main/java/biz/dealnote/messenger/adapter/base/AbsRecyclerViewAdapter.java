@@ -8,10 +8,6 @@ import biz.dealnote.messenger.adapter.listener.OwnerClickListener;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 15.05.2017.
- * phoenix
- */
 public abstract class AbsRecyclerViewAdapter<H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
 
     private OwnerClickListener ownerClickListener;

@@ -13,10 +13,7 @@ import biz.dealnote.messenger.api.model.response.NewsfeedSearchResponse;
 import biz.dealnote.messenger.api.services.INewsfeedService;
 import io.reactivex.Single;
 
-/**
- * Created by admin on 03.01.2017.
- * phoenix
- */
+
 class NewsfeedApi extends AbsApi implements INewsfeedApi {
 
     NewsfeedApi(int accountId, IServiceProvider provider) {

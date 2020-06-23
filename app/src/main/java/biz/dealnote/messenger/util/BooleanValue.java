@@ -3,10 +3,7 @@ package biz.dealnote.messenger.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by admin on 03.06.2017.
- * phoenix
- */
+
 public final class BooleanValue implements Parcelable {
 
     public static final Creator<BooleanValue> CREATOR = new Creator<BooleanValue>() {

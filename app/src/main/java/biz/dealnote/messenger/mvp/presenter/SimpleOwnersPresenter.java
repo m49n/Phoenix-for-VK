@@ -12,10 +12,7 @@ import biz.dealnote.messenger.model.Owner;
 import biz.dealnote.messenger.mvp.presenter.base.AccountDependencyPresenter;
 import biz.dealnote.messenger.mvp.view.ISimpleOwnersView;
 
-/**
- * Created by Ruslan Kolbasa on 08.09.2017.
- * phoenix
- */
+
 public abstract class SimpleOwnersPresenter<V extends ISimpleOwnersView> extends AccountDependencyPresenter<V> {
 
     List<Owner> data;

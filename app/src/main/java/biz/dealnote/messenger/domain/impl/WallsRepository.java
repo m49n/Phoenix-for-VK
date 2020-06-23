@@ -43,10 +43,6 @@ import static biz.dealnote.messenger.util.Utils.isEmpty;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 20.03.2017.
- * phoenix
- */
 public class WallsRepository implements IWallsRepository {
 
     private final INetworker networker;
@@ -221,6 +217,31 @@ public class WallsRepository implements IWallsRepository {
                 });
     }
 
+    @Override
+    public Single<List<Post>> getWallNoCache(int accountId, int ownerId, int offset, int count, int wallFilter) {
+        return networker.vkDefault(accountId)
+                .wall()
+                .get(ownerId, null, offset, count, convertToApiFilter(wallFilter), true, Constants.MAIN_OWNER_FIELDS)
+                .flatMap(response -> {
+                    List<Owner> owners = Dto2Model.transformOwners(response.profiles, response.groups);
+
+                    List<VKApiPost> dtos = Utils.listEmptyIfNull(response.posts);
+
+                    VKOwnIds ids = new VKOwnIds();
+                    for (VKApiPost dto : dtos) {
+                        ids.append(dto);
+                    }
+
+                    final OwnerEntities ownerEntities = Dto2Entity.mapOwners(response.profiles, response.groups);
+                    return ownersRepository
+                            .findBaseOwnersDataAsBundle(accountId, ids.getAll(), IOwnersRepository.MODE_ANY, owners)
+                            .flatMap(bundle -> {
+                                List<Post> posts = Dto2Model.transformPosts(dtos, bundle);
+                                return Single.just(posts);
+                            });
+                });
+    }
+
     private SingleTransformer<List<PostEntity>, List<Post>> entities2models(int accountId) {
         return single -> single
                 .flatMap(dbos -> {
@@ -247,9 +268,7 @@ public class WallsRepository implements IWallsRepository {
 
                     return ownersRepository
                             .findBaseOwnersDataAsBundle(accountId, ids.getAll(), IOwnersRepository.MODE_ANY)
-                            .map(owners -> {
-                                return Entity2Model.buildPostFromDbo(dbo, owners);
-                            });
+                            .map(owners -> Entity2Model.buildPostFromDbo(dbo, owners));
                 });
     }
 

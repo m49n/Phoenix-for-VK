@@ -8,10 +8,6 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 24.12.2016.
- * phoenix
- */
 public class AbsAdapter {
 
     public static String optString(JsonObject json, String name) {

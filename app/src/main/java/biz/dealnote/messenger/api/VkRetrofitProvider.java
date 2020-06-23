@@ -40,8 +40,9 @@ import biz.dealnote.messenger.api.adapters.PrivacyDtoAdapter;
 import biz.dealnote.messenger.api.adapters.SchoolClazzDtoAdapter;
 import biz.dealnote.messenger.api.adapters.SearchDialogsResponseAdapter;
 import biz.dealnote.messenger.api.adapters.StoryDtoAdapter;
-import biz.dealnote.messenger.api.adapters.ToticDtoAdapter;
+import biz.dealnote.messenger.api.adapters.TopicDtoAdapter;
 import biz.dealnote.messenger.api.adapters.UserDtoAdapter;
+import biz.dealnote.messenger.api.adapters.VKApiCatalogLinkDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoAlbumDtoAdapter;
 import biz.dealnote.messenger.api.adapters.VideoDtoAdapter;
 import biz.dealnote.messenger.api.model.ChatUserDto;
@@ -50,6 +51,7 @@ import biz.dealnote.messenger.api.model.GroupSettingsDto;
 import biz.dealnote.messenger.api.model.VKApiArticle;
 import biz.dealnote.messenger.api.model.VKApiAudio;
 import biz.dealnote.messenger.api.model.VKApiAudioPlaylist;
+import biz.dealnote.messenger.api.model.VKApiCatalogLink;
 import biz.dealnote.messenger.api.model.VKApiChat;
 import biz.dealnote.messenger.api.model.VKApiComment;
 import biz.dealnote.messenger.api.model.VKApiCommunity;
@@ -87,10 +89,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static biz.dealnote.messenger.util.Objects.isNull;
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by Ruslan Kolbasa on 21.07.2017.
- * phoenix
- */
 public class VkRetrofitProvider implements IVkRetrofitProvider {
 
     private static final String API_METHOD_URL = "https://api.vk.com/method/";
@@ -124,13 +122,14 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(LikesListResponse.class, new LikesListAdapter())
             .registerTypeAdapter(SearchDialogsResponse.class, new SearchDialogsResponseAdapter())
             .registerTypeAdapter(NewsfeedCommentsResponse.Dto.class, new NewsfeedCommentDtoAdapter())
-            .registerTypeAdapter(VKApiTopic.class, new ToticDtoAdapter())
+            .registerTypeAdapter(VKApiTopic.class, new TopicDtoAdapter())
             .registerTypeAdapter(GroupSettingsDto.class, new GroupSettingsAdapter())
             .registerTypeAdapter(CustomCommentsResponse.class, new CustomCommentsResponseAdapter())
             .registerTypeAdapter(VKApiAudioPlaylist.class, new AudioPlaylistDtoAdapter())
             .registerTypeAdapter(VKApiStory.class, new StoryDtoAdapter())
             .registerTypeAdapter(FaveLinkDto.class, new FaveLinkDtoAdapter())
             .registerTypeAdapter(VKApiArticle.class, new ArticleDtoAdapter())
+            .registerTypeAdapter(VKApiCatalogLink.class, new VKApiCatalogLinkDtoAdapter())
             .create();
 
     private static final GsonConverterFactory GSON_CONVERTER_FACTORY = GsonConverterFactory.create(VKGSON);

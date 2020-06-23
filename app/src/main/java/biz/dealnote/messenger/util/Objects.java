@@ -2,10 +2,7 @@ package biz.dealnote.messenger.util;
 
 import androidx.annotation.Nullable;
 
-/**
- * Created by admin on 24.09.2016.
- * phoenix
- */
+
 public class Objects {
 
     private Objects() {
@@ -18,14 +15,6 @@ public class Objects {
 
     public static boolean isNull(@Nullable Object o) {
         return o == null;
-    }
-
-    public static boolean isNullOrEmptyString(@Nullable String o) {
-        if (o == null)
-            return true;
-        if (o.length() <= 0)
-            return true;
-        return false;
     }
 
     /**

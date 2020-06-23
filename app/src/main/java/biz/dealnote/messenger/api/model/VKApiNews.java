@@ -55,6 +55,6 @@ public class VKApiNews {
     }
 
     public boolean hasCopyHistory() {
-        return copy_history != null && copy_history.size() > 0;
+        return copy_history != null && !copy_history.isEmpty();
     }
 }

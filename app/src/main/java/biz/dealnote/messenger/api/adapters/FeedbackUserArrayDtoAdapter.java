@@ -11,10 +11,6 @@ import java.lang.reflect.Type;
 
 import biz.dealnote.messenger.api.model.feedback.UserArray;
 
-/**
- * Created by ruslan.kolbasa on 28.12.2016.
- * phoenix
- */
 public class FeedbackUserArrayDtoAdapter extends AbsAdapter implements JsonDeserializer<UserArray> {
 
     @Override

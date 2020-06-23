@@ -23,10 +23,7 @@ import io.reactivex.Single;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 class VideoAlbumsStorage extends AbsStorage implements IVideoAlbumsStorage {
 
     VideoAlbumsStorage(@NonNull AppStorages base) {

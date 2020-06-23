@@ -34,10 +34,6 @@ import biz.dealnote.messenger.model.feedback.UsersFeedback;
 
 import static biz.dealnote.messenger.util.Objects.nonNull;
 
-/**
- * Created by ruslan.kolbasa on 09.12.2016.
- * phoenix
- */
 public class FeedbackEntity2Model {
 
     public static Feedback buildFeedback(FeedbackEntity entity, IOwnersBundle owners) {

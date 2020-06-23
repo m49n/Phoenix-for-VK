@@ -19,10 +19,7 @@ import biz.dealnote.messenger.util.RxUtils;
 import biz.dealnote.mvp.reflect.OnGuiCreated;
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * Created by admin on 13.12.2016.
- * phoenix
- */
+
 public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
 
     private static final int COUNT_PER_REQUEST = 20;

@@ -55,10 +55,7 @@ import static biz.dealnote.messenger.util.Objects.nonNull;
 import static biz.dealnote.messenger.util.Utils.nonEmpty;
 import static biz.dealnote.messenger.util.Utils.safeCountOf;
 
-/**
- * Created by admin on 21.11.2016.
- * phoenix
- */
+
 class VideoStorage extends AbsStorage implements IVideoStorage {
 
     VideoStorage(@NonNull AppStorages base) {

@@ -2,11 +2,6 @@ package biz.dealnote.messenger.util;
 
 import static java.lang.Character.toUpperCase;
 
-/**
- * Created by Ruslan Kolbasa on 24.05.2017.
- * phoenix
- * https://habrahabr.ru/post/265455/
- */
 public class Translit {
 
     public static String lat2cyr(String s) {
